@@ -148,6 +148,38 @@
  
                 <article>
 
+                    <h1 class="page-header"><a href="/articles/python-advanced.html">python语言学习进阶  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonyu-yan-ref">python语言
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-06-24T00:00:00+08:00">2019年 6月 24日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>淘得好书 《深入理解python特性》和 《流畅的python》，来对自己的python语言知识继续进阶查漏补缺之。</p>
+<h3 id="_2">最疯狂的字典表达式</h3>
+<div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="s1">'yes'</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">'no'</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">:</span> <span class="s1">'maybe'</span><span class="p">}</span>
+<span class="n">t</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="s1">'maybe'</span><span class="p">}</span>
+</pre></div>
+<p>造成这样的结果首先是python的字典的key相同的判断机制，比如是 值相同 而且是 hash 值相同 才认为是 key相同。</p>
+<p>其次是认为key相同key就不做改变了，而值是取最新的。也正是因为这样，下面的字典更新语句写法是可行的：</p>
+<div class="highlight"><pre><span></span>x = {'a':1, 'b':2}
+y = {'b':3}
+z = {**x, **y}
+</pre></div>
+<div class="highlight"><pre><span></span>z
+Out[8]: {'a': 1, 'b': 3 …</pre></div>
+                </article>
+
+
+                <article>
+
                     <h1 class="page-header"><a href="/articles/python-c++-dll-in-windows.html">python和c++的dll的对接_in_windows  </a></h1>
 
                     <section>
@@ -235,29 +267,26 @@
                         </div>
                     </section>
                     
-<h2 id="_1">装饰器和装饰器的衍生装饰器</h2>
-<p>写一个装饰器现在很已经很简单通用了，有如下写法：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="k">def</span> <span class="nf">test_decorator</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_decorator</span>
-    <span class="k">return</span> <span class="n">decorator</span>
+<h2 id="loggingpprint">在logging中使用pprint</h2>
+<p>参考了 <a href="https://stackoverflow.com/questions/11093236/use-logging-print-the-output-of-pprint">这个网页</a> 。</p>
+<p>有的时候logging的输出我们希望调用pprint从而输出打印更加美观些，可以调用pformat函数来达到这个效果：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'hello'</span><span class="p">:</span> <span class="s1">'there'</span><span class="p">}]</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pformat</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
 </pre></div>
-<p>有的时候处于编程便捷的考虑，需要某些参数作为默认值另外再单独开出一个装饰器：</p>
-<div class="highlight"><pre><span></span><span class="n">bbb_decorator</span> <span class="o">=</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'bbb'</span><span class="p">)</span>
+<h2 id="and-or-not">and or not的运算优先级</h2>
+<p>一般是推荐用括号清晰表达，然后not我们知道优先级是最高的。我们再看下面这个例子:</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; True or True and False
+True
 </pre></div>
-<p>这是可行的，然后还有种写法，实际上是一样的：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">aaa_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-</pre></div>
-<p>理解装饰器关键是理解：</p>
-<div class="highlight"><pre><span></span><span class="nd">@aaa_decorator</span>
-<span class="k">def</span> <span class="nf">hello2</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'hello' …</span></pre></div>
+<p>这个例子很好地说明了and和or的优先级顺序，具体就是 and的优先级比or的要高 。</p>
+<h2 id="allany">all和any关键词</h2>
+<p>这是python语言里面的关键词函数，源码很简单，下面列出来，看一下就清楚了:</p>
+<div class="highlight"><pre><span></span>def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return …</pre></div>
                 </article>
 
 
@@ -491,44 +520,6 @@ print(bin …</pre></div>
 
 
 <p>上面的效果就是将一个十六进制的字符按照十六进制输出一个十进制的数值。有相同需求的地方别用eval了。</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/rang-yi-ge-han-shu-cheng-wei-zhuang-shi-qi-de-zhuang-shi-qi-han-shu.html">让一个函数成为装饰器的装饰器函数  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonyu-yan-ref">python语言
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-04-15T00:00:00+08:00">2018年 4月 15日
-                            </time>
-                        </div>
-                    </section>
-                    
-<p>python中的装饰器的作用就是可调用对象（一般情况下指函数）名字的重绑定。重绑定行为通常发生在原函数def结束之后，原函数将作为参数被传入装饰器函数中，从而实现函数行为上的重制。</p>
-<p>所以装饰器函数的最基本定义就是接受一个可调用对象再返回一个可调用对象。</p>
-<p>本文的任务就是让一个函数成为装饰器的装饰器，这在某些情况下是有用的，比如说</p>
-<div class="highlight"><pre><span></span>    def post(self):
-        pass
-</pre></div>
-<p>在flask中我们定义的视图函数，如果需要添加参数检查逻辑，那么大概我们会写一系列的验证函数，将post进来的参数 ----&gt; ----&gt; ----&gt; 一直传过去，直到传出来那么就说明参数都没有问题的，嗯，很直观的一种设计模式。</p>
-<p>要实现这种代码风格，就需要做到让一个或者一些函数成为装饰器，而为了代码复用，最好写出一个装饰器函数装饰目标函数即可。</p>
-<p>我们知道装饰器最直观的写法如下：</p>
-<div class="highlight"><pre><span></span>def build_passing_decorator_func(func):
-    """
-    使一个函数成为一个装饰器
-    """
-    def wrapper(method, *args, **kwargs):
-        ok, response = method(*args, **kwargs)
-        return func(ok, response)
-
-    return wrapper
-</pre></div>
-<div class="highlight"><pre><span></span>@build_passing_decorator_func
-def test …</pre></div>
                 </article>
 
 

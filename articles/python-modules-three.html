@@ -151,10 +151,14 @@
 <li><a href="#_11">不默认更改大小写</a></li>
 </ul>
 </li>
-<li><a href="#csv">csv模块</a></li>
-<li><a href="#csv_1">自定义csv方言</a></li>
+<li><a href="#csv">csv模块</a><ul>
+<li><a href="#csv_1">自定义csv方言</a><ul>
 <li><a href="#reader">对应的Reader编写</a></li>
 <li><a href="#writer">对应的Writer编写</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#tempfile">tempfile模块</a></li>
 <li><a href="#mkstemp">mkstemp</a></li>
 </ul>
@@ -695,70 +699,8 @@ name改成小写，我不太喜欢这种风格，因为将configparser刷成字�
 self.cfg.optionxform = str## not auto make it lowercase
 </pre></div>
 <h2 id="csv">csv模块</h2>
-<p>Title: csv模块
-Slug: cvs-module
-Date: 2017-11-24 12:05
-Modified: 2017-11-24 12:05
-Tags: python</p>
-<div class="toc">
-<ul>
-<li><a href="#re">re模块</a><ul>
-<li><a href="#re_1">re模块中的元字符集</a></li>
-<li><a href="#re_2">re模块中的特殊字符类</a></li>
-<li><a href="#_1">转义问题</a></li>
-<li><a href="#re_3">re模块的使用</a><ul>
-<li><a href="#_2">匹配和查找</a></li>
-<li><a href="#_3">分割操作</a></li>
-<li><a href="#_4">替换操作</a></li>
-<li><a href="#_5">非最长匹配</a></li>
-<li><a href="#_6">非捕获组</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#abc">abc模块</a></li>
-<li><a href="#argparse">argparse模块</a><ul>
-<li><a href="#_7">简单添加一个参数</a></li>
-<li><a href="#_8">添加参数的其他选项设置</a><ul>
-<li><a href="#nargs">nargs选项设置</a></li>
-</ul>
-</li>
-<li><a href="#_9">一个完整的例子</a></li>
-<li><a href="#_10">命令行选项关联其他动作</a><ul>
-<li><a href="#store95const">store_const</a></li>
-<li><a href="#store95true-store95false">store_true 和 store_false</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#ast">ast模块</a><ul>
-<li><a href="#literal95eval">literal_eval函数</a></li>
-</ul>
-</li>
-<li><a href="#collections">collections模块</a><ul>
-<li><a href="#namedtuple">namedtuple函数</a></li>
-<li><a href="#counter">Counter计数类</a></li>
-<li><a href="#ordereddict">OrderedDict对象</a></li>
-</ul>
-</li>
-<li><a href="#configparser">configparser模块</a><ul>
-<li><a href="#configparser_1">新建一个configparser对象</a></li>
-<li><a href="#config">读取某个config文件</a></li>
-<li><a href="#configparser_2">如同字典一般操作configparser对象</a></li>
-<li><a href="#write">调用write方法写入</a></li>
-<li><a href="#_11">不默认更改大小写</a></li>
-</ul>
-</li>
-<li><a href="#csv">csv模块</a></li>
-<li><a href="#csv_1">自定义csv方言</a></li>
-<li><a href="#reader">对应的Reader编写</a></li>
-<li><a href="#writer">对应的Writer编写</a></li>
-<li><a href="#tempfile">tempfile模块</a></li>
-<li><a href="#mkstemp">mkstemp</a></li>
-</ul>
-</div>
-<p>本文主要讨论python内置模块csv略显高级的知识，也就是自定义csv的方言。</p>
-<h2 id="csv_1">自定义csv方言</h2>
+<p>下面主要介绍了自定义csv方言的情况，更加简单的txt文本样式，有时使用pandas会很方便，有时就是简单的使用自己定义的逗号分隔，一行行附加打印入文本即可，并不需要特别的处理。</p>
+<h3 id="csv_1">自定义csv方言</h3>
 <p>首先我们看到最通用的excel格式的csv方言写法：</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">excel</span><span class="p">(</span><span class="n">Dialect</span><span class="p">):</span>
     <span class="sd">"""Describe the usual properties of Excel-generated CSV files."""</span>
@@ -819,7 +761,7 @@ Tags: python</p>
 
 <span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span><span class="s2">"MindMapCSV"</span><span class="p">,</span> <span class="n">MindMapCSV</span><span class="p">)</span>
 </pre></div>
-<h2 id="reader">对应的Reader编写</h2>
+<h4 id="reader">对应的Reader编写</h4>
 <p>下面贴出一个样例，具体要看你设计的csv方言来的。</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Reader</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">dialect</span><span class="o">=</span><span class="s1">'sv'</span><span class="p">):</span>
@@ -854,7 +796,7 @@ Tags: python</p>
 <li>getcol 取某一列的值</li>
 <li>getdata 取整个表格的数据值</li>
 </ul>
-<h2 id="writer">对应的Writer编写</h2>
+<h4 id="writer">对应的Writer编写</h4>
 <p>同样也要根据你的csv方言设计来的，下面只是贴出一个样例：</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Writer</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">dialect</span><span class="o">=</span><span class="s1">'sv'</span><span class="p">):</span>

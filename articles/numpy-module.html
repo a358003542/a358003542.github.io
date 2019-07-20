@@ -113,7 +113,10 @@
 <li><a href="#dtype_1">dtype对象的从属关系</a></li>
 </ul>
 </li>
-<li><a href="#shape">shape属性</a></li>
+<li><a href="#shape">shape属性</a><ul>
+<li><a href="#reshape">reshape</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#ndarray_1">创建一个ndarray对象</a><ul>
@@ -150,7 +153,7 @@
 <li><a href="#abs">abs函数</a></li>
 <li><a href="#tile">tile函数</a></li>
 <li><a href="#argsort">argsort函数</a></li>
-<li><a href="#np">np.</a></li>
+<li><a href="#npargpartition">np.argpartition函数</a></li>
 <li><a href="#npallclose">np.allclose</a></li>
 <li><a href="#npisclose">np.isclose</a></li>
 <li><a href="#nplogical_and">np.logical_and</a></li>
@@ -272,6 +275,10 @@ array([[1, 2, 3],
        [4, 5, 6]])
 </pre></div>
 <p>shape 属性用来控制对于后面数据维度的理解，一个数字表示一维，二个数字表示二维几行几列（也就是数学中我们常见的概念矩阵），三个数字表示三维等。这里直接修改ndarray对象的shape属性将直接影响程序对于该对象数据的理解，此外更常用的是用 <code>reshape</code> 方法，其并不原地修改某个ndarray对象的shape，而是返回一个被修改shape属性的新的ndarray对象。</p>
+<h4 id="reshape">reshape</h4>
+<p>ndarray可以调用reshape来改变本ndarray的shape属性，其并不原地修改某个ndarray对象的shape，而是返回一个被修改shape属性的新的ndarray对象。</p>
+<p>你可以只指定一个维度，然后另外一个维度填上 <code>-1</code> ，这样改维度的shape将会自动计算出来。</p>
+<p>比如 4*5的矩阵，你reshape为 <code>(-1,4)</code> ，那么出来的该矩阵的row=5。</p>
 <h2 id="ndarray_1">创建一个ndarray对象</h2>
 <h3 id="python">从python数据结构中创建</h3>
 <p>这个就是前面接触过的 <code>np.array</code> 函数，用来接受一个python list 或 tuple ，从而返回一个ndarray对象。</p>
@@ -608,7 +615,15 @@ array([[[0, 1, 2, 0, 1, 2]],
 array([1, 2, 0])
 </pre></div>
 <p>上面的含义是排序后第一个值是 x[1] ，后面以此类推。</p>
-<h3 id="np">np.</h3>
+<h3 id="npargpartition">np.argpartition函数</h3>
+<p>以arg开头其返回的是索引值。</p>
+<p>然后其默认调用的行为有点类似于快速排序中的选择一个点，左边都是比这个值小的点，右边都是比这个值大的点。在某些情况下，你可能指向要topk个结果，这样调用这个函数，你必须将排序操作进行完，有时会很高效的。</p>
+<div class="highlight"><pre><span></span>x = [9,8,7,5,4,6,1]
+np.argpartition(x, 2)
+
+array([6, 4, 3, 2, 1, 5, 0], dtype=int64)
+</pre></div>
+<p>上面这个例子的意思就是，结果输出的分区点是 2 哪里，也就是前面的2个就是整个内容中最小的两个。2对应的数字5，前面两个是 1 4，然后剩下的9 8 7 6 都是比5大的。大概就是这样子。</p>
 <h3 id="npallclose">np.allclose</h3>
 <div class="highlight"><pre><span></span>numpy.allclose(a, b, rtol=1e-05, atol=1e-08, equal_nan=False)
 </pre></div>
@@ -787,7 +802,7 @@ matrix([[ 4,  8, 12],
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="/tags.html#ke-xue-ji-suan-ref">科学计算
-                    <span>2</span>
+                    <span>3</span>
 </a></li>
             </ul>
         </div>

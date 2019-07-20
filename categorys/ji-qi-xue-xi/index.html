@@ -133,39 +133,103 @@
 
                 <article>
 
-                    <h1 class="page-header"><a href="/articles/classification.html">分类  </a></h1>
+                    <h1 class="page-header"><a href="/articles/gao-xiao-numpyhe-pandas.html">高效numpy和pandas  </a></h1>
 
                     <section>
                         posted in
                         <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
                         </a>
                         <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2019-04-11T00:00:00+08:00">2019年 4月 11日
+                            <time pubdate="pubdate" datetime="2019-06-20T00:00:00+08:00">2019年 6月 20日
                             </time>
                         </div>
                     </section>
                     
-<h2 id="_1">前言</h2>
-<p>分类</p>
+<h2 id="numpy">高效numpy</h2>
+<h3 id="numpypandas">numpy总的来说比pandas快</h3>
+<p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
+<div class="highlight"><pre><span></span>np.dot(df['a'],x)
+</pre></div>
+<p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
+<h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
+<p>比如下面的程序：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
+
+<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)])</span>
+</pre></div>
+<div class="highlight"><pre><span></span>50.7 ms ± 1.5 ms per loop (mean ± std. dev. of …</pre></div>
                 </article>
 
 
                 <article>
 
-                    <h1 class="page-header"><a href="/articles/cluster.html">聚类  </a></h1>
+                    <h1 class="page-header"><a href="/articles/extract_pic_feature.html">提取图片的特征  </a></h1>
 
                     <section>
                         posted in
                         <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
                         </a>
                         <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2019-04-11T00:00:00+08:00">2019年 4月 11日
+                            <time pubdate="pubdate" datetime="2019-06-05T00:00:00+08:00">2019年 6月 5日
                             </time>
                         </div>
                     </section>
                     
-<h2 id="_1">前言</h2>
-<p>聚类</p>
+<h2 id="_1">提取图片的特征</h2>
+<p>请参阅 <a href="https://www.cnblogs.com/my-love-is-python/p/10414135.html">这篇文章</a> ，老实说具体算法细节看不大懂，而且似乎短时间内是没希望看懂了..里面有太深的相关领域专业知识了。不过具体python代码还是很简单的：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">'test_1.jpg'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># 第二个参数设置为0就是自动灰度化了</span>
+<span class="n">sift</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">xfeatures2d</span><span class="o">.</span><span class="n">SIFT_create</span><span class="p">()</span>
+
+<span class="c1"># 找出关键点</span>
+<span class="n">kp</span> <span class="o">=</span> <span class="n">sift</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="c1"># 对关键点进行绘图</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">'ret'</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+<span class="c1"># 使用关键点找出sift特征向量</span>
+<span class="n">kp</span><span class="p">,</span> <span class="n">des</span> <span class="o">=</span> <span class="n">sift …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/ke-xue-ji-suan-ji-qiao-za-xiang.html">科学计算技巧杂项  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-05-07T00:00:00+08:00">2019年 5月 7日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">计算余弦</h2>
+<p>按照 
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left | \vec{a} \right | \left | \vec{b} \right |
+}
+$$</div>
+<p>然后上面的向量的绝对值，是高中的写法，更确切应该写作如下形式：
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left \| \vec{a} \right \|_2 \left \| \vec{b} \right \|_2
+}
+$$</div>
+<p>
+具体就是叫做该向量的l2范数，也是该向量的欧几里得距离。</p>
+<p>而如果我们对某个向量进行sklearn的 <code>normalize</code> 归一化操作，也就是让这个向量的l2范数=1，默认是l2范数，你也可以设置为其他范数。比如l1范数就是所有值的绝对值相加等于1（这在某些数据预处理中 …</p>
                 </article>
 
 

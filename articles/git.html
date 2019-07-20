@@ -136,13 +136,13 @@
 </li>
 <li><a href="#commit_1">commit几次之后的后悔行为</a></li>
 <li><a href="#_15">子模块功能</a><ul>
-<li><a href="#_16">添加子模块</a></li>
-<li><a href="#_17">子模块更新</a></li>
+<li><a href="#git_4">为某个git项目添加子模块</a></li>
 <li><a href="#clonegit">clone包括子git模块</a></li>
+<li><a href="#_16">日常子模块操作</a></li>
 </ul>
 </li>
-<li><a href="#_18">中文乱码问题</a></li>
-<li><a href="#_19">参考资料</a></li>
+<li><a href="#_17">中文乱码问题</a></li>
+<li><a href="#_18">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -314,24 +314,29 @@ git push --force
 </pre></div>
 <p>我喜欢使用 <code>--hard</code> 选项彻底回滚到之前的某个commit下（还有什么 --soft 和 --mixed 选项。），因为远程仓库那边都有记录的，再对照比对选择就是了。记得后面的push操作一定要加上<code>--force</code> 选项。</p>
 <h2 id="_15">子模块功能</h2>
-<h3 id="_16">添加子模块</h3>
+<h3 id="git_4">为某个git项目添加子模块</h3>
 <p>一个git仓库里面可能有一些文件夹是另外一个git仓库，我们称该git仓库为子模块，对于这些内容我们应该如下添加子模块来管理：</p>
-<div class="highlight"><pre><span></span>git submodule add the_folder
+<div class="highlight"><pre><span></span>git submodule add submodule_url
 </pre></div>
-<p>这样你的子模块里面的内容都是通过其自身的git来管理的，但如果子模块内容更新了，而主模块是需要记录这些更新的，否则你的主模块记录的子模块还是以前的版本。</p>
-<h3 id="_17">子模块更新</h3>
-<p>具体子模块更新实际上就是常规的 <code>git add submodule_folder</code> 然后commit操作。</p>
-<div class="highlight"><pre><span></span>git add --all  submodule_folder
-
-git commit -m "update submodule"
+<p>这样将会多出了一个 <code>.gitmodules</code> 文件，里面存放着当前项目的子模块的信息。</p>
+<p>现在子模块里面还没有内容，你还需要运行：</p>
+<div class="highlight"><pre><span></span>git submodule update
 </pre></div>
+<p>来获取子模块的内容。</p>
 <h3 id="clonegit">clone包括子git模块</h3>
 <p>如果某个项目里面有子git模块，然后简单使用git clone命令里面的内容是不会下载下来的。参考了 <a href="http://stackoverflow.com/questions/3796927/how-to-git-clone-including-submodules">这个网页</a> 。</p>
 <p>如下加上 <code>--recursive</code> 选项就会下载项目里面的子git模块。</p>
 <div class="highlight"><pre><span></span>git clone --recursive what.git
 </pre></div>
 <p>​    </p>
-<h2 id="_18">中文乱码问题</h2>
+<h3 id="_16">日常子模块操作</h3>
+<p>其实子模块就是另外一个git项目，你可以进入子模块文件夹，然后进行其他一些常规的git操作。只是因为主项目指向的是某个版本号的子模块，这些操作在主模块上我们不能认为已经生效了。</p>
+<p>要主项目指向子模块的最新版本可以如下操作：</p>
+<div class="highlight"><pre><span></span>git add --all  submodule_folder
+
+git commit -m "update submodule"
+</pre></div>
+<h2 id="_17">中文乱码问题</h2>
 <p>主要参考了 <a href="https://segmentfault.com/a/1190000000578037">这个网页</a> 。</p>
 <p>我的用户家目录下的 <code>.gitconfig</code> 文件有这些设置，读者可以参考下：</p>
 <div class="highlight"><pre><span></span><span class="k">[core]</span>
@@ -349,7 +354,7 @@ git commit -m "update submodule"
 <p><code>quotepath</code> 是把git的路径默认转义行为关闭。</p>
 <p>然后下面一些设置为utf8编码的行为。</p>
 <p>​    </p>
-<h2 id="_19">参考资料</h2>
+<h2 id="_18">参考资料</h2>
 <ol>
 <li>
 <p><a href="http://rogerdudler.github.io/git-guide/index.zh.html">git简明指南</a></p>

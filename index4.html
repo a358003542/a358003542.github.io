@@ -150,6 +150,241 @@
  
                 <article>
 
+                    <h1 class="page-header"><a href="/articles/pythonpa-chong-zhi-fang-zhi-bei-feng-de-ce-lue.html">python爬虫之-防止被封的策略  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonpa-chong-ref">python爬虫
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                            </time>
+                        </div>
+                    </section>
+                    
+<p>防止被封的首要策略就是尽量的为别人的服务器多考虑下，让自己写的爬虫少请求，每次请求都是有效的核心请求获取最核心的数据，不管是刷页面还是刷ajax，多次请求之间应该设置一个停顿时间。</p>
+<div class="highlight"><pre><span></span>time.sleep(3)
+</pre></div>
+<p>在上面的首要原则的基础上，下面介绍的很多实战技巧，其实都符合一个大的原则：尽可能地让你的爬虫和人浏览网页没有区别。</p>
+<h2 id="http">http请求头调整</h2>
+<p>user-agent 设置，而且时不时的切换下。</p>
+<p>虽然目前还没有遇到，不过我推测可能 Referrer 这个header在某些场景下是有些文章的。</p>
+<p>还有 Accept-Language 也可能有用。</p>
+<h2 id="cookies">Cookies</h2>
+<p>有些情况下cookies的正常获取需要javascript的支持。cookies总的原则是第一次请求获取到cookies，然后后面的很多次请求都使用这个cookies即可。</p>
+<p>不过反爬虫cookies一般都会有个时间限制，一个简单的做法就是这边也设置个时间，定时获取最新的cookies或者，一定请求量之后再获取一个新的cookies。</p>
+<p>具体使用 scrapy-splash 了解下。</p>
+<h2 id="_1">表单陷阱</h2>
+<p>有的表单里面有：</p>
+<div class="highlight"><pre><span></span>&lt;input type="hidden" ...
+</pre></div>
+<p>我们要记住人如果在页面上点击，这个没有显示的字段的值也会一并送过去，而他们服务器那边会根据这个值可能是个加密的某个值来判断这个请求是人点的还是爬虫行为。</p>
+<p>最好的策略是先把整个表单内容爬过来，收集好之后再发送表单请求。</p>
+<p>和上面的情况相反，还有一种情况，页面表单发送可能有特别的处理，某些表单字段，不管用户看得见看不见，你都不能发送过去 …</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/pythonpa-chong-zhi-zi-ran-yu-yan-chu-li-xiang-guan.html">python爬虫之-自然语言处理相关  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonpa-chong-ref">python爬虫
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                            </time>
+                        </div>
+                    </section>
+                    <p>网页里面的内容大部分是文本，所以爬虫继续深入不可避免要研究自然语言处理的。</p>
+<p>爬虫越学到后面就会明白，漫无目的的爬虫真的只是入门阶段，而爬虫进阶很多时候就要在这个爬虫定向上下功夫。</p>
+<p>本文不是介绍自然语言处理相关知识的，只是就和爬虫相关做一些讨论和思考。</p>
+<p>比如分析文章得到热门词，然后根据热门词进一步定向搜索定向爬取。</p>
+<p>但在这里我们说得更加抽象一点，而这就是爬虫进阶和自然语言处理结合的理想状态，简言之就是：</p>
+<p>好像一个人在阅读一篇文章，然后真的理解了里面的文章和里面的词语，然后他自己去决定哪个url该点，哪个关键词该收集，那篇文章有价值，那篇文章该分到哪一类等等。</p>
+<p>下面列出一些自然语言处理的基本功，想要爬虫进阶深造的可能就要开始把这些基本功打扎实了：</p>
+<ul>
+<li>分词</li>
+<li>词频统计</li>
+<li>ngram模型等分析词语之间的关系</li>
+<li></li>
+</ul>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/pythonpa-chong-zhi-zi-ti-fan-pa-chong.html">python爬虫之-字体反爬虫  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonpa-chong-ref">python爬虫
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                            </time>
+                        </div>
+                    </section>
+                    
+<p>在爬虫的时候，你分析网页会看到，某些东西看上去是乱码，其css设置了一种额外的字体。怎么破解里面的内容呢？</p>
+<p>首先你需要把目标字体下载下来，通常这种字体有各种各样的名字，里面的具体字体codepoint也是随机的...</p>
+<p>如果你下载一个fontcreator会看到具体哪个字对应哪个codepoint，而爬虫这边编码，我们需要使用python的 fonttools库来加载字体。</p>
+<p>首先你需要下载好字体，保存好字体做好缓存工作。</p>
+<p>见本文的参考资料2，然后就是利用 fonttools 模块加载目标字体。</p>
+<div class="highlight"><pre><span></span>font = TTFont(font_filename)
+</pre></div>
+<p>然后就是分析这个字体的cmap tables的cmap数据，不同的字体似乎情况不同，这个要实际分析，由于fonttools这个模块文档较少，加上我对字体知识不太多，所以只能简单摸索下了。</p>
+<div class="highlight"><pre><span></span>font_mapping = font['cmap'].tables[?].cmap
+</pre></div>
+<p>如果你找到 font_mapping 了，字符 用python的 ord 函数处理下，就能得到目标字符的 unicode code point，也就是我们上面说的字体的code point，在这个 font_mapping 里面你会看到的，然后具体什么内容就出来了 …</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/pythonzhong-de-wei-cao-zuo.html">python中的位操作  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonyu-yan-ref">python语言
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                            </time>
+                        </div>
+                    </section>
+                    
+<p>位操作似乎用c语言会更方便，不过我们可以先把这块概念弄清楚，然后迁移到c代码是很方便的。</p>
+<h2 id="1">问题1，如何表示任意长度的基于字节的 位向量</h2>
+<p>比如说我想表达 01010101010101 
+答： </p>
+<div class="highlight"><pre><span></span>0b01010101010101
+</pre></div>
+<h2 id="2">问题2 上面任意长度的位向量，我如何实现遍历逻辑</h2>
+<p>是的，我是看编程珠玑确定这些问题的，然后发现python，当然，已经有类似的实现库了： <a href="https://github.com/ilanschnell/bitarray">https://github.com/ilanschnell/bitarray</a></p>
+<p>下面好好研究下这个项目的源码。</p>
+<h3 id="4">问题4 如何建立位图映射</h3>
+<p>比如 0b1010101010 -&gt; 对应的是 数字集合 {1,3,5,7,9}</p>
+<h3 id="5">问题5 有没有可能建立其他位图映射</h3>
+<h2 id="3">问题3 常规的位操作运算符，你帮我说说吧</h2>
+<h3 id="_1">按位与</h3>
+<div class="highlight"><pre><span></span>x = 0b111101010
+y = 0b101010101
+print(bin(x))
+print(bin …</pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/shi-yong-cythonlai-jia-su-python.html">使用cython来加速python  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">找到性能瓶颈所在</h2>
+<p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
+<div class="highlight"><pre><span></span>python -m cProfile test.py
+</pre></div>
+<p>或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。</p>
+<p>目前我知道的循环结构提速很明显，然后指定静态类型会提速。</p>
+<p>一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。</p>
+<p>参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。</p>
+<p>在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。</p>
+<h2 id="pyx">pyx文件</h2>
+<p>关于pyx文件的更多请查看cython的官方手册。</p>
+<p>下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来，</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/12factor-app-talk.html">软件即服务的12因素方法论  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#she-ji-ref">设计
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-13T00:00:00+08:00">2018年 6月 13日
+                            </time>
+                        </div>
+                    </section>
+                    
+<p>本文主要学习 <a href="https://12factor.net/zh_cn/">这个网站</a> ，这个网站提出了软件即服务架构的12因素方法论。在目前软件开发，部署docker化，微服务，云服务，分布式架构等大趋势下，软件即对外提供一种http api服务的定位是很具有普遍性的。本文的一些讨论是很值得我们细细去思考的。</p>
+<h2 id="_1">前言</h2>
+<p>Adam Wiggins 研究了数以百计的应用程序的开发和部署，并在Heroku平台上数十万应用程序的开发运作和扩展过程，写作了这个博客： <a href="https://12factor.net/zh_cn/">https://12factor.net/zh_cn/</a> 。</p>
+<p>在互联网Internet的大背景下，软件作为一种服务，更确切来说作为一种api服务而存在是一种具有普适性的架构模式，不管软件自身功能如何，但软件本身只是一个提供了一些对外api接口的工具的定位，无疑是面向整个互联网和面向未来的。</p>
+<p>同时这里的讨论不光涉及到部署和运维，实际上，在软件开始编写时的架构设计和具体编码部分内部细节，编码者的思路也需要作出相应的调整。</p>
+<h2 id="_2">总的原则</h2>
+<ul>
+<li>使用<strong>标准化</strong>流程自动配置，从而使新的开发者花费最少的学习成本加入这个项目。</li>
+<li>和操作系统之间尽可能的<strong>划清界限</strong>，在各个系统中提供<strong>最大的可移植性</strong>。</li>
+<li>适合<strong>部署</strong>在现代的<strong>云计算平台</strong>，从而在服务器和系统管理方面节省资源。</li>
+<li>将开发环境和生产环境的<strong>差异降至最低</strong>，并使用<strong>持续交付</strong>实施敏捷开发 …</li></ul>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/pythonyu-yan-zhi-dan-li-mo-shi.html">python语言之-单例模式  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonyu-yan-ref">python语言
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-13T00:00:00+08:00">2018年 6月 13日
+                            </time>
+                        </div>
+                    </section>
+                    
+<p>某些情况下你需要确保某个类只有一个实例，这叫做单例模式。</p>
+<p>python中的对象有 <code>__new__</code> 方法 和 <code>__init__</code> 方法，其中 <code>__new__</code> 方法会返回你的类具体创建的实例，而 <code>__init__</code> 方法仅仅和你的实例化初始化之后的一些额外动作相关。</p>
+<p>于是我们有：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SingleInstance</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">'_instance'</span><span class="p">):</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SingleInstance</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
+</pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/pythonyu-yan-zhi-formathan-shu.html">python语言之-format函数  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonyu-yan-ref">python语言
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-06-13T00:00:00+08:00">2018年 6月 13日
+                            </time>
+                        </div>
+                    </section>
+                    <p>format函数或者说字符串的format方法，一般的使用还是很简单的，但是有的时候有些特殊的高级需求，下面渐渐收集之。</p>
+<h2 id="_1">等宽数字</h2>
+<div class="highlight"><pre><span></span> {:0&gt;2d} 
+</pre></div>
+
+
+<p>目标数字宽度为两位，左边填充0 ， <code>&gt;</code> 表示左边填充， <code>0&gt;</code> 表示左边填充0，此外还有 <code>&gt;</code> 表示右边填充。</p>
+                </article>
+
+
+                <article>
+
                     <h1 class="page-header"><a href="/articles/pythonyu-yan-zhi-inthan-shu.html">python语言之-int函数  </a></h1>
 
                     <section>
@@ -548,311 +783,6 @@ WSGIPythonPath "/home/wanze/venv/webapp"
             Require all granted
         <span class="nt">&lt;/IfVersion&gt;</span>
         <span class="nt">&lt;IfVersion …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-chuang-jian-ke-fu-yong-de-app.html">django后台api编写之-创建可复用的app  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h1 id="app">创建可复用的app</h1>
-<p>创建可复用的app会极大的降低你的目标django项目的复杂度，如果可能，将你的app打造成可复用的风格总是首选。</p>
-<h2 id="django-whatpypi">制作django-what的pypi包</h2>
-<p>有关pypi包的制作就不赘述了，下面主要在官方文档 <a href="https://docs.djangoproject.com/en/1.11/intro/reusable-apps/">这里</a> 的基础上讨论一些问题。</p>
-<h2 id="_1">测试问题</h2>
-<p>我试着如下安装测试过程：</p>
-<div class="highlight"><pre><span></span>python setup.py sdist
-pip install dist/what.tar.gz
-</pre></div>
-<p>然后安装官方文档，在INSTALL_APPS那里设置好。app是可以正常使用的。但在安装测试过程中，这实在有点繁琐了。推荐还是将整个app文件夹复制到你的测试webapp那边去，然后一边修改一边看。测试好了再把内容同步到pypi安装包那边去。</p>
-<h2 id="migrations">migrations问题</h2>
-<p>官方文档之所以选择制作sdist和用pip install tar包这种风格是有原因的，经测试egg包在访问上很成问题，只有用pip安装这种方法，在site-packages那边你安装才是文件夹风格而不是那种egg文件。这样你等下执行：</p>
-<div class="highlight"><pre><span></span>python manage.py makemigrations app_name
-</pre></div>
-<p>才会成功。</p>
-<p>而且实际生成的迁移文件就放在site-packages那里的目标文件夹下的。所以你制作pypi包的时候不要把migrations文件夹里面的其他迁移文件包含进去了，要包含就包含 <code>__init__.py</code> 文件即可。</p>
-<p>当然就算你不是制作django的目标pypi包 …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-dan-yuan-ce-shi.html">django后台api编写之-单元测试  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h1 id="_1">单元测试</h1>
-<p>单元测试前期开发如果只是关注于后台api的话，实际上编写一套postman请求也是可以的，后期再考虑上代码级的单元测试。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rest_framework.test</span> <span class="kn">import</span> <span class="n">APITestCase</span>
-<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">status</span>
-<span class="kn">import</span> <span class="nn">django</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-
-<span class="kn">import</span> <span class="nn">mock</span>
-
-
-<span class="k">class</span> <span class="nc">Tests</span><span class="p">(</span><span class="n">APITestCase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">test_permutation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        :return:</span>
-<span class="sd">        """</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">'n'</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-            <span class="s1">'k'</span><span class="p">:</span> <span class="mi">3</span>
-        <span class="p">}</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">'arithmetic-permutation'</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
-
-        <span class="n">result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-djangohe-celery.html">django后台api编写之-django和celery  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="djangocelery">django和celery</h2>
-<p>django-crontab这个模块我试过的，还是很便捷的，不过其还是基于系统的crontab，而如果我们将django和celery组合起来，celery灵活的消息分发机制，无疑将给未来开发带来更多的可能性。celery的官方文档在 <a href="http://docs.celeryproject.org/en/latest/index.html">这里</a> ，本文主要讲一下celery的基本概念和django的集成问题，更多celery的知识请参阅官方文档。</p>
-<h3 id="celery">celery的核心概念</h3>
-<ul>
-<li>broker  任务队列服务提供者，celery推荐使用redis或者rabbitmq作为broker。</li>
-<li>task 具体执行的任务，其实就是定义的一些函数。</li>
-<li>backend 用来存储任务之后的输出结果</li>
-<li>worker celery的启动就是开启一个worker。</li>
-</ul>
-<h3 id="django">django内文件安排</h3>
-<p>本小节参考了 <a href="https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7">这篇文章</a> 和 <a href="http://geek.csdn.net/news/detail/128791">这篇文章</a> 。需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，而且下面讲的配置实际上就是一个单独的celery app大部分都是类似的，只是多了一些细节上的处理和优化。</p>
-<h4 id="celeryconfigpy">celeryconfig.py</h4>
-<p>首先推荐在你的django app <code>settings.py</code> 旁新建个 <code>celeryconfig.py</code> 文件，有的教程让设置这个配置文件名字为 <code>celery.py</code> ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-djangohe-scrapy.html">django后台api编写之-django和scrapy  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="djangoscrapy">django和scrapy</h2>
-<p>django也可以和scrapy集成起来，简单来说就是通过 <code>scrapyd</code> ，django发送一个信号，然后scrapyd 后台启动一个爬虫任务。本小节主要参考了 <a href="https://medium.com/@ali_oguzhan/how-to-use-scrapy-with-django-application-c16fabd0e62e">这篇文章</a> ，谢谢作者。</p>
-<p>这样做有什么好处？大体有以下好处：</p>
-<ol>
-<li>爬虫的运行状态信息可查询可操作</li>
-<li>爬虫后台爬取不卡顿前台显示</li>
-<li>以信号为基础可以和celery结合起来从而建立更加复杂的基于简单的HTTP信号机制的爬虫系统（包括周期性任务或者其他任务等等）</li>
-</ol>
-<p>读者请参看上面这篇文章，下面我就一些最核心的点来描述之。</p>
-<h3 id="views">从views开始说起</h3>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrapyd_api</span> <span class="kn">import</span> <span class="n">ScrapydAPI</span>
-<span class="n">scrapyd</span> <span class="o">=</span> <span class="n">ScrapydAPI</span><span class="p">(</span><span class="s1">'http://localhost:6800'</span><span class="p">)</span>
-
-<span class="nd">@api_view</span><span class="p">([</span><span class="s1">'POST'</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">crawl_article</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    POST : 传递公众号和文章title，然后运行spider去爬取。</span>
-<span class="sd">    GET ; 查询某个爬虫进行到了什么状态</span>
-<span class="sd">    :param request:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    """</span>
-
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'POST'</span><span class="p">:</span>
-        <span class="n">mode</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-fan-yi.html">django后台api编写之-翻译  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">翻译</h2>
-<p>django的翻译其实已经很便捷了，因为我关注于后台api的编写，所以实际上很多教程说的：</p>
-<div class="highlight"><pre><span></span>TEMPLATES = [
-    {
-        ...
-        'OPTIONS': {
-            'context_processors': [
-                ...
-                'django.template.context_processors.i18n',
-            ],
-        },
-    },
-]
-</pre></div>
-<p>这个配置只和模板输出的翻译有关，有需要再加上。</p>
-<p>然后MIDDLESWARES 哪里要加上：</p>
-<div class="highlight"><pre><span></span>    'django.middleware.locale.LocaleMiddleware',
-</pre></div>
-<p>然后就是这些配置：</p>
-<div class="highlight"><pre><span></span>LANGUAGE_CODE = 'zh-Hans'
-
-USE_I18N = True
-</pre></div>
-<p>设置好你的语言代码，这是没有问题的。</p>
-<p>我看了一下 django restframework 的翻译管理相关，发现大体这样配置就可以了，很多教程说的设置 <code>LOCALE_PATHS</code> 变量觉得没必要，默认的每个app下面的locale文件夹够用了。</p>
-<p>然后就是目标py文件下的 字符串 如下装饰之：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
-<span class="o">...</span>
-
-        <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="bp">None …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-ji-yu-lei-de-shi-tu.html">django后台api编写之-基于类的视图  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">基于类的视图</h2>
-<p>首先我们从django哪里初步了解了下基于类的视图的概念，就是如下代码：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-
-<span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'GET'</span><span class="p">:</span>
-        <span class="c1"># &lt;view logic&gt;</span>
-        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
-</pre></div>
-<p>变为更简洁的：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
-
-<span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="c1"># &lt;view logic&gt;</span>
-        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
-</pre></div>
-<p>然后依赖类的继承，引入Minxin类，可以让我们在http的很多restful风格请求上，总是一次又一次出现的那些套路，实现代码复用。其基本知识就是python的类的继承，我们可以直接从django …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-kuo-zhan-yong-hu-mo-xing.html">django后台api编写之-扩展用户模型  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">扩展用户模型</h2>
-<p>本小节主要参考了这篇 <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html">不错的文章</a> 。一般扩展django自带的用户模型，最常见的就下面两种情况，实际上这两种情况你可能都会使用到。第一种是 User 模型 和 Profile 模型的分开，然后User用来存放登录相关信息，而Profile用来存放更多的用户资料信息，一般User 和 Profile 是 onetoone 关系，这个时候我们会考虑建立一个signals文件来保证没创建一个User就会跟着创建一个Profile：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
-<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
-
-<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="kn">import</span> <span class="n">Profile</span>
-
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
-
-<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/djangohou-tai-apibian-xie-zhi-mo-xing-de-ding-yi-he-shi-yong.html">django后台api编写之-模型的定义和使用  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">模型的定义和使用</h2>
-<p>django的模板和sqlalchemy还是有很多地方类似的。</p>
-<h2 id="settings">settings那边的配置</h2>
-<ul>
-<li>
-<p><strong>INSTALLED_APPS:</strong> 你需要加上你新加入的 app 的名字，不加的话是不能通过 <code>makemigrations</code> 来管理数据库的。</p>
-</li>
-<li>
-<p><strong>DATABASES:</strong> 默认会创建一个sqlite3数据库，也能满足基本的需求了，如果你想要使用mysql等数据库，则参考样例修改这里的配置。比如连接mysql的样例是:</p>
-</li>
-</ul>
-<div class="highlight"><pre><span></span>    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': "database_name",
-            'USER': "root",
-            'PASSWORD': "",
-            'HOST': "localhost", 
-            'PORT': "3306",
-            'OPTIONS': {
-                'charset': 'utf8'
-            }
-        }
-    }
-</pre></div>
-<p>一般会加上 charset 是 utf8这个选项，当然mysql那边你也需要设置好字符编码。有的时候如下设置init_command 来设置字符编码可以让你获得更好的字符编码兼容性。</p>
-<div class="highlight"><pre><span></span>    'OPTIONS': {
-        'init_command': 'SET character_set_database=utf8 ,\
-        character_set_server=utf8,\
-        character_set_connection …</pre></div>
                 </article>
 
   <nav aria-label="Page Navigation">

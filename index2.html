@@ -150,6 +150,326 @@
  
                 <article>
 
+                    <h1 class="page-header"><a href="/articles/machine-learning-talk-six.html">机器学习第六谈之pipeline  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-12-26T00:00:00+08:00">2018年 12月 26日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="pipeline">机器学习第六谈之pipeline</h2>
+<p>前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。</p>
+<p>在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。</p>
+<p>sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。</p>
+<p>【pipeline工作流程图】</p>
+<p>本图片摘自 <a href="http://frankchen.xyz/2018/04/08/pipeline-in-machine-learning/">这篇文章</a></p>
+<p><img alt="" src="http://frankchen.xyz/images/15231783974167.jpg"/></p>
+<p>其中pipeline前面的叫做transformer，最后一个叫做estimator。</p>
+<h3 id="transformer">transformer</h3>
+<p>transformer必须要有fit和tranform两个方法，当你调用 <code>pipeline.fit</code> 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 <code>TransformerMixin</code> 这个类 …</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/python-c++-dll-in-windows.html">python和c++的dll的对接_in_windows  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonyu-yan-ref">python语言
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-12-24T00:00:00+08:00">2018年 12月 24日
+                            </time>
+                        </div>
+                    </section>
+                    <h2 id="ctypes">ctypes模块</h2>
+<p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
+<p>基本的使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">helloworld</span><span class="p">()</span>
+</pre></div>
+
+
+<p>接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。）</p>
+<p><a href="https://docs.python.org/3.7/library/ctypes.html">官方文档</a> 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。</p>
+<p>首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YOU_STRUCTURE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    基础信息结构体</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">),</span>  
+        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">24</span><span class="p">),</span> 
+        <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">40</span><span class="p">),</span> 
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>然后实际使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">YOU_STRUCTURE</span><span class="p">()</span>
+<span class="n">_ref_s</span>  <span class="o">=</span> <span class="n">ctypes …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/machine-learning-talk-five.html">机器学习第五谈之数据预处理  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。</p>
+<p>本文介绍的内容，以下面代码形式展示出来：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">sk_normalize</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">binarize</span> <span class="k">as</span> <span class="n">sk_binarize</span>
+
+
+<span class="k">def</span> <span class="nf">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">old_df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    输入ndarray值，然后根据给的老df的column列名来输出一个新的df</span>
+<span class="sd">    :param df_value:</span>
+<span class="sd">    :param old_df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/wxpython-talk-three.html">wxpython第三谈  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#wxpython-ref">wxpython
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="textctrl">TextCtrl用代码改变文本</h2>
+<p>TextCtrl用代码直接改变文本的方法有：</p>
+<ul>
+<li>AppendText 尾部添加文本</li>
+<li>Clear </li>
+<li>EmulateKeyPress 产生一个按键事件</li>
+<li>SetInsertionPoint 设置插入点</li>
+<li>SetValue</li>
+<li>WriteText 在当前插入点插入文本</li>
+<li>Remove 删除指定范围文本</li>
+<li>Replace 替换指定范围文本</li>
+</ul>
+<h2 id="_1">对接系统的剪贴板</h2>
+<h3 id="_2">将文本放入剪贴板</h3>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextDataObject</span><span class="p">()</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"your text"</span>
+<span class="n">data</span><span class="o">.</span><span class="n">SetText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Open</span><span class="p">():</span>
+    <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">SetData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1">#将数据放置到剪贴板上</span>
+    <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'剪贴板打不开..'</span><span class="p">)</span>
+</pre></div>
+<h3 id="_3">从剪贴板中取内容</h3>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextDataObject</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Open …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/pypubsub-module.html">pypubsub模块  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#wxpython-ref">wxpython
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-11-29T00:00:00+08:00">2018年 11月 29日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>pypubsub模块的基本使用这里就不赘述了，简单的看下官方文档即可。这里我要说的是debug问题：</p>
+<p>pypubsub引入之后程序经常出现问题之后是没有任何异常信息直接退出，这给日常编码带来了很多困扰，下面重点解决这个问题。</p>
+<p>官方文档的高级使用部分有相关介绍，不过似乎有点杂乱，然后语焉不详。</p>
+<p>搜索到 <a href="https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.core.listener.IListenerExcHandler.html">这个页面</a> ，似乎是要这样配置就能捕捉到异常信息。</p>
+<p>我试着跟着他写了一下，然后发现 listenerID 和 topicObj.getName() 只有消息的名字，具体程序捕捉到了什么异常并没有写明。</p>
+<p>在简单了解Topic和Linstener对象之后发现也找不到存储异常信息的地方。</p>
+<p>只好翻文档，在API的utils里面有个ExcPublisher引起来了我的兴趣，看了下源码，简单的使用哪个 ExcPublisher 发现能够打印出异常信息，但是还是有其他异常。然后发现其核心实际上就是这里：</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listenerID</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">topicObj</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Handle the exception raised by given listener. Send the</span>
+<span class="sd">        Traceback to all subscribers of …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/recommender-talk-two.html">推荐系统第二谈  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-11-27T00:00:00+08:00">2018年 11月 27日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>由于我对于推荐系统属于摸索性质，然后又过了一段时间，再来看之前写的推荐系统第一谈文章，基本上要全部删掉重写。但这里还是叫做推荐系统第二谈吧，一些大概没什么太大问题的东西都放在下面的基本概念了解部分了。</p>
+<h2 id="_2">基本概念了解</h2>
+<p>推荐系统本质上是隶属于机器学习系统的，所以在简单了解下推荐系统相关算法之后，具体实现推荐系统的架构，是应该基于机器学习系统架构，然后在这之上引入新的处理流即可。</p>
+<p>推荐系统分为两类推荐：一类是评分预测推荐；另一类是topN推荐。之前我们看的很多教材和案例基本上都在做评分预测推荐，大概如下面表格的数据：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">物品1</th>
+<th align="center">物品2</th>
+<th align="center">物品3</th>
+<th align="center">物品4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">用户1</td>
+<td align="center">2</td>
+<td align="center">?</td>
+<td align="center">3</td>
+<td align="center">?</td>
+</tr>
+<tr>
+<td align="center">用户2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">?</td>
+</tr>
+<tr>
+<td align="center">用户3</td>
+<td align="center">?</td>
+<td align="center">?</td>
+<td align="center">?</td>
+<td align="center">?</td>
+</tr>
+</tbody>
+</table>
+<p>然后用户对某些物品有些评分，然后开始开展推荐工作。老实说这些教材一开始给了我很大的困扰，因为我现在活着说一般做推荐系统刚开始，基本上是没有评分数据的。甚至不要说一开始，就是到了网站运营后期也可能没有这个收集用户评分的需求。在这里要感谢项亮的书籍【参考资料2】，提醒了我，还有另外一类推荐系统，叫做topN推荐，返回一些推荐列表数据，这才是通常我们常见的应用类型。</p>
+<h3 id="usercf">评分预测推荐的usercf方法</h3>
+<p>usercf也就是所谓的协同过滤推荐感觉教材里面到处都有，但实际因为缺少用户评分数据是不现实的，最大的用处可能就是让我们理解这个思路，那就是通过用户评分的相似性继而扩展到用户行为的相似性，从而找到相似的用户 …</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/wxpython-drawing-custom-widget.html">wxpython绘图和自定义窗体  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#wxpython-ref">wxpython
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-11-23T00:00:00+08:00">2018年 11月 23日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>本文重点讨论wxpython较为底层的绘图知识和利用这些知识来建立自定义的一些窗体。</p>
+<h2 id="gdi">GDI</h2>
+<p>wxpython底层绘图有个GDI（Graphics Device Interface）的概念，可以理解为通用绘图接口，利用这个通用绘图接口，一套绘图方法，就可以向显示器，打印机等绘图。这样程序员可以不用考虑硬件底层来进行绘图编程了。</p>
+<p>这个GDI具体来说就是一些绘图的类和方法。</p>
+<h2 id="dc">DC</h2>
+<p>在开始绘图前，你需要创建一个设备上下文DC（device context），这个DC具体来说就是wx.DC类。实际使用中不应该使用wx.DC类，而应该选择更具体的设备向的DC子类。这些子类具体分为三类：</p>
+<ul>
+<li>用于绘制到屏幕的上下文</li>
+<li>用于绘制到另外地方而非屏幕</li>
+<li>用于缓冲一个设备上下文</li>
+</ul>
+<h3 id="_2">用于绘制到屏幕</h3>
+<ul>
+<li>wx.ClientDC </li>
+<li>wx.PaintDC 如果你是在EVT_PAINT事件中，那么你应该使用这个设备上下文，其他时候必须使用wx.ClientDC 。</li>
+<li>wx.WindowDC 如果你不光希望在客户区绘制，窗体的边框，标题栏等你都想绘制，那么就使用这个。</li>
+<li>wx.ScreenDC 如果你希望在整个屏幕上绘制，那么就使用这个。</li>
+</ul>
+<h3 id="_3">非屏幕设备上下文</h3>
+<ul>
+<li>wx …</li></ul>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/websockets-module.html">websockets模块  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2018-11-22T00:00:00+08:00">2018年 11月 22日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">简介</h2>
+<p>python和websokets相关的模块在github得星差不多的大概有三个，一个autobahn在使用上更偏向twisted，而且个人使用的时候在连接上会报websocket upgrade error这样的错误，可能是我的问题，而另外一个更偏向javascript那边websocket的使用风格，因为个人没有使用过，不做点评，本文重点关注的是这个模块：</p>
+<p><a href="https://github.com/aaugustin/websockets">https://github.com/aaugustin/websockets</a></p>
+<p>这个模块使用还是很简单的，不过需要读者对asyncio那块异步编程要有所熟悉。</p>
+<h2 id="websocket">全局websocket</h2>
+<p>首先你的应用启动的时候和服务器建立websocket连接，最好让这个websocket成为一个全局变量，后续的发送和监听消息需求都根据这个websocket来。</p>
+<h2 id="gui">和其他GUI框架的继承问题</h2>
+<p>这个websockets模块和GUI框架的继承问题更多的是在于该GUI框架如何和asyncio的事件循环集成起来。这个在目标GUI框架的时候会有所讨论，就不在这里讨论了。</p>
+<p>简单来说就是asyncio的事件循环里面你将添加一个或者多个任务，在目标任务中，完成websoket的相关工作。</p>
+<h2 id="_2">常驻监听模式</h2>
+<p>请读者看下面代码，下面建立了一种常驻监听模式，由于可能存在各种原因websocket服务器那边可能会强制把websocket连接关闭，所以你需要捕捉这个异常，然后试着重新建立一个全局websocket连接。</p>
+<div class="highlight"><pre><span></span>    <span class="n">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        主面板初始化新建一个全局的websocket</span>
+<span class="sd">        然后开始websocket监听</span>
+<span class="sd">        :return:</span>
+<span class="sd">        """</span>
+        <span class="n">ws_url</span> <span class="o">=</span> <span class="n">create_ws_url</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">async</span> <span class="k">with</span> <span class="n">websockets …</span></pre></div>
+                </article>
+
+
+                <article>
+
                     <h1 class="page-header"><a href="/articles/machine-learning-talk-four.html">机器学习第四谈  </a></h1>
 
                     <section>
@@ -561,276 +881,6 @@ train_labels.shape
     <span class="k">def</span> <span class="nf">OnInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"SingleApp-</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">wx</span><span class="o">.</span><span class="n">GetUserId</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">SingleInstanceChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/wxpython-talk-one.html">wxpython第一谈  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#wxpython-ref">wxpython
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-08-27T00:00:00+08:00">2018年 8月 27日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>本文假设读者已经熟悉某一种桌面图形开发了，比如说PyQt之类的，也就是基本的图形桌面开发概念读者是熟悉了，下面将言简意赅地就wxpython相关的特色核心概念说明之，然后后面就针对某些专门的问题专门讨论了。</p>
-<p>首先说下安装，现在wxpython和pyqt5一样都已经进步了，都可以直接用pip安装了，而且linux下和windows都可以直接安装。</p>
-<h2 id="sizeradd">Sizer.Add参数详解</h2>
-<ul>
-<li><code>Sizer.Add(item, 0 , wx.ALIGN_RIGHT, 0)</code>    右对齐布局，第一个参数proportion详细讨论在后面，第三个参数是设置border的宽度的。</li>
-<li>Sizer.Add(item, 0, wx.ALIGN_CENTER, 0)  居中布局</li>
-<li>Sizer.Add(item, 0, wx.EXPAND, 0) 扩展布局，（在vertical sizer里面水平扩展；在horizontal sizer里面垂直扩展）</li>
-</ul>
-<h3 id="proportion">proportion参数</h3>
-<p>默认是0，0表示不缩放，我估计这样设置之后父窗体Layout，而子窗体将不会自动Layout。然后设置其他整数则是某种缩放比的意思。参考资料谈了一些缩放比的问题，暂时不是很关心这个 …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/greedy-algorithm.html">贪婪算法  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#suan-fa-ref">算法
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-08-26T00:00:00+08:00">2018年 8月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<p>任何问题总可以通过暴力穷举算法求解，当然有些问题组合数情况太多了，尤其是某些问题，没有快速算法，即NP完全问题。那么可以试着用一些近似算法来快速找到一个近似解。贪婪算法就是其中的一个近似解。</p>
-<p>贪婪算法并不是某种具体的算法，更像是写算法时的一种思路参考。如果你要解决问题，而该问题可以分解为多个步骤，那么你可以通过寻找每步的局部最优解，来<strong>近似</strong>得到目标问题的全局最优解。（贪婪算法并不保证你得到的解一定是全局最优解，但一般这个解是很靠近全局最优解了。）</p>
-<p>对于一个问题，如果贪婪算法是有效的，那么一般贪婪算法就是解决这个问题最好的算法。</p>
-<h2 id="_1">背包问题</h2>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">items</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
-
-    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="k">if …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/python-cookbook.html">python语言学习之-技巧大杂烩  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonyu-yan-ref">python语言
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-08-02T00:00:00+08:00">2018年 8月 2日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">装饰器和装饰器的衍生装饰器</h2>
-<p>写一个装饰器现在很已经很简单通用了，有如下写法：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="k">def</span> <span class="nf">test_decorator</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_decorator</span>
-    <span class="k">return</span> <span class="n">decorator</span>
-</pre></div>
-<p>有的时候处于编程便捷的考虑，需要某些参数作为默认值另外再单独开出一个装饰器：</p>
-<div class="highlight"><pre><span></span><span class="n">bbb_decorator</span> <span class="o">=</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'bbb'</span><span class="p">)</span>
-</pre></div>
-<p>这是可行的，然后还有种写法，实际上是一样的：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">aaa_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-</pre></div>
-<p>理解装饰器关键是理解：</p>
-<div class="highlight"><pre><span></span><span class="nd">@aaa_decorator</span>
-<span class="k">def</span> <span class="nf">hello2</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'hello' …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/wsl.html">windows下的linux子系统  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#tools-ref">tools
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-08-02T00:00:00+08:00">2018年 8月 2日
-                            </time>
-                        </div>
-                    </section>
-                    <p>WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。</p>
-<h2 id="wsl">WSL配置</h2>
-<p>首先需要用管理员方式运行powershell，然后运行：</p>
-<div class="highlight"><pre><span></span>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-</pre></div>
-
-
-<p>然后重启系统。这个必须做，否则wsl会提示错误。</p>
-<p>然后进去了之后设置用户名和密码，这个没什么好说的，这里的用户名不一定是root。</p>
-<p>然后在windows系统的 <code>Settings -&gt; Update and Security-&gt; For develops</code> 哪里打开 Devoloper Mode，不清楚为什么，但推荐做一下，参看的是 <a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-win10">官方文档的这里</a> 。</p>
-<p>这样你在windows下输入bash就可以进入ubuntu系统了，</p>
-<h2 id="ssh">ssh连接</h2>
-<p><strong>NOTICE：</strong> 本小节可选项，可以不看。</p>
-<p>主要就是修改 <code>/etc/ssh/sshd_config</code> 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口，然后：</p>
-<div class="highlight"><pre><span></span>UsePrivilegeSeparation no #因为wsl没有实现chroot …</pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/redis.html">redis  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#shu-ju-ku-ref">数据库
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-07-25T00:00:00+08:00">2018年 7月 25日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h3 id="redis">redis基础</h3>
-<p>redis简单来说就是一个基于内存的k-v存储数据库，当然具体内容还是很丰富的，这个后面再慢慢详细讨论之。</p>
-<p>就作为python接口和基本的 get set操作都是很直观简单的，这个就不多说了，至于具体数据类型，先知道字符串型即可，哦，对了，redis存储数字1也会变成字符串"1"的。</p>
-<p>一个简单的获取redis的连接函数如下所示：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_redis_client</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">host</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">'redis'</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'localhost'</span><span class="p">)</span>
-    <span class="n">port</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">'redis'</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'port'</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
-
-    <span class="n">redis_client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">StrictRedis</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">decode_responses</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">redis_client</span>
-</pre></div>
-<p>注意看 <code>decode_responses=True</code> ，加上的目的就是让python那边接受字符串不是bytes型，也是字符串型 …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/xpath.html">xpath  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonpa-chong-ref">python爬虫
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-07-25T00:00:00+08:00">2018年 7月 25日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>基本东西简单了解下即可，然后多看例子吧。</p>
-<div class="highlight"><pre><span></span>/what   基本路径表达，下个节点
-//what  基本路径表达，任意位置的下个节点
-</pre></div>
-<p>这里 <code>/</code> 表示在下个节点中匹配， <code>//</code> 下个或所有子节点匹配。 </p>
-<div class="highlight"><pre><span></span>//div[@id='what']   根据id定位
-//div[@id='what']/a[1] 根据id定位后找下面的第一个a标签
-//div[@id='what']/a[*] 根据id定位后找下面的所有a标签
-</pre></div>
-<p>这里 <code>*</code> 表示所有的意思。</p>
-<div class="highlight"><pre><span></span>//div[@name]   找具有name属性的div标签
-
-//div[@name='what'] 找name属性等于what的div标签 
-
-//*[contains(@class,'what')] 找某个标签class属性有 what NOTICE: 这里的意思是有，多个class属性也是可以匹配的 class="what what_what"
-//div[@class='what' …</pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/python-setuptools-pip.html">setuptools和pip等相关  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonyu-yan-ref">python语言
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-07-14T00:00:00+08:00">2018年 7月 14日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="setuppy">setup.py配置</h2>
-<p>在上面模块那一章里对python模块包的知识还有python相关生态圈的知识几乎没有谈及，这里一并在本章中说明了。本章知识是我们理解前人编写的各个有用的模块包的基础，也是编写自己的模块包的基础。</p>
-<p>请结合Github上的 <a href="https://github.com/a358003542/pyskeleton">pyskeleton项目</a> 来阅读本章。</p>
-<p>虽然官方内置distutils模块也能实现类似的功能，不过现在人们更常用的是第三方模块setuptools，其相当于distutils模块的加强版，初学者推荐就使用setuptools模块。更多内容请参看setuptools模块的 <a href="https://pythonhosted.org/setuptools/index.html">官方文档</a> 。</p>
-<p>安装就是先安装pip3：</p>
-<div class="highlight"><pre><span></span>sudo apt-get install python3-pip
-</pre></div>
-<p>然后通过pip3来安装setuptools：</p>
-<div class="highlight"><pre><span></span>sudo pip3 install setuptools
-</pre></div>
-<p>最简单的"setup.py"文件如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
-<span class="n">setup</span><span class="p">(</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">"HelloWorld"</span><span class="p">,</span>
-    <span class="n">version</span> <span class="o">=</span> <span class="s2">"0.1"</span><span class="p">,</span>
-    <span class="n">packages</span> <span class="o">=</span> <span class="n">find_packages</span><span class="p">(),</span>
-<span class="p">)</span>
-</pre></div>
-<p>第一行是从setuptools模块中引入setup函数和 <code>find_packages</code> 函数。</p>
-<p>setup函数接受一系列的字典值，下面就setup函数的一些字典值的含义慢慢道来：</p>
-<dl>
-<dt>name</dt>
-<dd>
-<p>本软件的名字</p>
-</dd>
-<dt>version …</dt></dl>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/django-templates.html">django后台api编写之-模板  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#django-ref">django
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-07-10T00:00:00+08:00">2018年 7月 10日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">模板基本概念</h2>
-<p>模板基本的样子如下，下面有模板继承，block ，循环，过滤，之类的。熟悉jinja2模板的同学稍微看下大致是个什么意思就已经清楚了。</p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">"base_generic.html"</span> <span class="cp">%}</span><span class="x"></span>
-<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span> <span class="nv">section.title</span> <span class="cp">}}{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
-<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x">&lt;h1&gt;</span><span class="cp">{{</span> <span class="nv">section.title</span> <span class="cp">}}</span><span class="x">&lt;/h1&gt;</span>
-<span class="cp">{%</span> <span class="k">for</span> <span class="nv">story</span> <span class="k">in</span> <span class="nv">story_list</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x">&lt;h2&gt;</span>
-<span class="x">  &lt;a href="</span><span class="cp">{{</span> <span class="nv">story.get_absolute_url</span> <span class="cp">}}</span><span class="x">"&gt;</span>
-<span class="x">    </span><span class="cp">{{</span> <span class="nv">story.headline</span><span class="o">|</span><span class="nf">upper</span> <span class="cp">}}</span><span class="x"></span>
-<span class="x">  &lt;/a&gt;</span>
-<span class="x">&lt;/h2&gt;</span>
-<span class="x">&lt;p&gt;</span><span class="cp">{{</span> <span class="nv">story.tease</span><span class="o">|</span><span class="nf">truncatewords</span><span class="s2">:"100"</span> <span class="cp">}}</span><span class="x">&lt;/p&gt;</span>
-<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
-<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
-</pre></div>
-<h2 id="django">django如何查找模板的</h2>
-<p>在django的settings.py哪里有：</p>
-<div class="highlight"><pre><span></span>PROJECT_DIR = os.path …</pre></div>
                 </article>
 
   <nav aria-label="Page Navigation">

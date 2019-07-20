@@ -148,39 +148,365 @@
  
                 <article>
 
-                    <h1 class="page-header"><a href="/articles/classification.html">分类  </a></h1>
+                    <h1 class="page-header"><a href="/articles/python-advanced.html">python语言学习进阶  </a></h1>
 
                     <section>
                         posted in
-                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        <a href="/categories.html#pythonyu-yan-ref">python语言
                         </a>
                         <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2019-04-11T00:00:00+08:00">2019年 4月 11日
+                            <time pubdate="pubdate" datetime="2019-06-24T00:00:00+08:00">2019年 6月 24日
                             </time>
                         </div>
                     </section>
                     
 <h2 id="_1">前言</h2>
-<p>分类</p>
+<p>淘得好书 《深入理解python特性》和 《流畅的python》，来对自己的python语言知识继续进阶查漏补缺之。</p>
+<h3 id="_2">最疯狂的字典表达式</h3>
+<div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="s1">'yes'</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">'no'</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">:</span> <span class="s1">'maybe'</span><span class="p">}</span>
+<span class="n">t</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="s1">'maybe'</span><span class="p">}</span>
+</pre></div>
+<p>造成这样的结果首先是python的字典的key相同的判断机制，比如是 值相同 而且是 hash 值相同 才认为是 key相同。</p>
+<p>其次是认为key相同key就不做改变了，而值是取最新的。也正是因为这样，下面的字典更新语句写法是可行的：</p>
+<div class="highlight"><pre><span></span>x = {'a':1, 'b':2}
+y = {'b':3}
+z = {**x, **y}
+</pre></div>
+<div class="highlight"><pre><span></span>z
+Out[8]: {'a': 1, 'b': 3 …</pre></div>
                 </article>
 
 
                 <article>
 
-                    <h1 class="page-header"><a href="/articles/cluster.html">聚类  </a></h1>
+                    <h1 class="page-header"><a href="/articles/gao-xiao-numpyhe-pandas.html">高效numpy和pandas  </a></h1>
 
                     <section>
                         posted in
                         <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
                         </a>
                         <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2019-04-11T00:00:00+08:00">2019年 4月 11日
+                            <time pubdate="pubdate" datetime="2019-06-20T00:00:00+08:00">2019年 6月 20日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="numpy">高效numpy</h2>
+<h3 id="numpypandas">numpy总的来说比pandas快</h3>
+<p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
+<div class="highlight"><pre><span></span>np.dot(df['a'],x)
+</pre></div>
+<p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
+<h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
+<p>比如下面的程序：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
+
+<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)])</span>
+</pre></div>
+<div class="highlight"><pre><span></span>50.7 ms ± 1.5 ms per loop (mean ± std. dev. of …</pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/bash-advanced.html">bash脚本进阶  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#linux-ref">linux
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-06-17T00:00:00+08:00">2019年 6月 17日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="xargs">xargs多行转一行</h2>
+<div class="highlight"><pre><span></span>sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)
+</pre></div>
+<p>这是一个批量删除空文件夹的命令，假设现在空文件夹数目很多。首先 <code>ls -U</code> 单纯列出来，然后管道导向 <code>head</code> 只打印最开始的几行，然后管道导向 <code>xargs</code> 命令，这样多行转成一行，就可以作为 rmdir 的参数了。</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/loguru-module.html">loguru模块  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-06-10T00:00:00+08:00">2019年 6月 10日
                             </time>
                         </div>
                     </section>
                     
 <h2 id="_1">前言</h2>
-<p>聚类</p>
+<p>keep it simple , keep it stupid . loguru模块大概是符合这一精神的，其让你把精力从一些日志的调配的琐碎事情上抽离出来，好让你有更多的精力去解决核心问题。基本上使用过之后，就好像使用了python的新特性 <code>f-string</code> 一样，you just can not stop to use it. 你会忍不住想要使用它。</p>
+<p>就最简单的使用：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</pre></div>
+<p>接触过logging的马上就知道这个logger是个什么东西了，然后就想通常那样 <code>logger.info('what')</code> 之类的去打日志即可。默认的logger的日志格式就已经非常好了。</p>
+<p>通常这个就已经够用了，实际上容器化了的应用或者某些应用场景，是要求你的日志都打印在默认终端上的，还有某些专门管理日志的工具，也要求你的应用就打印在默认终端。</p>
+<p>某些情况下你可能需要将日志同时打印到文件中：</p>
+<div class="highlight"><pre><span></span>logger.add('&lt;filename&gt;.log')
+</pre></div>
+<p>此外还支持这样带时间戳的文件名：</p>
+<div class="highlight"><pre><span></span>logger.add('file_{time …</pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/extract_pic_feature.html">提取图片的特征  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-06-05T00:00:00+08:00">2019年 6月 5日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">提取图片的特征</h2>
+<p>请参阅 <a href="https://www.cnblogs.com/my-love-is-python/p/10414135.html">这篇文章</a> ，老实说具体算法细节看不大懂，而且似乎短时间内是没希望看懂了..里面有太深的相关领域专业知识了。不过具体python代码还是很简单的：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">'test_1.jpg'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># 第二个参数设置为0就是自动灰度化了</span>
+<span class="n">sift</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">xfeatures2d</span><span class="o">.</span><span class="n">SIFT_create</span><span class="p">()</span>
+
+<span class="c1"># 找出关键点</span>
+<span class="n">kp</span> <span class="o">=</span> <span class="n">sift</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="c1"># 对关键点进行绘图</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">'ret'</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+<span class="c1"># 使用关键点找出sift特征向量</span>
+<span class="n">kp</span><span class="p">,</span> <span class="n">des</span> <span class="o">=</span> <span class="n">sift …</span></pre></div>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/impala.html">impala  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#da-shu-ju-ref">大数据
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-05-21T00:00:00+08:00">2019年 5月 21日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="impala">impala</h2>
+<p>impala是用于处理Hadoop集群上的大量数据的SQL处理引擎。</p>
+<p>impala可以让你使用传统的SQL知识以极快的速度处理存储在HDFS上的数据。</p>
+<p>impala和传统SQL关系数据库还是有一些区别的：</p>
+<ul>
+<li>impala无法更新或删除单个记录</li>
+<li>impala不支持事务</li>
+<li>impala不支持索引</li>
+</ul>
+<h2 id="pythonimpala">python连接impala</h2>
+<p><a href="https://github.com/cloudera/impyla">impyla</a> 模块可以让python连接impala，简单的连接下面的README简单的说了一下。</p>
+<p>具体各个使用语法就是符合python通用的db api 2，如果读者使用过sqlite3，python的官方模块，那么大概该怎么使用它心里已经有个数了。</p>
+<p>不熟悉也没关系，简单的连接下看看输出结果，大概情况也就了解了。这一块主要是SQL语法。</p>
+<h2 id="dataframe">导出到DataFrame对象</h2>
+<p>这个还是需要说一下，cursor对象executor某个语句之后，其可以如下转成pandas的DataFrame对象，有时这样转了之后，后面很多数据处理工作会很方便的。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">impala.util</span> <span class="kn">import</span> <span class="n">as_pandas</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">as_pandas</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+</pre></div>
+<h2 id="_1">参考资料</h2>
+<ol>
+<li><a href="https://www.w3cschool.cn/impala/">w3cschool 的impala教程</a></li>
+</ol>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/hadoop-file-system.html">hadoop文件系统  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#da-shu-ju-ref">大数据
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-05-10T00:00:00+08:00">2019年 5月 10日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>hdfs的全称是hadoop分布式文件系统。</p>
+<p>HDFS采用master/slave架构。一个HDFS集群是由一个Namenode和一定数目的Datanode组成的。</p>
+<p>hdfs的设计主要针对那些只写入一次，多次读取的数据。</p>
+<h2 id="pyarrowhdfs">pyarrow连接hdfs</h2>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="kn">as</span> <span class="nn">pa</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">hdfs</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+</pre></div>
+<p>连接之后返回的是HDFS文件对象，该文件对象可以继续调用如下命令：</p>
+<ul>
+<li>
+<p>cat</p>
+</li>
+<li>
+<p>chmod</p>
+</li>
+<li>
+<p>chown</p>
+</li>
+<li>
+<p>delete</p>
+</li>
+<li>
+<p>df</p>
+</li>
+<li>
+<p>exists</p>
+</li>
+<li>
+<p>get_capacity</p>
+</li>
+<li>
+<p>get_space_used</p>
+</li>
+<li>
+<p>info</p>
+</li>
+<li>
+<p>ls</p>
+</li>
+<li>
+<p>rm</p>
+</li>
+<li>
+<p>rename</p>
+</li>
+<li>
+<p>upload</p>
+</li>
+</ul>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/ke-xue-ji-suan-ji-qiao-za-xiang.html">科学计算技巧杂项  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-05-07T00:00:00+08:00">2019年 5月 7日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">计算余弦</h2>
+<p>按照 
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left | \vec{a} \right | \left | \vec{b} \right |
+}
+$$</div>
+<p>然后上面的向量的绝对值，是高中的写法，更确切应该写作如下形式：
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left \| \vec{a} \right \|_2 \left \| \vec{b} \right \|_2
+}
+$$</div>
+<p>
+具体就是叫做该向量的l2范数，也是该向量的欧几里得距离。</p>
+<p>而如果我们对某个向量进行sklearn的 <code>normalize</code> 归一化操作，也就是让这个向量的l2范数=1，默认是l2范数，你也可以设置为其他范数。比如l1范数就是所有值的绝对值相加等于1（这在某些数据预处理中 …</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/dask-module.html">dask模块  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#da-shu-ju-ref">大数据
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-05-06T00:00:00+08:00">2019年 5月 6日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">前言</h2>
+<p>总的说来对于python生态圈来说，大数据解决方案我是推荐dask多于pyspark。接触pyspark之后最大的痛苦就是，之前学习机器学习积累下来的numpy，pandas，sklearn的知识，全部不能继续使用了。而dask作为python的大数据解决方案，不说完全无缝对接，这也是不现实的，毕竟到了大数据那块，不说其他东西，就是你要应对的变量，也必然是惰性加载和惰性求值的，这也是一个区别点。但总的给我的感觉就是，作为python爱好者，之于大数据解决方案，dask真的用的很爽。</p>
+<p>dask的官方文档写的很厚实，主要是这块东西也多。本文作者尽我所知简要地说下个人使用经验吧。其他深入研究还是要读者去研究 <a href="https://docs.dask.org/en/latest/">官方文档</a> 的。</p>
+<h2 id="hadoop">大数据hadoop简介</h2>
+<p>现在的hadoop2的架构大概如下所示：</p>
+<p><img alt="img" src="/images/大数据/HADOOP.png"/></p>
+<p>底层是hadoop分布式文件系统作为大数据的文件存储支持。HDFS的基本架构如下图所示：</p>
+<p><img alt="img" src="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png"/></p>
+<p>然后中层是YARN对计算资源进行调度分配。YARN的基本架构如下图所示：</p>
+<p><img alt="img" src="http://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/yarn_architecture.gif"/></p>
+<p>如上图所示，Yarn有一个Scheduler，也就是Resource Manager 进行资源调度，然后还有很多 个worker，也就是Node Manager进行实际的应用计算任务。</p>
+<p>而最高层MapReduce框架是分布式应用程序的一个支持性框架，现在Hadoop2可扩展性很好，dask，spark等这些框架都是可以运行在Yarn之上的。</p>
+<h2 id="dask">dask简介</h2>
+<p>dask主要由两部分组成：</p>
+<ol>
+<li>基于计算优化的动态调度 </li>
+<li>大数据级别的集合</li>
+</ol>
+<p>简单来说就是dask基于python常见的那些数据类型概念 …</p>
+                </article>
+
+
+                <article>
+
+                    <h1 class="page-header"><a href="/articles/supervisor.html">supervisor  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#linux-ref">linux
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-05-05T00:00:00+08:00">2019年 5月 5日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h2 id="_1">简介</h2>
+<p>supervisor会开启一个后台服务 <code>supervisord</code> 可以通过：</p>
+<div class="highlight"><pre><span></span>systemctl status supervisord
+</pre></div>
+<p>查看之。同样类似于nginx之类的做法，其通过各个配置文件来管理的，然后配置文件在 <code>/etc/supervisord.conf</code> 文件里面。</p>
+<p>一般会如下所示将配置文件放在另外的某个地方。</p>
+<div class="highlight"><pre><span></span><span class="k">[include]</span>
+<span class="na">files</span> <span class="o">=</span> <span class="s">/etc/supervisord.d/*.conf</span>
+</pre></div>
+<p>这些配置都是等下supervisord要加载的。</p>
+<p>此外你还需要了解下 supervisor提供的 <code>supervisorctl</code> 命令。</p>
+<p>其提供的子命令有：</p>
+<ul>
+<li>reread 重载配置</li>
+<li>restart <code>&lt;name&gt;</code> 重启某个进程</li>
+<li>restart all 重启所有进程</li>
+<li>stop <code>&lt;name&gt;</code> 停止某个进程</li>
+<li>stop all 停止所有进程</li>
+<li>start <code>&lt;name&gt;</code> 启用某个进程</li>
+<li>start all 启用所有进程</li>
+<li>status <code>&lt;name …</code></li></ul>
                 </article>
 
 
@@ -489,8 +815,8 @@ $$</div>
                     </section>
                     
 <h2 id="_1">前言</h2>
-<p>django是一种构建大型商务网站的解决方案，但现在这一块需求已经很分散了，实际上很多语言，javascript方面甚至小程序等等，各种轻量级的应用，传统的那种重量级网站技术已经很成熟了，而在应用的背后，微服务api，小型博客应用，一般机器学习api接口等等，使用flask或者其他轻量级的模块现在显得更合适一些了。</p>
-<p>本文只介绍flask模块自身相关的一些东西，实际上即使是flask自身，也是多个python模块的组合：click，Werkzeug，jinja2等。这些都会分开讨论的，而其他一些flask扩展，除了基本和flask接口相关的外，都另外当做一个模块来介绍了。至于实际应用根据需要引入的其他python模块就更加不用说了。</p>
+<p>django是一种构建大型商务网站的解决方案，除非目前贵公司的技术栈是已经架构在django之上的，否则不管是个人性质的小项目，或者刚刚开始的新的项目，个人推荐flask多于django的。当然在flask和tornado之间如何选择上，个人觉得更多的是在你对python的异步这一块的理解上，如果你懂python的异步，并且也知道你要做的api对并发和速度都有很高的要求，那么就应该选择tornado，否则就选择flask。</p>
+<p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
 <h2 id="_2">初始运行</h2>
 <p>windows </p>
 <div class="highlight"><pre><span></span>set FLASK_APP=hello.py
@@ -507,327 +833,9 @@ flask run
 <li>调试器 出现异常在浏览器中显示异常信息</li>
 </ul>
 <p>在生产服务器上一定要把调试模式关闭！</p>
-<p>flask run …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/machine-learning-talk-six.html">机器学习第六谈之pipeline  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-12-26T00:00:00+08:00">2018年 12月 26日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="pipeline">机器学习第六谈之pipeline</h2>
-<p>前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。</p>
-<p>在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。</p>
-<p>sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。</p>
-<p>【pipeline工作流程图】</p>
-<p>本图片摘自 <a href="http://frankchen.xyz/2018/04/08/pipeline-in-machine-learning/">这篇文章</a></p>
-<p><img alt="" src="http://frankchen.xyz/images/15231783974167.jpg"/></p>
-<p>其中pipeline前面的叫做transformer，最后一个叫做estimator。</p>
-<h3 id="transformer">transformer</h3>
-<p>transformer必须要有fit和tranform两个方法，当你调用 <code>pipeline.fit</code> 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 <code>TransformerMixin</code> 这个类 …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/python-c++-dll-in-windows.html">python和c++的dll的对接_in_windows  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonyu-yan-ref">python语言
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-12-24T00:00:00+08:00">2018年 12月 24日
-                            </time>
-                        </div>
-                    </section>
-                    <h2 id="ctypes">ctypes模块</h2>
-<p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
-<p>基本的使用如下：</p>
-<div class="highlight"><pre><span></span><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
-</pre></div>
-
-
-<p>假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。</p>
-<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">helloworld</span><span class="p">()</span>
-</pre></div>
-
-
-<p>接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。）</p>
-<p><a href="https://docs.python.org/3.7/library/ctypes.html">官方文档</a> 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。</p>
-<p>首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YOU_STRUCTURE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    基础信息结构体</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">),</span>  
-        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">24</span><span class="p">),</span> 
-        <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">40</span><span class="p">),</span> 
-    <span class="p">]</span>
-</pre></div>
-
-
-<p>然后实际使用如下：</p>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">YOU_STRUCTURE</span><span class="p">()</span>
-<span class="n">_ref_s</span>  <span class="o">=</span> <span class="n">ctypes …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/machine-learning-talk-five.html">机器学习第五谈之数据预处理  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。</p>
-<p>本文介绍的内容，以下面代码形式展示出来：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
-
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">sk_normalize</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">binarize</span> <span class="k">as</span> <span class="n">sk_binarize</span>
-
-
-<span class="k">def</span> <span class="nf">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">old_df</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    输入ndarray值，然后根据给的老df的column列名来输出一个新的df</span>
-<span class="sd">    :param df_value:</span>
-<span class="sd">    :param old_df:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    """</span>
-    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/wxpython-talk-three.html">wxpython第三谈  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#wxpython-ref">wxpython
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="textctrl">TextCtrl用代码改变文本</h2>
-<p>TextCtrl用代码直接改变文本的方法有：</p>
-<ul>
-<li>AppendText 尾部添加文本</li>
-<li>Clear </li>
-<li>EmulateKeyPress 产生一个按键事件</li>
-<li>SetInsertionPoint 设置插入点</li>
-<li>SetValue</li>
-<li>WriteText 在当前插入点插入文本</li>
-<li>Remove 删除指定范围文本</li>
-<li>Replace 替换指定范围文本</li>
-</ul>
-<h2 id="_1">对接系统的剪贴板</h2>
-<h3 id="_2">将文本放入剪贴板</h3>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextDataObject</span><span class="p">()</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"your text"</span>
-<span class="n">data</span><span class="o">.</span><span class="n">SetText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Open</span><span class="p">():</span>
-    <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">SetData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1">#将数据放置到剪贴板上</span>
-    <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'剪贴板打不开..'</span><span class="p">)</span>
-</pre></div>
-<h3 id="_3">从剪贴板中取内容</h3>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextDataObject</span><span class="p">()</span>
-<span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Open …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/pypubsub-module.html">pypubsub模块  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#wxpython-ref">wxpython
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-11-29T00:00:00+08:00">2018年 11月 29日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>pypubsub模块的基本使用这里就不赘述了，简单的看下官方文档即可。这里我要说的是debug问题：</p>
-<p>pypubsub引入之后程序经常出现问题之后是没有任何异常信息直接退出，这给日常编码带来了很多困扰，下面重点解决这个问题。</p>
-<p>官方文档的高级使用部分有相关介绍，不过似乎有点杂乱，然后语焉不详。</p>
-<p>搜索到 <a href="https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.core.listener.IListenerExcHandler.html">这个页面</a> ，似乎是要这样配置就能捕捉到异常信息。</p>
-<p>我试着跟着他写了一下，然后发现 listenerID 和 topicObj.getName() 只有消息的名字，具体程序捕捉到了什么异常并没有写明。</p>
-<p>在简单了解Topic和Linstener对象之后发现也找不到存储异常信息的地方。</p>
-<p>只好翻文档，在API的utils里面有个ExcPublisher引起来了我的兴趣，看了下源码，简单的使用哪个 ExcPublisher 发现能够打印出异常信息，但是还是有其他异常。然后发现其核心实际上就是这里：</p>
-<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listenerID</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">topicObj</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Handle the exception raised by given listener. Send the</span>
-<span class="sd">        Traceback to all subscribers of …</span></pre></div>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/recommender-talk-two.html">推荐系统第二谈  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#ji-qi-xue-xi-ref">机器学习
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-11-27T00:00:00+08:00">2018年 11月 27日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>由于我对于推荐系统属于摸索性质，然后又过了一段时间，再来看之前写的推荐系统第一谈文章，基本上要全部删掉重写。但这里还是叫做推荐系统第二谈吧，一些大概没什么太大问题的东西都放在下面的基本概念了解部分了。</p>
-<h2 id="_2">基本概念了解</h2>
-<p>推荐系统本质上是隶属于机器学习系统的，所以在简单了解下推荐系统相关算法之后，具体实现推荐系统的架构，是应该基于机器学习系统架构，然后在这之上引入新的处理流即可。</p>
-<p>推荐系统分为两类推荐：一类是评分预测推荐；另一类是topN推荐。之前我们看的很多教材和案例基本上都在做评分预测推荐，大概如下面表格的数据：</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">物品1</th>
-<th align="center">物品2</th>
-<th align="center">物品3</th>
-<th align="center">物品4</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">用户1</td>
-<td align="center">2</td>
-<td align="center">?</td>
-<td align="center">3</td>
-<td align="center">?</td>
-</tr>
-<tr>
-<td align="center">用户2</td>
-<td align="center">1</td>
-<td align="center">2</td>
-<td align="center">5</td>
-<td align="center">?</td>
-</tr>
-<tr>
-<td align="center">用户3</td>
-<td align="center">?</td>
-<td align="center">?</td>
-<td align="center">?</td>
-<td align="center">?</td>
-</tr>
-</tbody>
-</table>
-<p>然后用户对某些物品有些评分，然后开始开展推荐工作。老实说这些教材一开始给了我很大的困扰，因为我现在活着说一般做推荐系统刚开始，基本上是没有评分数据的。甚至不要说一开始，就是到了网站运营后期也可能没有这个收集用户评分的需求。在这里要感谢项亮的书籍【参考资料2】，提醒了我，还有另外一类推荐系统，叫做topN推荐，返回一些推荐列表数据，这才是通常我们常见的应用类型。</p>
-<h3 id="usercf">评分预测推荐的usercf方法</h3>
-<p>usercf也就是所谓的协同过滤推荐感觉教材里面到处都有，但实际因为缺少用户评分数据是不现实的，最大的用处可能就是让我们理解这个思路，那就是通过用户评分的相似性继而扩展到用户行为的相似性，从而找到相似的用户 …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/wxpython-drawing-custom-widget.html">wxpython绘图和自定义窗体  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#wxpython-ref">wxpython
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-11-23T00:00:00+08:00">2018年 11月 23日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>本文重点讨论wxpython较为底层的绘图知识和利用这些知识来建立自定义的一些窗体。</p>
-<h2 id="gdi">GDI</h2>
-<p>wxpython底层绘图有个GDI（Graphics Device Interface）的概念，可以理解为通用绘图接口，利用这个通用绘图接口，一套绘图方法，就可以向显示器，打印机等绘图。这样程序员可以不用考虑硬件底层来进行绘图编程了。</p>
-<p>这个GDI具体来说就是一些绘图的类和方法。</p>
-<h2 id="dc">DC</h2>
-<p>在开始绘图前，你需要创建一个设备上下文DC（device context），这个DC具体来说就是wx.DC类。实际使用中不应该使用wx.DC类，而应该选择更具体的设备向的DC子类。这些子类具体分为三类：</p>
-<ul>
-<li>用于绘制到屏幕的上下文</li>
-<li>用于绘制到另外地方而非屏幕</li>
-<li>用于缓冲一个设备上下文</li>
-</ul>
-<h3 id="_2">用于绘制到屏幕</h3>
-<ul>
-<li>wx.ClientDC </li>
-<li>wx.PaintDC 如果你是在EVT_PAINT事件中，那么你应该使用这个设备上下文，其他时候必须使用wx.ClientDC 。</li>
-<li>wx.WindowDC 如果你不光希望在客户区绘制，窗体的边框，标题栏等你都想绘制，那么就使用这个。</li>
-<li>wx.ScreenDC 如果你希望在整个屏幕上绘制，那么就使用这个。</li>
-</ul>
-<h3 id="_3">非屏幕设备上下文</h3>
-<ul>
-<li>wx …</li></ul>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/websockets-module.html">websockets模块  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2018-11-22T00:00:00+08:00">2018年 11月 22日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">简介</h2>
-<p>python和websokets相关的模块在github得星差不多的大概有三个，一个autobahn在使用上更偏向twisted，而且个人使用的时候在连接上会报websocket upgrade error这样的错误，可能是我的问题，而另外一个更偏向javascript那边websocket的使用风格，因为个人没有使用过，不做点评，本文重点关注的是这个模块：</p>
-<p><a href="https://github.com/aaugustin/websockets">https://github.com/aaugustin/websockets</a></p>
-<p>这个模块使用还是很简单的，不过需要读者对asyncio那块异步编程要有所熟悉。</p>
-<h2 id="websocket">全局websocket</h2>
-<p>首先你的应用启动的时候和服务器建立websocket连接，最好让这个websocket成为一个全局变量，后续的发送和监听消息需求都根据这个websocket来。</p>
-<h2 id="gui">和其他GUI框架的继承问题</h2>
-<p>这个websockets模块和GUI框架的继承问题更多的是在于该GUI框架如何和asyncio的事件循环集成起来。这个在目标GUI框架的时候会有所讨论，就不在这里讨论了。</p>
-<p>简单来说就是asyncio的事件循环里面你将添加一个或者多个任务，在目标任务中，完成websoket的相关工作。</p>
-<h2 id="_2">常驻监听模式</h2>
-<p>请读者看下面代码，下面建立了一种常驻监听模式，由于可能存在各种原因websocket服务器那边可能会强制把websocket连接关闭，所以你需要捕捉这个异常，然后试着重新建立一个全局websocket连接。</p>
-<div class="highlight"><pre><span></span>    <span class="n">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        主面板初始化新建一个全局的websocket</span>
-<span class="sd">        然后开始websocket监听</span>
-<span class="sd">        :return:</span>
-<span class="sd">        """</span>
-        <span class="n">ws_url</span> <span class="o">=</span> <span class="n">create_ws_url</span><span class="p">()</span>
-
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">async</span> <span class="k">with</span> <span class="n">websockets …</span></pre></div>
+<p>flask run 额外的选项
+<code>--host 0.0.0.0</code></p>
+<p><code>--port 8080 …</code></p>
                 </article>
 
   <nav aria-label="Page Navigation">

@@ -17,13 +17,13 @@
 
 <meta property="og:title" content="python语言学习之-技巧大杂烩 "/>
 <meta property="og:url" content="/articles/python-cookbook.html" />
-<meta property="og:description" content="装饰器和装饰器的衍生装饰器 写一个装饰器现在很已经很简单通用了，有如下写法： from functools import wraps def test_decorator(word): def decorator(f): @wraps(f) def _decorator(*args, **kwargs): print(word) return f(*args, **kwargs) return _decorator return decorator 有的时候处于编程便捷的考虑，需要某些参数作为默认值另外再单独开出一个装饰器： bbb_decorator = test_decorator(&#39;bbb&#39;) 这是可行的，然后还有种写法，实际上是一样的： def aaa_decorator(f): return test_decorator(&#39;aaa&#39;)(f) 理解装饰器关键是理解： @aaa_decorator def hello2(): print(&#39;hello&#39; …" />
+<meta property="og:description" content="在logging中使用pprint 参考了 这个网页 。 有的时候logging的输出我们希望调用pprint从而输出打印更加美观些，可以调用pformat函数来达到这个效果： from pprint import pprint, pformat ds = [{&#39;hello&#39;: &#39;there&#39;}] logging.debug(pformat(ds)) and or not的运算优先级 一般是推荐用括号清晰表达，然后not我们知道优先级是最高的。我们再看下面这个例子: &gt;&gt;&gt; True or True and False True 这个例子很好地说明了and和or的优先级顺序，具体就是 and的优先级比or的要高 。 all和any关键词 这是python语言里面的关键词函数，源码很简单，下面列出来，看一下就清楚了: def all(iterable): for element in iterable: if not element: return False return …" />
 <meta property="og:site_name" content="cdwanze的博文" />
 <meta property="og:article:author" content="cdwanze" />
 <meta property="og:article:published_time" content="2018-08-02T00:00:00+08:00" />
-<meta property="" content="2019-01-25T00:00:00+08:00" />
+<meta property="" content="2019-06-25T00:00:00+08:00" />
 <meta name="twitter:title" content="python语言学习之-技巧大杂烩 ">
-<meta name="twitter:description" content="装饰器和装饰器的衍生装饰器 写一个装饰器现在很已经很简单通用了，有如下写法： from functools import wraps def test_decorator(word): def decorator(f): @wraps(f) def _decorator(*args, **kwargs): print(word) return f(*args, **kwargs) return _decorator return decorator 有的时候处于编程便捷的考虑，需要某些参数作为默认值另外再单独开出一个装饰器： bbb_decorator = test_decorator(&#39;bbb&#39;) 这是可行的，然后还有种写法，实际上是一样的： def aaa_decorator(f): return test_decorator(&#39;aaa&#39;)(f) 理解装饰器关键是理解： @aaa_decorator def hello2(): print(&#39;hello&#39; …">
+<meta name="twitter:description" content="在logging中使用pprint 参考了 这个网页 。 有的时候logging的输出我们希望调用pprint从而输出打印更加美观些，可以调用pformat函数来达到这个效果： from pprint import pprint, pformat ds = [{&#39;hello&#39;: &#39;there&#39;}] logging.debug(pformat(ds)) and or not的运算优先级 一般是推荐用括号清晰表达，然后not我们知道优先级是最高的。我们再看下面这个例子: &gt;&gt;&gt; True or True and False True 这个例子很好地说明了and和or的优先级顺序，具体就是 and的优先级比or的要高 。 all和any关键词 这是python语言里面的关键词函数，源码很简单，下面列出来，看一下就清楚了: def all(iterable): for element in iterable: if not element: return False return …">
 
     <title>python语言学习之-技巧大杂烩  · cdwanze的博文
 </title>
@@ -105,32 +105,31 @@
         <h4>目录</h4>
         <div class="toc">
 <ul>
-<li><a href="#_1">装饰器和装饰器的衍生装饰器</a></li>
 <li><a href="#loggingpprint">在logging中使用pprint</a></li>
 <li><a href="#and-or-not">and or not的运算优先级</a></li>
 <li><a href="#allany">all和any关键词</a></li>
-<li><a href="#_2">三元运算符</a></li>
+<li><a href="#_1">三元运算符</a></li>
 <li><a href="#__name__-__file__">__name__ 和 __file__</a></li>
 <li><a href="#localsglobals">locals和globals</a></li>
-<li><a href="#_3">获取本模块对象</a></li>
-<li><a href="#_4">根据字符串获取模块对象</a></li>
-<li><a href="#_5">检查某个变量是不是模块对象</a></li>
+<li><a href="#_2">获取本模块对象</a></li>
+<li><a href="#_3">根据字符串获取模块对象</a></li>
+<li><a href="#_4">检查某个变量是不是模块对象</a></li>
 <li><a href="#assert">assert语句</a></li>
-<li><a href="#_6">属性管理的函数</a></li>
+<li><a href="#_5">属性管理的函数</a></li>
 <li><a href="#flatten">可迭代对象flatten操作</a></li>
 <li><a href="#__missing__">__missing__方法</a></li>
 <li><a href="#product">product函数</a></li>
 <li><a href="#deque">deque结构</a></li>
-<li><a href="#_7">查找多个最大最小元素的情况</a></li>
-<li><a href="#_8">获取一个月最后的一天</a></li>
+<li><a href="#_6">查找多个最大最小元素的情况</a></li>
+<li><a href="#_7">获取一个月最后的一天</a></li>
 <li><a href="#ordereddict">OrderedDict类</a></li>
 <li><a href="#counter">Counter类</a></li>
-<li><a href="#_9">字符串比较大小</a><ul>
-<li><a href="#_10">中文比较大小？</a></li>
+<li><a href="#_8">字符串比较大小</a><ul>
+<li><a href="#_9">中文比较大小？</a></li>
 <li><a href="#ordchr">ord和chr函数</a></li>
 </ul>
 </li>
-<li><a href="#_11">给某个对象动态加载一个方法</a></li>
+<li><a href="#_10">给某个对象动态加载一个方法</a></li>
 <li><a href="#configparse">configparse处理特殊字符</a></li>
 </ul>
 </div>
@@ -140,34 +139,6 @@
 
             
             
-<h2 id="_1">装饰器和装饰器的衍生装饰器</h2>
-<p>写一个装饰器现在很已经很简单通用了，有如下写法：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="k">def</span> <span class="nf">test_decorator</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_decorator</span>
-    <span class="k">return</span> <span class="n">decorator</span>
-</pre></div>
-<p>有的时候处于编程便捷的考虑，需要某些参数作为默认值另外再单独开出一个装饰器：</p>
-<div class="highlight"><pre><span></span><span class="n">bbb_decorator</span> <span class="o">=</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'bbb'</span><span class="p">)</span>
-</pre></div>
-<p>这是可行的，然后还有种写法，实际上是一样的：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">aaa_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-</pre></div>
-<p>理解装饰器关键是理解：</p>
-<div class="highlight"><pre><span></span><span class="nd">@aaa_decorator</span>
-<span class="k">def</span> <span class="nf">hello2</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
-</pre></div>
-<p>装饰器不仅仅是函数作为第一个函数这么简单，更进行了函数的命名重定义。</p>
-<div class="highlight"><pre><span></span>hello2 = aaa_decorator(hello2)
-</pre></div>
-<p>而可以传参数的装饰器其首先消化掉参数，然后decorator，也就是实际装饰函数的是内部的那个decorator函数，而 <code>wraps</code> 只是为了保留原函数头doc的优化。</p>
 <h2 id="loggingpprint">在logging中使用pprint</h2>
 <p>参考了 <a href="https://stackoverflow.com/questions/11093236/use-logging-print-the-output-of-pprint">这个网页</a> 。</p>
 <p>有的时候logging的输出我们希望调用pprint从而输出打印更加美观些，可以调用pformat函数来达到这个效果：</p>
@@ -200,7 +171,7 @@ def any(iterable):
 <li>all，都是True，则返回True，否则返回False</li>
 <li>any，只要有一个True则返回True，否则返回False。</li>
 </ul>
-<h2 id="_2">三元运算符</h2>
+<h2 id="_1">三元运算符</h2>
 <p>也就是类似这样的结构:</p>
 <div class="highlight"><pre><span></span>loop = loop if loop is not None else get_event_loop()
 </pre></div>
@@ -215,17 +186,10 @@ def any(iterable):
 <li>
 <p><code>__file__</code> 的区别。如果脚本是被执行的，假设该脚本文件是 <code>hello.py</code> ，那么在这个被执行脚本中， <code>__file__</code> 的值是 <code>hello.py</code> ，也就是 <strong>文件名</strong> 。如果是被引用的，那么对于那个被引入的脚本来说， <code>__file__</code> 的值是该被引入脚本相对系统来说的 <strong>完整文件名</strong> ，比如是 <code>/home/wanze/桌面/hello.py</code> 。</p>
 </li>
-<li>
-<p>如果我们要得知本脚本在系统中的绝对位置，可以使用os.path模块的abspath函数。</p>
-</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
-</pre></div>
-<p>其将返回该脚本在系统所在的目录。</p>
 <h2 id="localsglobals">locals和globals</h2>
 <p>python的 <code>locals()</code> 返回本函数内的局部变量字典值，而 <code>globals()</code> 则返回本模块文件的全局变量。 <code>locals</code> 是只读的，而 <code>globals()</code> 不是，我们可以利用<code>globals()</code> 对脚本文件玩出一些新花样。</p>
-<h2 id="_3">获取本模块对象</h2>
+<h2 id="_2">获取本模块对象</h2>
 <p>如下所示，可以获取本模块内的变量。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">current_module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
@@ -240,11 +204,11 @@ def any(iterable):
 <span class="c1">#         if issubclass(v, case_base):</span>
 <span class="c1">#             URL_CASES.append(v)</span>
 </pre></div>
-<h2 id="_4">根据字符串获取模块对象</h2>
+<h2 id="_3">根据字符串获取模块对象</h2>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">importlib</span>
 <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">'what.what'</span><span class="p">)</span>
 </pre></div>
-<h2 id="_5">检查某个变量是不是模块对象</h2>
+<h2 id="_4">检查某个变量是不是模块对象</h2>
 <p>参考了 <a href="https://stackoverflow.com/questions/865503/how-to-isinstancex-module">这个网页</a></p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">types</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">)</span>
@@ -252,7 +216,7 @@ def any(iterable):
 </pre></div>
 <h2 id="assert">assert语句</h2>
 <p>assert语句简单的理解就是 <code>assert True</code> ，正常刷过去，而 <code>assert False</code> 将抛出<code>AssertionError</code> 。</p>
-<h2 id="_6">属性管理的函数</h2>
+<h2 id="_5">属性管理的函数</h2>
 <p>hasattr，setattr，getattr，delattr，这些函数都属于关于python中各个对象的属性管理函数，其都是内置函数。</p>
 <p>其中hasattr(object, name)检测某个对象有没有某个属性。</p>
 <p>setattr(object, name, value)用于设置某个对象的某个属性为某个值，<code>setattr(x,a,3)</code> 对应 <code>x.a = 3</code> 这样的语法。</p>
@@ -319,7 +283,7 @@ print(list(itertools.chain(*a_list)))
         <span class="k">return</span> <span class="n">deque</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 </pre></div>
 <p>其是利用了deque还有一个size定长的概念，输入的队列进入deque时较老的元素会被丢弃。我不太清楚这种做法效率如何，不过这种写法还是很优雅的。</p>
-<h2 id="_7">查找多个最大最小元素的情况</h2>
+<h2 id="_6">查找多个最大最小元素的情况</h2>
 <p>如果只是想要获知某些数据的一个最大值或者一个最小值，那么当然用 <code>max</code> 或 <code>min</code> 方法就可以了。这里讨论的情况是如果你想要获知某些数据的多个最大值或多个最小值。一般想到的就是先对这些数据进行排序，然后进行切片操作。参考资料2的第一章第四节讨论的方法实际上是利用最小堆结构进行堆排序然后提出最大或最小的那个几个元素。</p>
 <p>大体过程就是:</p>
 <div class="highlight"><pre><span></span><span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
@@ -328,7 +292,7 @@ print(list(itertools.chain(*a_list)))
 <span class="n">heapq</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">lst</span><span class="p">)</span>
 <span class="n">heapq</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">lst</span><span class="p">)</span>
 </pre></div>
-<h2 id="_8">获取一个月最后的一天</h2>
+<h2 id="_7">获取一个月最后的一天</h2>
 <p>首先要说的是利用python的datetime和timedelta对于 <code>days</code> 的加减操作是能够很好地支持跨月问题的:</p>
 <div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
     <span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
@@ -389,7 +353,7 @@ print(list(itertools.chain(*a_list)))
     &gt;&gt;&gt;
 </pre></div>
 <p>这个数据结构最为人们数值的统计频数了，通过调用 <code>most_common(n)</code> 方法，n是排行榜的前n名。</p>
-<h2 id="_9">字符串比较大小</h2>
+<h2 id="_8">字符串比较大小</h2>
 <p>读者可以实验一下python中字符串之间是可以比较大小的：</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; 'abc' &gt; 'ab'
 True
@@ -402,7 +366,7 @@ True
 <blockquote>
 <p>序列之间比较大小是，首先两个序列各自的第一个元素开始比较，如果它们相同，则进行下一个比较，直到任何一个序列被穷尽。如果两个序列各自比较的类型都是相同的，那么整个过程将一直进行下去。如果两个序列是相等的则认为它们是相等的，如果某一个序列是另外一个序列的子序列，则那个短的序列认为比长的序列要小。具体到每一个元素的大小比较，是按照ASCII顺序对其进行比较的。</p>
 </blockquote>
-<h3 id="_10">中文比较大小？</h3>
+<h3 id="_9">中文比较大小？</h3>
 <p>读者这时会想到，既然python中字符串都默认是unicode编码（utf-8），那么中文应该也是能够比较大小的吧，事实确实如此：</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; '章' &gt; '张'
 True
@@ -420,7 +384,7 @@ False
 '张'
 </pre></div>
 <p>所以我们可以总结到，python3的字符串比较大小，是基于utf-8编码的。</p>
-<h2 id="_11">给某个对象动态加载一个方法</h2>
+<h2 id="_10">给某个对象动态加载一个方法</h2>
 <p>这里主要参考了 <a href="http://stackoverflow.com/questions/962962/python-changing-methods-and-attributes-at-runtime">这个网页</a> 。</p>
 <p>具体原理还是很简单的，那就是构建一个函数对象，然后将这个对象赋值给某个对象。但这里的函数对象如果要接受self参数的话，其作为类的方法还是需要一些特殊的处理的。</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">():</span>
@@ -496,14 +460,14 @@ False
             <time pubdate="pubdate" datetime="2018-08-02T00:00:00+08:00">2018年 8月 2日 </time>
 
 <h4>最近更新于：</h4>
-<time datetime="2019-01-25T00:00:00+08:00">2019年 1月 25日 </time>
+<time datetime="2019-06-25T00:00:00+08:00">2019年 6月 25日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="/categories.html#pythonyu-yan-ref">python语言</a>
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="/tags.html#python-ref">python
-                    <span>14</span>
+                    <span>13</span>
 </a></li>
             </ul>
         </div>
