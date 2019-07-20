@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="cheminformatics, chemistry, " />
+
+<meta property="og:title" content="化学信息学第二谈 "/>
+<meta property="og:url" content="/articles/cheminformatics-talk-two.html" />
+<meta property="og:description" content="表示分子 价键模型是现代化学的基石，也是现代化学信息学的基石。当化学家想要研究一个问题的时候的，他首先是用图形来表示出一个个节点，也就是原子，然后一个个节点之间连成边，也就是化学键。 就价键理论和分子轨道理论区别它们有意义其实只在量子化学的计算层面上，老实说以前我学习的时候，就是简单的将化学键理解为电子的运动轨迹，至于具体这个电子是两个原子共享的还是分子层面共享的其实当时我的理解，就离子键和共价键还说，只是一种程度的问题。大体是 离子键 -&gt; 共价键单键 -&gt; 苯的化学键 -&gt; 共价键双键。不过不是从事量子化学计算，就作为应用的理解化学世界来说，确实价键理论够用了。 连接表格 早期人们研究化学信息学来表示一个分子用的是连接表（connection table），就是列出原子，还有原子们之间的连接键（描述了谁和谁连接起来）。 SMARTS (SMiles ARbitrary Target Specification). 子结构搜索语言，比如说 [C,N] 将会找一个原子或者是碳原子或者是氮原子 子结构搜索和索引 索引indexing是预处理某些问题来加速搜索过程。 化学信息学对于分子结构的索引过程就是将目标分子降解（decompose）成为一些小部分，然后索引它们。 子结构搜索在数学上是图同构问题（graph isomorphism），子图同构是NPC问题，图同构不是P问题也不是NPC问题是NP问题 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-12-03T00:00:00+08:00" />
+<meta property="" content="2017-12-03T00:00:00+08:00" />
+<meta name="twitter:title" content="化学信息学第二谈 ">
+<meta name="twitter:description" content="表示分子 价键模型是现代化学的基石，也是现代化学信息学的基石。当化学家想要研究一个问题的时候的，他首先是用图形来表示出一个个节点，也就是原子，然后一个个节点之间连成边，也就是化学键。 就价键理论和分子轨道理论区别它们有意义其实只在量子化学的计算层面上，老实说以前我学习的时候，就是简单的将化学键理解为电子的运动轨迹，至于具体这个电子是两个原子共享的还是分子层面共享的其实当时我的理解，就离子键和共价键还说，只是一种程度的问题。大体是 离子键 -&gt; 共价键单键 -&gt; 苯的化学键 -&gt; 共价键双键。不过不是从事量子化学计算，就作为应用的理解化学世界来说，确实价键理论够用了。 连接表格 早期人们研究化学信息学来表示一个分子用的是连接表（connection table），就是列出原子，还有原子们之间的连接键（描述了谁和谁连接起来）。 SMARTS (SMiles ARbitrary Target Specification). 子结构搜索语言，比如说 [C,N] 将会找一个原子或者是碳原子或者是氮原子 子结构搜索和索引 索引indexing是预处理某些问题来加速搜索过程。 化学信息学对于分子结构的索引过程就是将目标分子降解（decompose）成为一些小部分，然后索引它们。 子结构搜索在数学上是图同构问题（graph isomorphism），子图同构是NPC问题，图同构不是P问题也不是NPC问题是NP问题 …">
+
+    <title>化学信息学第二谈  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/cheminformatics-talk-two.html"> 化学信息学第二谈  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">表示分子</a></li>
+<li><a href="#_2">连接表格</a></li>
+<li><a href="#_3">子结构搜索和索引</a></li>
+<li><a href="#_4">分子相似度</a></li>
+<li><a href="#_5">化学注册系统</a></li>
+<li><a href="#_6">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">表示分子</h2>
+<p>价键模型是现代化学的基石，也是现代化学信息学的基石。当化学家想要研究一个问题的时候的，他首先是用图形来表示出一个个节点，也就是原子，然后一个个节点之间连成边，也就是化学键。</p>
+<p>就价键理论和分子轨道理论区别它们有意义其实只在量子化学的计算层面上，老实说以前我学习的时候，就是简单的将化学键理解为电子的运动轨迹，至于具体这个电子是两个原子共享的还是分子层面共享的其实当时我的理解，就离子键和共价键还说，只是一种程度的问题。大体是 离子键 -&gt; 共价键单键 -&gt; 苯的化学键 -&gt; 共价键双键。不过不是从事量子化学计算，就作为应用的理解化学世界来说，确实价键理论够用了。</p>
+<h2 id="_2">连接表格</h2>
+<p>早期人们研究化学信息学来表示一个分子用的是连接表（connection table），就是列出原子，还有原子们之间的连接键（描述了谁和谁连接起来）。</p>
+<p>SMARTS (SMiles ARbitrary Target Specification).  子结构搜索语言，比如说 [C,N] 将会找一个原子或者是碳原子或者是氮原子</p>
+<h2 id="_3">子结构搜索和索引</h2>
+<p>索引indexing是预处理某些问题来加速搜索过程。</p>
+<p>化学信息学对于分子结构的索引过程就是将目标分子降解（decompose）成为一些小部分，然后索引它们。</p>
+<p>子结构搜索在数学上是图同构问题（graph isomorphism），子图同构是NPC问题，图同构不是P问题也不是NPC问题是NP问题（参考wikipedia）。简单来说就是P问题是多项式复杂度的问题，计算机还是应付得来的；而NP问题就是非多项式复杂度的问题，计算机很难应付过来。</p>
+<p>在化学信息学上，子结构搜索的复杂度随着原子和化学键数目的增长是指数级别的增长的。目前已经在数学上证明子结构搜索是一个NPC问题，所以就没必要去试着找一个多项式复杂度的算法了。好消息是大多数分子有很低的连接性（low connectivity），意思是大多数原子有的化学键少于四个，不像数学家们研究的那些复杂的奇怪的图形。在实践中，大多数子结构搜索的计算复杂度能够在 <span class="math">\(N^2\)</span>  到 <span class="math">\(N^3\)</span> 之间完成。但是即使是这样，子结构搜索对于计算机来说都是一个昂贵的计算任务。</p>
+<p>所以索引indexing对于化学信息学系统来说非常的重要，现代计算机能够在一秒钟内检索几千个分子，百万的分子检索也不成为问题，indexing起了关键性的作用。</p>
+<h2 id="_4">分子相似度</h2>
+<p>子结构搜索很有用，但是有的时候会把分子之间很重要的信息给忽略了，比如对于某个子结构，只有某个地方一个单键一个双键的区别，但是子结构搜索给忽略了。这是我们需要分子相似度搜索来获得更多有用的信息。</p>
+<p>用来检测分子相似度的手段有：</p>
+<ol>
+<li>2D拓扑计算，2D拓扑计算只考虑分子的原子和化学键，但是不考虑他们的形状。</li>
+<li>3Dconfiguration 医药分子的3D形状对医药价值很重要，3D构造分析，电子表面分析</li>
+<li>物理性质  </li>
+<li>clustering </li>
+</ol>
+<h2 id="_5">化学注册系统</h2>
+<p>化学注册系统（Chemical Registration System）和化学信息学是两兄弟。化学注册系统主要要解决以下问题：</p>
+<ol>
+<li>单个分子只注册一次</li>
+<li>结构规范化</li>
+<li>结构绘制</li>
+<li>维护各个相关分子之间的关系。</li>
+<li>注册混合物，配方的描述，</li>
+<li>注册未知的分子</li>
+<li>和公司的角色、安全性、责任、工作流程等结合在一起</li>
+<li>更新、修正、控制化合物的繁衍增进（比如混合物的不同混合比例）</li>
+</ol>
+<p>假设你有五个烧杯：</p>
+<ol>
+<li>第一个烧杯仔细的分析了，发现它们是单一的立体异构体</li>
+<li>第二个烧杯仔细的分析了，发现它们是一个立体异构体的外消旋混合物</li>
+<li>第三个烧杯未知，可能是纯物质，也可能是单一的立体异构体或者外消旋混合物。</li>
+<li>第四个烧杯是将第二个烧杯进行了色谱分离，它是单一立体异构的，但是你不知道是那个立体异构。</li>
+<li>第五个烧杯是制作第四个烧杯过程的另外一部分，它也是单一的立体异构纯，但是你不知道它是那个立体异构，你只知道和第四个烧杯的立体构造相反。</li>
+</ol>
+<p>化学注册系统应该将这些情况都记录分清楚，而这已超出了化学信息学的研究领域。化学信息学只是关心结构，而化学注册系统则是要记录所谓化学家研究的知道的事实和不知道的事实。</p>
+<h2 id="_6">参考资料</h2>
+<ol>
+<li>openbabel提供的化学信息学 <a href="http://openbabel.org/docs/current/Cheminf101/basics.html">介绍一章节</a> 。</li>
+</ol>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-12-03T00:00:00+08:00">2017年 12月 3日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2017-12-03T00:00:00+08:00">2017年 12月 3日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#chemistry-ref">chemistry</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#cheminformatics-ref">cheminformatics
+                    <span>4</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

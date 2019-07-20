@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="python, 网络抓取, python爬虫, " />
+
+<meta property="og:title" content="scrapy模块 "/>
+<meta property="og:url" content="/articles/scrapy-module.html" />
+<meta property="og:description" content="简介 老实说Scrapy模块和Django模块在实用上包括在内容目录结构上都很相似，当然这两个项目干的完全是两个不同的事情，我想这种相似性更多的可以描述为类似于大多数GUI界面的那种类似。 我之前尝试过写过一个小的Spider网络爬虫程序，其实网络爬取大体过程都是类似的，因此我学习Scrapy项目大体只是一些基本配置的了解，对于其内部原理已经很熟悉了，所以本文不会在这些地方赘述了。 scrapy就是一个python模块，可以通过 pip 安装之，所以安装这块也不多说了。 新建一个项目 scrapy startproject project_name [path] 因为我喜欢创建python的venv虚拟环境，所以上面最后path设置为 . 当前目录下的意思。 然后接下来就是编写爬虫Spider脚本还有等等其他一些配置了。 第一个例子 下面是一个简单的例子： class MySpider(scrapy.Spider): user_agent = get_random_user_agent() name = &#34;7yrt&#34; start_urls = [&#39;http://7yrt.com/html/rhrt/&#39;] allowed_domains = [&#39;http://7yrt.com/&#39;] def parse(self, response): url = response.url …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-10-11T07:04:00+08:00" />
+<meta name="twitter:title" content="scrapy模块 ">
+<meta name="twitter:description" content="简介 老实说Scrapy模块和Django模块在实用上包括在内容目录结构上都很相似，当然这两个项目干的完全是两个不同的事情，我想这种相似性更多的可以描述为类似于大多数GUI界面的那种类似。 我之前尝试过写过一个小的Spider网络爬虫程序，其实网络爬取大体过程都是类似的，因此我学习Scrapy项目大体只是一些基本配置的了解，对于其内部原理已经很熟悉了，所以本文不会在这些地方赘述了。 scrapy就是一个python模块，可以通过 pip 安装之，所以安装这块也不多说了。 新建一个项目 scrapy startproject project_name [path] 因为我喜欢创建python的venv虚拟环境，所以上面最后path设置为 . 当前目录下的意思。 然后接下来就是编写爬虫Spider脚本还有等等其他一些配置了。 第一个例子 下面是一个简单的例子： class MySpider(scrapy.Spider): user_agent = get_random_user_agent() name = &#34;7yrt&#34; start_urls = [&#39;http://7yrt.com/html/rhrt/&#39;] allowed_domains = [&#39;http://7yrt.com/&#39;] def parse(self, response): url = response.url …">
+
+    <title>scrapy模块  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/scrapy-module.html"> scrapy模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a><ul>
+<li><a href="#_2">新建一个项目</a></li>
+</ul>
+</li>
+<li><a href="#_3">第一个例子</a><ul>
+<li><a href="#parse">parse方法</a></li>
+<li><a href="#response">response对象</a></li>
+<li><a href="#myitem">MyItem对象</a></li>
+</ul>
+</li>
+<li><a href="#settingspy">settings.py里面的配置</a><ul>
+<li><a href="#_4">减缓访问速度</a></li>
+<li><a href="#jsonpipeline">JsonPipeline</a></li>
+<li><a href="#imagespipeline">ImagesPipeline</a></li>
+<li><a href="#mongodbpipeline">MongoDBPipeline</a></li>
+</ul>
+</li>
+<li><a href="#_5">测试抓取</a></li>
+<li><a href="#settings">settings的传递</a></li>
+<li><a href="#xpath">xpath语法</a><ul>
+<li><a href="#title">选择title</a></li>
+<li><a href="#title_1">选择title包含的文本</a></li>
+<li><a href="#id">按照id选择</a></li>
+<li><a href="#_6">继续往下选</a></li>
+<li><a href="#_7">选择目标标签的属性</a></li>
+</ul>
+</li>
+<li><a href="#user-agent">user agent 设置</a></li>
+<li><a href="#_8">模拟用户登录</a></li>
+<li><a href="#_9">防止被封的策略</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">简介</h2>
+<p>老实说Scrapy模块和Django模块在实用上包括在内容目录结构上都很相似，当然这两个项目干的完全是两个不同的事情，我想这种相似性更多的可以描述为类似于大多数GUI界面的那种类似。</p>
+<p>我之前尝试过写过一个小的Spider网络爬虫程序，其实网络爬取大体过程都是类似的，因此我学习Scrapy项目大体只是一些基本配置的了解，对于其内部原理已经很熟悉了，所以本文不会在这些地方赘述了。</p>
+<p>scrapy就是一个python模块，可以通过 <code>pip</code> 安装之，所以安装这块也不多说了。</p>
+<h3 id="_2">新建一个项目</h3>
+<div class="highlight"><pre><span></span>scrapy startproject project_name  [path] 
+</pre></div>
+<p>因为我喜欢创建python的venv虚拟环境，所以上面最后path设置为 <code>.</code> 当前目录下的意思。</p>
+<p>然后接下来就是编写爬虫Spider脚本还有等等其他一些配置了。</p>
+<h2 id="_3">第一个例子</h2>
+<p>下面是一个简单的例子：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MySpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">user_agent</span> <span class="o">=</span> <span class="n">get_random_user_agent</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"7yrt"</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://7yrt.com/html/rhrt/'</span><span class="p">]</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://7yrt.com/'</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1">## do something</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">'http://7yrt.com/html/rhrt/[\d]+/[\d]+/[\d_]+.html'</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="n">parse_webpage_images</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'div'</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">'imgview'</span><span class="p">)</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">'//h1/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">MyItem</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="n">get_item_uuid</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)),</span>
+                            <span class="n">image_url</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="p">],</span>
+                            <span class="n">name</span> <span class="o">=</span> <span class="n">title</span><span class="p">)</span>
+
+
+        <span class="c1">##### get next page</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="n">parse_webpage_links</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">next_page</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">next_page</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>
+<p><code>user_agent</code> 属性改变你爬虫情况的USER_AGENT HTTP头，这通常需要设置一下，防止你的爬虫被ban。</p>
+</li>
+<li>
+<p><code>name</code> 你的爬虫的名字，等下你要具体运行某个爬虫的名字是 <code>scrapy crawl spider_name</code> ，用的就是这里定义的名字。然后 <code>scrapy list</code> 显示的也是这些爬虫名字。</p>
+</li>
+<li>
+<p><code>start_urls</code> 你的爬虫起始开爬点，官方教程提到过 <code>start_requests</code> 这个方法，一般就定义 <code>start_urls</code> 还是很简便的。</p>
+</li>
+<li>
+<p><code>allowed_domains</code> 你可以在 <code>parse</code> 方法获取 <code>next_page</code> 的时候自己定义过滤行为，更简单的就是定义站点内这个行为，这个熟悉点网络爬虫基本编写原理的都会了解这个概念，不过记得你还需要在 <code>settings.py</code> 那边设置：</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span>SPIDER_MIDDLEWARES = {
+    'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': None,
+}
+</pre></div>
+<h3 id="parse">parse方法</h3>
+<p>parse方法类似于Django也有request请求和response的概念，简单来说每一个URL（按照基本网络爬虫模型）最后都会送入到这个方法，其要完成的工作有：</p>
+<ul>
+<li>针对某些特定的url获取数据</li>
+<li>添加next page行为（其内暗含的行为有去重，舍弃，过滤等）</li>
+</ul>
+<h3 id="response">response对象</h3>
+<p>response对象可以获取 <code>response.text</code> 然后送给beautifulsoup来处理，比如上面的 <code>parse_webpage_images</code> 和 <code>parse_webpage_links</code> 就是这样做的，主要是这两个以前写的函数还是很简便的，所以就没考虑效率问题了，有的时候真的不在乎那么一点，因为后面还会讨论减缓爬虫爬取速度的问题。</p>
+<p>然后官方教程提到的response对象可以调用 <code>css</code> 或 <code>xpath</code> 方法来进行一些信息提取工作，这个简单了解下xpath语法，还是很便捷的。</p>
+<h3 id="myitem">MyItem对象</h3>
+<p>MyItem对象是在 <code>items.py</code> 哪里定义的，很简单，没啥好说的，就是一个简单的python对象罢了，方便存储数据用。你若不喜欢，就临时定义一个字典值也是可以的。</p>
+<h2 id="settingspy">settings.py里面的配置</h2>
+<h3 id="_4">减缓访问速度</h3>
+<p>在网络爬取中，防止被ban（一般403错误就是由此而来）一直是个大问题。开代理换IP要求挺高的，不过下面这些手段一般还是能够实现的，这些都在settings.py里面就有了，只需要去注释就是了。大体有下面这些：</p>
+<div class="highlight"><pre><span></span>DOWNLOAD_DELAY = 3
+CONCURRENT_REQUESTS_PER_DOMAIN = 16
+#CONCURRENT_REQUESTS_PER_IP = 16
+# Disable cookies (enabled by default)
+COOKIES_ENABLED = False
+</pre></div>
+<p>就是设置下载访问停顿时间和并行请求数还有禁用cookies。除了禁用cookies之外，上面这几个设置可以不用，请看到官方文档的 <a href="https://doc.scrapy.org/en/latest/topics/autothrottle.html">这里</a> 。</p>
+<p>这个在 settings.py 文件的后面些也有，这是一种自动节流机制，它是利用下载延迟还有并行数来自动调节DELAY时间，</p>
+<div class="highlight"><pre><span></span>AUTOTHROTTLE_ENABLED = True
+# The initial download delay
+AUTOTHROTTLE_START_DELAY = 5
+# The maximum download delay to be set in case of high latencies
+AUTOTHROTTLE_MAX_DELAY = 60
+# The average number of requests Scrapy should be sending in parallel to
+# each remote server
+AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+</pre></div>
+<p>最后要说的是自动节流和前面的 <code>DOWNLOAD_DELAY</code> 和 <code>CONCURRENT_REQUESTS_PER_DOMAIN</code> 是协作关系。自动节流最小不会小过 <code>DOWNLOAD_DELAY</code> ，最大不会大过 <code>AUTOTHROTTLE_MAX_DELAY</code> 。 然后 <code>AUTOTHROTTLE_TARGET_CONCURRENCY</code> 也只是一个节流建议，并不是最大极限，对于单个域名的最大并行请求数是由 <code>CONCURRENT_REQUESTS_PER_DOMAIN</code> 定义的。</p>
+<h3 id="jsonpipeline">JsonPipeline</h3>
+<p><code>pipelines.py</code> 文件里面就定义了一些你自己写的Pipeline类，比如下面这个是JsonPipeline类：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">JsonPipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">'test.json'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+    <span class="k">def</span> <span class="nf">spider_closed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+<p>大体就是一个简单的类，其中一些特别的方法有特别的用处。这个jsonpipelie并不具有实用价值，简单了解下即可。</p>
+<h3 id="imagespipeline">ImagesPipeline</h3>
+<p>想要自动下载图片，没问题，scrapy已经内置有这个功能了！你需要做的就是收集好图片连接就是了。设置里要加上这样一行：</p>
+<div class="highlight"><pre><span></span>ITEM_PIPELINES = {
+    'scrapy.pipelines.images.ImagesPipeline': 1,
+}
+</pre></div>
+<p>然后设置里还有如下相关配置:</p>
+<div class="highlight"><pre><span></span>IMAGES_STORE = '/path/to/download_images'
+IMAGES_URLS_FIELD = 'image_url'
+IMAGES_RESULT_FIELD = 'image'
+</pre></div>
+<p>这里 <code>IMAGES_URLS_FIELD</code> 的默认值是 <code>image_urls</code> ，你需要在你的items对象加上这一属性，其是一个列表值。然后 <code>IMAGES_RESULT_FIELD</code> 默认值是 <code>images</code> ， 这个值ImagesPipeline会自动填充，不需要管的。这里改名字是因为我不喜欢很多图片混在一起，所以做了一些处理分开了。</p>
+<h3 id="mongodbpipeline">MongoDBPipeline</h3>
+<p>想要把数据直接实时填入到mongodb里面去？用 <code>MongoDBPipeline</code> 即可，你需要</p>
+<div class="highlight"><pre><span></span>pip install scrapy-mongodb
+</pre></div>
+<p>然后配置加上</p>
+<div class="highlight"><pre><span></span>ITEM_PIPELINES = {
+    'scrapy_mongodb.MongoDBPipeline': 400,
+}
+</pre></div>
+<p>这后面的数字只是执行优先级，没什么特别的含义。</p>
+<p>然后还有配置：</p>
+<div class="highlight"><pre><span></span>MONGODB_URI = 'mongodb://localhost:27017'
+MONGODB_DATABASE = 'myscrapy'
+MONGODB_UNIQUE_KEY = 'uuid'
+</pre></div>
+<p>这个插件的 <code>MONGODB_COLLECTION</code> 值默认是 <code>items</code> 是个死的，我还不是很满意。然后 <code>MONGODB_UNIQUE_KEY</code> 我还不清楚是什么，后面有时间继续。</p>
+<h2 id="_5">测试抓取</h2>
+<div class="highlight"><pre><span></span>scrapy shell  url
+</pre></div>
+<p>然后进入shell之后，有个 <code>response</code> 对象，其对应于之前写爬虫 parse函数时候的那个response对象。进一步可以做一些前期测试抓取的工作。</p>
+<h2 id="settings">settings的传递</h2>
+<p>爬虫初始化后， <code>self.settings</code> 就可以使用了，通过它你就可以调用一些在 <code>settings.py</code> 文件里面的配置变量了。然后你在写pipeline的时候，如下：</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">open_spider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mongo_uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mongodb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mongo_dbname</span><span class="p">]</span>
+        <span class="n">spider</span><span class="o">.</span><span class="n">mongodb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongodb</span>
+</pre></div>
+<p><code>open_spider</code> 是打开爬虫后的动作，定义 <code>self.mongodb</code> 是将目标mongodb 数据库对象挂载本 pipeline上，而 <code>spider.mongodb</code> 是将这个变量挂在本爬虫上，这样后面你的爬虫类那里都是可以直接用 <code>self.mongodb</code> 来调用目标变量的，但说到爬虫类 <code>__init__</code> 方法里面还不大确定。然后你写pipeline的时候通过 <code>crawler.settings</code> 也可以或者配置变量：</p>
+<div class="highlight"><pre><span></span>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_crawler</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">crawler</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">mongo_uri</span><span class="o">=</span><span class="n">crawler</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'MONGODB_URI'</span><span class="p">),</span>
+            <span class="n">mongo_dbname</span><span class="o">=</span><span class="n">crawler</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'MONGODB_DATABASE'</span><span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+<h2 id="xpath">xpath语法</h2>
+<p>下面主要通过各个例子简要介绍xpath语法之，参考了 <a href="http://www.ruanyifeng.com/blog/2009/07/xpath_path_expressions.html">阮一峰的这篇文章</a> 和菜鸟教程的xpath教程。</p>
+<h3 id="title">选择title</h3>
+<div class="highlight"><pre><span></span>//title
+</pre></div>
+<p>这是选择到了文档中任意位置的 title 标签， <code>/</code> 开头的话会选择根节点，这不太好用。</p>
+<h3 id="title_1">选择title包含的文本</h3>
+<div class="highlight"><pre><span></span>//title/text()
+</pre></div>
+<h3 id="">按照id选择</h3>
+<div class="highlight"><pre><span></span>//div[@id='post-date']/text()
+</pre></div>
+<p>上面例子的意思是选择一个div标签，其有id属性 <code>post-date</code> ，如果div改为 <code>*</code> 则为随便什么标签名字。</p>
+<h3 id="_6">继续往下选</h3>
+<div class="highlight"><pre><span></span>//*[@id='js_profile_qrcode']/div/p[1]/span/text()
+</pre></div>
+<h3 id="_7">选择目标标签的属性</h3>
+<div class="highlight"><pre><span></span>////*[@id='js_profile_qrcode']//a/@href
+</pre></div>
+<h2 id="user-agent">user agent 设置</h2>
+<p>你可以设置middlesware来设置useragent：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyUserAgentMiddleware</span><span class="p">(</span><span class="n">UserAgentMiddleware</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_agent</span><span class="o">=</span><span class="s1">'Scrapy'</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyUserAgentMiddleware</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span> <span class="o">=</span> <span class="n">get_random_user_agent</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">process_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">:</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">'User-Agent'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_agent</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'Using User-Agent:{0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">'User-Agent'</span><span class="p">]))</span>
+</pre></div>
+<p>因为middleware是在你的爬虫开始之前就运行了，所以你的爬虫一开始就有一个 user_agent 属性了。</p>
+<p>可能你还有其他需求，需要临时改变user agent，那么在你的爬虫类的属性设置那里可以直接设置：</p>
+<div class="highlight"><pre><span></span>user_agent = what
+</pre></div>
+<p>这样将覆写原来middleware指定的self.user_agent，实际上在middleware之前你的settings那里还可以设置user_agent，而那是最先的scrapy默认的useragentMiddleware的行为，本小节的讨论参考了 <a href="https://stackoverflow.com/questions/33444793/how-can-i-change-user-agent-in-scrapy-spider">这个网页 eLRuLL</a> 的回答和自己的一点小小的print。</p>
+<h2 id="_8">模拟用户登录</h2>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">LoginSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'example.com'</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://www.example.com/users/login.php'</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">FormRequest</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span>
+            <span class="n">formdata</span><span class="o">=</span><span class="p">{</span><span class="s1">'username'</span><span class="p">:</span> <span class="s1">'john'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">:</span> <span class="s1">'secret'</span><span class="p">},</span>
+            <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">after_login</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">after_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="c1"># check login succeed before going on</span>
+        <span class="k">if</span> <span class="s2">"authentication failed"</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Login failed"</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># continue scraping with authenticated session...</span>
+</pre></div>
+<h2 id="_9">防止被封的策略</h2>
+<ol>
+<li>设置随机的user agent策略</li>
+<li>禁用cookie <code>COOKIES_ENABLED = True</code></li>
+<li>设置下载停顿 <code>DOWNLOAD_DELAY = n</code></li>
+<li>使用代理池</li>
+</ol>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-10-11T07:04:00+08:00">2017年 10月 11日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pythonpa-chong-ref">python爬虫</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#python-ref">python
+                    <span>14</span>
+</a></li>
+                <li><a href="/tags.html#wang-luo-zhua-qu-ref">网络抓取
+                    <span>3</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

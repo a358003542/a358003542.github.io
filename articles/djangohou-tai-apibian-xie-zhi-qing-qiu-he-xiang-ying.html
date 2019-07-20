@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-请求和响应 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-qing-qiu-he-xiang-ying.html" />
+<meta property="og:description" content="请求和响应 request 是的，我们的APIView的一些特殊含义的方法，都会接收一个 request对象，这个对象有： query_params 获得GET传过来的参数 data 获得POST PUT PATCH 传过来的参数，这还没完，传过来的文件，表单都支持。 user 如果请求经过认证了会返回相应的用户记录，你编写auth类的时候会知道的，如果没有认证，那么返回 AnonymousUser Response 也就是一些特殊含义的方法的返回对象，其第一个参数是data，字典值，会自动封装成为json友好的格式。实际上我们经常看到的就是这个套路： return Response(serializer.data) 然后 serializer 有个 is_valid 方法，用来序列化类输出前的预热。这两点在后面序列化的讨论中会涉及。其他一些我们看一下吧： Response(data, status=None, template_name=None, headers=None, content_type …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-请求和响应 ">
+<meta name="twitter:description" content="请求和响应 request 是的，我们的APIView的一些特殊含义的方法，都会接收一个 request对象，这个对象有： query_params 获得GET传过来的参数 data 获得POST PUT PATCH 传过来的参数，这还没完，传过来的文件，表单都支持。 user 如果请求经过认证了会返回相应的用户记录，你编写auth类的时候会知道的，如果没有认证，那么返回 AnonymousUser Response 也就是一些特殊含义的方法的返回对象，其第一个参数是data，字典值，会自动封装成为json友好的格式。实际上我们经常看到的就是这个套路： return Response(serializer.data) 然后 serializer 有个 is_valid 方法，用来序列化类输出前的预热。这两点在后面序列化的讨论中会涉及。其他一些我们看一下吧： Response(data, status=None, template_name=None, headers=None, content_type …">
+
+    <title>django后台api编写之-请求和响应  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-qing-qiu-he-xiang-ying.html"> django后台api编写之-请求和响应  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">请求和响应</a><ul>
+<li><a href="#request">request</a></li>
+<li><a href="#response">Response</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">请求和响应</h2>
+<h3 id="request">request</h3>
+<p>是的，我们的APIView的一些特殊含义的方法，都会接收一个 request对象，这个对象有：</p>
+<ul>
+<li>query_params 获得GET传过来的参数</li>
+<li>data 获得POST PUT PATCH 传过来的参数，这还没完，传过来的文件，表单都支持。</li>
+<li>user 如果请求经过认证了会返回相应的用户记录，你编写auth类的时候会知道的，如果没有认证，那么返回 <code>AnonymousUser</code></li>
+</ul>
+<h3 id="response">Response</h3>
+<p>也就是一些特殊含义的方法的返回对象，其第一个参数是data，字典值，会自动封装成为json友好的格式。实际上我们经常看到的就是这个套路：</p>
+<div class="highlight"><pre><span></span>return Response(serializer.data)
+</pre></div>
+<p>然后 serializer 有个 <code>is_valid</code> 方法，用来序列化类输出前的预热。这两点在后面序列化的讨论中会涉及。其他一些我们看一下吧：</p>
+<div class="highlight"><pre><span></span>Response(data, status=None, template_name=None, headers=None, content_type=None)
+</pre></div>
+<p>headers http协议响应头，status http状态码等等。</p>
+<p>整个过程套路，很多高级视图的套路都类似于下面这个例子，多看几遍吧。</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SnippetDetail</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Retrieve, update or delete a snippet instance.</span>
+<span class="sd">    """</span>
+    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Snippet</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Snippet</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Http404</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="p">(</span><span class="n">snippet</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="p">(</span><span class="n">snippet</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">serializer</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">snippet</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
+</pre></div>
+<p>urls.py那边加上的是:</p>
+<div class="highlight"><pre><span></span>url(r'^snippets/(?P&lt;pk&gt;[0-9]+)/$', views.SnippetDetail.as_view()),
+</pre></div>
+<p>这里正则表达式 <code>(?P&lt;pk&gt;[0-9]+)</code> 的意思是收集某一串数字，这一串数字被命名为 <code>pk</code> 。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-基于类的视图 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-ji-yu-lei-de-shi-tu.html" />
+<meta property="og:description" content="基于类的视图 首先我们从django哪里初步了解了下基于类的视图的概念，就是如下代码： from django.http import HttpResponse def my_view(request): if request.method == &#39;GET&#39;: # &lt;view logic&gt; return HttpResponse(&#39;result&#39;) 变为更简洁的： from django.http import HttpResponse from django.views import View class MyView(View): def get(self, request): # &lt;view logic&gt; return HttpResponse(&#39;result&#39;) 然后依赖类的继承，引入Minxin类，可以让我们在http的很多restful风格请求上，总是一次又一次出现的那些套路，实现代码复用。其基本知识就是python的类的继承，我们可以直接从django …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-基于类的视图 ">
+<meta name="twitter:description" content="基于类的视图 首先我们从django哪里初步了解了下基于类的视图的概念，就是如下代码： from django.http import HttpResponse def my_view(request): if request.method == &#39;GET&#39;: # &lt;view logic&gt; return HttpResponse(&#39;result&#39;) 变为更简洁的： from django.http import HttpResponse from django.views import View class MyView(View): def get(self, request): # &lt;view logic&gt; return HttpResponse(&#39;result&#39;) 然后依赖类的继承，引入Minxin类，可以让我们在http的很多restful风格请求上，总是一次又一次出现的那些套路，实现代码复用。其基本知识就是python的类的继承，我们可以直接从django …">
+
+    <title>django后台api编写之-基于类的视图  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-ji-yu-lei-de-shi-tu.html"> django后台api编写之-基于类的视图  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">基于类的视图</a><ul>
+<li><a href="#apiview">APIView</a></li>
+</ul>
+</li>
+<li><a href="#_2">视图再升级</a><ul>
+<li><a href="#genericapiview">GenericAPIView</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">基于类的视图</h2>
+<p>首先我们从django哪里初步了解了下基于类的视图的概念，就是如下代码：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'GET'</span><span class="p">:</span>
+        <span class="c1"># &lt;view logic&gt;</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
+</pre></div>
+<p>变为更简洁的：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
+
+<span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="c1"># &lt;view logic&gt;</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
+</pre></div>
+<p>然后依赖类的继承，引入Minxin类，可以让我们在http的很多restful风格请求上，总是一次又一次出现的那些套路，实现代码复用。其基本知识就是python的类的继承，我们可以直接从django restframework 这个模块直接用手来见识这种DRY理念的实现。</p>
+<h3 id="apiview">APIView</h3>
+<p>django restframework的 APIView 继承自 django 的 View，然后针对restful api 进行了很多优化，在某些情况下可能你编写的视图，就继承自APIView就是合适的，后面介绍的通用视图和其他高级视图等等，都是在某些情况下特别合适和让你少写代码，好用就用，仅此而已。如果不合适，那么自己定义 get post put 等等方法也是很方便的。</p>
+<h2 id="_2">视图再升级</h2>
+<p>在某些情况下使用 APIView 类和 Mixin 可能是最合适不过的，下面谈谈django restframework 提供的高级通用视图类。这些类都是继承自 <code>GenericAPIView</code> ，他们都有一个特点，那就是有点类似于 Serializer -&gt; ModelSerializer 的升级过程，如果你的视图类方法主要操作对象是基于数据库Model的各个操作，那么推荐视图类继承自 <code>GenericAPIView</code> 。</p>
+<h3 id="genericapiview">GenericAPIView</h3>
+<p>GenericAPIView 继承自 django restframework 的 APIView 类，其提供的一个很重要的特性是 <code>queryset</code> ，你设定 queryset属性或者实现 <code>get_queryset</code> 方法，该视图类的很多方法都是围绕着<code>queryset</code> 来展开的。</p>
+<p>具体 CRUD 数据操作有对应的 Minxin类，然后和GenericAPIView 组合出了很多高级的视图类。</p>
+<p>一个好的建议对于这块，看源码，源码都很简单的，看懂了，发现符合自己的需要那就使用它，让自己少写点代码。如果有额外的定制需求，那就重写对应的某个方法就是了。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

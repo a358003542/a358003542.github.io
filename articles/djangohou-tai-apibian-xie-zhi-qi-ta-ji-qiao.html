@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-其他技巧 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-qi-ta-ji-qiao.html" />
+<meta property="og:description" content="其他技巧 模型python2兼容性 为了提高模型python2兼容性，推荐模型定义上加个如下装饰器。 from django.utils.encoding import python_2_unicode_compatible @python_2_unicode_compatible class Question(models.Model): # ... def __str__(self): return self.question_text 以前不加这个装饰器，python2之前用的是 __unicode__ 方法。 重置migrations 一般的方法把migrations文件删掉，把表格删掉并不能成功，因为他们忽视了django_migrations这个表格里面的数据（参考了 这个网页）。 如果你把 django_migrations 里面的对应app的迁移数据删掉，然后再makemigrations和migrate，那么就更重新开始的一样。 python manage.py makemigrations app_name python manage.py migrate app_name 处理列表对象 我们需要自定义一个model的新Field对象来解决这个问题，具体就叫做ListField。 def …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-其他技巧 ">
+<meta name="twitter:description" content="其他技巧 模型python2兼容性 为了提高模型python2兼容性，推荐模型定义上加个如下装饰器。 from django.utils.encoding import python_2_unicode_compatible @python_2_unicode_compatible class Question(models.Model): # ... def __str__(self): return self.question_text 以前不加这个装饰器，python2之前用的是 __unicode__ 方法。 重置migrations 一般的方法把migrations文件删掉，把表格删掉并不能成功，因为他们忽视了django_migrations这个表格里面的数据（参考了 这个网页）。 如果你把 django_migrations 里面的对应app的迁移数据删掉，然后再makemigrations和migrate，那么就更重新开始的一样。 python manage.py makemigrations app_name python manage.py migrate app_name 处理列表对象 我们需要自定义一个model的新Field对象来解决这个问题，具体就叫做ListField。 def …">
+
+    <title>django后台api编写之-其他技巧  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-qi-ta-ji-qiao.html"> django后台api编写之-其他技巧  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">其他技巧</a><ul>
+<li><a href="#python2">模型python2兼容性</a></li>
+<li><a href="#migrations">重置migrations</a></li>
+<li><a href="#_2">处理列表对象</a></li>
+<li><a href="#_3">多数据库处理</a></li>
+<li><a href="#django">如何根据django的模型对象来获取其对应的表格的名字</a></li>
+<li><a href="#djangoimagefield">如何使用好django的ImageField</a></li>
+<li><a href="#djangomessages">django的messages系统</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">其他技巧</h2>
+<h3 id="python2">模型python2兼容性</h3>
+<p>为了提高模型python2兼容性，推荐模型定义上加个如下装饰器。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.utils.encoding</span> <span class="kn">import</span> <span class="n">python_2_unicode_compatible</span>
+
+
+<span class="nd">@python_2_unicode_compatible</span> 
+<span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">question_text</span>
+</pre></div>
+<p>以前不加这个装饰器，python2之前用的是 <code>__unicode__</code> 方法。</p>
+<h3 id="migrations">重置migrations</h3>
+<p>一般的方法把migrations文件删掉，把表格删掉并不能成功，因为他们忽视了django_migrations这个表格里面的数据（参考了 <a href="https://stackoverflow.com/questions/23755523/how-to-reset-migrations-in-django-1-7">这个网页</a>）。</p>
+<p>如果你把 <code>django_migrations</code> 里面的对应app的迁移数据删掉，然后再makemigrations和migrate，那么就更重新开始的一样。</p>
+<div class="highlight"><pre><span></span>python manage.py makemigrations app_name
+python manage.py migrate app_name
+</pre></div>
+<h3 id="_2">处理列表对象</h3>
+<p>我们需要自定义一个model的新Field对象来解决这个问题，具体就叫做ListField。</p>
+<div class="highlight"><pre><span></span><span class="nx">def</span> <span class="nx">parse_to_python</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="o">:</span>
+    <span class="k">try</span><span class="o">:</span>
+        <span class="nx">value</span> <span class="o">=</span> <span class="nx">ast</span><span class="p">.</span><span class="nx">literal_eval</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">value</span>
+    <span class="nx">except</span> <span class="nx">Exception</span> <span class="kr">as</span> <span class="nx">e</span>:
+        <span class="kt">rasie</span> <span class="nx">ValidationError</span>
+
+
+<span class="kr">class</span> <span class="nx">ListField</span><span class="p">(</span><span class="nx">models</span><span class="p">.</span><span class="nx">TextField</span><span class="p">)</span><span class="o">:</span>
+    <span class="s2">"""</span>
+<span class="s2">    存储python列表对象</span>
+<span class="s2">    """</span>
+    <span class="nx">description</span> <span class="o">=</span> <span class="nx">_</span><span class="p">(</span><span class="s2">"Stores a python list"</span><span class="p">)</span>
+
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="o">*</span><span class="nx">args</span><span class="p">,</span> <span class="o">**</span><span class="nx">kwargs</span><span class="p">)</span><span class="o">:</span>
+        <span class="kr">super</span><span class="p">(</span><span class="nx">ListField</span><span class="p">,</span> <span class="nx">self</span><span class="p">).</span><span class="nx">__init__</span><span class="p">(</span><span class="o">*</span><span class="nx">args</span><span class="p">,</span> <span class="o">**</span><span class="nx">kwargs</span><span class="p">)</span>
+
+    <span class="nx">def</span> <span class="nx">to_python</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">value</span> <span class="nx">is</span> <span class="nx">None</span>:
+            <span class="kt">value</span> <span class="o">=</span> <span class="nx">value</span>
+
+        <span class="k">if</span> <span class="nx">isinstance</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span><span class="o">:</span>
+            <span class="k">return</span> <span class="nx">value</span>
+
+        <span class="k">return</span> <span class="nx">parse_to_python</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+
+    <span class="nx">def</span> <span class="nx">get_prep_value</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">value</span> <span class="nx">is</span> <span class="nx">None</span>:
+            <span class="kt">return</span> <span class="nx">value</span>
+
+        <span class="nx">value</span> <span class="o">=</span> <span class="nx">six</span><span class="p">.</span><span class="nx">text_type</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">value</span>
+
+    <span class="nx">def</span> <span class="nx">value_to_string</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">value</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">value_from_object</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">get_prep_value</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+
+    <span class="nx">def</span> <span class="nx">from_db_value</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">expression</span><span class="p">,</span> <span class="nx">connection</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">value</span> <span class="nx">is</span> <span class="nx">None</span>:
+            <span class="kt">return</span> <span class="nx">value</span>
+
+        <span class="k">return</span> <span class="nx">parse_to_python</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>
+<p><code>from_db_value</code> 当数据从数据库里面读取出来，总会调用这个方法。包括（including in aggregates and <a href="https://docs.djangoproject.com/en/1.11/ref/models/querysets/#django.db.models.query.QuerySet.values"><code>values()</code></a> calls。 所以这是最重要最核心的一个定制方法，其含义是很明显的，不用多说了。</p>
+<hr/>
+</li>
+</ul>
+<p>这四个方法大体如下流程：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span>  <span class="o">&lt;-</span> <span class="n">to_python</span>  <span class="o">&lt;-</span>   <span class="n">from_db_value</span><span class="o">&lt;-</span> <span class="n">database</span>
+
+<span class="n">python</span> <span class="o">-&gt;</span><span class="n">value_to_string</span> <span class="o">-&gt;</span> <span class="n">get_prep_value</span> <span class="o">-&gt;</span> <span class="n">database</span>
+</pre></div>
+<p><strong>NOTICE</strong> 上图主要是方便读者理解，实际上django并不是这样逐个处理的。按照官方文档的说法 <code>to_python</code> 和django的反序列（deserialization ）有关，其还必须处理好三种情况：None，目标对象，字符串情况。</p>
+<p><code>value_to_string</code> 和序列化有关，和<code>to_python</code> 是相对的。<code>get_prep_value</code> 和我们在输入get(what='20170809') 执行查询是有关，讲过其转化成为sql实际查询中用到的字符串（比如说datetimefield）就做了一些额外的处理工作。 </p>
+<h3 id="_3">多数据库处理</h3>
+<p>一个django项目里面可能因为某些原因，某些app需要单独操作另外的数据库，这种情况你首先在 <code>settings</code> 那里定义好数据库的配置：</p>
+<div class="highlight"><pre><span></span>    DATABASES = {
+        'default': {
+            ...
+        },
+        'newdb': {
+            'ENGINE': 'django.db.backends.mysql',
+            ...
+        },
+</pre></div>
+<p>然后加上这个dbroute对象：</p>
+<div class="highlight"><pre><span></span>DATABASE_ROUTERS = ['articles.dbrouter.ArticlesRouter']
+</pre></div>
+<p>然后在你的app那里定义好dbroute对象：</p>
+<div class="highlight"><pre><span></span><span class="x">class ArticlesRouter(object):</span>
+<span class="x">    def db_for_read(self, model, **hints):</span>
+<span class="x">        if model._meta.app_label == 'articles':</span>
+<span class="x">            return 'articles'</span>
+<span class="x">        return None</span>
+
+<span class="x">    def db_for_write(self, model, **hints):</span>
+<span class="x">        if model._meta.app_label == 'articles':</span>
+<span class="x">            return 'articles'</span>
+<span class="x">        return None</span>
+
+<span class="x">    def allow_relation(self, obj1, obj2, **hints):</span>
+<span class="x">        if obj1._meta.app_label == 'articles' or \</span>
+<span class="x">            obj2._meta.app_label == 'articles':</span>
+<span class="x">            return True</span>
+<span class="x">        return None</span>
+
+<span class="x">    def allow_migrate(self, db, app_label, model_name=None, **hints):</span>
+<span class="x">        if app_label == 'articles':</span>
+<span class="x">            return db == 'articles'</span>
+<span class="x">        return None</span>
+</pre></div>
+<p>从上面的代码可以看出来，你定义的模型 <code>Meta</code> 那里必须定义好 <code>app_label</code> 属性。更多信息请参看官方文档的 <a href="https://docs.djangoproject.com/en/1.11/topics/db/multi-db">这里</a> 。</p>
+<h3 id="django">如何根据django的模型对象来获取其对应的表格的名字</h3>
+<p>参看 <a href="http://stackoverflow.com/questions/233045/how-to-read-the-database-table-name-of-a-model-instance">这个网页</a> 。</p>
+<p>答: </p>
+<div class="highlight"><pre><span></span>model_instance._meta.db_table
+</pre></div>
+<h3 id="djangoimagefield">如何使用好django的ImageField</h3>
+<p>参考了 <a href="http://gregblogs.com/django-saving-an-image-using-imagefield-explain-a-little/">这篇文章</a> 。</p>
+<p>ImageField和FileField很类似，除了还多了 <code>width</code> 和 <code>height</code> 属性，然后就是在上传的时候确保文件是图片文件。</p>
+<p>具体在模型文件中的定义如下:</p>
+<div class="highlight"><pre><span></span>banner = models.ImageField(upload_to=game_2048_images, blank=True,
+                           storage=OverwriteStorage(), default="placeholder.jpg")
+</pre></div>
+<p>上面的 <code>upload_to</code> 是控制图片在计算机中的保存路径，可以直接指定一个文件夹路径，但这通常不够灵活，这里通过一个函数来实现更加灵活的路径指定:</p>
+<div class="highlight"><pre><span></span>def game_2048_images(instance, filename):
+    """
+    where image upload to.
+    """
+    return 'game/2048/images/{}/{}'.format(instance.user.username, filename)
+</pre></div>
+<p>这里具体路径是根据你在 <code>settings</code> 里面指定的 <code>MEDIA_ROOT</code> 而来，然后再指定里面的具体的文件夹路径。我们看到函数还可以接受具体模型对应的实例，从而建立自动根据user用户名来分配不同的文件夹路径。</p>
+<p><code>storage=OverwriteStorage()</code> 实现了如果文件名重复则覆盖的逻辑:</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">OverwriteStorage</span><span class="p">(</span><span class="nx">FileSystemStorage</span><span class="p">)</span><span class="o">:</span>
+    <span class="s1">'''</span>
+<span class="s1">    存储文件或图片，如果文件名重复则覆盖。</span>
+<span class="s1">    '''</span>
+
+    <span class="nx">def</span> <span class="nx">get_available_name</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">self</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">:</span>
+            <span class="nx">os</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">MEDIA_ROOT</span><span class="p">,</span> <span class="nx">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nx">name</span>
+</pre></div>
+<p>ImageField 可以和rest_framework的序列化类形成很好的联动，最后序列化之后返回的是文件路径url字符串，测试的时候我们可以如下用django来挂载这些静态资源文件，实际运营的时候则推荐用nginx怎么设置一下url分发。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.conf.urls.static</span> <span class="kn">import</span> <span class="n">static</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+    <span class="n">urlpatterns</span> <span class="o">+=</span> <span class="n">static</span><span class="p">(</span><span class="s1">'/data/'</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span><span class="p">)</span>
+</pre></div>
+<p>在保存传过来的图片文件的时候，常规构建form对象也是可行的:</p>
+<div class="highlight"><pre><span></span>form = Game2048InfoForm(
+    request.POST, request.FILES, instance=target_info)
+
+if form.is_valid():
+    new_game_info = form.save()
+else:
+    logger.warning('form invalid')
+</pre></div>
+<p>否则你需要通过:</p>
+<div class="highlight"><pre><span></span>request.FILES['imgfield']
+</pre></div>
+<p>这样的语法来获取图片内容。</p>
+<h3 id="djangomessages">django的messages系统</h3>
+<p>本小节主要参看了 <a href="https://www.webforefront.com/django/setupdjangomessages.html">这个网页</a> 。</p>
+<p>使用django的messages系统，首先需要如下所示在settings里面进行一些配置：</p>
+<div class="highlight"><pre><span></span>INSTALLED_APPS = [
+    'django.contrib.messages',
+    ......
+
+MIDDLEWARE_CLASSES = [
+    'django.contrib.messages.middleware.MessageMiddleware',
+    ......
+
+TEMPLATES = [
+    {
+         'OPTIONS': {
+            'context_processors': [
+                'django.contrib.messages.context_processors.messages',
+                ......
+</pre></div>
+<p>然后在views那边，使用 <code>messages.add_message()</code> 来往django信息系统里面发送一个信息，此外还有如下的这些快捷方法：</p>
+<ul>
+<li>messages.debug()</li>
+<li>messages.info()</li>
+<li>messages.success()</li>
+<li>messages.warning()</li>
+<li>messages.error()</li>
+</ul>
+<p>你还可以如下设置每个request请求下的信息系统级别：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
+<span class="n">messages</span><span class="o">.</span><span class="n">set_level</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+<p>下面我定义了一个简单的flash函数</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">flash</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">'info'</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    利用django的message系统发送一个信息，对接模板的sweetalert。</span>
+<span class="sd">    """</span>
+    <span class="n">level_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'info'</span><span class="p">:</span> <span class="n">messages</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+        <span class="s1">'debug'</span><span class="p">:</span> <span class="n">messages</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+        <span class="s1">'success'</span><span class="p">:</span> <span class="n">messages</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span>
+        <span class="s1">'warning'</span><span class="p">:</span> <span class="n">messages</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
+        <span class="s1">'error'</span><span class="p">:</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span>
+        <span class="p">}</span>
+
+    <span class="n">level</span> <span class="o">=</span> <span class="n">level_map</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+
+    <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">extra_tags</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">'ok'</span>
+</pre></div>
+<p>之所以做这样的封装是为了更好地对接sweetalert这个javascript库，然后模块加入如下内容从而从而实现信息的具体弹出行为。</p>
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">messages</span> <span class="cp">%}</span>
+<span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">"</span><span class="cp">{%</span> <span class="k">static</span> <span class="s1">'js/sweetalert.min.js'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">msg</span> <span class="k">in</span> <span class="nv">messages</span> <span class="cp">%}</span>
+    sweetAlert({
+        title: '<span class="cp">{{</span><span class="nv">msg.extra_args</span><span class="cp">}}</span>',
+        text: '<span class="cp">{{</span> <span class="nv">msg.message</span> <span class="cp">}}</span>',
+        type: '<span class="cp">{{</span> <span class="nv">msg.level_tag</span> <span class="cp">}}</span>',
+      })
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

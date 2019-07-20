@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="数据绘图, 机器学习, " />
+
+<meta property="og:title" content="matplotlib模块 "/>
+<meta property="og:url" content="/articles/matplotlib-module.html" />
+<meta property="og:description" content="前言 之前数据绘图一文简单介绍了下如何在jupyter notebook 下绘制简单的直线图、饼图等等，本文主要是作为matplotlib模块绘图的综合性简要介绍。 经常看到一些简单的例子，比如如何画出散点图或者等等，从简单的直白的到复杂的一大堆参数调配的都有，让人迷惑。matplotlib模块还可以和PyQt或者wxpython等后端结合起来等等高级功能，但我现在最急切的就是想要理解matplotlib模块到底做了一些什么事情，那些是必要的常规操作，那些是对外的数据接口。 比如下面的调配中文字体支持的，是matplotlib模块的外围操作，应该绘图前就要调配好的： def set_matplotlib_support_chinese(font=&#39;SimHei&#39;): &#34;&#34;&#34; 设置matplotlib支持中文 :param font: :return: &#34;&#34;&#34; from matplotlib import rcParams rcParams[&#39;font.family&#39;] = &#39;sans-serif&#39; rcParams[&#39;font.sans-serif&#39;].insert(0, font) # 插入中文字体 rcParams[&#39;axes.unicode_minus&#39;] = False # 用来正常显示负号 然后我们对之前pandas的绘图接口操作发现，除了传递必要的x，y数值进去外，还需要传一个 ax …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2019-04-06T00:00:00+08:00" />
+<meta property="" content="2019-04-06T00:00:00+08:00" />
+<meta name="twitter:title" content="matplotlib模块 ">
+<meta name="twitter:description" content="前言 之前数据绘图一文简单介绍了下如何在jupyter notebook 下绘制简单的直线图、饼图等等，本文主要是作为matplotlib模块绘图的综合性简要介绍。 经常看到一些简单的例子，比如如何画出散点图或者等等，从简单的直白的到复杂的一大堆参数调配的都有，让人迷惑。matplotlib模块还可以和PyQt或者wxpython等后端结合起来等等高级功能，但我现在最急切的就是想要理解matplotlib模块到底做了一些什么事情，那些是必要的常规操作，那些是对外的数据接口。 比如下面的调配中文字体支持的，是matplotlib模块的外围操作，应该绘图前就要调配好的： def set_matplotlib_support_chinese(font=&#39;SimHei&#39;): &#34;&#34;&#34; 设置matplotlib支持中文 :param font: :return: &#34;&#34;&#34; from matplotlib import rcParams rcParams[&#39;font.family&#39;] = &#39;sans-serif&#39; rcParams[&#39;font.sans-serif&#39;].insert(0, font) # 插入中文字体 rcParams[&#39;axes.unicode_minus&#39;] = False # 用来正常显示负号 然后我们对之前pandas的绘图接口操作发现，除了传递必要的x，y数值进去外，还需要传一个 ax …">
+
+    <title>matplotlib模块  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/matplotlib-module.html"> matplotlib模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a><ul>
+<li><a href="#_2">一个简单的折线图函数</a></li>
+<li><a href="#_3">饼图</a></li>
+<li><a href="#_4">水平条形图</a></li>
+<li><a href="#_5">直方图</a></li>
+<li><a href="#_6">散点图</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">前言</h2>
+<p>之前数据绘图一文简单介绍了下如何在jupyter notebook 下绘制简单的直线图、饼图等等，本文主要是作为matplotlib模块绘图的综合性简要介绍。</p>
+<p>经常看到一些简单的例子，比如如何画出散点图或者等等，从简单的直白的到复杂的一大堆参数调配的都有，让人迷惑。matplotlib模块还可以和PyQt或者wxpython等后端结合起来等等高级功能，但我现在最急切的就是想要理解matplotlib模块到底做了一些什么事情，那些是必要的常规操作，那些是对外的数据接口。</p>
+<p>比如下面的调配中文字体支持的，是matplotlib模块的外围操作，应该绘图前就要调配好的：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_matplotlib_support_chinese</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s1">'SimHei'</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    设置matplotlib支持中文</span>
+<span class="sd">    :param font:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
+
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.family'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sans-serif'</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.sans-serif'</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">font</span><span class="p">)</span>  <span class="c1"># 插入中文字体</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># 用来正常显示负号</span>
+</pre></div>
+<p>然后我们对之前pandas的绘图接口操作发现，除了传递必要的x，y数值进去外，还需要传一个 ax 变量过去，这个ax变量就是matplotlib绘图中所谓的 <strong>axes</strong> 概念。matplotlib在绘图的时候是先确定一个figure 图表对象，然后一个figure下面有一个或者多个axes 坐标系。然后一个axes下面可能有比如x y 等等多个axis 坐标轴。</p>
+<p>因此官方教程也给出了，假如说我们有需求，对不同的数据绘制大致相似的图形，那么推荐的函数编写风格如下：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myplotter</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">param_dict</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ax matplotlib ax object</span>
+<span class="sd">    x data plot on x axis</span>
+<span class="sd">    y data plot on y axis</span>
+<span class="sd">    param_dict other kwargs</span>
+
+<span class="sd">    """</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">,</span> <span class="o">**</span><span class="n">param_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+<p>而外围ax的输出一般采用如下语法：</p>
+<div class="highlight"><pre><span></span>fig, ax = plt.subplots()
+</pre></div>
+<p>这是一幅图含一个坐标系，或者：</p>
+<div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(1,2)
+</pre></div>
+<p>这是一幅图含两个坐标系，坐标系布局是1row，2 col 。</p>
+<div class="highlight"><pre><span></span>fig, (ax1, ax2) = plt.subplots(2,1)
+</pre></div>
+<p>这是一幅图含两个坐标系，坐标系布局是2row，1col 。</p>
+<p>而我们常看到的 <code>plt.show()</code> 也属于外围语句，这个是将你的图形在屏幕上显示，但如果你设置好其他backend，比如说jupyter notebook 上设置好：</p>
+<div class="highlight"><pre><span></span><span class="nf">%matplotlib</span> <span class="n">notebook</span>
+</pre></div>
+<p>那么不用这一句图形也会显示出来的。</p>
+<p>具体建议查看 Axes 的源码来参考定制：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib.axes._axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+</pre></div>
+<p>但实际我们是没有必要写的如同那些内置方法一样复杂的，更多的是根据个人实际情况来简化定制，这样会更实用一些。</p>
+<h3 id="_2">一个简单的折线图函数</h3>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">line_plot1</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_ticks</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    绘制直线图</span>
+<span class="sd">    :param ax:</span>
+<span class="sd">    :param x:</span>
+<span class="sd">    :param y:</span>
+<span class="sd">    :param param_dict:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>  <span class="c1"># 设置y标签</span>
+
+    <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>  <span class="c1"># 设置x标签</span>
+
+    <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span>  <span class="c1"># 设置x标记</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ylim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>  <span class="c1"># 设置y轴范围</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_values</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+<p>然后我们有：</p>
+<div class="highlight"><pre><span></span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.1</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">]</span>
+<span class="n">x_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'七月'</span><span class="p">,</span> <span class="s1">'八月'</span><span class="p">,</span> <span class="s1">'九月'</span><span class="p">,</span> <span class="s1">'十月'</span><span class="p">,</span> <span class="s1">'十一月'</span><span class="p">,</span> <span class="s1">'十二月'</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">line_plot1</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_ticks</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">'月份'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'利润'</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">2.8</span><span class="p">))</span>
+</pre></div>
+<p>这样数据和绘图部分基本上就分离了。</p>
+<p>然后我们可以看下两个坐标系的情况：</p>
+<div class="highlight"><pre><span></span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.1</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">]</span>
+<span class="n">x_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'七月'</span><span class="p">,</span> <span class="s1">'八月'</span><span class="p">,</span> <span class="s1">'九月'</span><span class="p">,</span> <span class="s1">'十月'</span><span class="p">,</span> <span class="s1">'十一月'</span><span class="p">,</span> <span class="s1">'十二月'</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,(</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">line_plot1</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_ticks</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">'月份'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'利润'</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">2.8</span><span class="p">))</span>
+<span class="n">line_plot1</span><span class="p">(</span><span class="n">ax2</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_ticks</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">'月份'</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">2.8</span><span class="p">))</span>
+</pre></div>
+<p>如上面所示，matplotlib后面越玩越熟悉之后，就不再推荐使用pandas的绘图接口了，而应该统一到你定制的那些接口中去，因为慢慢的你的绘图函数，各个参数调配出来的风格，会越来越是你喜欢的那种样子了的。</p>
+<p>下面我们将之前接触的那几个绘图都转成通用函数风格作为我们学习matplotlib绘图的入门吧。</p>
+<h3 id="_3">饼图</h3>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pie_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    绘制饼状图</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">sizes</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s1">'</span><span class="si">%2.0f%%</span><span class="s1">'</span><span class="p">,</span> <span class="n">startangle</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>  <span class="c1"># 确保画成一个圆</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'其他'</span><span class="p">,</span> <span class="s1">'射击'</span><span class="p">,</span> <span class="s1">'动作'</span><span class="p">,</span> <span class="s1">'策略'</span><span class="p">,</span> <span class="s1">'体育'</span><span class="p">]</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">6000</span><span class="p">,</span> <span class="mi">11500</span><span class="p">,</span> <span class="mi">27500</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">pie_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span><span class="p">)</span>
+</pre></div>
+<h3 id="_4">水平条形图</h3>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">barh_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_labels</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    水平条形图</span>
+<span class="sd">    :param ax:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_labels</span><span class="p">))</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">x_labels</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">x_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'北美洲'</span><span class="p">,</span> <span class="s1">'南美洲'</span><span class="p">,</span> <span class="s1">'欧洲'</span><span class="p">,</span> <span class="s1">'亚洲'</span><span class="p">,</span> <span class="s1">'大洋洲'</span><span class="p">,</span> <span class="s1">'非洲'</span><span class="p">,</span> <span class="s1">'南极洲'</span><span class="p">]</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">barh_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_labels</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'销量'</span><span class="p">)</span>
+</pre></div>
+<h3 id="_5">直方图</h3>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hist_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_bins</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+
+<span class="sd">    :param ax:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">x_bins</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+<h3 id="_6">散点图</h3>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">scatter_plot1</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    散点图 输入X 第一列x 第二列 y</span>
+<span class="sd">    :param ax:</span>
+<span class="sd">    :param X:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">x_group</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_group</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
+        <span class="n">x_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_group</span><span class="p">,</span> <span class="n">y_group</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">scatter_plot1</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2019-04-06T00:00:00+08:00">2019年 4月 6日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-04-06T00:00:00+08:00">2019年 4月 6日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#ji-qi-xue-xi-ref">机器学习</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#shu-ju-hui-tu-ref">数据绘图
+                    <span>1</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

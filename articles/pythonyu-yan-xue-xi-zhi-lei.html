@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", python语言, " />
+
+<meta property="og:title" content="python语言学习之-类 "/>
+<meta property="og:url" content="/articles/pythonyu-yan-xue-xi-zhi-lei.html" />
+<meta property="og:description" content="在python中一切皆对象。前面学的那些操作对象都是python程序语言自己内部定义的对象（Object），而接下来介绍的类的语法除了更好的理解之前的那些对象之外，再就是可以创造自己的操作对象。一般面向对象(OOP)编程的基本概念这里不重复说明了，如有不明请读者自己随便搜索一篇网页阅读下即可。 python中类的结构 python中的类就好像树叶，所有的类就构成了一棵树，而python中超类，子类，实例的重载或继承关系等就是由一种搜索机制实现的： python首先搜索self有没有这个属性或者方法，如果没有，就向上搜索。比如说实例l1没有，就向上搜索C1，C1没有就向上搜索C2或C3等。 实例继承了创造他的类的属性，创造他的类上面可能还有更上层的超类，类似的概念还有子类，表示这个 类在树形层次中比较低。 well，简单来说类的结构和搜索机制就是这样的，很好地模拟了真实世界知识的树形层次结构。 上面那副图实际编写的代码如下： class C2: ... class C3: ... class C1(C2,C3): ... l1=C1() l2=C1() 其中class语句是创造类，而C1继承自C2和C3，这是多重继承，从左到右是内部的搜索顺序（会影响重载）。l1和l2是根据类C1创造的两个实例。 对于初次接触类这个概念的读者并不指望他们马上就弄懂类这个概念，这个概念倒并一定要涉及很多哲学的纯思考的东西 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-01-01T00:00:00+08:00" />
+<meta name="twitter:title" content="python语言学习之-类 ">
+<meta name="twitter:description" content="在python中一切皆对象。前面学的那些操作对象都是python程序语言自己内部定义的对象（Object），而接下来介绍的类的语法除了更好的理解之前的那些对象之外，再就是可以创造自己的操作对象。一般面向对象(OOP)编程的基本概念这里不重复说明了，如有不明请读者自己随便搜索一篇网页阅读下即可。 python中类的结构 python中的类就好像树叶，所有的类就构成了一棵树，而python中超类，子类，实例的重载或继承关系等就是由一种搜索机制实现的： python首先搜索self有没有这个属性或者方法，如果没有，就向上搜索。比如说实例l1没有，就向上搜索C1，C1没有就向上搜索C2或C3等。 实例继承了创造他的类的属性，创造他的类上面可能还有更上层的超类，类似的概念还有子类，表示这个 类在树形层次中比较低。 well，简单来说类的结构和搜索机制就是这样的，很好地模拟了真实世界知识的树形层次结构。 上面那副图实际编写的代码如下： class C2: ... class C3: ... class C1(C2,C3): ... l1=C1() l2=C1() 其中class语句是创造类，而C1继承自C2和C3，这是多重继承，从左到右是内部的搜索顺序（会影响重载）。l1和l2是根据类C1创造的两个实例。 对于初次接触类这个概念的读者并不指望他们马上就弄懂类这个概念，这个概念倒并一定要涉及很多哲学的纯思考的东西 …">
+
+    <title>python语言学习之-类  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/pythonyu-yan-xue-xi-zhi-lei.html"> python语言学习之-类  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#python">python中类的结构</a></li>
+<li><a href="#_1">类的最基础知识</a></li>
+<li><a href="#_2">类的创建</a></li>
+<li><a href="#_3">根据类创建实例</a></li>
+<li><a href="#_4">类的属性</a></li>
+<li><a href="#_5">类的方法</a></li>
+<li><a href="#_6">类的继承</a></li>
+<li><a href="#_7">类的内置方法</a></li>
+<li><a href="#9595init9595">__init__方法</a></li>
+<li><a href="#self">self意味着什么</a></li>
+<li><a href="#_8">类的操作第二版</a></li>
+<li><a href="#_9">类的操作第三版</a></li>
+<li><a href="#_10">构造函数的继承和重载</a></li>
+<li><a href="#9595str9595">__str__函数的继承和重载</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>在python中一切皆对象。前面学的那些操作对象都是python程序语言自己内部定义的对象（Object），而接下来介绍的类的语法除了更好的理解之前的那些对象之外，再就是可以创造自己的操作对象。一般面向对象(OOP)编程的基本概念这里不重复说明了，如有不明请读者自己随便搜索一篇网页阅读下即可。</p>
+<h2 id="python">python中类的结构</h2>
+<p>python中的类就好像树叶，所有的类就构成了一棵树，而python中超类，子类，实例的重载或继承关系等就是由一种搜索机制实现的：</p>
+<p><img alt="img" src="/images/python/lei-sou-suo-jie-gou.png"/></p>
+<p>python首先搜索self有没有这个属性或者方法，如果没有，就向上搜索。比如说实例l1没有，就向上搜索C1，C1没有就向上搜索C2或C3等。</p>
+<p>实例继承了创造他的类的属性，创造他的类上面可能还有更上层的超类，类似的概念还有子类，表示这个
+类在树形层次中比较低。</p>
+<p>well，简单来说类的结构和搜索机制就是这样的，很好地模拟了真实世界知识的树形层次结构。</p>
+<p>上面那副图实际编写的代码如下：</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">C2</span>: <span class="kt">...</span>
+<span class="kr">class</span> <span class="nx">C3</span>: <span class="kt">...</span>
+<span class="kr">class</span> <span class="nx">C1</span><span class="p">(</span><span class="nx">C2</span><span class="p">,</span><span class="nx">C3</span><span class="p">)</span><span class="o">:</span> <span class="p">...</span>
+<span class="nx">l1</span><span class="o">=</span><span class="nx">C1</span><span class="p">()</span>
+<span class="nx">l2</span><span class="o">=</span><span class="nx">C1</span><span class="p">()</span>
+</pre></div>
+<p>其中class语句是创造类，而C1继承自C2和C3，这是多重继承，从左到右是内部的搜索顺序（会影响重载）。l1和l2是根据类C1创造的两个实例。</p>
+<p>对于初次接触类这个概念的读者并不指望他们马上就弄懂类这个概念，这个概念倒并一定要涉及很多哲学的纯思考的东西，也可以看作一种编程经验或技术的总结。多接触也许对类的学习更重要，而不是纯哲学抽象概念的讨论，毕竟类这个东西创造出来就是为了更好地描述现实世界的。</p>
+<p>最后别人编写的很多模块就是一堆类，你就是要根据这些类来根据自己的情况情况编写自己的子类，为了更好地利用前人的成果，或者你的成果更好地让别人快速使用和上手，那么你需要好好掌握类这个工具。</p>
+<h2 id="_1">类的最基础知识</h2>
+<h2 id="_2">类的创建</h2>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">MyClass</span>:
+    <span class="kt">something</span>
+</pre></div>
+<p>类的创建语法如上所示，然后你需要想一个好一点的类名。类名规范的写法是首字母大写，这样好和其他变量有所区分。</p>
+<h2 id="_3">根据类创建实例</h2>
+<p>按照如下语句格式就根据MyClass类创建了一个实例myclass001。</p>
+<div class="highlight"><pre><span></span>myclass001=MyClass()
+</pre></div>
+<h2 id="_4">类的属性</h2>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; class MyClass:
+...  name='myclass'
+... 
+&gt;&gt;&gt; myclass001=MyClass()
+&gt;&gt;&gt; myclass001.name
+'myclass'
+&gt;&gt;&gt; MyClass.name
+'myclass'
+&gt;&gt;&gt; myclass001.name='myclass001'
+&gt;&gt;&gt; myclass001.name
+'myclass001'
+&gt;&gt;&gt; MyClass.name
+'myclass'
+</pre></div>
+<p>如上代码所示，我们首先创建了一个类，这个类加上了一个name属性，然后创建了一个实例myclass001，然后这个实例和这个类都有了name属性。然后我们通过实例加上点加上name的这种格式引用了这个实例的name属性，并将其值做了修改。</p>
+<p>这个例子简单演示了类的创建，属性添加，实例创建，多态等核心概念。后面类的继承等概念都和这些大同小异了。</p>
+<h2 id="_5">类的方法</h2>
+<p>类的方法就是类似上面类的属性一样加上def语句来定义一个函数，只是函数在类里面我们一般称之为方法。这里演示一个例子，读者看一下就明白了。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; class MyClass:
+...  name='myclass'
+...  def double(self):
+...   self.name=self.name*2
+...   print(self.name)
+... 
+&gt;&gt;&gt; myclass001=MyClass()
+&gt;&gt;&gt; myclass001.name
+'myclass'
+&gt;&gt;&gt; myclass001.double()
+myclassmyclass
+&gt;&gt;&gt; myclass001.name
+'myclassmyclass'
+</pre></div>
+<p>这里需要说明的是在类的定义结构里面，self代表着类自身（更多self意义细节请参看<a href="#sec:self含义">12.4.2</a>{reference-type="ref"
+reference="sec:self含义"}），self.name代表着对自身name属性的引用。然后实例在调用自身的这个方法时用的是myclass001.double()这样的结构，这里double函数实际上接受的第一个参数就是自身，也就是myclass001，而不是无参数函数。所以类里面的方法有一个参数self。</p>
+<h2 id="_6">类的继承</h2>
+<p>实例虽然说是根据类创建出来的，但实际上实例和类也是一种继承关系，实例继承自类，而类和类的继承关系也与之类似，只是语法稍有不同。下面我们来看这个例子：</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Hero</span><span class="p">()</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">addlevel</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">+</span><span class="nx">self</span><span class="p">.</span><span class="nx">addhp</span>
+
+<span class="kr">class</span> <span class="nx">Garen</span><span class="p">(</span><span class="nx">Hero</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">level</span><span class="o">=</span><span class="mi">1</span>
+    <span class="nx">hp</span><span class="o">=</span><span class="mi">455</span>
+    <span class="nx">addhp</span><span class="o">=</span><span class="mi">96</span>
+
+<span class="nx">garen001</span><span class="o">=</span><span class="nx">Garen</span><span class="p">()</span>
+<span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s1">'级别:'</span><span class="p">,</span><span class="nx">garen001</span><span class="p">.</span><span class="nx">level</span><span class="p">,</span><span class="s1">'生命值：'</span> <span class="p">,</span><span class="nx">garen001</span><span class="p">.</span><span class="nx">hp</span><span class="p">)</span>
+    <span class="nx">garen001</span><span class="p">.</span><span class="nx">addlevel</span><span class="p">()</span>
+
+<span class="nx">级别</span>: <span class="kt">1</span> <span class="err">生命值：</span> <span class="mi">455</span>
+<span class="nx">级别</span>: <span class="kt">2</span> <span class="err">生命值：</span> <span class="mi">551</span>
+<span class="nx">级别</span>: <span class="kt">3</span> <span class="err">生命值：</span> <span class="mi">647</span>
+<span class="nx">级别</span>: <span class="kt">4</span> <span class="err">生命值：</span> <span class="mi">743</span>
+<span class="nx">级别</span>: <span class="kt">5</span> <span class="err">生命值：</span> <span class="mi">839</span>
+<span class="nx">级别</span>: <span class="kt">6</span> <span class="err">生命值：</span> <span class="mi">935</span>
+</pre></div>
+<p>lei-de-ji-cheng-shi-li</p>
+<p>这里就简单的两个类，盖伦Garen类是继承自Hero类的，实例garen001是继承自Garen类的，这样garen001也有了addlevel方法，就是将自己的level属性加一，同时hp生命值也加上一定的值，整个过程还是很直观的。</p>
+<h2 id="_7">类的内置方法</h2>
+<p>如果构建一个类，就只是简单的加上pass语句，什么都不做，python还是会为这个类自动创建一些属性或者方法。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; class TestClass:
+...  pass
+... 
+&gt;&gt;&gt; dir(TestClass)
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__',
+ '__eq__', '__format__', '__ge__', '__getattribute__',
+  '__gt__',  '__hash__', '__init__', '__le__', '__lt__',
+   '__module__', '__ne__', '__new__', '__reduce__', 
+   '__reduce_ex__', '__repr__', '__setattr__', 
+   '__sizeof__', '__str__', '__subclasshook__',
+    '__weakref__']
+</pre></div>
+<p>这些变量名字前后都加上双下划线是给python这个语言的设计者用的，一般开发者还是不要这样命名变量。</p>
+<p>这些内置方法用户同样也是可以重定义他们从来覆盖掉原来的定义，其中特别值得一讲的就是<code>__init__</code>方法或者称之为构造函数。</p>
+<h2 id="9595init9595">__init__方法</h2>
+<p><code>__init__</code>方法对应的就是该类创建实例的时候的构造函数。比如：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; class Point:
+...  def __init__(self,x,y):
+...   self.x=x
+...   self.y=y
+... 
+&gt;&gt;&gt; point001=Point(5,4)
+&gt;&gt;&gt; point001.x
+5
+&gt;&gt;&gt; point001.y
+4
+</pre></div>
+<p>这个例子重载了<code>__init__</code>函数，然后让他接受三个参数，self是等下要创建的实例，x，还有y通过下面的语句给这个待创建的实例的属性x和y赋了值。</p>
+<h2 id="self">self意味着什么</h2>
+<p>self在类中是一个很重要的概念，当类的结构层次较简单时还容易看出来，
+当类的层次结构很复杂之后，你可能会弄糊涂。。比如你现在通过调用某个实例的某个方法，这个方法可能是一个远在天边的某个类给出的定义，就算如此，那个定义里面的self还是指调用这个方法的那个实例，这一点要牢记于心。</p>
+<p>比如下面这个例子：</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="p">()</span><span class="o">:</span>
+    <span class="nx">x</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="nx">test</span> <span class="o">=</span> <span class="nx">Test</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">test</span><span class="p">.</span><span class="nx">x</span>
+<span class="mi">10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nx">Test</span><span class="p">.</span><span class="nx">x</span>
+<span class="mi">5</span>
+</pre></div>
+<p>其中self.x就是对应的创建的实例的属性x，而前面定义的x则是类Test的属性x。</p>
+<h2 id="_8">类的操作第二版</h2>
+<p>现在我们可以写出和之前那个版本相比更加专业的类的使用版本了。</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Hero</span><span class="p">()</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">addlevel</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">+</span><span class="nx">self</span><span class="p">.</span><span class="nx">addhp</span>
+
+<span class="kr">class</span> <span class="nx">Garen</span><span class="p">(</span><span class="nx">Hero</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">=</span><span class="mi">1</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">=</span><span class="mi">455</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">addhp</span><span class="o">=</span><span class="mi">96</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">skill</span><span class="o">=</span><span class="p">[</span><span class="s1">'不屈'</span><span class="p">,</span><span class="s1">'致命打击'</span><span class="p">,</span><span class="s1">'勇气'</span><span class="p">,</span><span class="s1">'审判'</span><span class="p">,</span><span class="s1">'德玛西亚正义'</span><span class="p">]</span>
+
+<span class="nx">garen001</span><span class="o">=</span><span class="nx">Garen</span><span class="p">()</span>
+<span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s1">'级别:'</span><span class="p">,</span><span class="nx">garen001</span><span class="p">.</span><span class="nx">level</span><span class="p">,</span><span class="s1">'生命值：'</span> <span class="p">,</span><span class="nx">garen001</span><span class="p">.</span><span class="nx">hp</span><span class="p">)</span>
+    <span class="nx">garen001</span><span class="p">.</span><span class="nx">addlevel</span><span class="p">()</span>
+<span class="nx">print</span><span class="p">(</span><span class="s1">'盖伦的技能有：'</span><span class="p">,</span><span class="s2">""</span><span class="p">.</span><span class="nx">join</span><span class="p">([</span><span class="nx">x</span> <span class="o">+</span> <span class="s1">'  '</span> <span class="k">for</span> <span class="nx">x</span> <span class="k">in</span> <span class="nx">garen001</span><span class="p">.</span><span class="nx">skill</span><span class="p">]))</span>
+
+<span class="nx">级别</span>: <span class="kt">1</span> <span class="err">生命值：</span> <span class="mi">455</span>
+<span class="nx">级别</span>: <span class="kt">2</span> <span class="err">生命值：</span> <span class="mi">551</span>
+<span class="nx">级别</span>: <span class="kt">3</span> <span class="err">生命值：</span> <span class="mi">647</span>
+<span class="nx">级别</span>: <span class="kt">4</span> <span class="err">生命值：</span> <span class="mi">743</span>
+<span class="nx">级别</span>: <span class="kt">5</span> <span class="err">生命值：</span> <span class="mi">839</span>
+<span class="nx">级别</span>: <span class="kt">6</span> <span class="err">生命值：</span> <span class="mi">935</span>
+<span class="err">盖伦的技能有：</span> <span class="err">不屈</span>  <span class="err">致命打击</span>  <span class="err">勇气</span>  <span class="err">审判</span>  <span class="err">德玛西亚正义</span>
+</pre></div>
+<p>似乎专业的做法类里面多放点方法，最好不要放属性，不太清楚是什么。但确实这样写给人感觉更干净点，方法是方法，如果没有调用代码就放在那里我们不用管它，后面用了构造函数我们就去查看相关类的构造方法，这样很省精力。</p>
+<h2 id="_9">类的操作第三版</h2>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Unit</span><span class="p">()</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="nx">hp</span><span class="p">,</span><span class="nx">atk</span><span class="p">,</span><span class="nx">color</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">=</span><span class="nx">hp</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">atk</span><span class="o">=</span><span class="nx">atk</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">color</span><span class="o">=</span><span class="nx">color</span>
+    <span class="nx">def</span> <span class="nx">__str__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">'生命值：{0}，攻击力：{1}，颜色：\</span>
+<span class="s1">        {2}'</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="p">,</span><span class="nx">self</span><span class="p">.</span><span class="nx">atk</span><span class="p">,</span><span class="nx">self</span><span class="p">.</span><span class="nx">color</span><span class="p">)</span>
+
+<span class="kr">class</span> <span class="nx">Hero</span><span class="p">(</span><span class="nx">Unit</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="nx">level</span><span class="p">,</span><span class="nx">hp</span><span class="p">,</span><span class="nx">atk</span><span class="p">,</span><span class="nx">color</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">Unit</span><span class="p">.</span><span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="nx">hp</span><span class="p">,</span><span class="nx">atk</span><span class="p">,</span><span class="nx">color</span><span class="p">)</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">=</span><span class="nx">level</span>
+    <span class="nx">def</span> <span class="nx">__str__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">return</span> <span class="s1">'级别：{0},生命值：{1}，攻击力：{2}，\</span>
+<span class="s1">        颜色：{3}'</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="p">,</span><span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="p">,</span><span class="nx">self</span><span class="p">.</span><span class="nx">atk</span><span class="p">,</span><span class="nx">self</span><span class="p">.</span><span class="nx">color</span><span class="p">)</span>
+
+    <span class="nx">def</span> <span class="nx">addlevel</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">level</span><span class="o">+</span><span class="mi">1</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">hp</span><span class="o">+</span><span class="nx">self</span><span class="p">.</span><span class="nx">addhp</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">atk</span><span class="o">=</span><span class="nx">self</span><span class="p">.</span><span class="nx">atk</span><span class="o">+</span><span class="nx">self</span><span class="p">.</span><span class="nx">addatk</span>
+
+<span class="kr">class</span> <span class="nx">Garen</span><span class="p">(</span><span class="nx">Hero</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="nx">color</span><span class="o">=</span><span class="s1">'blue'</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">Hero</span><span class="p">.</span><span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">455</span><span class="p">,</span><span class="mi">56</span><span class="p">,</span><span class="nx">color</span><span class="p">)</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">name</span><span class="o">=</span><span class="s1">'盖伦'</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">addhp</span><span class="o">=</span><span class="mi">96</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">addatk</span><span class="o">=</span><span class="mf">3.5</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">skill</span><span class="o">=</span><span class="p">[</span><span class="s1">'不屈'</span><span class="p">,</span><span class="s1">'致命打击'</span><span class="p">,</span><span class="s1">'勇气'</span><span class="p">,</span><span class="s1">'审判'</span><span class="p">,</span><span class="s1">'德玛西亚正义'</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="nx">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="o">:</span>
+    <span class="nx">garen001</span><span class="o">=</span><span class="nx">Garen</span><span class="p">(</span><span class="s1">'red'</span><span class="p">)</span>
+    <span class="nx">garen002</span><span class="o">=</span><span class="nx">Garen</span><span class="p">()</span>
+    <span class="nx">print</span><span class="p">(</span><span class="nx">garen001</span><span class="p">)</span>
+    <span class="nx">unit001</span><span class="o">=</span><span class="nx">Unit</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="s1">'gray'</span><span class="p">)</span>
+    <span class="nx">print</span><span class="p">(</span><span class="nx">unit001</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">print</span><span class="p">(</span><span class="nx">garen001</span><span class="p">)</span>
+        <span class="nx">garen001</span><span class="p">.</span><span class="nx">addlevel</span><span class="p">()</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s1">'盖伦的技能有：'</span><span class="p">,</span><span class="s2">""</span><span class="p">.</span><span class="nx">join</span><span class="p">([</span><span class="nx">x</span> <span class="o">+</span> <span class="s1">'  '</span> <span class="k">for</span> <span class="nx">x</span> <span class="k">in</span> <span class="nx">garen001</span><span class="p">.</span><span class="nx">skill</span><span class="p">]))</span>
+
+<span class="err">级别：</span><span class="mi">1</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">455</span><span class="err">，攻击力：</span><span class="mi">56</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">生命值：</span><span class="mi">1000</span><span class="err">，攻击力：</span><span class="mi">1000</span><span class="err">，颜色：</span>        <span class="nx">gray</span>
+<span class="err">级别：</span><span class="mi">1</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">455</span><span class="err">，攻击力：</span><span class="mi">56</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">级别：</span><span class="mi">2</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">551</span><span class="err">，攻击力：</span><span class="mf">59.5</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">级别：</span><span class="mi">3</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">647</span><span class="err">，攻击力：</span><span class="mf">63.0</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">级别：</span><span class="mi">4</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">743</span><span class="err">，攻击力：</span><span class="mf">66.5</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">级别：</span><span class="mi">5</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">839</span><span class="err">，攻击力：</span><span class="mf">70.0</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">级别：</span><span class="mi">6</span><span class="p">,</span><span class="err">生命值：</span><span class="mi">935</span><span class="err">，攻击力：</span><span class="mf">73.5</span><span class="err">，</span>        <span class="err">颜色：</span><span class="nx">red</span>
+<span class="err">盖伦的技能有：</span> <span class="err">不屈</span>  <span class="err">致命打击</span>  <span class="err">勇气</span>  <span class="err">审判</span>  <span class="err">德玛西亚正义</span>
+</pre></div>
+<p>现在就这个例子相对于第二版所作的改动，也就是核心知识点说明之。其中函数参量列表中这样表述<code>color='blue'</code>表示blue是color变量的备选值，也就是color成了可选参量了。</p>
+<h2 id="_10">构造函数的继承和重载</h2>
+<p>上面例子很核心的一个概念就是<code>__init__</code>构造函数的继承和重载。比如我们看到garen001实例的创建，其中就引用了Hero的构造函数，特别强调的是，
+比如这里\
+<code>Hero.__init__(self,1,455,56,color)</code>就是调用了Hero类的构造函数，这个时候需要把self写上，因为self就是最终创建的实例garen001，而不是Hero，而且调用Hero类的构造函数就必须按照它的参量列表形式来。这个概念需要弄清楚！</p>
+<p>理解了这一点，在类的继承关系中的构造函数的继承和重载就好看了。比如这里Hero类的构造函数又是继承自Unit类的构造函数，Hero类额外有一个参量level接下来也要开辟存储空间配置好。</p>
+<h2 id="9595str9595">__str__函数的继承和重载</h2>
+<p>第二个修改是这里重定义了一些类的<code>__str__</code>函数，通过重新定义它可以改变默认print某个类对象是的输出。默认只是一段什么什么类并无具体内容信息。具体就是return一段你想要的字符串样式即可。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-01-01T00:00:00+08:00">2017年 1月 1日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pythonyu-yan-ref">python语言</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-序列化 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-xu-lie-hua.html" />
+<meta property="og:description" content="序列化 理解序列化过程 django restframework的序列化类类似于django的表单类，不同的是django的表单类是用于沟通django的Model和网页form之间的桥梁；而序列化类是用于沟通django的Model类和JSON数据格式之间的桥梁。 注: Model -&gt; Serializer （其data挂载的是python的dict字典值了） serializer = SnippetSerializer(snippet) serializer.data # {&#39;pk&#39;: 2, &#39;title&#39;: u&#39;&#39;, &#39;code&#39;: u&#39;print &#34;hello, world&#34;\n&#39;, &#39;linenos&#39;: False, &#39;language&#39;: u&#39;python&#39;, &#39;style&#39;: u&#39;friendly&#39;} 上面这个过程通常是在视图类特殊方法下，进行一些数据库操作之后获取数据库的目标Model的记录，然后送入序列化类，然后目标类的 .data 属性就是字典值了，送入Response哪里就可以作为HTTP响应的结果值了。 然后还有下面这种用法，将某个字典data送入序列化类的data属性中， serializer = SnippetSerializer(data=data) 调用序列化类的save方法来进一步完成相应的数据库操作。 serializer.save …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-序列化 ">
+<meta name="twitter:description" content="序列化 理解序列化过程 django restframework的序列化类类似于django的表单类，不同的是django的表单类是用于沟通django的Model和网页form之间的桥梁；而序列化类是用于沟通django的Model类和JSON数据格式之间的桥梁。 注: Model -&gt; Serializer （其data挂载的是python的dict字典值了） serializer = SnippetSerializer(snippet) serializer.data # {&#39;pk&#39;: 2, &#39;title&#39;: u&#39;&#39;, &#39;code&#39;: u&#39;print &#34;hello, world&#34;\n&#39;, &#39;linenos&#39;: False, &#39;language&#39;: u&#39;python&#39;, &#39;style&#39;: u&#39;friendly&#39;} 上面这个过程通常是在视图类特殊方法下，进行一些数据库操作之后获取数据库的目标Model的记录，然后送入序列化类，然后目标类的 .data 属性就是字典值了，送入Response哪里就可以作为HTTP响应的结果值了。 然后还有下面这种用法，将某个字典data送入序列化类的data属性中， serializer = SnippetSerializer(data=data) 调用序列化类的save方法来进一步完成相应的数据库操作。 serializer.save …">
+
+    <title>django后台api编写之-序列化  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-xu-lie-hua.html"> django后台api编写之-序列化  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">序列化</a><ul>
+<li><a href="#_2">理解序列化过程</a></li>
+<li><a href="#modelserializer">ModelSerializer</a></li>
+<li><a href="#is_valid">is_valid 方法</a></li>
+<li><a href="#requestuser">在序列化类里面引用request.user</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">序列化</h2>
+<h3 id="_2">理解序列化过程</h3>
+<p>django restframework的序列化类类似于django的表单类，不同的是django的表单类是用于沟通django的Model和网页form之间的桥梁；而序列化类是用于沟通django的Model类和JSON数据格式之间的桥梁。</p>
+<div class="highlight"><pre><span></span><span class="err">注</span><span class="o">:</span> <span class="n">Model</span> <span class="o">-&gt;</span> <span class="n">Serializer</span> <span class="err">（其</span><span class="n">data挂载的是python的dict字典值了</span><span class="err">）</span>
+
+<span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="o">(</span><span class="n">snippet</span><span class="o">)</span>
+<span class="n">serializer</span><span class="o">.</span><span class="na">data</span>
+<span class="err">#</span> <span class="o">{</span><span class="s1">'pk'</span><span class="o">:</span> <span class="mi">2</span><span class="o">,</span> <span class="s1">'title'</span><span class="o">:</span> <span class="n">u</span><span class="s1">''</span><span class="o">,</span> <span class="s1">'code'</span><span class="o">:</span> <span class="n">u</span><span class="s1">'print "hello, world"\n'</span><span class="o">,</span> <span class="s1">'linenos'</span><span class="o">:</span> <span class="n">False</span><span class="o">,</span> <span class="s1">'language'</span><span class="o">:</span> <span class="n">u</span><span class="s1">'python'</span><span class="o">,</span> <span class="s1">'style'</span><span class="o">:</span> <span class="n">u</span><span class="s1">'friendly'</span><span class="o">}</span>
+</pre></div>
+<p>上面这个过程通常是在视图类特殊方法下，进行一些数据库操作之后获取数据库的目标Model的记录，然后送入序列化类，然后目标类的 <code>.data</code> 属性就是字典值了，送入Response哪里就可以作为HTTP响应的结果值了。</p>
+<p>然后还有下面这种用法，将某个字典data送入序列化类的data属性中，</p>
+<div class="highlight"><pre><span></span>serializer = SnippetSerializer(data=data)
+</pre></div>
+<p>调用序列化类的save方法来进一步完成相应的数据库操作。</p>
+<div class="highlight"><pre><span></span>serializer.save()
+</pre></div>
+<p>这个save方法具体行为依赖于你进一步定义序列化类里面的 <code>create</code> 和 <code>update</code> 方法。如下所示：</p>
+<div class="highlight"><pre><span></span>    def create(self, validated_data):
+        return Comment.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.content = validated_data.get('content', instance.content)
+        instance.created = validated_data.get('created', instance.created)
+        instance.save()
+        return instance
+</pre></div>
+<p>某些情况下你可能想直接定义save方法。</p>
+<h3 id="modelserializer">ModelSerializer</h3>
+<p>类似于django的表单类，可以利用 <code>ModelSerializer</code> 类来更快地创建序列化类。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="k">class</span> <span class="nc">SnippetSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Snippet</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'title'</span><span class="p">,</span> <span class="s1">'code'</span><span class="p">,</span> <span class="s1">'linenos'</span><span class="p">,</span> <span class="s1">'language'</span><span class="p">,</span> <span class="s1">'style'</span><span class="p">)</span>
+</pre></div>
+<p>为了证明这种简便写法对于上面的任务（包括create和update方法都会自动实现的）是完全应付得过来的。上面在shell里的代码再撸一遍。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">snippets.models</span> <span class="kn">import</span> <span class="n">Snippet</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">snippet</span> <span class="o">=</span> <span class="n">Snippet</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">'print "hello, world2"</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">snippets.serializers</span> <span class="kn">import</span> <span class="n">SnippetSerializer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">snippet</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="p">(</span><span class="n">snippet</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">serializer</span><span class="o">.</span><span class="n">data</span>
+<span class="p">{</span><span class="s1">'language'</span><span class="p">:</span> <span class="s1">'python'</span><span class="p">,</span> <span class="s1">'linenos'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s1">'id'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'title'</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'code'</span><span class="p">:</span> <span class="s1">'print "hello, world2"</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="s1">'style'</span><span class="p">:</span> <span class="s1">'friendly'</span><span class="p">}</span>
+</pre></div>
+<h3 id="is_valid">is_valid 方法</h3>
+<div class="highlight"><pre><span></span>serializer.is_valid(raise_exception=True)
+</pre></div>
+<p>你可以定义 <code>validate</code> 方法来进行目标对象的验证行为，或者定义 <code>validate_&lt;fieldname&gt;</code> 来定义字段级别的验证行为。</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Check that the start is before the stop.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">'start'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="s1">'finish'</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s2">"finish must occur after start"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+<h3 id="requestuser">在序列化类里面引用request.user</h3>
+<p>参考了 <a href="https://stackoverflow.com/questions/30203652/how-to-get-request-user-in-django-rest-framework-serializer">这个问题</a> ，在序列化类里面需要通过 <code>self.context['request']</code> 来获取 request 对象，进而获取 user对象。</p>
+<div class="highlight"><pre><span></span>user =  self.context['request'].user
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

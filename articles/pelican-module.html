@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="pelican, 静态网站生成, python, python好伙伴, " />
+
+<meta property="og:title" content="pelican模块 "/>
+<meta property="og:url" content="/articles/pelican-module.html" />
+<meta property="og:description" content="简介 pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。 首先按照官方的quickstart简单的刷一遍吧，下面就一些问题作出一些讨论。 项目基本说明 python的虚拟环境控制这里就不多说了，下面主要讨论 pelicanconf.py 和 publishconf.py 和 Makefile 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。 首先说明下 publishconf.py 和 pelicanconf.py 的区别， publishconf.py 文件里面有这样一句话： import os import sys sys.path.append(os.curdir) from pelicanconf import * 也就是其将继承所有来自 pelicanconf.py 里面的配置参量，不同的是 publishconf.py 是对阵发布到那边服务器上的，而 pelicanconf …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2016-09-25T00:00:00+08:00" />
+<meta property="" content="2019-03-07T00:00:00+08:00" />
+<meta name="twitter:title" content="pelican模块 ">
+<meta name="twitter:description" content="简介 pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。 首先按照官方的quickstart简单的刷一遍吧，下面就一些问题作出一些讨论。 项目基本说明 python的虚拟环境控制这里就不多说了，下面主要讨论 pelicanconf.py 和 publishconf.py 和 Makefile 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。 首先说明下 publishconf.py 和 pelicanconf.py 的区别， publishconf.py 文件里面有这样一句话： import os import sys sys.path.append(os.curdir) from pelicanconf import * 也就是其将继承所有来自 pelicanconf.py 里面的配置参量，不同的是 publishconf.py 是对阵发布到那边服务器上的，而 pelicanconf …">
+
+    <title>pelican模块  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/pelican-module.html"> pelican模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a><ul>
+<li><a href="#_2">项目基本说明</a></li>
+<li><a href="#contentoutput">content和output文件夹说明</a></li>
+<li><a href="#_3">引用静态资源</a></li>
+<li><a href="#jscss">引用js和css</a></li>
+<li><a href="#output">output输出控制</a></li>
+</ul>
+</li>
+<li><a href="#_4">其他技巧</a><ul>
+<li><a href="#themetheme">THEME设置或自定义THEME</a></li>
+<li><a href="#_5">目录自动生成</a></li>
+<li><a href="#github-markdown">github markdown语法支持</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h1 id="_1">简介</h1>
+<p>pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。</p>
+<p>首先按照官方的quickstart简单的刷一遍吧，下面就一些问题作出一些讨论。</p>
+<h2 id="_2">项目基本说明</h2>
+<p>python的虚拟环境控制这里就不多说了，下面主要讨论 <code>pelicanconf.py</code> 和 <code>publishconf.py</code> 和 <code>Makefile</code> 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。</p>
+<p>首先说明下 <code>publishconf.py</code> 和 <code>pelicanconf.py</code> 的区别， <code>publishconf.py</code> 文件里面有这样一句话：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pelicanconf</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+<p>也就是其将继承所有来自 <code>pelicanconf.py</code> 里面的配置参量，不同的是 <code>publishconf.py</code> 是对阵发布到那边服务器上的，而 <code>pelicanconf.py</code> 的配置只是用于本机调试的。</p>
+<p>所以 <code>pelicanconf.py</code> 里面的 <code>SITEURL</code> 变量是空值，而在 <code>publishconf.py</code> 里面是要赋一个具体的值的，该值随你的模板里面的用法不同而不同，具体就是 <code>{{ SITEURL }}</code> 这样的调用。</p>
+<p>然后发布到远程机器pulish还会有其他一些额外的东西，比如 <code>DISQUS_SITENAME</code> 这个值，很多模板会根据这个值来决定是否开启disqus的javascript引用，而DISQUS系统在本机调试的时候是没有意义的，一般会不设置这个值从而自动关闭它。</p>
+<p><code>publishconf.py</code> 也许还有其他一些考虑，这里就略过了，下面将集中将 <code>pelicanconf.py</code> 里面的配置。</p>
+<p>然后我们看到 <code>Makefile</code> 这个文件，这个脚本很好用，下面这些命令是很经常用到的：</p>
+<div class="highlight"><pre><span></span>make html
+make serve
+make github
+...
+</pre></div>
+<p>其中make github会把你的output里面的内容刷到github pages对应的项目上去，其依赖于生成目标 <code>publish</code> ，而make publish和make html的惟一区别就是上面讨论的调用的那个具体的配置文件的不同。</p>
+<p>这个Makefile文件我做了一些精简，这些都是无关紧要的，惟一值得一提的就是github目标的生成命令我参考官方文档做了一些更改（请 <a href="http://docs.getpelican.com/en/3.6.3/tips.html#publishing-to-github">参看这里</a> ）：</p>
+<div class="highlight"><pre><span></span><span class="nf">github</span><span class="o">:</span> <span class="n">publish</span>
+    ghp-import -m <span class="s2">"Generate Pelican site"</span> <span class="k">$(</span>OUTPUTDIR<span class="k">)</span>
+    git push develop <span class="k">$(</span>GITHUB_PAGES_BRANCH<span class="k">)</span>:master
+</pre></div>
+<p>这里git的remote我加了一个develop指向目标地，是因为整个项目就是venv大环境作为一个项目是github上的另外一个项目，其已经使用origin这个目标地了，而github pages默认的那个目标地只好用develop这个名字了。</p>
+<p>然后 <code>ghp-import</code> 是个命令行工具，在ubuntu下可以直接用 <code>apt</code> 安装之， 老实说这个工具在干嘛我还不太清楚。</p>
+<h2 id="contentoutput">content和output文件夹说明</h2>
+<p>content 文件夹里面放着静态网站生成的源文件，接下来的讨论有些纯粹只是个人的设置偏好了，但都统一一并讲解了，具体DIY看读者自己的个人喜好了。</p>
+<p>articles里面放着markdown或者html的源文件，其中articles文件夹下还有一层子文件夹，这些文件夹的名字最后会成为 <code>Category</code> 。而这在设置有： </p>
+<div class="highlight"><pre><span></span>USE_FOLDER_AS_CATEGORY = True
+</pre></div>
+<p>然后html文件需要额外说一下，原网页的body里面的内容都会完整传过去，但是原html网页head部分里面除了必要的meta标签和title标签之外，其他多余的内容是传不过去的。那么css或者js的设置怎么弄呢，这个请参看后面的相关讨论，到时候设置好相关的meta标签即可。</p>
+<p>images和pdfs和data和extra文件夹其实名字都是随意的，只是一般这样写罢了，pdfs里面放pdf，images里面放图片等。这几个文件夹都是所谓的静态资源文件夹，等下生成output文件夹的时候，里面的内容都放送入到output文件夹里面去。你需要如下设置：</p>
+<div class="highlight"><pre><span></span>STATIC_PATHS = ['images',
+                'pdfs',
+                'data',
+                'extra',]
+</pre></div>
+<h2 id="_3">引用静态资源</h2>
+<p>比如在markdown里面引入图片如下所示：</p>
+<div class="highlight"><pre><span></span>![<span class="nt">img</span>](<span class="na">{static}/images/chemistry/Naphthalene.png</span>)
+</pre></div>
+<p>这里 <code>{static}</code> 后面就是具体要引用的文件路径。具体就是content文件夹下面的images文件夹，这个文件夹默认是要copy到输出文件夹根目录哪里去的。下面对extra这个文件夹多做一些说明，其是为了让网页加入favicon.ico静态文件的，你还需要如下设置：</p>
+<div class="highlight"><pre><span></span>EXTRA_PATH_METADATA = {
+    'extra/favicon.ico': {'path': 'favicon.ico'}
+}
+</pre></div>
+<p>这里参考了 <a href="http://stackoverflow.com/questions/31270373/how-to-add-a-favicon-to-a-pelican-blog">这个网页</a> 。</p>
+<h2 id="jscss">引用js和css</h2>
+<p>js和css也是静态资源，但和上面的处理有有所不同，前面也提及了html源文件如果在head部分有css引用语句，都是会丢失的。你需要如下加上这样的meta标签语句：</p>
+<div class="highlight"><pre><span></span>&lt;meta name="javascripts" content="周易之摇卦.js" /&gt;
+</pre></div>
+<p>然后你还需要安装pelican-plugins里面的 <code>pelican_javascript</code> 如下所示：</p>
+<div class="highlight"><pre><span></span>PLUGIN_PATHS = ['pelican-plugins']
+PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
+</pre></div>
+<p>更多信息请参看项目的 <a href="https://github.com/mortada/pelican_javascript">github地址</a> 。</p>
+<h2 id="output">output输出控制</h2>
+<div class="highlight"><pre><span></span>ARTICLE_URL = '{category}/{slug}.html'
+ARTICLE_SAVE_AS = ARTICLE_URL
+PAGE_URL = '{slug}.html'
+PAGE_SAVE_AS = PAGE_URL
+CATEGORY_URL = '{slug}/index.html'
+CATEGORY_SAVE_AS = CATEGORY_URL
+TAG_URL = 'tag/{slug}.html'
+TAG_SAVE_AS = TAG_URL
+</pre></div>
+<ul>
+<li><code>ARTICLE_URL</code> 定义了文章的URL显示，其中slug你可以在文件头属性那边自定义。</li>
+<li><code>ARTICLE_SAVE_AS</code> 定义了该文件在output文件夹那边如何的存储路径</li>
+<li>后面类似的有控制 CATEGORY TAG PAGE 页面的URL和具体网页在output文件夹里面的存储路径。</li>
+</ul>
+<h1 id="_4">其他技巧</h1>
+<h2 id="themetheme">THEME设置或自定义THEME</h2>
+<div class="highlight"><pre><span></span>THEME = 'mytheme'
+</pre></div>
+<p>具体自定义THEME其实就是copy一下别人的THEME，然后根据自己的jinja2知识等适当做一些修改。</p>
+<h2 id="_5">目录自动生成</h2>
+<p>你需要安装 <code>extract_toc</code> 插件，然后你的virtuaenv环境里面需要安装了beautifulsoup4, 然后python-markdown那边你需要设置好 <code>toc</code> 插件开启。</p>
+<div class="highlight"><pre><span></span>MARKDOWN = ['toc']
+</pre></div>
+<p>然后在markdown那边加上这么一行即可：</p>
+<div class="highlight"><pre><span></span>[TOC]
+</pre></div>
+<h2 id="github-markdown">github markdown语法支持</h2>
+<p>在python-markdown那边开启 <code>fenced_code</code> 插件。</p>
+<div class="highlight"><pre><span></span>MARKDOWN = ['toc', 'fenced_code','codehilite(css_class=highlight, linenums=True)']
+</pre></div>
+<p>上面还设置了语法高亮类和显示行数。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2016-09-25T00:00:00+08:00">2016年 9月 25日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-03-07T00:00:00+08:00">2019年 3月 7日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pythonhao-huo-ban-ref">python好伙伴</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#jing-tai-wang-zhan-sheng-cheng-ref">静态网站生成
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#pelican-ref">pelican
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#python-ref">python
+                    <span>14</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

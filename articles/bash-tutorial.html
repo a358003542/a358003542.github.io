@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="bash, tutorial, linux, " />
+
+<meta property="og:title" content="bash脚本入门 "/>
+<meta property="og:url" content="/articles/bash-tutorial.html" />
+<meta property="og:description" content="下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。 变量 i=2 echo $i 一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，但是要特别注意变量和值之间的等号是相连的，不能用空格隔开 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。 一般使用这个变量就是在前面加上 $ 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 ${i}what 。一般来说使用变量都推荐使用 ${} 这样的形式。 应用：修改终端前缀 export PS1=&#34;=&gt;&#34; 利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。 如果你将以上代码放入你家目录的 .bashrc 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成=&gt; 这样的形式。 这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。 这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式： export …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-12-24T16:08:00+08:00" />
+<meta property="" content="2017-12-24T16:08:00+08:00" />
+<meta name="twitter:title" content="bash脚本入门 ">
+<meta name="twitter:description" content="下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。 变量 i=2 echo $i 一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，但是要特别注意变量和值之间的等号是相连的，不能用空格隔开 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。 一般使用这个变量就是在前面加上 $ 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 ${i}what 。一般来说使用变量都推荐使用 ${} 这样的形式。 应用：修改终端前缀 export PS1=&#34;=&gt;&#34; 利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。 如果你将以上代码放入你家目录的 .bashrc 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成=&gt; 这样的形式。 这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。 这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式： export …">
+
+    <title>bash脚本入门  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/bash-tutorial.html"> bash脚本入门  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">变量</a><ul>
+<li><a href="#_2">应用：修改终端前缀</a></li>
+</ul>
+</li>
+<li><a href="#echo">echo命令</a></li>
+<li><a href="#unset">unset命令</a></li>
+<li><a href="#read">read命令</a></li>
+<li><a href="#bash">bash里面的特殊符号</a></li>
+<li><a href="#if">if条件判断</a><ul>
+<li><a href="#_3">应用：确认某个文件夹是不是存在</a></li>
+</ul>
+</li>
+<li><a href="#for">for循环</a><ul>
+<li><a href="#_4">应用：小数点递加输出流</a></li>
+<li><a href="#_5">应用：批量创建文件</a></li>
+<li><a href="#_6">应用：批量缩小图片大小</a></li>
+<li><a href="#_7">应用：批量重命名文件</a></li>
+</ul>
+</li>
+<li><a href="#_8">调用子命令返回值</a></li>
+<li><a href="#array">array</a><ul>
+<li><a href="#_9">赋值和引用</a></li>
+</ul>
+</li>
+<li><a href="#date">date命令</a><ul>
+<li><a href="#date_1">date返回日期字符</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。</p>
+<h2 id="_1">变量</h2>
+<div class="highlight"><pre><span></span>i=2
+
+echo $i
+</pre></div>
+<p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
+<p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
+<h3 id="_2">应用：修改终端前缀</h3>
+<div class="highlight"><pre><span></span>export PS1="=&gt;"
+</pre></div>
+<p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
+<p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
+<p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
+<p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
+<div class="highlight"><pre><span></span>export PS2="&gt;"
+</pre></div>
+<h2 id="echo">echo命令</h2>
+<p>echo命令前面接触很多了，这里不赘述了。echo命令就是用于查看某个变量的值或者直接输出一行字符串。</p>
+<h2 id="unset">unset命令</h2>
+<p>取消bash某个变量的赋值。</p>
+<h2 id="read">read命令</h2>
+<p>请求用户输入某个变量的值</p>
+<div class="highlight"><pre><span></span>read name ; echo '你输入的是：'<span class="cp">${</span><span class="n">name</span><span class="cp">}</span>
+</pre></div>
+<h2 id="bash">bash里面的特殊符号</h2>
+<p>上面的分号bash和其他编程语言都大体类似，就是表示一行的结束。但bash还有很多其他的特殊符号，下面讲一下，这些特殊符号有的时候看到了搜索都不太好搜索。 更多信息请参阅 <a href="http://stackoverflow.com/questions/5163144/what-are-the-special-dollar-sign-shell-variable">这个网页</a> 。</p>
+<ul>
+<li>
+<p><code>$0</code> 本命令名字，在shell脚本里面那么就成了本脚本的名字。</p>
+</li>
+<li>
+<p><code>$1 $2 ...</code> 命令接受的参数</p>
+</li>
+<li><code>$@</code> 所有参数： <code>{$1, $2, $3 ...}</code> ，其是一个array。</li>
+<li><code>$?</code> 上一个命令返回的状态，一般0表示成功。</li>
+<li><code>$!</code> 上一个命令运行的进程号</li>
+<li><code>&amp;&amp;</code> 比如 <code>cmd1 &amp;&amp; cmd2</code> 意思是前一个命令执行成功了再执行第二个命令</li>
+<li><code>&amp;</code> 如果某个命令以 <code>&amp;</code> 结尾，那么该命令将是异步的，进入后台执行。（PS：虽然这样，但如果你是通过远程连接服务器来创建的命令，远程关闭该后台进程也将自动关闭。这需要使用nohup或者screen。）</li>
+</ul>
+<h2 id="if">if条件判断</h2>
+<p>if条件语句格式是：</p>
+<div class="highlight"><pre><span></span><span class="k">if</span>  <span class="o">[</span> <span class="nb">test</span> expression <span class="o">]</span>
+<span class="k">then</span>    <span class="k">do</span> what
+<span class="k">fi</span>
+</pre></div>
+<p>对于短小的shell命令行，可以写成这样的一行格式，其中分号表示换行。</p>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span> <span class="nb">test</span> expression <span class="o">]</span><span class="p">;</span> <span class="k">then</span> <span class="k">do</span> what <span class="p">;</span> <span class="k">fi</span>
+</pre></div>
+<p>还值得提醒一下的是：条件判断语句（就是上面的test expression）要和那个方括号[]有一个空格表示分开，（上古神器都有一些怪僻，淡定就好）。</p>
+<h3 id="_3">应用：确认某个文件夹是不是存在</h3>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span>  !  -d  workspace  <span class="o">]</span><span class="p">;</span>  <span class="k">then</span> mkdir workspace   <span class="p">;</span> <span class="k">fi</span>
+</pre></div>
+<p><code>-d</code> 表示检测某个文件夹是不是存在，<code>!</code> 符号在这里进行逻辑否操作。也就是这里如果workspace不存在，那么新建workspace文件夹。</p>
+<h2 id="for">for循环</h2>
+<p>本小节参考了 <a href="http://www.cyberciti.biz/faq/bash-for-loop/">bash for loop</a> 这篇文章，其关于bash编程的循环部分讲的很详细。</p>
+<p>for循环语句格式如下：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span>  var in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span>
+    <span class="k">do</span> cmd1
+         cmd2
+<span class="k">done</span>
+</pre></div>
+<p>同样，你也可以将其写成一行的样子：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> var in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="p">;</span> <span class="k">do</span> cmd1 <span class="p">;</span> cmd2 <span class="p">;</span> <span class="k">done</span>
+</pre></div>
+<p>​    </p>
+<p>其中加分号的地方为多行格式下必须换行的地方。</p>
+<h3 id="_4">应用：小数点递加输出流</h3>
+<div class="highlight"><pre><span></span><span class="k">for</span> animate in <span class="k">$(</span>seq <span class="m">4</span>.0 <span class="m">0</span>.1 <span class="m">8</span>.0<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  <span class="nb">echo</span> <span class="si">${</span><span class="nv">animate</span><span class="si">}</span> <span class="p">;</span> <span class="k">done</span>
+</pre></div>
+<p>关于seq命令我简单说下，请通过 <code>--help</code> 来查阅具体信息：</p>
+<div class="highlight"><pre><span></span>用法：seq [选项]... 尾数
+    或：seq [选项]... 首数 尾数
+    或：seq [选项]... 首数 增量 尾数
+</pre></div>
+<h3 id="_5">应用：批量创建文件</h3>
+<p>在文件夹里面输入如下命令：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span><span class="p">;</span> i&lt;<span class="o">=</span><span class="m">10</span><span class="p">;</span> i++ <span class="o">))</span><span class="p">;</span> <span class="k">do</span>  touch file<span class="nv">$i</span>.txt<span class="p">;</span> <span class="k">done</span>
+</pre></div>
+<h3 id="_6">应用：批量缩小图片大小</h3>
+<p>这是一个多行脚本，用于批量缩小图片的大小。</p>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span>  !  -d  smallsize  <span class="o">]</span><span class="p">;</span>  <span class="k">then</span> mkdir smallsize   <span class="p">;</span> <span class="k">fi</span>
+    <span class="nb">cd</span> smallsize
+
+    <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span>
+        <span class="k">for</span> it in <span class="k">$(</span>ls *.png<span class="k">)</span>
+            <span class="k">do</span> convert -resize <span class="m">50</span>%x50% <span class="nv">$it</span>  <span class="nv">$i</span>-<span class="nv">$it</span>
+                <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span>i+1
+                <span class="nb">echo</span> <span class="nv">$it</span> is smallsized
+            <span class="k">done</span>
+</pre></div>
+<h3 id="_7">应用：批量重命名文件</h3>
+<div class="highlight"><pre><span></span><span class="nb">let</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="k">for</span> f in <span class="k">$(</span>ls *.jpg<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  mv -vi <span class="si">${</span><span class="nv">f</span><span class="si">}</span> <span class="m">0000</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span>.jpg <span class="o">&amp;&amp;</span> <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span>i+1<span class="p">;</span> <span class="k">done</span>
+</pre></div>
+<h2 id="_8">调用子命令返回值</h2>
+<p>在前面几个例子中，已经出现多次这个形式了： <code>$(cmd)</code> ，其将执行子shell命令，并将返回结果作为字符串值。</p>
+<h2 id="array">array</h2>
+<p>shell编程最好不要过多涉及复杂的编程的内容，那将是很痛苦的，但是在某些情况下你可能需要了解array这个概念。下面来演示这样一个例子，其需求就是在一个自动备份程序之上再加上自动删除逻辑。</p>
+<div class="highlight"><pre><span></span><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date +%F<span class="k">)</span>
+<span class="nv">DAYS</span><span class="o">=</span><span class="m">30</span>
+
+<span class="c1">## here is the autodump code, and the output filename is whatdump_${DATE}</span>
+<span class="c1">### the allowed list</span>
+ALLOWED<span class="o">[</span><span class="m">0</span><span class="o">]=</span>whatdump_<span class="si">${</span><span class="nv">DATE</span><span class="si">}</span>
+
+<span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span><span class="p">;</span> i<span class="p">&amp;</span>lt<span class="p">;</span><span class="o">=</span><span class="si">${</span><span class="nv">DAYS</span><span class="si">}</span><span class="p">;</span> i++ <span class="o">))</span>
+    <span class="k">do</span>  ALLOWED<span class="o">[</span>i<span class="o">]=</span>whatdump_<span class="k">$(</span>date -d <span class="s2">"now -</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">days"</span> +<span class="s2">"%F"</span><span class="k">)</span>
+    <span class="k">done</span>
+
+<span class="c1">### use the python script , it is really hard to write it on bash</span>
+python ~/thepython/scripts/whatdump_autoremove.py <span class="si">${</span><span class="nv">ALLOWED</span><span class="p">[@]</span><span class="si">}</span>
+</pre></div>
+<p>这个程序整个逻辑就是创建一个名字叫做 <code>whatdump_DATE</code> 的备份文件（你可以通过crontab来控制好每天运行一次），然后我们希望目标文件只保留最近三十天的文件。因为这个逻辑较为复杂，本来我是打算直接将 <code>DATE</code> 参数传递给python脚本来做接下来的工作的，但是在了解到date命令强大的人类友好的日期时间表达功能（请参考 <a href="http://unix.stackexchange.com/questions/24626/quickly-calculate-date-differences">这个问题</a>），我决定将整个允许存在的文件名都传递进python脚本中去。</p>
+<p>有兴趣的可以了解下date命令-d选项的灵活表达支持，比如 <code>date -d "now -3days"</code> 就是现在之前三天的日期时间，而 <code>date -d "+3weeks"</code> 就是现在三周之后的日期时间。用兴趣的可以继续了解下，这个date命令的-d选项真的好强大。</p>
+<p>好了下面详细讲一下这里array涉及到的语法。</p>
+<h3 id="_9">赋值和引用</h3>
+<div class="highlight"><pre><span></span><span class="o">=</span>&gt;array<span class="o">[</span><span class="m">0</span><span class="o">]=</span><span class="s2">"hello"</span>
+<span class="o">=</span>&gt;array<span class="o">[</span><span class="m">1</span><span class="o">]=</span><span class="s2">"world!"</span>
+<span class="o">=</span>&gt;echo <span class="si">${</span><span class="nv">array</span><span class="p">[0]</span><span class="si">}</span> <span class="si">${</span><span class="nv">array</span><span class="p">[1]</span><span class="si">}</span>
+hello world!
+</pre></div>
+<p>这种表达和我们常见的那种数组概念相近，记得索引从0开始这个惯例即可。或者如下一起赋值:</p>
+<div class="highlight"><pre><span></span><span class="o">=</span>&gt;array2<span class="o">=(</span><span class="s2">"hello"</span> <span class="s2">"python"</span><span class="o">)</span>
+<span class="o">=</span>&gt;echo <span class="si">${</span><span class="nv">array2</span><span class="p">[@]</span><span class="si">}</span>
+hello python
+</pre></div>
+<p>上面的 <code>${arrayname[@]}</code> 这种表达方式就是引用所有的array，然后还有 <code>${#arrayname[@]}</code> 这种表达是返回这个array的长度。</p>
+<div class="highlight"><pre><span></span>=&gt;echo <span class="cp">${</span><span class="c1">#array2[@]</span><span class="cp">}</span>
+2
+</pre></div>
+<p>然后最后这句:</p>
+<div class="highlight"><pre><span></span>python ~/thepython/scripts/whatdump_autoremove.py <span class="cp">${</span><span class="n">ALLOWED</span><span class="p">[</span><span class="err">@</span><span class="p">]</span><span class="cp">}</span>
+</pre></div>
+<p>就是将收集到的所有允许的文件名array传递进python脚本中去了。在python脚本中一个粗糙的做法就是如下这样引用</p>
+<div class="highlight"><pre><span></span>def main(args,path=""):
+    print args
+
+main(sys.argv[1:])
+</pre></div>
+<p>这样所有的这些array就传递进args里面去了，读者有兴趣可以试一下，这个args在python中就是一个列表对象了。到python里面了更复杂的逻辑我们都可以很快写出来了，我就不说了。</p>
+<p>大概类似下面所示，注意这里的pathlib在python3.4之后才会有，之前需要用pip安装之。</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+    <span class="n">allowed</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">pfolds</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">pfolds</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pfolds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="s2">"passed"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="s2">"removed"</span><span class="p">)</span>
+            <span class="c1">### really do the remove thing</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="c1">### 切换到autodump目录</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">"~/autodump"</span><span class="p">))</span>
+
+    <span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</pre></div>
+<h2 id="date">date命令</h2>
+<p>之所以把date命令放在一章是因为date命令如果单独作为一个命令来使用，打印显示日期其实意义不是很大。但是在bash脚本中，在管道中，date命令却变得非常有用了。读者可以用 <code>--help</code> 查看一下帮助信息，这个命令比我们预想的还要复杂的多，而且这里的那些输出格式参数控制语法，就是到了其他编程语言中也是有用的（比如python的time模块中的strftime函数）。</p>
+<h3 id="date_1">date返回日期字符</h3>
+<p>date命令返回某个特定格式的日期在某些shell脚本中很有用，如下所示就是一个简单的例子：</p>
+<div class="highlight"><pre><span></span>date=$(date +"%F_%R");echo $date
+</pre></div>
+<p>date命令前面已谈到一点，更多信息请参看 <a href="http://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/">这篇文章</a>  。这里就不赘述了。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-12-24T16:08:00+08:00">2017年 12月 24日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2017-12-24T16:08:00+08:00">2017年 12月 24日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#linux-ref">linux</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#bash-ref">bash
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#tutorial-ref">tutorial
+                    <span>2</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

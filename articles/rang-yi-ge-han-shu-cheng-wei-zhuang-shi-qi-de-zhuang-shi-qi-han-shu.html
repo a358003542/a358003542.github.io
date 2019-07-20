@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="python, python语言, " />
+
+<meta property="og:title" content="让一个函数成为装饰器的装饰器函数 "/>
+<meta property="og:url" content="/articles/rang-yi-ge-han-shu-cheng-wei-zhuang-shi-qi-de-zhuang-shi-qi-han-shu.html" />
+<meta property="og:description" content="python中的装饰器的作用就是可调用对象（一般情况下指函数）名字的重绑定。重绑定行为通常发生在原函数def结束之后，原函数将作为参数被传入装饰器函数中，从而实现函数行为上的重制。 所以装饰器函数的最基本定义就是接受一个可调用对象再返回一个可调用对象。 本文的任务就是让一个函数成为装饰器的装饰器，这在某些情况下是有用的，比如说 def post(self): pass 在flask中我们定义的视图函数，如果需要添加参数检查逻辑，那么大概我们会写一系列的验证函数，将post进来的参数 ----&gt; ----&gt; ----&gt; 一直传过去，直到传出来那么就说明参数都没有问题的，嗯，很直观的一种设计模式。 要实现这种代码风格，就需要做到让一个或者一些函数成为装饰器，而为了代码复用，最好写出一个装饰器函数装饰目标函数即可。 我们知道装饰器最直观的写法如下： def build_passing_decorator_func(func): &#34;&#34;&#34; 使一个函数成为一个装饰器 &#34;&#34;&#34; def wrapper(method, *args, **kwargs): ok, response = method(*args, **kwargs) return func(ok, response) return wrapper @build_passing_decorator_func def test …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-04-15T00:00:00+08:00" />
+<meta name="twitter:title" content="让一个函数成为装饰器的装饰器函数 ">
+<meta name="twitter:description" content="python中的装饰器的作用就是可调用对象（一般情况下指函数）名字的重绑定。重绑定行为通常发生在原函数def结束之后，原函数将作为参数被传入装饰器函数中，从而实现函数行为上的重制。 所以装饰器函数的最基本定义就是接受一个可调用对象再返回一个可调用对象。 本文的任务就是让一个函数成为装饰器的装饰器，这在某些情况下是有用的，比如说 def post(self): pass 在flask中我们定义的视图函数，如果需要添加参数检查逻辑，那么大概我们会写一系列的验证函数，将post进来的参数 ----&gt; ----&gt; ----&gt; 一直传过去，直到传出来那么就说明参数都没有问题的，嗯，很直观的一种设计模式。 要实现这种代码风格，就需要做到让一个或者一些函数成为装饰器，而为了代码复用，最好写出一个装饰器函数装饰目标函数即可。 我们知道装饰器最直观的写法如下： def build_passing_decorator_func(func): &#34;&#34;&#34; 使一个函数成为一个装饰器 &#34;&#34;&#34; def wrapper(method, *args, **kwargs): ok, response = method(*args, **kwargs) return func(ok, response) return wrapper @build_passing_decorator_func def test …">
+
+    <title>让一个函数成为装饰器的装饰器函数  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/rang-yi-ge-han-shu-cheng-wei-zhuang-shi-qi-de-zhuang-shi-qi-han-shu.html"> 让一个函数成为装饰器的装饰器函数  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul></ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>python中的装饰器的作用就是可调用对象（一般情况下指函数）名字的重绑定。重绑定行为通常发生在原函数def结束之后，原函数将作为参数被传入装饰器函数中，从而实现函数行为上的重制。</p>
+<p>所以装饰器函数的最基本定义就是接受一个可调用对象再返回一个可调用对象。</p>
+<p>本文的任务就是让一个函数成为装饰器的装饰器，这在某些情况下是有用的，比如说</p>
+<div class="highlight"><pre><span></span>    def post(self):
+        pass
+</pre></div>
+<p>在flask中我们定义的视图函数，如果需要添加参数检查逻辑，那么大概我们会写一系列的验证函数，将post进来的参数 ----&gt; ----&gt; ----&gt; 一直传过去，直到传出来那么就说明参数都没有问题的，嗯，很直观的一种设计模式。</p>
+<p>要实现这种代码风格，就需要做到让一个或者一些函数成为装饰器，而为了代码复用，最好写出一个装饰器函数装饰目标函数即可。</p>
+<p>我们知道装饰器最直观的写法如下：</p>
+<div class="highlight"><pre><span></span>def build_passing_decorator_func(func):
+    """
+    使一个函数成为一个装饰器
+    """
+    def wrapper(method, *args, **kwargs):
+        ok, response = method(*args, **kwargs)
+        return func(ok, response)
+
+    return wrapper
+</pre></div>
+<div class="highlight"><pre><span></span>@build_passing_decorator_func
+def test(ok, data):
+    pass
+</pre></div>
+<div class="highlight"><pre><span></span>@test
+def post(self):
+    pass
+</pre></div>
+<p>按照装饰器的含义，我们有：</p>
+<div class="highlight"><pre><span></span>test(post)(self)
+build_passing_decorator_func(test)(post)(self)
+wrapper(post)(self)  # func=test
+</pre></div>
+<p>最后程序似乎执行的是：</p>
+<div class="highlight"><pre><span></span>ok, response = post(*args, **kwargs)
+return test(ok, response)
+</pre></div>
+<p>如果这个test方法返回的还是某种参数格式，那么多个装饰器可以一直这样写下去。</p>
+<p><strong>但是上面的这种写法有个问题</strong> ：</p>
+<p>如果装饰的是简单的函数，那么是没问题的，但如果装饰的是类的方法的话，self实例并不能很好的解析。参考 Mark Lutz 的python学习手册一书，按照上面的写法，装饰的方法会重绑定到装饰器类中，从而丢失了self本身的实例，导致self不能正常解析。</p>
+<p>但如果采用下面这种嵌套函数写法则不会有如上问题：</p>
+<div class="highlight"><pre><span></span>def build_passing_decorator_func(func):
+    """
+    使一个函数成为一个装饰器
+    """
+    def wrapper(f):
+        @wraps(f)
+        def decorator(*args, **kwargs):
+            ok, response = f(*args, **kwargs)
+            return func(ok, response)
+        return decorator
+    return wrapper
+</pre></div>
+<p>具体原因我还不是特别清楚，之前我想到是可能python里的装饰器优先级特别高，先于类的实例化就已经加载了，而这种嵌套函数有惰性解析参数的含义，所以类的实例化self解析才不会出错。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-04-15T00:00:00+08:00">2018年 4月 15日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pythonyu-yan-ref">python语言</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#python-ref">python
+                    <span>14</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

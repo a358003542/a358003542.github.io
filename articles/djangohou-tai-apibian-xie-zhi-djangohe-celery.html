@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-django和celery "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-djangohe-celery.html" />
+<meta property="og:description" content="django和celery django-crontab这个模块我试过的，还是很便捷的，不过其还是基于系统的crontab，而如果我们将django和celery组合起来，celery灵活的消息分发机制，无疑将给未来开发带来更多的可能性。celery的官方文档在 这里 ，本文主要讲一下celery的基本概念和django的集成问题，更多celery的知识请参阅官方文档。 celery的核心概念 broker 任务队列服务提供者，celery推荐使用redis或者rabbitmq作为broker。 task 具体执行的任务，其实就是定义的一些函数。 backend 用来存储任务之后的输出结果 worker celery的启动就是开启一个worker。 django内文件安排 本小节参考了 这篇文章 和 这篇文章 。需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，而且下面讲的配置实际上就是一个单独的celery app大部分都是类似的，只是多了一些细节上的处理和优化。 celeryconfig.py 首先推荐在你的django app settings.py 旁新建个 celeryconfig.py 文件，有的教程让设置这个配置文件名字为 celery.py ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下： import os …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-django和celery ">
+<meta name="twitter:description" content="django和celery django-crontab这个模块我试过的，还是很便捷的，不过其还是基于系统的crontab，而如果我们将django和celery组合起来，celery灵活的消息分发机制，无疑将给未来开发带来更多的可能性。celery的官方文档在 这里 ，本文主要讲一下celery的基本概念和django的集成问题，更多celery的知识请参阅官方文档。 celery的核心概念 broker 任务队列服务提供者，celery推荐使用redis或者rabbitmq作为broker。 task 具体执行的任务，其实就是定义的一些函数。 backend 用来存储任务之后的输出结果 worker celery的启动就是开启一个worker。 django内文件安排 本小节参考了 这篇文章 和 这篇文章 。需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，而且下面讲的配置实际上就是一个单独的celery app大部分都是类似的，只是多了一些细节上的处理和优化。 celeryconfig.py 首先推荐在你的django app settings.py 旁新建个 celeryconfig.py 文件，有的教程让设置这个配置文件名字为 celery.py ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下： import os …">
+
+    <title>django后台api编写之-django和celery  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-djangohe-celery.html"> django后台api编写之-django和celery  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#djangocelery">django和celery</a><ul>
+<li><a href="#celery">celery的核心概念</a></li>
+<li><a href="#django">django内文件安排</a><ul>
+<li><a href="#celeryconfigpy">celeryconfig.py</a></li>
+<li><a href="#__init__py">__init__.py</a></li>
+<li><a href="#settingspy">settings.py</a></li>
+<li><a href="#_1">定义任务</a></li>
+<li><a href="#_2">启动任务</a></li>
+<li><a href="#_3">手工启动一次任务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="djangocelery">django和celery</h2>
+<p>django-crontab这个模块我试过的，还是很便捷的，不过其还是基于系统的crontab，而如果我们将django和celery组合起来，celery灵活的消息分发机制，无疑将给未来开发带来更多的可能性。celery的官方文档在 <a href="http://docs.celeryproject.org/en/latest/index.html">这里</a> ，本文主要讲一下celery的基本概念和django的集成问题，更多celery的知识请参阅官方文档。</p>
+<h3 id="celery">celery的核心概念</h3>
+<ul>
+<li>broker  任务队列服务提供者，celery推荐使用redis或者rabbitmq作为broker。</li>
+<li>task 具体执行的任务，其实就是定义的一些函数。</li>
+<li>backend 用来存储任务之后的输出结果</li>
+<li>worker celery的启动就是开启一个worker。</li>
+</ul>
+<h3 id="django">django内文件安排</h3>
+<p>本小节参考了 <a href="https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7">这篇文章</a> 和 <a href="http://geek.csdn.net/news/detail/128791">这篇文章</a> 。需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，而且下面讲的配置实际上就是一个单独的celery app大部分都是类似的，只是多了一些细节上的处理和优化。</p>
+<h4 id="celeryconfigpy">celeryconfig.py</h4>
+<p>首先推荐在你的django app <code>settings.py</code> 旁新建个 <code>celeryconfig.py</code> 文件，有的教程让设置这个配置文件名字为 <code>celery.py</code> ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">'DJANGO_SETTINGS_MODULE'</span><span class="p">,</span> <span class="s1">'project_name.settings'</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s1">'project_name'</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s1">'django.conf:settings'</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">'CELERY'</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">autodiscover_tasks</span><span class="p">()</span>
+
+
+<span class="nd">@app.task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">debug_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'Request: {0!r}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">))</span>
+</pre></div>
+<p>这个下面新建的任务不过是方便测试罢了，然后上面几行配置基本上死的。最值得讲的就是这两行：</p>
+<div class="highlight"><pre><span></span>app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
+</pre></div>
+<p>第一行是从django的配置对象中读取配置，特别注意的就是那个 <code>namespace='CELERY'</code> ，这样只有 <code>CELERY_</code> 开头的配置才会读取，而且对应原celery配置的关系是：</p>
+<div class="highlight"><pre><span></span>CELERY_BROKER_URL  -&gt; BROKER_URL
+</pre></div>
+<p>我那次就是 <code>CELERY_BEAT_SCHEDULE</code> 写成了 <code>CELERYBEAT_SCHEDULE</code> 然后老实发现周期性程序启动不起来。</p>
+<p>第二行也是一个优化细节，从函数名字也可以看到，就是自动发现任务。在你的django的其他app里面新建一个 <code>tasks.py</code> ，celery会自动发现你定义的任务。</p>
+<h4 id="__init__py"><code>__init__.py</code></h4>
+<p>还是你的django项目的project <code>settings.py</code> 那个文件夹里面，<code>__init__.py</code> 推荐写上这几行内容：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.celeryconfig</span> <span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">celery_app</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'celery_app'</span><span class="p">,)</span>
+</pre></div>
+<h4 id="settingspy">settings.py</h4>
+<p>具体celery的一些配置就统一写在 <code>settings.py</code> 文件里面，上面也提到了，都要 <code>CELERY_</code> 开头，大体如下所示：</p>
+<div class="highlight"><pre><span></span><span class="n">CELERY_BROKER_URL</span> <span class="o">=</span> <span class="s1">'redis://localhost:6379'</span>
+<span class="c1">#CELERY_RESULT_BACKEND = 'redis://localhost:6379'</span>
+<span class="c1">#CELERY_ACCEPT_CONTENT = ['application/json']</span>
+<span class="c1">#CELERY_RESULT_SERIALIZER = 'json'</span>
+<span class="c1">#CELERY_TASK_SERIALIZER = 'json'</span>
+<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s1">'Asia/Shanghai'</span>
+<span class="c1"># schedules</span>
+<span class="kn">from</span> <span class="nn">celery.schedules</span> <span class="kn">import</span> <span class="n">crontab</span>
+<span class="n">CELERY_BEAT_SCHEDULE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'crawl_juhe_every_one_hour'</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">'task'</span><span class="p">:</span> <span class="s1">'wxarticles.tasks.crawl_juhe'</span><span class="p">,</span>
+         <span class="s1">'schedule'</span><span class="p">:</span> <span class="n">crontab</span><span class="p">(</span><span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hour</span><span class="o">=</span><span class="s1">'*/3'</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="s1">'every_miniute_for_test'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">'task'</span><span class="p">:</span> <span class="s1">'wxarticles.tasks.test_celery'</span><span class="p">,</span>
+        <span class="s1">'schedule'</span><span class="p">:</span> <span class="n">crontab</span><span class="p">(),</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+<h4 id="_1">定义任务</h4>
+<p>好了，定义任务，实际上就是定义一个函数，比如下面这个简单的打印函数来确认celery周期程序是工作着的：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">shared_task</span>
+
+<span class="nd">@shared_task</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">test_celery</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'celery is working.'</span><span class="p">)</span>
+</pre></div>
+<p>celery的crontab功能很强大，比如上面的 <code>crontab()</code> 就是每分钟执行一次。具体请参看 <a href="http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html">官方文档</a> 之。</p>
+<h4 id="_2">启动任务</h4>
+<p>和celery其他操作都是一样的，就是启动worker：</p>
+<div class="highlight"><pre><span></span>celery -A project_name worker -l info
+</pre></div>
+<p><code>-A</code> 选项跟着 celery app的名字，在这里也就是django项目的名字。 <code>-l</code> 选项设置日志打印级别。</p>
+<p>你还可以加上 <code>-B</code> 来同时启动周期性任务。</p>
+<p>或者另外开个命令：</p>
+<div class="highlight"><pre><span></span>celery -A project_name beat -l info
+</pre></div>
+<hr/>
+<p>其他制作脚本啊，制作后台程序，制作服务啊，使用supervisor啊，实际上和celery关系已经不大了，可以不在这里说了。</p>
+<h4 id="_3">手工启动一次任务</h4>
+<p>参考了 <a href="https://stackoverflow.com/questions/12900023/how-can-i-run-a-celery-periodic-task-from-the-shell-manually">这个网页</a> 。</p>
+<div class="highlight"><pre><span></span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">shell</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">myapp.tasks</span> <span class="kn">import</span> <span class="n">my_task</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">eager_result</span> <span class="o">=</span> <span class="n">my_task</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

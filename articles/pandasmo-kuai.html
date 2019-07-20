@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="科学计算, 机器学习, " />
+
+<meta property="og:title" content="pandas模块 "/>
+<meta property="og:url" content="/articles/pandasmo-kuai.html" />
+<meta property="og:description" content="本文对pandas模块的一些核心概念进行说明。 基本入门 pandas最核心的两个数据结构就是 Series 类和 DataFrame 类。其中DataFrame可能会用的偏多一点，Series相当于一维情况下较简单的DataFrame，有的时候会用到。本文重点讨论DataFrame类。 DataFrame之所以很常用是因为这种数据结构太常见了，在excel中，在csv中，在sql中，等等来源的数据都可以汇总成为DataFrame数据结构，然后进行一些后面必要的数据处理，包括送入机器学习或者深度学习的模型中去。 读写文件支持 pandas的io子模块写得很便捷，实际上我经常看到有些python程序员并不是在做数据处理，有时都会调用下pandas的io来做一些读写操作。 其大体有这些函数： read_csv to_csv read_json to_json read_html to_html read_excel to_excel read_sql to_sql 这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。 读txt文件 实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-07-01T00:00:00+08:00" />
+<meta property="" content="2019-03-12T00:00:00+08:00" />
+<meta name="twitter:title" content="pandas模块 ">
+<meta name="twitter:description" content="本文对pandas模块的一些核心概念进行说明。 基本入门 pandas最核心的两个数据结构就是 Series 类和 DataFrame 类。其中DataFrame可能会用的偏多一点，Series相当于一维情况下较简单的DataFrame，有的时候会用到。本文重点讨论DataFrame类。 DataFrame之所以很常用是因为这种数据结构太常见了，在excel中，在csv中，在sql中，等等来源的数据都可以汇总成为DataFrame数据结构，然后进行一些后面必要的数据处理，包括送入机器学习或者深度学习的模型中去。 读写文件支持 pandas的io子模块写得很便捷，实际上我经常看到有些python程序员并不是在做数据处理，有时都会调用下pandas的io来做一些读写操作。 其大体有这些函数： read_csv to_csv read_json to_json read_html to_html read_excel to_excel read_sql to_sql 这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。 读txt文件 实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 …">
+
+    <title>pandas模块  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/pandasmo-kuai.html"> pandas模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">基本入门</a></li>
+<li><a href="#_2">读写文件支持</a><ul>
+<li><a href="#txt">读txt文件</a></li>
+<li><a href="#excel">读excel文件</a></li>
+<li><a href="#sql">执行某个sql查询语句</a></li>
+</ul>
+</li>
+<li><a href="#dataframe">创建DataFrame对象</a><ul>
+<li><a href="#python">直接加载python对象</a></li>
+<li><a href="#dataframe_1">新建一个随机数填充的DataFrame</a></li>
+<li><a href="#dataframe_2">选择合适的时机转入DataFrame</a></li>
+</ul>
+</li>
+<li><a href="#dataframe_3">DataFrame基础</a><ul>
+<li><a href="#dataframendarray">DataFrame转ndarray</a></li>
+<li><a href="#dataframe_4">DataFrame列重命名</a></li>
+<li><a href="#dataframeappend">DataFrame的append操作</a></li>
+</ul>
+</li>
+<li><a href="#_3">索引</a><ul>
+<li><a href="#_4">按照列名选择</a></li>
+<li><a href="#_5">按照列名选择多个列</a></li>
+<li><a href="#iloc">iloc方法</a></li>
+<li><a href="#_6">按照索引选择多个列</a></li>
+<li><a href="#_7">对某一特征列进行某个运算</a></li>
+<li><a href="#_8">搜索语句</a></li>
+<li><a href="#_9">按照行排序</a></li>
+<li><a href="#_10">按照列排序</a></li>
+</ul>
+</li>
+<li><a href="#_11">绘图相关</a><ul>
+<li><a href="#_12">绘制散点图</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>本文对pandas模块的一些核心概念进行说明。</p>
+<h2 id="_1">基本入门</h2>
+<p>pandas最核心的两个数据结构就是 Series 类和 DataFrame 类。其中DataFrame可能会用的偏多一点，Series相当于一维情况下较简单的DataFrame，有的时候会用到。本文重点讨论DataFrame类。</p>
+<p>DataFrame之所以很常用是因为这种数据结构太常见了，在excel中，在csv中，在sql中，等等来源的数据都可以汇总成为DataFrame数据结构，然后进行一些后面必要的数据处理，包括送入机器学习或者深度学习的模型中去。</p>
+<h2 id="_2">读写文件支持</h2>
+<p>pandas的io子模块写得很便捷，实际上我经常看到有些python程序员并不是在做数据处理，有时都会调用下pandas的io来做一些读写操作。</p>
+<p>其大体有这些函数：</p>
+<ul>
+<li>read_csv    to_csv</li>
+<li>read_json   to_json</li>
+<li>read_html to_html</li>
+<li>read_excel to_excel</li>
+<li>read_sql to_sql</li>
+</ul>
+<p>这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。</p>
+<h3 id="txt">读txt文件</h3>
+<p>实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 <a href="https://stackoverflow.com/questions/21546739/load-data-from-txt-with-pandas">这个问题</a> 里面的例子是这样的：</p>
+<div class="highlight"><pre><span></span>data = pd.read_csv('output_list.txt', sep=" ", header=None)
+</pre></div>
+<ul>
+<li>sep 设置读取csv时每个字段的分隔，默认是逗号，我遇到过是 <code>\t</code> 作为分隔符的情况</li>
+<li>header 默认取csv的第一行作为df数据的作为各个列的列名，如果设置了 <code>names</code> ，也就是手动指定列名，那么header相当于设置了None，如果header设置了None，将不会读取第一行作为列名。</li>
+</ul>
+<p>read_csv 有很多选项，应付初步加载csv数据进入df内是绝对没问题的了。</p>
+<h3 id="excel">读excel文件</h3>
+<p>利用pd.read_excel来读excel文件里面的数据，这个功能需要安装 <strong>xlrd</strong> 模块。</p>
+<h3 id="sql">执行某个sql查询语句</h3>
+<p>使用pd.read_sql 来从某个sql查询语句中获取数据，其有第二个必填参数conn，可以利用sqlalchemy如下获得：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="n">data_source</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="s1">'sqlite:///mydata.sqlite'</span><span class="p">)</span>
+</pre></div>
+<h2 id="dataframe">创建DataFrame对象</h2>
+<p>除了直接从文件读写创建DataFrame对象外，你还可以通过DataFrame类来直接生成DataFrame对象，如下所示：</p>
+<h3 id="python">直接加载python对象</h3>
+<p>这里支持的python对象有字典，或者已经是DataFrame了。</p>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'state'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Ohio'</span><span class="p">,</span> <span class="s1">'Ohio'</span><span class="p">,</span> <span class="s1">'Ohio'</span><span class="p">,</span> <span class="s1">'Nevada'</span><span class="p">,</span> <span class="s1">'Nevada'</span><span class="p">,</span> <span class="s1">'Nevada'</span><span class="p">],</span> 
+        <span class="s1">'year'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="mi">2002</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="mi">2002</span><span class="p">,</span> <span class="mi">2003</span><span class="p">],</span> 
+        <span class="s1">'pop'</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="mf">2.9</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">]}</span>
+
+<span class="n">frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+<p>当然我们操作DataFrame通常的思路更偏向于一行一行的来，你也可以直接把类似于numpy的ndarray的结构的数据转成DataFrame对象：</p>
+<div class="highlight"><pre><span></span>pd.DataFrame([[1,2],[2,3]])
+</pre></div>
+<p>再比如：</p>
+<h3 id="dataframe_1">新建一个随机数填充的DataFrame</h3>
+<p>新建一个DataFrame对象，随机数填充6行4列，列名分别为 <code>['a','b','c','d']</code> 。</p>
+<div class="highlight"><pre><span></span>df = pd.DataFrame(np.random.randn(6,4), columns=['a','b','c','d'])
+</pre></div>
+<p>上面的例子还演示了列名不用默认的0 1 ，而是你直接去指定。</p>
+<h3 id="dataframe_2">选择合适的时机转入DataFrame</h3>
+<p>你需要选择一个合适的时机将你的python数据转入DataFrame中，通常这并不是越早越好。DataFrame更快更适合的是那些矩阵操作，或者所有元素都要进行的操作。而对于你的python数据的某个，或者某些的更改操作，并不是某一行，或者某一列的操作，这个时候用DataFrame你会发现很不方便。</p>
+<h2 id="dataframe_3">DataFrame基础</h2>
+<h3 id="dataframendarray">DataFrame转ndarray</h3>
+<p>有的时候我们进行计算是希望以ndarray（numpy）的形式来进行的（我们引入DataFrame是因为其有label等等让各个列数据有含义的功能，而到了实际底层算法，可能就是特征1234了，我们不再关心具体特征的名字，这个时候将某部分数据退化为numpy的ndarray数据类型就很必要了，一方面底层算法层不在意这些，第二就是numpy的ndarray对象可以和以前我们常见的那些算法包括新出来的tensorflow很容易对接起来。）</p>
+<p>实际转变如下，非常简单：</p>
+<div class="highlight"><pre><span></span>nd = df.values
+</pre></div>
+<p>参考了 <a href="https://stackoverflow.com/questions/13187778/convert-pandas-dataframe-to-numpy-array-preserving-index">这个网页</a> 。</p>
+<h3 id="dataframe_4">DataFrame列重命名</h3>
+<p>在创建DataFrame对象时 <code>columns</code> 参数是设置列名的，DataFrame对象创建之后，你还可以如下所示修改列名。</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    重新设置列名</span>
+<span class="sd">    """</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+
+<span class="k">def</span> <span class="nf">rename_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">origin_column_name</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    将某个列名更改为某个名字</span>
+<span class="sd">    默认的column 可用 0 1 2 来引用 数值型</span>
+<span class="sd">    """</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">d</span><span class="p">[</span><span class="n">origin_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">column_name</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">rename_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    重新设置列名</span>
+<span class="sd">    """</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">rename_column_by_index</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    不知道列名是多少，只知道是第几列，将其修改为某个名字</span>
+<span class="sd">    """</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span> <span class="n">column_name</span><span class="p">})</span>
+</pre></div>
+<h3 id="dataframeappend">DataFrame的append操作</h3>
+<p>有的时候你需要在现有的Datafrme后面额外添加一行或者几行数据，这个操作很普遍。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'c'</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> 
+     <span class="n">a</span>   <span class="n">b</span>   <span class="n">c</span>
+<span class="mi">0</span>  <span class="mf">1.0</span> <span class="n">NaN</span> <span class="n">NaN</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">([{</span><span class="s1">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">},{</span><span class="s1">'b'</span><span class="p">:</span><span class="mi">2</span><span class="p">}],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> 
+     <span class="n">a</span>    <span class="n">b</span>   <span class="n">c</span>
+<span class="mi">0</span>  <span class="mf">1.0</span>  <span class="n">NaN</span> <span class="n">NaN</span>
+<span class="mi">1</span>  <span class="n">NaN</span>  <span class="mf">2.0</span> <span class="n">NaN</span>
+</pre></div>
+<p>如果是上面字典的形式，那么是比如带上 <code>ignore_index=True</code> 参数的。此外还可以append pandas的 Series对象，如果Series对象有name属性，那么这个name将作为插入新的一行的index名字，否则也要带上 <code>ignore_index=True</code> 参数。</p>
+<h2 id="_3">索引</h2>
+<h3 id="_4">按照列名选择</h3>
+<p>如果你已经定义列名了，那么选择一列按照列名是最直观的了：</p>
+<div class="highlight"><pre><span></span>df[column_name]
+</pre></div>
+<p>返回的是Series对象，原DataFrame对象的index部分继续保留，也就是原来你的DataFrame的index是有名字的，那么可以继续使用这些索引名字。</p>
+<p>这种引用也可以用于添加某一列或者删除某一列：</p>
+<div class="highlight"><pre><span></span>del df[column_name]
+df[column_name] = series
+</pre></div>
+<h3 id="_5">按照列名选择多个列</h3>
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'c'</span><span class="p">]]</span>
+</pre></div>
+<p>这样得到的将是一个copy！</p>
+<h3 id="iloc">iloc方法</h3>
+<p>因为我是比较喜欢矩阵那种几行几列对于某一具体单元格的描述的，所以我很喜欢用 <code>df.iloc[i][j]</code> 这种形式来索引具体某个单元格的数据，就是i行j列，然后注意如果你的column是指定的数字，不是从0开始的，那么引用0就会出现索引异常【如果你的列名不是数字类型那么没有这个问题】。</p>
+<p>唯一要注意的是就是和线性代数里面行列式下标有所不同，这里的索引都是从0开始计数的。</p>
+<h3 id="_6">按照索引选择多个列</h3>
+<p>选择多个列【切片式】</p>
+<div class="highlight"><pre><span></span>df.iloc[:,0:2]
+</pre></div>
+<p>此外还有种写法【列举式】：</p>
+<div class="highlight"><pre><span></span>df.iloc[:, [0,2]]
+</pre></div>
+<h3 id="_7">对某一特征列进行某个运算</h3>
+<p>利用pandas的DataFrame的apply方法将某个函数应用到某个特征列，然后赋值给新的一列。</p>
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'commas'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'text'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">','</span><span class="p">))</span>
+</pre></div>
+<h3 id="_8">搜索语句</h3>
+<p>DataFrame可以通过如下的搜索语句来对针对某些特征列的值进行判断，从而过滤掉某些行。</p>
+<div class="highlight"><pre><span></span>df[df['col1']==1]
+df[(df['col1']==1)|(df['col2']==1)]
+df[(df['col1']==0) &amp; (df['col2']==0)]
+</pre></div>
+<h3 id="_9">按照行排序</h3>
+<div class="highlight"><pre><span></span>df.sort_index(axis=1, ascending=False)
+</pre></div>
+<h3 id="_10">按照列排序</h3>
+<div class="highlight"><pre><span></span>df.sort_values(by='B')
+</pre></div>
+<h2 id="_11">绘图相关</h2>
+<h3 id="_12">绘制散点图</h3>
+<div class="highlight"><pre><span></span>DataFrame.plot.scatter(x, y, s=None, c=None, **kwds)
+</pre></div>
+<p>根据数据记录 x 列（由x参数指定）和 y 列（由y参数指定）的一一对应的数据，来绘制散点图。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-03-12T00:00:00+08:00">2019年 3月 12日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#ji-qi-xue-xi-ref">机器学习</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#ke-xue-ji-suan-ref">科学计算
+                    <span>2</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

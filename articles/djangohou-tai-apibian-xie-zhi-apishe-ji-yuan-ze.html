@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-API设计原则 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-apishe-ji-yuan-ze.html" />
+<meta property="og:description" content="API设计 首先讲一下这里讨论的API设计和网络上流行的Restful风格的API设计都只是一般性原则，并不是强制性的要求。然后API还分为内部使用和对外的API，如果对外的API那么接口最好遵循无惊讶原则，遵循大家都通用的一些写法风格，但如果是内部使用的API，那么很多情况下，还要考虑自己内部使用的便捷性要求。 url设计 目前url域名都推荐使用 api.what.com 这样的风格，然后关于API的版本，在URL上加上版本号，并不是一个很好的主意。在当前前后端分离的大背景下，这给前端和后端的代码都带来了一些额外的复杂度。 版本号按照 阮一峰的这篇文章 ，推荐使用 Accept 字段： Accept: vnd.example-com.foo+json; version=2.0 url的第一个字段我喜欢使用django的app的名字，然后接下来的第二个字段推荐按照 Restful 风格写上目标资源的名字，并不一定要强制写上名词的复数形式，不过如果有两个url，一个是操纵目标资源集，一个是定向操纵某个目标资源，那么尾缀写上s区分是推荐的风格。 然后针对某个资源或者目标资源集的一些额外的动作，这里所谓的额外的动作是指除了常规的Restful风格的那些增删查改动作之外的额外的动作需求，在上面讨论的Restful风格url基础上加上第三个字段，第三个字段是额外动作的名字是个不错的风格。 方法设计 方法通用的 GET …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-API设计原则 ">
+<meta name="twitter:description" content="API设计 首先讲一下这里讨论的API设计和网络上流行的Restful风格的API设计都只是一般性原则，并不是强制性的要求。然后API还分为内部使用和对外的API，如果对外的API那么接口最好遵循无惊讶原则，遵循大家都通用的一些写法风格，但如果是内部使用的API，那么很多情况下，还要考虑自己内部使用的便捷性要求。 url设计 目前url域名都推荐使用 api.what.com 这样的风格，然后关于API的版本，在URL上加上版本号，并不是一个很好的主意。在当前前后端分离的大背景下，这给前端和后端的代码都带来了一些额外的复杂度。 版本号按照 阮一峰的这篇文章 ，推荐使用 Accept 字段： Accept: vnd.example-com.foo+json; version=2.0 url的第一个字段我喜欢使用django的app的名字，然后接下来的第二个字段推荐按照 Restful 风格写上目标资源的名字，并不一定要强制写上名词的复数形式，不过如果有两个url，一个是操纵目标资源集，一个是定向操纵某个目标资源，那么尾缀写上s区分是推荐的风格。 然后针对某个资源或者目标资源集的一些额外的动作，这里所谓的额外的动作是指除了常规的Restful风格的那些增删查改动作之外的额外的动作需求，在上面讨论的Restful风格url基础上加上第三个字段，第三个字段是额外动作的名字是个不错的风格。 方法设计 方法通用的 GET …">
+
+    <title>django后台api编写之-API设计原则  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-apishe-ji-yuan-ze.html"> django后台api编写之-API设计原则  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#api">API设计</a><ul>
+<li><a href="#url">url设计</a></li>
+<li><a href="#_1">方法设计</a></li>
+<li><a href="#_2">参数设计</a></li>
+<li><a href="#_3">状态码设计</a></li>
+<li><a href="#_4">返回内容结构设计</a></li>
+<li><a href="#_5">编写良好的文档</a></li>
+<li><a href="#_6">参考</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="api">API设计</h2>
+<p>首先讲一下这里讨论的API设计和网络上流行的Restful风格的API设计都只是一般性原则，并不是强制性的要求。然后API还分为内部使用和对外的API，如果对外的API那么接口最好遵循无惊讶原则，遵循大家都通用的一些写法风格，但如果是内部使用的API，那么很多情况下，还要考虑自己内部使用的便捷性要求。</p>
+<h3 id="url">url设计</h3>
+<p>目前url域名都推荐使用 api.what.com 这样的风格，然后关于API的版本，在URL上加上版本号，并不是一个很好的主意。在当前前后端分离的大背景下，这给前端和后端的代码都带来了一些额外的复杂度。</p>
+<p>版本号按照 <a href="http://www.ruanyifeng.com/blog/2011/09/restful.html">阮一峰的这篇文章</a> ，推荐使用 Accept 字段：</p>
+<div class="highlight"><pre><span></span><span class="n">Accept</span><span class="o">:</span> <span class="n">vnd</span><span class="o">.</span><span class="na">example</span><span class="o">-</span><span class="n">com</span><span class="o">.</span><span class="na">foo</span><span class="o">+</span><span class="n">json</span><span class="o">;</span> <span class="n">version</span><span class="o">=</span><span class="mf">2.0</span>
+</pre></div>
+<p>url的第一个字段我喜欢使用django的app的名字，然后接下来的第二个字段推荐按照 Restful 风格写上目标资源的名字，并不一定要强制写上名词的复数形式，不过如果有两个url，一个是操纵目标资源集，一个是定向操纵某个目标资源，那么尾缀写上s区分是推荐的风格。</p>
+<p>然后针对某个资源或者目标资源集的一些额外的动作，这里所谓的额外的动作是指除了常规的Restful风格的那些增删查改动作之外的额外的动作需求，在上面讨论的Restful风格url基础上加上第三个字段，第三个字段是额外动作的名字是个不错的风格。</p>
+<h3 id="_1">方法设计</h3>
+<p>方法通用的 GET POST ，GET用于查询获取资源信息，POST用于创建或修改信息这是没有疑问的。</p>
+<p>虽然Restful风格还推荐的DELETE，PATCH等方法，但似乎大家实际编写都只是使用GET和POST方法。</p>
+<h3 id="_2">参数设计</h3>
+<p>查询操作如果针对的是目标资源集合，有以下参数是推荐加上的：</p>
+<ul>
+<li>limit 返回个数</li>
+<li>offset 偏移值，可以通过它来实现分页效果</li>
+<li>sort 或者sortby等，总之一个排序的参数</li>
+<li>reverse 排序是否反转的参数</li>
+</ul>
+<h3 id="_3">状态码设计</h3>
+<p>具体请参看HTTP的各个状态码。</p>
+<h3 id="_4">返回内容结构设计</h3>
+<p>我喜欢使用这种风格：
+1. 成功则直接返回各个结果：</p>
+<div class="highlight"><pre><span></span>{
+    'a':1
+}
+</pre></div>
+<p>有些人会说成功之后也应该加上code:200的代码，可是这是完全没有必要的，如果你需要获取数据，那么拿就是了，如果你怕数据不存在，那么加个针对目标数据的判断即可。加个code:200，但是目标数据字段还是不存在，程序不一样也会报错？</p>
+<ol>
+<li>失败则必须带上code错误码和msg错误信息</li>
+</ol>
+<div class="highlight"><pre><span></span>{
+    'code': 10001,
+    'msg': 'your error msg'
+}
+</pre></div>
+<p>错误码软件系统内部应该有一个统一的规范，常见的错误类型有：</p>
+<ul>
+<li>资源没有找到</li>
+<li>找到多个资源</li>
+<li>未知错误</li>
+<li>输入缺少参数</li>
+</ul>
+<h3 id="_5">编写良好的文档</h3>
+<p>这是当然。</p>
+<h3 id="_6">参考</h3>
+<ol>
+<li>
+<p>http://cizixs.com/2016/12/12/restful-api-design-guide</p>
+</li>
+<li></li>
+</ol>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="machine-learning, 机器学习, " />
+
+<meta property="og:title" content="机器学习第六谈之pipeline "/>
+<meta property="og:url" content="/articles/machine-learning-talk-six.html" />
+<meta property="og:description" content="机器学习第六谈之pipeline 前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。 在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。 sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。 【pipeline工作流程图】 本图片摘自 这篇文章 其中pipeline前面的叫做transformer，最后一个叫做estimator。 transformer transformer必须要有fit和tranform两个方法，当你调用 pipeline.fit 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 TransformerMixin 这个类 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-12-26T00:00:00+08:00" />
+<meta property="" content="2018-12-26T00:00:00+08:00" />
+<meta name="twitter:title" content="机器学习第六谈之pipeline ">
+<meta name="twitter:description" content="机器学习第六谈之pipeline 前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。 在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。 sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。 【pipeline工作流程图】 本图片摘自 这篇文章 其中pipeline前面的叫做transformer，最后一个叫做estimator。 transformer transformer必须要有fit和tranform两个方法，当你调用 pipeline.fit 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 TransformerMixin 这个类 …">
+
+    <title>机器学习第六谈之pipeline  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/machine-learning-talk-six.html"> 机器学习第六谈之pipeline  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#pipeline">机器学习第六谈之pipeline</a><ul>
+<li><a href="#transformer">transformer</a></li>
+<li><a href="#estimator">estimator</a></li>
+<li><a href="#_1">特征的联合</a></li>
+<li><a href="#gridsearchcv">GridSearchCV</a></li>
+<li><a href="#_2">机器学习的一般过程整理</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="pipeline">机器学习第六谈之pipeline</h2>
+<p>前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。</p>
+<p>在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。</p>
+<p>sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。</p>
+<p>【pipeline工作流程图】</p>
+<p>本图片摘自 <a href="http://frankchen.xyz/2018/04/08/pipeline-in-machine-learning/">这篇文章</a></p>
+<p><img alt="" src="http://frankchen.xyz/images/15231783974167.jpg"/></p>
+<p>其中pipeline前面的叫做transformer，最后一个叫做estimator。</p>
+<h3 id="transformer">transformer</h3>
+<p>transformer必须要有fit和tranform两个方法，当你调用 <code>pipeline.fit</code> 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 <code>TransformerMixin</code> 这个类，这样你只需要定义fit和transform方法就有 <code>fit_transform</code> 方法了。</p>
+<p>下面是一个什么都没做的自定义的transformer的大概样子。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">TransformerMixin</span>
+<span class="k">class</span> <span class="nc">MyTransformer</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    定义自己的Transformer</span>
+
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        :param X:</span>
+<span class="sd">        :param y:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        :param X:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">X</span>
+</pre></div>
+<p>当你调用 <code>pipeline.predict</code> 方法，你的输入X同样也会经过前面所有的transformer的transform方法处理【没有调用fit方法了，因为你之前已经调用pipeline.fit了，然后你的模型或者说你的pipeline中的各个transformer已经处理过了，换句话说，你的pipeline中的各个模型都已经训练好了】，然后再调用的是你最后哪个 estimator的 <code>predict</code> 方法再得到结果。</p>
+<p>也就是说，我们完全可以将pipeline当做一个更大型的组合模型，现在在这个综合模型下，你输入数据集，训练，然后predict，而数据集的minmax scale或者各个标签标记等等都会自动处理，不需要你再这样考虑问题了：训练集已经scale了，我等下要输入一个实际的数据来使用模型，是不是还要先把数据scale一下，然后输出的结果我该转换成什么标记之类的问题了。</p>
+<p>sklearn真的是一个很Great的项目，如果你找到有些老旧教材来学习机器学习的话，你会发现机器学习中存在着太多的通用处理模式，你会考虑该怎么形成一种数据处理流模式，而sklearn的pipeline可以说初步解决这个问题了。在使用pipeline，基于pipeline之上构建你的机器学习项目，你完全可以把最终你搭建起来的某个pipeline当做某个综合模型，最后就剩下很简单的这样一个问题：选择参数，输入数据，训练模型，利用模型进行预测，评估模型。</p>
+<p>而关于选择参数，sklearn还基于pipeline提出了GridSearchCV网格搜索的概念，我只能说这是sklearn大成式的豪迈宣言了。通过GridSearchCV，在训练pipeline模型的时候，一些参数结合评估模型是可以自动完成优化工作的。</p>
+<p>这里还顺便提一下神经网络框架keras和sklearn的关系，正如机器学习是包含神经网络这门学科一样，sklearn模块在使用上是可以包含keras的，keras只是作为神经网络模型算法里面最核心的一部分，至少从输入数据处理流向上应该是这样的，这方面还要继续尝试——多个神经模型，和传统机器学习算法和其他数据处理等等最终形成一个大型的综合模型。</p>
+<h3 id="estimator">estimator</h3>
+<p>estimator只需要fit方法就可以了，这个fit方法的任务就是通过某种学习算法——从简单的线性回归到神经网络等等，训练好模型。然后其还应该提供 predict方法，这也是学习算法的本质要求，来利用训练好的这个模型。</p>
+<h3 id="_1">特征的联合</h3>
+<p>前面提到sklearn的pipeline相当于一个综合模型了，在进一步使用 <code>FeatureUnion</code> 之后可以让你对特征的操作和添加新特征更加的灵活，FeatureUnion类其实际上对应于一个 transformer，你可以提取然后组合出你想要的那几个特征。请读者多看看 kaggle 的 <a href="https://www.kaggle.com/baghern/a-deep-dive-into-sklearn-pipelines/notebook">这个小项目</a> ，个人觉得这种写法风格非常的优雅。</p>
+<p>针对每个特征进行了提取和处理工作，然后特征联合。此外FeatureUnion 哪里你当然还可以加上额外的特征，进行额外的运算之后得到的新的特征。</p>
+<p>还有这个小项目有一点很值得我们注意，也是这篇文章提醒了我，sklearn的train_test_split 分割pandas的DataFrame之后返回也是pandas的DataFrame或者Series【labels】对象。这种和pandas的无缝对接的写法也是很好的。</p>
+<p>我在构建pipeline的时候还参考了 <a href="http://zacstewart.com/2014/08/05/pipelines-of-featureunions-of-pipelines.html">这篇文章</a> 来更连贯地构建了一个综合模型，大概如下所示：</p>
+<div class="highlight"><pre><span></span>  <span class="n">text</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">TextSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'processed'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'tfidf'</span><span class="p">,</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">stop_words</span><span class="o">=</span><span class="s1">'english'</span><span class="p">))</span>
+    <span class="p">])</span>
+
+    <span class="n">length</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'length'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'words'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+    <span class="n">words_not_stopword</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'words_not_stopword'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+    <span class="n">avg_word_length</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'avg_word_length'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+    <span class="n">commas</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'commas'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+    <span class="n">feats</span> <span class="o">=</span> <span class="n">FeatureUnion</span><span class="p">([(</span><span class="s1">'text'</span><span class="p">,</span> <span class="n">text</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'length'</span><span class="p">,</span> <span class="n">length</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'words'</span><span class="p">,</span> <span class="n">words</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'words_not_stopword'</span><span class="p">,</span> <span class="n">words_not_stopword</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'avg_word_length'</span><span class="p">,</span> <span class="n">avg_word_length</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'commas'</span><span class="p">,</span> <span class="n">commas</span><span class="p">)])</span>
+
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'features'</span><span class="p">,</span> <span class="n">feats</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">'classifier'</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+    <span class="p">])</span>
+</pre></div>
+<p>然后pipeline就好像一个大的综合模型一样，fit predict 等等之类的。</p>
+<h3 id="gridsearchcv">GridSearchCV</h3>
+<p>网格搜索用于调参，具体pipeline的参数名字是 :</p>
+<div class="highlight"><pre><span></span><span class="n">f</span><span class="s1">'{transformer_or_estimator_name}__{parameter_name}'</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+
+<span class="n">hyperparameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">'features__text__tfidf__max_df'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">],</span>
+                    <span class="s1">'features__text__tfidf__ngram_range'</span><span class="p">:</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)],</span>
+                   <span class="s1">'classifier__max_depth'</span><span class="p">:</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">],</span>
+                    <span class="s1">'classifier__min_samples_leaf'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+                  <span class="p">}</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">hyperparameters</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Fit and tune model</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</pre></div>
+<p>上面这个例子名字有点长，因为要往下找，features --&gt; text --&gt; tfidf --&gt; 实际传进去的参数是 max_df</p>
+<p>这里运算稍微有点耗时，如果程序化的话可以考虑将这些最佳参数最后保存起来：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">joblib</span>
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s1">'filename.pkl'</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<p>下次直接使用最佳clf是：</p>
+<div class="highlight"><pre><span></span><span class="n">reclf</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'filename.pkl'</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">reclf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+<p>还有种保存方法，就是直接保存clf，这更加直观，估计兼容性也更好一点，只是模型文件稍微大了些：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">joblib</span>
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="s1">'filename.pkl'</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">reclf</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'filename.pkl'</span><span class="p">)</span>
+</pre></div>
+<h3 id="_2">机器学习的一般过程整理</h3>
+<p>下面将机器学习的一般过程在Pipeline的基础上再整理一下：</p>
+<ul>
+<li>
+<p>从各个数据来源中获取数据并汇总，这里pandas的io工具非常好用，没必要拒绝使用它。</p>
+</li>
+<li>
+<p>基于pandas的普遍性数据预处理【这个就要根据实际情况来了】</p>
+</li>
+<li>
+<p>分割训练集和测试集</p>
+</li>
+<li>
+<p>针对训练集编写Pipeline pipeline的过程大致涉及到目标特征的提取或者新特征的计算和特征融合，缩放，特征选择，直到最终算法的选择。</p>
+</li>
+<li>
+<p>pipeline.fit  训练模型</p>
+</li>
+<li>
+<p>pipeline.predict 使用模型</p>
+</li>
+<li>
+<p>K折基于训练数据的验证得分 </p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span>cross_val_score(pipeline, train_data, train_labels, cv=4)
+</pre></div>
+<ul>
+<li>pipeline.test 基于测试集的测试</li>
+<li>上面讨论的模型如何保存和再利用</li>
+<li>绘图表现也很重要，虽然这个工作可以往后面放一放。</li>
+<li>基于GridSearchCV的参数调优</li>
+<li>更多更多手段调优</li>
+</ul>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-12-26T00:00:00+08:00">2018年 12月 26日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2018-12-26T00:00:00+08:00">2018年 12月 26日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#ji-qi-xue-xi-ref">机器学习</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#machine-learning-ref">machine-learning
+                    <span>10</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

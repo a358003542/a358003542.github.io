@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", pyqt5, " />
+
+<meta property="og:title" content="pyqt5编程之-快捷键管理 "/>
+<meta property="og:url" content="/articles/pyqt5-shortcut.html" />
+<meta property="og:description" content="快捷键和Tab键管理 我们在创建ui文件的时候就可以把一些Action对应的快捷键给设置好。 什么是伙伴关系 一般是通过QLabel的setBuddy方法来关联某个输入窗体。然后QLabel有一个快捷键，当你按下这个快捷键，输入焦点就会转到这个QLabel对应的伙伴输入窗体上。 快捷键 QShortcut类 文本前用&amp;会引入对应的Alt+w之类的快捷键。 然后QAction在初始化的时候有 然后QAction有方法 QKeySequence QKeySequence 类在pyqt4和pyqt5中来自QtGui子模块，是快捷键的解决方案。比如可以直接引用 QKeySequence.Open 来表示快捷键Ctrl+O。可用的构造函数如下所示： QKeySequence(QKeySequence.Print) QKeySequence(tr(&#34;Ctrl+P&#34;)) QKeySequence(tr(&#34;Ctrl+p&#34;)) QKeySequence(Qt.CTRL + Qt.Key_P) 我不太喜欢第一种表达方式，不是任何软件都有打印操作，况且打印和某个快捷键之间并没有逻辑联系，只有程序员的个人使用经验，这是不小的记忆负担。我比较喜欢第四种写法，看上去意义更加清晰，Qt来自QtCore子模块。 字母按键就是类似 Qt …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="pyqt5编程之-快捷键管理 ">
+<meta name="twitter:description" content="快捷键和Tab键管理 我们在创建ui文件的时候就可以把一些Action对应的快捷键给设置好。 什么是伙伴关系 一般是通过QLabel的setBuddy方法来关联某个输入窗体。然后QLabel有一个快捷键，当你按下这个快捷键，输入焦点就会转到这个QLabel对应的伙伴输入窗体上。 快捷键 QShortcut类 文本前用&amp;会引入对应的Alt+w之类的快捷键。 然后QAction在初始化的时候有 然后QAction有方法 QKeySequence QKeySequence 类在pyqt4和pyqt5中来自QtGui子模块，是快捷键的解决方案。比如可以直接引用 QKeySequence.Open 来表示快捷键Ctrl+O。可用的构造函数如下所示： QKeySequence(QKeySequence.Print) QKeySequence(tr(&#34;Ctrl+P&#34;)) QKeySequence(tr(&#34;Ctrl+p&#34;)) QKeySequence(Qt.CTRL + Qt.Key_P) 我不太喜欢第一种表达方式，不是任何软件都有打印操作，况且打印和某个快捷键之间并没有逻辑联系，只有程序员的个人使用经验，这是不小的记忆负担。我比较喜欢第四种写法，看上去意义更加清晰，Qt来自QtCore子模块。 字母按键就是类似 Qt …">
+
+    <title>pyqt5编程之-快捷键管理  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/pyqt5-shortcut.html"> pyqt5编程之-快捷键管理  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#tab">快捷键和Tab键管理</a><ul>
+<li><a href="#_1">什么是伙伴关系</a></li>
+<li><a href="#_2">快捷键</a></li>
+<li><a href="#qkeysequence">QKeySequence</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h1 id="tab">快捷键和Tab键管理</h1>
+<p>我们在创建ui文件的时候就可以把一些Action对应的快捷键给设置好。</p>
+<h2 id="_1">什么是伙伴关系</h2>
+<p>一般是通过QLabel的setBuddy方法来关联某个输入窗体。然后QLabel有一个快捷键，当你按下这个快捷键，输入焦点就会转到这个QLabel对应的伙伴输入窗体上。</p>
+<h2 id="_2">快捷键</h2>
+<p>QShortcut类</p>
+<p>文本前用&amp;会引入对应的Alt+w之类的快捷键。</p>
+<p>然后QAction在初始化的时候有</p>
+<p>然后QAction有方法</p>
+<h2 id="qkeysequence">QKeySequence</h2>
+<p><code>QKeySequence</code> 类在pyqt4和pyqt5中来自QtGui子模块，是快捷键的解决方案。比如可以直接引用 <code>QKeySequence.Open</code> 来表示快捷键Ctrl+O。可用的构造函数如下所示：</p>
+<div class="highlight"><pre><span></span>QKeySequence(QKeySequence.Print)
+QKeySequence(tr("Ctrl+P"))
+QKeySequence(tr("Ctrl+p"))
+QKeySequence(Qt.CTRL + Qt.Key_P)
+</pre></div>
+<p>我不太喜欢第一种表达方式，不是任何软件都有打印操作，况且打印和某个快捷键之间并没有逻辑联系，只有程序员的个人使用经验，这是不小的记忆负担。我比较喜欢第四种写法，看上去意义更加清晰，Qt来自QtCore子模块。</p>
+<p>字母按键就是类似 <code>Qt.Key_W</code> 这样的形式，Shift按键是Qt.SHIFT，Meta按键是Qt.META，CTRL按键是 <code>Qt.CTRL</code> ，ALT按键是 <code>Qt.ALT</code> 。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pyqt5-ref">pyqt5</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

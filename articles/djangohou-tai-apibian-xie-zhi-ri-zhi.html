@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-日志 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-ri-zhi.html" />
+<meta property="og:description" content="django日志 简介 django使用python的logging模块来作为的自己的日志系统，所以django项目日志管理的深入学习离不开对于logging模块的深入学习。 logging模块中级教程 logging模块的中级使用需要了解如下几个词汇：loggers, handlers, filters, and formatters。 loggers 记录器 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。 logger = logging.getLogger(__name__) 这个 __name__ 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。 然后这个 getLogger 函数如果你后面指定的名字之前已经定义了（这通常是指在其他第三方模块下定义了），那么你通过这个 getLogger 然后指定目标名字就会得到对应的该记录器。这通常对于DIY某个第三方模块的日志记录器有用。 记录器可以挂载或者卸载某个处理器对象或过滤器对象： - logger.addHandler() - logger.removeHandler() - logger.addFilter() - logger.removeFilter() 记录器通过 setLevel() 方法来设置最小记录级别，这个和后面的Handler级别是协作关系。 handlers 处理器负责分发日志信息到目标地去。这里主要介绍这几个Handler类： StreamHandler …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-日志 ">
+<meta name="twitter:description" content="django日志 简介 django使用python的logging模块来作为的自己的日志系统，所以django项目日志管理的深入学习离不开对于logging模块的深入学习。 logging模块中级教程 logging模块的中级使用需要了解如下几个词汇：loggers, handlers, filters, and formatters。 loggers 记录器 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。 logger = logging.getLogger(__name__) 这个 __name__ 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。 然后这个 getLogger 函数如果你后面指定的名字之前已经定义了（这通常是指在其他第三方模块下定义了），那么你通过这个 getLogger 然后指定目标名字就会得到对应的该记录器。这通常对于DIY某个第三方模块的日志记录器有用。 记录器可以挂载或者卸载某个处理器对象或过滤器对象： - logger.addHandler() - logger.removeHandler() - logger.addFilter() - logger.removeFilter() 记录器通过 setLevel() 方法来设置最小记录级别，这个和后面的Handler级别是协作关系。 handlers 处理器负责分发日志信息到目标地去。这里主要介绍这几个Handler类： StreamHandler …">
+
+    <title>django后台api编写之-日志  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-ri-zhi.html"> django后台api编写之-日志  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#django">django日志</a><ul>
+<li><a href="#_1">简介</a></li>
+<li><a href="#logging">logging模块中级教程</a><ul>
+<li><a href="#loggers">loggers</a></li>
+<li><a href="#handlers">handlers</a></li>
+<li><a href="#filters">filters</a></li>
+<li><a href="#formatters">formatters</a></li>
+</ul>
+</li>
+<li><a href="#_2">字典统一配置</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h1 id="django">django日志</h1>
+<h2 id="_1">简介</h2>
+<p>django使用python的logging模块来作为的自己的日志系统，所以django项目日志管理的深入学习离不开对于logging模块的深入学习。</p>
+<h2 id="logging">logging模块中级教程</h2>
+<p>logging模块的中级使用需要了解如下几个词汇：loggers, handlers, filters, and formatters。</p>
+<h3 id="loggers">loggers</h3>
+<p>记录器 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。</p>
+<div class="highlight"><pre><span></span>logger = logging.getLogger(__name__)
+</pre></div>
+<p>这个 <code>__name__</code> 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。</p>
+<p>然后这个 <code>getLogger</code> 函数如果你后面指定的名字之前已经定义了（这通常是指在其他第三方模块下定义了），那么你通过这个 <code>getLogger</code> 然后指定目标名字就会得到对应的该记录器。这通常对于DIY某个第三方模块的日志记录器有用。</p>
+<p>记录器可以挂载或者卸载某个处理器对象或过滤器对象：
+- logger.addHandler()
+- logger.removeHandler()
+- logger.addFilter()
+- logger.removeFilter()</p>
+<p>记录器通过 <code>setLevel()</code> 方法来设置最小记录级别，这个和后面的Handler级别是协作关系。</p>
+<h3 id="handlers">handlers</h3>
+<p>处理器负责分发日志信息到目标地去。这里主要介绍这几个Handler类：</p>
+<ul>
+<li>StreamHandler 将信息以流的形式输出，这通常指输出到终端</li>
+<li>FileHandler 将信息写入到某个文件中去</li>
+<li>RotatingFileHandler 将信息写入某个文件，如果文件大小超过某个值，则另外新建一个文件继续写。</li>
+<li>TimeRotatingFileHandler 将信息写入某个文件，每隔一段时间，比如说一天，就会自动再新建一个文件再往里面写。</li>
+</ul>
+<p>处理器对象也有 <code>setLevel</code> 方法，这个前面也提及了，和记录器的 <code>setLevel</code> 是协作关系，更详细的描述是，信息先记录器处理并分发给对应的处理器对象，然后再处理器处理再分发到目的地。</p>
+<p>处理器可以挂载 格式器 对象和 过滤器 对象。</p>
+<ul>
+<li>handler.setFormatter()</li>
+<li>handler.addFilter()</li>
+<li>handler.removeFilter()</li>
+</ul>
+<h3 id="filters">filters</h3>
+<p>过滤器</p>
+<h3 id="formatters">formatters</h3>
+<p>格式器，具体信息的格式定义。</p>
+<h2 id="_2">字典统一配置</h2>
+<p>django的setting.py就会有这样的配置，具体含义还是很明显的，就是定义处理器，格式器，记录器等。</p>
+<div class="highlight"><pre><span></span>LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': "%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s"
+        }
+    },
+    'handlers': {
+        'log_file': {
+            'class': 'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler',
+            'filename': config.get('web', 'log_path'),
+            'when': 'midnight',
+            'maxBytes':int(config.get('web','log_max_bytes')),
+            'interval': 1,
+            'backupDay': int(config.get('web', 'log_backup_days')),
+            'dedupetime': int(config.get('web', 'log_dedupe_time')),
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['log_file'],
+            'level': config.get('web', 'log_level'),
+            'propagate': True,
+        },
+    }
+}
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

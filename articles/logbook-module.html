@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="logging, python好伙伴, " />
+
+<meta property="og:title" content="logbook模块 "/>
+<meta property="og:url" content="/articles/logbook-module.html" />
+<meta property="og:description" content="前言 logbook似乎是个不错的模块可以改进我们的日志功能，可以看做系统logging模块的第三方升级版，但还是有很多地方不同的。 一开始我接触的最大的不同就是logbook官方文档并不推荐将某个handler注册在某个logger的那种做法，logbook的handler可以注册在整个线程或者整个进程上。或者我们看到官方文档的第一个例子是这种写法： from logbook import warn, StreamHandler import sys StreamHandler(sys.stdout).push_application() warn(&#39;This is a warning&#39;) 或者写作： from logbook import warn, StreamHandler import sys log_handler = StreamHandler(sys.stdout) with log_handler.applicationbound(): warn(&#39;This is too cool for stdlib&#39;) 这是单个注册在整个程序上的，此外还有 threadbound 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-08-27T00:00:00+08:00" />
+<meta property="" content="2018-09-20T00:00:00+08:00" />
+<meta name="twitter:title" content="logbook模块 ">
+<meta name="twitter:description" content="前言 logbook似乎是个不错的模块可以改进我们的日志功能，可以看做系统logging模块的第三方升级版，但还是有很多地方不同的。 一开始我接触的最大的不同就是logbook官方文档并不推荐将某个handler注册在某个logger的那种做法，logbook的handler可以注册在整个线程或者整个进程上。或者我们看到官方文档的第一个例子是这种写法： from logbook import warn, StreamHandler import sys StreamHandler(sys.stdout).push_application() warn(&#39;This is a warning&#39;) 或者写作： from logbook import warn, StreamHandler import sys log_handler = StreamHandler(sys.stdout) with log_handler.applicationbound(): warn(&#39;This is too cool for stdlib&#39;) 这是单个注册在整个程序上的，此外还有 threadbound 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上 …">
+
+    <title>logbook模块  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/logbook-module.html"> logbook模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">一些配置</a><ul>
+<li><a href="#level">level</a></li>
+<li><a href="#handler">handler</a></li>
+<li><a href="#bubble">bubble</a></li>
+<li><a href="#action_level">action_level</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">前言</h2>
+<p>logbook似乎是个不错的模块可以改进我们的日志功能，可以看做系统logging模块的第三方升级版，但还是有很多地方不同的。</p>
+<p>一开始我接触的最大的不同就是logbook官方文档并不推荐将某个handler注册在某个logger的那种做法，logbook的handler可以注册在整个线程或者整个进程上。或者我们看到官方文档的第一个例子是这种写法：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span><span class="o">.</span><span class="n">push_application</span><span class="p">()</span>
+<span class="n">warn</span><span class="p">(</span><span class="s1">'This is a warning'</span><span class="p">)</span>
+</pre></div>
+<p>或者写作：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">log_handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">log_handler</span><span class="o">.</span><span class="n">applicationbound</span><span class="p">():</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">'This is too cool for stdlib'</span><span class="p">)</span>
+</pre></div>
+<p>这是单个注册在整个程序上的，此外还有 <code>threadbound</code> 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上，web应用推荐注册在整个线程上。</p>
+<p>这并不是说你不需要定义logger了，你还是如同你以前习惯的这样定义和使用。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">Logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'just log it.'</span><span class="p">)</span>
+</pre></div>
+<p>logbook更多的配置如下所示，就是配置不同的handler：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">NestedSetup</span><span class="p">,</span> <span class="n">NullHandler</span><span class="p">,</span> <span class="n">FileHandler</span><span class="p">,</span> \
+     <span class="n">MailHandler</span><span class="p">,</span> <span class="n">Processor</span>
+
+<span class="k">def</span> <span class="nf">inject_information</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s1">'cwd'</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+<span class="c1"># a nested handler setup can be used to configure more complex setups</span>
+<span class="n">setup</span> <span class="o">=</span> <span class="n">NestedSetup</span><span class="p">([</span>
+    <span class="c1"># make sure we never bubble up to the stderr handler</span>
+    <span class="c1"># if we run out of setup handling</span>
+    <span class="n">NullHandler</span><span class="p">(),</span>
+    <span class="c1"># then write messages that are at least warnings to a logfile</span>
+    <span class="n">FileHandler</span><span class="p">(</span><span class="s1">'application.log'</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">'WARNING'</span><span class="p">),</span>
+    <span class="c1"># errors should then be delivered by mail and also be kept</span>
+    <span class="c1"># in the application log, so we let them bubble up.</span>
+    <span class="n">MailHandler</span><span class="p">(</span><span class="s1">'servererrors@example.com'</span><span class="p">,</span>
+                   <span class="p">[</span><span class="s1">'admin@example.com'</span><span class="p">],</span>
+                   <span class="n">level</span><span class="o">=</span><span class="s1">'ERROR'</span><span class="p">,</span> <span class="n">bubble</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="c1"># while we're at it we can push a processor on its own stack to</span>
+    <span class="c1"># record additional information.  Because processors and handlers</span>
+    <span class="c1"># go to different stacks it does not matter if the processor is</span>
+    <span class="c1"># added here at the bottom or at the very beginning.  Same would</span>
+    <span class="c1"># be true for flags.</span>
+    <span class="n">Processor</span><span class="p">(</span><span class="n">inject_information</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+<p>上面的Processor会自动在每条日志记录上打上额外的信息。logbook还提供了很强大的MailHandler等等。这些相关配置信息后面慢慢了解。</p>
+<h2 id="_2">一些配置</h2>
+<h3 id="level">level</h3>
+<div class="highlight"><pre><span></span>critical <span class="err">导致程序终止的异常</span>
+error  <span class="err">还可以应付的error</span>
+warning <span class="err">一些情况可能不是error</span>
+notice  no-error <span class="err">但你可能希望看见</span>
+info  <span class="err">信息你不想看见</span>
+debug <span class="err">信息给debug用</span>
+</pre></div>
+<h3 id="handler">handler</h3>
+<ul>
+<li>StreamHandler 流handler，一般指 sys.stdout </li>
+<li>FileHandler RotatingFileHandler TimedRotatingHandler 用于输出到文件</li>
+<li>MailHandler 用于输出到email</li>
+</ul>
+<h3 id="bubble">bubble</h3>
+<p>bubble参数默认是False，某个日志记录被某个handler处理了其他的handler就不会处理了，而设置bubble=True之后，其他handler同样也可以处理。</p>
+<h3 id="action_level">action_level</h3>
+<p>有了这个级别的记录才会输出日志，否则不输出。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-08-27T00:00:00+08:00">2018年 8月 27日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2018-09-20T00:00:00+08:00">2018年 9月 20日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pythonhao-huo-ban-ref">python好伙伴</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#logging-ref">logging
+                    <span>1</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

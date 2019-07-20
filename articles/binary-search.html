@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="算法, 算法, " />
+
+<meta property="og:title" content="二分查找 "/>
+<meta property="og:url" content="/articles/binary-search.html" />
+<meta property="og:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-11-24T00:00:00+08:00" />
+<meta property="" content="2018-08-09T00:00:00+08:00" />
+<meta name="twitter:title" content="二分查找 ">
+<meta name="twitter:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …">
+
+    <title>二分查找  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/binary-search.html"> 二分查找  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">二分查找</a></li>
+<li><a href="#_2">抽象的二分查找思想讨论</a></li>
+<li><a href="#bisect">bisect模块</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">二分查找</h2>
+<p>二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 <a href="https://github.com/qiwsir/algorithm/blob/master/bin_search.md">这个网页</a> ，其认为python的 <code>index</code> 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 <code>bisect</code> 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。</p>
+<p>关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。</p>
+<p>这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。</p>
+<h2 id="_2">抽象的二分查找思想讨论</h2>
+<p>现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系。然后假设我们的考察对象f(x)在目标结果集内存在简单的增减关系，即目标集合可以由此排序，那么我们就可以开展二分查找来找到目标结果x了。</p>
+<p>以相等查找为例，f(x)函数即f(x)=x，也就是输入什么同样输出的是什么。如果x=target，则我们说目标x复合条件f(x)=target，则该x就是我们要找的目标结果x。</p>
+<p>如果我们定义 <code>f(x)=x*x</code>，则意思是我们要找某个x符合条件 <code>x*x=target</code> ，这就是求平方根的过程。</p>
+<p>程序主体 <code>binary_search</code> 函数大体是这样的，主要参考了 <a href="https://github.com/keon/algorithms">algorithms模块</a> <code>binary_search.py</code> 文件，然后稍作修改。</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">while</span> <span class="n">high</span> <span class="o">&gt;=</span> <span class="n">low</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">low</span><span class="p">,</span><span class="n">high</span><span class="p">,</span><span class="n">mid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span> <span class="c1">##higher area</span>
+            <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">f</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">:</span><span class="c1">##lower area</span>
+            <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">'exactly'</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">'nearly'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span>
+</pre></div>
+<p>首先我们来看最简单的查找匹配操作，即:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+<p>然后我们有:</p>
+<div class="highlight"><pre><span></span>seq = list('abcdefg')
+res = binary_search(f,seq,'e')
+print(res)
+
+0 6 3
+4 6 5
+4 4 4
+exactly
+e
+&gt;&gt;&gt;
+</pre></div>
+<p>然后我们要求平方根，也就是某个 <code>x*x=target</code> 的过程，把之前定义的函数简单改一下即可:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span>
+</pre></div>
+<p>然后我们利用numpy的 <code>arange</code> 函数来生成一个可能结果集。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="kp">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="kp">array</span><span class="p">([</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.6</span><span class="p">,</span>  <span class="mf">0.7</span><span class="p">,</span>  <span class="mf">0.8</span><span class="p">,</span>  <span class="mf">0.9</span><span class="p">,</span>  <span class="mf">1.</span> <span class="p">,</span>
+        <span class="mf">1.1</span><span class="p">,</span>  <span class="mf">1.2</span><span class="p">,</span>  <span class="mf">1.3</span><span class="p">,</span>  <span class="mf">1.4</span><span class="p">,</span>  <span class="mf">1.5</span><span class="p">,</span>  <span class="mf">1.6</span><span class="p">,</span>  <span class="mf">1.7</span><span class="p">,</span>  <span class="mf">1.8</span><span class="p">,</span>  <span class="mf">1.9</span><span class="p">,</span>  <span class="mf">2.</span> <span class="p">,</span>  <span class="mf">2.1</span><span class="p">,</span>
+        <span class="mf">2.2</span><span class="p">,</span>  <span class="mf">2.3</span><span class="p">,</span>  <span class="mf">2.4</span><span class="p">,</span>  <span class="mf">2.5</span><span class="p">,</span>  <span class="mf">2.6</span><span class="p">,</span>  <span class="mf">2.7</span><span class="p">,</span>  <span class="mf">2.8</span><span class="p">,</span>  <span class="mf">2.9</span><span class="p">,</span>  <span class="mf">3.</span> <span class="p">,</span>  <span class="mf">3.1</span><span class="p">,</span>  <span class="mf">3.2</span><span class="p">,</span>
+        <span class="mf">3.3</span><span class="p">,</span>  <span class="mf">3.4</span><span class="p">,</span>  <span class="mf">3.5</span><span class="p">,</span>  <span class="mf">3.6</span><span class="p">,</span>  <span class="mf">3.7</span><span class="p">,</span>  <span class="mf">3.8</span><span class="p">,</span>  <span class="mf">3.9</span><span class="p">,</span>  <span class="mf">4.</span> <span class="p">,</span>  <span class="mf">4.1</span><span class="p">,</span>  <span class="mf">4.2</span><span class="p">,</span>  <span class="mf">4.3</span><span class="p">,</span>
+        <span class="mf">4.4</span><span class="p">,</span>  <span class="mf">4.5</span><span class="p">,</span>  <span class="mf">4.6</span><span class="p">,</span>  <span class="mf">4.7</span><span class="p">,</span>  <span class="mf">4.8</span><span class="p">,</span>  <span class="mf">4.9</span><span class="p">,</span>  <span class="mf">5.</span> <span class="p">,</span>  <span class="mf">5.1</span><span class="p">,</span>  <span class="mf">5.2</span><span class="p">,</span>  <span class="mf">5.3</span><span class="p">,</span>  <span class="mf">5.4</span><span class="p">,</span>
+        <span class="mf">5.5</span><span class="p">,</span>  <span class="mf">5.6</span><span class="p">,</span>  <span class="mf">5.7</span><span class="p">,</span>  <span class="mf">5.8</span><span class="p">,</span>  <span class="mf">5.9</span><span class="p">,</span>  <span class="mf">6.</span> <span class="p">,</span>  <span class="mf">6.1</span><span class="p">,</span>  <span class="mf">6.2</span><span class="p">,</span>  <span class="mf">6.3</span><span class="p">,</span>  <span class="mf">6.4</span><span class="p">,</span>  <span class="mf">6.5</span><span class="p">,</span>
+        <span class="mf">6.6</span><span class="p">,</span>  <span class="mf">6.7</span><span class="p">,</span>  <span class="mf">6.8</span><span class="p">,</span>  <span class="mf">6.9</span><span class="p">,</span>  <span class="mf">7.</span> <span class="p">,</span>  <span class="mf">7.1</span><span class="p">,</span>  <span class="mf">7.2</span><span class="p">,</span>  <span class="mf">7.3</span><span class="p">,</span>  <span class="mf">7.4</span><span class="p">,</span>  <span class="mf">7.5</span><span class="p">,</span>  <span class="mf">7.6</span><span class="p">,</span>
+        <span class="mf">7.7</span><span class="p">,</span>  <span class="mf">7.8</span><span class="p">,</span>  <span class="mf">7.9</span><span class="p">,</span>  <span class="mf">8.</span> <span class="p">,</span>  <span class="mf">8.1</span><span class="p">,</span>  <span class="mf">8.2</span><span class="p">,</span>  <span class="mf">8.3</span><span class="p">,</span>  <span class="mf">8.4</span><span class="p">,</span>  <span class="mf">8.5</span><span class="p">,</span>  <span class="mf">8.6</span><span class="p">,</span>  <span class="mf">8.7</span><span class="p">,</span>
+        <span class="mf">8.8</span><span class="p">,</span>  <span class="mf">8.9</span><span class="p">,</span>  <span class="mf">9.</span> <span class="p">,</span>  <span class="mf">9.1</span><span class="p">,</span>  <span class="mf">9.2</span><span class="p">,</span>  <span class="mf">9.3</span><span class="p">,</span>  <span class="mf">9.4</span><span class="p">,</span>  <span class="mf">9.5</span><span class="p">,</span>  <span class="mf">9.6</span><span class="p">,</span>  <span class="mf">9.7</span><span class="p">,</span>  <span class="mf">9.8</span><span class="p">,</span>
+        <span class="mf">9.9</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+<p>然后我们有:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.000001</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+
+<span class="n">nearly</span>
+<span class="mf">1.414214</span>
+</pre></div>
+<p>在这里讲个题外话，提到可能结果集的时候，我就想到将多个函数参数作为(a,b,c)这种形式，可是这种多元函数问题，怎么排序，怎么比较大小，怎么确定增减性？所以只好回滚到最原始的穷举过程，这里讲的意思是计算思想很核心的一个思想就是穷举思想，然后二分查找方法是在某些条件符合的情况下的加速穷举过程。</p>
+<p>比如说孙子算经里面的:</p>
+<blockquote>
+<p>今有雉兔同笼，上有三十五头，下有九十四足，问雉兔各几何？</p>
+</blockquote>
+<p>穷举的基本函数是:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">iter_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">item</span>
+</pre></div>
+<p>很简单的一个函数，很简单的逻辑，但实际上这种先迭代某个对象，然后找到某个对象复合某个条件，则返回某个对象的过程在程序模式里面是非常常见的。</p>
+<p>然后我们根据笛卡尔积生成可能结果集:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">seq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">35</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">35</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">seq</span>
+<span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="o">..............</span>
+<span class="o">.............</span>
+</pre></div>
+<p>然后我们可以很直观的将问题化为两个满足条件来对可能结果集进行过滤操作:</p>
+<div class="highlight"><pre><span></span>def f(d):
+    x = d[0]
+    y = d[1]
+    head = x + y
+    return head
+
+def g(d):
+    x = d[0]
+    y = d[1]
+
+    foot = 2*x + 4*y
+    return foot
+</pre></div>
+<p>然后我们有:</p>
+<div class="highlight"><pre><span></span>res = list(product(range(35),range(35)))
+res = iter_search(f,res,35)
+res = iter_search(g,res,94)
+print(list(res))
+
+[(23, 12)]
+</pre></div>
+<p>很简单的一些函数，但是整个过程是我很感兴趣的一种风格。</p>
+<h2 id="bisect">bisect模块</h2>
+<p>bisect模块提供了二分查找的支持，比如bisect_left函数：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bisect_left</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">"""Return the index where to insert item x in list a, assuming a is sorted.</span>
+<span class="sd">    The return value i is such that all e in a[:i] have e &lt; x, and all e in</span>
+<span class="sd">    a[i:] have e &gt;= x.  So if x already appears in the list, a.insert(x) will</span>
+<span class="sd">    insert just before the leftmost x already there.</span>
+<span class="sd">    Optional args lo (default 0) and hi (default len(a)) bound the</span>
+<span class="sd">    slice of a to be searched.</span>
+<span class="sd">    """</span>
+
+    <span class="k">if</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'lo must be non-negative'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hi</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span><span class="o">+</span><span class="n">hi</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="k">return</span> <span class="n">lo</span>
+</pre></div>
+<p>其底层有c加速，然后其返回的是一个索引值，根据这个索引值，如果你执行 <code>a.insert(x)</code> ，那么将把目标值插入到目标位置，如果x已经在a中存在，则插入的是最左边的位置。于是我们有：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    seq已排序，二分查找    </span>
+<span class="sd">    返回的是已经找到的索引值或者没有找到返回-1</span>
+<span class="sd">    :param seq:</span>
+<span class="sd">    :param target:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">bisect_left</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">pos</span> <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<p>仔细体会python官方的源码，他写的版本比上面的版本要稍微好一点，代码更精炼，上面的版本可以根据它来改造，最后效果都差不多的。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-11-24T00:00:00+08:00">2017年 11月 24日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2018-08-09T00:00:00+08:00">2018年 8月 9日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#suan-fa-ref">算法</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#suan-fa-ref">算法
+                    <span>1</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

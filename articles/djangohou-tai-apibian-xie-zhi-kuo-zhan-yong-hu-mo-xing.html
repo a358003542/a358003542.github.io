@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-扩展用户模型 "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-kuo-zhan-yong-hu-mo-xing.html" />
+<meta property="og:description" content="扩展用户模型 本小节主要参考了这篇 不错的文章 。一般扩展django自带的用户模型，最常见的就下面两种情况，实际上这两种情况你可能都会使用到。第一种是 User 模型 和 Profile 模型的分开，然后User用来存放登录相关信息，而Profile用来存放更多的用户资料信息，一般User 和 Profile 是 onetoone 关系，这个时候我们会考虑建立一个signals文件来保证没创建一个User就会跟着创建一个Profile： from django.db.models.signals import post_save from django.dispatch import receiver from profiles.models import Profile from .models import User @receiver(post_save, sender=User) def create_user_profile(sender, instance …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-扩展用户模型 ">
+<meta name="twitter:description" content="扩展用户模型 本小节主要参考了这篇 不错的文章 。一般扩展django自带的用户模型，最常见的就下面两种情况，实际上这两种情况你可能都会使用到。第一种是 User 模型 和 Profile 模型的分开，然后User用来存放登录相关信息，而Profile用来存放更多的用户资料信息，一般User 和 Profile 是 onetoone 关系，这个时候我们会考虑建立一个signals文件来保证没创建一个User就会跟着创建一个Profile： from django.db.models.signals import post_save from django.dispatch import receiver from profiles.models import Profile from .models import User @receiver(post_save, sender=User) def create_user_profile(sender, instance …">
+
+    <title>django后台api编写之-扩展用户模型  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-kuo-zhan-yong-hu-mo-xing.html"> django后台api编写之-扩展用户模型  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">扩展用户模型</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">扩展用户模型</h2>
+<p>本小节主要参考了这篇 <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html">不错的文章</a> 。一般扩展django自带的用户模型，最常见的就下面两种情况，实际上这两种情况你可能都会使用到。第一种是 User 模型 和 Profile 模型的分开，然后User用来存放登录相关信息，而Profile用来存放更多的用户资料信息，一般User 和 Profile 是 onetoone 关系，这个时候我们会考虑建立一个signals文件来保证没创建一个User就会跟着创建一个Profile：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="kn">import</span> <span class="n">Profile</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">create_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+<p>然后你可能对django默认的auth机制，比如session cookies等不太满意，那么推荐你直接建立自己的 User 模型， 继承自 AbstractBaseUser ，我大概看了一下 AbstractBaseUser 的源码，其做的工作都是围绕着 password这个字段来的，而且只要你在settings里面定义好了:</p>
+<div class="highlight"><pre><span></span>AUTH_USER_MODEL = ...
+</pre></div>
+<p>就都是可以正常工作的。继承之后定义自己的字段这是不多用多说的，然后推荐进一步继承 <code>PermissionsMixin</code> 这个类。</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">User</span><span class="p">(</span><span class="nx">AbstractBaseUser</span><span class="p">,</span> <span class="nx">PermissionsMixin</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">email</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">EmailField</span><span class="p">(</span><span class="nx">_</span><span class="p">(</span><span class="s1">'email address'</span><span class="p">),</span> <span class="nx">unique</span><span class="o">=</span><span class="nx">True</span><span class="p">)</span>
+</pre></div>
+<p><code>PermissionsMixin</code> 这个类定义了一些群组信息还有什么的。</p>
+<p>然后这三个字段属性有特殊含义，都是可以自己设置的：</p>
+<div class="highlight"><pre><span></span>    USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = ['email']
+</pre></div>
+<p>然后你需要写好 objects 这个 UserManager ，其继承自 <code>BaseUserManager</code> ，你可以做其他一些定制，这个是个什么东西？这个就是之前我们看到的 <code>Model.objects.what</code> 之类的这种用法。在这里你需要根据自己的情况定义好： </p>
+<ul>
+<li>create_user</li>
+<li>create_superuser</li>
+</ul>
+<p>这两个方法即可。就用这两个方法来控制用户的创建行为。其中 <code>create_superuser</code> 主要负责把 </p>
+<ul>
+<li>is_superuser</li>
+<li>is_staff </li>
+</ul>
+<p>设为True。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", 算法, " />
+
+<meta property="og:title" content="mindmaptree "/>
+<meta property="og:url" content="/articles/mindmaptree.html" />
+<meta property="og:description" content="如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？ 然后其对应的csv格式如下： 奴隶社会,非洲,古埃及文明,金字塔 ,亚洲,两河流域文明,汉谟拉比法典 ,,古印度,种姓制度 ,,,佛教的创立 ,欧洲,希腊,希腊城邦 ,,,雅典民主 ,,罗马,城邦 ,,,帝国的征服与扩展 ,,希腊罗马古典文化,建筑艺术 ,,,公历 这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。 基本类的设计 import logging logger = logging.getLogger(__name__) logging.basicConfig(level=logging.DEBUG) class MindMapTree(object): def __init__(self, data=None, parent …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-11-24T18:03:00+08:00" />
+<meta property="" content="2017-11-24T18:03:00+08:00" />
+<meta name="twitter:title" content="mindmaptree ">
+<meta name="twitter:description" content="如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？ 然后其对应的csv格式如下： 奴隶社会,非洲,古埃及文明,金字塔 ,亚洲,两河流域文明,汉谟拉比法典 ,,古印度,种姓制度 ,,,佛教的创立 ,欧洲,希腊,希腊城邦 ,,,雅典民主 ,,罗马,城邦 ,,,帝国的征服与扩展 ,,希腊罗马古典文化,建筑艺术 ,,,公历 这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。 基本类的设计 import logging logger = logging.getLogger(__name__) logging.basicConfig(level=logging.DEBUG) class MindMapTree(object): def __init__(self, data=None, parent …">
+
+    <title>mindmaptree  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/mindmaptree.html"> mindmaptree  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">基本类的设计</a></li>
+<li><a href="#csv">csv的读写</a></li>
+<li><a href="#_2">其他函数接口</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？</p>
+<p><img alt="img" src="/images/arithmetic/mindmaptree.png"/></p>
+<p>然后其对应的csv格式如下：</p>
+<div class="highlight"><pre><span></span>奴隶社会,非洲,古埃及文明,金字塔
+,亚洲,两河流域文明,汉谟拉比法典
+,,古印度,种姓制度
+,,,佛教的创立
+,欧洲,希腊,希腊城邦
+,,,雅典民主
+,,罗马,城邦
+,,,帝国的征服与扩展
+,,希腊罗马古典文化,建筑艺术
+,,,公历
+</pre></div>
+<p>这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。</p>
+<h2 id="_1">基本类的设计</h2>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MindMapTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">introspection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        核心内省函数，返回我和我的所有children。</span>
+<span class="sd">        """</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'intorspection add node:{0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
+            <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">:</span>
+                <span class="n">stack</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">introspection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">stack</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt; has children: {1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt; has children: {1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child_data</span><span class="p">):</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">(</span><span class="n">child_data</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child_data</span><span class="p">):</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">(</span><span class="n">child_data</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_data</span><span class="p">,</span> <span class="n">child_data</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">introspection</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">parent_data</span><span class="p">:</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">introspection</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">target</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span>
+
+    <span class="k">def</span> <span class="nf">set_nodedata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">child</span>
+
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">]}</span>
+
+    <span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">(</span><span class="s2">"奴隶社会"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"非洲"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"亚洲"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"非洲"</span><span class="p">,</span> <span class="s2">"古埃及文明"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"古埃及文明"</span><span class="p">,</span> <span class="s2">"金字塔"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"亚洲"</span><span class="p">,</span> <span class="s2">"两河流域文明"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"两河流域文明"</span><span class="p">,</span> <span class="s2">"汉谟拉比法典"</span><span class="p">)</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"亚洲"</span><span class="p">,</span> <span class="s2">"古印度"</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'######################'</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">introspection</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
+
+    <span class="n">yazhou</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"亚洲"</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">introspection</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">get_path</span><span class="p">())</span>
+</pre></div>
+<h2 id="csv">csv的读写</h2>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+
+<span class="k">class</span> <span class="nc">MindMapCSV</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">Dialect</span><span class="p">):</span>
+    <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">','</span>  <span class="c1"># 分隔符</span>
+    <span class="n">quotechar</span> <span class="o">=</span> <span class="s1">'"'</span>  <span class="c1"># quote符号</span>
+    <span class="n">doublequote</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 双引号在字符中的情况</span>
+    <span class="n">skipinitialspace</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 分隔符后空白忽略</span>
+    <span class="n">lineterminator</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span>  <span class="c1"># 换行符</span>
+    <span class="n">quoting</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span>  <span class="c1"># 最小quote</span>
+
+
+<span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span><span class="s2">"MindMapCSV"</span><span class="p">,</span> <span class="n">MindMapCSV</span><span class="p">)</span>
+
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">mindmaptree</span> <span class="kn">import</span> <span class="n">MindMapTree</span>
+
+
+<span class="k">class</span> <span class="nc">MindMapReader</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s1">'MindMapCSV'</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">()</span>
+
+        <span class="n">last_stack</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 根元素，目前还只处理一个根元素的情况</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'got original line data: {0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">item</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+                        <span class="n">last_stack</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">set_nodedata</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                        <span class="n">first</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">last</span> <span class="o">=</span> <span class="n">last_stack</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="n">last_stack</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># ""</span>
+                    <span class="k">continue</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'init data: {0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">introspection</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="nf">getdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+
+<span class="k">class</span> <span class="nc">MindMapWriter</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s1">'MindMapCSV'</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setdata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+</pre></div>
+<h2 id="_2">其他函数接口</h2>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">MindMapReader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">getdata</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">csv2json</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">MindMapReader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">getdata</span><span class="p">()</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
+        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">mindmaptree</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">mindmaptree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">'.'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">get_path</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span><span class="s1">'找不到关键字：{0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_csv</span><span class="p">(</span><span class="s1">'history.csv'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">csv2json</span><span class="p">(</span><span class="s1">'history.csv'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>
+
+    <span class="n">find_res</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"汉谟拉比法典"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">find_res</span><span class="p">)</span>
+
+    <span class="n">find_res</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"美洲"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">find_res</span><span class="p">)</span>
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-11-24T18:03:00+08:00">2017年 11月 24日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2017-11-24T18:03:00+08:00">2017年 11月 24日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#suan-fa-ref">算法</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

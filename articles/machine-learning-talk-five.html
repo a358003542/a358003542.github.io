@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="machine-learning, 机器学习, " />
+
+<meta property="og:title" content="机器学习第五谈之数据预处理 "/>
+<meta property="og:url" content="/articles/machine-learning-talk-five.html" />
+<meta property="og:description" content="前言 sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。 本文介绍的内容，以下面代码形式展示出来： import pandas as pd import numpy as np from sklearn.preprocessing import StandardScaler from sklearn.preprocessing import MinMaxScaler from sklearn.preprocessing import normalize as sk_normalize from sklearn.preprocessing import binarize as sk_binarize def combine_df(df_value, old_df): &#34;&#34;&#34; 输入ndarray值，然后根据给的老df的column列名来输出一个新的df :param df_value: :param old_df: :return: &#34;&#34;&#34; new_df = pd …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-12-13T00:00:00+08:00" />
+<meta property="" content="2019-04-10T00:00:00+08:00" />
+<meta name="twitter:title" content="机器学习第五谈之数据预处理 ">
+<meta name="twitter:description" content="前言 sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。 本文介绍的内容，以下面代码形式展示出来： import pandas as pd import numpy as np from sklearn.preprocessing import StandardScaler from sklearn.preprocessing import MinMaxScaler from sklearn.preprocessing import normalize as sk_normalize from sklearn.preprocessing import binarize as sk_binarize def combine_df(df_value, old_df): &#34;&#34;&#34; 输入ndarray值，然后根据给的老df的column列名来输出一个新的df :param df_value: :param old_df: :return: &#34;&#34;&#34; new_df = pd …">
+
+    <title>机器学习第五谈之数据预处理  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/machine-learning-talk-five.html"> 机器学习第五谈之数据预处理  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">缩放操作</a><ul>
+<li><a href="#_3">均值移除</a></li>
+<li><a href="#minmax">minmax缩放</a></li>
+</ul>
+</li>
+<li><a href="#_4">归一化</a></li>
+<li><a href="#_5">二值化</a></li>
+<li><a href="#onehot">onehot编码</a></li>
+<li><a href="#label">label编码</a></li>
+<li><a href="#_6">计算误差</a><ul>
+<li><a href="#mae">平均绝对误差MAE</a></li>
+<li><a href="#mse">均方误差MSE</a></li>
+<li><a href="#rmse">均方根误差RMSE</a></li>
+<li><a href="#_7">中位数绝对误差</a></li>
+<li><a href="#_8">解释方差分</a></li>
+<li><a href="#r-r2-score">R方得分 R2 score</a></li>
+</ul>
+</li>
+<li><a href="#_9">缩放和归一化的再讨论</a></li>
+<li><a href="#_10">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">前言</h2>
+<p>sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。</p>
+<p>本文介绍的内容，以下面代码形式展示出来：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">sk_normalize</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">binarize</span> <span class="k">as</span> <span class="n">sk_binarize</span>
+
+
+<span class="k">def</span> <span class="nf">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">old_df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    输入ndarray值，然后根据给的老df的column列名来输出一个新的df</span>
+<span class="sd">    :param df_value:</span>
+<span class="sd">    :param old_df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">old_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_df</span>
+
+<span class="sd">"""</span>
+
+<span class="sd">- scale 缩放操作 (缩放器 df) 返回df</span>
+<span class="sd">- inverse_scale 反向缩放操作 (缩放器 df) 返回df</span>
+<span class="sd">- normalize(df, norm='l1') 归一化</span>
+<span class="sd">- binarize 二值化 阈值默认为0</span>
+
+<span class="sd">- encode 编码</span>
+<span class="sd">- inverse_encode 反编码 </span>
+
+<span class="sd">### 缩放器</span>
+<span class="sd">- z-score标准化 get_standard_scaler</span>
+<span class="sd">- minmax缩放 get_minmax_scaler</span>
+
+
+<span class="sd">"""</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
+
+<span class="sd">"""</span>
+
+<span class="sd">one hot encoding</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
+
+<span class="sd">"""</span>
+
+<span class="sd">LabelEncoder  标记编码</span>
+<span class="sd">"""</span>
+
+
+<span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="n">scaler</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    缩放操作</span>
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">inverse_scale</span><span class="p">(</span><span class="n">scaler</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    反向缩放操作 - 反向缩放的有：</span>
+
+<span class="sd">    - minmax</span>
+<span class="sd">    - stand</span>
+
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">'l1'</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    归一化 norm选项有 l1 范数 和 l2 范数 选项</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :param norm:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_normalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_normalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    二值化 给定阈值默认为0, 然后根据阈值来返回0和1</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :param threshold:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_binarize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_binarize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">fit_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    编码</span>
+<span class="sd">    :param encoder:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">fit_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">fit_data</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">LabelEncoder</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">inverse_encode</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    反向编码</span>
+
+<span class="sd">    可以反向编码的有：</span>
+<span class="sd">    - onehot</span>
+<span class="sd">    - label</span>
+
+<span class="sd">    :param encoder:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+
+    <span class="n">df_value</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">get_standard_scaler</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    均值移除 或者 z-score标准化</span>
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">get_minmax_scaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="sd">"""</span>
+<span class="sd">    范围缩放，同样缩放到0-1，所以也叫做 0-1缩放</span>
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="n">feature_range</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scaler</span>
+</pre></div>
+<p>代码不是很具实用性，但大概也说明了sklearn对于数据预处理这块的相关支持情况。</p>
+<h2 id="_2">缩放操作</h2>
+<h3 id="_3">均值移除</h3>
+<p>我更喜欢称之为z-score缩放，因为学习过统计学的就知道z-score标准分的含义，大体也知道这个缩放操作在做些什么事情。简单来说就是讲你的张量数据沿着各个特征维度，均值都为0，标准差都为1。</p>
+<p>sklearn提供了 <code>StandardScaler</code> ，然后你利用它进行fit和tranform操作即可，你还可以继续利用之前的缩放器反向回滚 <code>inverse_transform</code>。</p>
+<h3 id="minmax">minmax缩放</h3>
+<p>就是控制你的张量数据的最小值和最大值范围。</p>
+<p>sklearn提供了 <code>MinMaxScaler</code> 缩放器类，类似上面的你可以进行fit和tranform操作，同样可以利用之前的缩放器进行回滚操作。</p>
+<h2 id="_4">归一化</h2>
+<p>sklearn提供了normalize函数来支持你的张量数据的归一化操作，这是一个不可逆的操作。具体就是让特征维度的数据绝对值之和为1。</p>
+<h2 id="_5">二值化</h2>
+<p>就是给定一个阈值，你的张量数据转变成为0 1 值。这个估计在神经网络中有用。</p>
+<h2 id="onehot">onehot编码</h2>
+<p>onehot编码可以算是神经网络里面的基本入门知识了，简单来说就是将 数值或者字符 编码为空间扩展的  0 1 数值特征向量。 具体sklearn提供了 <code>OneHotEncoder</code> 来进行相关操作。</p>
+<p>比如说 </p>
+<div class="highlight"><pre><span></span>[
+    ['male', 10],
+    ['female',5],
+    ['male', 1]
+]
+</pre></div>
+<p>其中性别特征列有值 male female 两个值 这一列需要两个bit位 。
+而后面的数字列有 1 5 10 三个值   这个特征列需要三个bit位 。
+上面的例子一共需要 5 个bit位。</p>
+<div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">'male'</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">'female'</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">'male'</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">get_onehot_encoder</span><span class="p">()</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">([[</span><span class="s1">'female'</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+</pre></div>
+<p>上面的例子中 <code>1 0</code> 表示 female <code>0 0 1</code> 表示 10 。</p>
+<h2 id="label">label编码</h2>
+<p>label编码的含义也是很直接简单的，就是给定一个字典值，然后给这些字典里面的单词赋值0,2,3...这样你的张量数据就变成了数值型了。</p>
+<p>具体sklearn提供了 <code>LabelEncoder</code> 来进行相关操作。</p>
+<h2 id="_6">计算误差</h2>
+<h3 id="mae">平均绝对误差MAE</h3>
+<p>数据集所有数据点的绝对误差的平均值</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sklearn.metrics</span> <span class="kn">as</span> <span class="nn">sm</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">test_pred</span><span class="p">)</span>
+</pre></div>
+<h3 id="mse">均方误差MSE</h3>
+<p>数据集所有数据点的误差的平方的平均值</p>
+<div class="highlight"><pre><span></span>sm.mean_squared_error(test_data, test_pred)
+</pre></div>
+<h3 id="rmse">均方根误差RMSE</h3>
+<p>均方误差开个根号，为了更好地描述模型的误差</p>
+<h3 id="_7">中位数绝对误差</h3>
+<p>数据集所有数据点的误差的中位数</p>
+<div class="highlight"><pre><span></span>sm.median_absolute_error(test_data, test_pred)
+</pre></div>
+<h3 id="_8">解释方差分</h3>
+<p>这个分数用来衡量我们的模型对于数据集波动的解释能力</p>
+<div class="highlight"><pre><span></span>sm.explained_variance_score(test_data, test_pred)
+</pre></div>
+<h3 id="r-r2-score">R方得分 R2 score</h3>
+<p>用来衡量模型对于未知样本的预测效果。</p>
+<div class="highlight"><pre><span></span>sm.r2_score(test_data, test_pred)
+</pre></div>
+<h2 id="_9">缩放和归一化的再讨论</h2>
+<p>关于物品的特征，可能有些算法对特征的数值差异容忍度很高，但一般来说一般的算法都是要求我们对特征值进行缩放处理的。尤其是那些基于特征值计算距离的算法，则是必须要对各个不同的特征值进行缩放，才能进入后面的算法处理的。某些情况可能可以通过通过二值化就能解决，剩下的问题则需要你对特征值进行缩放，z-score缩放和minmax缩放。</p>
+<p>这两个缩放手段其实都是可以的，如果时间充裕，两种缩放手段和算法评估工作都应该做的。</p>
+<p>这里顺便提一下归一化手段，归一化normalize默认是使用的l2范数，就是横向【是的其默认axis=1，不是特征维axis=0】所有的值的平方和等于1，而l1范数是横向所有的值【绝对值？】相加等于1。</p>
+<p>具体l1范数是否是绝对值这不是重点，归一化并不属于缩放范畴，其实严格意义上讲属于算法里面的一部分数据处理了。比如说频数列表 <code>[2,3,0,0]</code> 利用l1归一化，我们就能得到 <code>array([[0.4, 0.6, 0. , 0. ]])</code> 这里的0.4 就可以看做 2 发生的概率是0.4 ，然后l1范数正好满足 所有的概率的和等于1。具体某些应用场景是需要这个计算的。</p>
+<h2 id="_10">参考资料</h2>
+<ol>
+<li>python机器学习经典案例 Prateek Joshi 著  陶俊杰 陈小莉译</li>
+<li><a href="https://blog.csdn.net/weixin_40040404/article/details/81291799">这篇文章不错</a></li>
+</ol>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-04-10T00:00:00+08:00">2019年 4月 10日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#ji-qi-xue-xi-ref">机器学习</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#machine-learning-ref">machine-learning
+                    <span>10</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

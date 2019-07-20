@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", django, " />
+
+<meta property="og:title" content="django后台api编写之-django和scrapy "/>
+<meta property="og:url" content="/articles/djangohou-tai-apibian-xie-zhi-djangohe-scrapy.html" />
+<meta property="og:description" content="django和scrapy django也可以和scrapy集成起来，简单来说就是通过 scrapyd ，django发送一个信号，然后scrapyd 后台启动一个爬虫任务。本小节主要参考了 这篇文章 ，谢谢作者。 这样做有什么好处？大体有以下好处： 爬虫的运行状态信息可查询可操作 爬虫后台爬取不卡顿前台显示 以信号为基础可以和celery结合起来从而建立更加复杂的基于简单的HTTP信号机制的爬虫系统（包括周期性任务或者其他任务等等） 读者请参看上面这篇文章，下面我就一些最核心的点来描述之。 从views开始说起 from scrapyd_api import ScrapydAPI scrapyd = ScrapydAPI(&#39;http://localhost:6800&#39;) @api_view([&#39;POST&#39;]) def crawl_article(request): &#34;&#34;&#34; POST : 传递公众号和文章title，然后运行spider去爬取。 GET ; 查询某个爬虫进行到了什么状态 :param request: :return: &#34;&#34;&#34; if request.method == &#39;POST&#39;: mode = int(request.data.get …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-26T00:00:00+08:00" />
+<meta name="twitter:title" content="django后台api编写之-django和scrapy ">
+<meta name="twitter:description" content="django和scrapy django也可以和scrapy集成起来，简单来说就是通过 scrapyd ，django发送一个信号，然后scrapyd 后台启动一个爬虫任务。本小节主要参考了 这篇文章 ，谢谢作者。 这样做有什么好处？大体有以下好处： 爬虫的运行状态信息可查询可操作 爬虫后台爬取不卡顿前台显示 以信号为基础可以和celery结合起来从而建立更加复杂的基于简单的HTTP信号机制的爬虫系统（包括周期性任务或者其他任务等等） 读者请参看上面这篇文章，下面我就一些最核心的点来描述之。 从views开始说起 from scrapyd_api import ScrapydAPI scrapyd = ScrapydAPI(&#39;http://localhost:6800&#39;) @api_view([&#39;POST&#39;]) def crawl_article(request): &#34;&#34;&#34; POST : 传递公众号和文章title，然后运行spider去爬取。 GET ; 查询某个爬虫进行到了什么状态 :param request: :return: &#34;&#34;&#34; if request.method == &#39;POST&#39;: mode = int(request.data.get …">
+
+    <title>django后台api编写之-django和scrapy  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/djangohou-tai-apibian-xie-zhi-djangohe-scrapy.html"> django后台api编写之-django和scrapy  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#djangoscrapy">django和scrapy</a><ul>
+<li><a href="#views">从views开始说起</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="djangoscrapy">django和scrapy</h2>
+<p>django也可以和scrapy集成起来，简单来说就是通过 <code>scrapyd</code> ，django发送一个信号，然后scrapyd 后台启动一个爬虫任务。本小节主要参考了 <a href="https://medium.com/@ali_oguzhan/how-to-use-scrapy-with-django-application-c16fabd0e62e">这篇文章</a> ，谢谢作者。</p>
+<p>这样做有什么好处？大体有以下好处：</p>
+<ol>
+<li>爬虫的运行状态信息可查询可操作</li>
+<li>爬虫后台爬取不卡顿前台显示</li>
+<li>以信号为基础可以和celery结合起来从而建立更加复杂的基于简单的HTTP信号机制的爬虫系统（包括周期性任务或者其他任务等等）</li>
+</ol>
+<p>读者请参看上面这篇文章，下面我就一些最核心的点来描述之。</p>
+<h3 id="views">从views开始说起</h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrapyd_api</span> <span class="kn">import</span> <span class="n">ScrapydAPI</span>
+<span class="n">scrapyd</span> <span class="o">=</span> <span class="n">ScrapydAPI</span><span class="p">(</span><span class="s1">'http://localhost:6800'</span><span class="p">)</span>
+
+<span class="nd">@api_view</span><span class="p">([</span><span class="s1">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">crawl_article</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    POST : 传递公众号和文章title，然后运行spider去爬取。</span>
+<span class="sd">    GET ; 查询某个爬虫进行到了什么状态</span>
+<span class="sd">    :param request:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'POST'</span><span class="p">:</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'mode'</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">gzh_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'gzh_id'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gzh_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">fail_missing_paras</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">"missing gzh_id"</span><span class="p">)</span>
+
+            <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">'gzh_id'</span><span class="p">:</span> <span class="n">gzh_id</span><span class="p">,</span>
+                <span class="s1">'mode'</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="n">task</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="s1">'article'</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">sucess_response</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">gzh_id</span><span class="o">=</span><span class="n">gzh_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s1">'started'</span><span class="p">)</span>
+</pre></div>
+<p>你需要安装的pypi包有：<code>django</code> ，当然，<code>python-scrapyd-api</code> 同scrapyd交谈的python api接口。<code>Scrapy</code> 和 <code>scrapyd</code> 。</p>
+<p>最核心的就是 <code>scrapyd.schedule()</code> 这个函数，<code>default</code> 是projecet name，意义有待进一步阐明。然后 <code>article</code> 就是具体你写的爬虫名字，然后还可以传递一些参数进去，这些参数实际传到了scrapy爬虫那边，简单来说就是你如果要手工模拟的话加上 <code>-a mode=1</code> 也是一样的效果。这些参数到了爬虫类那里可以直接 <code>self.mode</code> 调用那是后话了。 </p>
+<p>所以scrapyd，ok，后台开了一个爬虫，还有什么要说的吗？没了。就django和scrapy集成知识来说没了，scrapy那边数据怎么存等等那都是scrapy那边的问题了。</p>
+<p>最后粘贴个查看spider运行状态的视图函数吧，之所以粘贴出来是因为其和本文讨论的 <code>python-scrapyd-api</code> 有关，暴漏了很多api操作，可以简单看下了解下。</p>
+<div class="highlight"><pre><span></span><span class="nd">@api_view</span><span class="p">([</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">crawl_index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    task_id # 如果有则根据task_id 来查询</span>
+
+<span class="sd">    或者根据 status 来过滤查询 '' running pending finished</span>
+
+<span class="sd">    project_name 参数默认 default</span>
+<span class="sd">    :param request:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'GET'</span><span class="p">:</span>
+        <span class="n">project_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'project_name'</span><span class="p">,</span> <span class="s1">'default'</span><span class="p">)</span>
+        <span class="n">task_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'task_id'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">task_id</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">job_status</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">task_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">fail_uri_not_found</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s1">'task_id not found'</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">sucess_response</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+
+        <span class="n">status_filter</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">list_jobs</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">status_filter</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">list_jobs</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">status_filter</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">status_filter</span><span class="p">)}</span>
+
+        <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">sucess_response</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'POST'</span><span class="p">:</span>
+        <span class="n">task_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'task_id'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">task_id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">fail_missing_paras</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s1">'missing task_id'</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="s1">'TERM'</span><span class="p">)</span> <span class="c1"># kill it twice</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="s1">'TERM'</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">OurResponse</span><span class="o">.</span><span class="n">sucess_response</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#django-ref">django</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

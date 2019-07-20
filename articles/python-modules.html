@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", python语言, " />
+
+<meta property="og:title" content="python语言学习之-官方模块第一谈 "/>
+<meta property="og:url" content="/articles/python-modules.html" />
+<meta property="og:description" content="unittest模块 在编程中有一个概念TDD，其和具体的编程语言无关，其全称叫做test-driven development。也就是人们常说的测试驱动型开发。不说这么大的概念，但在python编程开发中有一块内容是你必须要了解的，那就是单元测试开发。具体python中内置模块unittest就是做这个工作的。 基本的使用就简单用下面这个例子来说明了： import unittest import math class TooBigError(Exception): pass def hello(n): if n&gt;2: raise TooBigError(&#39;too big input error&#39;) else: print(&#39;hello&#39;*n) class FirstTest(unittest.TestCase): def setUp(self): &#39;&#39;&#39;setUp函数在每个测试单元执行前被执行，其通常用于预先配置 一些后面测试单元会用到的参数&#39;&#39;&#39; pass def tearDown(self): &#39;&#39;&#39;tearDown函数在每个测试单元执行之后再执行 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-05-05T00:00:00+08:00" />
+<meta property="" content="2018-10-04T00:00:00+08:00" />
+<meta name="twitter:title" content="python语言学习之-官方模块第一谈 ">
+<meta name="twitter:description" content="unittest模块 在编程中有一个概念TDD，其和具体的编程语言无关，其全称叫做test-driven development。也就是人们常说的测试驱动型开发。不说这么大的概念，但在python编程开发中有一块内容是你必须要了解的，那就是单元测试开发。具体python中内置模块unittest就是做这个工作的。 基本的使用就简单用下面这个例子来说明了： import unittest import math class TooBigError(Exception): pass def hello(n): if n&gt;2: raise TooBigError(&#39;too big input error&#39;) else: print(&#39;hello&#39;*n) class FirstTest(unittest.TestCase): def setUp(self): &#39;&#39;&#39;setUp函数在每个测试单元执行前被执行，其通常用于预先配置 一些后面测试单元会用到的参数&#39;&#39;&#39; pass def tearDown(self): &#39;&#39;&#39;tearDown函数在每个测试单元执行之后再执行 …">
+
+    <title>python语言学习之-官方模块第一谈  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/python-modules.html"> python语言学习之-官方模块第一谈  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#unittest">unittest模块</a></li>
+<li><a href="#time">time模块</a><ul>
+<li><a href="#time_1">time函数</a></li>
+<li><a href="#gmtime">gmtime函数</a></li>
+<li><a href="#localtime">localtime函数</a></li>
+<li><a href="#ctime">ctime函数</a></li>
+<li><a href="#strftime">strftime函数</a></li>
+<li><a href="#sleep">sleep函数</a></li>
+</ul>
+</li>
+<li><a href="#sys">sys模块</a><ul>
+<li><a href="#sysargv">sys.argv</a></li>
+<li><a href="#exit">exit函数</a></li>
+<li><a href="#sysplatform">sys.platform</a></li>
+<li><a href="#syspath">sys.path</a></li>
+<li><a href="#_1">标准输入输出错误输出文件</a></li>
+<li><a href="#sysversion">sys.version</a></li>
+<li><a href="#sysmaxsize">sys.maxsize</a></li>
+<li><a href="#sysstdinisatty">sys.stdin.isatty()</a></li>
+</ul>
+</li>
+<li><a href="#subprocess">subprocess模块</a><ul>
+<li><a href="#call">call函数</a></li>
+<li><a href="#getoutput">getoutput函数</a></li>
+<li><a href="#getstatusoutput">getstatusoutput函数</a></li>
+<li><a href="#popen">Popen类</a></li>
+</ul>
+</li>
+<li><a href="#shutil">shutil模块</a><ul>
+<li><a href="#_2">复制文件</a></li>
+<li><a href="#_3">复制文件夹</a></li>
+<li><a href="#_4">删除整个目录</a></li>
+<li><a href="#_5">移动文件夹</a></li>
+<li><a href="#chown">chown函数</a></li>
+<li><a href="#which">which函数</a></li>
+</ul>
+</li>
+<li><a href="#os">os模块</a><ul>
+<li><a href="#getcwd">getcwd函数</a></li>
+<li><a href="#mkdir">mkdir函数</a></li>
+<li><a href="#chdir">chdir函数</a></li>
+<li><a href="#_6">删除文件</a></li>
+<li><a href="#osrename">os.rename</a></li>
+<li><a href="#osrepalce">os.repalce</a></li>
+<li><a href="#_7">删除空目录</a></li>
+<li><a href="#listdir">listdir命令</a></li>
+<li><a href="#_8">遍历目录树</a></li>
+<li><a href="#environ">environ函数</a></li>
+<li><a href="#getpid">getpid函数</a></li>
+<li><a href="#stat">stat函数</a><ul>
+<li><a href="#st95size">st_size属性</a></li>
+<li><a href="#st95mtime">st_mtime属性</a></li>
+<li><a href="#st95ctime">st_ctime属性</a></li>
+</ul>
+</li>
+<li><a href="#_9">给进程发送信号</a></li>
+</ul>
+</li>
+<li><a href="#ospath">os.path模块</a><ul>
+<li><a href="#abspath">abspath函数</a></li>
+<li><a href="#dirname">dirname函数</a></li>
+<li><a href="#basename">basename函数</a></li>
+<li><a href="#split">split函数</a></li>
+<li><a href="#splitext">splitext函数</a></li>
+<li><a href="#join">join函数</a></li>
+<li><a href="#expanduser">expanduser函数</a></li>
+<li><a href="#exists">exists函数</a></li>
+<li><a href="#isfileisdirislink">isfile和isdir还有islink</a></li>
+<li><a href="#samefile">samefile函数</a></li>
+<li><a href="#getmtime">getmtime函数</a></li>
+<li><a href="#getctime">getctime函数</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="unittest">unittest模块</h2>
+<p>在编程中有一个概念TDD，其和具体的编程语言无关，其全称叫做test-driven
+development。也就是人们常说的测试驱动型开发。不说这么大的概念，但在python编程开发中有一块内容是你必须要了解的，那就是单元测试开发。具体python中内置模块unittest就是做这个工作的。</p>
+<p>基本的使用就简单用下面这个例子来说明了：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">class</span> <span class="nc">TooBigError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TooBigError</span><span class="p">(</span><span class="s1">'too big input error'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">'hello'</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">FirstTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">'''setUp函数在每个测试单元执行前被执行，其通常用于预先配置</span>
+<span class="sd">        一些后面测试单元会用到的参数'''</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">'''tearDown函数在每个测试单元执行之后再执行。'''</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">test_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">'''具体的测试单元，名字需要以test字符开始'''</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">3.1416</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotAlmostEqual</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">3.1415</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">TooBigError</span><span class="p">,</span> <span class="n">hello</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+<p>unittest模块的main函数具体实际执行各个测试单元类，这些测试单元类继承自unittest的TestCase类。在这些继承自TestCase的类中，setUp函数和tearDown函数有特殊的用途，具体见上面代码的说明。然后里面定义的函数test字符串开头的都是所谓的测试单元，其将被逐个执行。</p>
+<p>TestCase有很多方法，比如assertTrue，assertFalse用于断言某个bool值是真或假，然后assertEqual用来断言某两个值是相等的(==)，类似的还有assertNotEqual用来断言两个值不相等。这里值得一提的assertAlmostEqual方法是用来断言某两个float值在多少小数位上是大致相等的，比如上面的例子，
+<span class="math">\(\pi\)</span>
+值具体到小数点4位是3.1416。上面这些方法后面还可以额外接受一个提示字符串参数（Msg参数），用来具体没有断言成功的时的补充信息。</p>
+<p>assertRaises方法用来断言某个函数在接受某些参数之后必然返回某个异常。该方法第一个参数是期望捕捉到的异常，第二个参数是具体调用的函数，后面的参数将送给这个函数，所以就不能跟之前谈及的Msg参数了。</p>
+<p>更多信息请参看该模块的官方文档。</p>
+<h2 id="time">time模块</h2>
+<p>time模块提供了一些和时间相关的函数，更加的底层，不过有些函数可能在某些平台并不适用。类似的模块还有datetime模块，datetime是以类的框架来解决一些时间问题的。所以如果只是需要简单的调用一下时间，那么用time模块，如果是大量和时间相关的问题，推荐使用datetime模块。</p>
+<h3 id="time_1">time函数</h3>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">time</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="mf">1404348227.07554</span>
+</pre></div>
+<p>time函数返回一个数值，这个数值表示从1970年1月1号0时0分0秒到现在的时间过了多少秒。</p>
+<h3 id="gmtime">gmtime函数</h3>
+<p>这个函数可以接受一个参数，这个参数是多少秒，然后返回一个特定格式的时间数组<code>struct_time</code>。如果不接受参数，那么默认接受的秒数由time函数返回，也就是从那个特定时间到现在过了多少秒，这样这个特定格式的时间数组对应的就是当前时间。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; time.gmtime()
+time.struct_time(tm_year=2014, tm_mon=7, tm_mday=3, tm_hour=0, 
+tm_min=53, tm_sec=0, tm_wday=3, tm_yday=184, tm_isdst=0)
+&gt;&gt;&gt; time.gmtime(0)
+time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, 
+tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+</pre></div>
+<h3 id="localtime">localtime函数</h3>
+<p>此外类似的还有<strong>localtime</strong>函数，和gmtime用法和返回完全一模一样，唯一的区别就是返回的是当地的时间。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
+'2014-07-03 09:19:40'
+&gt;&gt;&gt; time.strftime('%Y-%m-%d %H:%M:%S',time.gmtime())
+'2014-07-03 01:19:49'
+</pre></div>
+<h3 id="ctime">ctime函数</h3>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; time.ctime()
+'Thu Jul  3 08:54:54 2014'
+&gt;&gt;&gt; time.ctime(0)
+'Thu Jan  1 07:00:00 1970'
+</pre></div>
+<p>和gmtime类似，不过返回的是字符串格式的时间。我们看到ctime默认设置的时间是根据localtime函数来的。</p>
+<h3 id="strftime">strftime函数</h3>
+<p>接受那个特定格式的时间数组<code>struct_time</code>作为参数，然后返回一定字符串格式的时间。具体例子请参看前面的例子。</p>
+<p>其中最常用的格式符有：</p>
+<div class="highlight"><pre><span></span><span class="c">%Y，多少年；%m，多少月；%d，多少日；</span>
+<span class="c">%H，多少小时；%M，多少分；%S，多少秒。</span>
+</pre></div>
+<p>\%X直接输出09:27:19这样的格式，也就是前面的多少小时多少分多少秒可以用一个%X表示即可。</p>
+<p>还有一些，比如：%I表示多少小时，不过是[0-12]的形式；%y表示多少年，不过是[00-99]的格式，比如2014年就输出14；%p，本地的AM或PM文字。等等。</p>
+<h3 id="sleep">sleep函数</h3>
+<p>sleep函数有时需要用到，将程序休眠个几秒的意思。需要接受一个数值参数，单位是秒，可以是零点几秒。但sleep函数只是大概休眠几秒的意思，最好不去用来计时，因为它不大精确。</p>
+<p>更多内容请参见<a href="https://docs.python.org/3/library/time.html">官方文档</a>。</p>
+<h2 id="sys">sys模块</h2>
+<p>sys模块有一些功能很常用，其实在前面我们就看到过一些了。</p>
+<h3 id="sysargv">sys.argv</h3>
+<p>在刚开始说明python执行脚本参数传递的问题时就已经讲了sys.argv这个变量。这是一个由字符串组成的列表。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+<p>比如新建上面的一个test.py文件，然后执行：</p>
+<div class="highlight"><pre><span></span>python3 test.py test1 test2
+['test.py', 'test1', 'test2']
+test.py
+test1
+test2
+</pre></div>
+<p>我们可以看到sys.argv[0]就是这个脚本的文件名，然后后面依次是各个参数。</p>
+<h3 id="exit">exit函数</h3>
+<p>这个我们在编写GUI程序的时候经常看到，在其他脚本程序中也很常用。如果不带参数的话那么直接退出程序，还可以带一个字符串参数，返回错误提示信息，或者带一个数字，这里的详细讨论略过。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">'出错了'</span><span class="p">)</span>
+<span class="err">出错了</span>
+<span class="n">wanze</span><span class="nd">@wanze</span><span class="o">-</span><span class="n">ubuntu</span><span class="p">:</span><span class="o">~</span><span class="err">$</span>
+</pre></div>
+<h3 id="sysplatform">sys.platform</h3>
+<p>返回当前脚本执行的操作系统环境。</p>
+<p>Linux 返回字符串值：linux；Windows返回win32；Mac OS X 返回darwin。</p>
+<h3 id="syspath">sys.path</h3>
+<p>一连串字符串列表，是python脚本模块的搜索路径，所以我们自定义的python模块，只需要在sys.path这个列表上新加一个字符串路径即可。</p>
+<h3 id="_1">标准输入输出错误输出文件</h3>
+<p>sys.stdin，sys.stdout，sys.stderr这三个文件对象对应的就是linux系统所谓的标准输入标准输出和错误输出文件流对象。</p>
+<h3 id="sysversion">sys.version</h3>
+<p>sys.version输出当前python的版本信息和编译环境的详细信息。</p>
+<p>sys.version_info[0]
+返回当前python主版本的标识，比如python3就返回数字3。</p>
+<h3 id="sysmaxsize">sys.maxsize</h3>
+<p>返回当前计算环境下整数(int)类型的最大值，32位系统是<span class="math">\(2**31-1\)</span>。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">2147483647</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span>
+<span class="mi">2147483647</span>
+</pre></div>
+<h3 id="sysstdinisatty">sys.stdin.isatty()</h3>
+<p>测试输入流是不是终端。如果是终端，则返回True。</p>
+<p>更多内容请参见<a href="https://docs.python.org/3/library/sys.html">官方文档</a>。</p>
+<h2 id="subprocess">subprocess模块</h2>
+<p>我想大家都注意到了现在的计算机都是多任务的，这种多任务的实现机制就是所谓的多个进程同时运行，因为计算机只有一个CPU（现在多核的越来越普及了。）所有计算机一次只能处理一个进程，而这种多进程的实现有点类似你人脑（当然不排除某些极个别现象），你不能一边看电影一边写作业，但是可以写一会作业然后再看一会电影（当然不推荐这么做、），计算机的多进程实现机制也和这个类似，就是一会干这个进程，一会儿做那个进程。</p>
+<p>计算机的一个进程里面还可以分为很多个线程，这个较为复杂，就不谈了。比如你编写的一个脚本程序，系统就会给它分配一个进程号之类的，然后cpu有时就会转过头来执行它一下（计算机各个进程之间的切换很快的，所以才会给我们一种多任务的错觉。）而你的脚本程序里面还可以再开出其他的子进程出来，
+python的subprocess模块主要负责这方面的工作。</p>
+<h3 id="call">call函数</h3>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="c1"># Command with shell expansion</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">"echo"</span><span class="p">,</span> <span class="s2">"hello world"</span><span class="p">])</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">"echo"</span><span class="p">,</span> <span class="s2">"$HOME"</span><span class="p">])</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">'echo $HOME'</span><span class="p">,</span><span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">hello</span> <span class="n">world</span>
+<span class="err">$</span><span class="n">HOME</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span>
+</pre></div>
+<p>其中使用shell=True选项后用法较简单较直观，但网上提及安全性和兼容性可能有问题，他们推荐一般不适用shell=True这个选项。</p>
+<p>如果不使用shell=True这个选项的，比如这里<code>$HOME</code>这个系统变量就无法正确翻译过来，如果实在需要home路径，需要使用os.path的expanduser函数。</p>
+<h3 id="getoutput">getoutput函数</h3>
+<p>取出某个进程命令的输出，返回的是字符串形式。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">name</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span><span class="s1">'whoami'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+<h3 id="getstatusoutput">getstatusoutput函数</h3>
+<p>某个进程执行的状态。</p>
+<h3 id="popen">Popen类</h3>
+<p>根据Popen类创建一个进程管理实例，可以进行进程的沟通，暂停，关闭等等操作。前面的函数的实现是基于Popen类的，这是较高级的课题，这里暂时略过。</p>
+<p>更多内容请参见<a href="https://docs.python.org/3/library/subprocess.html">官方文档</a>。</p>
+<h2 id="shutil">shutil模块</h2>
+<p>相当于os模块的补充，shutil模块进一步提供了一些系统级别的文件或文件夹的复制，删除，移动等等操作。</p>
+<h3 id="_2">复制文件</h3>
+<div class="highlight"><pre><span></span>shutil.copyfile(src, dst)
+shutil.copy(src, dst)
+shutil.copy2(src, dst)
+</pre></div>
+<p>其中<strong>copyfile</strong>的src和dst两个参量都是完整文件路径名，第一个参量是待复制的文件，第二个参量是复制后的文件名；而<strong>copy</strong>函数的第一个参量是待复制的文件，但是第二个参量是目标文件夹路径；<strong>copy2</strong>函数和copy函数类似，不同的是它能尝试保留文件的所有元信息metadata（模块开头有说明是理论上但不尽然）。</p>
+<h3 id="_3">复制文件夹</h3>
+<div class="highlight"><pre><span></span>shutil.copytree(src, dst)
+</pre></div>
+<p><strong>copytree</strong>函数第一个参量是待复制的文件夹路径名，第二个参量是目标文件夹路径名，其将被创建不应该存在。</p>
+<h3 id="_4">删除整个目录</h3>
+<div class="highlight"><pre><span></span>shutil.rmtree(path)
+</pre></div>
+<p><strong>rmtree</strong>函数用于删除整个文件夹，path就是目标文件夹的路径名。</p>
+<h3 id="_5">移动文件夹</h3>
+<div class="highlight"><pre><span></span>shutil.move(src,dst)
+</pre></div>
+<p><strong>move</strong>函数把一个文件或者一个文件夹移动到一个文件夹内。</p>
+<h3 id="chown">chown函数</h3>
+<div class="highlight"><pre><span></span>shutil.chown(path, user=None, group=None)
+</pre></div>
+<p><strong>chown</strong>函数类似的linux系统下的chown函数，这个函数基于os.chown函数，不过接口更友好。</p>
+<h3 id="which">which函数</h3>
+<div class="highlight"><pre><span></span>shutil.which(cmd)
+</pre></div>
+<p><strong>which</strong>函数类似的linux系统下的which函数。</p>
+<p>更多shutil模块内容请参见<a href="https://docs.python.org/3.4/library/shutil.html">官方文档</a>。</p>
+<h2 id="os">os模块</h2>
+<h3 id="getcwd">getcwd函数</h3>
+<p>不管你在终端运行python还是运行某个python脚本，总有一个变量存储着当前工作目录的位置。你可以通过getcwd命令来查看当前工作目录。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+</pre></div>
+<p>上面是通过LaTeX文件运行的python小脚本，当你以python命令来运行某个脚本的时候，你调用python命令的地方就是当前的工作目录。然后加载的其他模块的各个py文件运行时的当前工作目录和主py文件脚本的当前目录是一样的，都是你运行python命令的地方。</p>
+<p>如果是终端调用python就是你终端的当前工作目录所在，你可以用pwd命令来查看。如下所示：</p>
+<div class="highlight"><pre><span></span><span class="o">=&gt;</span><span class="n">pwd</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span>
+<span class="o">=&gt;</span><span class="n">python3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span>
+</pre></div>
+<h3 id="mkdir">mkdir函数</h3>
+<p>新建一个文件夹。</p>
+<div class="highlight"><pre><span></span>os.mkdir(str)
+</pre></div>
+<h3 id="chdir">chdir函数</h3>
+<p>os模块里有一个chdir函数来更改当前工作目录所在地。</p>
+<p>可以使用<em>.</em>和<em>..</em>语法，也可以使用简单的\"test\"调转到test文件夹。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; os.chdir('/home/wanze/pymf')
+&gt;&gt;&gt; print(os.getcwd())
+/home/wanze/pymf
+</pre></div>
+<h3 id="_6">删除文件</h3>
+<p>os.remove(path)</p>
+<p>支持相对路径表达。如果路径是目录将会抛出一个OSError异常。</p>
+<h3 id="osrename">os.rename</h3>
+<div class="highlight"><pre><span></span>os.rename(src, dst)
+</pre></div>
+<p>第一个参数是目标文件或目录，第二个参数是要替换成为的名字。这个命令一方面可以重命名文件，此外可以移动文件。</p>
+<p>支持相对路径语法表达，rename在windows下不一定替换原文件，repalce一定替换文件。</p>
+<h3 id="osrepalce">os.repalce</h3>
+<div class="highlight"><pre><span></span>os.replace(src, dst)
+</pre></div>
+<p>rename在windows下不一定替换原文件，repalce一定替换文件。</p>
+<p>支持相对路径语法表达。</p>
+<h3 id="_7">删除空目录</h3>
+<p>os.rmdir(path)</p>
+<p>支持相对路径语法表达，只能删除空目录。如果要删除整个目录，请使用shutil.rmtree(path)。</p>
+<h3 id="listdir">listdir命令</h3>
+<div class="highlight"><pre><span></span>os.listdir(path='.')
+</pre></div>
+<p>相当于简单的ls命令，将返回一个字符串列表，其内包含本path下所有的文件和文件夹名（包括链接文件）。</p>
+<p>可以结合前面介绍的os.path模块的isfile等函数新建一个函数listdir_file，listdir_dir和listdir_link，将普通文件，目录和链接文件区分开来。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">listdir_dir</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">'.'</span><span class="p">):</span>
+    <span class="sd">'''os的listdir函数加强，只返回文件夹。'''</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">dir</span> <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="p">]</span>
+<span class="k">def</span> <span class="nf">listdir_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">'.'</span><span class="p">):</span>
+    <span class="sd">'''os的listdir函数加强，只返回普通文件'''</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">file</span> <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+     <span class="ow">and</span>  <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="nb">file</span><span class="p">)]</span>
+<span class="k">def</span> <span class="nf">listdir_link</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">'.'</span><span class="p">):</span>
+    <span class="sd">'''os的listdir函数加强，只返回链接文件'''</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">link</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">link</span><span class="p">)</span> <span class="p">]</span>
+</pre></div>
+<h3 id="_8">遍历目录树</h3>
+<div class="highlight"><pre><span></span>os.walk('.')
+</pre></div>
+<p>产生一个生成器对象，具体数值含义如下：（dirpath, dirnames,
+filenames），其中dirpath和filenames可以合并出本目录下所有文件的具体文件名路径，而dirpath和dirnames可以合并出本目录下所有目录的具体路径名。</p>
+<p>根据这个os.walk函数我写了一个<code>gen_file</code>
+函数，其是一个生成器函数，会遍历目录树，并返回本目录下的文件信息。具体代码如下所示:</p>
+<div class="highlight"><pre><span></span>def gen_file(startpath='.',filetype=""):
+    '''利用os.walk 遍历某个目录，收集其内的文件，返回
+    (文件路径列表, 本路径下的文件列表)
+    比如:
+    (['shortly'], ['shortly.py'])
+(['shortly', 'templates'], ['shortly.py'])
+(['shortly', 'static'], ['shortly.py'])
+
+    第一个可选参数 startpath  默认值 '.'
+    第二个参数  filetype  正则表达式模板 默认值是"" 其作用是只选择某些文件
+    如果是空值，则所有的文件都将被选中。比如 "html$|pdf$" 将只选中 html和pdf文件。
+    '''
+    for root, dirs, files in os.walk(startpath):
+        filelist = []
+        for f in files:
+            fileName,fileExt = os.path.splitext(f)
+            if filetype:
+                if re.search(filetype,fileExt):
+                    filelist.append(f)
+            else:
+                filelist = files
+        if filelist:#空文件夹不加入
+            dirlist = root.split(os.path.sep)
+            dirlist = dirlist[1:]
+            if dirlist:
+                yield (dirlist, filelist)
+            else:
+                yield (['.'], filelist)
+</pre></div>
+<p>这个函数可以帮助你管理本目录下（可以通过正则表达式过滤）你感兴趣的文件，都刷一边。然后继续必要的操作，比如查找等等之类的。</p>
+<h3 id="environ">environ函数</h3>
+<p>os.environ，返回一个字典值，这个字典值里面存储着当前shell的一些变量和值。比如系统中"HOME"所具体的路径名是：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HOME'</span><span class="p">])</span>
+
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span>
+<span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+<h3 id="getpid">getpid函数</h3>
+<p>os.getpid函数，返回当前运行的进程的pid。</p>
+<h3 id="stat">stat函数</h3>
+<p>返回文件的一些信息。比如st_size是文件的大小，单位是字节。</p>
+<h4 id="st95size">st_size属性</h4>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="k">print</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">'*.py'</span><span class="p">)])</span>
+
+<span class="k">print</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">'*.py'</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span> <span class="o">&gt;</span> <span class="mi">400</span><span class="p">])</span>
+
+<span class="p">[</span><span class="s1">'/home/wanze/桌面/test.py'</span><span class="p">,</span> <span class="s1">'/home/wanze/桌面/flatten.py'</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">'flatten.py'</span><span class="p">]</span>
+</pre></div>
+<p>下面这个例子进行了文件大小输出单位的优化:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span>
+
+<span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'字节'</span><span class="p">,</span><span class="s1">'KB'</span><span class="p">,</span><span class="s1">'MB'</span><span class="p">,</span><span class="s1">'GB'</span><span class="p">,</span><span class="s1">'TB'</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">filesize</span> <span class="o">&gt;</span> <span class="mi">1024</span><span class="p">:</span>
+        <span class="n">filesize</span> <span class="o">=</span> <span class="n">filesize</span><span class="o">/</span><span class="mi">1024</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">'大小是'</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">filesize</span><span class="p">))</span> <span class="o">+</span> <span class="n">unit</span><span class="p">)</span>
+</pre></div>
+<p>这个python小脚本自动输出合适的单位，具体程序逻辑还是很简单的。</p>
+<h4 id="st95mtime">st_mtime属性</h4>
+<p>最后文件修改的时间。</p>
+<h4 id="st95ctime">st_ctime属性</h4>
+<p>最后文件创建的时间，在windows下是严格的最初文件创建时间，在unix下是最后文件metadata的改变时间。</p>
+<h3 id="_9">给进程发送信号</h3>
+<p>可以通过os模块的kill函数来给某个进程发送某个信号。</p>
+<div class="highlight"><pre><span></span>os.kill(pid, sig)
+</pre></div>
+<p>函数第一个参数是进程的pid，第二个参数是具体发送的信号。比如:</p>
+<div class="highlight"><pre><span></span>os.kill(pid, signal.SIGSTOP)
+</pre></div>
+<p>就是暂停某个进程，然后</p>
+<div class="highlight"><pre><span></span>os.kill(pid, signal.SIGCONT)
+</pre></div>
+<p>是继续某个进程。
+然后<strong>killpg</strong>函数能够对某个进程包括其子进程发送某个信号，参考了<a href="http://kernelcheck.blogspot.com/2009/07/pausestop-process-in-python.html">这个网页</a>。</p>
+<p>除此之外还有 <strong>SIGINT</strong> （正常终止进程信号）和 <strong>SIGKILL</strong>
+（强制终止进程信号）
+等等，更多信号请参看关于unix信号那块，比如<a href="http://en.wikipedia.org/wiki/Unix_signal">这个wiki页面</a>
+。</p>
+<p>更多os模块内容请参见<a href="https://docs.python.org/3.4/library/os.html">官方文档</a>。</p>
+<h2 id="ospath">os.path模块</h2>
+<p>前面提到sys.argv只能返回当前python脚本的文件名，而我们常常需要这个python脚本在系统中的具体位置。前面如os.getcwd等也能获得当前python脚本的所在目录，不过os.path模块的一个优点就是跨平台特性支持很好，也就是一般我们通过其他方式获得的path路径都会用这个模块的函数辅助处理一下。</p>
+<p>我们来看下面的例子：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HOME'</span><span class="p">]))</span>
+
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="err">桌面</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">py</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="err">桌面</span>
+<span class="n">test</span><span class="o">.</span><span class="n">py</span>
+<span class="n">wanze</span>
+</pre></div>
+<p>其中<code>__file__</code>表示当前脚本文件所在的路径。</p>
+<h3 id="abspath">abspath函数</h3>
+<p>abspath函数接受一个path路径值然后返回一个正规的普适的路径地址。具体效果类似于执行了:
+<code>normpath(join(os.getcwd(), path))</code> 。</p>
+<p>再看下面的例子演示了空字符串默认当前工作目录，然后也接受绝对路径等。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="s1">'/home/wanze'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">'test'</span><span class="p">)</span>
+<span class="s1">'/home/wanze/test'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">'/test'</span><span class="p">)</span>
+<span class="s1">'/test'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">'test/'</span><span class="p">)</span>
+<span class="s1">'/home/wanze/test'</span>
+</pre></div>
+<p>我们看到如果abspath接收的是空字符串，其定位是当前脚本的工作目录，那么是引用的模块里面的<code>os.path.abspath('')</code>，具体对应的也是当前脚本的工作目录。然后os.path.abspath(\".\")返回的是当前脚本工作目录。</p>
+<h3 id="dirname">dirname函数</h3>
+<p>dirname函数接受一个路径值然后返回这个路径除开最后一个元素的前面的路径值。比如上面的例子，路径指向文件，那么dirname函数返回的是除开这个文件名的前面的路径；而如果接受的路径指向目录，那么返回的是除开最后一个文件夹名的前面的路径值。</p>
+<h3 id="basename">basename函数</h3>
+<p>如上面例子所示，basename函数接受一个路径值然后返回路径的最后一个元素，如果路径指向文件，那么返回的是文件名；如果路径指向目录，那么返回的是最后那个目录的文件夹名。比如下面实现了从绝对路径提取出文件名的功能。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os.path</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">string</span> <span class="o">=</span> <span class="s1">'/home/wanze/test.txt'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fileName</span><span class="p">,</span><span class="n">fileExtension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fileName</span>
+<span class="s1">'test'</span>
+</pre></div>
+<h3 id="split">split函数</h3>
+<p>将路径path字符串分割，可以视作dirname和basename的组合。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; os.path.split('/usr/local/bin/test.txt')
+('/usr/local/bin', 'test.txt')
+&gt;&gt;&gt; os.path.dirname('/usr/local/bin/test.txt')
+'/usr/local/bin'
+&gt;&gt;&gt; os.path.basename('/usr/local/bin/test.txt')
+'test.txt'
+</pre></div>
+<h3 id="splitext">splitext函数</h3>
+<p>将某个路径path的后缀分开，这里主要是针对文件名为输入的时候，那么第一个为该文件的名字，输出数组的第二个值是该文件的后缀。这个函数在提取文件名后缀和前面的名字的时候很有用，方便组合出新的文件名。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">fileExtension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="s1">'/path/to/somefile.ext'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fileName</span>
+<span class="s1">'/path/to/somefile'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fileExtension</span>
+<span class="s1">'.ext'</span>
+</pre></div>
+<h3 id="join">join函数</h3>
+<p>用于连接多个路径值合并成一个新的路径值，同样相对于简单的字符串拼接，用这个函数处理路径组合具有操作系统普适性和灵活性。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; os.path.join(os.path.expanduser('~'),'test','lib')
+'/home/wanze/test/lib'
+</pre></div>
+<p>上面join函数多个参数生成的新path在windows下又是不同的输出的。</p>
+<h3 id="expanduser">expanduser函数</h3>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">'~'</span><span class="p">)</span>
+<span class="s1">'/home/wanze'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">'~/pymf'</span><span class="p">)</span>
+<span class="s1">'/home/wanze/pymf'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">'~'</span><span class="p">),</span><span class="s1">'pymf'</span><span class="p">,</span><span class="s1">'mymodule'</span><span class="p">)</span>
+<span class="s1">'/home/wanze/pymf/mymodule'</span>
+</pre></div>
+<p><code>~</code>这个符号可以在这里使用，从而展开为以/home/wanze为基础的绝对路径，兼容大部分系统（在windows下也可以使用。）</p>
+<p>同时我们看到join函数可以接受很多不定量的参数，然后将他们组合成为一个新的路径，而且不用你费心是<code>/</code>还是<code>\</code>，你不需要写这些了，用join函数自然料理好一切。</p>
+<h3 id="exists">exists函数</h3>
+<p>os.path.exists(path)：测试路径或文件等是否存在。如果存在返回True，否则返回False。</p>
+<h3 id="isfileisdirislink">isfile和isdir还有islink</h3>
+<p>os.path.isfile(path)：接受一个字符串路径变量，如果是文件那么返回True，否则返回False（也就是文件不存在或者不是文件是文件夹等情况都会返回False）。</p>
+<p>类似的有isdir和islink函数。</p>
+<h3 id="samefile">samefile函数</h3>
+<p>os.path.samefile(path1,path2)：如果两个文件或路径相同则返回True\
+，否则返回False。</p>
+<h3 id="getmtime">getmtime函数</h3>
+<p>os.path.getmtime(path)</p>
+<p>返回文件的最后修改时间，返回值是多少多少秒，可用time模块的ctime或localtime函数将其转换成time.struct_time
+对象，然后使用strftime来进行更好的格式输出。</p>
+<h3 id="getctime">getctime函数</h3>
+<p>类似getmtime，返回文件的最后创建时间。在unix系统中是指最后文件的元信息更改的时间。</p>
+<p>更多内容请参见<a href="https://docs.python.org/3/library/os.path.html">官方文档</a>。</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-05-05T00:00:00+08:00">2017年 5月 5日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2018-10-04T00:00:00+08:00">2018年 10月 4日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#pythonyu-yan-ref">python语言</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>

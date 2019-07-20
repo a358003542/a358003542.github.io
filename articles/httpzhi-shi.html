@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="baidu-site-verification" content="D4VqC4HppC" />
+	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="cdwanze"/>
+    <meta name="copyright" content="cdwanze"/>
+
+    <meta property="og:type" content="article"/>
+    <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", html5, " />
+
+<meta property="og:title" content="http知识 "/>
+<meta property="og:url" content="/articles/httpzhi-shi.html" />
+<meta property="og:description" content="HTTP知识 URL结构 URL结构如下: scheme:[//[user:password@]host[:port]][/]path[?query][#fragment] 其中: scheme: 描述访问服务器的协议，也就是如何获取该资源，最常见的是http，此外还有ftp等。 user:password: 这里用于http认证 host: 那里获取资源 port: 连接端口号是多少 path: 具体访问该资源的path query: 其他额外参数 fragment: 片段，为client使用。还有一个params不太常用。 URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作。具体转义字符是 % ，比如空格SPACE，具体在URL中的表示就是 %20 。即使是ascii里面，也有一些字符需要转义，然后比如中文字符等，也需要如此utf-8编码和转义。比如 &#34;书&#34; &gt;&gt;&gt; &#39;书&#39;.encode(&#39;utf-8&#39;) b&#39;\xe4\xb9 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2018-05-28T00:00:00+08:00" />
+<meta property="" content="2018-08-16T00:00:00+08:00" />
+<meta name="twitter:title" content="http知识 ">
+<meta name="twitter:description" content="HTTP知识 URL结构 URL结构如下: scheme:[//[user:password@]host[:port]][/]path[?query][#fragment] 其中: scheme: 描述访问服务器的协议，也就是如何获取该资源，最常见的是http，此外还有ftp等。 user:password: 这里用于http认证 host: 那里获取资源 port: 连接端口号是多少 path: 具体访问该资源的path query: 其他额外参数 fragment: 片段，为client使用。还有一个params不太常用。 URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作。具体转义字符是 % ，比如空格SPACE，具体在URL中的表示就是 %20 。即使是ascii里面，也有一些字符需要转义，然后比如中文字符等，也需要如此utf-8编码和转义。比如 &#34;书&#34; &gt;&gt;&gt; &#39;书&#39;.encode(&#39;utf-8&#39;) b&#39;\xe4\xb9 …">
+
+    <title>http知识  · cdwanze的博文
+</title>
+
+
+    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
+    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
+                 <ul class="dropdown-menu">
+                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
+                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
+                </ul>
+                </li>
+
+
+                <li >
+                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
+                <li >
+                    <a href="/gong-gao.html">公告</a></li>
+            </ul>
+
+            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
+                <div class="form-group">
+                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/httpzhi-shi.html"> http知识  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#http">HTTP知识</a></li>
+<li><a href="#url">URL结构</a><ul>
+<li><a href="#http-header">http header详解</a></li>
+<li><a href="#http_1">http 请求信息包</a></li>
+<li><a href="#headers">请求headers详解</a></li>
+<li><a href="#http_2">http 响应信息包</a></li>
+<li><a href="#headers_1">响应headers详解</a></li>
+<li><a href="#http_3">http状态码详</a></li>
+</ul>
+</li>
+<li><a href="#_1">参考资料<a id="orgheadline9"></a></a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="http">HTTP知识</h2>
+<h2 id="url">URL结构</h2>
+<p>URL结构如下:</p>
+<div class="highlight"><pre><span></span>scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
+</pre></div>
+<p>其中:</p>
+<ul>
+<li><strong>scheme:</strong> 描述访问服务器的协议，也就是如何获取该资源，最常见的是http，此外还有ftp等。</li>
+<li><strong>user:password:</strong> 这里用于http认证</li>
+<li><strong>host:</strong> 那里获取资源</li>
+<li><strong>port:</strong> 连接端口号是多少</li>
+<li><strong>path:</strong> 具体访问该资源的path</li>
+<li><strong>query:</strong> 其他额外参数</li>
+<li><strong>fragment:</strong> 片段，为client使用。还有一个params不太常用。</li>
+</ul>
+<p>URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作。具体转义字符是 <code>%</code> ，比如空格SPACE，具体在URL中的表示就是 <code>%20</code> 。即使是ascii里面，也有一些字符需要转义，然后比如中文字符等，也需要如此utf-8编码和转义。比如 "书"</p>
+<div class="highlight"><pre><span></span>    &gt;&gt;&gt; '书'.encode('utf-8')
+    b'\xe4\xb9\xa6'
+</pre></div>
+<p>在URL中对应的就是 <code>%e4%b9%a6</code> 。还有其他一些细节，当然实际操作中各个编程语言都提供了良好的函数接口了的，比如python的urlencode函数。</p>
+<h3 id="http-header">http header详解</h3>
+<p>本小节主要参考了 <a href="http://kb.cnblogs.com/page/92320/">这个网页</a> ，内容整理得不错，都搬过来了，做备份用。</p>
+<p>http协议过程分为http请求过程和http响应过程，http请求过程就是发送http请求信息包，http响应过程就是发送http响应信息包的过程。</p>
+<h3 id="http_1">http 请求信息包</h3>
+<p>http请求信息包格式如下:</p>
+<div class="highlight"><pre><span></span>    &lt;method&gt; &lt;URL&gt; &lt;version&gt;
+
+    &lt;headers&gt;
+
+    &lt;entity-body&gt;
+</pre></div>
+<p>比如打开google主页的请求包是:</p>
+<div class="highlight"><pre><span></span>    <span class="nt">GET</span> <span class="o">/</span> <span class="nt">HTTP</span><span class="o">/</span><span class="nt">1</span><span class="p">.</span><span class="nc">1</span>
+    <span class="nt">Host</span><span class="o">:</span> <span class="nt">www</span><span class="p">.</span><span class="nc">google</span><span class="p">.</span><span class="nc">com</span>
+    <span class="nt">User-Agent</span><span class="o">:</span> <span class="nt">Mozilla</span><span class="o">/</span><span class="nt">5</span><span class="p">.</span><span class="nc">0</span> <span class="o">(</span><span class="nt">X11</span><span class="o">;</span> <span class="nt">Ubuntu</span><span class="o">;</span> <span class="nt">Linux</span> <span class="nt">x86_64</span><span class="o">;</span> <span class="nt">rv</span><span class="p">:</span><span class="nd">40</span><span class="p">.</span><span class="nc">0</span><span class="o">)</span> <span class="nt">Gecko</span><span class="o">/</span><span class="nt">20100101</span> <span class="nt">Firefox</span><span class="o">/</span><span class="nt">40</span><span class="p">.</span><span class="nc">0</span>
+    <span class="o">........</span>
+</pre></div>
+<p>其中第一行为大家熟知， 就是 <code>GET</code> 方法，具体打开的URL是 <code>/</code> ，然后http的version是 <code>HTTP/1.1</code> 。然后后面的请求包header内容不定，后面再细讲。请求信息包大多都没有entity-body，也就是额外的content内容，但就算没有header完了也要留一空白行。</p>
+<h3 id="headers">请求headers详解</h3>
+<table>
+<colgroup>
+<col class="org-left"/>
+<col class="org-left"/>
+<col class="org-left"/>
+</colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">header</th>
+<th class="org-left" scope="col">解释</th>
+<th class="org-left" scope="col">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Accept</td>
+<td class="org-left">指定客户端能够接收的内容类型</td>
+<td class="org-left">Accept: text/plain, text/html</td>
+</tr>
+<tr>
+<td class="org-left">Accept-Charset</td>
+<td class="org-left">浏览器可以接受的字符编码集</td>
+<td class="org-left">Accept-Charset: iso-8859-5</td>
+</tr>
+<tr>
+<td class="org-left">Accept-Encoding</td>
+<td class="org-left">指定浏览器可以支持的web服务器返回内容压缩编码类型</td>
+<td class="org-left">Accept-Encoding: compress, gzip</td>
+</tr>
+<tr>
+<td class="org-left">Accept-Language</td>
+<td class="org-left">浏览器可接受的语言</td>
+<td class="org-left">Accept-Language: en,zh</td>
+</tr>
+<tr>
+<td class="org-left">Accept-Ranges</td>
+<td class="org-left">可以请求网页实体的一个或者多个子范围字段</td>
+<td class="org-left">Accept-Ranges: bytes</td>
+</tr>
+<tr>
+<td class="org-left">Authorization</td>
+<td class="org-left">HTTP授权的授权证书</td>
+<td class="org-left">Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+</tr>
+<tr>
+<td class="org-left">Cache-Control</td>
+<td class="org-left">指定请求和响应遵循的缓存机制</td>
+<td class="org-left">Cache-Control: no-cache</td>
+</tr>
+<tr>
+<td class="org-left">Connection</td>
+<td class="org-left">表示是否需要持久连接   （HTTP 1.1默认进行持久连接）</td>
+<td class="org-left">Connection: close</td>
+</tr>
+<tr>
+<td class="org-left">Cookie</td>
+<td class="org-left">HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器。</td>
+<td class="org-left">Cookie: $Version=1; Skin=new;</td>
+</tr>
+<tr>
+<td class="org-left">Content-Length</td>
+<td class="org-left">请求的内容长度</td>
+<td class="org-left">Content-Length: 348</td>
+</tr>
+<tr>
+<td class="org-left">Content-Type</td>
+<td class="org-left">请求的与实体对应的MIME信息</td>
+<td class="org-left">Content-Type: application/x-www-form-urlencoded</td>
+</tr>
+<tr>
+<td class="org-left">Date</td>
+<td class="org-left">请求发送的日期和时间</td>
+<td class="org-left">Date: Tue, 15 Nov 2010 08:12:31 GMT</td>
+</tr>
+<tr>
+<td class="org-left">Expect</td>
+<td class="org-left">请求的特定的服务器行为</td>
+<td class="org-left">Expect: 100-continue</td>
+</tr>
+<tr>
+<td class="org-left">From</td>
+<td class="org-left">发出请求的用户的Email</td>
+<td class="org-left">From: user@email.com</td>
+</tr>
+<tr>
+<td class="org-left">Host</td>
+<td class="org-left">指定请求的服务器的域名和端口号</td>
+<td class="org-left">Host: www.zcmhi.com</td>
+</tr>
+<tr>
+<td class="org-left">If-Match</td>
+<td class="org-left">只有请求内容与实体相匹配才有效</td>
+<td class="org-left">If-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td class="org-left">If-Modified-Since</td>
+<td class="org-left">如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码</td>
+<td class="org-left">If-Modified-Since: Sat, 29 Oct 2010 19:43:31 GMT</td>
+</tr>
+<tr>
+<td class="org-left">If-None-Match</td>
+<td class="org-left">如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变</td>
+<td class="org-left">If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td class="org-left">If-Range</td>
+<td class="org-left">如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag</td>
+<td class="org-left">If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td class="org-left">If-Unmodified-Since</td>
+<td class="org-left">只在实体在指定时间之后未被修改才请求成功</td>
+<td class="org-left">If-Unmodified-Since: Sat, 29 Oct 2010 19:43:31 GMT</td>
+</tr>
+<tr>
+<td class="org-left">Max-Forwards</td>
+<td class="org-left">限制信息通过代理和网关传送的时间</td>
+<td class="org-left">Max-Forwards: 10</td>
+</tr>
+<tr>
+<td class="org-left">Pragma</td>
+<td class="org-left">用来包含实现特定的指令</td>
+<td class="org-left">Pragma: no-cache</td>
+</tr>
+<tr>
+<td class="org-left">Proxy-Authorization</td>
+<td class="org-left">连接到代理的授权证书</td>
+<td class="org-left">Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+</tr>
+<tr>
+<td class="org-left">Range</td>
+<td class="org-left">只请求实体的一部分，指定范围</td>
+<td class="org-left">Range: bytes=500-999</td>
+</tr>
+<tr>
+<td class="org-left">Referer</td>
+<td class="org-left">先前网页的地址，当前请求网页紧随其后,即来路</td>
+<td class="org-left">Referer: <http: 71.html="" archives="" www.zcmhi.com=""></http:></td>
+</tr>
+<tr>
+<td class="org-left">TE</td>
+<td class="org-left">客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息</td>
+<td class="org-left">TE: trailers,deflate;q=0.5</td>
+</tr>
+<tr>
+<td class="org-left">Upgrade</td>
+<td class="org-left">向服务器指定某种传输协议以便服务器进行转换（如果支持）</td>
+<td class="org-left">Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
+</tr>
+<tr>
+<td class="org-left">User-Agent</td>
+<td class="org-left">User-Agent的内容包含发出请求的用户信息</td>
+<td class="org-left">User-Agent: Mozilla/5.0 (Linux; X11)</td>
+</tr>
+<tr>
+<td class="org-left">Via</td>
+<td class="org-left">通知中间网关或代理服务器地址，通信协议</td>
+<td class="org-left">Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
+</tr>
+<tr>
+<td class="org-left">Warning</td>
+<td class="org-left">关于消息实体的警告信息</td>
+<td class="org-left">Warn: 199 Miscellaneous warning</td>
+</tr>
+</tbody>
+</table>
+<h3 id="http_2">http 响应信息包</h3>
+<p>http响应信息包格式如下:</p>
+<div class="highlight"><pre><span></span>    &lt;version&gt; &lt;status-code&gt; &lt;reason-phrase&gt;
+
+    &lt;headers&gt;
+
+    &lt;entity-body&gt;
+</pre></div>
+<p>比如:</p>
+<div class="highlight"><pre><span></span>    <span class="nt">HTTP</span><span class="o">/</span><span class="nt">1</span><span class="p">.</span><span class="nc">1</span> <span class="nt">200</span> <span class="nt">OK</span>
+    <span class="nt">Cache-Control</span><span class="o">:</span> <span class="nt">private</span>
+    <span class="nt">Content-Length</span><span class="o">:</span> <span class="nt">231</span>
+    <span class="nt">Content-Type</span><span class="o">:</span> <span class="nt">text</span><span class="o">/</span><span class="nt">html</span><span class="o">;</span> <span class="nt">charset</span><span class="o">=</span><span class="nt">UTF-8</span>
+    <span class="nt">Date</span><span class="o">:</span> <span class="nt">Wed</span><span class="o">,</span> <span class="nt">02</span> <span class="nt">Sep</span> <span class="nt">2015</span> <span class="nt">08</span><span class="p">:</span><span class="nd">47</span><span class="p">:</span><span class="nd">52</span> <span class="nt">GMT</span>
+    <span class="o">....</span>
+</pre></div>
+<p>这个响应体 <code>HTTP/1.1</code> 就是的就是http的version，然后 <code>200</code> 是具体的http状态码，然后 <code>OK</code> 是一个描述文字。然后是响应体的header，然后空一行，然后是响应信息包的具体发送的cotent内容。</p>
+<p>http的方法method和状态码为大家所熟知，下面就header的一些内容列出来说明之。</p>
+<h3 id="headers_1">响应headers详解</h3>
+<table>
+<colgroup>
+<col class="org-left"/>
+<col class="org-left"/>
+<col class="org-left"/>
+</colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">header</th>
+<th class="org-left" scope="col">解释</th>
+<th class="org-left" scope="col">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Accept-Ranges</td>
+<td class="org-left">表明服务器是否支持指定范围请求及哪种类型的分段请求</td>
+<td class="org-left">Accept-Ranges: bytes</td>
+</tr>
+<tr>
+<td class="org-left">Age</td>
+<td class="org-left">从原始服务器到代理缓存形成的估算时间（以秒计，非负）</td>
+<td class="org-left">Age: 12</td>
+</tr>
+<tr>
+<td class="org-left">Allow</td>
+<td class="org-left">对某网络资源的有效的请求行为，不允许则返回405</td>
+<td class="org-left">Allow: GET, HEAD</td>
+</tr>
+<tr>
+<td class="org-left">Cache-Control</td>
+<td class="org-left">告诉所有的缓存机制是否可以缓存及哪种类型</td>
+<td class="org-left">Cache-Control: no-cache</td>
+</tr>
+<tr>
+<td class="org-left">Content-Encoding</td>
+<td class="org-left">web服务器支持的返回内容压缩编码类型。</td>
+<td class="org-left">Content-Encoding: gzip</td>
+</tr>
+<tr>
+<td class="org-left">Content-Language</td>
+<td class="org-left">响应体的语言</td>
+<td class="org-left">Content-Language: en,zh</td>
+</tr>
+<tr>
+<td class="org-left">Content-Length</td>
+<td class="org-left">响应体的长度</td>
+<td class="org-left">Content-Length: 348</td>
+</tr>
+<tr>
+<td class="org-left">Content-Location</td>
+<td class="org-left">请求资源可替代的备用的另一地址</td>
+<td class="org-left">Content-Location: /index.htm</td>
+</tr>
+<tr>
+<td class="org-left">Content-MD5</td>
+<td class="org-left">返回资源的MD5校验值</td>
+<td class="org-left">Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</td>
+</tr>
+<tr>
+<td class="org-left">Content-Range</td>
+<td class="org-left">在整个返回体中本部分的字节位置</td>
+<td class="org-left">Content-Range: bytes 21010-47021/47022</td>
+</tr>
+<tr>
+<td class="org-left">Content-Type</td>
+<td class="org-left">返回内容的MIME类型</td>
+<td class="org-left">Content-Type: text/html; charset=utf-8</td>
+</tr>
+<tr>
+<td class="org-left">Date</td>
+<td class="org-left">原始服务器消息发出的时间</td>
+<td class="org-left">Date: Tue, 15 Nov 2010 08:12:31 GMT</td>
+</tr>
+<tr>
+<td class="org-left">ETag</td>
+<td class="org-left">请求变量的实体标签的当前值</td>
+<td class="org-left">ETag: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td class="org-left">Expires</td>
+<td class="org-left">响应过期的日期和时间</td>
+<td class="org-left">Expires: Thu, 01 Dec 2010 16:00:00 GMT</td>
+</tr>
+<tr>
+<td class="org-left">Last-Modified</td>
+<td class="org-left">请求资源的最后修改时间</td>
+<td class="org-left">Last-Modified: Tue, 15 Nov 2010 12:45:26 GMT</td>
+</tr>
+<tr>
+<td class="org-left">Location</td>
+<td class="org-left">用来重定向接收方到非请求URL的位置来完成请求或标识新的资源</td>
+<td class="org-left">Location: <http: 94.html="" archives="" www.zcmhi.com=""></http:></td>
+</tr>
+<tr>
+<td class="org-left">Pragma</td>
+<td class="org-left">包括实现特定的指令，它可应用到响应链上的任何接收方</td>
+<td class="org-left">Pragma: no-cache</td>
+</tr>
+<tr>
+<td class="org-left">Proxy-Authenticate</td>
+<td class="org-left">它指出认证方案和可应用到代理的该URL上的参数</td>
+<td class="org-left">Proxy-Authenticate: Basic</td>
+</tr>
+<tr>
+<td class="org-left">refresh</td>
+<td class="org-left">应用于重定向或一个新的资源被创造，在5秒之后重定向</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left">Retry-After</td>
+<td class="org-left">如果实体暂时不可取，通知客户端在指定时间之后再次尝试</td>
+<td class="org-left">Retry-After: 120</td>
+</tr>
+<tr>
+<td class="org-left">Server</td>
+<td class="org-left">web服务器软件名称</td>
+<td class="org-left">Server: Apache/1.3.27 (Unix) (Red-Hat/Linux)</td>
+</tr>
+<tr>
+<td class="org-left">Set-Cookie</td>
+<td class="org-left">设置Http Cookie</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left">Trailer</td>
+<td class="org-left">指出头域在分块传输编码的尾部存在</td>
+<td class="org-left">Trailer: Max-Forwards</td>
+</tr>
+<tr>
+<td class="org-left">Transfer-Encoding</td>
+<td class="org-left">文件传输编码</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left">Vary</td>
+<td class="org-left">告诉下游代理是使用缓存响应还是从原始服务器请求</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left">Via</td>
+<td class="org-left">告知代理客户端响应是通过哪里发送的</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left">Warning</td>
+<td class="org-left">警告实体可能存在的问题</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left">WWW-Authenticate</td>
+<td class="org-left">表明客户端请求实体应该使用的授权方案</td>
+<td class="org-left">WWW-Authenticate: Basic</td>
+</tr>
+</tbody>
+</table>
+<h3 id="http_3">http状态码详</h3>
+<ul>
+<li><strong>MIME type:</strong> 其全称是Multipurpose Internet Mail Extensions ，可以看得出来和email系统有关，但不管怎么说，我们知道其在http里面用于描述文件类型即可。具体就是对应的</li>
+</ul>
+<div class="highlight"><pre><span></span>    Content-type : image/jpeg
+</pre></div>
+<p>这一行，image/jpeg 就是MIME type描述，image是主文件类型，jpeg是次文件类型。最常见的是html文件，其MIME type是 <code>text/html</code> 。</p>
+<ul>
+<li><strong>URI:</strong> Uniform Resource Identifier ，此外常见的还有URN和URL概念。参考了 <a href="http://stackoverflow.com/questions/4913343/what-is-the-difference-between-uri-url-and-urn">这个网页</a> 。URN和URL都属于URI的范畴，也就是都视同用一连串的字符串来将所有的资源文件分别表示出来，而URN和URL是两种不同的标识方法，URL有点类似于门牌号码街道的描述，其大致有如下结构:</li>
+</ul>
+<div class="highlight"><pre><span></span>    scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
+</pre></div>
+<p>而URN比如:</p>
+<div class="highlight"><pre><span></span>    urn:isbn:0451450523
+</pre></div>
+<p>目前几乎绝大部分URI就是URL，URN只在某些特别领域使用。</p>
+<h1 id="_1">参考资料<a id="orgheadline9"></a></h1>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2018-05-28T00:00:00+08:00">2018年 5月 28日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2018-08-16T00:00:00+08:00">2018年 8月 16日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#html5-ref">html5</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+    <script src="/theme/js/jquery.min.js"></script>
+<script src="/theme/js/bootstrap.min.js"></script>
+<script>
+    function validateForm(query) {
+        return (query.length > 0);
+    }
+</script>
+
+
+    
+
+
+
+</body>
+</html>
