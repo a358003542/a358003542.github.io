@@ -148,6 +148,42 @@
  
                 <article>
 
+                    <h1 class="page-header"><a href="/articles/flask-context-faq.html">flask上下文释疑  </a></h1>
+
+                    <section>
+                        posted in
+                        <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                        </a>
+                        <div class="recent-posts-time">
+                            <time pubdate="pubdate" datetime="2019-07-22T00:00:00+08:00">2019年 7月 22日
+                            </time>
+                        </div>
+                    </section>
+                    
+<h3 id="gunicornflask">问题一 gunicorn多进程模式是怎样和flask作用的</h3>
+<p>参考 <a href="https://stackoverflow.com/questions/670891/is-there-a-way-for-multiple-processes-to-share-a-listening-socket#">这个问题</a> 的解答：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8888</span><span class="p">))</span>
+    <span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Child Process</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"child"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
+
+    <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">c</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept …</span></pre></div>
+                </article>
+
+
+                <article>
+
                     <h1 class="page-header"><a href="/articles/python-advanced.html">python语言学习进阶  </a></h1>
 
                     <section>
@@ -797,45 +833,6 @@ $$</div>
 <p>准确率可以简单理解为模型的正确率，正的都预测为正，负的都预测为负，那么准确率为1，这个模型真准。</p>
 <p>召回率就是针对正类的样本池，模型预测为正类的比率。</p>
 <p>在推荐系统，精确率又叫做查准率 …</p>
-                </article>
-
-
-                <article>
-
-                    <h1 class="page-header"><a href="/articles/flask-module.html">flask模块  </a></h1>
-
-                    <section>
-                        posted in
-                        <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                        </a>
-                        <div class="recent-posts-time">
-                            <time pubdate="pubdate" datetime="2019-01-03T00:00:00+08:00">2019年 1月 3日
-                            </time>
-                        </div>
-                    </section>
-                    
-<h2 id="_1">前言</h2>
-<p>django是一种构建大型商务网站的解决方案，除非目前贵公司的技术栈是已经架构在django之上的，否则不管是个人性质的小项目，或者刚刚开始的新的项目，个人推荐flask多于django的。当然在flask和tornado之间如何选择上，个人觉得更多的是在你对python的异步这一块的理解上，如果你懂python的异步，并且也知道你要做的api对并发和速度都有很高的要求，那么就应该选择tornado，否则就选择flask。</p>
-<p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
-<h2 id="_2">初始运行</h2>
-<p>windows </p>
-<div class="highlight"><pre><span></span>set FLASK_APP=hello.py
-flask run
-</pre></div>
-<p>linux </p>
-<div class="highlight"><pre><span></span>export FLASK_APP=hello.py
-flask run
-</pre></div>
-<p>flask的调试模式：
-开启调试模式是： <code>export FLASK_DEBUG=1</code></p>
-<ul>
-<li>重载器 所有源码文件变动自动重启服务器</li>
-<li>调试器 出现异常在浏览器中显示异常信息</li>
-</ul>
-<p>在生产服务器上一定要把调试模式关闭！</p>
-<p>flask run 额外的选项
-<code>--host 0.0.0.0</code></p>
-<p><code>--port 8080 …</code></p>
                 </article>
 
   <nav aria-label="Page Navigation">
