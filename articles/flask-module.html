@@ -124,9 +124,13 @@
 <li><a href="#flash">flash消息</a></li>
 <li><a href="#_7">对接数据库</a></li>
 <li><a href="#python-shell">集成python shell</a></li>
-<li><a href="#flask-migrate">flask-migrate</a></li>
-<li><a href="#_8">电子邮件</a></li>
-<li><a href="#_9">大型应用结构</a></li>
+<li><a href="#flask-migrate">flask-migrate</a><ul>
+<li><a href="#_8">删除无用的迁移脚本</a></li>
+<li><a href="#_9">彻底从零开始的迁移脚本</a></li>
+</ul>
+</li>
+<li><a href="#_10">电子邮件</a></li>
+<li><a href="#_11">大型应用结构</a></li>
 </ul>
 </div>
         </nav>
@@ -213,7 +217,7 @@ FLASK_DEBUG=1
 <li>after_request 每次请求后执行 如果程序没有抛出异常的话</li>
 <li>teardown_request 每次请求之后执行，即使抛出异常</li>
 </ul>
-<p>请求钩子和视图函数之间变量互通一般用上下文全局变量 g</p>
+<p>请求钩子和视图函数之间变量互通一般用上下文全局变量 g ，比如 <code>before_request</code> 处理的时候设置 <code>g.user</code> 为登录用户，后面视图函数可以调用 <code>g.user</code> 来得知当前登录用户。</p>
 <h2 id="flask_3">flask的响应对象</h2>
 <div class="highlight"><pre><span></span>response = make_response(content, status_code)
 response.set_cookie('a',1)
@@ -335,11 +339,33 @@ def page_not_found(e):
 <p>cmd里面要配置好环境变量 <code>export FLASK_APP=hello.py</code> </p>
 <h2 id="flask-migrate">flask-migrate</h2>
 <p><code>flask-migrate</code> 其基于sqlalchemy 的  alembic ，然后做了一些额外的工作。 主要提供了一些便捷的命令行接口，具体使用还是要熟悉sqlalchemy和alembic。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask_migrate</span> <span class="kn">import</span> <span class="n">Migrate</span>
+<p>一个简要的例子如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="kn">from</span> <span class="nn">flask_sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemy</span>
+<span class="kn">from</span> <span class="nn">flask_migrate</span> <span class="kn">import</span> <span class="n">Migrate</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'SQLALCHEMY_DATABASE_URI'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sqlite:///app.db'</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">SQLAlchemy</span><span class="p">()</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 <span class="n">migrate</span> <span class="o">=</span> <span class="n">Migrate</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
 </pre></div>
-<p>然后运行</p>
+<p>新项目首先要运行：</p>
 <div class="highlight"><pre><span></span>flask db init
+</pre></div>
+<p>这对应alembic的 <code>alembic init</code> 命令，其将创建 <code>migrations</code> 文件夹，里面的文件就是alembic需要的，migrations文件夹是推荐和源代码一起加入版本控制的。</p>
+<p>和简单的使用的alembic不同，其新建的 <code>env.py</code> 有一些优化，flask的配置环境里只要配置了 <code>SQLALCHEMY_DATABASE_URI</code> 这样变量，alembic就能正确找到数据库了。</p>
+<p>然后：</p>
+<div class="highlight"><pre><span></span>flask db revision # 对应的是 alembic revison
+flask db migrate # 对应的是 alembic revision --autogenerate
+flask db upgrade # 对应的是 alembic upgrade
+flask db downgrade # 对应的是 alembic downgrade
 </pre></div>
 <p>一般工作流程：</p>
 <ol>
@@ -348,9 +374,64 @@ def page_not_found(e):
 <li>检查自动生成的脚本，改正不正确的地方</li>
 <li><code>flask db upgrade</code>  将改动应用到数据库</li>
 </ol>
-<h2 id="_8">电子邮件</h2>
+<h3 id="_8">删除无用的迁移脚本</h3>
+<p>alembic的自动生成脚本并不是万能的，需要人工审核。而就算没问题的某些迁移脚本，如果你觉得已经毫无意义了，那么将那个版本的迁移脚本删除是没有任何问题的。</p>
+<h3 id="_9">彻底从零开始的迁移脚本</h3>
+<p>虽然alembic的官方文档觉得没有这个必要，不过我觉得还是很有用的。</p>
+<ol>
+<li>首先我们在flask应用下加上这样两个命令，负责最开始的创建数据库和根本代码生成表格工作。</li>
+<li>表格生成成功之后后面都用flask-migrate 或者说 alembic来管理，经过测试比如在models.py 哪里新加一列，然后利用 <code>flask db migrate</code> 是能够自动检测新加入了一列，从而自动生成的代码会更加精准。</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">drop_database</span>
+
+<span class="nd">@app.cli.command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">initdb</span><span class="p">():</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'本命令只用于数据库初始化，后续更改请使用alembic来管理，确定请输入 [Y]'</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">user_input</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'y'</span><span class="p">:</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">engine</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
+            <span class="n">create_database</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">'db exists...'</span><span class="p">)</span>
+            <span class="kn">import</span> <span class="nn">sys</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+        <span class="kn">from</span> <span class="nn">alembic.config</span> <span class="kn">import</span> <span class="n">Config</span>
+        <span class="kn">from</span> <span class="nn">alembic</span> <span class="kn">import</span> <span class="n">command</span>
+        <span class="n">alembic_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">'migrations/alembic.ini'</span><span class="p">)</span>
+
+        <span class="n">command</span><span class="o">.</span><span class="n">stamp</span><span class="p">(</span><span class="n">alembic_cfg</span><span class="p">,</span> <span class="s2">"head"</span><span class="p">)</span>
+
+
+<span class="nd">@app.cli.command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">dropdb</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    TODO 生产环境不允许调用本命令</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'警告!!! 本操作将删除数据库，数据将完全丢失，确定请输入： [YYY]'</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">user_input</span> <span class="o">==</span> <span class="s1">'YYY'</span><span class="p">:</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">engine</span>
+
+        <span class="n">db</span><span class="o">.</span><span class="n">drop_all</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
+            <span class="n">drop_database</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">'db not exists...'</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+<h2 id="_10">电子邮件</h2>
 <p>flask-mail</p>
-<h2 id="_9">大型应用结构</h2>
+<h2 id="_11">大型应用结构</h2>
             
             
             <hr/>
