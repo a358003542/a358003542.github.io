@@ -118,19 +118,23 @@
 <li><a href="#_3">加入错误页面</a></li>
 <li><a href="#url_for">url_for</a></li>
 <li><a href="#_4">静态文件</a></li>
-<li><a href="#flask-moment">flask-moment</a></li>
-<li><a href="#_5">表单</a></li>
-<li><a href="#_6">表单提交模式</a></li>
 <li><a href="#flash">flash消息</a></li>
-<li><a href="#_7">对接数据库</a></li>
-<li><a href="#python-shell">集成python shell</a></li>
+<li><a href="#_5">大型应用结构</a></li>
+<li><a href="#_6">数据库相关</a></li>
+<li><a href="#flask-shell">flask shell命令定制</a></li>
 <li><a href="#flask-migrate">flask-migrate</a><ul>
-<li><a href="#_8">删除无用的迁移脚本</a></li>
-<li><a href="#_9">彻底从零开始的迁移脚本</a></li>
+<li><a href="#_7">删除无用的迁移脚本</a></li>
+<li><a href="#_8">彻底从零开始的迁移脚本</a></li>
 </ul>
 </li>
-<li><a href="#_10">电子邮件</a></li>
-<li><a href="#_11">大型应用结构</a></li>
+<li><a href="#flask-moment">flask-moment</a></li>
+<li><a href="#flask-wtf">flask-wtf</a><ul>
+<li><a href="#_9">表单提交模式</a></li>
+</ul>
+</li>
+<li><a href="#flask-mail">flask-mail</a></li>
+<li><a href="#flask-login">flask-login</a></li>
+<li><a href="#_10">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -240,6 +244,11 @@ response.set_cookie('a',1)
 def page_not_found(e):
     return render_template('404.html'),404
 </pre></div>
+<p>如果是蓝图的话，要有全局的效果，则应该使用 <code>app_errorhandler</code> ：</p>
+<div class="highlight"><pre><span></span><span class="nd">@main.app_errorhandler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">page_not_found</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'404.html'</span><span class="p">),</span> <span class="mi">404</span>
+</pre></div>
 <h2 id="url_for">url_for</h2>
 <div class="highlight"><pre><span></span>url_for('index', _external=True)
 </pre></div>
@@ -248,73 +257,12 @@ def page_not_found(e):
 <li>送入一些参数进去</li>
 <li><code>_external</code> 绝对路径 ，一般使用相对路径即可，浏览器之外的某些链接一定要使用绝对路径</li>
 </ol>
+<p>如果是对应蓝图的视图函数，则前面应该加上蓝图名：</p>
+<div class="highlight"><pre><span></span>url_for('main.index')
+</pre></div>
 <h2 id="_4">静态文件</h2>
 <div class="highlight"><pre><span></span>url('static', filename='favicon.ico')
 </pre></div>
-<h2 id="flask-moment">flask-moment</h2>
-<p>Moment JS 送入UTC时间会自动转换成为本地时间，服务器那边的时间戳最好是记录UTC时间。用户则应该看到本地时间。</p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">scripts</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x">    </span><span class="cp">{{</span> <span class="nb">super</span><span class="o">()</span> <span class="cp">}}</span><span class="x"></span>
-<span class="x">    </span><span class="cp">{{</span> <span class="nv">moment.include_moment</span><span class="o">()</span> <span class="cp">}}</span><span class="x"></span>
-<span class="x">    </span><span class="cp">{{</span> <span class="nv">moment.lang</span><span class="o">(</span><span class="s2">"zh-cn"</span><span class="o">)</span> <span class="cp">}}</span><span class="x"></span>
-<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
-</pre></div>
-<p>在模板上使用：</p>
-<div class="highlight"><pre><span></span>    <span class="nt">&lt;p&gt;</span>当前时间是： <span class="cp">{{</span> <span class="nv">moment</span><span class="o">(</span><span class="nv">current_time</span><span class="o">)</span><span class="nv">.format</span><span class="o">(</span><span class="s1">'LLLL'</span><span class="o">)</span> <span class="cp">}}</span>.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span><span class="cp">{{</span> <span class="nv">moment</span><span class="o">(</span><span class="nv">current_time</span><span class="o">)</span><span class="nv">.fromNow</span><span class="o">(</span><span class="nv">refresh</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>刷新过.<span class="nt">&lt;/p&gt;</span>
-</pre></div>
-<p>具体格式请参看 <a href="http://momentjs.cn/">MomentJs 官网</a> 。</p>
-<h2 id="_5">表单</h2>
-<p>flask-wtf </p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask_wtf</span> <span class="kn">import</span> <span class="n">FlaskForm</span>
-<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">SubmitField</span>
-<span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">DataRequired</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'SECRET_KEY'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'hard to guess string'</span>
-
-<span class="k">class</span> <span class="nc">NameForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'请输入您的名字？'</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
-    <span class="n">submit</span> <span class="o">=</span> <span class="n">SubmitField</span><span class="p">(</span><span class="s1">'提交'</span><span class="p">)</span>
-</pre></div>
-<p>WTForms支持的HTML字段</p>
-<ul>
-<li>BooleanField 复选框</li>
-<li>DateField 文本字段 for datetime.date</li>
-<li>DateTimeField 文本字段 for datetime.datetime</li>
-<li>DecimalField 文本字段 for  decimal.Decimal</li>
-<li>FileField 文件上传字段</li>
-<li>HiddenField 隐藏文本字段</li>
-<li>FieldList 一组指定类型的字段</li>
-<li>FloatField 文本字段 for float</li>
-<li>FormField 把一个表单作为字段嵌入另一个表单</li>
-<li>IntegerField 文本字段 for integer</li>
-<li>PasswordField 密码文本字段</li>
-<li>RadioField 单选按钮</li>
-<li>SelectField 下拉列表</li>
-<li>SelectmultipleField 下拉多选列表</li>
-<li>SubmitField 表单提交按钮</li>
-<li>StringField 文本字段</li>
-<li>TextAreaField 多行文本字段</li>
-</ul>
-<p>WTForms提供的验证函数</p>
-<ul>
-<li>DataRequired 确保类型转换后字段有数据</li>
-<li>Email 验证电子邮箱</li>
-<li>EqualTo 比较两个字段的值 常用于比较两次密码是否输入一致</li>
-<li>InputRequired 确保类型转换前字段有数据</li>
-<li>IPAddress 验证IPv4地址</li>
-<li>Length 长度验证</li>
-<li>MacAddress 验证MAC地址</li>
-<li>NumberRange 数字范围校验</li>
-<li>Optional 允许字段没有输入，将跳过其他校验函数</li>
-<li>Regexp 正则表达式校验</li>
-<li>URL URL校验</li>
-<li>UUID UUID校验</li>
-<li>AnyOf 输入值在任一可能值中</li>
-<li>NoneOf 输入值不在一组可能值中</li>
-</ul>
-<h2 id="_6">表单提交模式</h2>
-<p>一般表单提交模式是 POST 重定向到本视图函数 GET ，POST操作需要保存用户的一些信息则修改session中的值。</p>
 <h2 id="flash">flash消息</h2>
 <p>flash消息方便让用户知道一些必要的信息。flash函数可以实现这点。然后模板文件上需要加上：</p>
 <div class="highlight"><pre><span></span>    <span class="cp">{%</span> <span class="k">for</span> <span class="nv">message</span> <span class="k">in</span> <span class="nv">get_flashed_messages</span><span class="o">()</span> <span class="cp">%}</span>
@@ -324,10 +272,48 @@ def page_not_found(e):
         <span class="nt">&lt;/div&gt;</span>
     <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
 </pre></div>
-<h2 id="_7">对接数据库</h2>
+<h2 id="_5">大型应用结构</h2>
+<p>请参看参考资料1，即有名的flasky项目的结构。下面简单说一下：</p>
+<ol>
+<li>
+<p>配置开发测试生产分离</p>
+</li>
+<li>
+<p>使用应用工厂函数 <code>create_app</code> 来延迟创建应用。</p>
+</li>
+<li>
+<p>使用蓝图（Blueprint）</p>
+</li>
+<li>
+<p>蓝图模块写法如下：</p>
+</li>
+</ol>
+<p>```python
+   from flask import Blueprint</p>
+<p>main = Blueprint('main', <strong>name</strong>)</p>
+<p>from . import views, errors
+   ```</p>
+<p>因为views errors模块那边还需要使用蓝图对象main，所以应该放在它的的后面引入进来。</p>
+<ul>
+<li>蓝图在应用中注册写法如下：</li>
+</ul>
+<p><code>python
+       from .main import main as main_blueprint
+       app.register_blueprint(main_blueprint)</code></p>
+<ul>
+<li>蓝图的错误页面需要使用 <code>app_errorhandler</code> 要注册为全局的错误处理，如果是 <code>errorhandler</code> 则只负责本蓝图内的错误。</li>
+</ul>
+<p><code>python
+   @main.app_errorhandler(404)
+   def page_not_found(e):
+       return render_template('404.html'), 404</code></p>
+<ul>
+<li>蓝图内注册的视图函数，用 <code>url_for</code> 来获取的是 <code>main.index</code> 这种形式，即蓝图名加上视图函数名。</li>
+</ul>
+<h2 id="_6">数据库相关</h2>
 <p><code>__tablename__</code> 定义表名，默认的表名没有遵循使用复数命名的约定 like  <code>users</code>  。</p>
 <p>这一块东西后面会补充一些，但更多的是sqlalchemy和sql那边的知识。</p>
-<h2 id="python-shell">集成python shell</h2>
+<h2 id="flask-shell">flask shell命令定制</h2>
 <div class="highlight"><pre><span></span><span class="nd">@app.shell_context_processor</span>
 <span class="k">def</span> <span class="nf">make_shell_context</span><span class="p">():</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">User</span><span class="o">=</span><span class="n">User</span><span class="p">,</span> <span class="n">Role</span><span class="o">=</span><span class="n">Role</span><span class="p">)</span>
@@ -374,9 +360,9 @@ flask db downgrade # 对应的是 alembic downgrade
 <li>检查自动生成的脚本，改正不正确的地方</li>
 <li><code>flask db upgrade</code>  将改动应用到数据库</li>
 </ol>
-<h3 id="_8">删除无用的迁移脚本</h3>
+<h3 id="_7">删除无用的迁移脚本</h3>
 <p>alembic的自动生成脚本并不是万能的，需要人工审核。而就算没问题的某些迁移脚本，如果你觉得已经毫无意义了，那么将那个版本的迁移脚本删除是没有任何问题的。</p>
-<h3 id="_9">彻底从零开始的迁移脚本</h3>
+<h3 id="_8">彻底从零开始的迁移脚本</h3>
 <p>虽然alembic的官方文档觉得没有这个必要，不过我觉得还是很有用的。</p>
 <ol>
 <li>首先我们在flask应用下加上这样两个命令，负责最开始的创建数据库和根本代码生成表格工作。</li>
@@ -429,9 +415,77 @@ flask db downgrade # 对应的是 alembic downgrade
 
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
 </pre></div>
-<h2 id="_10">电子邮件</h2>
+<h2 id="flask-moment">flask-moment</h2>
+<p>Moment JS 送入UTC时间会自动转换成为本地时间，服务器那边的时间戳最好是记录UTC时间。用户则应该看到本地时间。</p>
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">scripts</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nb">super</span><span class="o">()</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nv">moment.include_moment</span><span class="o">()</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nv">moment.lang</span><span class="o">(</span><span class="s2">"zh-cn"</span><span class="o">)</span> <span class="cp">}}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+<p>在模板上使用：</p>
+<div class="highlight"><pre><span></span>    <span class="nt">&lt;p&gt;</span>当前时间是： <span class="cp">{{</span> <span class="nv">moment</span><span class="o">(</span><span class="nv">current_time</span><span class="o">)</span><span class="nv">.format</span><span class="o">(</span><span class="s1">'LLLL'</span><span class="o">)</span> <span class="cp">}}</span>.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span><span class="cp">{{</span> <span class="nv">moment</span><span class="o">(</span><span class="nv">current_time</span><span class="o">)</span><span class="nv">.fromNow</span><span class="o">(</span><span class="nv">refresh</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>刷新过.<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+<p>具体格式请参看 <a href="http://momentjs.cn/">MomentJs 官网</a> 。</p>
+<h2 id="flask-wtf">flask-wtf</h2>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask_wtf</span> <span class="kn">import</span> <span class="n">FlaskForm</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">SubmitField</span>
+<span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">DataRequired</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'SECRET_KEY'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'hard to guess string'</span>
+
+<span class="k">class</span> <span class="nc">NameForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'请输入您的名字？'</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">SubmitField</span><span class="p">(</span><span class="s1">'提交'</span><span class="p">)</span>
+</pre></div>
+<p>WTForms支持的HTML字段</p>
+<ul>
+<li>BooleanField 复选框</li>
+<li>DateField 文本字段 for datetime.date</li>
+<li>DateTimeField 文本字段 for datetime.datetime</li>
+<li>DecimalField 文本字段 for  decimal.Decimal</li>
+<li>FileField 文件上传字段</li>
+<li>HiddenField 隐藏文本字段</li>
+<li>FieldList 一组指定类型的字段</li>
+<li>FloatField 文本字段 for float</li>
+<li>FormField 把一个表单作为字段嵌入另一个表单</li>
+<li>IntegerField 文本字段 for integer</li>
+<li>PasswordField 密码文本字段</li>
+<li>RadioField 单选按钮</li>
+<li>SelectField 下拉列表</li>
+<li>SelectmultipleField 下拉多选列表</li>
+<li>SubmitField 表单提交按钮</li>
+<li>StringField 文本字段</li>
+<li>TextAreaField 多行文本字段</li>
+</ul>
+<p>WTForms提供的验证函数</p>
+<ul>
+<li>DataRequired 确保类型转换后字段有数据</li>
+<li>Email 验证电子邮箱</li>
+<li>EqualTo 比较两个字段的值 常用于比较两次密码是否输入一致</li>
+<li>InputRequired 确保类型转换前字段有数据</li>
+<li>IPAddress 验证IPv4地址</li>
+<li>Length 长度验证</li>
+<li>MacAddress 验证MAC地址</li>
+<li>NumberRange 数字范围校验</li>
+<li>Optional 允许字段没有输入，将跳过其他校验函数</li>
+<li>Regexp 正则表达式校验</li>
+<li>URL URL校验</li>
+<li>UUID UUID校验</li>
+<li>AnyOf 输入值在任一可能值中</li>
+<li>NoneOf 输入值不在一组可能值中</li>
+</ul>
+<h3 id="_9">表单提交模式</h3>
+<p>一般表单提交模式是 POST 重定向到本视图函数 GET ，POST操作需要保存用户的一些信息则修改session中的值。</p>
+<h2 id="flask-mail">flask-mail</h2>
 <p>flask-mail</p>
-<h2 id="_11">大型应用结构</h2>
+<h2 id="flask-login">flask-login</h2>
+<p>flask-login引入进来之后 所有的jinja2模块都支持 <code>current_user</code> 这个变量了。</p>
+<h2 id="_10">参考资料</h2>
+<ol>
+<li>Flask Web 开发第二版 米格尔·格林贝格著 安道译</li>
+</ol>
             
             
             <hr/>

@@ -381,31 +381,25 @@ print(bin …</pre></div>
 <div class="highlight"><pre><span></span>{# ... #}
 </pre></div>
 <h2 id="_3">变量</h2>
-<p>这里算是jinja2模板的主体内容了，里面的变量可以直接使用，在render的时候传进去即可。然后 <code>object.a</code> 这样的dot法引用，或者 <code>object['a']</code> 这样的利用对象 <code>__getitem__</code> 内置方法来调用值的形式也支持。</p>
+<p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
 <div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="err">...</span> <span class="cp">}}</span><span class="x"></span>
 </pre></div>
-<p>变量的值在jinja2模板系统中调用之后将会变成字符串然后插入在文档中，这就不多说了。</p>
-<h2 id="for">for语句</h2>
-<p>for语句结构如下所示:</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;ul&gt;</span>
-<span class="cp">{%</span> <span class="k">for</span> <span class="nv">user</span> <span class="k">in</span> <span class="nv">users</span> <span class="cp">%}</span>
-  <span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">user.username</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
-<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
-<span class="nt">&lt;/ul&gt;</span>
-</pre></div>
-<h2 id="_4">条件分支</h2>
-<p>条件分支主要用于有条件的显示某些内容。</p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">user</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x"> Hello, </span><span class="cp">{{</span> <span class="nv">user</span> <span class="cp">}}</span><span class="x">!</span>
-<span class="x"> </span><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x"> Hello , stranger!</span>
-<span class="x"> </span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
-</pre></div>
+<p>然后 <code>object.a</code> 这样的dot法引用，或者 <code>object['a']</code> 这样的写法，甚至是调用实例的某个方法 <code>object.func()</code> 都是支持的。</p>
+<h2 id="filters">过滤器filters</h2>
+<p>变量可以进一步加上某个过滤器来进行进一步的处理。过滤器是有点类似于linux系统的管道作业风格，多个过滤器可以叠加，如： <code>{{ var | striptags | title }}</code> 。</p>
+<p>jinja2中内置的过滤器有：</p>
+<ul>
+<li><code>safe</code> 渲染值不转义</li>
+<li><code>capitalize</code> 值首字母大写 其他字母小写</li>
+<li><code>lower</code> 字母都小写</li>
+<li><code>upper</code> 字母都大写</li>
+<li><code>title</code> 值每个单词首字母大写</li>
+<li><code>trim</code>值首尾空格去除</li>
+<li><code>striptags</code> 渲染之前把所有HTML标签去掉</li>
+</ul>
+<p>关于safe过滤器请参看下面讨论的特殊符号的问题。</p>
 <h2 id="html">html特殊符号问题</h2>
-<p>如果你的变量有这些html的特殊符号:</p>
-<div class="highlight"><pre><span></span><span class="err">&lt;</span>  &gt;  <span class="err">&amp;</span>  "
-</pre></div>
-<p>假设你没有在flask中使用jinja2模板系统，那么这些字符是没有经过特殊处理的 …</p>
+<p>如果你的变量有这些html的特殊符号 …</p>
                 </article>
 
 
