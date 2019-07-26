@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="baidu-site-verification" content="D4VqC4HppC" />
-	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
 
-    <meta name="author" content="cdwanze"/>
-    <meta name="copyright" content="cdwanze"/>
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
 
-    <meta property="og:type" content="article"/>
-    <meta name="twitter:card" content="summary">
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
 
 <meta name="keywords" content="spark, 大数据, " />
 
@@ -25,16 +25,22 @@
 <meta name="twitter:title" content="spark学习笔记 ">
 <meta name="twitter:description" content="前言 总的说来数据挖掘，数据处理，机器学习直到深度学习等，实际上其骨子里面的很多东西都是相通的。而从实践的角度出发，我们可以把这个领域看做更多的矩阵或者张量运算的领域，虽然大数据这个词概念不是很清晰，到底何种程度上才算得上大数据，我的一个总的看法是，如果你面对的计算，矩阵的维度数是非常大的，至少是上万的级别，而且随着你的项目程序运行，这个矩阵的大小还会进一步膨胀，这个时候就算得上大数据了吧。 现在单机的运算能力比以前又提升了不少，假设你面临一个算法问题，虽然暂时能够在单机上运算，但如果你面临的这个问题在一个很合理的时间范围内矩阵大小还会膨胀，直到超过你的单机承受能力，而你的算法代码，整个都是建立在矩阵这个思维之上的，这个时候我觉得你面对的就是一个大数据问题。 大数据问题是这样一个问题，可能我这样说不太确切，但大体也可以这样说，大数据问题就是矩阵过大的问题。 而现在似乎比较前沿的人工智能芯片问题实际上就是如何更好地设计芯片来加速矩阵运算的问题。 也就是大数据问题并不讨论算法细节，机器学习细节等。原则上你应该写一套非大数据工具下的测试代码小规模测试下你的算法代码，再移植到大数据工具上，而一个设计得很好的大数据工具，就是要让你从部署，维护到移植都感觉非常的舒适。 基于上面的讨论，这就引来了第一个问题，spark自带的机器学习包可能并不是很推荐使用，首先不得不承认spark精力有限，其自带的机器学习包功能很有限，更不用说新出来的神经网络等技术层出不穷，spark是不可能照顾得过来的。而keras那边对于这个领域是越做越好了，要让算法开发人员放弃这些模块，这是不可能的。所以我们在学习spark的时候必须要有这个底线，这个底线就是简单的根据spark做些简单的运算这是可以接受的，但复杂的算法实现不应该用spark那边提供的语言来写。如果不行 …">
 
-    <title>spark学习笔记  · cdwanze的博文
+    <title>
+spark学习笔记  · cdwanze的博文
 </title>
 
 
-    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
-    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
 
-    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/custom.css" media="screen">
 
 
 
@@ -47,43 +53,60 @@
 <nav class="navbar">
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
                 <span class="sr-only">Navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+            <a class="navbar-brand" href="/"><span
+                    class=site-name>网站首页</span></a>
         </div>
 
 
         <div class="navbar-collapse collapse">
+            <form action="/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li >
                     <a href="">博文首页</a></li>
 
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
-                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
-                </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
 
 
-                <li >
-                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
-                <li >
-                    <a href="/gong-gao.html">公告</a></li>
+                        <li >
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="/gong-gao.html">公告</a>
+                        </li>
             </ul>
 
-            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
-                <div class="form-group">
-                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
-                </div>
-                <button class="btn btn-default" type="submit">搜索</button>
-            </form>
+
         </div>
     </div>
 </nav>
@@ -253,13 +276,36 @@ y2.collect()
 </div>
 </footer>
 
-    <script src="/theme/js/jquery.min.js"></script>
-<script src="/theme/js/bootstrap.min.js"></script>
-<script>
-    function validateForm(query) {
-        return (query.length > 0);
-    }
-</script>
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
 
 
     

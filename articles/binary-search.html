@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="baidu-site-verification" content="D4VqC4HppC" />
-	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
 
-    <meta name="author" content="cdwanze"/>
-    <meta name="copyright" content="cdwanze"/>
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
 
-    <meta property="og:type" content="article"/>
-    <meta name="twitter:card" content="summary">
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
 
 <meta name="keywords" content="算法, 算法, " />
 
@@ -25,16 +25,22 @@
 <meta name="twitter:title" content="二分查找 ">
 <meta name="twitter:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …">
 
-    <title>二分查找  · cdwanze的博文
+    <title>
+二分查找  · cdwanze的博文
 </title>
 
 
-    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
-    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
 
-    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/custom.css" media="screen">
 
 
 
@@ -47,43 +53,60 @@
 <nav class="navbar">
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
                 <span class="sr-only">Navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+            <a class="navbar-brand" href="/"><span
+                    class=site-name>网站首页</span></a>
         </div>
 
 
         <div class="navbar-collapse collapse">
+            <form action="/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li >
                     <a href="">博文首页</a></li>
 
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
-                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
-                </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
 
 
-                <li >
-                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
-                <li >
-                    <a href="/gong-gao.html">公告</a></li>
+                        <li >
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="/gong-gao.html">公告</a>
+                        </li>
             </ul>
 
-            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
-                <div class="form-group">
-                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
-                </div>
-                <button class="btn btn-default" type="submit">搜索</button>
-            </form>
+
         </div>
     </div>
 </nav>
@@ -306,13 +329,36 @@ print(list(res))
 </div>
 </footer>
 
-    <script src="/theme/js/jquery.min.js"></script>
-<script src="/theme/js/bootstrap.min.js"></script>
-<script>
-    function validateForm(query) {
-        return (query.length > 0);
-    }
-</script>
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
 
 
     

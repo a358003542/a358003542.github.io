@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="baidu-site-verification" content="D4VqC4HppC" />
-	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
 
-    <meta name="author" content="cdwanze"/>
-    <meta name="copyright" content="cdwanze"/>
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
 
-    <meta property="og:type" content="article"/>
-    <meta name="twitter:card" content="summary">
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
 
 <meta name="keywords" content=", articles, " />
 
@@ -24,16 +24,22 @@
 <meta name="twitter:title" content="拉链表算法 ">
 <meta name="twitter:description" content="什么是拉链表算法，拉链表算法是为了解决什么问题的，或者说拉链表算法有什么用？ 假设数据库里面的一个record，在某个时间点上某几个字段发生了什么变化，然后又过了一定的时间，在某个时间点上某几个字段发生了什么变化。我们该怎样记录研究对象的这种状态变化。 第一，在某些业务需求上，没有必要记录研究对象的历史状态，直接update一条记录，取最新状态即可。这是一个极端；另外一个极端就是每个时间点上，研究对象的所有状态都插入一个record来记录，这是另外一个极端。 如果确实有需求要记录研究对象的所有历史状态，那么第二种做法有太多的冗余信息了，因为我们实际上只需要记录状态发生变化的那个时间点就是了。 拉链表算法的核心设计概念就是在数据库record里面加入了 start_date 和 end_date 这两个字段来表示本记录的生命周期，或者说只有在 start_date &lt; dt &lt; end_date 这个时间段内，该记录才是有效的。 大体设计思路如下，首先设定好几个字段为核心校对字段，查询数据库，发现是否有目标记录，和目录记录的核心校对字段是否一致，如果一致，则什么都不做，也就是pass掉；如果不一致，则新加入一条记录，start_date 设定当前时间，end_date 默认是一个很大的日期时间。然后找到的那条记录只是校对字段不一致的，end_date 要设定为当前时间，如果没有找到任何记录，则新增一条记录 …">
 
-    <title>拉链表算法  · cdwanze的博文
+    <title>
+拉链表算法  · cdwanze的博文
 </title>
 
 
-    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
-    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
 
-    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/custom.css" media="screen">
 
 
 
@@ -46,43 +52,60 @@
 <nav class="navbar">
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
                 <span class="sr-only">Navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+            <a class="navbar-brand" href="/"><span
+                    class=site-name>网站首页</span></a>
         </div>
 
 
         <div class="navbar-collapse collapse">
+            <form action="/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li >
                     <a href="">博文首页</a></li>
 
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
-                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
-                </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
 
 
-                <li >
-                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
-                <li >
-                    <a href="/gong-gao.html">公告</a></li>
+                        <li >
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="/gong-gao.html">公告</a>
+                        </li>
             </ul>
 
-            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
-                <div class="form-group">
-                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
-                </div>
-                <button class="btn btn-default" type="submit">搜索</button>
-            </form>
+
         </div>
     </div>
 </nav>
@@ -153,13 +176,36 @@
 </div>
 </footer>
 
-    <script src="/theme/js/jquery.min.js"></script>
-<script src="/theme/js/bootstrap.min.js"></script>
-<script>
-    function validateForm(query) {
-        return (query.length > 0);
-    }
-</script>
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
 
 
     

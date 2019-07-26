@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="baidu-site-verification" content="D4VqC4HppC" />
-	<meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
 
-    <meta name="author" content="cdwanze"/>
-    <meta name="copyright" content="cdwanze"/>
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
 
-    <meta property="og:type" content="article"/>
-    <meta name="twitter:card" content="summary">
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
 
 <meta name="keywords" content=", 基础, " />
 
@@ -24,16 +24,22 @@
 <meta name="twitter:title" content="500lines-一个简单的web服务器 ">
 <meta name="twitter:description" content="前言 本文主要是对 500lines 项目的这篇文章的学习和讨论，这篇文章写得是极好的，除了对如何编码有一些很好的借鉴参考价值，还主要能让读者对http web server 做的事情有了一个清楚的认识。这篇文章弄清楚了，对django或者flask在做一些什么事，就很胸有成竹了，甚至包括nginx等服务器在做一些什么事也有一个大致的了解了。 因为作者后端出身，所以对这篇文章的质量和价值是清楚的，以至于作者在强烈呼唤出现这样一篇类似的描述前端框架的文章，目前我对前端框架整个过程还没有一个很好的认识。 关于计算机网络和HTTP相关不在本文讨论了，笔者也自觉这一块有时间还需要再深入补一补。 我们的web服务器要做的工作如下： 占着个端口等着某个HTTP 请求包发过来 你知道的HTTP请求包有一定的格式，具体哪些信息进行parse操作 确定该请求要做点什么（分发GET POST） 程序做点什么 形成返回的数据格式，比如html等。 将返回的数据传回去 上面步骤的前两步和最后一步python的 HTTPServer 已经帮我们自动做了，更不用说django和flask这些框架，也早就帮我们做好了。我们只需要关注的是，请求过来的是GET还是POST等，然后当然是程序总要干点什么事，最后就是把要送回去的数据整理好，再一并发过去即可。 更高级的web server 如flask之类的，会提供很多额外的支持，比如请求参数，请求头等信息的整理，然后如果你希望实现restful风格api，只返回一个字典值 …">
 
-    <title>500lines-一个简单的web服务器  · cdwanze的博文
+    <title>
+500lines-一个简单的web服务器  · cdwanze的博文
 </title>
 
 
-    <link href="/theme/css/font-awesome.css" rel="stylesheet" media="screen">
-    <link href="/theme/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
 
-    <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/custom.css" media="screen">
 
 
 
@@ -46,43 +52,60 @@
 <nav class="navbar">
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
                 <span class="sr-only">Navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/"><span class=site-name>网站首页</span></a>
+            <a class="navbar-brand" href="/"><span
+                    class=site-name>网站首页</span></a>
         </div>
 
 
         <div class="navbar-collapse collapse">
+            <form action="/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li >
                     <a href="">博文首页</a></li>
 
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查找文章<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-                  <li><a class="slowscroll" href="/categories.html">按分类</a></li>
-                 <li><a class="slowscroll" href="/tags.html">按标签</a></li>
-                </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
 
 
-                <li >
-                    <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a></li>
-                <li >
-                    <a href="/gong-gao.html">公告</a></li>
+                        <li >
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="/gong-gao.html">公告</a>
+                        </li>
             </ul>
 
-            <form action="/search.html" onsubmit="return validateForm(this.elements['q'].value);" class="navbar-form navbar-left">
-                <div class="form-group">
-                <input type="text" name="q"  id="tipue_search_input" class="form-control" placeholder="Search..." style="width:350px">
-                </div>
-                <button class="btn btn-default" type="submit">搜索</button>
-            </form>
+
         </div>
     </div>
 </nav>
@@ -279,13 +302,36 @@
 </div>
 </footer>
 
-    <script src="/theme/js/jquery.min.js"></script>
-<script src="/theme/js/bootstrap.min.js"></script>
-<script>
-    function validateForm(query) {
-        return (query.length > 0);
-    }
-</script>
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
 
 
     
