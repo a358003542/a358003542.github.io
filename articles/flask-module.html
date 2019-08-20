@@ -595,7 +595,7 @@ flask db downgrade # 对应的是 alembic downgrade
 <p>具体flask-login的使用请参看官方文档，这里重点讲一下flask-login都做了哪些事情，这个参考资料1说的很好。</p>
 <ol>
 <li><code>login_user</code> 函数用于登录用户，核心任务就是将用户的id写入flask的session。类似的 <code>logout_user</code> 就是将这个id从session中删除。</li>
-<li>渲染jinja2模板的时候，会出现对 flask-login 的 <code>current_user</code> 这个变量的请求。具体就是调用flask-login 的<code>_get_user</code> 函数。<code>_get_user</code> 首先检查session中有没有用户id，没有则返回 <code>AnonymousUser</code> ，有则调用 <code>user_loader</code> 装饰器注册的函数。</li>
+<li>渲染jinja2模板的时候，会出现对 flask-login 的 <code>current_user</code> 这个变量的请求。具体就是调用flask-login 的<code>_get_user</code> 函数。<code>_get_user</code> 首先检查session中有没有用户id，没有则返回 <code>AnonymousUser</code> ，有则调用 <code>user_loader</code> 装饰器注册的函数。【这里值得额外一提的是，在python代码那边引用 <code>current_user</code> 返回的不是数据库的User对象，要获得数据库对象需要使用 <code>current_user._get_current_object()</code>】</li>
 <li><code>login_required</code> 是对当前的 <code>current_user</code> 的 <code>is_authenticated</code> 方法进行调用，如果True 则通过，False则拒绝。</li>
 </ol>
 <h2 id="_9">参考资料</h2>
