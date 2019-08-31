@@ -196,32 +196,32 @@ emacs学习笔记  · cdwanze的博文
 <h1 id="lisp">lisp语法简介</h1>
 <p>在进入接下来的讨论之前，先简单介绍下lisp的语法，这里不是要让读者学会lisp语言了，而是为了让你对接下来要接触的最基本的emacs lisp语法不会感到恐惧。</p>
 <p>以下例子读者如果有兴趣可以进入elisp的交互环境试验一下，具体按键是：</p>
-<div class="highlight"><pre><span></span>M-x ielm
+<div class="highlight"><pre><span></span><span class="n">M</span><span class="o">-</span><span class="n">x</span> <span class="n">ielm</span>
 </pre></div>
 <p>lisp语言的一大特色就是里面的程序和数据都是列表，如</p>
-<div class="highlight"><pre><span></span>'(1, 2, 3)
+<div class="highlight"><pre><span></span><span class="err">'</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 <p>这样的形式。</p>
 <p>这个引号很关键，因为你输入给lisp的字符串都会被eval一次，然后前面加个引号，那么里面的东西eval一次之后就成(1, 2, 3)这样的形式了（即去掉引号），也就是列表数据了。</p>
 <p>那么下面这个是什么呢？</p>
-<div class="highlight"><pre><span></span>x
-'x
+<div class="highlight"><pre><span></span><span class="n">x</span>
+<span class="err">'</span><span class="n">x</span>
 </pre></div>
 <p>上面的x如果被送入eval的话，将会发生寻址操作，也就是成变量了；而第二个x加上引号，eval之后，去掉引号，就是x这样的形式了，我们可以把这个x看作字符串，当然如果我们要将其送入eval，那么你可以认为这个x字符串又变成变量了。</p>
 <p>然后lisp中程序的结构就是一系列和数学结构类似的括号，学过数学括号结构的都知道，先算里面的再算外面的…….，直到最终算成这样的形式</p>
-<div class="highlight"><pre><span></span>(+ 1 1)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">+</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 <p>lisp实际上也是类似的这样运算的，上面的(+ 1 1)送入lisp运算就会得到2。lisp处理这样的结构有一个原则，总认为这样的括号的第一个元素是一个函数，如果不是，将会发生错误。然后后面的东西都是一系列管他什么的参数。</p>
 <p>然后再来讲讲设置变量和定义函数。</p>
 <h2 id="_3">设置变量</h2>
 <p>设置变量有两个方法，一般为了方便使用的是setq吧。</p>
-<div class="highlight"><pre><span></span>(set 'x 1)
-(setq x 1)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">set</span> <span class="err">'</span><span class="n">x</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="n">setq</span> <span class="n">x</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 <p>set和setq的区别就在那个引号，setq不需要加上那个引号，第一个元素的字符形式总被视作变量。</p>
 <h2 id="_4">定义函数</h2>
 <p>最简单的形式如下所示：</p>
-<div class="highlight"><pre><span></span>(defun add (x y) (+ x y))
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">defun</span> <span class="k">add</span> <span class="p">(</span><span class="n">x</span> <span class="n">y</span><span class="p">)</span> <span class="p">(</span><span class="o">+</span> <span class="n">x</span> <span class="n">y</span><span class="p">))</span>
 </pre></div>
 <p>这样你就定义了一个add函数，然后(add x y)实际上就是执行的是(+ x y )。</p>
 <p>最简单的lisp语法简介就是这么多了，后面还会接触一些，当然要深入起来里面内容还很丰富的，但目前已经够我们继续探索下去了。</p>
@@ -244,34 +244,34 @@ emacs学习笔记  · cdwanze的博文
 </pre></div>
 <p>下面详细讲解之。 <strong>add-to-list</strong> 是一个函数，其接受一个列表变量，然后将后面的一个元素加入该列表中。
 请看下面的例子，其中 <strong>nil</strong> 是一个空列表的意思：</p>
-<div class="highlight"><pre><span></span>ELISP&gt; (set 'x nil)
-nil
-ELISP&gt; x
-nil
-ELISP&gt; (add-to-list 'x 1)
-(1)
+<div class="highlight"><pre><span></span><span class="n">ELISP</span><span class="o">&gt;</span> <span class="p">(</span><span class="k">set</span> <span class="s1">'x nil)</span>
+<span class="s1">nil</span>
+<span class="s1">ELISP&gt; x</span>
+<span class="s1">nil</span>
+<span class="s1">ELISP&gt; (add-to-list '</span><span class="n">x</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-ELISP&gt; (add-to-list 'x 2)
-(2 1)
+<span class="n">ELISP</span><span class="o">&gt;</span> <span class="p">(</span><span class="k">add</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="n">list</span> <span class="s1">'x 2)</span>
+<span class="s1">(2 1)</span>
 
-ELISP&gt; (add-to-list 'x 3)
-(3 2 1)
+<span class="s1">ELISP&gt; (add-to-list '</span><span class="n">x</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span> <span class="mi">2</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 <p>这里的 <strong>load-path</strong> 变量放着的就是emacs加载插件时的搜索路径，这里把一个新的smex插件所在的路径加进来了，注意路径的下面就应该放着目标el文件。</p>
 <p>以后你要加载新的插件"what"，大致也是类似的配置语句：</p>
-<div class="highlight"><pre><span></span>(add-to-list 'load-path "~/工作空间/emacs/what")
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">add</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="n">list</span> <span class="err">'</span><span class="k">load</span><span class="o">-</span><span class="n">path</span> <span class="ss">"~/工作空间/emacs/what"</span><span class="p">)</span>
 </pre></div>
 <p>把what.el放入emacs文件夹里的what文件夹里面即可。</p>
 <p>然后接下来就是实际的加载这个插件了：</p>
-<div class="highlight"><pre><span></span>(require 'smex);加载某个模块
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">require</span> <span class="err">'</span><span class="n">smex</span><span class="p">);</span><span class="err">加载某个模块</span>
 </pre></div>
 <p><strong>require</strong> 函数后面跟着插件的名字，对应的就是那个smex.el文件。</p>
 <h3 id="_6">自定义按键配置</h3>
 <p>接下来是进一步的按键配置：</p>
-<div class="highlight"><pre><span></span>(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="k">set</span><span class="o">-</span><span class="k">key</span> <span class="p">(</span><span class="n">kbd</span> <span class="ss">"M-x"</span><span class="p">)</span> <span class="s1">'smex)</span>
+<span class="s1">(global-set-key (kbd "M-X") '</span><span class="n">smex</span><span class="o">-</span><span class="n">major</span><span class="o">-</span><span class="k">mode</span><span class="o">-</span><span class="n">commands</span><span class="p">)</span>
+<span class="p">;;</span> <span class="n">This</span> <span class="k">is</span> <span class="n">your</span> <span class="k">old</span> <span class="n">M</span><span class="o">-</span><span class="n">x</span><span class="p">.</span>
+<span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="k">set</span><span class="o">-</span><span class="k">key</span> <span class="p">(</span><span class="n">kbd</span> <span class="ss">"C-c C-c M-x"</span><span class="p">)</span> <span class="err">'</span><span class="k">execute</span><span class="o">-</span><span class="n">extended</span><span class="o">-</span><span class="n">command</span><span class="p">)</span>
 </pre></div>
 <p>这种自定义按键配置方式以后我们可以用来随意的配置后面学到的命令。</p>
 <p><strong>global-set-key</strong> 函数后面跟着 <strong>kbd</strong> 函数对按键字符的封装，可以把第一个元素看作具体的按键，第二个元素看作具体调用的命令。</p>
@@ -286,14 +286,14 @@ ELISP&gt; (add-to-list 'x 3)
 <li><strong>set-frame-attribute:</strong> 设置默认字体大小</li>
 </ul>
 <p>以上两个命令一般放入.emacs文件中，如下配置成为全局配置。</p>
-<div class="highlight"><pre><span></span>(set-default-font "DejaVu Sans Mono");设置默认字体
-(set-frame-attribute 'default nil :height 110);设置默认字体大小11pt
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">set</span><span class="o">-</span><span class="k">default</span><span class="o">-</span><span class="n">font</span> <span class="ss">"DejaVu Sans Mono"</span><span class="p">);</span><span class="err">设置默认字体</span>
+<span class="p">(</span><span class="k">set</span><span class="o">-</span><span class="n">frame</span><span class="o">-</span><span class="n">attribute</span> <span class="err">'</span><span class="k">default</span> <span class="n">nil</span> <span class="p">:</span><span class="n">height</span> <span class="mi">110</span><span class="p">);</span><span class="err">设置默认字体大小</span><span class="mi">11</span><span class="n">pt</span>
 </pre></div>
 <ul>
 <li><strong>toggle-frame-maximized:</strong> 窗口最大化</li>
 </ul>
 <p>你可以将其加入.emacs文件让你的emacs一打开就窗口最大化。 <em>注意本命令只适用于emacs24.4+的版本。</em> </p>
-<div class="highlight"><pre><span></span>(toggle-frame-maximized)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">toggle</span><span class="o">-</span><span class="n">frame</span><span class="o">-</span><span class="n">maximized</span><span class="p">)</span>
 </pre></div>
 <p>如果是emacs24.4之前的版本你想启动之后就窗口最大化，参考 <a href="http://emacs.stackexchange.com/questions/2999/how-to-maximize-my-emacs-frame-on-start-up">这个网站</a> ，在你的emacs初始化脚本上加上这么一句即可：</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">'default-frame-alist</span> <span class="o">'</span><span class="p">(</span><span class="nv">fullscreen</span> <span class="o">.</span> <span class="nv">maximized</span><span class="p">))</span>
@@ -302,13 +302,13 @@ ELISP&gt; (add-to-list 'x 3)
 <li><strong>global-linum-mode:</strong> 左侧显示行号</li>
 </ul>
 <p>如下加入.emacs文件中你可以让你的emacs左侧永远显示行号，参考了 <a href="http://stackoverflow.com/questions/2034470/how-do-i-enable-line-numbers-on-the-left-everytime-i-open-emacs">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span>(global-linum-mode t)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="n">linum</span><span class="o">-</span><span class="k">mode</span> <span class="n">t</span><span class="p">)</span>
 </pre></div>
 <ul>
 <li><strong>global-visual-line-mode:</strong> 显示的段落自动换行</li>
 </ul>
 <p>如下加入.emacs文件中你可以让你的emacs显示的文件段落会自动换行。</p>
-<div class="highlight"><pre><span></span>(global-visual-line-mode t)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="n">visual</span><span class="o">-</span><span class="n">line</span><span class="o">-</span><span class="k">mode</span> <span class="n">t</span><span class="p">)</span>
 </pre></div>
 <ul>
 <li>
@@ -340,11 +340,11 @@ ELISP&gt; (add-to-list 'x 3)
 <li><strong>save-buffers-kill-terminal:</strong> 默认按键"C-x C-c"，退出emacs。</li>
 </ul>
 <p>你可以通过defun来定义新的函数，这里采用一种简单的机制defalias来给原函数取一个新的名字：</p>
-<div class="highlight"><pre><span></span>(defalias 'open 'find-file)
-(defalias 'save 'save-buffer)
-(defalias 'saveall 'save-some-buffers)
-(defalias 'kill 'kill-buffer)
-(defalias 'buffer 'switch-to-buffer)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">defalias</span> <span class="s1">'open '</span><span class="n">find</span><span class="o">-</span><span class="n">file</span><span class="p">)</span>
+<span class="p">(</span><span class="n">defalias</span> <span class="s1">'save '</span><span class="n">save</span><span class="o">-</span><span class="n">buffer</span><span class="p">)</span>
+<span class="p">(</span><span class="n">defalias</span> <span class="s1">'saveall '</span><span class="n">save</span><span class="o">-</span><span class="k">some</span><span class="o">-</span><span class="n">buffers</span><span class="p">)</span>
+<span class="p">(</span><span class="n">defalias</span> <span class="s1">'kill '</span><span class="n">kill</span><span class="o">-</span><span class="n">buffer</span><span class="p">)</span>
+<span class="p">(</span><span class="n">defalias</span> <span class="s1">'buffer '</span><span class="n">switch</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="n">buffer</span><span class="p">)</span>
 </pre></div>
 <p>然后我们再进入emacs，我们发现smex里面多了一个open命令，之前没有的，然后原有的find-file命令也还在。</p>
 <p>初步的试验已经有那么一点意思了，当然接下来所谓的DIY之门，就是编写自己的插件，这其中很大一部分就是编写自己的函数。elisp语言还有很多内容，不过本章节就此结束了。</p>
@@ -390,7 +390,7 @@ C-x u undo
 <h1 id="tabspace">tab都自动换成space</h1>
 <p>参考网页：<a href="http://www.emacswiki.org/emacs/NoTabs">NoTabs</a> </p>
 <p>在.emacs文件里加入如下代码：</p>
-<div class="highlight"><pre><span></span>(setq-default indent-tabs-mode nil)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">setq</span><span class="o">-</span><span class="k">default</span> <span class="n">indent</span><span class="o">-</span><span class="n">tabs</span><span class="o">-</span><span class="k">mode</span> <span class="n">nil</span><span class="p">)</span>
 </pre></div>
 <h1 id="80">80列规则</h1>
 <p>控制你的代码不超过80列是一个非常好的习惯，不仅可以起到控制自己写出缩进过于复杂的代码的冲动，而且这样写出来的代码直接复制粘贴就能很好地在网页或pdf文档上显示。</p>
@@ -426,11 +426,11 @@ C-x u undo
 <p>然后所谓 kill 的字符串 可以通过 <code>C-y</code> 召回了。</p>
 <h1 id="emacs">快速启动emacs</h1>
 <p>先用</p>
-<div class="highlight"><pre><span></span>emacs --daemon
+<div class="highlight"><pre><span></span><span class="n">emacs</span> <span class="c1">--daemon</span>
 </pre></div>
 <p>命令启动一个后台服务器，这个命令可以考虑加入.bashrc文件中每次启动自动运行一次。</p>
 <p>然后把系统的desktop文件（你可以在 <code>/usr/share/applications</code> 那里找到它，你也可以在用户主文件夹的 <code>.local/share/applications</code> 那里再另外新建一个。 ）修改一下:</p>
-<div class="highlight"><pre><span></span>Exec=/usr/bin/emacsclient -c -a ""  %F
+<div class="highlight"><pre><span></span><span class="k">Exec</span><span class="o">=/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">bin</span><span class="o">/</span><span class="nv">emacsclient</span> <span class="o">-</span><span class="nv">c</span> <span class="o">-</span><span class="nv">a</span> <span class="s2">""</span>  <span class="o">%</span><span class="nv">F</span>
 </pre></div>
 <p>本来是 <code>emacs %F</code> ，改为emacsclient，这里的 <code>-c</code> 参数是启动图形界面。然后-a参数设置为空字符串，这样即使你前面没有建立一个emacs后台服务器，其也会自动创建一个。这样你双击对应emacs关联的文件就自动快速用emacsclient打开了。读者可以尝试一下，这样emacs打开文件确实很快了，但也带来了一些问题。</p>
 <h2 id="frame">关闭frame和以前的不同了</h2>
@@ -457,27 +457,27 @@ C-x u undo
 <h1 id="_16">左侧文件树面板</h1>
 <p>一般现代IDE最大的一个特色就是左侧有一个文件树面板，方便快速切换文件，这个emacs下的neotree宏包可以实现类似的功能。该项目的github地址在 <a href="https://github.com/jaypei/emacs-neotree">这里</a> 。</p>
 <p>具体使用很简单，就是常规的加载:</p>
-<div class="highlight"><pre><span></span>(add-to-list 'load-path "/some/path/neotree")
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">add</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="n">list</span><span class="w"> </span><span class="s1">'load-path "/some/path/neotree")</span>
+<span class="s1">(require '</span><span class="n">neotree</span><span class="p">)</span><span class="w"></span>
+<span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="k">set</span><span class="o">-</span><span class="k">key</span><span class="w"> </span><span class="o">[</span><span class="n">f8</span><span class="o">]</span><span class="w"> </span><span class="err">'</span><span class="n">neotree</span><span class="o">-</span><span class="n">toggle</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <p>这样你就可以按下F8来快速切换到文件树面板了。</p>
 <h2 id="pdf">pdf文件打开卡住问题</h2>
 <p>emacs的docview功能可以直接看pdf文件，这有时会带来很大的便利，不过现在打开pdf文件有点卡，这可以通过将 <code>doc-view-continuous</code> 设置为nil来稍微缓和一下。</p>
-<div class="highlight"><pre><span></span>(custom-set-variables
- '(doc-view-continuous nil)
- )
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">custom</span><span class="o">-</span><span class="k">set</span><span class="o">-</span><span class="n">variables</span>
+ <span class="err">'</span><span class="p">(</span><span class="n">doc</span><span class="o">-</span><span class="k">view</span><span class="o">-</span><span class="n">continuous</span> <span class="n">nil</span><span class="p">)</span>
+ <span class="p">)</span>
 </pre></div>
 <h2 id="_17">可能的其他问题</h2>
 <p>neotree这个项目看得出来还有很多地方可以进一步完善，比如说emacsclient模式下似乎根目录读取有问题。</p>
 <h1 id="_18">多个窗口之间的编号切换</h1>
 <p>window-numbering这个宏包不错，其github项目地址在 <a href="https://github.com/nschum/window-numbering.el">这里</a> 。该宏包实现了对各个窗口进行编号，使得你通过按 <code>M-1</code> 之类的就能快速切换各个窗口焦点。</p>
 <p>官方推荐的一个配置如下所示:</p>
-<div class="highlight"><pre><span></span>(setq window-numbering-assign-func
-      (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">setq</span> <span class="n">window</span><span class="o">-</span><span class="n">numbering</span><span class="o">-</span><span class="n">assign</span><span class="o">-</span><span class="n">func</span>
+      <span class="p">(</span><span class="n">lambda</span> <span class="p">()</span> <span class="p">(</span><span class="k">when</span> <span class="p">(</span><span class="n">equal</span> <span class="p">(</span><span class="n">buffer</span><span class="o">-</span><span class="n">name</span><span class="p">)</span> <span class="ss">"*Calculator*"</span><span class="p">)</span> <span class="mi">9</span><span class="p">)))</span>
 </pre></div>
 <p>然后还需要加上一句:</p>
-<div class="highlight"><pre><span></span>(window-numbering-mode)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">window</span><span class="o">-</span><span class="n">numbering</span><span class="o">-</span><span class="k">mode</span><span class="p">)</span>
 </pre></div>
 <p>实际开启编号模式，具体效果如下图所示:</p>
 <p><img alt="img" src="/images/emacs/窗口编号方便快速切换.png"/></p>
@@ -485,25 +485,25 @@ C-x u undo
 <h1 id="markdown">markdown模式</h1>
 <p>markdown-mode这个宏包给emacs加入了markdown的渲染，还有类似org模式的折叠等等功能。其github项目地址在 <a href="https://github.com/defunkt/markdown-mode">这里</a> 。</p>
 <p>就这样简单配置一下即可:</p>
-<div class="highlight"><pre><span></span>(add-to-list 'load-path "~/工作空间/myemacs/markdown-mode")
-(autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+<div class="highlight"><pre><span></span><span class="ss">(</span><span class="nv">add</span><span class="o">-</span><span class="nv">to</span><span class="o">-</span><span class="nv">list</span> <span class="s1">'</span><span class="s">load-path "~/工作空间/myemacs/markdown-mode")</span>
+<span class="ss">(</span><span class="nv">autoload</span> <span class="s1">'</span><span class="s">markdown-mode "markdown-mode"</span>
+   <span class="s2">"</span><span class="s">Major mode for editing Markdown files</span><span class="s2">"</span> <span class="nv">t</span><span class="ss">)</span>
+<span class="ss">(</span><span class="nv">add</span><span class="o">-</span><span class="nv">to</span><span class="o">-</span><span class="nv">list</span> <span class="s1">'</span><span class="s">auto-mode-alist </span><span class="s1">'</span><span class="ss">(</span><span class="s2">"</span><span class="se">\\</span><span class="s">.text</span><span class="se">\\</span><span class="s">'</span><span class="s2">"</span> . <span class="nv">markdown</span><span class="o">-</span><span class="nv">mode</span><span class="ss">))</span>
+<span class="ss">(</span><span class="nv">add</span><span class="o">-</span><span class="nv">to</span><span class="o">-</span><span class="nv">list</span> <span class="s1">'</span><span class="s">auto-mode-alist </span><span class="s1">'</span><span class="ss">(</span><span class="s2">"</span><span class="se">\\</span><span class="s">.markdown</span><span class="se">\\</span><span class="s">'</span><span class="s2">"</span> . <span class="nv">markdown</span><span class="o">-</span><span class="nv">mode</span><span class="ss">))</span>
+<span class="ss">(</span><span class="nv">add</span><span class="o">-</span><span class="nv">to</span><span class="o">-</span><span class="nv">list</span> <span class="s1">'</span><span class="s">auto-mode-alist </span><span class="s1">'</span><span class="ss">(</span><span class="s2">"</span><span class="se">\\</span><span class="s">.md</span><span class="se">\\</span><span class="s">'</span><span class="s2">"</span> . <span class="nv">markdown</span><span class="o">-</span><span class="nv">mode</span><span class="ss">))</span>
 </pre></div>
 <p>里面的用法除了Tab折叠功能外，其他再慢慢了解，有些可能会用不到，下面介绍重头戏，markdowon的实时预览功能实现。</p>
 <h1 id="markdown_1">markdown实时预览</h1>
 <p>emacs-livedown这个宏包其是利用nodejs里面的livedown模块的功能，将markdown文档实时显示在网页端。其github项目地址在 <a href="https://github.com/shime/emacs-livedown">这里</a> 。</p>
 <p>首先你需要安装npm，然后通过npm安装livedown。</p>
-<div class="highlight"><pre><span></span>sudo npm install livedown
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">npm</span> <span class="n">install</span> <span class="n">livedown</span>
 </pre></div>
 <p>然后做如下配置:</p>
-<div class="highlight"><pre><span></span><span class="o">(</span><span class="nt">custom-set-variables</span>
- <span class="s1">'(livedown:autostart t) ; automatically open preview when opening markdown files</span>
-<span class="s1"> '</span><span class="o">(</span><span class="nt">livedown</span><span class="p">:</span><span class="nd">port</span> <span class="nt">1337</span><span class="o">))</span>    <span class="o">;</span> <span class="nt">port</span> <span class="nt">for</span> <span class="nt">livedown</span> <span class="nt">server</span> <span class="o">;</span><span class="nt">一般nodejs的服务用这个端口</span>
-<span class="o">(</span><span class="nt">add-to-list</span> <span class="s1">'load-path  "~/工作空间/myemacs/emacs-livedown")</span>
-<span class="s1">(require '</span><span class="nt">livedown</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><span class="ss">(</span><span class="nv">custom</span><span class="o">-</span><span class="nv">set</span><span class="o">-</span><span class="nv">variables</span>
+ <span class="s1">'</span><span class="s">(livedown:autostart t) ; automatically open preview when opening markdown files</span>
+ <span class="s1">'</span><span class="s">(livedown:port 1337))    ; port for livedown server ;一般nodejs的服务用这个端口</span>
+<span class="ss">(</span><span class="nv">add</span><span class="o">-</span><span class="nv">to</span><span class="o">-</span><span class="nv">list</span> <span class="s1">'</span><span class="s">load-path  "~/工作空间/myemacs/emacs-livedown")</span>
+<span class="ss">(</span><span class="nv">require</span> <span class="s1">'</span><span class="s">livedown)</span>
 </pre></div>
 <p>你就可以用emacs双击一个md文件，然后在网页端就显示渲染好的网页了，而且livedown本身就支持实时根据md文件实时更新。上图片吧:</p>
 <p><img alt="img" src="/images/emacs/emacs的markdown模式.png" title="emacs的markdown模式"/></p>
@@ -514,16 +514,16 @@ C-x u undo
 <h2 id="_19">移动光标</h2>
 <p>参考了 <a href="http://dsec.pku.edu.cn/~jinlong/emacs/emacs.html">这个网页</a> 。</p>
 <p>一般通过键盘上的方向键移动辅助搜索跳转还是很快的，但有时不知怎么方向键移动也会出问题。这是只好借助下面这些快捷键了。</p>
-<div class="highlight"><pre><span></span>C-f    前进一个字符
-C-b    后退一个字符
-C-p    上移一行
-C-n    下移一行
+<div class="highlight"><pre><span></span><span class="k">C</span><span class="o">-</span><span class="n">f</span>    <span class="err">前进一个字符</span>
+<span class="k">C</span><span class="o">-</span><span class="n">b</span>    <span class="err">后退一个字符</span>
+<span class="k">C</span><span class="o">-</span><span class="n">p</span>    <span class="err">上移一行</span>
+<span class="k">C</span><span class="o">-</span><span class="n">n</span>    <span class="err">下移一行</span>
 
-M-f    前进一个单词
-M-b    后退一个单词
+<span class="n">M</span><span class="o">-</span><span class="n">f</span>    <span class="err">前进一个单词</span>
+<span class="n">M</span><span class="o">-</span><span class="n">b</span>    <span class="err">后退一个单词</span>
 
-C-a    行首
-C-e    行尾
+<span class="k">C</span><span class="o">-</span><span class="n">a</span>    <span class="err">行首</span>
+<span class="k">C</span><span class="o">-</span><span class="n">e</span>    <span class="err">行尾</span>
 </pre></div>
 <h2 id="_20">切换窗口焦点</h2>
 <p>这个前面也提过了，但在这里显然是一个重要问题，需要再次强调一下。 <code>C-x o</code> 进行切换各个窗口操作。</p>
@@ -553,7 +553,7 @@ C-e    行尾
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="/tags.html#emacs-ref">emacs
-                    <span>1</span>
+                    <span>2</span>
 </a></li>
             </ul>
         </div>

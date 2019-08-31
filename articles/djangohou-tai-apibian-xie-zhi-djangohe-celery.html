@@ -176,11 +176,11 @@ django后台api编写之-django和celery  · cdwanze的博文
     <span class="k">print</span><span class="p">(</span><span class="s1">'Request: {0!r}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">))</span>
 </pre></div>
 <p>这个下面新建的任务不过是方便测试罢了，然后上面几行配置基本上死的。最值得讲的就是这两行：</p>
-<div class="highlight"><pre><span></span>app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks()
+<div class="highlight"><pre><span></span><span class="n">app</span><span class="p">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s1">'django.conf:settings'</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">'CELERY'</span><span class="p">)</span>
+<span class="n">app</span><span class="p">.</span><span class="n">autodiscover_tasks</span><span class="p">()</span>
 </pre></div>
 <p>第一行是从django的配置对象中读取配置，特别注意的就是那个 <code>namespace='CELERY'</code> ，这样只有 <code>CELERY_</code> 开头的配置才会读取，而且对应原celery配置的关系是：</p>
-<div class="highlight"><pre><span></span>CELERY_BROKER_URL  -&gt; BROKER_URL
+<div class="highlight"><pre><span></span><span class="n">CELERY_BROKER_URL</span>  <span class="o">-&gt;</span> <span class="n">BROKER_URL</span>
 </pre></div>
 <p>我那次就是 <code>CELERY_BEAT_SCHEDULE</code> 写成了 <code>CELERYBEAT_SCHEDULE</code> 然后老实发现周期性程序启动不起来。</p>
 <p>第二行也是一个优化细节，从函数名字也可以看到，就是自动发现任务。在你的django的其他app里面新建一个 <code>tasks.py</code> ，celery会自动发现你定义的任务。</p>
@@ -222,12 +222,12 @@ app.autodiscover_tasks()
 <p>celery的crontab功能很强大，比如上面的 <code>crontab()</code> 就是每分钟执行一次。具体请参看 <a href="http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html">官方文档</a> 之。</p>
 <h4 id="_2">启动任务</h4>
 <p>和celery其他操作都是一样的，就是启动worker：</p>
-<div class="highlight"><pre><span></span>celery -A project_name worker -l info
+<div class="highlight"><pre><span></span><span class="n">celery</span> <span class="o">-</span><span class="n">A</span> <span class="n">project_name</span> <span class="n">worker</span> <span class="o">-</span><span class="n">l</span> <span class="n">info</span>
 </pre></div>
 <p><code>-A</code> 选项跟着 celery app的名字，在这里也就是django项目的名字。 <code>-l</code> 选项设置日志打印级别。</p>
 <p>你还可以加上 <code>-B</code> 来同时启动周期性任务。</p>
 <p>或者另外开个命令：</p>
-<div class="highlight"><pre><span></span>celery -A project_name beat -l info
+<div class="highlight"><pre><span></span><span class="n">celery</span> <span class="o">-</span><span class="n">A</span> <span class="n">project_name</span> <span class="n">beat</span> <span class="o">-</span><span class="n">l</span> <span class="n">info</span>
 </pre></div>
 <hr/>
 <p>其他制作脚本啊，制作后台程序，制作服务啊，使用supervisor啊，实际上和celery关系已经不大了，可以不在这里说了。</p>

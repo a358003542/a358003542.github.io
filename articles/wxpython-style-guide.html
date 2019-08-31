@@ -168,13 +168,13 @@ wxpython编码风格推荐  · cdwanze的博文
 <li>凡是面板都应该子类化，然后面板类的各个控件可以被面板管理。这个不是说要全部这样做，但这样做的好处很多。面板类的控件可管理，对你的后续管理操作编码带来很多便利，而面板的子类化是大型GUI程序的必然道路。</li>
 <li>多个按钮推荐使用 <code>StdDialogButtonSizer</code> ， TODO ，后面我个人使用体验之后再讨论几句。</li>
 </ol>
-<div class="highlight"><pre><span></span>    okButton = wx.Button(self, wx.ID_OK, "&amp;OK")
-    okButton.SetDefault()
-    cancelButton = wx.Button(self, wx.ID_CANCEL, "&amp;Cancel")
-    btnSizer = wx.StdDialogButtonSizer()
-    btnSizer.AddButton(okButton)
-    btnSizer.AddButton(cancelButton)
-    btnSizer.Realize()
+<div class="highlight"><pre><span></span>    <span class="n">okButton</span> <span class="o">=</span> <span class="n">wx</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">wx</span><span class="p">.</span><span class="n">ID_OK</span><span class="p">,</span> <span class="ss">"&amp;OK"</span><span class="p">)</span>
+    <span class="n">okButton</span><span class="p">.</span><span class="n">SetDefault</span><span class="p">()</span>
+    <span class="n">cancelButton</span> <span class="o">=</span> <span class="n">wx</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">wx</span><span class="p">.</span><span class="n">ID_CANCEL</span><span class="p">,</span> <span class="ss">"&amp;Cancel"</span><span class="p">)</span>
+    <span class="n">btnSizer</span> <span class="o">=</span> <span class="n">wx</span><span class="p">.</span><span class="n">StdDialogButtonSizer</span><span class="p">()</span>
+    <span class="n">btnSizer</span><span class="p">.</span><span class="n">AddButton</span><span class="p">(</span><span class="n">okButton</span><span class="p">)</span>
+    <span class="n">btnSizer</span><span class="p">.</span><span class="n">AddButton</span><span class="p">(</span><span class="n">cancelButton</span><span class="p">)</span>
+    <span class="n">btnSizer</span><span class="p">.</span><span class="n">Realize</span><span class="p">()</span>
 </pre></div>
 <h2 id="_2">代码重构：思考如何视图操作分离</h2>
 <p>本小节有些是自己思考的，但更多的是学习 <a href="https://wiki.wxpython.org/ModelViewController">这篇文章</a> 提出的架构思路。</p>
@@ -269,10 +269,10 @@ wxpython编码风格推荐  · cdwanze的博文
 <p>则pypubsub会抛异常，但如果两个都写作一样的，无论哪种形式，都没问题。</p>
 <h3 id="_11">类变量和实例变量</h3>
 <p>这个算是python里面的基础知识了，在使用你自己写的可复用面板的时候，千万要记得：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="p">...</span>
-  <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span> <span class="err">这里的变量每个实例都是相同的</span>
-  <span class="nx">def</span> <span class="nx">__init__</span><span class="p">()...</span>
-    <span class="nx">b</span> <span class="o">=</span> <span class="mi">1</span>  <span class="err">这里的变量每个实例都不同</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> ...
+  <span class="n">a</span> = <span class="mi">1</span> <span class="n">这里的变量每个实例都是相同的</span>
+  <span class="n">def</span> <span class="n">__init__</span>()...
+    <span class="n">b</span> = <span class="mi">1</span>  <span class="n">这里的变量每个实例都不同</span>
 </pre></div>
 <p>也就是你在写一些方法和定义一些特别的本面板上的元素的时候，有些挂在类上问题不大，有些是一定要定义在初始化函数里面的，好让具体多个实例化后的面板有不同的子面板元素，这样行为才不会出错。</p>
 <h2 id="_12">参考资料</h2>

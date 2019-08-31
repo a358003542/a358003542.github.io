@@ -171,80 +171,80 @@ django后台api编写之-模型的定义和使用  · cdwanze的博文
 <p><strong>DATABASES:</strong> 默认会创建一个sqlite3数据库，也能满足基本的需求了，如果你想要使用mysql等数据库，则参考样例修改这里的配置。比如连接mysql的样例是:</p>
 </li>
 </ul>
-<div class="highlight"><pre><span></span>    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': "database_name",
-            'USER': "root",
-            'PASSWORD': "",
-            'HOST': "localhost", 
-            'PORT': "3306",
-            'OPTIONS': {
-                'charset': 'utf8'
-            }
-        }
-    }
+<div class="highlight"><pre><span></span>    <span class="n">DATABASES</span> <span class="o">=</span> <span class="err">{</span>
+        <span class="s1">'default'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'ENGINE'</span><span class="p">:</span> <span class="s1">'django.db.backends.mysql'</span><span class="p">,</span>
+            <span class="s1">'NAME'</span><span class="p">:</span> <span class="ss">"database_name"</span><span class="p">,</span>
+            <span class="s1">'USER'</span><span class="p">:</span> <span class="ss">"root"</span><span class="p">,</span>
+            <span class="s1">'PASSWORD'</span><span class="p">:</span> <span class="ss">""</span><span class="p">,</span>
+            <span class="s1">'HOST'</span><span class="p">:</span> <span class="ss">"localhost"</span><span class="p">,</span> 
+            <span class="s1">'PORT'</span><span class="p">:</span> <span class="ss">"3306"</span><span class="p">,</span>
+            <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+                <span class="s1">'charset'</span><span class="p">:</span> <span class="s1">'utf8'</span>
+            <span class="err">}</span>
+        <span class="err">}</span>
+    <span class="err">}</span>
 </pre></div>
 <p>一般会加上 charset 是 utf8这个选项，当然mysql那边你也需要设置好字符编码。有的时候如下设置init_command 来设置字符编码可以让你获得更好的字符编码兼容性。</p>
-<div class="highlight"><pre><span></span>    'OPTIONS': {
-        'init_command': 'SET character_set_database=utf8 ,\
-        character_set_server=utf8,\
-        character_set_connection=utf8,\
-        collation_connection=utf8_unicode_ci',
-        'charset': 'utf8'}
+<div class="highlight"><pre><span></span>    <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'init_command'</span><span class="p">:</span> <span class="s1">'SET character_set_database=utf8 ,\</span>
+<span class="s1">        character_set_server=utf8,\</span>
+<span class="s1">        character_set_connection=utf8,\</span>
+<span class="s1">        collation_connection=utf8_unicode_ci'</span><span class="p">,</span>
+        <span class="s1">'charset'</span><span class="p">:</span> <span class="s1">'utf8'</span><span class="err">}</span>
 </pre></div>
 <h3 id="_2">使用多个数据库</h3>
 <p>有的时候你需要使用多个数据库，最常见的情况是某个单独的app使用另外一个数据库。</p>
 <p>首先你需要再加上另外一个数据库的定义：</p>
-<div class="highlight"><pre><span></span>    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "database_name",
-        'USER': "root",
-        'PASSWORD': "",
-        'HOST': "localhost",
-        'PORT': "3306",
-        'OPTIONS': {
-            'charset': 'utf8'
-            }
-        },
-        'youapp': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'youapp',
-            'USER': 'root',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': '',
-            'OPTIONS': {'charset': 'utf8'}
-        },
-    }
+<div class="highlight"><pre><span></span>    <span class="n">DATABASES</span> <span class="o">=</span> <span class="err">{</span>
+        <span class="s1">'default'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'ENGINE'</span><span class="p">:</span> <span class="s1">'django.db.backends.mysql'</span><span class="p">,</span>
+        <span class="s1">'NAME'</span><span class="p">:</span> <span class="ss">"database_name"</span><span class="p">,</span>
+        <span class="s1">'USER'</span><span class="p">:</span> <span class="ss">"root"</span><span class="p">,</span>
+        <span class="s1">'PASSWORD'</span><span class="p">:</span> <span class="ss">""</span><span class="p">,</span>
+        <span class="s1">'HOST'</span><span class="p">:</span> <span class="ss">"localhost"</span><span class="p">,</span>
+        <span class="s1">'PORT'</span><span class="p">:</span> <span class="ss">"3306"</span><span class="p">,</span>
+        <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'charset'</span><span class="p">:</span> <span class="s1">'utf8'</span>
+            <span class="err">}</span>
+        <span class="err">}</span><span class="p">,</span>
+        <span class="s1">'youapp'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'ENGINE'</span><span class="p">:</span> <span class="s1">'django.db.backends.mysql'</span><span class="p">,</span>
+            <span class="s1">'NAME'</span><span class="p">:</span> <span class="s1">'youapp'</span><span class="p">,</span>
+            <span class="s1">'USER'</span><span class="p">:</span> <span class="s1">'root'</span><span class="p">,</span>
+            <span class="s1">'PASSWORD'</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+            <span class="s1">'HOST'</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+            <span class="s1">'PORT'</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+            <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span><span class="s1">'charset'</span><span class="p">:</span> <span class="s1">'utf8'</span><span class="err">}</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span>
 </pre></div>
 <p>然后在你的app那边新建一个dbrouter文件，里面定义一个YourRouter类。</p>
-<div class="highlight"><pre><span></span>DATABASE_ROUTERS = ['youapp.dbrouter.YourRouter']
+<div class="highlight"><pre><span></span><span class="n">DATABASE_ROUTERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'youapp.dbrouter.YourRouter'</span><span class="p">]</span>
 </pre></div>
 <p>在这个类里面如下定义一些数据库选择行为：</p>
 <p><strong>NOTICE: 在这个app中定义的模型记得都要加上app_label这个meta属性。</strong></p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">YourRouter</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">db_for_read</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="o">**</span><span class="nx">hints</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">model</span><span class="p">.</span><span class="nx">_meta</span><span class="p">.</span><span class="nx">app_label</span> <span class="o">==</span> <span class="s1">'youapp'</span><span class="o">:</span>
-            <span class="k">return</span> <span class="s1">'youapp'</span>
-        <span class="k">return</span> <span class="nx">None</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">YourRouter</span><span class="ss">(</span><span class="nv">object</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">db_for_read</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">model</span>, <span class="o">**</span><span class="nv">hints</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">model</span>.<span class="nv">_meta</span>.<span class="nv">app_label</span> <span class="o">==</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>:
+            <span class="k">return</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>
+        <span class="k">return</span> <span class="nv">None</span>
 
-    <span class="nx">def</span> <span class="nx">db_for_write</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="o">**</span><span class="nx">hints</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">model</span><span class="p">.</span><span class="nx">_meta</span><span class="p">.</span><span class="nx">app_label</span> <span class="o">==</span> <span class="s1">'youapp'</span><span class="o">:</span>
-            <span class="k">return</span> <span class="s1">'youapp'</span>
-        <span class="k">return</span> <span class="nx">None</span>
+    <span class="nv">def</span> <span class="nv">db_for_write</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">model</span>, <span class="o">**</span><span class="nv">hints</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">model</span>.<span class="nv">_meta</span>.<span class="nv">app_label</span> <span class="o">==</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>:
+            <span class="k">return</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>
+        <span class="k">return</span> <span class="nv">None</span>
 
-    <span class="nx">def</span> <span class="nx">allow_relation</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">obj1</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">,</span> <span class="o">**</span><span class="nx">hints</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">obj1</span><span class="p">.</span><span class="nx">_meta</span><span class="p">.</span><span class="nx">app_label</span> <span class="o">==</span> <span class="s1">'youapp'</span> <span class="nx">or</span> <span class="o">\</span>
-            <span class="nx">obj2</span><span class="p">.</span><span class="nx">_meta</span><span class="p">.</span><span class="nx">app_label</span> <span class="o">==</span> <span class="s1">'youapp'</span><span class="o">:</span>
-            <span class="k">return</span> <span class="nx">True</span>
-        <span class="k">return</span> <span class="nx">None</span>
+    <span class="nv">def</span> <span class="nv">allow_relation</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">obj1</span>, <span class="nv">obj2</span>, <span class="o">**</span><span class="nv">hints</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">obj1</span>.<span class="nv">_meta</span>.<span class="nv">app_label</span> <span class="o">==</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span> <span class="nv">or</span> \
+            <span class="nv">obj2</span>.<span class="nv">_meta</span>.<span class="nv">app_label</span> <span class="o">==</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>:
+            <span class="k">return</span> <span class="nv">True</span>
+        <span class="k">return</span> <span class="nv">None</span>
 
-    <span class="nx">def</span> <span class="nx">allow_migrate</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">db</span><span class="p">,</span> <span class="nx">app_label</span><span class="p">,</span> <span class="nx">model_name</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="o">**</span><span class="nx">hints</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">app_label</span> <span class="o">==</span> <span class="s1">'youapp'</span><span class="o">:</span>
-            <span class="k">return</span> <span class="nx">db</span> <span class="o">==</span> <span class="s1">'youapp'</span>
-        <span class="k">return</span> <span class="nx">None</span>
+    <span class="nv">def</span> <span class="nv">allow_migrate</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">db</span>, <span class="nv">app_label</span>, <span class="nv">model_name</span><span class="o">=</span><span class="nv">None</span>, <span class="o">**</span><span class="nv">hints</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">app_label</span> <span class="o">==</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>:
+            <span class="k">return</span> <span class="nv">db</span> <span class="o">==</span> <span class="s1">'</span><span class="s">youapp</span><span class="s1">'</span>
+        <span class="k">return</span> <span class="nv">None</span>
 </pre></div>
 <h2 id="_3">定义模型</h2>
 <p>好了，开始实际定义自己的模型了。首先基本语法如下:</p>
@@ -280,8 +280,8 @@ django后台api编写之-模型的定义和使用  · cdwanze的博文
 </pre></div>
 <p>后面的模型都可以继承自该基类，基类是不会创建表格的，因为其Meta设置了 <code>abstract=True</code> 。DateTimeField加上 <code>auto_now=True</code> ，那么该模型每次 <code>save</code> 操作都会自动更新最新日期。 然后 <code>auto_now_add=True</code> 即该记录第一次创建时设置最新的日期。然后如果DateTimeField使用了 auto_now 或者 auto_now_add 这两个选项了就不要使用default选项了，还有就是自动插入的默认的时间是由 <code>django.utils.timezone.now()</code> 获得的。</p>
 <p>比如后面你想获得六个小时之前的所有记录那么可以如下查询：</p>
-<div class="highlight"><pre><span></span>    checktime = timezone.now() - timedelta(hours=6)
-    result = result.exclude(created_at__gt= checktime)
+<div class="highlight"><pre><span></span>    <span class="n">checktime</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="k">result</span> <span class="o">=</span> <span class="k">result</span><span class="p">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">created_at__gt</span><span class="o">=</span> <span class="n">checktime</span><span class="p">)</span>
 </pre></div>
 <h3 id="_5">通用选项</h3>
 <p>字段声明控制中有一些通用可选项:</p>
@@ -305,21 +305,21 @@ django后台api编写之-模型的定义和使用  · cdwanze的博文
 </li>
 <li><strong>unique_for_date:</strong> 比如title字段设置:</li>
 </ul>
-<div class="highlight"><pre><span></span>    unique_for_date="pub_date"
+<div class="highlight"><pre><span></span>    <span class="n">unique_for_date</span><span class="o">=</span><span class="ss">"pub_date"</span>
 </pre></div>
 <p>则 title字段和 pub_date 字段都不能相同。也就是在某个日期内某个title只能有唯一值。可以看作一种 <code>unique_together</code> 的应用。</p>
 <h3 id="_6">数据库中的关系</h3>
 <p><strong>ForeignKey:</strong> 外键引用，如果该字段的名字是user，那么实际存储在表格中的名字是user_id，你可以通过 <code>db_column</code> 来实际控制该表格的名字。- </p>
 <p>我们通常说的onetomany关系就是通过定义ForeignKey来获得的。比如：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">City</span><span class="p">(</span><span class="nx">models</span><span class="p">.</span><span class="nx">Model</span><span class="p">)</span><span class="o">:</span>
-     <span class="nx">name</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">CharField</span><span class="p">(</span><span class="nx">max_length</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
-     <span class="nx">state</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">CharField</span><span class="p">(</span><span class="nx">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-     <span class="nx">zipcode</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">IntegerField</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">City</span>(<span class="n">models</span>.<span class="n">Model</span>):
+     <span class="nb">name</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="n">max_length</span>=<span class="mi">60</span>)
+     <span class="k">state</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="n">max_length</span>=<span class="mi">40</span>)
+     <span class="n">zipcode</span> = <span class="n">models</span>.<span class="n">IntegerField</span>()
 
-<span class="kr">class</span> <span class="nx">Address</span><span class="p">(</span><span class="nx">models</span><span class="p">.</span><span class="nx">Model</span><span class="p">)</span><span class="o">:</span>
-     <span class="kt">number</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">IntegerField</span><span class="p">()</span>
-     <span class="nx">street</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">CharField</span><span class="p">(</span><span class="nx">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-     <span class="nx">city</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">ForeignKey</span><span class="p">(</span><span class="nx">City</span><span class="p">)</span>
+<span class="k">class</span> <span class="n">Address</span>(<span class="n">models</span>.<span class="n">Model</span>):
+     <span class="n">number</span> = <span class="n">models</span>.<span class="n">IntegerField</span>()
+     <span class="n">street</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="n">max_length</span>=<span class="mi">100</span>)
+     <span class="n">city</span> = <span class="n">models</span>.<span class="n">ForeignKey</span>(<span class="n">City</span>)
 </pre></div>
 <p>一个city有多个address，但是一个address只能有一个city，也就是一个外键映射到city那边。所以我觉得ForeignKey更确切的表示是manytoone关系，当某个模型有一个外键属性是，也就是可以有多个记录指向同一个它物 <a href="https://chrisbartos.com/articles/how-to-implement-one-to-many-relationship-in-django/">参阅了这篇文章</a>。</p>
 <p><strong>OneToOneField</strong>
@@ -329,18 +329,18 @@ OneToOneField 比较简单，就是一个记录只有一个对应的属性，通
 <p>关于模型定义的字段，更多的内容请参看官方文档。</p>
 <h3 id="_7">多字段组合唯一</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/28712848/composite-primary-key-in-django">这个网页</a> ，具体就是在 <code>Meta</code>  那里定义 <code>unique_together</code> 属性。</p>
-<div class="highlight"><pre><span></span>    ...
-    title = models.CharField(max_length=255)
-    gzh_id = models.CharField(max_length=255, null=True, blank=True)
-    ...
-   class Meta:
-        db_table = 'article'
-        unique_together = ("title","gzh_id")
+<div class="highlight"><pre><span></span>    <span class="p">...</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">gzh_id</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="k">null</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+    <span class="p">...</span>
+   <span class="k">class</span> <span class="n">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s1">'article'</span>
+        <span class="n">unique_together</span> <span class="o">=</span> <span class="p">(</span><span class="ss">"title"</span><span class="p">,</span><span class="ss">"gzh_id"</span><span class="p">)</span>
 </pre></div>
 <h2 id="_8">定义模型中的元类数据</h2>
-<div class="highlight"><pre><span></span>    ...
-    class Meta:
-        db_table = 'table_name'
+<div class="highlight"><pre><span></span>    <span class="p">...</span>
+    <span class="k">class</span> <span class="n">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s1">'table_name'</span>
 </pre></div>
 <ul>
 <li>db_table 具体指定实际创建的table表格的名字。</li>
@@ -354,8 +354,8 @@ OneToOneField 比较简单，就是一个记录只有一个对应的属性，通
 <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"WeizhongTu"</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
 </pre></div>
 <p>但是要注意如果你插入一条记录出现主键重复问题了，那么程序是会返回异常的。一般推荐使用 <code>get_or_create</code> 方法：</p>
-<div class="highlight"><pre><span></span>obj, created = Person.objects.get_or_create(first_name='John', last_name='Lennon',
-                  defaults={'birthday': date(1940, 10, 9)})
+<div class="highlight"><pre><span></span><span class="n">obj</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Person</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">first_name</span><span class="o">=</span><span class="s1">'John'</span><span class="p">,</span> <span class="n">last_name</span><span class="o">=</span><span class="s1">'Lennon'</span><span class="p">,</span>
+                  <span class="k">defaults</span><span class="o">=</span><span class="err">{</span><span class="s1">'birthday'</span><span class="p">:</span> <span class="nb">date</span><span class="p">(</span><span class="mi">1940</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span><span class="err">}</span><span class="p">)</span>
 </pre></div>
 <p>上面这个语句有查询的效果也有新建记录的效果。写的这些属性首先将进行get操作，大体是如下的加强版：</p>
 <div class="highlight"><pre><span></span><span class="k">try</span><span class="o">:</span>
@@ -369,39 +369,39 @@ OneToOneField 比较简单，就是一个记录只有一个对应的属性，通
 <p>然后是如何理解 defaults 这样选项，defaults里面定义的属性不会参与get查询过程，其参与的是在没有找到记录的情况下，设置某些值。</p>
 <h3 id="_11">查询记录</h3>
 <p>首先说一下获取所有的记录：</p>
-<div class="highlight"><pre><span></span>result = Person.objects.all()
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="n">Person</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="k">all</span><span class="p">()</span>
 </pre></div>
 <p>其返回的是 QuerySet 对象，QuerySet对象可以继续进行下一步的查询操作。比如下面可以继续：</p>
-<div class="highlight"><pre><span></span>result = result.filter(name="abc")
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="k">result</span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="ss">"abc"</span><span class="p">)</span>
 </pre></div>
 <p>当然就上面的例子来说直接使用filter方法即可：</p>
-<div class="highlight"><pre><span></span>result = Person.objects.filter(name="abc")
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="n">Person</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="ss">"abc"</span><span class="p">)</span>
 </pre></div>
 <h3 id="_12">排序</h3>
 <p>QuerySet对象可以进一步排序：</p>
-<div class="highlight"><pre><span></span>result = result.order_by('what')
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="k">result</span><span class="p">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">'what'</span><span class="p">)</span>
 </pre></div>
 <h3 id="reverse">reverse</h3>
-<div class="highlight"><pre><span></span>result = result.reverse()
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="k">result</span><span class="p">.</span><span class="n">reverse</span><span class="p">()</span>
 </pre></div>
 <h3 id="exclude">exclude</h3>
 <p>排除某些记录，下面是排除created_at这个字段值大于某个时间的值：</p>
-<div class="highlight"><pre><span></span>result = result.exclude(created_at__gt= checktime)
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="k">result</span><span class="p">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">created_at__gt</span><span class="o">=</span> <span class="n">checktime</span><span class="p">)</span>
 </pre></div>
 <h3 id="offset-and-limit">offset and limit</h3>
-<div class="highlight"><pre><span></span>result = result[offset: offset+limit]
+<div class="highlight"><pre><span></span><span class="k">result</span> <span class="o">=</span> <span class="k">result</span><span class="p">[</span><span class="k">offset</span><span class="p">:</span> <span class="k">offset</span><span class="o">+</span><span class="k">limit</span><span class="p">]</span>
 </pre></div>
 <h3 id="_13">删除某个记录</h3>
 <p>找到目标记录的instance，然后调用 <code>delete</code> 方法即可。</p>
 <h3 id="_14">确定某记录是否存在</h3>
 <p>前面已经谈到了一些查询操作，而如果读者只是单纯的想确定某记录是否存在，那么使用 <code>exists</code> 方法是最快和最简便的。参考了 <a href="https://stackoverflow.com/questions/2690521/django-check-for-any-exists-for-a-query">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span>if Article.objects.filter(unique_id= unique_id).exists():
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="nv">Article</span>.<span class="nv">objects</span>.<span class="nv">filter</span><span class="ss">(</span><span class="nv">unique_id</span><span class="o">=</span> <span class="nv">unique_id</span><span class="ss">)</span>.<span class="nv">exists</span><span class="ss">()</span>:
     ...
 </pre></div>
 <h3 id="_15">关系的使用</h3>
 <p>OnetoOne关系的使用非常简单， <code>a.b</code> 或者 <code>b.a</code> 都是可以的。</p>
 <p>ManytoOne关系也就是由 ForeignKey 定义的关系，如果是引用外键的那个对象，那么直接 <code>a.b</code> 即可，如果是反向onetomany那种，则最好你在定义的时候就定义好 <code>related_name</code> ，（参考了 <a href="https://stackoverflow.com/questions/19799955/django-get-the-set-of-objects-from-many-to-one-relationship">这个问题</a> ）那么引用如下：</p>
-<div class="highlight"><pre><span></span>b.related_name
+<div class="highlight"><pre><span></span><span class="n">b</span><span class="p">.</span><span class="n">related_name</span>
 </pre></div>
 <p>具体使用细节还是请查看文档的 <a href="https://docs.djangoproject.com/zh-hans/2.0/topics/db/examples/many_to_one/">这里</a> 。</p>
             

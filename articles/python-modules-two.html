@@ -360,7 +360,7 @@ and formatters。</p>
 <h4 id="loggers">loggers</h4>
 <p><strong>记录器</strong>
 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。</p>
-<div class="highlight"><pre><span></span>logger = logging.getLogger(__name__)
+<div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 <p>这个 <code>__name__</code>
 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。</p>
@@ -431,50 +431,50 @@ and formatters。</p>
 <h4 id="formatters">formatters</h4>
 <p><strong>格式器</strong>，具体信息的格式定义。</p>
 <p>这里的format涉及到的一些参数设置如下所示:</p>
-<div class="highlight"><pre><span></span>-   %(levelname)s 类似'DEBUG'这样的logging level
--   %(message)s 具体输出的信息
--   %(asctime)s 具体时间，默认是'2003-07-08 16:49:45,896'，你可以通过 **datefmt** 选项来进一步设置格式，格式设置和strftime命令类似。
--   %(filename)s 文件名，更简洁的表达是模块名。
--   %(module)s 模块名
--   %(funcName)s 函数名
--   %(lineno)d 具体logging代码在第几行
+<div class="highlight"><pre><span></span><span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">levelname</span><span class="p">)</span><span class="n">s</span> <span class="err">类似</span><span class="s1">'DEBUG'</span><span class="err">这样的</span><span class="n">logging</span> <span class="k">level</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="n">s</span> <span class="err">具体输出的信息</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">asctime</span><span class="p">)</span><span class="n">s</span> <span class="err">具体时间，默认是</span><span class="s1">'2003-07-08 16:49:45,896'</span><span class="err">，你可以通过</span> <span class="o">**</span><span class="n">datefmt</span><span class="o">**</span> <span class="err">选项来进一步设置格式，格式设置和</span><span class="n">strftime命令类似</span><span class="err">。</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="n">s</span> <span class="err">文件名，更简洁的表达是模块名。</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">module</span><span class="p">)</span><span class="n">s</span> <span class="err">模块名</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">funcName</span><span class="p">)</span><span class="n">s</span> <span class="err">函数名</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">lineno</span><span class="p">)</span><span class="n">d</span> <span class="err">具体</span><span class="n">logging代码在第几行</span>
 
--   %(name)s logger的名字，默认是'root'。
--   %(process)d 进程号
--   %(processName)s 进程名
--   %(thread)d 线程号
--   %(threadName)s 线程名
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="n">s</span> <span class="n">logger的名字</span><span class="err">，默认是</span><span class="s1">'root'</span><span class="err">。</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">process</span><span class="p">)</span><span class="n">d</span> <span class="err">进程号</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">processName</span><span class="p">)</span><span class="n">s</span> <span class="err">进程名</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">thread</span><span class="p">)</span><span class="n">d</span> <span class="err">线程号</span>
+<span class="o">-</span>   <span class="o">%</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="n">s</span> <span class="err">线程名</span>
 </pre></div>
 <h3 id="_6">字典统一配置</h3>
 <p>django的setting.py就会有这样的配置，具体含义还是很明显的，就是定义处理器，格式器，记录器等。</p>
-<div class="highlight"><pre><span></span>LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': "%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s"
-        }
-    },
-    'handlers': {
-        'log_file': {
-            'class': 'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler',
-            'filename': config.get('web', 'log_path'),
-            'when': 'midnight',
-            'maxBytes': int(config.get('web', 'log_max_bytes')),
-            'interval': 1,
-            'backupDay': int(config.get('web', 'log_backup_days')),
-            'dedupetime': int(config.get('web', 'log_dedupe_time')),
-            'formatter': 'simple'
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['log_file'],
-            'level': config.get('web', 'log_level'),
-            'propagate': True,
-        },
-    }
-}
+<div class="highlight"><pre><span></span><span class="n">LOGGING</span> <span class="o">=</span> <span class="err">{</span>
+    <span class="s1">'version'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">'disable_existing_loggers'</span><span class="p">:</span> <span class="k">False</span><span class="p">,</span>
+    <span class="s1">'formatters'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'simple'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'format'</span><span class="p">:</span> <span class="ss">"%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s"</span>
+        <span class="err">}</span>
+    <span class="err">}</span><span class="p">,</span>
+    <span class="s1">'handlers'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'log_file'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'class'</span><span class="p">:</span> <span class="s1">'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler'</span><span class="p">,</span>
+            <span class="s1">'filename'</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_path'</span><span class="p">),</span>
+            <span class="s1">'when'</span><span class="p">:</span> <span class="s1">'midnight'</span><span class="p">,</span>
+            <span class="s1">'maxBytes'</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_max_bytes'</span><span class="p">)),</span>
+            <span class="s1">'interval'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">'backupDay'</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_backup_days'</span><span class="p">)),</span>
+            <span class="s1">'dedupetime'</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_dedupe_time'</span><span class="p">)),</span>
+            <span class="s1">'formatter'</span><span class="p">:</span> <span class="s1">'simple'</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span><span class="p">,</span>
+    <span class="s1">'loggers'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'django.request'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'handlers'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'log_file'</span><span class="p">],</span>
+            <span class="s1">'level'</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_level'</span><span class="p">),</span>
+            <span class="s1">'propagate'</span><span class="p">:</span> <span class="k">True</span><span class="p">,</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span>
+<span class="err">}</span>
 </pre></div>
 <h2 id="json">json模块</h2>
 <h3 id="json_1">什么是json</h3>
@@ -520,22 +520,22 @@ and formatters。</p>
 <h2 id="itertools">itertools模块</h2>
 <h3 id="repeat">repeat函数</h3>
 <p>其定义函数如下：</p>
-<div class="highlight"><pre><span></span>def repeat(object, times=None):
-    # repeat(10, 3) --&gt; 10 10 10
-    if times is None:
-        while True:
-            yield object
-    else:
-        for i in range(times):
-            yield object
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">repeat</span><span class="ss">(</span><span class="nv">object</span>, <span class="nv">times</span><span class="o">=</span><span class="nv">None</span><span class="ss">)</span>:
+    # <span class="nv">repeat</span><span class="ss">(</span><span class="mi">10</span>, <span class="mi">3</span><span class="ss">)</span> <span class="o">--&gt;</span> <span class="mi">10</span> <span class="mi">10</span> <span class="mi">10</span>
+    <span class="k">if</span> <span class="nv">times</span> <span class="nv">is</span> <span class="nv">None</span>:
+        <span class="k">while</span> <span class="nv">True</span>:
+            <span class="nv">yield</span> <span class="nv">object</span>
+    <span class="k">else</span>:
+        <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="nv">times</span><span class="ss">)</span>:
+            <span class="nv">yield</span> <span class="nv">object</span>
 </pre></div>
 <p>也就是返回一个可迭代对象，这么封装最大的一个用处是用于填充map函数或者zip函数的某个常数值。因为你填写repeat(5)之后将一个返回一个可迭代对象，不停的返回数字5而不需要你考虑长度问题。</p>
 <h3 id="starmap">starmap函数</h3>
 <p>starmap函数具体定义如下所示：</p>
-<div class="highlight"><pre><span></span>def starmap(function, iterable):
-    # starmap(pow, [(2,5), (3,2), (10,3)]) --&gt; 32 9 1000
-    for args in iterable:
-        yield function(*args)
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">starmap</span><span class="ss">(</span><span class="nv">function</span>, <span class="nv">iterable</span><span class="ss">)</span>:
+    # <span class="nv">starmap</span><span class="ss">(</span><span class="nv">pow</span>, [<span class="ss">(</span><span class="mi">2</span>,<span class="mi">5</span><span class="ss">)</span>, <span class="ss">(</span><span class="mi">3</span>,<span class="mi">2</span><span class="ss">)</span>, <span class="ss">(</span><span class="mi">10</span>,<span class="mi">3</span><span class="ss">)</span>]<span class="ss">)</span> <span class="o">--&gt;</span> <span class="mi">32</span> <span class="mi">9</span> <span class="mi">1000</span>
+    <span class="k">for</span> <span class="nv">args</span> <span class="nv">in</span> <span class="nv">iterable</span>:
+        <span class="nv">yield</span> <span class="nv">function</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span><span class="ss">)</span>
 </pre></div>
 <p>其接受一个可迭代对象，然后逐个将可迭代对象中的元素解包之后送入函数当参数（最后当然函数也执行了）。</p>
 <h2 id="inspect">inspect模块</h2>
@@ -544,21 +544,21 @@ and formatters。</p>
 <h3 id="getfile">getfile函数</h3>
 <p>传入python
 object，返回定义该object具体是在那个文件中的。可以如下获取该文件的系统绝对路径地址:</p>
-<div class="highlight"><pre><span></span>os.path.abspath(inspect.getfile(func))
+<div class="highlight"><pre><span></span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">inspect</span><span class="p">.</span><span class="n">getfile</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
 </pre></div>
 <p>值得一提的是，如果该模块被安装进入系统了，那么实际该文件的地址应该是类似这样的形式:</p>
-<div class="highlight"><pre><span></span>/usr/local/lib/python3.4/dist-packages/infome-15.10.30-py3.4.egg/infome/web/youdao.py
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="p">.</span><span class="mi">4</span><span class="o">/</span><span class="n">dist</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">infome</span><span class="o">-</span><span class="mi">15</span><span class="p">.</span><span class="mi">10</span><span class="p">.</span><span class="mi">30</span><span class="o">-</span><span class="n">py3</span><span class="p">.</span><span class="mi">4</span><span class="p">.</span><span class="n">egg</span><span class="o">/</span><span class="n">infome</span><span class="o">/</span><span class="n">web</span><span class="o">/</span><span class="n">youdao</span><span class="p">.</span><span class="n">py</span>
 </pre></div>
 <p>。</p>
 <h3 id="getcallargs">getcallargs函数</h3>
 <p>如下所示:</p>
-<div class="highlight"><pre><span></span>params = inspect.getcallargs(func,*args,**kargs)
+<div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">.</span><span class="n">getcallargs</span><span class="p">(</span><span class="n">func</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
 </pre></div>
 <p>相当于模拟执行了func函数，然后返回如果执行func函数时其接受的参数字典值（包括必填参数和可选参数）。</p>
 <h2 id="functools">functools模块</h2>
 <h3 id="partial">partial类</h3>
 <p>functools模块定义了一个partial类，其输入参数如下所示:</p>
-<div class="highlight"><pre><span></span>    functools.partial(func, *args, **keywords)
+<div class="highlight"><pre><span></span>    <span class="n">functools</span><span class="p">.</span><span class="k">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keywords</span><span class="p">)</span>
 </pre></div>
 <p>其将返回一个partial对象，其有 <code>__call__</code>
 方法，也就是其可以类似函数进行调用。然后其有 <strong>func</strong>
@@ -593,16 +593,16 @@ object，返回定义该object具体是在那个文件中的。可以如下获�
 <span class="n">p1</span><span class="p">()</span>
 </pre></div>
 <p>其输出如下:</p>
-<div class="highlight"><pre><span></span>    fun1
-    &lt;function fun1 at 0xb705880c&gt;
-    fun1
-    called fun1 with fun1 a 2
-    p1
-    functools.partial(&lt;function fun1 at 0xb705880c&gt;, 'p1 a', b=99)
-    &lt;function fun1 at 0xb705880c&gt;
-    ('p1 a',)
-    {'b': 99}
-    called fun1 with p1 a 99
+<div class="highlight"><pre><span></span>    <span class="n">fun1</span>
+    <span class="o">&lt;</span><span class="k">function</span> <span class="n">fun1</span> <span class="k">at</span> <span class="mi">0</span><span class="n">xb705880c</span><span class="o">&gt;</span>
+    <span class="n">fun1</span>
+    <span class="k">called</span> <span class="n">fun1</span> <span class="k">with</span> <span class="n">fun1</span> <span class="n">a</span> <span class="mi">2</span>
+    <span class="n">p1</span>
+    <span class="n">functools</span><span class="p">.</span><span class="k">partial</span><span class="p">(</span><span class="o">&lt;</span><span class="k">function</span> <span class="n">fun1</span> <span class="k">at</span> <span class="mi">0</span><span class="n">xb705880c</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">'p1 a'</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+    <span class="o">&lt;</span><span class="k">function</span> <span class="n">fun1</span> <span class="k">at</span> <span class="mi">0</span><span class="n">xb705880c</span><span class="o">&gt;</span>
+    <span class="p">(</span><span class="s1">'p1 a'</span><span class="p">,)</span>
+    <span class="err">{</span><span class="s1">'b'</span><span class="p">:</span> <span class="mi">99</span><span class="err">}</span>
+    <span class="k">called</span> <span class="n">fun1</span> <span class="k">with</span> <span class="n">p1</span> <span class="n">a</span> <span class="mi">99</span>
 </pre></div>
 <p>这里的逻辑是首先正常执行fun1，然后将fun用partial封装成p1，新增参数字符串'p1
 a'和b=4，后面我们可以看到这个p1的参数都加进去了。然后执行这个p1我们看到了参数的变化。</p>
@@ -614,25 +614,25 @@ datetime 对象的，这很是方便。</p>
 <a href="https://docs.python.org/3.4/library/datetime.html">官方文档</a> 。</p>
 <h3 id="timedelta">timedelta对象</h3>
 <p>通过timedelta函数返回一个timedelta对象，也就是一个表示时间间隔的对象。函数参数情况如下所示:</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">datetime</span><span class="p">.</span><span class="nx">timedelta</span><span class="p">([</span><span class="nx">days</span><span class="p">[,</span> <span class="nx">seconds</span><span class="p">[,</span> <span class="nx">microseconds</span><span class="p">[,</span> <span class="nx">milliseconds</span><span class="p">[,</span> <span class="nx">minutes</span><span class="p">[,</span> <span class="nx">hours</span><span class="p">[,</span> <span class="nx">weeks</span><span class="p">]]]]]]])</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">datetime</span>.<span class="n">timedelta</span>([<span class="n">days</span>[, <span class="n">seconds</span>[, <span class="n">microseconds</span>[, <span class="n">milliseconds</span>[, <span class="n">minutes</span>[, <span class="n">hours</span>[, <span class="n">weeks</span>]]]]]]])
 </pre></div>
 <p>其没有必填参数，简单控制的话第一个整数就是多少天的间隔的意思:</p>
-<div class="highlight"><pre><span></span>datetime.timedelta(10)
+<div class="highlight"><pre><span></span><span class="n">datetime</span><span class="p">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 <p>两个时间间隔对象可以彼此之间相加或相减，返回的仍是一个时间间隔对象。而更方便的是一个datetime对象如果减去一个时间间隔对象，那么返回的对应减去之后的datetime对象，然后两个datetime对象如果相减返回的是一个时间间隔对象。这很是方便。</p>
 <h3 id="datetime_1">datetime对象</h3>
 <p>通过datetime函数可以创建一个datetime对象:</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">datetime</span><span class="p">.</span><span class="nx">datetime</span><span class="p">(</span><span class="nx">year</span><span class="p">,</span> <span class="nx">month</span><span class="p">,</span> <span class="nx">day</span><span class="p">[,</span> <span class="nx">hour</span><span class="p">[,</span> <span class="nx">minute</span><span class="p">[,</span> <span class="nx">second</span><span class="p">[,</span> <span class="nx">microsecond</span><span class="p">[,</span> <span class="nx">tzinfo</span><span class="p">]]]]])</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">datetime</span>.<span class="n">datetime</span>(<span class="n">year</span>, <span class="n">month</span>, <span class="n">day</span>[, <span class="n">hour</span>[, <span class="n">minute</span>[, <span class="n">second</span>[, <span class="n">microsecond</span>[, <span class="n">tzinfo</span>]]]]])
 </pre></div>
 <p>其中year，month和day是必填参数。下面是一个简单的例子:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; db_t = {
-...  "date": datetime.datetime(1777,07,07)
-... }
-&gt;&gt;&gt; db_t
-{'date': datetime.datetime(1777, 7, 7, 0, 0)}
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">db_t</span> <span class="o">=</span> <span class="err">{</span>
+<span class="p">...</span>  <span class="ss">"date"</span><span class="p">:</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1777</span><span class="p">,</span><span class="mi">07</span><span class="p">,</span><span class="mi">07</span><span class="p">)</span>
+<span class="p">...</span> <span class="err">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">db_t</span>
+<span class="err">{</span><span class="s1">'date'</span><span class="p">:</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1777</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="err">}</span>
 </pre></div>
 <p>其通过pymongo存入mongodb之后是这样的形式:</p>
-<div class="highlight"><pre><span></span>ISODate("1777-07-07T00:00:00.000Z")
+<div class="highlight"><pre><span></span><span class="n">ISODate</span><span class="p">(</span><span class="ss">"1777-07-07T00:00:00.000Z"</span><span class="p">)</span>
 </pre></div>
 <h4 id="nowutcnow">now和utcnow方法</h4>
 <p>datetime对象有 <code>now</code> 和 <code>utcnow</code>
@@ -642,8 +642,8 @@ datetime 对象的，这很是方便。</p>
 <p>参看
 <a href="http://stackoverflow.com/questions/13866926/python-pytz-list-of-timezones">这个网页</a>
 。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; pytz.all_timezones
-['Africa/Abidjan', 'Africa/Accra', 'Africa/Addis_Ababa', 'Africa/Algiers', ......
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">pytz</span><span class="p">.</span><span class="n">all_timezones</span>
+<span class="p">[</span><span class="s1">'Africa/Abidjan'</span><span class="p">,</span> <span class="s1">'Africa/Accra'</span><span class="p">,</span> <span class="s1">'Africa/Addis_Ababa'</span><span class="p">,</span> <span class="s1">'Africa/Algiers'</span><span class="p">,</span> <span class="p">......</span>
 </pre></div>
 <h5 id="now">具体给now方法指定一个时区</h5>
 <p>参看
@@ -654,16 +654,16 @@ datetime 对象的，这很是方便。</p>
 </pre></div>
 <h5 id="nowutcnow_1">now方法和utcnow方法区别</h5>
 <p>我们看下面这个例子:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; datetime.now(tz = pytz.timezone("UTC")),datetime.utcnow()
-(datetime.datetime(2015, 7, 11, 9, 25, 20, 266863, tzinfo=&lt;UTC&gt;), datetime.datetime(2015, 7, 11, 9, 25, 20, 266888))
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="p">.</span><span class="n">timezone</span><span class="p">(</span><span class="ss">"UTC"</span><span class="p">)),</span><span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">266863</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">UTC</span><span class="o">&gt;</span><span class="p">),</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">266888</span><span class="p">))</span>
 </pre></div>
 <p>如果我们给now方法指定默认的时区是\"UTC\"，那么我们看到其返回的datetime对象和utcnow返回的datetime对象基本上没什么区别，后面的微秒（
 <span class="math">\(10^{-6}\)</span>
 秒）有点区别完全可以理解。然后我们再看now方法如果不加任何参数会如何:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; now
-datetime.datetime(2015, 7, 11, 16, 34, 43, 144018)
-&gt;&gt;&gt; utcnow
-datetime.datetime(2015, 7, 11, 8, 34, 56, 319108)
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">now</span>
+<span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">144018</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">utcnow</span>
+<span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">319108</span><span class="p">)</span>
 </pre></div>
 <p>这里now显示的时间和本地的时间是一致的，说明now默认的时区是本地的时区参数。谈到这里大家应该就明白了，如果是后台数据库有日期时间输入需求，为了保持时间戳的一致性，推荐都使用utcnow方法来生成时间戳，也就是实际上都以UTC格林威治时区为准。如果到前端需要显示给用户具体的日期时间了，如果要引用前端数据库的日期时间，才需要引入时区的考虑进行必要的转换。然后如果前端需要用python生成实时的时间，那么就用now方法再引入pytz的时区控制。</p>
 <h4 id="datetime_2">datetime对象的属性</h4>
@@ -781,16 +781,16 @@ datetime.datetime(2015, 7, 11, 8, 34, 56, 319108)
 <p>前面提到了一个datetime对象减去一个timedelta对象返回一个datetime对象，然后一个datetime对象减去一个datetime对象返回一个时间间隔对象。比如此时之前一年的时间可以这样表达
 <code>datetime.datetime.utcnow() - datetime.timedelta(365)</code>
 。然后此时和爱因斯坦的生日时间间隔可以这样表达:</p>
-<div class="highlight"><pre><span></span>datetime.datetime.utcnow() - datetime.datetime(1879,03,14)
+<div class="highlight"><pre><span></span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1879</span><span class="p">,</span><span class="mi">03</span><span class="p">,</span><span class="mi">14</span><span class="p">)</span>
 </pre></div>
 <p>然后我们可以利用这个时间间隔来进行一些操作和判断。</p>
-<div class="highlight"><pre><span></span>    &gt;&gt;&gt; delta = datetime.datetime.utcnow() - datetime.datetime(1879,03,14)
-    &gt;&gt;&gt; delta
-    datetime.timedelta(49792, 35970, 903285)
-    &gt;&gt;&gt; delta &gt; datetime.timedelta(120*365)
-    True
-    &gt;&gt;&gt; delta.days // 365
-    136
+<div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1879</span><span class="p">,</span><span class="mi">03</span><span class="p">,</span><span class="mi">14</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">delta</span>
+    <span class="n">datetime</span><span class="p">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">49792</span><span class="p">,</span> <span class="mi">35970</span><span class="p">,</span> <span class="mi">903285</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="n">datetime</span><span class="p">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">120</span><span class="o">*</span><span class="mi">365</span><span class="p">)</span>
+    <span class="k">True</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">delta</span><span class="p">.</span><span class="n">days</span> <span class="o">//</span> <span class="mi">365</span>
+    <span class="mi">136</span>
 </pre></div>
 <h3 id="struct95time-datetime">struct_time 对象转化成为 datetime 对象</h3>
 <p>参看
@@ -810,12 +810,12 @@ datetime.datetime(2015, 7, 11, 8, 34, 56, 319108)
 <h3 id="datetime-time95struct">datetime 对象转化为 time_struct 对象</h3>
 <p>参考了
 <a href="http://stackoverflow.com/questions/8022161/python-converting-from-datetime-datetime-to-time-time">这个网页</a></p>
-<div class="highlight"><pre><span></span>    &gt;&gt;&gt; t = datetime.datetime.now()
-    &gt;&gt;&gt; t
-    datetime.datetime(2011, 11, 5, 11, 26, 15, 37496)
+<div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">t</span>
+    <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2011</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">37496</span><span class="p">)</span>
 
-    &gt;&gt;&gt; time.mktime(t.timetuple()) + t.microsecond / 1E6
-    1320517575.037496
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">timetuple</span><span class="p">())</span> <span class="o">+</span> <span class="n">t</span><span class="p">.</span><span class="n">microsecond</span> <span class="o">/</span> <span class="mi">1</span><span class="n">E6</span>
+    <span class="mi">1320517575</span><span class="p">.</span><span class="mi">037496</span>
 </pre></div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",

@@ -147,26 +147,26 @@
 <h2 id="_1">第二版说明</h2>
 <p>在 <a href="{filename}./小分子网页显示.html">第一版中</a> 我们介绍了在html文件中如何绘制数学表达式和化学分子式，简单来说就是利用 <code>mathjax</code>  这个javascript库。但是我们是如此喜欢markdown和pelican，那里在pelican下该如何做呢。</p>
 <p>最优雅的方法就是引入 <code>render_math</code> 这个插件。</p>
-<div class="highlight"><pre><span></span># the plugin
-PLUGIN_PATHS = ['myplugins']
+<div class="highlight"><pre><span></span><span class="o">#</span> <span class="n">the</span> <span class="n">plugin</span>
+<span class="n">PLUGIN_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'myplugins'</span><span class="p">]</span>
 
-PLUGINS = [extract_toc', 'render_math']
+<span class="n">PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="n">extract_toc</span><span class="s1">', '</span><span class="n">render_math</span><span class="s1">']</span>
 
-MATH_JAX = {'tex_extensions': ['mhchem.js']}
+<span class="s1">MATH_JAX = {'</span><span class="n">tex_extensions</span><span class="s1">': ['</span><span class="n">mhchem</span><span class="p">.</span><span class="n">js</span><span class="err">'</span><span class="p">]</span><span class="err">}</span>
 </pre></div>
 <p>然后剩下的一切就交给pelican来处理吧，其可以检测你的markdown下是否插入了数学公式或者说化学分子式，然后决定是否引入 mathjax 库。</p>
 <h2 id="_2">数学环境简要介绍</h2>
 <p>行内数学环境就像 TeX 里面一样 <code>$ $</code>  ，然后单独一行的数学表达式是 ： </p>
-<div class="highlight"><pre><span></span>$$
-...
+<div class="highlight"><pre><span></span><span class="err">$$</span>
+<span class="p">...</span>
 
-$$
+<span class="err">$$</span>
 </pre></div>
 <p>更多用 Tex写数学的知识请参看这个 <a href="https://en.wikibooks.org/wiki/LaTeX/Mathematics">wikibook</a> 。值得一提的是 LaTeX风格 <code>\(</code> 这样的并不支持。然后 <code>\begin{equation}</code> 是支持的，不过这边markdown编辑器并不支持实时预览，所以推荐就使用 <code>$</code> 和 <code>$$</code> 了。</p>
 <p>如下：</p>
-<div class="highlight"><pre><span></span>$$
-{\sigma  }^{2  } =\frac { 1 }{n }  \sum _{ i=1 }^{ n }{( X_i  - \mu)^2}
-$$
+<div class="highlight"><pre><span></span><span class="err">$$</span>
+<span class="err">{\</span><span class="n">sigma</span>  <span class="err">}</span><span class="o">^</span><span class="err">{</span><span class="mi">2</span>  <span class="err">}</span> <span class="o">=</span><span class="err">\</span><span class="n">frac</span> <span class="err">{</span> <span class="mi">1</span> <span class="err">}{</span><span class="n">n</span> <span class="err">}</span>  <span class="err">\</span><span class="k">sum</span> <span class="n">_</span><span class="err">{</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span> <span class="err">}</span><span class="o">^</span><span class="err">{</span> <span class="n">n</span> <span class="err">}{</span><span class="p">(</span> <span class="n">X_i</span>  <span class="o">-</span> <span class="err">\</span><span class="n">mu</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="err">}</span>
+<span class="err">$$</span>
 </pre></div>
 <p>显示效果就是：
 </p>
@@ -196,10 +196,10 @@ $$</div>
 <div class="math">$$
 \ce{CO2 + C &lt;- 2CO}
 $$</div>
-<div class="highlight"><pre><span></span>$$
-\ce{CO2 + C -&gt;[\text{加入text命令}] 2CO}
-\ce{CO2 + C -&gt;T[是支持][中文的] 2CO}
-$$
+<div class="highlight"><pre><span></span><span class="err">$$</span>
+<span class="err">\</span><span class="n">ce</span><span class="err">{</span><span class="n">CO2</span> <span class="o">+</span> <span class="k">C</span> <span class="o">-&gt;</span><span class="p">[</span><span class="err">\</span><span class="nb">text</span><span class="err">{加入</span><span class="n">text命令</span><span class="err">}</span><span class="p">]</span> <span class="mi">2</span><span class="n">CO</span><span class="err">}</span>
+<span class="err">\</span><span class="n">ce</span><span class="err">{</span><span class="n">CO2</span> <span class="o">+</span> <span class="k">C</span> <span class="o">-&gt;</span><span class="n">T</span><span class="p">[</span><span class="err">是支持</span><span class="p">][</span><span class="err">中文的</span><span class="p">]</span> <span class="mi">2</span><span class="n">CO</span><span class="err">}</span>
+<span class="err">$$</span>
 </pre></div>
 <div class="math">$$
 \ce{CO2 + C -&gt;[\text{加入text命令}] 2CO}
@@ -209,9 +209,9 @@ $$</div>
 $$</div>
 <p>如果不使用text命令，那么中文是不会正常显示。上面例子第二个没有使用text命令，是因为前面加上了T，然后箭头上下文字都不需要了。</p>
 <h2 id="_7">显示上下箭头</h2>
-<div class="highlight"><pre><span></span>$$
-\ce{SO4^2- + Ba^2+ -&gt; BaSO4 v ^}
-$$
+<div class="highlight"><pre><span></span><span class="err">$$</span>
+<span class="err">\</span><span class="n">ce</span><span class="err">{</span><span class="n">SO4</span><span class="o">^</span><span class="mi">2</span><span class="o">-</span> <span class="o">+</span> <span class="n">Ba</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span> <span class="o">-&gt;</span> <span class="n">BaSO4</span> <span class="n">v</span> <span class="o">^</span><span class="err">}</span>
+<span class="err">$$</span>
 </pre></div>
 <div class="math">$$
 \ce{SO4^2- + Ba^2+ -&gt; BaSO4 v ^}

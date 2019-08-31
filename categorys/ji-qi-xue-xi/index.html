@@ -179,7 +179,7 @@ cdwanze的博文 - 机器学习 category</title>
 <h2 id="numpy">高效numpy</h2>
 <h3 id="numpypandas">numpy总的来说比pandas快</h3>
 <p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
-<div class="highlight"><pre><span></span>np.dot(df['a'],x)
+<div class="highlight"><pre><span></span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 <p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
 <h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
@@ -187,11 +187,11 @@ cdwanze的博文 - 机器学习 category</title>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="nv">timeit</span> 
 
-<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)])</span>
+<span class="nv">res</span> <span class="o">=</span> <span class="nv">np</span>.<span class="nv">vstack</span><span class="ss">(</span>[<span class="nv">x</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">10000</span><span class="ss">)</span>]<span class="ss">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>50.7 ms ± 1.5 ms per loop (mean ± std. dev. of …</pre></div>
+<div class="highlight"><pre><span></span><span class="mi">50</span>.<span class="mi">7</span> <span class="nv">ms</span> ± <span class="mi">1</span>.<span class="mi">5</span> <span class="nv">ms</span> <span class="nv">per</span> <span class="k">loop</span> <span class="ss">(</span><span class="nv">mean</span> ± <span class="nv">std</span>. <span class="nv">dev</span>. <span class="nv">of …</span></pre></div>
                             </article>
 
 
@@ -619,7 +619,7 @@ $$</div>
 <p>在上一文机器学习第二谈中，我们算是搭建了一个简单的神经网络，初步了解了一下大体情况。本文主要紧跟着对相关内容进行更细致的讨论。</p>
 <h2 id="relu">relu激活函数</h2>
 <p>relu激活函数具体的数学运算公式很简单，就是：</p>
-<div class="highlight"><pre><span></span>z = np.maximum(z, 0)
+<div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 <p>上面运算就是对z张量进行了relu运算了，按元素的，如果元素值大于0则为原元素的值，否则为0。</p>
 <h2 id="broadcasting">广播(broadcasting)</h2>
@@ -668,10 +668,10 @@ x …</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
 <span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 </pre></div>
-<div class="highlight"><pre><span></span>train_images.shape
-(60000, 28, 28)
-train_labels.shape
-(60000,)
+<div class="highlight"><pre><span></span><span class="n">train_images</span><span class="p">.</span><span class="n">shape</span>
+<span class="p">(</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+<span class="n">train_labels</span><span class="p">.</span><span class="n">shape</span>
+<span class="p">(</span><span class="mi">60000</span><span class="p">,)</span>
 </pre></div>
 <p>train_images 的shape第一维度是60000，说明有6万个图片，然后标签第一维度也是6万与之对应。</p>
 <div class="highlight"><pre><span></span><span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
@@ -845,8 +845,7 @@ train_labels.shape
                                         </time>
                                     </div>
                                 </section>
-                                
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+                                <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>在jupyter notebook 下首先推荐输入 <code>%matplotlib notebook</code> 。</p>
@@ -934,8 +933,7 @@ train_labels.shape
                                         </time>
                                     </div>
                                 </section>
-                                
-<div class="cell border-box-sizing code_cell rendered">
+                                <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">

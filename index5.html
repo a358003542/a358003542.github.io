@@ -180,6 +180,152 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="/articles/jquery.html">前端开发之-jquery
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#html5-ref">html5
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-27T00:00:00+08:00">2018年 5月 27日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="jquery">jquery基本语法</h2>
+<p>jquery的基本语法就是:</p>
+<div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">action</span><span class="p">()</span>
+</pre></div>
+<p>如果单 <code>$(selector)</code> 将返回找到的对象的数组，而进行某个action的时候是对所有找到的对象都进行如此动作。</p>
+<h2 id="_1">文档初始化之后执行的动作</h2>
+<div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="c1">// jQuery methods go here...</span>
+<span class="p">});</span>
+</pre></div>
+<p>此外我们还常见一种简化的写法：</p>
+<div class="highlight"><pre><span></span><span class="err">$</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="err">{}</span><span class="p">);</span>
+</pre></div>
+<p>然后有时你会看到这种写法：</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="err">$</span><span class="p">)</span><span class="err">{…}</span><span class="p">)(</span><span class="n">jQuery</span><span class="p">)</span>
+</pre></div>
+<p>这是运行了一个匿名函数，其参数为(JQuery)，前面用 <code>$</code> 符号，是为了不与其他库冲突。（<a href="https://blog.csdn.net/javazw123/article/details/6217988">参考这篇文章</a>）</p>
+<h2 id="_2">获取屏幕的宽度和高度</h2>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>
+<span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span>
+</pre></div>
+<p>这两个方法更确切的描述是返回所选元素的宽度或高度。此外还有 <code>innerWidth</code> 和 <code>innerHeight</code> 方法（包含内边距）， <code>outerWidth</code> 和 <code>outerHeight</code> 包含内边距和边框。</p>
+<h2 id="hide">hide方法</h2>
+<p>实际上就是css设置 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/djangohou-tai-apibian-xie-zhi-apishe-ji-yuan-ze.html">django后台api编写之-API设计原则
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#django-ref">django
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="api">API设计</h2>
+<p>首先讲一下这里讨论的API设计和网络上流行的Restful风格的API设计都只是一般性原则，并不是强制性的要求。然后API还分为内部使用和对外的API，如果对外的API那么接口最好遵循无惊讶原则，遵循大家都通用的一些写法风格，但如果是内部使用的API，那么很多情况下，还要考虑自己内部使用的便捷性要求。</p>
+<h3 id="url">url设计</h3>
+<p>目前url域名都推荐使用 api.what.com 这样的风格，然后关于API的版本，在URL上加上版本号，并不是一个很好的主意。在当前前后端分离的大背景下，这给前端和后端的代码都带来了一些额外的复杂度。</p>
+<p>版本号按照 <a href="http://www.ruanyifeng.com/blog/2011/09/restful.html">阮一峰的这篇文章</a> ，推荐使用 Accept 字段：</p>
+<div class="highlight"><pre><span></span><span class="n">Accept</span><span class="o">:</span> <span class="n">vnd</span><span class="o">.</span><span class="na">example</span><span class="o">-</span><span class="n">com</span><span class="o">.</span><span class="na">foo</span><span class="o">+</span><span class="n">json</span><span class="o">;</span> <span class="n">version</span><span class="o">=</span><span class="mf">2.0</span>
+</pre></div>
+<p>url的第一个字段我喜欢使用django的app的名字，然后接下来的第二个字段推荐按照 Restful 风格写上目标资源的名字，并不一定要强制写上名词的复数形式，不过如果有两个url，一个是操纵目标资源集，一个是定向操纵某个目标资源，那么尾缀写上s区分是推荐的风格。</p>
+<p>然后针对某个资源或者目标资源集的一些额外的动作，这里所谓的额外的动作是指除了常规的Restful风格的那些增删查改动作之外的额外的动作需求，在上面讨论的Restful风格url基础上加上第三个字段，第三个字段是额外动作的名字是个不错的风格。</p>
+<h3 id="_1">方法设计</h3>
+<p>方法通用的 GET …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/djangohou-tai-apibian-xie-zhi-appspy.html">django后台api编写之-apps.py
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#django-ref">django
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="appspy">apps.py</h2>
+<p>通过快捷命令创建的app模块是没有这个文件的，但是我看到某些例子里面其有这个文件，后来了解到这个文件是有特殊含义的：这是django项目用来存放app 一些相关配置信息的地方。</p>
+<p>一个基本的例子如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+
+<span class="k">class</span> <span class="nc">RockNRollConfig</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">'rock_n_roll'</span>
+    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">"Rock ’n’ roll"</span>
+</pre></div>
+<p>其中name定义了本app的名字和完整名字，然后你需要在本app的 <code>__init__.py</code> 文件下加入：</p>
+<div class="highlight"><pre><span></span><span class="n">default_app_config</span> <span class="o">=</span> <span class="s1">'rock_n_roll.apps.RockNRollConfig'</span>
+</pre></div>
+<p>来引入这个配置文件。</p>
+<p>有什么用？well，最简单的用处就是本app实际在 <code>INSTALLED_APPS</code> 哪里不是默认的文件夹名字了，而是你这里定义的名字。</p>
+<p>另外一个高级用法就是定制 <code>ready</code> 方法，来初始化本app的一些信号设置。</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/djangohou-tai-apibian-xie-zhi-beginning.html">django后台api编写之-beginning
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#django-ref">django
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="beginning">Beginning</h1>
+<p>一开始先介绍下Djanog项目的基本文件夹结构，还有一些基本的命令操作和一些基本的常识性东西。</p>
+<p>首先是新建一个项目：</p>
+<h2 id="_1">新建项目</h2>
+<div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="k">admin</span> <span class="n">startproject</span> <span class="n">project</span><span class="o">-</span><span class="n">name</span>
+</pre></div>
+<p>这个命令将创建一个文件夹，文件夹的名字就是这里设置的project-name，然后文件夹里面有一个manage.py文件，这个文件的主要作用就是挂载django的配置（一般是settings.py这个文件，当然你也可以修改为其他比如dev_settings.py文件）。</p>
+<p>然后还有一个文件夹，里面有settings.py 、 urls.py 和 wsgi.py 文件。</p>
+<p>settings.py 控制django的全部配置管理；</p>
+<p>urls.py 控制django的路径分发主入口，这个在配置中可以修改的。</p>
+<p>wsgi.py 是你用apache或者uwsgi挂载的时候的控制入口。</p>
+<p>这样最简单的初始项目就是可以运行的了：</p>
+<h2 id="_2">开启服务器</h2>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span>
+</pre></div>
+<p>后面控制服务器监听的localhost或者外网0.0.0.0 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="/articles/djangohou-tai-apibian-xie-zhi-bu-shu.html">django后台api编写之-部署
  </a></h1>
 
@@ -242,13 +388,13 @@ WSGIPythonPath "/home/wanze/venv/webapp"
 <p>有关pypi包的制作就不赘述了，下面主要在官方文档 <a href="https://docs.djangoproject.com/en/1.11/intro/reusable-apps/">这里</a> 的基础上讨论一些问题。</p>
 <h2 id="_1">测试问题</h2>
 <p>我试着如下安装测试过程：</p>
-<div class="highlight"><pre><span></span>python setup.py sdist
-pip install dist/what.tar.gz
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">sdist</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">dist</span><span class="o">/</span><span class="n">what</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span>
 </pre></div>
 <p>然后安装官方文档，在INSTALL_APPS那里设置好。app是可以正常使用的。但在安装测试过程中，这实在有点繁琐了。推荐还是将整个app文件夹复制到你的测试webapp那边去，然后一边修改一边看。测试好了再把内容同步到pypi安装包那边去。</p>
 <h2 id="migrations">migrations问题</h2>
 <p>官方文档之所以选择制作sdist和用pip install tar包这种风格是有原因的，经测试egg包在访问上很成问题，只有用pip安装这种方法，在site-packages那边你安装才是文件夹风格而不是那种egg文件。这样你等下执行：</p>
-<div class="highlight"><pre><span></span>python manage.py makemigrations app_name
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">app_name</span>
 </pre></div>
 <p>才会成功。</p>
 <p>而且实际生成的迁移文件就放在site-packages那里的目标文件夹下的。所以你制作pypi包的时候不要把migrations文件夹里面的其他迁移文件包含进去了，要包含就包含 <code>__init__.py</code> 文件即可。</p>
@@ -397,26 +543,26 @@ pip install dist/what.tar.gz
                                 
 <h2 id="_1">翻译</h2>
 <p>django的翻译其实已经很便捷了，因为我关注于后台api的编写，所以实际上很多教程说的：</p>
-<div class="highlight"><pre><span></span>TEMPLATES = [
-    {
-        ...
-        'OPTIONS': {
-            'context_processors': [
-                ...
-                'django.template.context_processors.i18n',
-            ],
-        },
-    },
-]
+<div class="highlight"><pre><span></span><span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="err">{</span>
+        <span class="p">...</span>
+        <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">...</span>
+                <span class="s1">'django.template.context_processors.i18n'</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span><span class="p">,</span>
+<span class="p">]</span>
 </pre></div>
 <p>这个配置只和模板输出的翻译有关，有需要再加上。</p>
 <p>然后MIDDLESWARES 哪里要加上：</p>
-<div class="highlight"><pre><span></span>    'django.middleware.locale.LocaleMiddleware',
+<div class="highlight"><pre><span></span>    <span class="s1">'django.middleware.locale.LocaleMiddleware'</span><span class="p">,</span>
 </pre></div>
 <p>然后就是这些配置：</p>
-<div class="highlight"><pre><span></span>LANGUAGE_CODE = 'zh-Hans'
+<div class="highlight"><pre><span></span><span class="n">LANGUAGE_CODE</span> <span class="o">=</span> <span class="s1">'zh-Hans'</span>
 
-USE_I18N = True
+<span class="n">USE_I18N</span> <span class="o">=</span> <span class="k">True</span>
 </pre></div>
 <p>设置好你的语言代码，这是没有问题的。</p>
 <p>我看了一下 django restframework 的翻译管理相关，发现大体这样配置就可以了，很多教程说的设置 <code>LOCALE_PATHS</code> 变量觉得没必要，默认的每个app下面的locale文件夹够用了。</p>
@@ -526,25 +672,25 @@ USE_I18N = True
 <p><strong>DATABASES:</strong> 默认会创建一个sqlite3数据库，也能满足基本的需求了，如果你想要使用mysql等数据库，则参考样例修改这里的配置。比如连接mysql的样例是:</p>
 </li>
 </ul>
-<div class="highlight"><pre><span></span>    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': "database_name",
-            'USER': "root",
-            'PASSWORD': "",
-            'HOST': "localhost", 
-            'PORT': "3306",
-            'OPTIONS': {
-                'charset': 'utf8'
-            }
-        }
-    }
+<div class="highlight"><pre><span></span>    <span class="n">DATABASES</span> <span class="o">=</span> <span class="err">{</span>
+        <span class="s1">'default'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'ENGINE'</span><span class="p">:</span> <span class="s1">'django.db.backends.mysql'</span><span class="p">,</span>
+            <span class="s1">'NAME'</span><span class="p">:</span> <span class="ss">"database_name"</span><span class="p">,</span>
+            <span class="s1">'USER'</span><span class="p">:</span> <span class="ss">"root"</span><span class="p">,</span>
+            <span class="s1">'PASSWORD'</span><span class="p">:</span> <span class="ss">""</span><span class="p">,</span>
+            <span class="s1">'HOST'</span><span class="p">:</span> <span class="ss">"localhost"</span><span class="p">,</span> 
+            <span class="s1">'PORT'</span><span class="p">:</span> <span class="ss">"3306"</span><span class="p">,</span>
+            <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+                <span class="s1">'charset'</span><span class="p">:</span> <span class="s1">'utf8'</span>
+            <span class="err">}</span>
+        <span class="err">}</span>
+    <span class="err">}</span>
 </pre></div>
 <p>一般会加上 charset 是 utf8这个选项，当然mysql那边你也需要设置好字符编码。有的时候如下设置init_command 来设置字符编码可以让你获得更好的字符编码兼容性。</p>
-<div class="highlight"><pre><span></span>    'OPTIONS': {
-        'init_command': 'SET character_set_database=utf8 ,\
-        character_set_server=utf8,\
-        character_set_connection …</pre></div>
+<div class="highlight"><pre><span></span>    <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'init_command'</span><span class="p">:</span> <span class="s1">'SET character_set_database=utf8 ,\</span>
+<span class="s1">        character_set_server=utf8,\</span>
+<span class="s1">        character_set_connection …</span></pre></div>
                             </article>
 
 
@@ -581,12 +727,12 @@ USE_I18N = True
 <h3 id="migrations">重置migrations</h3>
 <p>一般的方法把migrations文件删掉，把表格删掉并不能成功，因为他们忽视了django_migrations这个表格里面的数据（参考了 <a href="https://stackoverflow.com/questions/23755523/how-to-reset-migrations-in-django-1-7">这个网页</a>）。</p>
 <p>如果你把 <code>django_migrations</code> 里面的对应app的迁移数据删掉，然后再makemigrations和migrate，那么就更重新开始的一样。</p>
-<div class="highlight"><pre><span></span>python manage.py makemigrations app_name
-python manage.py migrate app_name
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">app_name</span>
+<span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="n">app_name</span>
 </pre></div>
 <h3 id="_2">处理列表对象</h3>
 <p>我们需要自定义一个model的新Field对象来解决这个问题，具体就叫做ListField。</p>
-<div class="highlight"><pre><span></span><span class="nx">def …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="nv">def …</span></pre></div>
                             </article>
 
 
@@ -609,10 +755,10 @@ python manage.py migrate app_name
                                 
 <h2 id="csrf">csrf认证失败</h2>
 <p>一般提到的表单那边加上：</p>
-<div class="highlight"><pre><span></span>&lt;form method="post"&gt;{% csrf_token %}
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">form</span> <span class="k">method</span><span class="o">=</span><span class="ss">"post"</span><span class="o">&gt;</span><span class="err">{</span><span class="o">%</span> <span class="n">csrf_token</span> <span class="o">%</span><span class="err">}</span>
 </pre></div>
 <p>但后来我还是遇到csrf认证失败问题，最后参考 <a href="https://stackoverflow.com/questions/38841109/csrf-validation-does-not-work-on-django-using-https">这个问题的答案</a> 如下设置才可以。</p>
-<div class="highlight"><pre><span></span>CSRF_TRUSTED_ORIGINS = ['www.cdwanze.work']
+<div class="highlight"><pre><span></span><span class="n">CSRF_TRUSTED_ORIGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'www.cdwanze.work'</span><span class="p">]</span>
 </pre></div>
                             </article>
 
@@ -644,10 +790,10 @@ python manage.py migrate app_name
 </ul>
 <h3 id="response">Response</h3>
 <p>也就是一些特殊含义的方法的返回对象，其第一个参数是data，字典值，会自动封装成为json友好的格式。实际上我们经常看到的就是这个套路：</p>
-<div class="highlight"><pre><span></span>return Response(serializer.data)
+<div class="highlight"><pre><span></span><span class="k">return</span> <span class="nv">Response</span><span class="ss">(</span><span class="nv">serializer</span>.<span class="nv">data</span><span class="ss">)</span>
 </pre></div>
 <p>然后 serializer 有个 <code>is_valid</code> 方法，用来序列化类输出前的预热。这两点在后面序列化的讨论中会涉及。其他一些我们看一下吧：</p>
-<div class="highlight"><pre><span></span>Response(data, status=None, template_name=None, headers=None, content_type …</pre></div>
+<div class="highlight"><pre><span></span><span class="n">Response</span><span class="p">(</span><span class="k">data</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">template_name</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">content_type …</span></pre></div>
                             </article>
 
 
@@ -708,7 +854,7 @@ python manage.py migrate app_name
 <p>logging模块的中级使用需要了解如下几个词汇：loggers, handlers, filters, and formatters。</p>
 <h3 id="loggers">loggers</h3>
 <p>记录器 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。</p>
-<div class="highlight"><pre><span></span>logger = logging.getLogger(__name__)
+<div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 <p>这个 <code>__name__</code> 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。</p>
 <p>然后这个 <code>getLogger</code> 函数如果你后面指定的名字之前已经定义了（这通常是指在其他第三方模块下定义了），那么你通过这个 <code>getLogger</code> 然后指定目标名字就会得到对应的该记录器。这通常对于DIY某个第三方模块的日志记录器有用。</p>
@@ -788,188 +934,10 @@ python manage.py migrate app_name
 </pre></div>
 <p>上面这个过程通常是在视图类特殊方法下，进行一些数据库操作之后获取数据库的目标Model的记录，然后送入序列化类，然后目标类的 <code>.data</code> 属性就是字典值了，送入Response哪里就可以作为HTTP响应的结果值了。</p>
 <p>然后还有下面这种用法，将某个字典data送入序列化类的data属性中，</p>
-<div class="highlight"><pre><span></span>serializer = SnippetSerializer(data=data)
+<div class="highlight"><pre><span></span><span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="p">(</span><span class="k">data</span><span class="o">=</span><span class="k">data</span><span class="p">)</span>
 </pre></div>
 <p>调用序列化类的save方法来进一步完成相应的数据库操作。</p>
-<div class="highlight"><pre><span></span>serializer.save …</pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/djangohou-tai-apibian-xie-zhi-you-xiang-ren-zheng.html">django后台api编写之-邮箱认证
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#django-ref">django
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">邮箱认证</h2>
-<p>参考了 <a href="https://medium.com/@frfahim/django-registration-with-confirmation-email-bb5da011e4ef">这篇文章</a> 。</p>
-<p>过程分为两步，发送验证邮箱，和接受确认邮箱链接：</p>
-<div class="highlight"><pre><span></span>    re_path(r'^users/verify_email/?$', VerifyEmailView.as_view(), name='users_verify_email'),
-
-    re_path(r'^users/confirm_email/(?P&lt;uidb64&gt;[0-9A-Za-z_\-]+)/(?P&lt;token&gt;[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$',
-            ConfirmEmailView.as_view(), name='users_confirm_email'),
-</pre></div>
-<p>发送邮件的过程主要是填写一些必要信息，发送邮件即可：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VerifyEmailView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
-    <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">IsAuthenticated</span><span class="p">,)</span>
-
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="n">profile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">user</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">user …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/djangohou-tai-apibian-xie-zhi-zi-ding-yi-ming-ling.html">django后台api编写之-自定义命令
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#django-ref">django
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h1 id="_1">自定义命令</h1>
-<p>在目标app下面新建一个 <code>management</code> 文件夹，然后新建一个 <code>commands</code>  文件夹，注意这两个文件夹都要带上 <code>__init__.py</code> 文件。</p>
-<p>然后commands文件夹里面就可以定义一些python脚本了，这些脚本成为命令可以直接如下调用：</p>
-<div class="highlight"><pre><span></span>python manage.py command_name
-</pre></div>
-<p>你可以通过：</p>
-<div class="highlight"><pre><span></span>python manage.py help
-</pre></div>
-<p>来查看目前已经有的命令列表。</p>
-<p>一个基本的命令模块如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.management.base</span> <span class="kn">import</span> <span class="n">BaseCommand</span><span class="p">,</span> <span class="n">CommandError</span>
-<span class="kn">from</span> <span class="nn">polls.models</span> <span class="kn">import</span> <span class="n">Question</span> <span class="k">as</span> <span class="n">Poll</span>
-
-<span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
-    <span class="n">help</span> <span class="o">=</span> <span class="s1">'Closes the specified poll for voting'</span>
-
-    <span class="k">def …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/html5dai-ma-gui-fan.html">html5代码规范
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#html5-ref">html5
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h1 id="html5">html5代码规范</h1>
-<p>本文参考了 <a href="http://codeguide.bootcss.com">这篇文章</a> 和 <a href="http://alloyteam.github.io/CodeGuide/">这篇文章</a> 还有 <a href="https://github.com/airbnb/javascript">aribnb的javascript规范</a> 。</p>
-<p>需要指出的是这些都是一些代码建议，其中有一些还有点大头开蛋还是小头开蛋的意思，比如到底是空四个空格还是两个空格，这些有分歧的我就不写出来了，读者自行决定吧。</p>
-<h2 id="_1">总的原则</h2>
-<ol>
-<li>无论团队人数多少，代码应该看起来就好像一个人写的。——这个原则为大家所公认。</li>
-<li>文件名推荐是小写字母加下划线。（小写字母加连字符也是可以的，但是绝对不推荐带上空格）</li>
-</ol>
-<h2 id="html">html</h2>
-<ol>
-<li>
-<p>缩进，这个一个好的编辑器会提供这个自动缩进功能的。</p>
-</li>
-<li>
-<p>属性名全部小写，用 <code>-</code> 隔开。</p>
-</li>
-<li>
-<p>属性的定义用 <strong>双引号</strong> 包围起来。</p>
-</li>
-<li>
-<p><code>&lt;hr&gt;</code> <code>&lt;img src=...&gt;</code> 这样的不用后面加个 <code>/</code> 号了。</p>
-</li>
-<li>
-<p>关闭标签不要省略 <code>&lt;li&gt;...&lt;/li&gt;</code>  这是没有疑问的。</p>
-</li>
-<li>
-<p>开头格式都是： <code>&lt;!DOCTYPE html&gt;</code> </p>
-</li>
-<li>
-<p>语言指定遵循规范 ，<code>&lt;html lang="zh-cn"&gt;</code> </p>
-</li>
-<li>
-<p>字符编码推荐指定utf8，<code>&lt;meta charset="utf-8"&gt;</code> </p>
-</li>
-<li>
-<p>IE兼容模式，推荐加上这样一行 …</p></li></ol>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/html5ji-chu.html">html5基础
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#html5-ref">html5
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h1 id="html5">html5基础</h1>
-<h2 id="_1">第一个模板</h2>
-<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"zh-cn"</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"utf-8"</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>your awesome title<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-
-    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-
-    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</pre></div>
-<h3 id="doctype">doctype声明</h3>
-<p>现在html5的doctype声明非常简单了，开头加入如下简单一行即可:</p>
-<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
-</pre></div>
-<p>然后进入 <strong>html</strong> 标签，然后进入 <strong>head</strong> 标签，在head标签里面的内容不会显示在网页上，主要是一些关于本网页的配置信息。</p>
-<h3 id="utf-8">字符集设置为utf-8</h3>
-<p>现在html5使用如下更简洁的语法了:</p>
-<div class="highlight"><pre><span></span>&lt;meta charset="utf-8"&gt;
-</pre></div>
-<p>然后 <strong>body</strong> 标签里面存放这实际要显示的网页内容。</p>
-<h2 id="_2">第二个例子</h2>
-<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"zh-cn"</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="n">serializer</span><span class="p">.</span><span class="n">save …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">

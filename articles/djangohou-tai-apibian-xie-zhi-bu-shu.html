@@ -213,21 +213,21 @@ WSGIPythonPath "/home/wanze/venv/webapp"
 <h3 id="_2">关于静态文件</h3>
 <p>关于静态文件再补充下，上面服务的静态文件是在项目目录下的static文件夹下，这里所谓的静态文件主要是djano和djangorestframwork等框架带的静态文件，其通过  <code>python manage.py collectstatic</code> 命令来生成这些内容。</p>
 <p>你需要在settings那里设置 <code>STATIC_ROOT</code> 值。</p>
-<div class="highlight"><pre><span></span>STATIC_ROOT= os.path.join(BASE_DIR, 'static')
+<div class="highlight"><pre><span></span><span class="n">STATIC_ROOT</span><span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s1">'static'</span><span class="p">)</span>
 </pre></div>
 <h3 id="django">多django站点部署问题</h3>
 <p>多个django站点都通过 <code>mod_wsgi</code> 来部署是不能继续像前面那样写： </p>
-<div class="highlight"><pre><span></span>WSGIScriptAlias / /path/to/mysite.com/mysite/wsgi.py
-WSGIPythonHome /path/to/venv
-WSGIPythonPath /path/to/mysite.com
+<div class="highlight"><pre><span></span><span class="n">WSGIScriptAlias</span> <span class="o">/</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="k">to</span><span class="o">/</span><span class="n">mysite</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">mysite</span><span class="o">/</span><span class="n">wsgi</span><span class="p">.</span><span class="n">py</span>
+<span class="n">WSGIPythonHome</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="k">to</span><span class="o">/</span><span class="n">venv</span>
+<span class="n">WSGIPythonPath</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="k">to</span><span class="o">/</span><span class="n">mysite</span><span class="p">.</span><span class="n">com</span>
 </pre></div>
 <p>而必须每个通过deamon模式来（参考了 <a href="https://stackoverflow.com/questions/14923083/multiple-sites-in-django">这个网页</a> ）：</p>
-<div class="highlight"><pre><span></span>&lt;VirtualHost *:80&gt;
-    ServerName api.cdwanze.work
-    WSGIDaemonProcess cdwanze_api  processes=1 python-path=/home/wanze/venv/myapi python-home=/home/wanze/venv/ threads=10  
-    WSGIProcessGroup cdwanze_api
-    WSGIScriptAlias / /home/wanze/venv/myapi/myapi/wsgi.py process-group=cdwanze_api
-    ...
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">VirtualHost</span> <span class="o">*</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span>
+    <span class="n">ServerName</span> <span class="n">api</span><span class="p">.</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span>
+    <span class="n">WSGIDaemonProcess</span> <span class="n">cdwanze_api</span>  <span class="n">processes</span><span class="o">=</span><span class="mi">1</span> <span class="n">python</span><span class="o">-</span><span class="n">path</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">myapi</span> <span class="n">python</span><span class="o">-</span><span class="n">home</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span> <span class="n">threads</span><span class="o">=</span><span class="mi">10</span>  
+    <span class="n">WSGIProcessGroup</span> <span class="n">cdwanze_api</span>
+    <span class="n">WSGIScriptAlias</span> <span class="o">/</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">myapi</span><span class="o">/</span><span class="n">myapi</span><span class="o">/</span><span class="n">wsgi</span><span class="p">.</span><span class="n">py</span> <span class="n">process</span><span class="o">-</span><span class="k">group</span><span class="o">=</span><span class="n">cdwanze_api</span>
+    <span class="p">...</span>
 </pre></div>
 <p>其中 <code>WSGIProcessGroup</code> 目前来看名字是随意的，但必须写。然后在定义daemon进程的时候 <code>python-path</code> 是定义到你的django project那里， <code>python-home</code> 是定义到你的python虚拟环境那里。</p>
 <h3 id="_3">文件权限问题</h3>
@@ -236,53 +236,53 @@ WSGIPythonPath /path/to/mysite.com
 <p>还有值得一提的是如果某个母文件夹没有可执行权限，那么里面的所有文件都是不可见的。</p>
 <h2 id="nginx">nginx</h2>
 <p>nginx要对接wsgi接口需要uwsgi这个模块将wsgi接口服务起来。</p>
-<div class="highlight"><pre><span></span>pip install uwsgi
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">uwsgi</span>
 </pre></div>
 <p>更多细节请参看uwsgi的 <a href="http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html">官方文档</a> 。</p>
 <p>ngnix的配置如下：</p>
-<div class="highlight"><pre><span></span><span class="nt">upstream</span> <span class="nt">django</span> <span class="p">{</span>
-    <span class="err">server</span> <span class="err">127.0.0.1:8001</span><span class="p">;</span> 
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><span class="nv">upstream</span> <span class="nv">django</span> {
+    <span class="nv">server</span> <span class="mi">127</span>.<span class="mi">0</span>.<span class="mi">0</span>.<span class="mi">1</span>:<span class="mi">8001</span><span class="c1">; </span>
+}
 
-<span class="nt">server</span> <span class="p">{</span>
-    <span class="err">location</span> <span class="err">/</span> <span class="err">{</span>
-        <span class="err">uwsgi_pass</span>  <span class="err">django</span><span class="p">;</span>
-        <span class="err">include</span>     <span class="err">/path/to/your/mysite/uwsgi_params</span><span class="p">;</span> 
-    <span class="p">}</span>
-<span class="err">}</span>
+<span class="nv">server</span> {
+    <span class="nv">location</span> <span class="o">/</span> {
+        <span class="nv">uwsgi_pass</span>  <span class="nv">django</span><span class="c1">;</span>
+        <span class="k">include</span>     <span class="o">/</span><span class="nv">path</span><span class="o">/</span><span class="nv">to</span><span class="o">/</span><span class="nv">your</span><span class="o">/</span><span class="nv">mysite</span><span class="o">/</span><span class="nv">uwsgi_params</span><span class="c1">; </span>
+    }
+}
 </pre></div>
 <h3 id="nginx-serve">nginx serve 静态文件</h3>
-<div class="highlight"><pre><span></span>server {
-    listen      80;
-    ......
+<div class="highlight"><pre><span></span><span class="n">server</span> <span class="err">{</span>
+    <span class="k">listen</span>      <span class="mi">80</span><span class="p">;</span>
+    <span class="p">......</span>
 
-    client_max_body_size 75M;
+    <span class="n">client_max_body_size</span> <span class="mi">75</span><span class="n">M</span><span class="p">;</span>
 
-    location /media  {
-        alias /path/to/media;
-    }
+    <span class="k">location</span> <span class="o">/</span><span class="n">media</span>  <span class="err">{</span>
+        <span class="k">alias</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="k">to</span><span class="o">/</span><span class="n">media</span><span class="p">;</span>
+    <span class="err">}</span>
 
-    location /static {
-        alias /path/to/static;
-    }
+    <span class="k">location</span> <span class="o">/</span><span class="k">static</span> <span class="err">{</span>
+        <span class="k">alias</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="k">to</span><span class="o">/</span><span class="k">static</span><span class="p">;</span>
+    <span class="err">}</span>
 
-    ......
-}
+    <span class="p">......</span>
+<span class="err">}</span>
 </pre></div>
 <p>更多nginx配置细节请参看我写的关于nginx配置的专门的文章。</p>
 <h2 id="_4">对外部署必看</h2>
 <p>django项目如果对外部署的话，因为python是一个动态脚本语言，所以会有很多安全性的问题需要检查，否则你的项目对外会很不安全。本文主要参看官方文档的 <a href="https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/">这里</a> 。</p>
 <p>第一当然首先是确保 <code>DEBUG=False</code> ，对外开着 <code>DEBUG=True</code> 那简单是开玩笑了。</p>
 <p>然后是运行：</p>
-<div class="highlight"><pre><span></span>python manage.py check --deploy
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="k">check</span> <span class="c1">--deploy</span>
 </pre></div>
 <p>### settings.py 里密钥外置</p>
 <p>settings.py 文件里面不要有任何密钥信息，包括 <code>SECRET_KEY</code> 你的数据库连接信息或者其他密钥等等，所有这些信息都应该作为环境变量引入或者从某个配置文件中读取出来。</p>
 <h3 id="allowed_hosts">ALLOWED_HOSTS</h3>
 <p>要某是限定好域名，要某是你的nginx服务器那边对入口请求已经做好了限定，凡是不认识的域名HOST请求都抛出444错误：</p>
-<div class="highlight"><pre><span></span>server {
-    listen 80 default_server;
-    return 444;
+<div class="highlight"><pre><span></span><span class="nv">server</span> {
+    <span class="nv">listen</span> <span class="mi">80</span> <span class="nv">default_server</span><span class="c1">;</span>
+    <span class="k">return</span> <span class="mi">444</span><span class="c1">;</span>
 }
 </pre></div>
             

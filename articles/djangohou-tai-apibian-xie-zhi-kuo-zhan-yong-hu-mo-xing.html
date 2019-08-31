@@ -155,17 +155,17 @@ django后台api编写之-扩展用户模型  · cdwanze的博文
     <span class="n">instance</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 <p>然后你可能对django默认的auth机制，比如session cookies等不太满意，那么推荐你直接建立自己的 User 模型， 继承自 AbstractBaseUser ，我大概看了一下 AbstractBaseUser 的源码，其做的工作都是围绕着 password这个字段来的，而且只要你在settings里面定义好了:</p>
-<div class="highlight"><pre><span></span>AUTH_USER_MODEL = ...
+<div class="highlight"><pre><span></span><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="p">...</span>
 </pre></div>
 <p>就都是可以正常工作的。继承之后定义自己的字段这是不多用多说的，然后推荐进一步继承 <code>PermissionsMixin</code> 这个类。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">User</span><span class="p">(</span><span class="nx">AbstractBaseUser</span><span class="p">,</span> <span class="nx">PermissionsMixin</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">email</span> <span class="o">=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">EmailField</span><span class="p">(</span><span class="nx">_</span><span class="p">(</span><span class="s1">'email address'</span><span class="p">),</span> <span class="nx">unique</span><span class="o">=</span><span class="nx">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">User</span>(<span class="n">AbstractBaseUser</span>, <span class="n">PermissionsMixin</span>):
+    <span class="n">email</span> = <span class="n">models</span>.<span class="n">EmailField</span>(<span class="n">_</span>(<span class="s">'email address'</span>), <span class="n">unique</span>=<span class="nb">True</span>)
 </pre></div>
 <p><code>PermissionsMixin</code> 这个类定义了一些群组信息还有什么的。</p>
 <p>然后这三个字段属性有特殊含义，都是可以自己设置的：</p>
-<div class="highlight"><pre><span></span>    USERNAME_FIELD = 'username'
-    EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = ['email']
+<div class="highlight"><pre><span></span>    <span class="n">USERNAME_FIELD</span> <span class="o">=</span> <span class="s1">'username'</span>
+    <span class="n">EMAIL_FIELD</span> <span class="o">=</span> <span class="s1">'email'</span>
+    <span class="n">REQUIRED_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'email'</span><span class="p">]</span>
 </pre></div>
 <p>然后你需要写好 objects 这个 UserManager ，其继承自 <code>BaseUserManager</code> ，你可以做其他一些定制，这个是个什么东西？这个就是之前我们看到的 <code>Model.objects.what</code> 之类的这种用法。在这里你需要根据自己的情况定义好： </p>
 <ul>

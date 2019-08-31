@@ -187,8 +187,8 @@ python语言学习之-一切皆对象  · cdwanze的博文
             
             
 <p>首先说下python2和python3的兼容性，如果读者在python2.7环境下，那么推荐定义class的时候都如下跟上object：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">pass</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Test</span>(<span class="n">object</span>):
+    <span class="nb">pass</span>
 </pre></div>
 <p>本章节围绕着下面这些内容逐步展开，从而逐步实现对python类的各个行为的深度定制。</p>
 <ol>
@@ -348,14 +348,14 @@ python语言学习之-一切皆对象  · cdwanze的博文
         <span class="k">return</span> <span class="bp">False</span>
 </pre></div>
 <p>定义了这样的<code>__eq__</code>方法之后，我们运行==语句，如果两个对象之间内置字典键和值都是一样的，那么就返回True。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; test=GClass()
-&gt;&gt;&gt; test.a=1
-&gt;&gt;&gt; test2=GClass()
-&gt;&gt;&gt; test2.a=1
-&gt;&gt;&gt; test == test2
-True
-&gt;&gt;&gt; test is test2
-False
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">test</span><span class="o">=</span><span class="n">GClass</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">test</span><span class="p">.</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">test2</span><span class="o">=</span><span class="n">GClass</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">test2</span><span class="p">.</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">test</span> <span class="o">==</span> <span class="n">test2</span>
+<span class="k">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">test</span> <span class="k">is</span> <span class="n">test2</span>
+<span class="k">False</span>
 </pre></div>
 <p>如果我们不重定义<code>__eq__</code>方法，似乎test和test2会从原始的object类继承<code>__eq__</code>方法，然后它们比较返回的是False，我想可能是这两个实例内部某些值的差异吧，但应该不是基于id。</p>
 <h2 id="_3">比较判断操作</h2>
@@ -390,37 +390,37 @@ False
 <p><a href="http://www.informit.com/articles/article.aspx?p=453682">参考网站</a>。</p>
 <p>这里先总结下is语句和==判断和isinstance和id还有type函数，然后再提及python类的内置方法<code>__eq__</code>。</p>
 <p>python是一个彻头彻尾的面向对象的语言，python内部一切数据都是对象，对象就有类型type的区别。比如内置的那样对象类型：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; type('abc')
-&lt;class 'str'&gt;
-&gt;&gt;&gt; type(123)
-&lt;class 'int'&gt;
-&gt;&gt;&gt; type([1,2,3])
-&lt;class 'list'&gt;
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="k">class</span> <span class="s1">'str'</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="k">class</span> <span class="s1">'int'</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="o">&lt;</span><span class="k">class</span> <span class="s1">'list'</span><span class="o">&gt;</span>
 </pre></div>
 <p>对象除了有type类型之外，还有id属性，id就是这个对象具体在内存中的存储位置。</p>
 <p>当我们说lst=[1,2,3]的时候，程序具体在内存中创建的对象是[1,2,3]，而lst这个变量名不过是一个引用。然后我们看下面的例子：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; x=[1,2,3]
-&gt;&gt;&gt; y=[1,2,3]
-&gt;&gt;&gt; type(x)
-&lt;class 'list'&gt;
-&gt;&gt;&gt; type(y)
-&lt;class 'list'&gt;
-&gt;&gt;&gt; id(x)
-3069975884
-&gt;&gt;&gt; id(y)
-3062209708
-&gt;&gt;&gt; x==y
-True
-&gt;&gt;&gt; x is y
-False
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="k">class</span> <span class="s1">'list'</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="k">class</span> <span class="s1">'list'</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="mi">3069975884</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">id</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="mi">3062209708</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">==</span><span class="n">y</span>
+<span class="k">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="k">is</span> <span class="n">y</span>
+<span class="k">False</span>
 </pre></div>
 <p>type函数返回对象的类型，id函数返回对象具体在内存中的存储位置，而==判断只是确保值相等，is语句返回True则更加严格，需要对象在内存上（即id相等）完全是同一个东西。</p>
 <p>对象之间的类型比较可以用如下语句来进行比较：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; x=10
-&gt;&gt;&gt; type(x) == int
-True
-&gt;&gt;&gt; type(x) == type(0)
-True
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
+<span class="k">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="k">type</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">True</span>
 </pre></div>
 <p>不过不是特别好用，比如假设fun是你自己定义的一个函数，用type(fun) ==
 function就会出错，然后type比较还要小心NoneType和其他空列表类型不同，而且type比较并没有将类的继承考虑进去。</p>
@@ -469,14 +469,14 @@ function就会出错，然后type比较还要小心NoneType和其他空列表类
 <p>更多内容请参见<a href="https://docs.python.org/3.4/library/types.html">types模块的官方文档</a>。</p>
 <h2 id="_5">强制类型变换</h2>
 <p>所包含的内置方法有：</p>
-<div class="highlight"><pre><span></span>__int__(self)   返回整型
-__long__(self)  长整型
-__float__(self)  浮点型
-__complex__(self)  复数型
-__str__(self)  字符型
-__oct__(self)  八进制
-__hex__(self) 十六进制
-__index__(self) 切片操作
+<div class="highlight"><pre><span></span><span class="n">__int__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>   <span class="err">返回整型</span>
+<span class="n">__long__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>  <span class="err">长整型</span>
+<span class="n">__float__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>  <span class="err">浮点型</span>
+<span class="n">__complex__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>  <span class="err">复数型</span>
+<span class="n">__str__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>  <span class="err">字符型</span>
+<span class="n">__oct__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>  <span class="err">八进制</span>
+<span class="n">__hex__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="err">十六进制</span>
+<span class="n">__index__</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="err">切片操作</span>
 </pre></div>
 <h2 id="lenwhat"><code>len(what)</code></h2>
 <p><code>len(what)</code> 由<code>__len__(self)</code>提供支持。</p>
@@ -486,16 +486,16 @@ __index__(self) 切片操作
 <p>这里就要提一下python的copy模块了，一般很少有人去专门针对某个类单独编写 <code>__deepcopy__</code> 方法，可能会有某些特殊的情况吧，其他很多情况使用 <code>copy.deepcopy(what)</code> 是够用的。</p>
 <h2 id="with">with语句支持</h2>
 <p>按照PEP343的说法：</p>
-<div class="highlight"><pre><span></span>with VAR = EXPR: # as EXPR 应该只是一个语法糖
-    BLOCK
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">VAR</span> <span class="o">=</span> <span class="n">EXPR</span><span class="p">:</span> <span class="o">#</span> <span class="k">as</span> <span class="n">EXPR</span> <span class="err">应该只是一个语法糖</span>
+    <span class="n">BLOCK</span>
 </pre></div>
 <p>实际上就是：</p>
-<div class="highlight"><pre><span></span>VAR = EXPR
-VAR.__enter__()
-try:
-    BLOCK
-finally:
-    VAR.__exit__()
+<div class="highlight"><pre><span></span><span class="n">VAR</span> <span class="o">=</span> <span class="n">EXPR</span>
+<span class="n">VAR</span><span class="p">.</span><span class="n">__enter__</span><span class="p">()</span>
+<span class="n">try</span><span class="p">:</span>
+    <span class="n">BLOCK</span>
+<span class="n">finally</span><span class="p">:</span>
+    <span class="n">VAR</span><span class="p">.</span><span class="n">__exit__</span><span class="p">()</span>
 </pre></div>
 <p>比如我们执行 <code>with open(...) as f</code> 的这类语句，最终离开就应该调用了文件对象的 <code>__exit__</code> 方法。</p>
 <h2 id="9595call9595">__call__</h2>
@@ -564,11 +564,11 @@ finally:
 <p>用来表示一连串数据流的对象。重复调用迭代器的 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#iterator.__next__"><code>__next__()</code></a> 方法（或将其传给内置函数 <a href="https://docs.python.org/zh-cn/3/library/functions.html#next"><code>next()</code></a>）将逐个返回流中的项。当没有数据可用时则将引发 <a href="https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration"><code>StopIteration</code></a> 异常。到这时迭代器对象中的数据项已耗尽，继续调用其 <code>__next__()</code> 方法只会再次引发 <a href="https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration"><code>StopIteration</code></a> 异常。迭代器必须具有 <a href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__"><code>__iter__()</code></a> 方法用来返回该迭代器对象自身，因此迭代器必定也是可迭代对象，可被用于其他可迭代对象适用的大部分场合。一个显著的例外是那些会多次重复访问迭代项的代码。容器对象（例如 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#list"><code>list</code></a>）在你每次向其传入 <a href="https://docs.python.org/zh-cn/3/library/functions.html#iter"><code>iter()</code></a> 函数或是在 <a href="https://docs.python.org/zh-cn/3/reference/compound_stmts.html#for"><code>for</code></a> 循环中使用它时都会产生一个新的迭代器。如果在此情况下你尝试用迭代器则会返回在之前迭代过程中被耗尽的同一迭代器对象，使其看起来就像是一个空容器。</p>
 </blockquote>
 <p>生成器函数区别一般函数是使用了yield语句返回，具体这块和python的异步相关，后面再说。然后还有生成器表达式：</p>
-<div class="highlight"><pre><span></span>test1 = (i+1 for i in range(5))
-isinstance(test1, Iterator)
-&gt;&gt;&gt; True
-isinstance(test1, Iterable)
-&gt;&gt;&gt; True
+<div class="highlight"><pre><span></span><span class="nv">test1</span> <span class="o">=</span> <span class="ss">(</span><span class="nv">i</span><span class="o">+</span><span class="mi">1</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">5</span><span class="ss">))</span>
+<span class="nv">isinstance</span><span class="ss">(</span><span class="nv">test1</span>, <span class="nv">Iterator</span><span class="ss">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">True</span>
+<span class="nv">isinstance</span><span class="ss">(</span><span class="nv">test1</span>, <span class="nv">Iterable</span><span class="ss">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">True</span>
 </pre></div>
 <p>其都是生成器，生成器是某种简化版的迭代器，迭代器一定是可迭代对象。而某个可迭代对象经过 iter 函数处理就成了 迭代器了。就一般而言简单理解，认为某个对象具有 <code>__iter__</code> 方法，那么它就是一个可迭代对象，如果某个对象具有 <code>__next__</code> 方法，那么它就是一个迭代器。</p>
 <p>常见的for遍历的过程如下所示：</p>
@@ -590,16 +590,16 @@ isinstance(test1, Iterable)
 <p>上面提到的for语句，还有map zip 之类的函数是将这个过程自动做了的。包括iter函数处理和捕获终止异常。</p>
 <p>比如文件对象本身就是可迭代的，调用<code>__next__</code>方法就返回文件中下一行的内容，到达文件尾也就是迭代越界了返回：<strong>StopIteration</strong>异常。</p>
 <p>next函数比如next(f)等价于<code>f.__next__()</code> 。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; for line in open('removeduplicate.py'):
-...  print(line,end='')
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="nv">line</span> <span class="nv">in</span> <span class="nv">open</span><span class="ss">(</span><span class="s1">'</span><span class="s">removeduplicate.py</span><span class="s1">'</span><span class="ss">)</span>:
+...  <span class="nv">print</span><span class="ss">(</span><span class="nv">line</span>,<span class="k">end</span><span class="o">=</span><span class="s1">''</span><span class="ss">)</span>
 ... 
-#!/usr/bin/env python3
-#-*-coding:utf-8-*-
+#<span class="o">!/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">bin</span><span class="o">/</span><span class="nv">env</span> <span class="nv">python3</span>
+#<span class="o">-*-</span><span class="nv">coding</span>:<span class="nv">utf</span><span class="o">-</span><span class="mi">8</span><span class="o">-*-</span>
 #此处一些内容省略。
 
-&gt;&gt;&gt; f=open('removeduplicate.py')
-&gt;&gt;&gt; next(f)
-'#!/usr/bin/env python3\n'
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">f</span><span class="o">=</span><span class="nv">open</span><span class="ss">(</span><span class="s1">'</span><span class="s">removeduplicate.py</span><span class="s1">'</span><span class="ss">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">next</span><span class="ss">(</span><span class="nv">f</span><span class="ss">)</span>
+<span class="s1">'</span><span class="s">#!/usr/bin/env python3</span><span class="se">\n</span><span class="s1">'</span>
 </pre></div>
 <p>所以你可以通过定义类的 <code>__next__</code> 方法来获得这个类对于next函数时的反应。</p>
 <p>序列（列表，元组，字典，ranges对象）等是可迭代对象，不是迭代器。其经过iter函数处理就成了迭代器了。</p>
@@ -615,10 +615,10 @@ isinstance(test1, Iterable)
             <span class="k">raise</span> <span class="ne">StopIteration</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
 </pre></div>
-<div class="highlight"><pre><span></span>isinstance(t, Iterator)
-&gt;&gt;&gt; True
-list(t)
-&gt;&gt;&gt; [1, 2]
+<div class="highlight"><pre><span></span><span class="n">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">True</span>
+<span class="n">list</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 </pre></div>
 <p>你也可以直接通过定义 <code>__iter__</code>方法返回一个生成器对象（generator object），这因为生成器总是迭代器。</p>
 <p>下面这个例子通过重新定义字典类的<code>__iter__</code>方法来获得一个新类，这个类用iter函数处理之后的迭代器返回的是经过排序的字典的键。</p>
@@ -637,13 +637,13 @@ list(t)
 <span class="n">dict02</span><span class="p">[</span><span class="s1">'d'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">dict02</span><span class="p">[</span><span class="s1">'c'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
-<div class="highlight"><pre><span></span>for i in dict02:
-    print(i)
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">dict02</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="nv">i</span><span class="ss">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>a
-b
-c
-d
+<div class="highlight"><pre><span></span><span class="n">a</span>
+<span class="n">b</span>
+<span class="k">c</span>
+<span class="n">d</span>
 </pre></div>
 <p>但是要注意上面的例子，只在for语句直接迭代目标对象时才会调用 <code>__iter__</code> 方法的。</p>
 <h3 id="python">深入理解python的迭代操作</h3>
@@ -659,133 +659,133 @@ d
 <p>按照之前的迭代模式的描述，虽然使用常见的列表解析格式(for语句)就可以完成对某个集合中各个元素的操作或者过滤，不过python中还有另外两个函数来实现类似的功能，map对应对集合中各个元素进行某个函数操作（可以接受lambda函式），而filter则实现如上所述的过滤功能。然后值得一提的是python3之后map函数和filter函数返回都是一个可迭代对象而不是列表，和range函数等其他可迭代对象一样可用于列表解析结构。</p>
 <h3 id="map">map函数</h3>
 <p>这里列出一些例子：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; map(abs, [-2,-1,0,1,2])
-&lt;map object at 0xb707dccc&gt;
-&gt;&gt;&gt; [x for x in map(abs, [-2,-1,0,1,2])]
-[2, 1, 0, 1, 2]
-&gt;&gt;&gt; [x for x in map(lambda x : x+2, [-2,-1,0,1,2])]
-[0, 1, 2, 3, 4]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="nv">map</span><span class="ss">(</span><span class="nv">abs</span>, [<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="mi">2</span>]<span class="ss">)</span>
+<span class="o">&lt;</span><span class="nv">map</span> <span class="nv">object</span> <span class="nv">at</span> <span class="mi">0</span><span class="nv">xb707dccc</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">map</span><span class="ss">(</span><span class="nv">abs</span>, [<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="mi">2</span>]<span class="ss">)</span>]
+[<span class="mi">2</span>, <span class="mi">1</span>, <span class="mi">0</span>, <span class="mi">1</span>, <span class="mi">2</span>]
+<span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">map</span><span class="ss">(</span><span class="nv">lambda</span> <span class="nv">x</span> : <span class="nv">x</span><span class="o">+</span><span class="mi">2</span>, [<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="mi">2</span>]<span class="ss">)</span>]
+[<span class="mi">0</span>, <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">4</span>]
 </pre></div>
 <p>map函数还可以接受两个可迭代对象的协作参数模式，这个学过lisp语言的会觉得很眼熟，不过这里按照我们的理解也是很便捷的。具体就是第一个可迭代对象取出一个元素作为map的函数的第一个参数，然后第二个可迭代对象取出第二个参数，然后经过函数运算，得到一个结果，这个结果如果不列表解析的话就是一个map对象（可迭代对象），然后展开以此类推。值得一提的是两个可迭代对象的<em>深度由最短的那个决定</em>，请看下面的例子：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1,2])]
-[-4, -2, 0, 2, 4]
-&gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1])]
-[-4, -2, 0, 2]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">map</span><span class="ss">(</span><span class="nv">lambda</span> <span class="nv">x</span>,<span class="nv">y</span> : <span class="nv">x</span><span class="o">+</span><span class="nv">y</span>, [<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="mi">2</span>],[<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="mi">2</span>]<span class="ss">)</span>]
+[<span class="o">-</span><span class="mi">4</span>, <span class="o">-</span><span class="mi">2</span>, <span class="mi">0</span>, <span class="mi">2</span>, <span class="mi">4</span>]
+<span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">map</span><span class="ss">(</span><span class="nv">lambda</span> <span class="nv">x</span>,<span class="nv">y</span> : <span class="nv">x</span><span class="o">+</span><span class="nv">y</span>, [<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>,<span class="mi">2</span>],[<span class="o">-</span><span class="mi">2</span>,<span class="o">-</span><span class="mi">1</span>,<span class="mi">0</span>,<span class="mi">1</span>]<span class="ss">)</span>]
+[<span class="o">-</span><span class="mi">4</span>, <span class="o">-</span><span class="mi">2</span>, <span class="mi">0</span>, <span class="mi">2</span>]
 </pre></div>
 <h3 id="filter">filter函数</h3>
 <p>同样和上面的谈及的类似，filter函数过滤一个可迭代对象然后产生一个可迭代对象。类似的功能可以用列表解析的后的if语句来实现。前面谈到map函数的时候提及一般还是优先使用列表解析模式，但filter函数这里有点不同，因为列表解析后面跟个if可能有时会让人困惑，这时推荐还是用filter函数来进行可迭代对象的过滤操作。</p>
 <p>filter函数的基本逻辑是只有 <code>return True</code>（用lambda表达式就是这个表达式的值为真) 的时候元素才被收集起来，或者说是过滤出来。</p>
 <p>请参看下面的例子来理解：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; [x for x in filter(lambda x:x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
-[1, 3, 5, 9, 155, -25]
-&gt;&gt;&gt; [x for x in filter(lambda x:not x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
-[2, 10, -20]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">filter</span><span class="ss">(</span><span class="nv">lambda</span> <span class="nv">x</span>:<span class="nv">x</span><span class="o">&amp;</span><span class="mi">1</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">5</span>,<span class="mi">9</span>,<span class="mi">10</span>,<span class="mi">155</span>,<span class="o">-</span><span class="mi">20</span>,<span class="o">-</span><span class="mi">25</span>]<span class="ss">)</span>]
+[<span class="mi">1</span>, <span class="mi">3</span>, <span class="mi">5</span>, <span class="mi">9</span>, <span class="mi">155</span>, <span class="o">-</span><span class="mi">25</span>]
+<span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">filter</span><span class="ss">(</span><span class="nv">lambda</span> <span class="nv">x</span>:<span class="nv">not</span> <span class="nv">x</span><span class="o">&amp;</span><span class="mi">1</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">5</span>,<span class="mi">9</span>,<span class="mi">10</span>,<span class="mi">155</span>,<span class="o">-</span><span class="mi">20</span>,<span class="o">-</span><span class="mi">25</span>]<span class="ss">)</span>]
+[<span class="mi">2</span>, <span class="mi">10</span>, <span class="o">-</span><span class="mi">20</span>]
 </pre></div>
 <p>当然你也可以传统的编写函数：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; def even(n):
-...    if n % 2 ==0:
-...         return True
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="nv">def</span> <span class="nv">even</span><span class="ss">(</span><span class="nv">n</span><span class="ss">)</span>:
+...    <span class="k">if</span> <span class="nv">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span><span class="mi">0</span>:
+...         <span class="k">return</span> <span class="nv">True</span>
 
-&gt;&gt;&gt; [x for x in filter(even,[1,2,3,5,9,10,155,-25])]
-[2, 10]
+<span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">filter</span><span class="ss">(</span><span class="nv">even</span>,[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">5</span>,<span class="mi">9</span>,<span class="mi">10</span>,<span class="mi">155</span>,<span class="o">-</span><span class="mi">25</span>]<span class="ss">)</span>]
+[<span class="mi">2</span>, <span class="mi">10</span>]
 </pre></div>
 <h3 id="zip">zip函数</h3>
 <p>这里就顺便把zip函数也一起提了，zip函数同样返回一个可迭代对象，它接受任意数目的可迭代对象，然后逐个取出可迭代对象元素构成一个元组成为自己的一个元素。和map函数类似<em>迭代深度由最短的那个可迭代对象决定</em>。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; zip(['a','b','c'],[1,2,3,4])
-&lt;zip object at 0xb7055e6c&gt;
-&gt;&gt;&gt; [x for x in zip(['a','b','c'],[1,2,3,4])]
-[('a', 1), ('b', 2), ('c', 3)]
-&gt;&gt;&gt; list(zip(['a','b','c'],[1,2,3,4]))
-[('a', 1), ('b', 2), ('c', 3)]
-&gt;&gt;&gt; dict(zip(['a','b','c'],[1,2,3,4]))
-{'c': 3, 'b': 2, 'a': 1}
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="nv">zip</span><span class="ss">(</span>[<span class="s1">'</span><span class="s">a</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">b</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">c</span><span class="s1">'</span>],[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>]<span class="ss">)</span>
+<span class="o">&lt;</span><span class="nv">zip</span> <span class="nv">object</span> <span class="nv">at</span> <span class="mi">0</span><span class="nv">xb7055e6c</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> [<span class="nv">x</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">zip</span><span class="ss">(</span>[<span class="s1">'</span><span class="s">a</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">b</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">c</span><span class="s1">'</span>],[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>]<span class="ss">)</span>]
+[<span class="ss">(</span><span class="s1">'</span><span class="s">a</span><span class="s1">'</span>, <span class="mi">1</span><span class="ss">)</span>, <span class="ss">(</span><span class="s1">'</span><span class="s">b</span><span class="s1">'</span>, <span class="mi">2</span><span class="ss">)</span>, <span class="ss">(</span><span class="s1">'</span><span class="s">c</span><span class="s1">'</span>, <span class="mi">3</span><span class="ss">)</span>]
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">list</span><span class="ss">(</span><span class="nv">zip</span><span class="ss">(</span>[<span class="s1">'</span><span class="s">a</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">b</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">c</span><span class="s1">'</span>],[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>]<span class="ss">))</span>
+[<span class="ss">(</span><span class="s1">'</span><span class="s">a</span><span class="s1">'</span>, <span class="mi">1</span><span class="ss">)</span>, <span class="ss">(</span><span class="s1">'</span><span class="s">b</span><span class="s1">'</span>, <span class="mi">2</span><span class="ss">)</span>, <span class="ss">(</span><span class="s1">'</span><span class="s">c</span><span class="s1">'</span>, <span class="mi">3</span><span class="ss">)</span>]
+<span class="o">&gt;&gt;&gt;</span> <span class="nv">dict</span><span class="ss">(</span><span class="nv">zip</span><span class="ss">(</span>[<span class="s1">'</span><span class="s">a</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">b</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">c</span><span class="s1">'</span>],[<span class="mi">1</span>,<span class="mi">2</span>,<span class="mi">3</span>,<span class="mi">4</span>]<span class="ss">))</span>
+{<span class="s1">'</span><span class="s">c</span><span class="s1">'</span>: <span class="mi">3</span>, <span class="s1">'</span><span class="s">b</span><span class="s1">'</span>: <span class="mi">2</span>, <span class="s1">'</span><span class="s">a</span><span class="s1">'</span>: <span class="mi">1</span>}
 </pre></div>
 <h3 id="_7">字典到列表</h3>
 <p>这个例子似乎使用价值不大，只是说明zip函数接受任意数目参数的情况。y.items()解包之后是4个参数传递给zip函数，而zip函数的封装逻辑就是如果有人问我，我就把你们这些迭代对象每个取出一个元素，然后用元组包装之后返回。</p>
-<div class="highlight"><pre><span></span>x1 = ['a','b','c','e']
-x2 = [1,2,3,4]
-y = dict(zip(x1,x2))
-print('列表到字典：',y)
-new_x1,new_x2 = zip(*y.items())
-print(new_x1,new_x2)
+<div class="highlight"><pre><span></span><span class="n">x1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'c'</span><span class="p">,</span><span class="s1">'e'</span><span class="p">]</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dict</span><span class="p">(</span><span class="n">zip</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">))</span>
+<span class="n">print</span><span class="p">(</span><span class="s1">'列表到字典：'</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_x1</span><span class="p">,</span><span class="n">new_x2</span> <span class="o">=</span> <span class="n">zip</span><span class="p">(</span><span class="o">*</span><span class="n">y</span><span class="p">.</span><span class="n">items</span><span class="p">())</span>
+<span class="n">print</span><span class="p">(</span><span class="n">new_x1</span><span class="p">,</span><span class="n">new_x2</span><span class="p">)</span>
 
-列表到字典： {'b': 2, 'c': 3, 'a': 1, 'e': 4}
-('b', 'c', 'a', 'e') (2, 3, 1, 4)
+<span class="err">列表到字典：</span> <span class="err">{</span><span class="s1">'b'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">:</span> <span class="mi">4</span><span class="err">}</span>
+<span class="p">(</span><span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">)</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 <p>这个例子如果到更加复杂的情况，我们可以跳过字典形式，来个数据映射对：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; x1 = ['a','b','c','e']
-&gt;&gt;&gt; x2 = ['red','yellow','red','blue']
-&gt;&gt;&gt; x3 = [1,2,3,4]
-&gt;&gt;&gt; list(zip(x1,x2,x3))
-[('a', 'red', 1), ('b', 'yellow', 2), ('c', 'red', 3), ('e', 'blue', 4)]
-&gt;&gt;&gt; new_x1,new_x2,new_x3 = zip(*list(zip(x1,x2,x3)))
-&gt;&gt;&gt; new_x1
-('a', 'b', 'c', 'e')
-&gt;&gt;&gt; new_x2
-('red', 'yellow', 'red', 'blue')
-&gt;&gt;&gt; new_x3
-(1, 2, 3, 4)
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">x1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'c'</span><span class="p">,</span><span class="s1">'e'</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'red'</span><span class="p">,</span><span class="s1">'yellow'</span><span class="p">,</span><span class="s1">'red'</span><span class="p">,</span><span class="s1">'blue'</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">list</span><span class="p">(</span><span class="n">zip</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">x3</span><span class="p">))</span>
+<span class="p">[(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'red'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">'b'</span><span class="p">,</span> <span class="s1">'yellow'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">'c'</span><span class="p">,</span> <span class="s1">'red'</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">'e'</span><span class="p">,</span> <span class="s1">'blue'</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">new_x1</span><span class="p">,</span><span class="n">new_x2</span><span class="p">,</span><span class="n">new_x3</span> <span class="o">=</span> <span class="n">zip</span><span class="p">(</span><span class="o">*</span><span class="n">list</span><span class="p">(</span><span class="n">zip</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">x3</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">new_x1</span>
+<span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">new_x2</span>
+<span class="p">(</span><span class="s1">'red'</span><span class="p">,</span> <span class="s1">'yellow'</span><span class="p">,</span> <span class="s1">'red'</span><span class="p">,</span> <span class="s1">'blue'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">new_x3</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 <p>当然对于多属性数据问题一般还是推荐使用类来处理，不过某些情况下可能不需要使用类，就这样简单处理之。</p>
 <p>值得一提的是这种数据存储形式和sql存储是一致的，而且不知道你们注意到没有，这似乎实现了矩阵的转置功能。</p>
 <h2 id="_8">装饰器</h2>
 <p>装饰器的作用机制就是对接下来的函数（类class声明其实也类似于函数声明，所以后面会提到类装饰器的概念）进行进一步的封装，比如：</p>
-<div class="highlight"><pre><span></span>    @staticmethod
-    def what():
-        pass
+<div class="highlight"><pre><span></span><span class="w">    </span><span class="nv">@staticmethod</span><span class="w"></span>
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">what</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">pass</span><span class="w"></span>
 
-    # 其就等价于在类声明语句里写上了这样一句。   
-    what = staticmethod(what)
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="n">其就等价于在类声明语句里写上了这样一句</span><span class="err">。</span><span class="w">   </span>
+<span class="w">    </span><span class="n">what</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">staticmethod</span><span class="p">(</span><span class="n">what</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <p>可见装饰器并不是一个什么神秘的难懂的概念，同样你可以定义自己的函数，这个函数处理某个函数对象，并对其进行某种封装。</p>
 <h3 id="_9">自定义装饰器</h3>
-<div class="highlight"><pre><span></span>def print1(f):
-    print('1',f)
-    return f
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">print1</span><span class="ss">(</span><span class="nv">f</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">1</span><span class="s1">'</span>,<span class="nv">f</span><span class="ss">)</span>
+    <span class="k">return</span> <span class="nv">f</span>
 
-@print1
-def print3(c):
-    print(c)
+@<span class="nv">print1</span>
+<span class="nv">def</span> <span class="nv">print3</span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span>
 
-print3('c')  # print1(print3)('c')
+<span class="nv">print3</span><span class="ss">(</span><span class="s1">'</span><span class="s">c</span><span class="s1">'</span><span class="ss">)</span>  # <span class="nv">print1</span><span class="ss">(</span><span class="nv">print3</span><span class="ss">)(</span><span class="s1">'</span><span class="s">c</span><span class="s1">'</span><span class="ss">)</span>
 </pre></div>
 <p>比如上面的print1函数就做成了一个装饰器函数，后面的print3函数可以理解为
 <code>print3=print1(print3)</code> 。</p>
 <h3 id="_10">多个装饰器</h3>
-<div class="highlight"><pre><span></span>def print1(f):
-    print('1',f)
-    return f
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">print1</span><span class="ss">(</span><span class="nv">f</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">1</span><span class="s1">'</span>,<span class="nv">f</span><span class="ss">)</span>
+    <span class="k">return</span> <span class="nv">f</span>
 
-def print2(f):
-    print('2',f)
-    return f
+<span class="nv">def</span> <span class="nv">print2</span><span class="ss">(</span><span class="nv">f</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">2</span><span class="s1">'</span>,<span class="nv">f</span><span class="ss">)</span>
+    <span class="k">return</span> <span class="nv">f</span>
 
-@print2
-@print1
-def print4(c):
-    print(c)
+@<span class="nv">print2</span>
+@<span class="nv">print1</span>
+<span class="nv">def</span> <span class="nv">print4</span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span>
 
-print4('c')  # print2(print1(print4))(c)
+<span class="nv">print4</span><span class="ss">(</span><span class="s1">'</span><span class="s">c</span><span class="s1">'</span><span class="ss">)</span>  # <span class="nv">print2</span><span class="ss">(</span><span class="nv">print1</span><span class="ss">(</span><span class="nv">print4</span><span class="ss">))(</span><span class="nv">c</span><span class="ss">)</span>
 </pre></div>
 <p>类似上面的多个装饰器就可以简单理解为: print4 = print2(print1(print4))</p>
 <h3 id="_11">装饰器带上参数</h3>
 <p>在前面的例子中，我们就可以简单将装饰器函数理解为一个接受函数对象返回返回函数对象的函数，这很直观和简单。实际上装饰器也是可以带上自己的参数的，这需要通过什么函数的闭包结构才能完成，如下面的例子所示:</p>
-<div class="highlight"><pre><span></span>def print1(f):
-    print('1',f)
-    return f
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">print1</span><span class="ss">(</span><span class="nv">f</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">1</span><span class="s1">'</span>,<span class="nv">f</span><span class="ss">)</span>
+    <span class="k">return</span> <span class="nv">f</span>
 
-def print2(b):
-    def test(f):
-        print('2',f,b)
-        return f
-    return test
+<span class="nv">def</span> <span class="nv">print2</span><span class="ss">(</span><span class="nv">b</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">test</span><span class="ss">(</span><span class="nv">f</span><span class="ss">)</span>:
+        <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">2</span><span class="s1">'</span>,<span class="nv">f</span>,<span class="nv">b</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">f</span>
+    <span class="k">return</span> <span class="nv">test</span>
 
-@print2('b')
-@print1
-def print4(c):
-    print(c)
+@<span class="nv">print2</span><span class="ss">(</span><span class="s1">'</span><span class="s">b</span><span class="s1">'</span><span class="ss">)</span>
+@<span class="nv">print1</span>
+<span class="nv">def</span> <span class="nv">print4</span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span>
 
-print4('c')  # print2(print1(print4))('b')(c)
+<span class="nv">print4</span><span class="ss">(</span><span class="s1">'</span><span class="s">c</span><span class="s1">'</span><span class="ss">)</span>  # <span class="nv">print2</span><span class="ss">(</span><span class="nv">print1</span><span class="ss">(</span><span class="nv">print4</span><span class="ss">))(</span><span class="s1">'</span><span class="s">b</span><span class="s1">'</span><span class="ss">)(</span><span class="nv">c</span><span class="ss">)</span>
 </pre></div>
 <p>所谓闭包结构简单来说就是函数里面套函数的结构。前面在介绍nolocal关键词的时候说道，如果函数里面的嵌套函数的某个变量加上声明关键词nolocal，那么（如果嵌套函数内没有定义该本地变量），则该变量名是对应嵌套函数外面的自由变量的（自由变量在函数生存期具有记忆能力）。</p>
 <p>上面例子可以理解为<code>print2(print1(print4))('b')(c)</code>
@@ -817,73 +817,73 @@ print4('c')  # print2(print1(print4))('b')(c)
     <span class="k">print</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
 </pre></div>
 <p>装饰器不仅仅是函数作为第一个函数这么简单，更进行了函数的命名重定义。</p>
-<div class="highlight"><pre><span></span>hello2 = aaa_decorator(hello2)
+<div class="highlight"><pre><span></span><span class="n">hello2</span> <span class="o">=</span> <span class="n">aaa_decorator</span><span class="p">(</span><span class="n">hello2</span><span class="p">)</span>
 </pre></div>
 <p>而可以传参数的装饰器其首先消化掉参数，然后decorator，也就是实际装饰函数的是内部的那个decorator函数，而 <code>wraps</code> 只是为了保留原函数头doc的优化。</p>
 <h3 id="_13">静态方法装饰器</h3>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="o">:</span>
-<span class="err">#</span>    <span class="kd">@staticmethod</span>
-    <span class="nx">def</span> <span class="nx">hello</span><span class="p">()</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nl">Test</span><span class="p">:</span><span class="w"></span>
+<span class="err">#</span><span class="w">    </span><span class="nv">@staticmethod</span><span class="w"></span>
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">hello</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)</span><span class="w"></span>
 
-<span class="nx">test</span><span class="o">=</span><span class="nx">Test</span><span class="p">()</span>
-<span class="nx">test</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+<span class="n">test</span><span class="o">=</span><span class="n">Test</span><span class="p">()</span><span class="w"></span>
+<span class="n">test</span><span class="p">.</span><span class="n">hello</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 <p>在上面的例子中，我们希望创造一个函数，这个函数和self实例没有关系（这里指这个函数将不接受self这个默认参数了）。如上所示，hello函数只是希望简单打印一小段字符，如<em>上面这样的代码是错误</em>的，如果我们在这个函数上面加上<strong>\@staticmethod</strong>，那么上面这段代码就不会报错了，</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="o">:</span>
-    <span class="kd">@staticmethod</span>
-    <span class="nx">def</span> <span class="nx">hello</span><span class="p">()</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nl">Test</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nv">@staticmethod</span><span class="w"></span>
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">hello</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)</span><span class="w"></span>
 
-<span class="nx">test</span><span class="o">=</span><span class="nx">Test</span><span class="p">()</span>
-<span class="nx">test</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+<span class="n">test</span><span class="o">=</span><span class="n">Test</span><span class="p">()</span><span class="w"></span>
+<span class="n">test</span><span class="p">.</span><span class="n">hello</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 <p>这样在类里面定义出来的函数叫做这个类的静态方法，静态方法同样可以继承等等，而静态方法通常使用最大的特色就是不需要建立实例，即可以直接从类来调用，如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="o">:</span>
-    <span class="kd">@staticmethod</span>
-    <span class="nx">def</span> <span class="nx">hello</span><span class="p">()</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nl">Test</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nv">@staticmethod</span><span class="w"></span>
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">hello</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)</span><span class="w"></span>
 
-<span class="nx">Test</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+<span class="n">Test</span><span class="p">.</span><span class="n">hello</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 <p>静态方法的使用比如pyqt中的</p>
-<div class="highlight"><pre><span></span>QtGui.QFileDialog.getOpenFileName(......)
+<div class="highlight"><pre><span></span><span class="n">QtGui</span><span class="p">.</span><span class="n">QFileDialog</span><span class="p">.</span><span class="n">getOpenFileName</span><span class="p">(......)</span>
 </pre></div>
 <p>就是一个静态方法，可以通过直接调用这个方法来弹出询问打开文件的窗口，并不需要先实例化一个对象，然后通过self.what等类似的形式来调用。</p>
 <h3 id="_14">类方法装饰器</h3>
 <p>还有一个装饰器有时也会用到， <code>@classmethod</code>
 ，叫什么类方法装饰器。其和前面的静态方法一样也可以不新建实例，而直接通过类来调用。其和静态方法的区别就是静态方法在调用的时候没有任何默认的第一参数，而类方法在调用的时候默认第一参数就是调用的那个类[^14]。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="o">:</span>
-    <span class="kd">@classmethod</span>
-    <span class="nx">def</span> <span class="nx">hello</span><span class="p">(</span><span class="nx">cls</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'from class:'</span><span class="p">,</span> <span class="nx">cls</span><span class="p">,</span> <span class="s1">'saying hello'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nl">Test</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nv">@classmethod</span><span class="w"></span>
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">hello</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="s1">'from class:'</span><span class="p">,</span><span class="w"> </span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="s1">'saying hello'</span><span class="p">)</span><span class="w"></span>
 
-<span class="nx">Test</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+<span class="n">Test</span><span class="p">.</span><span class="n">hello</span><span class="p">()</span><span class="w"></span>
 
-<span class="nx">from</span> <span class="kr">class</span><span class="o">:</span> <span class="o">&lt;</span><span class="kr">class</span> <span class="s1">'__main__.Test'</span><span class="o">&gt;</span> <span class="nx">saying</span> <span class="nx">hello</span>
+<span class="k">from</span><span class="w"> </span><span class="k">class</span><span class="err">:</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="s1">'__main__.Test'</span><span class="o">&gt;</span><span class="w"> </span><span class="n">saying</span><span class="w"> </span><span class="n">hello</span><span class="w"></span>
 </pre></div>
 <p>关于classmethod装饰器实际上东西就这么多，然后就是传进去的第一个参数cls看你有什么使用需要了，比如
 <code>cls(...)</code> 将根据这个类来生成一个实例。</p>
 <h3 id="_15">属性饰器</h3>
 <p>其他编程语言的开发者可能会在类里定义一些针对某些属性的get和set之类的方法，这并不是Pythonic的风格，对于某些特定名字的属性，一般利用属性装饰器来构建，如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Apple</span><span class="p">()</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_color</span> <span class="o">=</span> <span class="s1">'red'</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">Apple</span><span class="ss">()</span>:
+    <span class="nv">def</span> <span class="nv">__init__</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
+        <span class="nv">self</span>.<span class="nv">_color</span> <span class="o">=</span> <span class="s1">'</span><span class="s">red</span><span class="s1">'</span>
 
-    <span class="kd">@property</span>
-    <span class="nx">def</span> <span class="nx">color</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_color</span>
+    @<span class="nv">property</span>
+    <span class="nv">def</span> <span class="nv">color</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">_color</span>
 
-<span class="nx">apple</span> <span class="o">=</span> <span class="nx">Apple</span><span class="p">()</span>
+<span class="nv">apple</span> <span class="o">=</span> <span class="nv">Apple</span><span class="ss">()</span>
 </pre></div>
 <p>这样将给这个类定义个属性，具体调用这个属性就用这样的点号引用即可，然后实际执行的就是
 <code>@property</code> 装饰的那个函数。 现在这个color属性只可读，不可更改。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; apple.color
-'red'
-&gt;&gt;&gt; apple.color = 'yellow'
-Traceback (most recent call last):
-  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
-AttributeError: can't set attribute
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">apple</span><span class="p">.</span><span class="n">color</span>
+<span class="s1">'red'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">apple</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'yellow'</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="k">call</span> <span class="k">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="ss">"&lt;stdin&gt;"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="k">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="n">AttributeError</span><span class="p">:</span> <span class="n">can</span><span class="err">'</span><span class="n">t</span> <span class="k">set</span> <span class="n">attribute</span>
 </pre></div>
 <p>请参看
 <a href="http://stackoverflow.com/questions/17330160/how-does-the-property-decorator-work">这个网页</a>
@@ -893,207 +893,206 @@ AttributeError: can't set attribute
 装饰某个函数之后，来通过这个函数来删除某个属性。这里deleter的使用可能较少，一般
 <code>@property</code> 就能满足大部分需求了，有的觉得需要修改某个属性则定义setter。</p>
 <p>一个简单的setter例子如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Apple</span><span class="p">()</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_color</span> <span class="o">=</span> <span class="s1">'red'</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">Apple</span><span class="ss">()</span>:
+    <span class="nv">def</span> <span class="nv">__init__</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
+        <span class="nv">self</span>.<span class="nv">_color</span> <span class="o">=</span> <span class="s1">'</span><span class="s">red</span><span class="s1">'</span>
 
-    <span class="kd">@property</span>
-    <span class="nx">def</span> <span class="nx">color</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">_color</span>
+    @<span class="nv">property</span>
+    <span class="nv">def</span> <span class="nv">color</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">_color</span>
 
-    <span class="kd">@color</span><span class="p">.</span><span class="nx">setter</span>
-    <span class="nx">def</span> <span class="nx">color</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">color</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">_color</span> <span class="o">=</span> <span class="nx">color</span>
+    @<span class="nv">color</span>.<span class="nv">setter</span>
+    <span class="nv">def</span> <span class="nv">color</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">color</span><span class="ss">)</span>:
+        <span class="nv">self</span>.<span class="nv">_color</span> <span class="o">=</span> <span class="nv">color</span>
 
-<span class="nx">apple</span> <span class="o">=</span> <span class="nx">Apple</span><span class="p">()</span>
+<span class="nv">apple</span> <span class="o">=</span> <span class="nv">Apple</span><span class="ss">()</span>
 
-<span class="nx">print</span><span class="p">(</span><span class="nx">apple</span><span class="p">.</span><span class="nx">color</span><span class="p">)</span>
-<span class="nx">apple</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s1">'yellow'</span>
-<span class="nx">print</span><span class="p">(</span><span class="nx">apple</span><span class="p">.</span><span class="nx">color</span><span class="p">)</span>
+<span class="nv">print</span><span class="ss">(</span><span class="nv">apple</span>.<span class="nv">color</span><span class="ss">)</span>
+<span class="nv">apple</span>.<span class="nv">color</span> <span class="o">=</span> <span class="s1">'</span><span class="s">yellow</span><span class="s1">'</span>
+<span class="nv">print</span><span class="ss">(</span><span class="nv">apple</span>.<span class="nv">color</span><span class="ss">)</span>
 </pre></div>
 <h3 id="_16">函数装饰器</h3>
 <p>本小节参考了
 <a href="https://stackoverflow.com/questions/10294014/python-decorator-best-practice-using-a-class-vs-a-function">这个网页</a>。</p>
 <p>前面简单介绍了python的装饰器的概念，然后已经接触了带参数的函数装饰器的概念，之前的例子是为了直白，下面再写个例子表示函数的这种通用形式：</p>
-<div class="highlight"><pre><span></span>def mydecorator(arg1, arg2):
-    def _mydecorator(func):
-        print('i know you pass to decorator parameters:', arg1, arg2)
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">mydecorator</span><span class="ss">(</span><span class="nv">arg1</span>, <span class="nv">arg2</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">_mydecorator</span><span class="ss">(</span><span class="nv">func</span><span class="ss">)</span>:
+        <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">i know you pass to decorator parameters:</span><span class="s1">'</span>, <span class="nv">arg1</span>, <span class="nv">arg2</span><span class="ss">)</span>
 
-        return func
-    return _mydecorator
+        <span class="k">return</span> <span class="nv">func</span>
+    <span class="k">return</span> <span class="nv">_mydecorator</span>
 </pre></div>
-<div class="highlight"><pre><span></span>@mydecorator('a', 'b')
-def test(*args, **kwargs):
-    print(args, kwargs)
+<div class="highlight"><pre><span></span><span class="nv">@mydecorator</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="w"> </span><span class="s1">'b'</span><span class="p">)</span><span class="w"></span>
+<span class="n">def</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="p">)</span><span class="w"></span>
 </pre></div>
-<div class="highlight"><pre><span></span>test('test', a=1)
+<div class="highlight"><pre><span></span><span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-('i know you pass to decorator parameters:', 'a', 'b')
-(('test',), {'a': 1})
+<span class="p">(</span><span class="s1">'i know you pass to decorator parameters:'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span>
+<span class="p">((</span><span class="s1">'test'</span><span class="p">,),</span> <span class="err">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="err">}</span><span class="p">)</span>
 </pre></div>
 <p>上面的这种函数装饰器写法是在理解了装饰器的具体原理之后写出来的这种形式，和网上的这种写法有所区别，其更加简洁明了一点，不过还是推荐和大家使用一致的风格写法吧：</p>
-<div class="highlight"><pre><span></span>def mydecorator(arg1, arg2):
-    def _mydecorator(func):
-        def wraper_func(*args, **kwargs):
-            print('i know you pass to decorator parameters:', arg1, arg2)
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">mydecorator</span><span class="ss">(</span><span class="nv">arg1</span>, <span class="nv">arg2</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">_mydecorator</span><span class="ss">(</span><span class="nv">func</span><span class="ss">)</span>:
+        <span class="nv">def</span> <span class="nv">wraper_func</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+            <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">i know you pass to decorator parameters:</span><span class="s1">'</span>, <span class="nv">arg1</span>, <span class="nv">arg2</span><span class="ss">)</span>
 
-            return func(*args, **kwargs)
-        return wraper_func
-    return _mydecorator
+            <span class="k">return</span> <span class="nv">func</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">wraper_func</span>
+    <span class="k">return</span> <span class="nv">_mydecorator</span>
 </pre></div>
-<div class="highlight"><pre><span></span>@mydecorator('a', 'b')
-def test(*args, **kwargs):
-    print(args, kwargs)
+<div class="highlight"><pre><span></span><span class="nv">@mydecorator</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="w"> </span><span class="s1">'b'</span><span class="p">)</span><span class="w"></span>
+<span class="n">def</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="p">)</span><span class="w"></span>
 </pre></div>
-<div class="highlight"><pre><span></span>test('test', a=1)
+<div class="highlight"><pre><span></span><span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 <p>具体运行效果都是一致的，然后我们看到这里用到了函数套函数的结构，从而将装饰器上的一些参数都变为自由变量了，理解这一点是关键。</p>
 <p>更进一步的做法是利用functools模块的 <code>wraps</code> 函数来装饰最终实际执行的那个
 <code>wraper_func</code> 函数。</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 </pre></div>
-<div class="highlight"><pre><span></span>def mydecorator(arg1, arg2):
-    def _mydecorator(func):
-        @wraps(func)
-        def wraper_func(*args, **kwargs):
-            print('i know you pass to decorator parameters:', arg1, arg2)
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">mydecorator</span><span class="ss">(</span><span class="nv">arg1</span>, <span class="nv">arg2</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">_mydecorator</span><span class="ss">(</span><span class="nv">func</span><span class="ss">)</span>:
+        @<span class="nv">wraps</span><span class="ss">(</span><span class="nv">func</span><span class="ss">)</span>
+        <span class="nv">def</span> <span class="nv">wraper_func</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+            <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">i know you pass to decorator parameters:</span><span class="s1">'</span>, <span class="nv">arg1</span>, <span class="nv">arg2</span><span class="ss">)</span>
 
-            return func(*args, **kwargs)
-        return wraper_func
-    return _mydecorator
+            <span class="k">return</span> <span class="nv">func</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">wraper_func</span>
+    <span class="k">return</span> <span class="nv">_mydecorator</span>
 </pre></div>
-<div class="highlight"><pre><span></span>@mydecorator('a', 'b')
-def test(*args, **kwargs):
-    """
-    this is test function
-    """
-    print(args, kwargs)
+<div class="highlight"><pre><span></span><span class="nv">@mydecorator</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="w"> </span><span class="s1">'b'</span><span class="p">)</span><span class="w"></span>
+<span class="n">def</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+<span class="w">    </span><span class="ss">"""</span>
+<span class="ss">    this is test function</span>
+<span class="ss">    """</span><span class="w"></span>
+<span class="w">    </span><span class="k">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="p">)</span><span class="w"></span>
 </pre></div>
-<div class="highlight"><pre><span></span>test('test', a=1)
-print(test.__doc__)
+<div class="highlight"><pre><span></span><span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">test</span><span class="p">.</span><span class="n">__doc__</span><span class="p">)</span>
 </pre></div>
 <p>这样做的好处就是目标函数的说明文档还保留着，目标函数的名字也保留着，目标函数的动作也保留着，只是经过装饰器之后需要经过一些额外的程序流程操作。</p>
 <h3 id="_17">类作为装饰器</h3>
 <p>类作为装饰器就是利用类的 <code>__call__</code>
 内置方法，我把这段代码粘贴在下面了，有时可能看别人的源码有用吧，但装饰器这部分就到此为止吧，没必要弄得这么复杂了。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">MyDecorator</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">"""Decorator example mixing class and function definitions."""</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">func</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="nx">func</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">param1</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">param2</span> <span class="o">=</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">MyDecorator</span><span class="ss">(</span><span class="nv">object</span><span class="ss">)</span>:
+    <span class="s2">"""</span><span class="s">Decorator example mixing class and function definitions.</span><span class="s2">"""</span>
+    <span class="nv">def</span> <span class="nv">__init__</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">func</span>, <span class="nb">param1</span>, <span class="nb">param2</span><span class="ss">)</span>:
+        <span class="nv">self</span>.<span class="nv">func</span> <span class="o">=</span> <span class="nv">func</span>
+        <span class="nv">self</span>.<span class="nb">param1</span>, <span class="nv">self</span>.<span class="nb">param2</span> <span class="o">=</span> <span class="nb">param1</span>, <span class="nb">param2</span>
 
-    <span class="nx">def</span> <span class="nx">__call__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="o">*</span><span class="nx">args</span><span class="p">,</span> <span class="o">**</span><span class="nx">kwargs</span><span class="p">)</span><span class="o">:</span>
-        <span class="p">...</span>
-        <span class="err">#</span><span class="nx">use</span> <span class="nx">self</span><span class="p">.</span><span class="nx">param1</span>
-        <span class="nx">result</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">func</span><span class="p">(</span><span class="o">*</span><span class="nx">args</span><span class="p">,</span> <span class="o">**</span><span class="nx">kwargs</span><span class="p">)</span>
-        <span class="err">#</span><span class="nx">use</span> <span class="nx">self</span><span class="p">.</span><span class="nx">param2</span>
-        <span class="k">return</span> <span class="nx">result</span>
+    <span class="nv">def</span> <span class="nv">__call__</span><span class="ss">(</span><span class="nv">self</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        ...
+        #<span class="nv">use</span> <span class="nv">self</span>.<span class="nb">param1</span>
+        <span class="nb">result</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">func</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>
+        #<span class="nv">use</span> <span class="nv">self</span>.<span class="nb">param2</span>
+        <span class="k">return</span> <span class="nb">result</span>
 
-<span class="nx">def</span> <span class="nx">my_dec_factory</span><span class="p">(</span><span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">decorator</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span><span class="o">:</span>
-         <span class="k">return</span> <span class="nx">MyDecorator</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nx">decorator</span>
+<span class="nv">def</span> <span class="nv">my_dec_factory</span><span class="ss">(</span><span class="nb">param1</span>, <span class="nb">param2</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">decorator</span><span class="ss">(</span><span class="nv">func</span><span class="ss">)</span>:
+         <span class="k">return</span> <span class="nv">MyDecorator</span><span class="ss">(</span><span class="nv">func</span>, <span class="nb">param1</span>, <span class="nb">param2</span><span class="ss">)</span>
+    <span class="k">return</span> <span class="nv">decorator</span>
 </pre></div>
 <p>前面讲到class声明语句和def语句很类似，def语句是利用缩进区块内的代码（简单理解就是执行编译了一遍，当然应该还有其他处理）构建出一个函数对象，然后将这个函数对象和某个名字绑定起来。class语句也是利用缩进区块内的代码构建出一个类对象，然后将这个类对象和某个名字绑定起来。</p>
 <p>那么类装饰器，也就是类上面挂个装饰器，如下所示是什么意思呢：</p>
-<div class="highlight"><pre><span></span><span class="nx">def</span> <span class="nx">decorator</span><span class="p">(</span><span class="nx">C</span><span class="p">)</span><span class="o">:</span>
-    <span class="k">return</span> <span class="nx">ProcessedC</span>
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">decorator</span><span class="ss">(</span><span class="nv">C</span><span class="ss">)</span>:
+    <span class="k">return</span> <span class="nv">ProcessedC</span>
 
-<span class="kd">@decorator</span>    
-<span class="kr">class</span> <span class="nx">C</span>:
-    <span class="kt">....</span>
+@<span class="nv">decorator</span>    
+<span class="nv">class</span> <span class="nv">C</span>:
+    ....
 </pre></div>
 <p>这样我们得到的C是：</p>
-<div class="highlight"><pre><span></span>C = decorator(C)
+<div class="highlight"><pre><span></span><span class="k">C</span> <span class="o">=</span> <span class="n">decorator</span><span class="p">(</span><span class="k">C</span><span class="p">)</span>
 </pre></div>
 <p>所以函数装饰器相当于函数对象创建过程的深度定制DIY，而类装饰器就相当于类对象创建过程的深度DIY。</p>
 <h2 id="_18">多重继承的顺序问题</h2>
 <p>我们来看下面这个例子：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">B1</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'B1'</span>
-<span class="kr">class</span> <span class="nx">B2</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'B2'</span>
-<span class="kr">class</span> <span class="nx">B3</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'B3'</span>
-<span class="kr">class</span> <span class="nx">B</span><span class="p">(</span><span class="nx">B1</span><span class="p">,</span><span class="nx">B2</span><span class="p">,</span><span class="nx">B3</span><span class="p">)</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'B'</span>
-<span class="kr">class</span> <span class="nx">A1</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'A1'</span>
-<span class="kr">class</span> <span class="nx">A2</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'A2'</span>
-<span class="kr">class</span> <span class="nx">A</span><span class="p">(</span><span class="nx">A1</span><span class="p">,</span><span class="nx">A2</span><span class="p">)</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'A'</span>
-<span class="kr">class</span> <span class="nx">D</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span><span class="nx">A</span><span class="p">)</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'D'</span>
-<span class="nx">test</span><span class="o">=</span><span class="nx">D</span><span class="p">()</span>
-<span class="nx">print</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">B1</span>():<span class="o">x</span>=<span class="s">'B1'</span>
+<span class="k">class</span> <span class="n">B2</span>():<span class="o">x</span>=<span class="s">'B2'</span>
+<span class="k">class</span> <span class="n">B3</span>():<span class="o">x</span>=<span class="s">'B3'</span>
+<span class="k">class</span> <span class="n">B</span>(<span class="n">B1</span>,<span class="n">B2</span>,<span class="n">B3</span>):<span class="o">x</span>=<span class="s">'B'</span>
+<span class="k">class</span> <span class="n">A1</span>():<span class="o">x</span>=<span class="s">'A1'</span>
+<span class="k">class</span> <span class="n">A2</span>():<span class="o">x</span>=<span class="s">'A2'</span>
+<span class="k">class</span> <span class="n">A</span>(<span class="n">A1</span>,<span class="n">A2</span>):<span class="o">x</span>=<span class="s">'A'</span>
+<span class="k">class</span> <span class="n">D</span>(<span class="n">B</span>,<span class="n">A</span>):<span class="o">x</span>=<span class="s">'D'</span>
+<span class="n">test</span>=<span class="n">D</span>()
+<span class="nb">print</span>(<span class="n">test</span>.<span class="o">x</span>)
 </pre></div>
-<p>duo-chong-ji-cheng</p>
+<p><img alt="多重继承示意图" src="/images/python/duo-chong-ji-cheng.png"/></p>
 <p>你可以测试一下上面这个例子，首先当然结果是D自己的x被先查找，然后返回<em>'D'</em>，如果你把类D的x定义语句换成pass，结果就是<em>'B'</em>。这说明这里程序的逻辑是如果test实例找不到x，那么再找D，D找不到再接下来找D继承自的父类，首先是B，到目前为止，没什么新鲜事发生。</p>
 <p>然后我们再把B的x赋值语句换成pass，这时的结果是<em>'B1'</em>，也没什么好惊讶的。然后类似的一致操作下去，我们会发现python的值的查找顺序在这里是：D，B，B1，B2，B3，A，A1，A2。</p>
 <p>于是我们可以总结道：恩，类的多重继承就是深度优先法则，先把子类或者子类的子类都查找完，确认没有值之后再继续从左到右的查找。</p>
 <p>一般情况来说这么理解是没有问题的，但是在编程界多重继承中有个有名的问题------菱形难题。</p>
 <h3 id="_19">菱形难题</h3>
-<p>参考资料：
-<a href="http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">维基百科菱形难题</a></p>
-<p>ling-xing-nan-ti</p>
+<p>参考资料：<a href="http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">维基百科菱形难题</a></p>
+<p><img alt="菱形难题" src="/images/python/ling-xing-nan-ti.png"/></p>
 <p>菱形难题即在如上的类的继承中，如果C和A都有同名属性x，那么D会调用谁的呢？读者测试下面的例子：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">E</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'E'</span>
-<span class="kr">class</span> <span class="nx">F</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'F'</span>
-<span class="kr">class</span> <span class="nx">G</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'G'</span>
-<span class="kr">class</span> <span class="nx">A</span><span class="p">(</span><span class="nx">F</span><span class="p">,</span><span class="nx">G</span><span class="p">)</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'A'</span>
-<span class="kr">class</span> <span class="nx">B</span><span class="p">(</span><span class="nx">E</span><span class="p">,</span><span class="nx">F</span><span class="p">)</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'B'</span>
-<span class="kr">class</span> <span class="nx">D</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span><span class="nx">A</span><span class="p">)</span><span class="o">:</span><span class="nx">pass</span>
-<span class="nx">test</span><span class="o">=</span><span class="nx">D</span><span class="p">()</span>
-<span class="nx">print</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">E</span>():<span class="o">x</span>=<span class="s">'E'</span>
+<span class="k">class</span> <span class="n">F</span>():<span class="o">x</span>=<span class="s">'F'</span>
+<span class="k">class</span> <span class="n">G</span>():<span class="o">x</span>=<span class="s">'G'</span>
+<span class="k">class</span> <span class="n">A</span>(<span class="n">F</span>,<span class="n">G</span>):<span class="o">x</span>=<span class="s">'A'</span>
+<span class="k">class</span> <span class="n">B</span>(<span class="n">E</span>,<span class="n">F</span>):<span class="o">x</span>=<span class="s">'B'</span>
+<span class="k">class</span> <span class="n">D</span>(<span class="n">B</span>,<span class="n">A</span>):<span class="n">pass</span>
+<span class="n">test</span>=<span class="n">D</span>()
+<span class="nb">print</span>(<span class="n">test</span>.<span class="o">x</span>)
 </pre></div>
 <p>此时运行结果到DBE都没有什么出奇的，
 接下来要某是DBEF[^15]，要某是DBEA，这里程序的结果是<em>'A'</em>。这里的情况确实比较纠结，如果没有这个F作为菱形难题的交叉点，似前面的层次分明，那么简单的理解为深度优先即可，这里python3的选择是<em>'A'</em>，不清楚为什么要这么选择。</p>
 <p>我们再来看这个例子：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">E</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'E'</span>
-<span class="kr">class</span> <span class="nx">F</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'F'</span>
-<span class="kr">class</span> <span class="nx">G</span><span class="p">()</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'G'</span>
-<span class="kr">class</span> <span class="nx">A</span><span class="p">(</span><span class="nx">F</span><span class="p">,</span><span class="nx">G</span><span class="p">)</span><span class="o">:</span><span class="nx">x</span><span class="o">=</span><span class="s1">'A'</span>
-<span class="kr">class</span> <span class="nx">B</span><span class="p">(</span><span class="nx">F</span><span class="p">,</span><span class="nx">E</span><span class="p">)</span><span class="o">:</span><span class="nx">pass</span>
-<span class="kr">class</span> <span class="nx">D</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span><span class="nx">A</span><span class="p">)</span><span class="o">:</span><span class="nx">pass</span>
-<span class="nx">test</span><span class="o">=</span><span class="nx">D</span><span class="p">()</span>
-<span class="nx">print</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">E</span>():<span class="o">x</span>=<span class="s">'E'</span>
+<span class="k">class</span> <span class="n">F</span>():<span class="o">x</span>=<span class="s">'F'</span>
+<span class="k">class</span> <span class="n">G</span>():<span class="o">x</span>=<span class="s">'G'</span>
+<span class="k">class</span> <span class="n">A</span>(<span class="n">F</span>,<span class="n">G</span>):<span class="o">x</span>=<span class="s">'A'</span>
+<span class="k">class</span> <span class="n">B</span>(<span class="n">F</span>,<span class="n">E</span>):<span class="n">pass</span>
+<span class="k">class</span> <span class="n">D</span>(<span class="n">B</span>,<span class="n">A</span>):<span class="n">pass</span>
+<span class="n">test</span>=<span class="n">D</span>()
+<span class="nb">print</span>(<span class="n">test</span>.<span class="o">x</span>)
 </pre></div>
 <p>此时结果是<em>'A'</em>，连E都被跳过去了，变成了彻底的横向优先原则。</p>
 <p>程序出现菱形难题之后，情况变得不可琢磨了。上面的三个情况</p>
-<div class="highlight"><pre><span></span>D(B(B1 B2 B3) A(A1 A2)) → D B B1 B2 B3 A A1 A2
+<div class="highlight"><pre><span></span><span class="n">D</span><span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">B1</span> <span class="n">B2</span> <span class="n">B3</span><span class="p">)</span> <span class="n">A</span><span class="p">(</span><span class="n">A1</span> <span class="n">A2</span><span class="p">))</span> <span class="err">→</span> <span class="n">D</span> <span class="n">B</span> <span class="n">B1</span> <span class="n">B2</span> <span class="n">B3</span> <span class="n">A</span> <span class="n">A1</span> <span class="n">A2</span>
 
-D(B(E F) A(F G)) → D B E A F G
+<span class="n">D</span><span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">E</span> <span class="n">F</span><span class="p">)</span> <span class="n">A</span><span class="p">(</span><span class="n">F</span> <span class="k">G</span><span class="p">))</span> <span class="err">→</span> <span class="n">D</span> <span class="n">B</span> <span class="n">E</span> <span class="n">A</span> <span class="n">F</span> <span class="k">G</span>
 
-D(B(F E) A(F G)) → D B A F E G
+<span class="n">D</span><span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">F</span> <span class="n">E</span><span class="p">)</span> <span class="n">A</span><span class="p">(</span><span class="n">F</span> <span class="k">G</span><span class="p">))</span> <span class="err">→</span> <span class="n">D</span> <span class="n">B</span> <span class="n">A</span> <span class="n">F</span> <span class="n">E</span> <span class="k">G</span>
 </pre></div>
 <p>就是这样的，总之这是很冷门的领域了。。简单的理解就是深度搜索，类似flatten函数处理过，然后如果遇到某个子元在下一个平行级别的子元中也含有，那么本子元会被略过，做个记号，分叉跳过去跑到A那里，执行完那个子元之后，又会重新调到之前的操作点上。python怎么弄这么古怪的逻辑。。</p>
 <h3 id="super">super如何面对菱形难题</h3>
 <p>第一种情况是如果是单继承的类的系统，super()这种形式就直接表示父类的意思。然后用super().什么什么的来引用父类的某个变量或方法。</p>
 <p>第二种情况是多重继承的，搜索顺序和多重继承的搜索顺序相同，也就是从左到右。请注意调试下面的例子，如果调用c.d就会返回错误，说明调用的是类A的构造函数。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">A</span><span class="p">()</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">a</span><span class="o">=</span><span class="nx">a</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">A</span>():
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>,<span class="n">a</span>):
+        <span class="k">self</span>.<span class="n">a</span>=<span class="n">a</span>
 
-    <span class="nx">def</span> <span class="nx">fun</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'fun'</span><span class="p">)</span>
+    <span class="n">def</span> <span class="n">fun</span>(<span class="k">self</span>):
+        <span class="nb">print</span>(<span class="s">'fun'</span>)
 
-    <span class="nx">def</span> <span class="nx">fun2</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span><span class="nx">what</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'fun'</span><span class="p">,</span><span class="nx">what</span><span class="p">)</span>
+    <span class="n">def</span> <span class="n">fun2</span>(<span class="k">self</span>,<span class="n">what</span>):
+        <span class="nb">print</span>(<span class="s">'fun'</span>,<span class="n">what</span>)
 
-<span class="kr">class</span> <span class="nx">B</span><span class="p">()</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">d</span><span class="o">=</span><span class="mi">5</span>
-    <span class="nx">b</span><span class="o">=</span><span class="mi">2</span>
-    <span class="nx">def</span> <span class="nx">fun3</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">print</span><span class="p">(</span><span class="s1">'fun3'</span><span class="p">)</span>
+<span class="k">class</span> <span class="n">B</span>():
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>):
+        <span class="k">self</span>.<span class="n">d</span>=<span class="mi">5</span>
+    <span class="n">b</span>=<span class="mi">2</span>
+    <span class="n">def</span> <span class="n">fun3</span>(<span class="k">self</span>):
+        <span class="nb">print</span>(<span class="s">'fun3'</span>)
 
-<span class="kr">class</span> <span class="nx">C</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span><span class="nx">B</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="kr">super</span><span class="p">().</span><span class="nx">__init__</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-        <span class="kr">super</span><span class="p">().</span><span class="nx">fun</span><span class="p">()</span>
-        <span class="kr">super</span><span class="p">().</span><span class="nx">fun2</span><span class="p">(</span><span class="s1">'what'</span><span class="p">)</span>
-        <span class="kr">super</span><span class="p">().</span><span class="nx">fun3</span><span class="p">()</span>
-        <span class="nx">print</span><span class="p">(</span><span class="kr">super</span><span class="p">().</span><span class="nx">b</span><span class="p">)</span>
+<span class="k">class</span> <span class="n">C</span>(<span class="n">A</span>,<span class="n">B</span>):
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>):
+        <span class="n">super</span>().<span class="n">__init__</span>(<span class="mi">3</span>)
+        <span class="n">super</span>().<span class="n">fun</span>()
+        <span class="n">super</span>().<span class="n">fun2</span>(<span class="s">'what'</span>)
+        <span class="n">super</span>().<span class="n">fun3</span>()
+        <span class="nb">print</span>(<span class="n">super</span>().<span class="n">b</span>)
 
-<span class="nx">c</span><span class="o">=</span><span class="nx">C</span><span class="p">()</span>
-<span class="nx">print</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">a</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">b</span><span class="p">)</span>
+<span class="n">c</span>=<span class="n">C</span>()
+<span class="nb">print</span>(<span class="n">c</span>.<span class="n">a</span>,<span class="n">c</span>.<span class="n">b</span>)
 
-<span class="nx">fun</span>
-<span class="nx">fun</span> <span class="nx">what</span>
-<span class="nx">fun3</span>
+<span class="n">fun</span>
+<span class="n">fun</span> <span class="n">what</span>
+<span class="n">fun3</span>
 <span class="mi">2</span>
 <span class="mi">3</span> <span class="mi">2</span>
 </pre></div>
@@ -1102,7 +1101,7 @@ D(B(F E) A(F G)) → D B A F E G
 <h2 id="_20">描述器</h2>
 <p>本小节参考了<a href="http://pyzh.readthedocs.io/en/latest/Descriptor-HOW-TO-Guide.html">这个网页</a> 。</p>
 <p>上面谈及的属性装饰器，其实际上是调用的property函数，</p>
-<div class="highlight"><pre><span></span>property(fget, fset, fdel, descrition)
+<div class="highlight"><pre><span></span><span class="n">property</span><span class="p">(</span><span class="n">fget</span><span class="p">,</span> <span class="n">fset</span><span class="p">,</span> <span class="n">fdel</span><span class="p">,</span> <span class="n">descrition</span><span class="p">)</span>
 </pre></div>
 <p>而这个函数返回的是一个描述器对象（Desriptor）。那么什么是一个描述器对象呢，简单来说这个对象里面定义了三个方法（最基本的是必须把
 <code>__get__</code>方法定义了）。</p>
@@ -1113,40 +1112,40 @@ D(B(F E) A(F G)) → D B A F E G
 方法，如果找不到那么就会报错。</p>
 <p>在上面找属性的过程中，查找描述器的行为是很靠前的。如果找到的属性是一个描述器，那么python会根据这个描述器对象来决定如何提取这个属性，如何修改这个属性等的行为。</p>
 <p>然后理解property这个函数返回的是一个怎样的描述器，看下面的python代码等价实现是最直观的了：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Property</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">"Emulate PyProperty_Type() in Objects/descrobject.c"</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">Property</span><span class="ss">(</span><span class="nv">object</span><span class="ss">)</span>:
+    <span class="s2">"</span><span class="s">Emulate PyProperty_Type() in Objects/descrobject.c</span><span class="s2">"</span>
 
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">fget</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="nx">fset</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="nx">fdel</span><span class="o">=</span><span class="nx">None</span><span class="p">,</span> <span class="nx">doc</span><span class="o">=</span><span class="nx">None</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">fget</span> <span class="o">=</span> <span class="nx">fget</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">fset</span> <span class="o">=</span> <span class="nx">fset</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">fdel</span> <span class="o">=</span> <span class="nx">fdel</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">__doc__</span> <span class="o">=</span> <span class="nx">doc</span>
+    <span class="nv">def</span> <span class="nv">__init__</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">fget</span><span class="o">=</span><span class="nv">None</span>, <span class="nv">fset</span><span class="o">=</span><span class="nv">None</span>, <span class="nv">fdel</span><span class="o">=</span><span class="nv">None</span>, <span class="nv">doc</span><span class="o">=</span><span class="nv">None</span><span class="ss">)</span>:
+        <span class="nv">self</span>.<span class="nv">fget</span> <span class="o">=</span> <span class="nv">fget</span>
+        <span class="nv">self</span>.<span class="nv">fset</span> <span class="o">=</span> <span class="nv">fset</span>
+        <span class="nv">self</span>.<span class="nv">fdel</span> <span class="o">=</span> <span class="nv">fdel</span>
+        <span class="nv">self</span>.<span class="nv">__doc__</span> <span class="o">=</span> <span class="nv">doc</span>
 
-    <span class="nx">def</span> <span class="nx">__get__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">objtype</span><span class="o">=</span><span class="nx">None</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">obj</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">return</span> <span class="nx">self</span>
-        <span class="k">if</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fget</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">raise</span> <span class="nx">AttributeError</span><span class="p">,</span> <span class="s2">"unreadable attribute"</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fget</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">__get__</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">obj</span>, <span class="nv">objtype</span><span class="o">=</span><span class="nv">None</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">obj</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="k">return</span> <span class="nv">self</span>
+        <span class="k">if</span> <span class="nv">self</span>.<span class="nv">fget</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="nv">raise</span> <span class="nv">AttributeError</span>, <span class="s2">"</span><span class="s">unreadable attribute</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">fget</span><span class="ss">(</span><span class="nv">obj</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">__set__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">obj</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fset</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">raise</span> <span class="nx">AttributeError</span><span class="p">,</span> <span class="s2">"can't set attribute"</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">fset</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">__set__</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">obj</span>, <span class="nv">value</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">self</span>.<span class="nv">fset</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="nv">raise</span> <span class="nv">AttributeError</span>, <span class="s2">"</span><span class="s">can't set attribute</span><span class="s2">"</span>
+        <span class="nv">self</span>.<span class="nv">fset</span><span class="ss">(</span><span class="nv">obj</span>, <span class="nv">value</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">__delete__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fdel</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">raise</span> <span class="nx">AttributeError</span><span class="p">,</span> <span class="s2">"can't delete attribute"</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">fdel</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">__delete__</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">obj</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">self</span>.<span class="nv">fdel</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="nv">raise</span> <span class="nv">AttributeError</span>, <span class="s2">"</span><span class="s">can't delete attribute</span><span class="s2">"</span>
+        <span class="nv">self</span>.<span class="nv">fdel</span><span class="ss">(</span><span class="nv">obj</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">getter</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">fget</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">type</span><span class="p">(</span><span class="nx">self</span><span class="p">)(</span><span class="nx">fget</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fset</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fdel</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">__doc__</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">getter</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">fget</span><span class="ss">)</span>:
+        <span class="k">return</span> <span class="nv">type</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)(</span><span class="nv">fget</span>, <span class="nv">self</span>.<span class="nv">fset</span>, <span class="nv">self</span>.<span class="nv">fdel</span>, <span class="nv">self</span>.<span class="nv">__doc__</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">setter</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">fset</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">type</span><span class="p">(</span><span class="nx">self</span><span class="p">)(</span><span class="nx">self</span><span class="p">.</span><span class="nx">fget</span><span class="p">,</span> <span class="nx">fset</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fdel</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">__doc__</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">setter</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">fset</span><span class="ss">)</span>:
+        <span class="k">return</span> <span class="nv">type</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)(</span><span class="nv">self</span>.<span class="nv">fget</span>, <span class="nv">fset</span>, <span class="nv">self</span>.<span class="nv">fdel</span>, <span class="nv">self</span>.<span class="nv">__doc__</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">deleter</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">fdel</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">type</span><span class="p">(</span><span class="nx">self</span><span class="p">)(</span><span class="nx">self</span><span class="p">.</span><span class="nx">fget</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">fset</span><span class="p">,</span> <span class="nx">fdel</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">__doc__</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">deleter</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">fdel</span><span class="ss">)</span>:
+        <span class="k">return</span> <span class="nv">type</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)(</span><span class="nv">self</span>.<span class="nv">fget</span>, <span class="nv">self</span>.<span class="nv">fset</span>, <span class="nv">fdel</span>, <span class="nv">self</span>.<span class="nv">__doc__</span><span class="ss">)</span>
 </pre></div>
 <h2 id="_21">缓存属性</h2>
 <p>下面这个例子灵感来自python官方装饰器 <code>@property</code>
@@ -1209,7 +1208,7 @@ D(B(F E) A(F G)) → D B A F E G
 </pre></div>
 <h2 id="metaclass">什么是metaclass</h2>
 <p>所有类都是由元类（type类）创建的，其对应的语句如下：</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="o">=</span> <span class="nx">type</span><span class="p">(</span><span class="nx">classname</span><span class="p">,</span> <span class="nx">superclasses</span><span class="p">,</span> <span class="nx">attributedict</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> = <span class="n">type</span>(<span class="n">classname</span>, <span class="n">superclasses</span>, <span class="n">attributedict</span>)
 </pre></div>
 <p>type实际调用的是自身的 <code>__call__</code> 方法，这个方法将运行type的两个方法：
 <code>__new__</code> ， <code>__call__</code> 。</p>
@@ -1217,14 +1216,14 @@ D(B(F E) A(F G)) → D B A F E G
 <code>__call__</code> ，这样就创造出一个实例来了。</p>
 <p>之前提到type的type也是type，type大体可以看作python中类型的最底层的原子结构吧。元类创造类，然后是类创造实例。</p>
 <h3 id="_22">定义一个元类</h3>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Meta</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">def</span> <span class="nx">__new__</span><span class="p">(</span><span class="nx">meta</span><span class="p">,</span> <span class="nx">classname</span><span class="p">,</span> <span class="nx">supers</span><span class="p">,</span> <span class="nx">classdict</span><span class="p">)</span><span class="o">:</span>
-        <span class="err">#</span> <span class="k">do</span> <span class="nx">something</span>
-        <span class="k">return</span> <span class="nx">type</span><span class="p">.</span><span class="nx">__new__</span><span class="p">(</span><span class="nx">meta</span><span class="p">,</span> <span class="nx">classname</span><span class="p">,</span> <span class="nx">supers</span><span class="p">,</span> <span class="nx">classdict</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">Meta</span><span class="ss">(</span><span class="nv">type</span><span class="ss">)</span>:
+    <span class="nv">def</span> <span class="nv">__new__</span><span class="ss">(</span><span class="nv">meta</span>, <span class="nv">classname</span>, <span class="nv">supers</span>, <span class="nv">classdict</span><span class="ss">)</span>:
+        # <span class="k">do</span> <span class="nv">something</span>
+        <span class="k">return</span> <span class="nv">type</span>.<span class="nv">__new__</span><span class="ss">(</span><span class="nv">meta</span>, <span class="nv">classname</span>, <span class="nv">supers</span>, <span class="nv">classdict</span><span class="ss">)</span>
 </pre></div>
 <h3 id="_23">使用一个元类</h3>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">Super</span><span class="p">,</span> <span class="nx">metaclass</span><span class="o">=</span><span class="nx">Meta</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">pass</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Test</span>(<span class="n">Super</span>, <span class="n">metaclass</span>=<span class="n">Meta</span>):
+    <span class="nb">pass</span>
 </pre></div>
 <p>元类理解起来并不难，关键是如何把握在合适的时候合适的使用。</p>
             

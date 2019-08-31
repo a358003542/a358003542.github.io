@@ -153,7 +153,7 @@
 <h2 id="numpy">高效numpy</h2>
 <h3 id="numpypandas">numpy总的来说比pandas快</h3>
 <p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
-<div class="highlight"><pre><span></span>np.dot(df['a'],x)
+<div class="highlight"><pre><span></span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 <p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
 <h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
@@ -161,17 +161,17 @@
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="nv">timeit</span> 
 
-<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)])</span>
+<span class="nv">res</span> <span class="o">=</span> <span class="nv">np</span>.<span class="nv">vstack</span><span class="ss">(</span>[<span class="nv">x</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">10000</span><span class="ss">)</span>]<span class="ss">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>50.7 ms ± 1.5 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+<div class="highlight"><pre><span></span><span class="mi">50</span>.<span class="mi">7</span> <span class="nv">ms</span> ± <span class="mi">1</span>.<span class="mi">5</span> <span class="nv">ms</span> <span class="nv">per</span> <span class="k">loop</span> <span class="ss">(</span><span class="nv">mean</span> ± <span class="nv">std</span>. <span class="nv">dev</span>. <span class="nv">of</span> <span class="mi">7</span> <span class="nv">runs</span>, <span class="mi">10</span> <span class="nv">loops</span> <span class="nv">each</span><span class="ss">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="nv">timeit</span> 
 
-<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)],</span> <span class="n">axis</span><span class="p">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nv">res</span> <span class="o">=</span> <span class="nv">np</span>.<span class="nv">concatenate</span><span class="ss">(</span>[<span class="nv">x</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">10000</span><span class="ss">)</span>], <span class="nv">axis</span><span class="o">=</span><span class="mi">0</span><span class="ss">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>41.1 ms ± 697 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+<div class="highlight"><pre><span></span><span class="mi">41</span>.<span class="mi">1</span> <span class="nv">ms</span> ± <span class="mi">697</span> µ<span class="nv">s</span> <span class="nv">per</span> <span class="k">loop</span> <span class="ss">(</span><span class="nv">mean</span> ± <span class="nv">std</span>. <span class="nv">dev</span>. <span class="nv">of</span> <span class="mi">7</span> <span class="nv">runs</span>, <span class="mi">10</span> <span class="nv">loops</span> <span class="nv">each</span><span class="ss">)</span>
 </pre></div>
 <h3 id="numpycopyview">避免numpy的copy操作而多用view</h3>
 <p><a href="https://ipython-books.github.io/45-understanding-the-internals-of-numpy-to-avoid-unnecessary-array-copying/">https://ipython-books.github.io/45-understanding-the-internals-of-numpy-to-avoid-unnecessary-array-copying/</a></p>
@@ -189,9 +189,9 @@
 <h3 id="_2">向量操作风格最高效</h3>
 <p>这个优化建议主要参看了 <a href="https://engineering.upside.com/a-beginners-guide-to-optimizing-pandas-code-for-speed-c09ef2c6a4d6">这篇文章</a> ，我们也可以多学习下这篇文章的分析问题测速的思路。</p>
 <p>对pandas的某个列的所有值进行操作，如下的逐个索引风格：</p>
-<div class="highlight"><pre><span></span>    for i in range(0, len(df)):
-        d = haversine(40.671, -73.985, df.iloc[i]['latitude'], df.iloc[i]['longitude'])
-        distance_list.append(d)
+<div class="highlight"><pre><span></span>    <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">0</span>, <span class="nv">len</span><span class="ss">(</span><span class="nv">df</span><span class="ss">))</span>:
+        <span class="nv">d</span> <span class="o">=</span> <span class="nv">haversine</span><span class="ss">(</span><span class="mi">40</span>.<span class="mi">671</span>, <span class="o">-</span><span class="mi">73</span>.<span class="mi">985</span>, <span class="nv">df</span>.<span class="nv">iloc</span>[<span class="nv">i</span>][<span class="s1">'</span><span class="s">latitude</span><span class="s1">'</span>], <span class="nv">df</span>.<span class="nv">iloc</span>[<span class="nv">i</span>][<span class="s1">'</span><span class="s">longitude</span><span class="s1">'</span>]<span class="ss">)</span>
+        <span class="nv">distance_list</span>.<span class="nv">append</span><span class="ss">(</span><span class="nv">d</span><span class="ss">)</span>
 </pre></div>
 <p>这很慢，这样的代码不应该出现。 <code>iterrows</code> 写法如下：</p>
 <div class="highlight"><pre><span></span>    <span class="n">haversine_series</span> <span class="o">=</span> <span class="p">[]</span>
@@ -199,7 +199,7 @@
         <span class="n">haversine_series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">haversine</span><span class="p">(</span><span class="mf">40.671</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.985</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s1">'latitude'</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">'longitude'</span><span class="p">]))</span>
 </pre></div>
 <p>比上面的逐个索引稍微好点，但也不应该使用。如下apply写法稍微好点，但也尽量不使用：</p>
-<div class="highlight"><pre><span></span>df['distance'] = df.apply(lambda row: haversine(40.671, -73.985, row['latitude'], row['longitude']), axis=1)
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lambda</span> <span class="k">row</span><span class="p">:</span> <span class="n">haversine</span><span class="p">(</span><span class="mi">40</span><span class="p">.</span><span class="mi">671</span><span class="p">,</span> <span class="o">-</span><span class="mi">73</span><span class="p">.</span><span class="mi">985</span><span class="p">,</span> <span class="k">row</span><span class="p">[</span><span class="s1">'latitude'</span><span class="p">],</span> <span class="k">row</span><span class="p">[</span><span class="s1">'longitude'</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 <p>pandas 最高效的操作风格是向量式操作，这需要你在定义函数的时候就习惯numpy的那种ndarray向量操作风格，上面的函数就是支持的：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -217,10 +217,10 @@
 </pre></div>
 <p>这种写法需要我们对numpy的一些东西，尤其是向量操作很熟悉，这样我们直接把pandas的Series对象传递过去即可。</p>
 <p>这种向量式写法及时和之前优化了的apply写法，也快了56倍。</p>
-<div class="highlight"><pre><span></span>df['distance'] = haversine(40.671, -73.985, df['latitude'], df['longitude'])
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span> <span class="o">=</span> <span class="n">haversine</span><span class="p">(</span><span class="mi">40</span><span class="p">.</span><span class="mi">671</span><span class="p">,</span> <span class="o">-</span><span class="mi">73</span><span class="p">.</span><span class="mi">985</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'latitude'</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'longitude'</span><span class="p">])</span>
 </pre></div>
 <p>而如果我们直接使用numpy的ndarray对象，速度还将继续提升4倍：</p>
-<div class="highlight"><pre><span></span>df['distance'] = haversine(40.671, -73.985, df['latitude'].values, df['longitude'].values)
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'distance'</span><span class="p">]</span> <span class="o">=</span> <span class="n">haversine</span><span class="p">(</span><span class="mi">40</span><span class="p">.</span><span class="mi">671</span><span class="p">,</span> <span class="o">-</span><span class="mi">73</span><span class="p">.</span><span class="mi">985</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'latitude'</span><span class="p">].</span><span class="k">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'longitude'</span><span class="p">].</span><span class="k">values</span><span class="p">)</span>
 </pre></div>
             
             

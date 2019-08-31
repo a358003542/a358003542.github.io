@@ -180,6 +180,184 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="/articles/djangohou-tai-apibian-xie-zhi-you-xiang-ren-zheng.html">django后台api编写之-邮箱认证
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#django-ref">django
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">邮箱认证</h2>
+<p>参考了 <a href="https://medium.com/@frfahim/django-registration-with-confirmation-email-bb5da011e4ef">这篇文章</a> 。</p>
+<p>过程分为两步，发送验证邮箱，和接受确认邮箱链接：</p>
+<div class="highlight"><pre><span></span>    <span class="n">re_path</span><span class="p">(</span><span class="n">r</span><span class="s1">'^users/verify_email/?$'</span><span class="p">,</span> <span class="n">VerifyEmailView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'users_verify_email'</span><span class="p">),</span>
+
+    <span class="n">re_path</span><span class="p">(</span><span class="n">r</span><span class="s1">'^users/confirm_email/(?P&lt;uidb64&gt;[0-9A-Za-z_\-]+)/(?P&lt;token&gt;[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$'</span><span class="p">,</span>
+            <span class="n">ConfirmEmailView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'users_confirm_email'</span><span class="p">),</span>
+</pre></div>
+<p>发送邮件的过程主要是填写一些必要信息，发送邮件即可：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VerifyEmailView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+    <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">IsAuthenticated</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">user …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/djangohou-tai-apibian-xie-zhi-zi-ding-yi-ming-ling.html">django后台api编写之-自定义命令
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#django-ref">django
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">自定义命令</h1>
+<p>在目标app下面新建一个 <code>management</code> 文件夹，然后新建一个 <code>commands</code>  文件夹，注意这两个文件夹都要带上 <code>__init__.py</code> 文件。</p>
+<p>然后commands文件夹里面就可以定义一些python脚本了，这些脚本成为命令可以直接如下调用：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">command_name</span>
+</pre></div>
+<p>你可以通过：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">help</span>
+</pre></div>
+<p>来查看目前已经有的命令列表。</p>
+<p>一个基本的命令模块如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.management.base</span> <span class="kn">import</span> <span class="n">BaseCommand</span><span class="p">,</span> <span class="n">CommandError</span>
+<span class="kn">from</span> <span class="nn">polls.models</span> <span class="kn">import</span> <span class="n">Question</span> <span class="k">as</span> <span class="n">Poll</span>
+
+<span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s1">'Closes the specified poll for voting'</span>
+
+    <span class="k">def …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/html5dai-ma-gui-fan.html">html5代码规范
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#html5-ref">html5
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="html5">html5代码规范</h1>
+<p>本文参考了 <a href="http://codeguide.bootcss.com">这篇文章</a> 和 <a href="http://alloyteam.github.io/CodeGuide/">这篇文章</a> 还有 <a href="https://github.com/airbnb/javascript">aribnb的javascript规范</a> 。</p>
+<p>需要指出的是这些都是一些代码建议，其中有一些还有点大头开蛋还是小头开蛋的意思，比如到底是空四个空格还是两个空格，这些有分歧的我就不写出来了，读者自行决定吧。</p>
+<h2 id="_1">总的原则</h2>
+<ol>
+<li>无论团队人数多少，代码应该看起来就好像一个人写的。——这个原则为大家所公认。</li>
+<li>文件名推荐是小写字母加下划线。（小写字母加连字符也是可以的，但是绝对不推荐带上空格）</li>
+</ol>
+<h2 id="html">html</h2>
+<ol>
+<li>
+<p>缩进，这个一个好的编辑器会提供这个自动缩进功能的。</p>
+</li>
+<li>
+<p>属性名全部小写，用 <code>-</code> 隔开。</p>
+</li>
+<li>
+<p>属性的定义用 <strong>双引号</strong> 包围起来。</p>
+</li>
+<li>
+<p><code>&lt;hr&gt;</code> <code>&lt;img src=...&gt;</code> 这样的不用后面加个 <code>/</code> 号了。</p>
+</li>
+<li>
+<p>关闭标签不要省略 <code>&lt;li&gt;...&lt;/li&gt;</code>  这是没有疑问的。</p>
+</li>
+<li>
+<p>开头格式都是： <code>&lt;!DOCTYPE html&gt;</code> </p>
+</li>
+<li>
+<p>语言指定遵循规范 ，<code>&lt;html lang="zh-cn"&gt;</code> </p>
+</li>
+<li>
+<p>字符编码推荐指定utf8，<code>&lt;meta charset="utf-8"&gt;</code> </p>
+</li>
+<li>
+<p>IE兼容模式，推荐加上这样一行 …</p></li></ol>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/html5ji-chu.html">html5基础
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#html5-ref">html5
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="html5">html5基础</h1>
+<h2 id="_1">第一个模板</h2>
+<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"zh-cn"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"utf-8"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>your awesome title<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+<h3 id="doctype">doctype声明</h3>
+<p>现在html5的doctype声明非常简单了，开头加入如下简单一行即可:</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</pre></div>
+<p>然后进入 <strong>html</strong> 标签，然后进入 <strong>head</strong> 标签，在head标签里面的内容不会显示在网页上，主要是一些关于本网页的配置信息。</p>
+<h3 id="utf-8">字符集设置为utf-8</h3>
+<p>现在html5使用如下更简洁的语法了:</p>
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">meta</span> <span class="n">charset</span><span class="o">=</span><span class="ss">"utf-8"</span><span class="o">&gt;</span>
+</pre></div>
+<p>然后 <strong>body</strong> 标签里面存放这实际要显示的网页内容。</p>
+<h2 id="_2">第二个例子</h2>
+<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"zh-cn"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="/articles/html5jin-jie.html">html5进阶
  </a></h1>
 
@@ -200,15 +378,15 @@
 </pre></div>
 <h3 id="_2">设置背景图片位置</h3>
 <p>设置背景图片位置，可能的值有top，center，right，left，top，bottom等，如下所示:</p>
-<div class="highlight"><pre><span></span>top left
-top center
-top right
-center left
-center center
-center right
-bottom left
-bottom center
-bottom right
+<div class="highlight"><pre><span></span><span class="n">top</span> <span class="k">left</span>
+<span class="n">top</span> <span class="n">center</span>
+<span class="n">top</span> <span class="k">right</span>
+<span class="n">center</span> <span class="k">left</span>
+<span class="n">center</span> <span class="n">center</span>
+<span class="n">center</span> <span class="k">right</span>
+<span class="n">bottom</span> <span class="k">left</span>
+<span class="n">bottom</span> <span class="n">center</span>
+<span class="n">bottom</span> <span class="k">right</span>
 </pre></div>
 <p>如果只给出一个值，则第二个值是默认值center。</p>
 <div class="highlight"><pre><span></span><span class="nt">background-position</span><span class="o">:</span> <span class="nt">center</span> <span class="nt">center</span><span class="o">;</span>
@@ -241,13 +419,13 @@ bottom right
                                 
 <h2 id="_1">安装和配置</h2>
 <p>就是利用pip3 安装之：</p>
-<div class="highlight"><pre><span></span>pip3 install pyqt5
+<div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">pyqt5</span>
 </pre></div>
 <p>以前是需要安装qt5的，不过在windows下经过测试发现已经不需要安装qt5了，所以我估计ubuntu下也已经不需要安装qt5了。</p>
 <p>但是还是把下面这个写上吧，如果读者遇到程序提示没找到qt或者什么类似的错误，那么安装qt之：</p>
-<div class="highlight"><pre><span></span>sudo apt-get install qt5-default
-sudo apt-get install qtbase5-dev
-sudo apt-get install qtdeclarative5-dev
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">qt5</span><span class="o">-</span><span class="k">default</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">qtbase5</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">qtdeclarative5</span><span class="o">-</span><span class="n">dev</span>
 </pre></div>
 <p>以前安装SIP挺麻烦的，现在sip也可以直接通过pip安装了，而且之前你安装pyqt5的时候，应该也顺便装上了。然后我发现windows下已经有
  <code>pyuic5</code> 和 <code>pyrcc5</code> 这两个命令了，应该是通过pip安装的时候就装上了。</p>
@@ -255,9 +433,7 @@ sudo apt-get install qtdeclarative5-dev
 <div class="highlight"><pre><span></span>sudo apt-get install pyqt5-dev-tools
 </pre></div>
 <p>检查pyqt5安装情况执行以下脚本即可，显示的是当前安装的pyqt5的版本号:</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">QT_VERSION_STR</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">QT_VERSION_STR</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">5 …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">PyQt5 …</span></pre></div>
                             </article>
 
 
@@ -483,12 +659,12 @@ sudo apt-get install qtdeclarative5-dev
 <ul>
 <li>如果是linux系统，比如上面的例子具体配置文件就是：</li>
 </ul>
-<div class="highlight"><pre><span></span>/home/wanze/.config/Wise/wise.conf
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="p">.</span><span class="n">config</span><span class="o">/</span><span class="n">Wise</span><span class="o">/</span><span class="n">wise</span><span class="p">.</span><span class="n">conf</span>
 </pre></div>
 <ul>
 <li>如果是windows系统，那么上面的例子具体就是：</li>
 </ul>
-<div class="highlight"><pre><span></span>HKEY_CURRENT_USER\Software\Wise\wise
+<div class="highlight"><pre><span></span><span class="n">HKEY_CURRENT_USER</span><span class="err">\</span><span class="n">Software</span><span class="err">\</span><span class="n">Wise</span><span class="err">\</span><span class="n">wise</span>
 </pre></div>
 <p>windows下配置是放在注册表里面的。</p>
 <h2 id="iniformat">IniFormat</h2>
@@ -524,10 +700,10 @@ sudo apt-get install qtdeclarative5-dev
 <p>然后QAction有方法</p>
 <h2 id="qkeysequence">QKeySequence</h2>
 <p><code>QKeySequence</code> 类在pyqt4和pyqt5中来自QtGui子模块，是快捷键的解决方案。比如可以直接引用 <code>QKeySequence.Open</code> 来表示快捷键Ctrl+O。可用的构造函数如下所示：</p>
-<div class="highlight"><pre><span></span>QKeySequence(QKeySequence.Print)
-QKeySequence(tr("Ctrl+P"))
-QKeySequence(tr("Ctrl+p"))
-QKeySequence(Qt.CTRL + Qt.Key_P)
+<div class="highlight"><pre><span></span><span class="n">QKeySequence</span><span class="p">(</span><span class="n">QKeySequence</span><span class="p">.</span><span class="n">Print</span><span class="p">)</span>
+<span class="n">QKeySequence</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="ss">"Ctrl+P"</span><span class="p">))</span>
+<span class="n">QKeySequence</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="ss">"Ctrl+p"</span><span class="p">))</span>
+<span class="n">QKeySequence</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">CTRL</span> <span class="o">+</span> <span class="n">Qt</span><span class="p">.</span><span class="n">Key_P</span><span class="p">)</span>
 </pre></div>
 <p>我不太喜欢第一种表达方式，不是任何软件都有打印操作，况且打印和某个快捷键之间并没有逻辑联系，只有程序员的个人使用经验，这是不小的记忆负担。我比较喜欢第四种写法，看上去意义更加清晰，Qt来自QtCore子模块。</p>
 <p>字母按键就是类似 <code>Qt …</code></p>
@@ -624,7 +800,7 @@ QKeySequence(Qt.CTRL + Qt.Key_P)
 
                                 <section>
                                     posted in
-                                    <a href="/categories.html#others-ref">others
+                                    <a href="/categories.html#tools-ref">tools
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -636,20 +812,20 @@ QKeySequence(Qt.CTRL + Qt.Key_P)
 <p>一般的操作就不多说了，下面主要说一些略显高级的技巧。</p>
 <h2 id="_1">直接上传文件到服务器</h2>
 <p>其实原理就是利用sftp上传，但在pycharm这个大环境下，确实有时很方便的。这个功能只在pycharm专业版下才有。</p>
-<div class="highlight"><pre><span></span>Tools -&gt; Deployment -&gt; configuration
+<div class="highlight"><pre><span></span><span class="n">Tools</span> <span class="o">-&gt;</span> <span class="n">Deployment</span> <span class="o">-&gt;</span> <span class="n">configuration</span>
 </pre></div>
 <p>主要是某些需要在服务器上频繁测试的工作，但是有不方便git频繁commit的情况，这个时候可以先测试好，在git推送。</p>
 <h2 id="python">设置环境为远程python解释器</h2>
 <p>在：</p>
-<div class="highlight"><pre><span></span>Settings -&gt; Project -&gt; Project Interpreter
+<div class="highlight"><pre><span></span><span class="n">Settings</span> <span class="o">-&gt;</span> <span class="n">Project</span> <span class="o">-&gt;</span> <span class="n">Project</span> <span class="n">Interpreter</span>
 </pre></div>
 <p>哪里，可以利用pycharm新建一个本地的虚拟环境，或者用pipenv建立环境之后，pycharm会自动找到，从而利用已经存在的python虚拟环境，而这里要讲的是，你还可以设置解释器环境为远程服务器的python环境，这样你的开发调试将更加接近程序实际运行时的环境。</p>
 <p>在：</p>
-<div class="highlight"><pre><span></span>Tools -&gt; Start SSH session...
+<div class="highlight"><pre><span></span><span class="n">Tools</span> <span class="o">-&gt;</span> <span class="k">Start</span> <span class="n">SSH</span> <span class="k">session</span><span class="p">...</span>
 </pre></div>
 <p>你可以在terminal哪里打开一个连接到远程服务器的ssh终端，加上上面的设置好文件upload功能，基本上你不需要使用另外一个额外的ssh终端连接程序了。</p>
 <p>本部分讨论的都是基于ssh连接的，你需要在：</p>
-<div class="highlight"><pre><span></span>Tools -&gt; Deployment -&gt; Configuration
+<div class="highlight"><pre><span></span><span class="n">Tools</span> <span class="o">-&gt;</span> <span class="n">Deployment</span> <span class="o">-&gt;</span> <span class="n">Configuration</span>
 </pre></div>
 <p>哪里设置好ssh server 的连接方式。</p>
 <h2 id="_2">正则表达式替换</h2>
@@ -692,7 +868,7 @@ QKeySequence(Qt.CTRL + Qt.Key_P)
 <span class="n">workers</span> <span class="o">=</span> <span class="n">max_workers</span><span class="p">()</span>
 </pre></div>
 <p>写上这么一个python文件之后，启动gunicorn挂载django服务大体如下：</p>
-<div class="highlight"><pre><span></span>gunicorn -c gunicorn_config.py youapp.wsgi
+<div class="highlight"><pre><span></span><span class="n">gunicorn</span> <span class="o">-</span><span class="k">c</span> <span class="n">gunicorn_config</span><span class="p">.</span><span class="n">py</span> <span class="n">youapp</span><span class="p">.</span><span class="n">wsgi</span>
 </pre></div>
 <p>其他配置还有：</p>
 <ul>
@@ -764,145 +940,6 @@ QKeySequence(Qt.CTRL + Qt.Key_P)
 </pre></div>
 <p>官方文档已经说的很详细了，本身使用是很简单的，下面我随便说说吧。</p>
 <h2 id="_2">第一个例子 …</h2>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/learning-centos7-system.html">学习centeos7系统
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-19T00:00:00+08:00">2018年 2月 19日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">安装系统</h2>
-<p>centos7的安装目前最大的难点在硬盘分区上，加上新生代的uefi启动方式，还是有些新的问题需要讨论的。</p>
-<p>记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照 鸟哥的私房菜   一章的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了，总之，分出3-4Gswap分区意思一下就可以了。</p>
-<h3 id="linux">各个硬件在linux下的名字</h3>
-<p>这个需要了解下，参考 <a href="http://linux.vbird.org/linux_basic/0130designlinux.php">鸟哥的私房菜第二章</a> ，</p>
-<ul>
-<li>硬盘或者USB模拟的硬盘 ：   /dev/sd[a-p]</li>
-<li>CDROM或者DVDROM :  /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1]</li>
-<li>打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15]</li>
-<li>鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标)</li>
-</ul>
-<h3 id="uefi">UEFI …</h3>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/pipenv-module.html">pipenv模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-14T11:45:00+08:00">2018年 2月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>pipenv模块刚开始听说觉得virtualenv够用了，就没太在意。后来一试发现真的可以，很方便的，在设计理念上和nodejs那边的包管理有点接近了，很不错。</p>
-<p>刚进入一个文件夹，然后运行：</p>
-<div class="highlight"><pre><span></span>pipenv install
-</pre></div>
-<p>当然运行前你需要：</p>
-<div class="highlight"><pre><span></span>pip install pipenv
-</pre></div>
-<p>其会创建 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 这两个文件。如果读者有点熟悉nodejs那边的包管理机制，就对这两个文件的作用不需要做过多的说明了。</p>
-<p>那么怎么激活进入虚拟环境呢：</p>
-<div class="highlight"><pre><span></span>pipenv shell
-</pre></div>
-<p>或者你直接调用虚拟环境下运行某个命令：</p>
-<div class="highlight"><pre><span></span>pipenv run you_awesom_command
-</pre></div>
-<p>读者打开 <code>Pipfile</code> 文件会发现这一行</p>
-<div class="highlight"><pre><span></span>url = "https://pypi.douban.com/simple"
-</pre></div>
-<p>以前还要在系统的另外的地方去配置，现在直接在这里修改就可以了。</p>
-<p>然后安装模块就是：</p>
-<div class="highlight"><pre><span></span>pipenv install requests
-</pre></div>
-<p>或者remove模块：</p>
-<div class="highlight"><pre><span></span>pipenv uninstall requests
-</pre></div>
-<p>值得注意的pipenv模块很好地解析的各个包包的依赖关系，这就是他比原 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/pillow-module.html">pillow模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-06T12:04:00+08:00">2018年 2月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>pillow模块的前身是PIL模块，其有更好的github和pypi支持，所以简单的安装就可以通过pip命令安装之即可。不过pillow模块对于某些特殊格式的图片处理支持可能依赖于系统的一些额外的图形处理模块，比如libjpeg，libtiff等。可能你的系统已经安装了，也可能没有，根据具体情况来，这里就不一一讨论了。</p>
-<p>安装官方文档的叙述（also reference <a href="http://askubuntu.com/questions/427358/install-pillow-for-python-3">this</a> ），下面这些可能需要装上。</p>
-<div class="highlight"><pre><span></span>sudo apt-get install python3-dev python3-setuptools
-sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</span>
-    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-</pre></div>
-<h3 id="_2">测试安装情况</h3>
-<p>可以如下找个图片简单测试一下安装情况:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"test.jpg"</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="/articles/statistics-tutorial.html">统计学入门
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#shu-xue-ref">数学
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-06T00:00:00+08:00">2018年 2月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">均值中位数众数</h2>
-<ul>
-<li><strong>mean</strong> 也就是均值，也就是算术平均数，也就是大家熟知的把所有的数加起来然后除以个数，看看这些数平均有多大。</li>
-<li><strong>median</strong> 中位数，是这样的概念：如果我们把一组数从小到大排列，然后最中间的那个数就是中位数。其中最中间的解释是，如果一共有奇数个数字，那么去掉一个最小去掉一个最大，这样类推，最后剩下来的那个数就是中位数；如果一共有偶数个数字，那么最后会剩下两个数字，而中位数就是最后这两个数字的均值。</li>
-<li><strong>mode</strong> 众数，也就是这一组数中出现频率最高或者说分布最多的数。比如说[1,2,2,3]这样一个样本，其中数字2出现次数最多，我们就说这个样本的众数为2。</li>
-</ul>
-<h3 id="_2">统计意义</h3>
-<p>平均值的概念是大家最熟悉的，其是最基本的统计学手段。比如物理学上的测量，为了精确总是需要多次测量取平均值。再比如我们衡量某一类数据的大致平均情况，比如你的考试平均成绩，通过这个平均成绩可以大致得到你对待本学期学业的态度等。</p>
-<p>中位数和均值一样也能考察样本总体存在状态，不过区别是中位数对一些极值（特殊的偏离特别远的值）不敏感。以收入来举例子：某些人的收入特别的高，那么如果你用均值来考察社会的收入水平就会有抬高的嫌疑。因为不同的家庭之间的收入并没有共享，但是你在计算中却一并考虑了。这个时候用中位数来考察能更加合理地看着社会总体的收入水平。因此考察家庭平均收入要用中位数。</p>
-<p>众数只关注出现次数最多的数 …</p>
                             </article>
 
  <nav aria-label="Page Navigation">

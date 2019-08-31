@@ -143,6 +143,7 @@ python语言学习之-技巧大杂烩  · cdwanze的博文
 <li><a href="#__missing__">__missing__方法</a></li>
 <li><a href="#product">product函数</a></li>
 <li><a href="#deque">deque结构</a></li>
+<li><a href="#python">python中类继承的顺序</a></li>
 <li><a href="#_6">查找多个最大最小元素的情况</a></li>
 <li><a href="#_7">获取一个月最后的一天</a></li>
 <li><a href="#ordereddict">OrderedDict类</a></li>
@@ -152,8 +153,8 @@ python语言学习之-技巧大杂烩  · cdwanze的博文
 <li><a href="#ordchr">ord和chr函数</a></li>
 </ul>
 </li>
-<li><a href="#_10">给某个对象动态加载一个方法</a></li>
 <li><a href="#configparse">configparse处理特殊字符</a></li>
+<li><a href="#_10">给某个对象动态加载一个方法</a></li>
 </ul>
 </div>
         </nav>
@@ -171,23 +172,23 @@ python语言学习之-技巧大杂烩  · cdwanze的博文
 </pre></div>
 <h2 id="and-or-not">and or not的运算优先级</h2>
 <p>一般是推荐用括号清晰表达，然后not我们知道优先级是最高的。我们再看下面这个例子:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; True or True and False
-True
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="k">True</span> <span class="k">or</span> <span class="k">True</span> <span class="k">and</span> <span class="k">False</span>
+<span class="k">True</span>
 </pre></div>
 <p>这个例子很好地说明了and和or的优先级顺序，具体就是 and的优先级比or的要高 。</p>
 <h2 id="allany">all和any关键词</h2>
 <p>这是python语言里面的关键词函数，源码很简单，下面列出来，看一下就清楚了:</p>
-<div class="highlight"><pre><span></span>def all(iterable):
-    for element in iterable:
-        if not element:
-            return False
-    return True
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">all</span><span class="ss">(</span><span class="nv">iterable</span><span class="ss">)</span>:
+    <span class="k">for</span> <span class="nv">element</span> <span class="nv">in</span> <span class="nv">iterable</span>:
+        <span class="k">if</span> <span class="nv">not</span> <span class="nv">element</span>:
+            <span class="k">return</span> <span class="nv">False</span>
+    <span class="k">return</span> <span class="nv">True</span>
 
-def any(iterable):
-    for element in iterable:
-        if element:
-            return True
-    return False
+<span class="nv">def</span> <span class="nv">any</span><span class="ss">(</span><span class="nv">iterable</span><span class="ss">)</span>:
+    <span class="k">for</span> <span class="nv">element</span> <span class="nv">in</span> <span class="nv">iterable</span>:
+        <span class="k">if</span> <span class="nv">element</span>:
+            <span class="k">return</span> <span class="nv">True</span>
+    <span class="k">return</span> <span class="nv">False</span>
 </pre></div>
 <p>如果用语言表述的话是:</p>
 <ul>
@@ -196,7 +197,7 @@ def any(iterable):
 </ul>
 <h2 id="_1">三元运算符</h2>
 <p>也就是类似这样的结构:</p>
-<div class="highlight"><pre><span></span>loop = loop if loop is not None else get_event_loop()
+<div class="highlight"><pre><span></span><span class="k">loop</span> <span class="o">=</span> <span class="k">loop</span> <span class="k">if</span> <span class="k">loop</span> <span class="nv">is</span> <span class="nv">not</span> <span class="nv">None</span> <span class="k">else</span> <span class="nv">get_event_loop</span><span class="ss">()</span>
 </pre></div>
 <p>通常我们在处理函数的入口参数实现默认值的情况的时候会用到，比如上面一般函数参数那里写着 <code>loop=None</code> ，用上面这种一行形式更简洁一些。而我们不直接在函数定义的那里采用默认值可能有两种情况，一是该默认值并不方便作为默认值，而最好默认为None；还有一种情况是默认值是需要通过某个函数等运算得到的。</p>
 <h2 id="__name__-__file__"><code>__name__</code> 和 <code>__file__</code></h2>
@@ -246,13 +247,13 @@ def any(iterable):
 <p>getattr(object, name[, default])用于取某个对象的某个属性的值，对应 <code>object.name</code> 这样的语法。</p>
 <p>delattr(object,name)用于删除某个对象的某个属性，对应 <code>del object.name</code> 这样的语法。</p>
 <h2 id="flatten">可迭代对象flatten操作</h2>
-<div class="highlight"><pre><span></span>a_list = [[1, 2], [3, 4], [5, 6]]
-print(list(itertools.chain.from_iterable(a_list)))
-# Output: [1, 2, 3, 4, 5, 6]
+<div class="highlight"><pre><span></span><span class="n">a_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
+<span class="n">print</span><span class="p">(</span><span class="n">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="k">chain</span><span class="p">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">a_list</span><span class="p">)))</span>
+<span class="o">#</span> <span class="k">Output</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
 
-# or
-print(list(itertools.chain(*a_list)))
-# Output: [1, 2, 3, 4, 5, 6]
+<span class="o">#</span> <span class="k">or</span>
+<span class="n">print</span><span class="p">(</span><span class="n">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="k">chain</span><span class="p">(</span><span class="o">*</span><span class="n">a_list</span><span class="p">)))</span>
+<span class="o">#</span> <span class="k">Output</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
 </pre></div>
 <h2 id="__missing__">__missing__方法</h2>
 <p>对于字典或者字典的子类，你可以通过定义 <code>__missing__</code> 方法来回避找不到键值而抛出的 <code>KeyError</code> ，参考了 <a href="http://stackoverflow.com/questions/635483/what-is-the-best-way-to-implement-nested-dictionaries-in-python">这个网页</a> 。如下所示:</p>
@@ -284,16 +285,16 @@ print(list(itertools.chain(*a_list)))
 <p>如果找不到该key，则该类会自动赋值一个新的 dict()并作为该key的值。你可能希望使用 <code>type(self)()</code> ，但这种风格对json的兼容性不太好，推荐还是都用dict类。</p>
 <h2 id="product">product函数</h2>
 <p>product函数在 <code>itertools</code> 模块里面，按照官方文档的说明是product(A, B)返回值等价于((x,y) for x in A for y in B)，也就是各种可能的组合情况（类似于笛卡尔积的概念）:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; list(product(['a','b'],['c']))
-[('a', 'c'), ('b', 'c')]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">list</span><span class="p">(</span><span class="n">product</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">],[</span><span class="s1">'c'</span><span class="p">]))</span>
+<span class="p">[(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)]</span>
 </pre></div>
 <p>此外单一迭代加上 <code>repeat</code> 参数也会生成一些很有意思的结果:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; list(product(['True','False'],repeat=len('abc')))
-[('True', 'True', 'True'), ('True', 'True', 'False'), ('True', 'False', 'True'), ('True', 'False', 'False'), ('False', 'True', 'True'), ('False', 'True', 'False'), ('False', 'False', 'True'), ('False', 'False', 'False')]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">list</span><span class="p">(</span><span class="n">product</span><span class="p">([</span><span class="s1">'True'</span><span class="p">,</span><span class="s1">'False'</span><span class="p">],</span><span class="n">repeat</span><span class="o">=</span><span class="n">len</span><span class="p">(</span><span class="s1">'abc'</span><span class="p">)))</span>
+<span class="p">[(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)]</span>
 </pre></div>
 <p>这可以看作:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; list(product(['True','False'],['True','False'],['True','False']))
-[('True', 'True', 'True'), ('True', 'True', 'False'), ('True', 'False', 'True'), ('True', 'False', 'False'), ('False', 'True', 'True'), ('False', 'True', 'False'), ('False', 'False', 'True'), ('False', 'False', 'False')]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">list</span><span class="p">(</span><span class="n">product</span><span class="p">([</span><span class="s1">'True'</span><span class="p">,</span><span class="s1">'False'</span><span class="p">],[</span><span class="s1">'True'</span><span class="p">,</span><span class="s1">'False'</span><span class="p">],[</span><span class="s1">'True'</span><span class="p">,</span><span class="s1">'False'</span><span class="p">]))</span>
+<span class="p">[(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)]</span>
 </pre></div>
 <h2 id="deque">deque结构</h2>
 <p>本小节主要参考了 <a href="http://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p03_keep_last_n_items.html">这个网页</a> 。</p>
@@ -306,6 +307,14 @@ print(list(itertools.chain(*a_list)))
         <span class="k">return</span> <span class="n">deque</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 </pre></div>
 <p>其是利用了deque还有一个size定长的概念，输入的队列进入deque时较老的元素会被丢弃。我不太清楚这种做法效率如何，不过这种写法还是很优雅的。</p>
+<h2 id="python">python中类继承的顺序</h2>
+<p>我们知道python中类的搜索顺序是从左到右的，比如：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">D</span>(<span class="n">A</span>,<span class="n">B</span>): <span class="nb">pass</span>
+</pre></div>
+<p>D的属性是先从A找，然后再从B找。但从类的继承概念上来说，如果A类和B类之间没有层次关系，那么他们顺序随便都没问题，但如果B类是更底层的Base类，那么其是应该放在最右边的。这在关于Mixin类中写法是要严格如下所示的：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">MyClass</span>(<span class="n">Mixin2</span>, <span class="n">Mixin1</span>, <span class="n">BaseClass</span>):
+    <span class="nb">pass</span>
+</pre></div>
 <h2 id="_6">查找多个最大最小元素的情况</h2>
 <p>如果只是想要获知某些数据的一个最大值或者一个最小值，那么当然用 <code>max</code> 或 <code>min</code> 方法就可以了。这里讨论的情况是如果你想要获知某些数据的多个最大值或多个最小值。一般想到的就是先对这些数据进行排序，然后进行切片操作。参考资料2的第一章第四节讨论的方法实际上是利用最小堆结构进行堆排序然后提出最大或最小的那个几个元素。</p>
 <p>大体过程就是:</p>
@@ -328,13 +337,13 @@ print(list(itertools.chain(*a_list)))
     <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">337204</span><span class="p">)</span>
 </pre></div>
 <p>但是有的时候你就是需要直接获知某个月份的最后一天是30还是31等等，然后利用replace来获得一个月的最后一天。这个时候你需要利用 calendar 的 <code>monthrange</code> 函数。参考了 <a href="http://stackoverflow.com/questions/42950/get-last-day-of-the-month-in-python">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span>    &gt;&gt;&gt; d.replace(year = 2016,month=4,day = monthrange(2016,4)[-1])
-    datetime.datetime(2016, 4, 30, 8, 50, 20, 337204)
+<div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="n">d</span><span class="p">.</span><span class="k">replace</span><span class="p">(</span><span class="k">year</span> <span class="o">=</span> <span class="mi">2016</span><span class="p">,</span><span class="k">month</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="k">day</span> <span class="o">=</span> <span class="n">monthrange</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span><span class="mi">4</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">337204</span><span class="p">)</span>
 </pre></div>
 <h2 id="ordereddict">OrderedDict类</h2>
 <p>字典一般没有排序的需求吧，就是有也可以输出的时候再排序，再说OrderedDict和一般字典比较起来存储开销大了一倍，能不用就不用吧。不过在某些情况下，用这个类确实能带来一些便利。我第一次遇到这种情况大体是在bilibili的api对接那里，其计算密钥需要将所有参数排序然后urlencode为字符串然后再基于这个字符串进行一些计算。</p>
-<div class="highlight"><pre><span></span>    params = OrderedDict(sorted(params.items(), key=lambda t: t[0]))
-    string = urlencode(params)
+<div class="highlight"><pre><span></span>    <span class="n">params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">sorted</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">items</span><span class="p">(),</span> <span class="k">key</span><span class="o">=</span><span class="n">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 <p>大体在某些情况下，总是要求某个字典值变量按照某个顺序输出，那么用OrderedDict还是很便利的。其顺序就是按照其插入顺序来的，所以进入之前我们还是要做字典排序工作，所以我们可以看作这是一个自动进行了某种操作的便捷对象吧。</p>
 <h2 id="counter">Counter类</h2>
@@ -354,36 +363,36 @@ print(list(itertools.chain(*a_list)))
 </pre></div>
 <p>Counter 对象是字典的子类，所以字典的一般方法它都有，下面就不赘述了。然后 <code>update</code> 方法我们应该理解为同key之间的加法， 此外还有 <code>subtract</code> 方法可以看作同key之间的减法。此外你还可以做:</p>
 <p>这种加减运算和上面提及的 update 方法和 subtract 方法还是有点区别的，加法大体类似，主要是减法将会自动去掉计数小于等于零的项，而 <code>subtract</code> 方法不会。</p>
-<div class="highlight"><pre><span></span>    &gt;&gt;&gt; a = Counter(words)
-    &gt;&gt;&gt; b = Counter(morewords)
-    &gt;&gt;&gt; a
-    Counter({'eyes': 8, 'the': 5, 'look': 4, 'into': 3, 'my': 3, 'around': 2,
-    "you're": 1, "don't": 1, 'under': 1, 'not': 1})
-    &gt;&gt;&gt; b
-    Counter({'eyes': 1, 'looking': 1, 'are': 1, 'in': 1, 'not': 1, 'you': 1,
-    'my': 1, 'why': 1})
-    &gt;&gt;&gt; # Combine counts
-    &gt;&gt;&gt; c = a + b
-    &gt;&gt;&gt; c
-    Counter({'eyes': 9, 'the': 5, 'look': 4, 'my': 4, 'into': 3, 'not': 2,
-    'around': 2, "you're": 1, "don't": 1, 'in': 1, 'why': 1,
-    'looking': 1, 'are': 1, 'under': 1, 'you': 1})
-    &gt;&gt;&gt; # Subtract counts
-    &gt;&gt;&gt; d = a - b
-    &gt;&gt;&gt; d
-    Counter({'eyes': 7, 'the': 5, 'look': 4, 'into': 3, 'my': 2, 'around': 2,
-    "you're": 1, "don't": 1, 'under': 1})
-    &gt;&gt;&gt;
+<div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">morewords</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span>
+    <span class="n">Counter</span><span class="p">(</span><span class="err">{</span><span class="s1">'eyes'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">'the'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">'look'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'into'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'my'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'around'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="ss">"you're"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">"don't"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'under'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'not'</span><span class="p">:</span> <span class="mi">1</span><span class="err">}</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+    <span class="n">Counter</span><span class="p">(</span><span class="err">{</span><span class="s1">'eyes'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'looking'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'are'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'in'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'not'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'you'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">'my'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'why'</span><span class="p">:</span> <span class="mi">1</span><span class="err">}</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="o">#</span> <span class="n">Combine</span> <span class="n">counts</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="k">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="k">c</span>
+    <span class="n">Counter</span><span class="p">(</span><span class="err">{</span><span class="s1">'eyes'</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">'the'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">'look'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'my'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'into'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'not'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">'around'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="ss">"you're"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">"don't"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'in'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'why'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">'looking'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'are'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'under'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'you'</span><span class="p">:</span> <span class="mi">1</span><span class="err">}</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="o">#</span> <span class="n">Subtract</span> <span class="n">counts</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">d</span>
+    <span class="n">Counter</span><span class="p">(</span><span class="err">{</span><span class="s1">'eyes'</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">'the'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">'look'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'into'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'my'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'around'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="ss">"you're"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">"don't"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'under'</span><span class="p">:</span> <span class="mi">1</span><span class="err">}</span><span class="p">)</span>
+    <span class="o">&gt;&gt;&gt;</span>
 </pre></div>
 <p>这个数据结构最为人们数值的统计频数了，通过调用 <code>most_common(n)</code> 方法，n是排行榜的前n名。</p>
 <h2 id="_8">字符串比较大小</h2>
 <p>读者可以实验一下python中字符串之间是可以比较大小的：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; 'abc' &gt; 'ab'
-True
-&gt;&gt;&gt; 'fabc' &gt; 'abc'
-True
-&gt;&gt;&gt; '3.04' &gt; '3'
-True
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="s1">'abc'</span> <span class="o">&gt;</span> <span class="s1">'ab'</span>
+<span class="k">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">'fabc'</span> <span class="o">&gt;</span> <span class="s1">'abc'</span>
+<span class="k">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">'3.04'</span> <span class="o">&gt;</span> <span class="s1">'3'</span>
+<span class="k">True</span>
 </pre></div>
 <p>这个特性有的时候很有用的，具体是如何比较大小的呢？按照python官方文档的描述，采用的是词典编纂顺序。具体描述信息如下：</p>
 <blockquote>
@@ -391,22 +400,24 @@ True
 </blockquote>
 <h3 id="_9">中文比较大小？</h3>
 <p>读者这时会想到，既然python中字符串都默认是unicode编码（utf-8），那么中文应该也是能够比较大小的吧，事实确实如此：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; '章' &gt; '张'
-True
-&gt;&gt;&gt; '章' &lt; '张'
-False
-&gt;&gt;&gt; ord('章')
-31456
-&gt;&gt;&gt; ord('张')
-24352
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="s1">'章'</span> <span class="o">&gt;</span> <span class="s1">'张'</span>
+<span class="k">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">'章'</span> <span class="o">&lt;</span> <span class="s1">'张'</span>
+<span class="k">False</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ord</span><span class="p">(</span><span class="s1">'章'</span><span class="p">)</span>
+<span class="mi">31456</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ord</span><span class="p">(</span><span class="s1">'张'</span><span class="p">)</span>
+<span class="mi">24352</span>
 </pre></div>
 <p>感兴趣的读者可以打开字符映射表看一下，'张'对应的unicode编号是U+5F20，你输入0x5f20，返回的正是24352。如果你输入hex(24352)，返回的就是'0x5f20'。</p>
 <h3 id="ordchr">ord和chr函数</h3>
 <p>ord函数接受 一个 字符，然后返回其unicode编码，十进制的。chr函数是ord函数的反向，比如你输入24352这个十进制uniocde，就返回了对应的字符。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; chr(24352)
-'张'
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">chr</span><span class="p">(</span><span class="mi">24352</span><span class="p">)</span>
+<span class="s1">'张'</span>
 </pre></div>
 <p>所以我们可以总结到，python3的字符串比较大小，是基于utf-8编码的。</p>
+<h2 id="configparse">configparse处理特殊字符</h2>
+<p>configparse对于某些特殊字符可能会报错，参考了 <a href="https://stackoverflow.com/questions/14340366/configparser-and-string-with">这个问题</a> ，推荐使用 <code>RawConfigParser</code> ，这样就可以解决问题。</p>
 <h2 id="_10">给某个对象动态加载一个方法</h2>
 <p>这里主要参考了 <a href="http://stackoverflow.com/questions/962962/python-changing-methods-and-attributes-at-runtime">这个网页</a> 。</p>
 <p>具体原理还是很简单的，那就是构建一个函数对象，然后将这个对象赋值给某个对象。但这里的函数对象如果要接受self参数的话，其作为类的方法还是需要一些特殊的处理的。</p>
@@ -470,8 +481,6 @@ False
 <span class="n">test</span><span class="o">.</span><span class="n">hello</span><span class="p">()</span>
 </pre></div>
 <p>这样这个函数就只加在本实例上面了，这用处不太大。</p>
-<h2 id="configparse">configparse处理特殊字符</h2>
-<p>configparse对于某些特殊字符可能会报错，参考了 <a href="https://stackoverflow.com/questions/14340366/configparser-and-string-with">这个问题</a> ，推荐使用 <code>RawConfigParser</code> ，这样就可以解决问题。</p>
             
             
             <hr/>

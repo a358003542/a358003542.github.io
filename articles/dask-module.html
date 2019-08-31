@@ -200,15 +200,15 @@ dask模块  · cdwanze的博文
 </ul>
 <h3 id="worker">实际调整worker资源</h3>
 <p>最开始是没有实际开启worker资源的。</p>
-<div class="highlight"><pre><span></span>cluster.scale()
+<div class="highlight"><pre><span></span><span class="k">cluster</span><span class="p">.</span><span class="k">scale</span><span class="p">()</span>
 </pre></div>
 <p>然后可以跟个数字，其会自动决定是 <code>scale_up</code> 还是 <code>scale_down</code> 。</p>
 <h3 id="_2">关闭应用释放资源</h3>
 <p>似乎cluster的关闭动作会申请自动释放你在hadoop集群上申请的资源，但任何非正常推荐都可能导致申请的应用资源仍占在哪里的。更保险起见是确保异常之后总能够执行:</p>
-<div class="highlight"><pre><span></span>cluster.shutdown()
+<div class="highlight"><pre><span></span><span class="k">cluster</span><span class="p">.</span><span class="n">shutdown</span><span class="p">()</span>
 </pre></div>
 <h3 id="_3">强制关闭某个应用</h3>
-<div class="highlight"><pre><span></span> dask-yarn kill application_1538148161343_0051
+<div class="highlight"><pre><span></span> <span class="n">dask</span><span class="o">-</span><span class="n">yarn</span> <span class="n">kill</span> <span class="n">application_1538148161343_0051</span>
 </pre></div>
 <h2 id="dataframe">dataframe最佳实践</h2>
 <ol>
@@ -219,7 +219,7 @@ dask模块  · cdwanze的博文
 <li>上面提到的 <code>set_index</code> 是很昂贵的操作，你需要确认这有必要，此外不要频繁这样设置索引操作，最好后面再persist 一下。</li>
 <li>聪明的persist 推荐采用如下写法来节省占用内存：</li>
 </ol>
-<div class="highlight"><pre><span></span>df = client.persist(df)  # replace your old lazy DataFrame
+<div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">persist</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>  <span class="o">#</span> <span class="k">replace</span> <span class="n">your</span> <span class="k">old</span> <span class="n">lazy</span> <span class="n">DataFrame</span>
 </pre></div>
 <ol>
 <li>设置合理的分区数 分区数太大太小都不好 </li>

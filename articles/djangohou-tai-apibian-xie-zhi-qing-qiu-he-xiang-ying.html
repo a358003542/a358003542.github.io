@@ -150,10 +150,10 @@ django后台api编写之-请求和响应  · cdwanze的博文
 </ul>
 <h3 id="response">Response</h3>
 <p>也就是一些特殊含义的方法的返回对象，其第一个参数是data，字典值，会自动封装成为json友好的格式。实际上我们经常看到的就是这个套路：</p>
-<div class="highlight"><pre><span></span>return Response(serializer.data)
+<div class="highlight"><pre><span></span><span class="k">return</span> <span class="nv">Response</span><span class="ss">(</span><span class="nv">serializer</span>.<span class="nv">data</span><span class="ss">)</span>
 </pre></div>
 <p>然后 serializer 有个 <code>is_valid</code> 方法，用来序列化类输出前的预热。这两点在后面序列化的讨论中会涉及。其他一些我们看一下吧：</p>
-<div class="highlight"><pre><span></span>Response(data, status=None, template_name=None, headers=None, content_type=None)
+<div class="highlight"><pre><span></span><span class="n">Response</span><span class="p">(</span><span class="k">data</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">template_name</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
 </pre></div>
 <p>headers http协议响应头，status http状态码等等。</p>
 <p>整个过程套路，很多高级视图的套路都类似于下面这个例子，多看几遍吧。</p>
@@ -186,7 +186,7 @@ django后台api编写之-请求和响应  · cdwanze的博文
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
 </pre></div>
 <p>urls.py那边加上的是:</p>
-<div class="highlight"><pre><span></span>url(r'^snippets/(?P&lt;pk&gt;[0-9]+)/$', views.SnippetDetail.as_view()),
+<div class="highlight"><pre><span></span><span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="s1">'^snippets/(?P&lt;pk&gt;[0-9]+)/$'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">SnippetDetail</span><span class="p">.</span><span class="n">as_view</span><span class="p">()),</span>
 </pre></div>
 <p>这里正则表达式 <code>(?P&lt;pk&gt;[0-9]+)</code> 的意思是收集某一串数字，这一串数字被命名为 <code>pk</code> 。</p>
             

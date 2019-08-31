@@ -161,24 +161,24 @@ pyqt5编程之-配置文件管理  · cdwanze的博文
 <ul>
 <li>如果是linux系统，比如上面的例子具体配置文件就是：</li>
 </ul>
-<div class="highlight"><pre><span></span>/home/wanze/.config/Wise/wise.conf
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">wanze</span><span class="o">/</span><span class="p">.</span><span class="n">config</span><span class="o">/</span><span class="n">Wise</span><span class="o">/</span><span class="n">wise</span><span class="p">.</span><span class="n">conf</span>
 </pre></div>
 <ul>
 <li>如果是windows系统，那么上面的例子具体就是：</li>
 </ul>
-<div class="highlight"><pre><span></span>HKEY_CURRENT_USER\Software\Wise\wise
+<div class="highlight"><pre><span></span><span class="n">HKEY_CURRENT_USER</span><span class="err">\</span><span class="n">Software</span><span class="err">\</span><span class="n">Wise</span><span class="err">\</span><span class="n">wise</span>
 </pre></div>
 <p>windows下配置是放在注册表里面的。</p>
 <h2 id="iniformat">IniFormat</h2>
 <p>如果你希望配置文件都以ini形式存储，那么你需要采取如下格式初始化配置文件对象：</p>
-<div class="highlight"><pre><span></span>self.settings = QSettings(QSettings.IniFormat,QSettings.UserScope,"Wise","wise")
+<div class="highlight"><pre><span></span><span class="k">self</span><span class="p">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">QSettings</span><span class="p">(</span><span class="n">QSettings</span><span class="p">.</span><span class="n">IniFormat</span><span class="p">,</span><span class="n">QSettings</span><span class="p">.</span><span class="n">UserScope</span><span class="p">,</span><span class="ss">"Wise"</span><span class="p">,</span><span class="ss">"wise"</span><span class="p">)</span>
 </pre></div>
 <p>这样配置文件就在这里： <code>/home/wanze/.config/Wise/wise.ini</code> 。这里是linux系统的情况，windows系统官方文档给出的是： <code>%APPDATA%\Wise\wise.ini</code> ，这个 <code>%APPDATA%</code> 一般是 <code>C:\Documents and Settings\*User Name*\Application Data</code></p>
 <p>你可以通过调用 <code>self.settings.fileName()</code> 来查看该配置文件对象具体的路径所在。</p>
 <p>推荐配置文件作为mainwindow实例的属性如上self.settings来确定，然后所有的子窗体都可以通过调用self来获得同一的配置文件对象。</p>
 <h3 id="inidiy">ini文件存放DIY</h3>
 <p>如果你希望ini文件放在你喜欢的地方，下面是配置文件构造函数的第三种形式：</p>
-<div class="highlight"><pre><span></span>QSettings("wise.ini",QSettings.IniFormat)
+<div class="highlight"><pre><span></span><span class="n">QSettings</span><span class="p">(</span><span class="ss">"wise.ini"</span><span class="p">,</span><span class="n">QSettings</span><span class="p">.</span><span class="n">IniFormat</span><span class="p">)</span>
 </pre></div>
 <p>第一个参数是你的配置文件名，第二个参数是format。如上相对路径的话则是从你目前软件运行时的文件夹算起。</p>
 <p>你可以通过调用 <code>settings.fileName()</code> 来看看该配置文件的具体所在。</p>
@@ -187,8 +187,8 @@ pyqt5编程之-配置文件管理  · cdwanze的博文
 <p>不要使用“\”和“/”。windows里\会转换成/，而“/”使用来表示配置文件中分组关系的。</p>
 <h2 id="_2">存值和读值</h2>
 <p>配置文件对象建立之后你就可以很方便地存放一些值和读取值了。存值用 <code>setValue</code> 方法，取值用 <code>value</code> 方法。如下所示：</p>
-<div class="highlight"><pre><span></span>settings.setValue("editor/wrapMargin", 68)
-margin = self.settings.value("editor/wrapMargin")
+<div class="highlight"><pre><span></span><span class="n">settings</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="ss">"editor/wrapMargin"</span><span class="p">,</span> <span class="mi">68</span><span class="p">)</span>
+<span class="n">margin</span> <span class="o">=</span> <span class="k">self</span><span class="p">.</span><span class="n">settings</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="ss">"editor/wrapMargin"</span><span class="p">)</span>
 </pre></div>
 <p>如果setValue的键在配置文件对象中已经存在，那么将更新值，如果要修改立即生效，可以使用 <code>sync</code> 方法，sync方法不接受参数，就是立即同步配置文件中的更新。</p>
 <p><code>value</code> 方法第一个参数是“键”，第二个参数是可选值，也就是如果没找到这个键，那么将会返回的值。一般最好还是写上，否则可能配置文件不在了，你就会发生读取错误。</p>
@@ -200,12 +200,12 @@ margin = self.settings.value("editor/wrapMargin")
 <li><strong>clear:</strong> 不接受参数，清除所有的“键”。</li>
 </ul>
 <h2 id="_3">群组管理</h2>
-<div class="highlight"><pre><span></span>settings.setValue("editor/wrapMargin", 68)
+<div class="highlight"><pre><span></span><span class="n">settings</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="ss">"editor/wrapMargin"</span><span class="p">,</span> <span class="mi">68</span><span class="p">)</span>
 </pre></div>
 <p>如上例子所示“/”表示数据结构中的分组，如果有很多值都有相同的前缀，也就是同属一组，那么可以使用beginGroup方法和endGroup方法来管理。如下所示：</p>
-<div class="highlight"><pre><span></span>settings.beginGroup("editor")
-settings.setValue("wrapMargin", 68)
-settings.engGroup()
+<div class="highlight"><pre><span></span><span class="n">settings</span><span class="p">.</span><span class="n">beginGroup</span><span class="p">(</span><span class="ss">"editor"</span><span class="p">)</span>
+<span class="n">settings</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="ss">"wrapMargin"</span><span class="p">,</span> <span class="mi">68</span><span class="p">)</span>
+<span class="n">settings</span><span class="p">.</span><span class="n">engGroup</span><span class="p">()</span>
 </pre></div>
             
             

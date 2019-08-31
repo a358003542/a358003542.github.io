@@ -170,16 +170,16 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 </pre></div>
 <p>然后利用这个Image类的open方法来创建一个图片对象:</p>
-<div class="highlight"><pre><span></span>im = Image.open('lena.jpg')
+<div class="highlight"><pre><span></span><span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="k">open</span><span class="p">(</span><span class="s1">'lena.jpg'</span><span class="p">)</span>
 </pre></div>
 <p>然后如下获取图片的格式，尺寸和模式信息。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; im.format
-'JPEG'
-&gt;&gt;&gt; im.size
-(512, 512)
-&gt;&gt;&gt; im.mode
-'RGB'
-&gt;&gt;&gt;
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">im</span><span class="p">.</span><span class="n">format</span>
+<span class="s1">'JPEG'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">im</span><span class="p">.</span><span class="k">size</span>
+<span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">im</span><span class="p">.</span><span class="k">mode</span>
+<span class="s1">'RGB'</span>
+<span class="o">&gt;&gt;&gt;</span>
 </pre></div>
 <h2 id="_4">图片格式转换</h2>
 <p>接触pillow模块的第一个应用就是图片格式转换，请看下面我写的两个函数，都是利用的pillow模块，一个单独转换图片，一个根据文件夹某个后缀文件批量进行格式转换。</p>
@@ -319,14 +319,14 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
         <span class="n">trim_img</span><span class="p">(</span><span class="n">inputimg</span><span class="p">,</span><span class="n">outputdir</span><span class="o">=</span><span class="n">outputdir</span><span class="p">)</span>
 </pre></div>
 <p>这个算法最核心的语句是:</p>
-<div class="highlight"><pre><span></span>bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
-diff = ImageChops.difference(im, bg)
-diff = ImageChops.add(diff, diff, 2.0, -100)
-bbox = diff.getbbox()
-new_im = im.crop(bbox)
+<div class="highlight"><pre><span></span><span class="n">bg</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="n">im</span><span class="p">.</span><span class="k">mode</span><span class="p">,</span> <span class="n">im</span><span class="p">.</span><span class="k">size</span><span class="p">,</span> <span class="n">im</span><span class="p">.</span><span class="n">getpixel</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">ImageChops</span><span class="p">.</span><span class="n">difference</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">bg</span><span class="p">)</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">ImageChops</span><span class="p">.</span><span class="k">add</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">bbox</span> <span class="o">=</span> <span class="n">diff</span><span class="p">.</span><span class="n">getbbox</span><span class="p">()</span>
+<span class="n">new_im</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">crop</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
 </pre></div>
 <p>其中</p>
-<div class="highlight"><pre><span></span>bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
+<div class="highlight"><pre><span></span><span class="n">bg</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="n">im</span><span class="p">.</span><span class="k">mode</span><span class="p">,</span> <span class="n">im</span><span class="p">.</span><span class="k">size</span><span class="p">,</span> <span class="n">im</span><span class="p">.</span><span class="n">getpixel</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
 </pre></div>
 <p>这一句看得出来是新建一个图片对象，这个图片对象可以看作纯色背景图片，最后的参数是color，其是用 <code>im.getpixel</code> 来去原图片(0,0)的这个像素点的颜色，也就是最左边最顶上的那个点。</p>
 <div class="highlight"><pre><span></span><span class="gh">diff = ImageChops.difference(im, bg)</span>
@@ -343,8 +343,8 @@ $$</div>
 out = ((image1 + image2) / scale + offset)
 $$</div>
 <p>到这里我们看到diff这个图片对象实际上是原图片减去背景，然后双倍重叠在除以2。这些操作我们都可以看作让四周背景边框更加的趋于0。然后offset设为100，这是我最有疑问的地方，一，像素值变为负值会如何？二，为什么是减去100，有什么特殊的理由吗？</p>
-<div class="highlight"><pre><span></span>bbox = diff.getbbox()
-new_im = im.crop(bbox)
+<div class="highlight"><pre><span></span><span class="n">bbox</span> <span class="o">=</span> <span class="n">diff</span><span class="p">.</span><span class="n">getbbox</span><span class="p">()</span>
+<span class="n">new_im</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">crop</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
 </pre></div>
 <p>接下来实际上还好理解了，首先通过Image对象的 <code>getbbox</code> 方法来获得一个矩形边框值（其由left，upper，right，lower四个像素点坐标组成）。具体内部算法是根据非0的值来计算图形的边界。这个里面的算法可能还很复杂吧。</p>
 <p>然后就是调用Image对象的 <code>crop</code> 方法执行裁剪操作，其接受的也是一个矩形边框值，所以可以直接使用上面获得的边框来获得一个新的图形对象。</p>

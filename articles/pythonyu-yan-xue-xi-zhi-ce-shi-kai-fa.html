@@ -151,8 +151,8 @@ python语言学习之-测试开发  · cdwanze的博文
 <p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
 <h2 id="pytest">pytest简介</h2>
 <p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
-<div class="highlight"><pre><span></span>def test_prime():
-    assert prime(4) == 7
+<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">test_prime</span><span class="p">():</span>
+    <span class="n">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
 </pre></div>
 <h3 id="_1">确认抛出某个异常</h3>
 <p>把官方的例子copy过来了，看一下就懂了。</p>
@@ -172,18 +172,18 @@ python语言学习之-测试开发  · cdwanze的博文
 </pre></div>
 <p>这样当你输入 <code>python setup.py test</code> 实际等于输入 <code>python setup.py pytest</code> 。</p>
 <p>以后你要测试就输入：</p>
-<div class="highlight"><pre><span></span>python setup.py test
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span>
 </pre></div>
 <p>这样做的好处是，其是直接利用本地修改的源码，也就是一边修改源码一边实时测试。</p>
 <p>这样写的话记得要给pytest传递参数需要加上 <code>--addopts=</code> 选项，比如打印更多的信息：</p>
-<div class="highlight"><pre><span></span>python setup.py test --addopts="-v"
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span> <span class="c1">--addopts="-v"</span>
 </pre></div>
 <p>可能每次写 <code>--addopts="-v"</code> 有点麻烦，在 <code>setup.cfg</code> 上加上这样一句吧：</p>
 <div class="highlight"><pre><span></span><span class="k">[tool:pytest]</span>
 <span class="na">addopts</span> <span class="o">=</span> <span class="s">--verbose</span>
 </pre></div>
 <p>好了，就是：</p>
-<div class="highlight"><pre><span></span>python setup.py test
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span>
 </pre></div>
 <p>然后专心一边测试一边写代码吧。</p>
 <h3 id="_3">只单独测试某个文件</h3>
@@ -200,7 +200,7 @@ python语言学习之-测试开发  · cdwanze的博文
 <p>pytest里面比较高级一点的功能大概就是fixture功能了，这个等下再讲。TODO。</p>
 <h3 id="_5">测试过一次下次不测试了</h3>
 <p>函数上加上这个装饰器。</p>
-<div class="highlight"><pre><span></span>@pytest.mark.skip(reason="i have test it")
+<div class="highlight"><pre><span></span><span class="nv">@pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">skip</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="ss">"i have test it"</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <h2 id="mock">mock模块的使用</h2>
 <p>在大型框架中写单元测试，在涉及到网络，套接字等编程问题是，必然有这个需求，那就是你希望伪造一些数据，拦截某些函数或类的返回值，从而将整个测试从大型软件框架中抽离出来，这个时候就必须要了解mock模块了。python3自带的有mock模块，直接用就是了：</p>
@@ -219,23 +219,23 @@ python语言学习之-测试开发  · cdwanze的博文
 </pre></div>
 <p>一开始的话我们还是不要管那个 MagicMock 是个什么东西吧，暂时 Mock够用了。然后Mock也可以通过 <code>side_effect</code> 来定制抛出异常。</p>
 <p>在来个定制函数返回的例子：</p>
-<div class="highlight"><pre><span></span>test = mock.Mock(return_value='hello world.')
-test()
-'hello world.'
+<div class="highlight"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">mock</span><span class="p">.</span><span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="s1">'hello world.'</span><span class="p">)</span>
+<span class="n">test</span><span class="p">()</span>
+<span class="s1">'hello world.'</span>
 </pre></div>
 <h3 id="just-patch-it">just patch it</h3>
 <p>实际编码中我们更多的是和现有的代码或者现有的第三方库的代码来交互，而不是凭空创造个Mock对象进行测试。我们看下面这个例子：</p>
-<div class="highlight"><pre><span></span>    @mock.patch('users.views.WXAPPAPI.jscode2session', \
-                return_value={"openid": "o1ZL90Blemh5ylei7sBfQotG7PLM", "session_key": "4XXDVTc0e4nuDVp20CIcOg==",
-                              "expires_in": 7200})
-    def test_login(self, mock_jscode2session):
-        data = {'js_code': '003xXUd30hnknF1gLeg30ua5e30xXUdr'}
-        response = self.client.get(reverse('mini-login'), data)
+<div class="highlight"><pre><span></span>    @<span class="nv">mock</span>.<span class="nv">patch</span><span class="ss">(</span><span class="s1">'</span><span class="s">users.views.WXAPPAPI.jscode2session</span><span class="s1">'</span>, \
+                <span class="nv">return_value</span><span class="o">=</span>{<span class="s2">"</span><span class="s">openid</span><span class="s2">"</span>: <span class="s2">"</span><span class="s">o1ZL90Blemh5ylei7sBfQotG7PLM</span><span class="s2">"</span>, <span class="s2">"</span><span class="s">session_key</span><span class="s2">"</span>: <span class="s2">"</span><span class="s">4XXDVTc0e4nuDVp20CIcOg==</span><span class="s2">"</span>,
+                              <span class="s2">"</span><span class="s">expires_in</span><span class="s2">"</span>: <span class="mi">7200</span>}<span class="ss">)</span>
+    <span class="nv">def</span> <span class="nv">test_login</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">mock_jscode2session</span><span class="ss">)</span>:
+        <span class="nv">data</span> <span class="o">=</span> {<span class="s1">'</span><span class="s">js_code</span><span class="s1">'</span>: <span class="s1">'</span><span class="s">003xXUd30hnknF1gLeg30ua5e30xXUdr</span><span class="s1">'</span>}
+        <span class="nv">response</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">client</span>.<span class="nv">get</span><span class="ss">(</span><span class="nv">reverse</span><span class="ss">(</span><span class="s1">'</span><span class="s">mini-login</span><span class="s1">'</span><span class="ss">)</span>, <span class="nv">data</span><span class="ss">)</span>
 
-        # for next testcase
-        self.our_session_key = response.data.get('our_session_key')
+        # <span class="k">for</span> <span class="k">next</span> <span class="nv">testcase</span>
+        <span class="nv">self</span>.<span class="nv">our_session_key</span> <span class="o">=</span> <span class="nv">response</span>.<span class="nv">data</span>.<span class="nv">get</span><span class="ss">(</span><span class="s1">'</span><span class="s">our_session_key</span><span class="s1">'</span><span class="ss">)</span>
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        <span class="nv">self</span>.<span class="nv">assertEqual</span><span class="ss">(</span><span class="nv">response</span>.<span class="nv">status_code</span>, <span class="nv">status</span>.<span class="nv">HTTP_200_OK</span><span class="ss">)</span>
 </pre></div>
 <p>如何理解上面的代码？当这段测试代码运行的时候，它的变量名字空间被patch给污染了，比如上面的 <code>users.views.WXAPPAPI.jscode2session</code> 这个函数，被污染成为一个 Mock 对象了，这个Mock对象传递给了这个函数的第二个参数（额外的的这个参数哪怕你后面不用也必须写上） <code>mock_jscode2session</code> 。</p>
 <p>然后代码在运行的时候遇到<code>jscode2session</code> 总会返回上面给出的值，这样你就不用考虑数据库啊，网络情况之类的问题了。上面还有一些小技巧和django框架相关，比如 <code>self.client.get(reverse('mini-login'), data)</code> 是直接利用自己django，然后自己请求自己的url获得什么响应，这个和django相关，在这里就不多说了。</p>

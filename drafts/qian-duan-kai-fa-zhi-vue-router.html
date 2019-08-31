@@ -187,19 +187,19 @@
 <span class="kr">import</span> <span class="nx">DrawMolecule</span> <span class="nx">from</span> <span class="s1">'@/components/main/DrawMolecule'</span><span class="p">;</span>
 </pre></div>
 <p>这个引入一些对象，其中 <code>@</code> 是指 src 文件夹，就是一个别名罢了。</p>
-<div class="highlight"><pre><span></span>  mode: 'history',
+<div class="highlight"><pre><span></span>  <span class="k">mode</span><span class="p">:</span> <span class="s1">'history'</span><span class="p">,</span>
 </pre></div>
 <p>默认的路由是带个 <code>#</code> ，这个一般人们是不太喜爱的，我们也可以让url成为常见的那种，也就是如上开启 history 模式。</p>
 <p>开启了之后一般点没问题，但如果刷新的会报 404 错误，也就是后端需要额外做些配置，下面以nginx为例子说明之，参看了 <a href="https://www.jianshu.com/p/0a9077d8714d">这篇文章</a> ，简单来说就是nginx要加上这样一行：</p>
-<div class="highlight"><pre><span></span>  try_files $uri $uri/ @rewrites;
+<div class="highlight"><pre><span></span><span class="w">  </span><span class="n">try_files</span><span class="w"> </span><span class="err">$</span><span class="n">uri</span><span class="w"> </span><span class="err">$</span><span class="n">uri</span><span class="o">/</span><span class="w"> </span><span class="nv">@rewrites</span><span class="p">;</span><span class="w"></span>
 
-  location @rewrites{
-    rewrite ^(.+)$ /index.html last;
-  }
+<span class="w">  </span><span class="n">location</span><span class="w"> </span><span class="nv">@rewrites</span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">rewrite</span><span class="w"> </span><span class="o">^</span><span class="p">(.</span><span class="o">+</span><span class="p">)</span><span class="err">$</span><span class="w"> </span><span class="o">/</span><span class="k">index</span><span class="p">.</span><span class="n">html</span><span class="w"> </span><span class="k">last</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="err">}</span><span class="w"></span>
 </pre></div>
 <p>因为默认的location就是 <code>/</code> ，这里就直接放外面了，<code>try_files</code>  这里的逻辑是先根据uri来查找文件夹，或者目录，都找不到再@rewrites那边，简单来说就是一切都重定向到index.html哪里。</p>
 <p>这个我喜欢简单点的解决方案，我看到 vue-router官方文档的解决方案就是：</p>
-<div class="highlight"><pre><span></span>try_files $uri $uri/ /index.html;
+<div class="highlight"><pre><span></span><span class="n">try_files</span> <span class="err">$</span><span class="n">uri</span> <span class="err">$</span><span class="n">uri</span><span class="o">/</span> <span class="o">/</span><span class="k">index</span><span class="p">.</span><span class="n">html</span><span class="p">;</span>
 </pre></div>
 <p>所以推荐就加上一行就OK了。</p>
 <div class="highlight"><pre><span></span><span class="nx">routes</span><span class="o">:</span> <span class="p">[</span>

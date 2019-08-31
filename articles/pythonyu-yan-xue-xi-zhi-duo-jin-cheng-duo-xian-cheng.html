@@ -183,13 +183,13 @@ fork')已经执行了，所以子进程就不会执行这一行代码了，而�
 <span class="k">print</span><span class="p">(</span><span class="s1">'after fork'</span><span class="p">)</span>
 </pre></div>
 <p>其运行结果大致如下:</p>
-<div class="highlight"><pre><span></span>before fork 
-13762
-say hello from parent 13761
-0
-say hello from child 13762
-after fork
-after fork
+<div class="highlight"><pre><span></span><span class="k">before</span> <span class="n">fork</span> 
+<span class="mi">13762</span>
+<span class="n">say</span> <span class="n">hello</span> <span class="k">from</span> <span class="n">parent</span> <span class="mi">13761</span>
+<span class="mi">0</span>
+<span class="n">say</span> <span class="n">hello</span> <span class="k">from</span> <span class="n">child</span> <span class="mi">13762</span>
+<span class="k">after</span> <span class="n">fork</span>
+<span class="k">after</span> <span class="n">fork</span>
 </pre></div>
 <p>我们看到在父进程那一边，pid是本父进程的子进程PID，而在子进程那一边，os.fork()返回的是0。可以利用这点将父进程的操作和子进程的操作分开。具体上面的代码if
 pid 那一块是父进程的，else那一块是子进程的。</p>
@@ -258,8 +258,8 @@ pid 那一块是父进程的，else那一块是子进程的。</p>
 </pre></div>
 <p>上面调用线程对象的 <strong>join</strong>
 方法是确保该线程执行完了，其也可能返回异常。上面的做法不太标准，更标准的做法是单独写一行t.join代码:</p>
-<div class="highlight"><pre><span></span>for t in threads:
-    t.join()
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="nv">t</span> <span class="nv">in</span> <span class="nv">threads</span>:
+    <span class="nv">t</span>.<span class="nv">join</span><span class="ss">()</span>
 </pre></div>
 <p>来确保各个线程都执行完了，如之前的形式并不能达到多任务并行处理的效果。</p>
 <p>上面的例子对线程的执行顺序没有特殊要求，如果有的话推荐使用python的queue模块，这里就略过了。</p>
@@ -490,9 +490,9 @@ pid 那一块是父进程的，else那一块是子进程的。</p>
 <p>python有两种类型线程锁 <code>Lock</code> 和 <code>RLock</code> ，其都是通过 <code>acquire</code> 来获取锁和 <code>release</code> 来释放锁。当一个线程试着访问某个unlocked的锁，<code>acquire</code> 将立即返回；如果访问的是locked的锁，那么该线程将阻塞，直到一个 <code>release</code> 释放了该锁。</p>
 <p>RLock和Lock的区别是RLock可以被相同的线程acquire多次，RLock人们也称之为递归锁，如果你的某个（递归）函数在某个线程中多次访问资源，而这时被允许的，那么你应该使用RLock。</p>
 <p>RLock常和with语句一起使用：</p>
-<div class="highlight"><pre><span></span>lock = threading.RLock()
-with lock:
-    do something...
+<div class="highlight"><pre><span></span><span class="nv">lock</span> <span class="o">=</span> <span class="nv">threading</span>.<span class="nv">RLock</span><span class="ss">()</span>
+<span class="nv">with</span> <span class="nv">lock</span>:
+    <span class="k">do</span> <span class="nv">something</span>...
 </pre></div>
             
             

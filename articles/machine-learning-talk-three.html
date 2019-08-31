@@ -162,7 +162,7 @@
 <p>在上一文机器学习第二谈中，我们算是搭建了一个简单的神经网络，初步了解了一下大体情况。本文主要紧跟着对相关内容进行更细致的讨论。</p>
 <h2 id="relu">relu激活函数</h2>
 <p>relu激活函数具体的数学运算公式很简单，就是：</p>
-<div class="highlight"><pre><span></span>z = np.maximum(z, 0)
+<div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 <p>上面运算就是对z张量进行了relu运算了，按元素的，如果元素值大于0则为原元素的值，否则为0。</p>
 <h2 id="broadcasting">广播(broadcasting)</h2>
@@ -218,10 +218,10 @@ x shape (a, b) y shape (b,c) 输出 z的 shape(a, c) </p>
 <span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">asarray</span><span class="p">(</span><span class="n">train_labels</span><span class="p">)</span><span class="o">.</span><span class="kp">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
 <span class="n">y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">asarray</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span><span class="o">.</span><span class="kp">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span>word_index = imdb.get_word_index()
-reversed_word_index = dict([value,key] for key,value in word_index.items())
-decoded_review = ' '.join([reversed_word_index.get(i-3, '?') for i in train_data[0]])
-decoded_review
+<div class="highlight"><pre><span></span><span class="nv">word_index</span> <span class="o">=</span> <span class="nv">imdb</span>.<span class="nv">get_word_index</span><span class="ss">()</span>
+<span class="nv">reversed_word_index</span> <span class="o">=</span> <span class="nv">dict</span><span class="ss">(</span>[<span class="nv">value</span>,<span class="nv">key</span>] <span class="k">for</span> <span class="nv">key</span>,<span class="nv">value</span> <span class="nv">in</span> <span class="nv">word_index</span>.<span class="nv">items</span><span class="ss">())</span>
+<span class="nv">decoded_review</span> <span class="o">=</span> <span class="s1">'</span><span class="s"> </span><span class="s1">'</span>.<span class="nv">join</span><span class="ss">(</span>[<span class="nv">reversed_word_index</span>.<span class="nv">get</span><span class="ss">(</span><span class="nv">i</span><span class="o">-</span><span class="mi">3</span>, <span class="s1">'</span><span class="s">?</span><span class="s1">'</span><span class="ss">)</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">train_data</span>[<span class="mi">0</span>]]<span class="ss">)</span>
+<span class="nv">decoded_review</span>
 </pre></div>
 <p>这里采用的是one-hot编码，值得注意的是一句话如果有几个重复的单词，将是被忽略的，第一种方案填充截取方案会保留词语顺序，这个在自然语言处理中是很重要的一个因素。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -232,8 +232,8 @@ decoded_review
             <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">results</span>
 </pre></div>
-<div class="highlight"><pre><span></span>x_train = verctorize_sequences(train_data)
-x_test = verctorize_sequences(test_data)
+<div class="highlight"><pre><span></span><span class="n">x_train</span> <span class="o">=</span> <span class="n">verctorize_sequences</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">verctorize_sequences</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
 <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span><span class="n">Dropout</span>
@@ -244,9 +244,9 @@ x_test = verctorize_sequences(test_data)
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </pre></div>
-<div class="highlight"><pre><span></span>model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+<div class="highlight"><pre><span></span><span class="n">model</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">'rmsprop'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
 </pre></div>
-<div class="highlight"><pre><span></span>history = model.fit(x_train, y_train, epochs=4, batch_size=512, validation_data=(x_test, y_test))
+<div class="highlight"><pre><span></span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
 </pre></div>
 <h3 id="history">history作图</h3>
 <p>keras出来的history并没提供作图函数，下面简单整理了一下：</p>
@@ -309,14 +309,14 @@ x_test = verctorize_sequences(test_data)
 <p>回归问题预测是连续的值而不是离散的标签。</p>
 <h3 id="_11">取值范围差异很大的数据</h3>
 <p>取值范围差异很大的数据送入神经网络需要先进行标准化处理。这里指的标准化是正态分布那边的概念，也就是计算每个特征值的z-score标准分。即 每个特征值减去本特征的平均值然后除以本特征的标准差。</p>
-<div class="highlight"><pre><span></span>mean = train_data.mean(axis=0)
+<div class="highlight"><pre><span></span><span class="n">mean</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 <p>这是计算维度0的均值，或者说是计算每个特征列的均值。减去操作如下：</p>
-<div class="highlight"><pre><span></span>train_data -= mean
+<div class="highlight"><pre><span></span><span class="n">train_data</span> <span class="o">-=</span> <span class="n">mean</span>
 </pre></div>
 <p>这里往细上将还进行了mean的广播操作，所以才能按照元素点对点的执行了减法操作。</p>
 <p>这是计算每个特征列的标准差：</p>
-<div class="highlight"><pre><span></span>std = train_data.std(axis=0)
+<div class="highlight"><pre><span></span><span class="n">std</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 <p><strong>注意：</strong> 用于测试数据标准化的均值和标准差都是训练数据上的。在工作流程上，你不能从测试数据上计算得到任何结果。</p>
 <h3 id="k">K折验证</h3>

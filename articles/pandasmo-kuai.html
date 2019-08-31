@@ -187,7 +187,7 @@ pandas模块  · cdwanze的博文
 <p>这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。</p>
 <h3 id="txt">读txt文件</h3>
 <p>实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 <a href="https://stackoverflow.com/questions/21546739/load-data-from-txt-with-pandas">这个问题</a> 里面的例子是这样的：</p>
-<div class="highlight"><pre><span></span>data = pd.read_csv('output_list.txt', sep=" ", header=None)
+<div class="highlight"><pre><span></span><span class="k">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'output_list.txt'</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="ss">" "</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
 </pre></div>
 <ul>
 <li>sep 设置读取csv时每个字段的分隔，默认是逗号，我遇到过是 <code>\t</code> 作为分隔符的情况</li>
@@ -212,12 +212,12 @@ pandas模块  · cdwanze的博文
 <span class="n">frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 <p>当然我们操作DataFrame通常的思路更偏向于一行一行的来，你也可以直接把类似于numpy的ndarray的结构的数据转成DataFrame对象：</p>
-<div class="highlight"><pre><span></span>pd.DataFrame([[1,2],[2,3]])
+<div class="highlight"><pre><span></span><span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
 </pre></div>
 <p>再比如：</p>
 <h3 id="dataframe_1">新建一个随机数填充的DataFrame</h3>
 <p>新建一个DataFrame对象，随机数填充6行4列，列名分别为 <code>['a','b','c','d']</code> 。</p>
-<div class="highlight"><pre><span></span>df = pd.DataFrame(np.random.randn(6,4), columns=['a','b','c','d'])
+<div class="highlight"><pre><span></span><span class="nv">df</span> <span class="o">=</span> <span class="nv">pd</span>.<span class="nv">DataFrame</span><span class="ss">(</span><span class="nv">np</span>.<span class="k">random</span>.<span class="nv">randn</span><span class="ss">(</span><span class="mi">6</span>,<span class="mi">4</span><span class="ss">)</span>, <span class="nv">columns</span><span class="o">=</span>[<span class="s1">'</span><span class="s">a</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">b</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">c</span><span class="s1">'</span>,<span class="s1">'</span><span class="s">d</span><span class="s1">'</span>]<span class="ss">)</span>
 </pre></div>
 <p>上面的例子还演示了列名不用默认的0 1 ，而是你直接去指定。</p>
 <h3 id="dataframe_2">选择合适的时机转入DataFrame</h3>
@@ -226,7 +226,7 @@ pandas模块  · cdwanze的博文
 <h3 id="dataframendarray">DataFrame转ndarray</h3>
 <p>有的时候我们进行计算是希望以ndarray（numpy）的形式来进行的（我们引入DataFrame是因为其有label等等让各个列数据有含义的功能，而到了实际底层算法，可能就是特征1234了，我们不再关心具体特征的名字，这个时候将某部分数据退化为numpy的ndarray数据类型就很必要了，一方面底层算法层不在意这些，第二就是numpy的ndarray对象可以和以前我们常见的那些算法包括新出来的tensorflow很容易对接起来。）</p>
 <p>实际转变如下，非常简单：</p>
-<div class="highlight"><pre><span></span>nd = df.values
+<div class="highlight"><pre><span></span><span class="n">nd</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="k">values</span>
 </pre></div>
 <p>参考了 <a href="https://stackoverflow.com/questions/13187778/convert-pandas-dataframe-to-numpy-array-preserving-index">这个网页</a> 。</p>
 <h3 id="dataframe_4">DataFrame列重命名</h3>
@@ -277,12 +277,12 @@ pandas模块  · cdwanze的博文
 <h2 id="_3">索引</h2>
 <h3 id="_4">按照列名选择</h3>
 <p>如果你已经定义列名了，那么选择一列按照列名是最直观的了：</p>
-<div class="highlight"><pre><span></span>df[column_name]
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="o">[</span><span class="n">column_name</span><span class="o">]</span><span class="w"></span>
 </pre></div>
 <p>返回的是Series对象，原DataFrame对象的index部分继续保留，也就是原来你的DataFrame的index是有名字的，那么可以继续使用这些索引名字。</p>
 <p>这种引用也可以用于添加某一列或者删除某一列：</p>
-<div class="highlight"><pre><span></span>del df[column_name]
-df[column_name] = series
+<div class="highlight"><pre><span></span><span class="n">del</span><span class="w"> </span><span class="n">df</span><span class="o">[</span><span class="n">column_name</span><span class="o">]</span><span class="w"></span>
+<span class="n">df</span><span class="o">[</span><span class="n">column_name</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">series</span><span class="w"></span>
 </pre></div>
 <h3 id="_5">按照列名选择多个列</h3>
 <div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'c'</span><span class="p">]]</span>
@@ -293,10 +293,10 @@ df[column_name] = series
 <p>唯一要注意的是就是和线性代数里面行列式下标有所不同，这里的索引都是从0开始计数的。</p>
 <h3 id="_6">按照索引选择多个列</h3>
 <p>选择多个列【切片式】</p>
-<div class="highlight"><pre><span></span>df.iloc[:,0:2]
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
 <p>此外还有种写法【列举式】：</p>
-<div class="highlight"><pre><span></span>df.iloc[:, [0,2]]
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
 </pre></div>
 <h3 id="_7">对某一特征列进行某个运算</h3>
 <p>对于DataFrame中的某一特征列，其为Series对象，推荐使用 <code>map</code> 方法:</p>
@@ -305,19 +305,19 @@ df[column_name] = series
 <p>参考了 <a href="https://stackoverflow.com/questions/19798153/difference-between-map-applymap-and-apply-methods-in-pandas">这个网页</a> ，apply方法可以作用方向为行或者列，然后apply方法主要针对dataframe对象整体的操作。</p>
 <h3 id="_8">搜索语句</h3>
 <p>DataFrame可以通过如下的搜索语句来对针对某些特征列的值进行判断，从而过滤掉某些行。</p>
-<div class="highlight"><pre><span></span>df[df['col1']==1]
-df[(df['col1']==1)|(df['col2']==1)]
-df[(df['col1']==0) &amp; (df['col2']==0)]
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'col1'</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">'col1'</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'col2'</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)]</span>
+<span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">'col1'</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'col2'</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)]</span>
 </pre></div>
 <h3 id="_9">按照行排序</h3>
-<div class="highlight"><pre><span></span>df.sort_index(axis=1, ascending=False)
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
 </pre></div>
 <h3 id="_10">按照列排序</h3>
-<div class="highlight"><pre><span></span>df.sort_values(by='B')
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="k">by</span><span class="o">=</span><span class="s1">'B'</span><span class="p">)</span>
 </pre></div>
 <h2 id="_11">绘图相关</h2>
 <h3 id="_12">绘制散点图</h3>
-<div class="highlight"><pre><span></span>DataFrame.plot.scatter(x, y, s=None, c=None, **kwds)
+<div class="highlight"><pre><span></span><span class="n">DataFrame</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="k">c</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
 </pre></div>
 <p>根据数据记录 x 列（由x参数指定）和 y 列（由y参数指定）的一一对应的数据，来绘制散点图。</p>
             

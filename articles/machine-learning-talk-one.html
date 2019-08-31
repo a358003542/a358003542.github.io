@@ -238,12 +238,12 @@
 </blockquote>
 <p>我觉得弗朗索瓦·肖奈的另外一个比方也很好，很形象。可以把深度学习网络看做多级信息的蒸馏操作，信息穿越过滤器，然后纯度越来越高（对任务的帮助越来越大）。</p>
 <p>上面公式中 W 是每一层的权重，深度学习训练的过程就是给每一次找到更好的权重参数，从而整个深度学习神经网络能够更好地帮助任务。</p>
-<div class="highlight"><pre><span></span>model.fit(x_train, y_train, epochs=5, batch_size=32)
+<div class="highlight"><pre><span></span><span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 </pre></div>
 <p>训练的过程 x_train 是具体的数据， y_train 是对应的标签数据， epoch 是迭代次数，也就是对于某个训练数据的重复训练次数。batch_size 是一次训练所含样本数，参考了 <a href="https://blog.csdn.net/u013041398/article/details/72841854">这个网页</a> ，因为一次把所有样本训练完开销太大，而每训练一次就算一下损失函数震荡又大，所以现在通用的做法是： mini-batch gradient decent ，小批量数据的梯度下降。这里的batch_size 是一次训练所含的样本数，那么1个epoch就是把所有训练数据都训练完的训练次数是总样本数除以batch_size。</p>
-<div class="highlight"><pre><span></span>model.compile(loss='categorical_crossentropy',
-              optimizer='sgd',
-              metrics=['accuracy'])
+<div class="highlight"><pre><span></span><span class="n">model</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span>
+              <span class="n">optimizer</span><span class="o">=</span><span class="s1">'sgd'</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
 </pre></div>
 <p>上面模型在compile的时候需要指定损失函数loss，损失函数是用来衡量模型得到的预测值和真实目标值之间的距离的，简单来说就是损失函数就是给目前模型打分的，来评价模型的效果好坏的。</p>
 <p>根据打分来对模型的各个权重参数进行微调使用的是反向传播算法。</p>
@@ -275,10 +275,10 @@ $$</div>
 <h3 id="_8">样本维度</h3>
 <p>在深度学习领域，一般大家把第一个维度用作样本维度，所以我们看到MNIST例子中shape (60000,28,28)，第一个维度表示有60000个样本。</p>
 <p>然后前面说到batch_size 是一次训练所含的样本数，所以实际一次训练模型送入的batch数据如下：</p>
-<div class="highlight"><pre><span></span>batch_size = 128
-batch = train_images[:128] # 第一个批次
-batch = train_iamges[128:256] # 第二个批次
-...
+<div class="highlight"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="n">train_images</span><span class="p">[:</span><span class="mi">128</span><span class="p">]</span> <span class="o">#</span> <span class="err">第一个批次</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="n">train_iamges</span><span class="p">[</span><span class="mi">128</span><span class="p">:</span><span class="mi">256</span><span class="p">]</span> <span class="o">#</span> <span class="err">第二个批次</span>
+<span class="p">...</span>
 </pre></div>
 <h2 id="_9">参考资料</h2>
 <ol>

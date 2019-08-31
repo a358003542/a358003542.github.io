@@ -177,17 +177,17 @@ luigi模块  · cdwanze的博文
 <p>然后依赖于这个外部文件对象，当目标文件对象创建之后，才会进行下面的任务。</p>
 <h3 id="parameter">Parameter对象</h3>
 <p>任务类里面可以定义一些 Parameter 对象，当我们通过命令行调用该任务的时候，可以提供这些参数。</p>
-<div class="highlight"><pre><span></span>date = luigi.DateParameter(default=datetime.date.today())
-date_interval = luigi.DateIntervalParameter()
-use_hadoop = luigi.BoolParameter()
+<div class="highlight"><pre><span></span><span class="nb">date</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">DateParameter</span><span class="p">(</span><span class="k">default</span><span class="o">=</span><span class="n">datetime</span><span class="p">.</span><span class="nb">date</span><span class="p">.</span><span class="n">today</span><span class="p">())</span>
+<span class="n">date_interval</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">DateIntervalParameter</span><span class="p">()</span>
+<span class="n">use_hadoop</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">BoolParameter</span><span class="p">()</span>
 </pre></div>
 <h3 id="input">input方法</h3>
 <p>input方法是luigi框架里面任务对象调用本任务的前依赖输出对象的便捷方法，比如你使用 <code>self.input</code> ，就对应本任务的 requires Target 对象，或者说当你调用 <code>self.input()</code> 实际上得到的就是 <code>self.requires()</code> 的输出。</p>
 <h2 id="_3">运行任务</h2>
-<div class="highlight"><pre><span></span>luigi --module autowriting.workflow examples.HelloWorldTask --local-scheduler
+<div class="highlight"><pre><span></span><span class="n">luigi</span> <span class="c1">--module autowriting.workflow examples.HelloWorldTask --local-scheduler</span>
 </pre></div>
 <p>一般生产环境会去掉 <code>--local-scheduler</code> 然后使用中央调度器，你需要用 </p>
-<div class="highlight"><pre><span></span>luigid
+<div class="highlight"><pre><span></span><span class="n">luigid</span>
 </pre></div>
 <p>来开启它。</p>
 <p>默认你可以在localhost的 <code>8082</code> 端口看到监视任务的画面。</p>
@@ -281,15 +281,15 @@ use_hadoop = luigi.BoolParameter()
 <p><strong>NOTICE</strong> : logger最好放在任务类里面，否则你彼此引用任务脚本会把环境污染了。</p>
 <h2 id="_5">所有任务集中于一个任务</h2>
 <p>所有的任务每天都执行一次。</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">AllReports</span><span class="p">(</span><span class="nx">luigi</span><span class="p">.</span><span class="nx">WrapperTask</span><span class="p">)</span><span class="o">:</span>
-    <span class="nx">date</span> <span class="o">=</span> <span class="nx">luigi</span><span class="p">.</span><span class="nx">DateParameter</span><span class="p">(</span><span class="k">default</span><span class="o">=</span><span class="nx">datetime</span><span class="p">.</span><span class="nx">date</span><span class="p">.</span><span class="nx">today</span><span class="p">())</span>
-    <span class="nx">def</span> <span class="nx">requires</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">yield</span> <span class="nx">SomeReport</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">date</span><span class="p">)</span>
-        <span class="nx">yield</span> <span class="nx">SomeOtherReport</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">date</span><span class="p">)</span>
-        <span class="nx">yield</span> <span class="nx">CropReport</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">date</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">AllReports</span>(<span class="n">luigi</span>.<span class="n">WrapperTask</span>):
+    <span class="n">date</span> = <span class="n">luigi</span>.<span class="n">DateParameter</span>(<span class="k">default</span>=<span class="n">datetime</span>.<span class="n">date</span>.<span class="n">today</span>())
+    <span class="n">def</span> <span class="n">requires</span>(<span class="k">self</span>):
+        <span class="n">yield</span> <span class="n">SomeReport</span>(<span class="k">self</span>.<span class="n">date</span>)
+        <span class="n">yield</span> <span class="n">SomeOtherReport</span>(<span class="k">self</span>.<span class="n">date</span>)
+        <span class="n">yield</span> <span class="n">CropReport</span>(<span class="k">self</span>.<span class="n">date</span>)
 </pre></div>
 <h2 id="_6">执行循环任务</h2>
-<div class="highlight"><pre><span></span>luigi --module all_reports RangeDailyBase --of AllReports --start 2015-01-01
+<div class="highlight"><pre><span></span><span class="n">luigi</span> <span class="c1">--module all_reports RangeDailyBase --of AllReports --start 2015-01-01</span>
 </pre></div>
             
             

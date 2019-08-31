@@ -154,7 +154,7 @@ django后台api编写之-日志  · cdwanze的博文
 <p>logging模块的中级使用需要了解如下几个词汇：loggers, handlers, filters, and formatters。</p>
 <h3 id="loggers">loggers</h3>
 <p>记录器 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。</p>
-<div class="highlight"><pre><span></span>logger = logging.getLogger(__name__)
+<div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 <p>这个 <code>__name__</code> 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。</p>
 <p>然后这个 <code>getLogger</code> 函数如果你后面指定的名字之前已经定义了（这通常是指在其他第三方模块下定义了），那么你通过这个 <code>getLogger</code> 然后指定目标名字就会得到对应的该记录器。这通常对于DIY某个第三方模块的日志记录器有用。</p>
@@ -185,34 +185,34 @@ django后台api编写之-日志  · cdwanze的博文
 <p>格式器，具体信息的格式定义。</p>
 <h2 id="_2">字典统一配置</h2>
 <p>django的setting.py就会有这样的配置，具体含义还是很明显的，就是定义处理器，格式器，记录器等。</p>
-<div class="highlight"><pre><span></span>LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': "%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s"
-        }
-    },
-    'handlers': {
-        'log_file': {
-            'class': 'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler',
-            'filename': config.get('web', 'log_path'),
-            'when': 'midnight',
-            'maxBytes':int(config.get('web','log_max_bytes')),
-            'interval': 1,
-            'backupDay': int(config.get('web', 'log_backup_days')),
-            'dedupetime': int(config.get('web', 'log_dedupe_time')),
-            'formatter': 'simple'
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['log_file'],
-            'level': config.get('web', 'log_level'),
-            'propagate': True,
-        },
-    }
-}
+<div class="highlight"><pre><span></span><span class="n">LOGGING</span> <span class="o">=</span> <span class="err">{</span>
+    <span class="s1">'version'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">'disable_existing_loggers'</span><span class="p">:</span> <span class="k">False</span><span class="p">,</span>
+    <span class="s1">'formatters'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'simple'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'format'</span><span class="p">:</span> <span class="ss">"%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s"</span>
+        <span class="err">}</span>
+    <span class="err">}</span><span class="p">,</span>
+    <span class="s1">'handlers'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'log_file'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'class'</span><span class="p">:</span> <span class="s1">'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler'</span><span class="p">,</span>
+            <span class="s1">'filename'</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_path'</span><span class="p">),</span>
+            <span class="s1">'when'</span><span class="p">:</span> <span class="s1">'midnight'</span><span class="p">,</span>
+            <span class="s1">'maxBytes'</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span><span class="s1">'log_max_bytes'</span><span class="p">)),</span>
+            <span class="s1">'interval'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">'backupDay'</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_backup_days'</span><span class="p">)),</span>
+            <span class="s1">'dedupetime'</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_dedupe_time'</span><span class="p">)),</span>
+            <span class="s1">'formatter'</span><span class="p">:</span> <span class="s1">'simple'</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span><span class="p">,</span>
+    <span class="s1">'loggers'</span><span class="p">:</span> <span class="err">{</span>
+        <span class="s1">'django.request'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'handlers'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'log_file'</span><span class="p">],</span>
+            <span class="s1">'level'</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">'web'</span><span class="p">,</span> <span class="s1">'log_level'</span><span class="p">),</span>
+            <span class="s1">'propagate'</span><span class="p">:</span> <span class="k">True</span><span class="p">,</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span>
+<span class="err">}</span>
 </pre></div>
             
             

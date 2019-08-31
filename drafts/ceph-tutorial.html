@@ -342,11 +342,11 @@ service ceph start osd.<span class="cp">${</span><span class="n">osdNum</span><s
 <p>cluster network主要是给osds通信用，所以ceph的其他组件其实还是都依赖于public network的。</p>
 <h3 id="mon_1">mon那边</h3>
 <p>ceph的monitor默认监听端口是 <code>6789</code> ，然后其只管public network，其用到的 <code>{iface}</code> 是public network 的interface，其所用到的 <code>{ip-address}</code> 是 public network 的IP address。其所用的netmask是public network的 <code>{netmask}</code> 。</p>
-<div class="highlight"><pre><span></span>sudo iptables -A INPUT -i {iface} -p tcp -s {ip-address}/{netmask} --dport 6789 -j ACCEPT
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="k">INPUT</span> <span class="o">-</span><span class="n">i</span> <span class="err">{</span><span class="n">iface</span><span class="err">}</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">s</span> <span class="err">{</span><span class="n">ip</span><span class="o">-</span><span class="n">address</span><span class="err">}</span><span class="o">/</span><span class="err">{</span><span class="n">netmask</span><span class="err">}</span> <span class="c1">--dport 6789 -j ACCEPT</span>
 </pre></div>
 <h3 id="mds">mds那边</h3>
 <p>ceph的mds server监听public network从 6800 开始的第一个可用的端口。类似上面的其也只管public network，其用到的 <code>{iface}</code> 是public network 的interface，其所用到的 <code>{ip-address}</code> 是 public network 的IP address。其所用的netmask是public network的 <code>{netmask}</code> 。</p>
-<div class="highlight"><pre><span></span>sudo iptables -A INPUT -i {iface} -m multiport -p tcp -s {ip-address}/{netmask} --dports 6800:6810 -j ACCEPT
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="k">INPUT</span> <span class="o">-</span><span class="n">i</span> <span class="err">{</span><span class="n">iface</span><span class="err">}</span> <span class="o">-</span><span class="n">m</span> <span class="n">multiport</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">s</span> <span class="err">{</span><span class="n">ip</span><span class="o">-</span><span class="n">address</span><span class="err">}</span><span class="o">/</span><span class="err">{</span><span class="n">netmask</span><span class="err">}</span> <span class="c1">--dports 6800:6810 -j ACCEPT</span>
 </pre></div>
 <h3 id="osd_1">osd那边</h3>
 <p>ceph的osd deamons从当前ceph节点上的6800端口开始找可用端口，一个osd deamon需要三个端口：</p>
@@ -357,7 +357,7 @@ service ceph start osd.<span class="cp">${</span><span class="n">osdNum</span><s
 </ul>
 <p>这些端口都是限于ceph节点Host机器上的，可以重复，为了防止osd deamons重启端口未正常释放，确保后面还有一些富余的端口号。</p>
 <p>公网和私网分离之后，clients会通过公网连接osds，然后各个osds之间会通过私网来连接。这些在iptables那边的rules是分开的。</p>
-<div class="highlight"><pre><span></span>sudo iptables -A INPUT -i {iface}  -m multiport -p tcp -s {ip-address}/{netmask} --dports 6800:6810 -j ACCEPT
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="k">INPUT</span> <span class="o">-</span><span class="n">i</span> <span class="err">{</span><span class="n">iface</span><span class="err">}</span>  <span class="o">-</span><span class="n">m</span> <span class="n">multiport</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">s</span> <span class="err">{</span><span class="n">ip</span><span class="o">-</span><span class="n">address</span><span class="err">}</span><span class="o">/</span><span class="err">{</span><span class="n">netmask</span><span class="err">}</span> <span class="c1">--dports 6800:6810 -j ACCEPT</span>
 </pre></div>
 <p>请确保上面的6810满足你的osd deamons数量要求。</p>
 <h3 id="cephconf">ceph.conf的配置</h3>
@@ -396,7 +396,7 @@ service ceph start osd.<span class="cp">${</span><span class="n">osdNum</span><s
 <h2 id="_5">硬盘和文件系统配置</h2>
 <p>osd daemon最好在一个单独的硬盘上，如果你一定要在一个硬盘上做多个osd，那么最好是先做分区工作。</p>
 <p>生产上推荐是用 <code>XFS</code>  文件系统格式。如果你使用的是 <code>ext4</code> 文件系统格式，那么在你的ceph.conf配置的osd section上推荐加上这么一行：</p>
-<div class="highlight"><pre><span></span>filestore xattr use omap = true
+<div class="highlight"><pre><span></span><span class="n">filestore</span> <span class="n">xattr</span> <span class="n">use</span> <span class="n">omap</span> <span class="o">=</span> <span class="k">true</span>
 </pre></div>
 <p>然后ceph官方手册说了一些 <code>btrfs</code> 文件格式的好话，说如果测试的话推荐用这个文件系统格式。</p>
 <h2 id="mon_2">mon的配置</h2>
@@ -453,8 +453,8 @@ service ceph start osd.<span class="cp">${</span><span class="n">osdNum</span><s
 <span class="na">osd journal size</span> <span class="o">=</span> <span class="s">10000</span>
 </pre></div>
 <p>osd daemon 默认把数据放在 <code>/var/lib/ceph/osd/$cluster-$id</code> 这里。你可以通过 <code>osd data</code> 改变这个值，推荐系统盘和osd盘分开，然后osd盘作为挂载点使用你需要先将其挂载好。</p>
-<div class="highlight"><pre><span></span>sudo mkfs -t {fstype} /dev/{disk}
-sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkfs</span> <span class="o">-</span><span class="n">t</span> <span class="err">{</span><span class="n">fstype</span><span class="err">}</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="err">{</span><span class="n">disk</span><span class="err">}</span>
+<span class="n">sudo</span> <span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">user_xattr</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="err">{</span><span class="n">hdd</span><span class="err">}</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">ceph</span><span class="o">/</span><span class="n">osd</span><span class="o">/</span><span class="n">ceph</span><span class="o">-</span><span class="err">{</span><span class="n">osd</span><span class="o">-</span><span class="nb">number</span><span class="err">}</span>
 </pre></div>
 <h3 id="osd_3">osd的心跳</h3>
 <p>osd之间会彼此检查心跳（每6秒），这个心跳周期可以通过参数 <code>osd heartbeat interval</code>  来设置。如果一个osd deamon 20秒内没有返回心跳信息，那么就会被认为这个osd deamon <code>down</code> 了。这个时间可以通过 <code>osd heartbeat grace</code> 来设置。mon那边需要接受某个osd deamon <code>down</code> 的信息 <code>三次</code> 才会认为这个osd deamon已经down了。这个次数可以通过 <code>mon osd min down reports</code> ，默认一个osd报告者就可以了，你可以通过 <code>mon osd min down reporters</code> 来设置要求的报告者数目。</p>
@@ -464,7 +464,7 @@ sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
 <p>日志的大小至少是 ( drive speed * filestore max sync interval ) * 2 ，不过最常见的实践是给日志文件专门弄个分区（SSD），然后把整个分区都挂载为专门用做存储日志。</p>
 <p>日志设置为 <code>osd journal</code> 默认路径是： <code>/var/lib/ceph/osd/$cluster-$id/journal</code> </p>
 <p>日志大小设置为 <code>osd journal size</code> 默认大小是： <code>0</code> ... ， 所以你想要日志就需要设置这个值。</p>
-<div class="highlight"><pre><span></span>osd journal size = {2 * (expected throughput * filestore max sync interval)}
+<div class="highlight"><pre><span></span><span class="n">osd</span> <span class="n">journal</span> <span class="k">size</span> <span class="o">=</span> <span class="err">{</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">expected</span> <span class="n">throughput</span> <span class="o">*</span> <span class="n">filestore</span> <span class="k">max</span> <span class="n">sync</span> <span class="nb">interval</span><span class="p">)</span><span class="err">}</span>
 </pre></div>
 <p>上面期待的吞吐量取硬盘吞吐量或网络吞吐量的最小值。</p>
 <h2 id="_6">认证配置</h2>
@@ -509,25 +509,25 @@ sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
 <li><code>$name</code> 等价于 <code>$type.$id</code> </li>
 </ul>
 <h3 id="_8">运行时更改配置</h3>
-<div class="highlight"><pre><span></span>ceph tell {daemon-type}.{id or *} injectargs --{name} {value} [--{name} {value}]
+<div class="highlight"><pre><span></span><span class="n">ceph</span> <span class="n">tell</span> <span class="err">{</span><span class="n">daemon</span><span class="o">-</span><span class="k">type</span><span class="err">}</span><span class="p">.</span><span class="err">{</span><span class="n">id</span> <span class="k">or</span> <span class="o">*</span><span class="err">}</span> <span class="n">injectargs</span> <span class="c1">--{name} {value} [--{name} {value}]</span>
 </pre></div>
 <p>具体配置名有可能需要加上 <code>_</code> 或 <code>-</code> 。</p>
 <h3 id="_9">运行时查看配置</h3>
-<div class="highlight"><pre><span></span>ceph daemon {daemon-type}.{id} config show | less
+<div class="highlight"><pre><span></span><span class="nv">ceph</span> <span class="nv">daemon</span> {<span class="nv">daemon</span><span class="o">-</span><span class="nv">type</span>}.{<span class="nv">id</span>} <span class="nv">config</span> <span class="k">show</span> <span class="o">|</span> <span class="nv">less</span>
 </pre></div>
 <h1 id="diamond">安装diamond模块</h1>
 <p><a href="https://github.com/python-diamond/Diamond">https://github.com/python-diamond/Diamond</a></p>
 <p>diamond是用来收集信息的，其发出的信息格式如下：</p>
-<div class="highlight"><pre><span></span>servers.wanze-ubuntu.iostat.sda6.writes_merged 60.000 1469329380
+<div class="highlight"><pre><span></span><span class="n">servers</span><span class="p">.</span><span class="n">wanze</span><span class="o">-</span><span class="n">ubuntu</span><span class="p">.</span><span class="n">iostat</span><span class="p">.</span><span class="n">sda6</span><span class="p">.</span><span class="n">writes_merged</span> <span class="mi">60</span><span class="p">.</span><span class="mi">000</span> <span class="mi">1469329380</span>
 </pre></div>
-<div class="highlight"><pre><span></span>什么path 值是多少 时间戳
+<div class="highlight"><pre><span></span><span class="err">什么</span><span class="n">path</span> <span class="err">值是多少</span> <span class="err">时间戳</span>
 </pre></div>
 <p>这种格式具有通用性，后面carbon部分就是接受这种信息格式，甚至后面自己写额外的数据发送也应该按照这种格式来。 </p>
 <p>diamond依赖 <code>configobj</code> 和 <code>psutil</code> 这两个模块。其中configobj似乎还依赖six模块，而psutil安装则需要花费一点功夫，首先需要安装 gcc</p>
-<div class="highlight"><pre><span></span>yum install gcc
+<div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">gcc</span>
 </pre></div>
 <p>然后是 python-devel </p>
-<div class="highlight"><pre><span></span>yum install python-devel
+<div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">devel</span>
 </pre></div>
 <p>diamond这里安装的是4.0.451，安装同上，然后这个模块安装后会在虚拟环境下创建一些额外功能的文件夹和文件，这个下面详细说明之。</p>
 <ol>
@@ -543,29 +543,29 @@ sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
 </ul>
 <p>现在我们虚拟环境下运行 <code>diamond</code> 就可以看到这个命令了，只是需要指定配置文件在哪里。</p>
 <p>将/opt/sdsom/venv/etc/diamond 下的 diamond.conf.example 改名为 diamond.conf （现在先这样编写，后面安装时可以考虑批量往etc等地方塞配置文件。）</p>
-<div class="highlight"><pre><span></span># Pid file
-pid_file = /opt/sdsom/venv/var/run/diamond.pid
+<div class="highlight"><pre><span></span><span class="o">#</span> <span class="n">Pid</span> <span class="n">file</span>
+<span class="n">pid_file</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">diamond</span><span class="p">.</span><span class="n">pid</span>
 
-# Directory to load collector modules from
-collectors_path = /opt/sdsom/venv/share/diamond/collectors/
+<span class="o">#</span> <span class="n">Directory</span> <span class="k">to</span> <span class="k">load</span> <span class="n">collector</span> <span class="n">modules</span> <span class="k">from</span>
+<span class="n">collectors_path</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="k">share</span><span class="o">/</span><span class="n">diamond</span><span class="o">/</span><span class="n">collectors</span><span class="o">/</span>
 
-# Directory to load collector configs from
-collectors_config_path = /opt/sdsom/venv/etc/diamond/collectors/
+<span class="o">#</span> <span class="n">Directory</span> <span class="k">to</span> <span class="k">load</span> <span class="n">collector</span> <span class="n">configs</span> <span class="k">from</span>
+<span class="n">collectors_config_path</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">diamond</span><span class="o">/</span><span class="n">collectors</span><span class="o">/</span>
 
-# Directory to load handler configs from
-handlers_config_path = /opt/sdsom/venv/etc/diamond/handlers/
+<span class="o">#</span> <span class="n">Directory</span> <span class="k">to</span> <span class="k">load</span> <span class="k">handler</span> <span class="n">configs</span> <span class="k">from</span>
+<span class="n">handlers_config_path</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">diamond</span><span class="o">/</span><span class="n">handlers</span><span class="o">/</span>
 
-# Directory to load handler modules from
-handlers_path = /opt/sdsom/venv/share/diamond/handlers/
+<span class="o">#</span> <span class="n">Directory</span> <span class="k">to</span> <span class="k">load</span> <span class="k">handler</span> <span class="n">modules</span> <span class="k">from</span>
+<span class="n">handlers_path</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="k">share</span><span class="o">/</span><span class="n">diamond</span><span class="o">/</span><span class="n">handlers</span><span class="o">/</span>
 </pre></div>
 <p>原则上所有的这些文件都应该放入 <code>/opt/sdsom/venv</code> 里面，现在先暂时这样写死了，后面应该考虑配置文件自动基于模块填充的生成机制。</p>
-<div class="highlight"><pre><span></span>### Defaults options for all Handlers
-[[default]]
+<div class="highlight"><pre><span></span>### <span class="nv">Defaults</span> <span class="nv">options</span> <span class="k">for</span> <span class="nv">all</span> <span class="nv">Handlers</span>
+[[<span class="nv">default</span>]]
 
-[[ArchiveHandler]]
+[[<span class="nv">ArchiveHandler</span>]]
 
-# File to write archive log files
-log_file = /opt/sdsom/venv/var/log/diamond/archive.log
+# <span class="nv">File</span> <span class="nv">to</span> <span class="nv">write</span> <span class="nv">archive</span> <span class="nv">log</span> <span class="nv">files</span>
+<span class="nv">log_file</span> <span class="o">=</span> <span class="o">/</span><span class="nv">opt</span><span class="o">/</span><span class="nv">sdsom</span><span class="o">/</span><span class="nv">venv</span><span class="o">/</span><span class="nv">var</span><span class="o">/</span><span class="nv">log</span><span class="o">/</span><span class="nv">diamond</span><span class="o">/</span><span class="nv">archive</span>.<span class="nv">log</span>
 </pre></div>
 <p>这里的host变量是sdsom模块后面怎么修改了的，现在测试简单填写为127.0.0.1即可。这里的port将和后面的carbon直接对应。</p>
 <div class="highlight"><pre><span></span><span class="k">[[GraphiteHandler]]</span>
@@ -606,20 +606,20 @@ log_file = /opt/sdsom/venv/var/log/diamond/archive.log
 <span class="na">enabled</span> <span class="o">=</span> <span class="s">True</span>
 </pre></div>
 <p>先暂时留一两个方便测试用即可。</p>
-<div class="highlight"><pre><span></span>[handler_rotated_file]
+<div class="highlight"><pre><span></span><span class="o">[</span><span class="n">handler_rotated_file</span><span class="o">]</span><span class="w"></span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="o">=</span> <span class="nx">handlers</span><span class="p">.</span><span class="nx">TimedRotatingFileHandler</span>
-<span class="nx">level</span> <span class="o">=</span> <span class="nx">DEBUG</span>
-<span class="nx">formatter</span> <span class="o">=</span> <span class="k">default</span>
-<span class="err">#</span> <span class="nx">rotate</span> <span class="nx">at</span> <span class="nx">midnight</span><span class="p">,</span> <span class="nx">each</span> <span class="nx">day</span> <span class="nx">and</span> <span class="nx">keep</span> <span class="mi">7</span> <span class="nx">days</span>
-<span class="nx">args</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'/opt/sdsom/venv/var/log/diamond/diamond.log'</span><span class="p">,</span> <span class="s1">'midnight'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> = <span class="n">handlers</span>.<span class="n">TimedRotatingFileHandler</span>
+<span class="n">level</span> = <span class="n">DEBUG</span>
+<span class="n">formatter</span> = <span class="k">default</span>
+<span class="c1"># rotate at midnight, each day and keep 7 days</span>
+<span class="n">args</span> = (<span class="s">'/opt/sdsom/venv/var/log/diamond/diamond.log'</span>, <span class="s">'midnight'</span>, <span class="mi">1</span>, <span class="mi">7</span>)
 </pre></div>
 <p>有些文件夹需要手工创建下：</p>
-<div class="highlight"><pre><span></span>mkdir -p /opt/sdsom/venv/var/log/diamond
-mkdir -p /opt/sdsom/venv/var/run
+<div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">diamond</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span>
 </pre></div>
 <p>配置完了之后，如下开启一个diamond进程，后续可以考虑用supervisor来管理开启。</p>
-<div class="highlight"><pre><span></span>diamond -c /opt/sdsom/venv/etc/diamond/diamond.conf 
+<div class="highlight"><pre><span></span><span class="n">diamond</span> <span class="o">-</span><span class="k">c</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">diamond</span><span class="o">/</span><span class="n">diamond</span><span class="p">.</span><span class="n">conf</span> 
 </pre></div>
 <p>然后我们可以去看下创建的pid文件已经相应的日志文件。关闭该diamond进程就是kill掉该进程号即可。 </p>
 <h1 id="diamond_1">diamond配置进阶</h1>
@@ -632,34 +632,34 @@ mkdir -p /opt/sdsom/venv/var/run
 <p>其额外创建了 storage 文件夹前面已经提及。其额外创建的conf文件夹，里面是一些配置文件，后续建议都统一到 etc/carbon/ 文件夹里面去。</p>
 <p>examples 文件夹还不清楚有啥用。</p>
 <p>bin里面多了一些python可执行脚本文件，其中 <code>carbon-cache</code> 是直接和whisper交互的，然后aggregator和relay是高级功能，后续可以慢慢了解。</p>
-<div class="highlight"><pre><span></span>validate-storage-schemas.py
-carbon-cache.py
-carbon-aggregator.py
-carbon-client.py
-carbon-relay.py
+<div class="highlight"><pre><span></span><span class="n">validate</span><span class="o">-</span><span class="k">storage</span><span class="o">-</span><span class="n">schemas</span><span class="p">.</span><span class="n">py</span>
+<span class="n">carbon</span><span class="o">-</span><span class="k">cache</span><span class="p">.</span><span class="n">py</span>
+<span class="n">carbon</span><span class="o">-</span><span class="n">aggregator</span><span class="p">.</span><span class="n">py</span>
+<span class="n">carbon</span><span class="o">-</span><span class="n">client</span><span class="p">.</span><span class="n">py</span>
+<span class="n">carbon</span><span class="o">-</span><span class="n">relay</span><span class="p">.</span><span class="n">py</span>
 </pre></div>
 <p>然后还需要安装 whisper 模块</p>
 <p>然后在虚拟环境文件夹下的那个conf文件夹里面有个carbon.conf.example，将其改名为carbon.conf，稍微做如下修改：</p>
-<div class="highlight"><pre><span></span>GRAPHITE_ROOT = /opt/sdsom/venv/
-LOG_DIR = /opt/sdsom/venv/var/log/carbon/
-PID_DIR = /opt/sdsom/venv/var/run
+<div class="highlight"><pre><span></span><span class="n">GRAPHITE_ROOT</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span>
+<span class="n">LOG_DIR</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">carbon</span><span class="o">/</span>
+<span class="n">PID_DIR</span> <span class="o">=</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span>
 </pre></div>
 <p>类似的还需要创建一个 storage-schemas.conf 文件。</p>
 <p>启动carbon-cache进程如下执行：</p>
-<div class="highlight"><pre><span></span>carbon-cache.py start 
+<div class="highlight"><pre><span></span><span class="n">carbon</span><span class="o">-</span><span class="k">cache</span><span class="p">.</span><span class="n">py</span> <span class="k">start</span> 
 </pre></div>
 <p>此外还有 status stop 子命令。 然后我们可以去storage那边去看下具体的输出wsp文件。</p>
 <h1 id="graphite-web">本地安装graphite-web</h1>
-<div class="highlight"><pre><span></span>pip install --install-option="--prefix=/opt/sdsom/venv" --install-option="--install-lib=/opt/sdsom/venv/webapp" graphite-web-0.9.15.tar.gz 
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="c1">--install-option="--prefix=/opt/sdsom/venv" --install-option="--install-lib=/opt/sdsom/venv/webapp" graphite-web-0.9.15.tar.gz </span>
 </pre></div>
 <p>webapp那边实际上就是 graphite-web 的一个django app。</p>
 <h2 id="django">安装django</h2>
 <p>由于目前sdsom代码是基于django（1.5.1）此外graphite-web依赖于 django-tagging (0.3.1) ，这个最好先限定版本号。</p>
 <h2 id="graphite-web_1">graphite-web 数据库创建</h2>
-<div class="highlight"><pre><span></span>django-admin.py syncdb --pythonpath ./webapp  --settings graphite.settings 
+<div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="k">admin</span><span class="p">.</span><span class="n">py</span> <span class="n">syncdb</span> <span class="c1">--pythonpath ./webapp  --settings graphite.settings </span>
 </pre></div>
 <h2 id="graphite-web-shell">graphite-web shell调试</h2>
-<div class="highlight"><pre><span></span>django-admin.py shell --pythonpath ./webapp  --settings graphite.settings 
+<div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="k">admin</span><span class="p">.</span><span class="n">py</span> <span class="n">shell</span> <span class="c1">--pythonpath ./webapp  --settings graphite.settings </span>
 </pre></div>
 <h2 id="shell">第一次shell 测试</h2>
 <p>这里新引入一个依赖包 pytz </p>
@@ -678,7 +678,7 @@ PID_DIR = /opt/sdsom/venv/var/run
 <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">2.727</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">1.24</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">2.63</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">1.097</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">1.077</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span>
 </pre></div>
 <h2 id="graphite-web_2">开启graphite-web</h2>
-<div class="highlight"><pre><span></span>django-admin.py runserver --pythonpath ./webapp --settings graphite.settings 0.0.0.0:8080
+<div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="k">admin</span><span class="p">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="c1">--pythonpath ./webapp --settings graphite.settings 0.0.0.0:8080</span>
 </pre></div>
 <h3 id="_10">重要信息</h3>
 <ol>

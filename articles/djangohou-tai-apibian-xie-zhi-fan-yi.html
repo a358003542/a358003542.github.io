@@ -138,26 +138,26 @@ django后台api编写之-翻译  · cdwanze的博文
             
 <h2 id="_1">翻译</h2>
 <p>django的翻译其实已经很便捷了，因为我关注于后台api的编写，所以实际上很多教程说的：</p>
-<div class="highlight"><pre><span></span>TEMPLATES = [
-    {
-        ...
-        'OPTIONS': {
-            'context_processors': [
-                ...
-                'django.template.context_processors.i18n',
-            ],
-        },
-    },
-]
+<div class="highlight"><pre><span></span><span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="err">{</span>
+        <span class="p">...</span>
+        <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">...</span>
+                <span class="s1">'django.template.context_processors.i18n'</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="err">}</span><span class="p">,</span>
+    <span class="err">}</span><span class="p">,</span>
+<span class="p">]</span>
 </pre></div>
 <p>这个配置只和模板输出的翻译有关，有需要再加上。</p>
 <p>然后MIDDLESWARES 哪里要加上：</p>
-<div class="highlight"><pre><span></span>    'django.middleware.locale.LocaleMiddleware',
+<div class="highlight"><pre><span></span>    <span class="s1">'django.middleware.locale.LocaleMiddleware'</span><span class="p">,</span>
 </pre></div>
 <p>然后就是这些配置：</p>
-<div class="highlight"><pre><span></span>LANGUAGE_CODE = 'zh-Hans'
+<div class="highlight"><pre><span></span><span class="n">LANGUAGE_CODE</span> <span class="o">=</span> <span class="s1">'zh-Hans'</span>
 
-USE_I18N = True
+<span class="n">USE_I18N</span> <span class="o">=</span> <span class="k">True</span>
 </pre></div>
 <p>设置好你的语言代码，这是没有问题的。</p>
 <p>我看了一下 django restframework 的翻译管理相关，发现大体这样配置就可以了，很多教程说的设置 <code>LOCALE_PATHS</code> 变量觉得没必要，默认的每个app下面的locale文件夹够用了。</p>
@@ -170,15 +170,15 @@ USE_I18N = True
 </pre></div>
 <p>Model字段定义的名字可以加上，verbose_name 可以加上，然后异常信息可以加上等等。</p>
 <p>加完了之后运行：</p>
-<div class="highlight"><pre><span></span>django-admin makemessages -l zh_Hans 
+<div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="k">admin</span> <span class="n">makemessages</span> <span class="o">-</span><span class="n">l</span> <span class="n">zh_Hans</span> 
 </pre></div>
 <p>app下面没有locale文件夹的创建个就是了，某些文件你不想管，比如 manage.py ，那么加上 <code>--ignore</code> 选项即可。</p>
 <p>windows下不是很方便，推荐在linux服务器下创建了目标 django.po 文件，然后再修改文件即可。其中po文件的头部有些东西，估计：</p>
-<div class="highlight"><pre><span></span>"Language: zh-Hans\n"
+<div class="highlight"><pre><span></span><span class="ss">"Language: zh-Hans\n"</span>
 </pre></div>
 <p>已经是必填的，其他有时间也填上吧。</p>
 <p>然后运行:</p>
-<div class="highlight"><pre><span></span>django-admin compilemessages 
+<div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="k">admin</span> <span class="n">compilemessages</span> 
 </pre></div>
 <p>如果不出意外的，翻译就已经生效了。</p>
             

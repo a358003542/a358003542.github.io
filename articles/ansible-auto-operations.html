@@ -173,7 +173,7 @@ ansible自动化运维  · cdwanze的博文
             
 <p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
 <p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
-<div class="highlight"><pre><span></span>ansible all -m ping
+<div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="k">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
 </pre></div>
 <p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
 <h2 id="hosts">hosts文件配置</h2>
@@ -191,7 +191,7 @@ ansible自动化运维  · cdwanze的博文
 </pre></div>
 <h3 id="_2">主机的其他参数控制</h3>
 <p>应该大多和具体ssh连接的配置有关吧，比如:</p>
-<div class="highlight"><pre><span></span>some_host         ansible_ssh_port=2222     ansible_ssh_user=manager
+<div class="highlight"><pre><span></span><span class="n">some_host</span>         <span class="n">ansible_ssh_port</span><span class="o">=</span><span class="mi">2222</span>     <span class="n">ansible_ssh_user</span><span class="o">=</span><span class="n">manager</span>
 </pre></div>
 <ul>
 <li><code>ansible_ssh_host</code> 这个一般没啥好设置的，不过可能你的主机名很长，则通过这个设置一下作为具体连接的主机名。而前面写的 <code>some_host</code> 只是作为主机别名。如果你的ansible版本号大于2了，那么推荐使用 <code>ansible_host</code> 。</li>
@@ -229,31 +229,31 @@ ansible自动化运维  · cdwanze的博文
         <span class="l l-Scalar l-Scalar-Plain">ping</span> <span class="p p-Indicator">:</span>
 </pre></div>
 <p>然后执行是:</p>
-<div class="highlight"><pre><span></span>ansible-playbook first.yaml
+<div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="k">first</span><span class="p">.</span><span class="n">yaml</span>
 </pre></div>
 <p>这里只是简单的ping pong 了一下，这个配置简单的内容就是主机 work ，这个是在之前提到 <code>/etc/ansible/hosts</code> 那个文件里定义的。然后对这个主机执行某个任务 tasks 。这是一个任务列表清单，name 描述了该任务，文字随意。然后执行了 ping 模块。</p>
 <p>这个任务确保nginx重启了一次:</p>
-<div class="highlight"><pre><span></span>- name: make sure nginx restarted
-  service: name=nginx state=restarted
+<div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">nginx</span> <span class="n">restarted</span>
+  <span class="n">service</span><span class="p">:</span> <span class="n">name</span><span class="o">=</span><span class="n">nginx</span> <span class="k">state</span><span class="o">=</span><span class="n">restarted</span>
 </pre></div>
 <p>这个任务是确保nginx服务是运行着的:</p>
-<div class="highlight"><pre><span></span>- name: make sure nginx is running
-  service: name=nginx state=running
+<div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">nginx</span> <span class="k">is</span> <span class="n">running</span>
+  <span class="n">service</span><span class="p">:</span> <span class="n">name</span><span class="o">=</span><span class="n">nginx</span> <span class="k">state</span><span class="o">=</span><span class="n">running</span>
 </pre></div>
 <h2 id="playbook_1">playbook最佳实践</h2>
 <h3 id="hosts_1">hosts文件</h3>
 <p>在项目的文件夹下新建一个hosts文件，其类似之前讨论的 <code>/etc/ansible/hosts</code> 文件，然后在本地通过如下语法引入：</p>
-<div class="highlight"><pre><span></span>ansible-playbook -i hosts site.yml
+<div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">-</span><span class="n">i</span> <span class="n">hosts</span> <span class="n">site</span><span class="p">.</span><span class="n">yml</span>
 </pre></div>
 <p>​    </p>
 <h3 id="siteyml">site.yml</h3>
 <p>刷脚本的主入口</p>
 <h3 id="tags">tags单独运行子任务</h3>
 <p>在roles文件夹里面新建一个common文件夹，然后common文件夹里面新建一个tasks文件夹，tasks文件夹里面定义一个main.yml，该文件内容大体如下:</p>
-<div class="highlight"><pre><span></span>---
+<div class="highlight"><pre><span></span><span class="c1">---</span>
 
-- name: task的名字
-  command: ...
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">task的名字</span>
+  <span class="n">command</span><span class="p">:</span> <span class="p">...</span>
 </pre></div>
 <p>然后site.yml里面如下定义：</p>
 <div class="highlight"><pre><span></span><span class="nn">---</span>
@@ -265,7 +265,7 @@ ansible自动化运维  · cdwanze的博文
     <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">role</span><span class="p">:</span> <span class="nv">common</span><span class="p p-Indicator">,</span><span class="nt"> tags</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">'common'</span><span class="p p-Indicator">]}</span>
 </pre></div>
 <p>然后只运行某个子任务如下利用tags来完成。</p>
-<div class="highlight"><pre><span></span>ansible-playbook -i hosts site.yml --tags=common
+<div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">-</span><span class="n">i</span> <span class="n">hosts</span> <span class="n">site</span><span class="p">.</span><span class="n">yml</span> <span class="c1">--tags=common</span>
 </pre></div>
 <p>​    </p>
 <h3 id="tags_1">临时加上某个 tags 任务</h3>
@@ -286,7 +286,7 @@ ansible自动化运维  · cdwanze的博文
 <p>官方模块很多，内容很丰富，这里就不赘述了，请参看官方文档。</p>
 <h2 id="_3">如何实现本地安装</h2>
 <p>在hosts里面添加一行：</p>
-<div class="highlight"><pre><span></span>localhost ansible_connection=local
+<div class="highlight"><pre><span></span><span class="n">localhost</span> <span class="n">ansible_connection</span><span class="o">=</span><span class="k">local</span>
 </pre></div>
 <p>同时需要注意本地安装不需要提供ssh用户名和密码了，然后也不需要上传ssh key了，所以如果你之前有上传操作的应该加上这么一行：</p>
 <div class="highlight"><pre><span></span><span class="n">when</span><span class="o">:</span> <span class="n">ansible_connection</span> <span class="o">!=</span> <span class="s2">"local"</span>
@@ -301,8 +301,8 @@ ansible自动化运维  · cdwanze的博文
 </pre></div>
 <h2 id="rsync">rsync风格的将某个文件夹复制过去</h2>
 <p>为什么不利用copy模块，因为scp如果文件夹里面结构稍微复杂点就会很慢，这时推荐使用 synchronize 模块：</p>
-<div class="highlight"><pre><span></span>- name: 上传源
-  synchronize: src=resource/winstore dest=/root mode=push
+<div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="err">上传源</span>
+  <span class="n">synchronize</span><span class="p">:</span> <span class="n">src</span><span class="o">=</span><span class="n">resource</span><span class="o">/</span><span class="n">winstore</span> <span class="n">dest</span><span class="o">=/</span><span class="n">root</span> <span class="k">mode</span><span class="o">=</span><span class="n">push</span>
 </pre></div>
 <p>值得一提的是，rsync那边如果远程机器不是免密码ssh连接的话，这时又要输入密码，所以推荐你的playbook一开始就将pub密钥传过去，然后rsync功能需要远程机装了libselinux-python和 rsync 这两个软件包。</p>
 <div class="highlight"><pre><span></span><span class="x">- name: 上传ssh key</span>
@@ -328,18 +328,18 @@ ansible自动化运维  · cdwanze的博文
 </pre></div>
 <h2 id="rpm">如何安装本地的rpm包</h2>
 <p>有兴趣的可以看一下ansible的 <code>yum</code> 模块，不过要实现免网络完全利用本地下载的rpm包来安装的话用这个模块似乎并不是很好用，因为其并不能很好地处理各个模块之间的依赖。推荐就直接调用shell模块，如下所示：</p>
-<div class="highlight"><pre><span></span>- name: install rpms
-  shell: yum localinstall -yC --disablerepo=* `ls /path/to/rpms/*.rpm` 
+<div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">install</span> <span class="n">rpms</span>
+  <span class="n">shell</span><span class="p">:</span> <span class="n">yum</span> <span class="n">localinstall</span> <span class="o">-</span><span class="n">yC</span> <span class="c1">--disablerepo=* `ls /path/to/rpms/*.rpm` </span>
 </pre></div>
 <p>具体这些rpm包如果是base的，那么推荐用：</p>
-<div class="highlight"><pre><span></span>yum install yum-utils
-yum install --downloadonly --downloaddir=. the_rpm_name
+<div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">yum</span><span class="o">-</span><span class="n">utils</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="c1">--downloadonly --downloaddir=. the_rpm_name</span>
 </pre></div>
 <p>来下载之。如果来自epel，那么推荐在 <a href="https://pkgs.org/">pkgs.org</a> 搜名字，在 <a href="http://dl.fedoraproject.org/pub/epel/7/x86_64/">这个网站</a> 下载。</p>
 <h2 id="_6">删除文件或文件夹</h2>
 <p>删除文件或文件夹推荐使用 file 模块而不是调用rm命令，如下所示：</p>
-<div class="highlight"><pre><span></span>- name: 确保目标venv文件夹不存在
-  file: path=/opt/sdsom/venv state=absent
+<div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="err">确保目标</span><span class="n">venv文件夹不存在</span>
+  <span class="n">file</span><span class="p">:</span> <span class="n">path</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">sdsom</span><span class="o">/</span><span class="n">venv</span> <span class="k">state</span><span class="o">=</span><span class="n">absent</span>
 </pre></div>
 <h2 id="_7">如何微调配置文件</h2>
 <p>一般配置文件在远程机器上已经有个原样了，只是某几行需要修改一下，这个时候用lineinfile模块来微调这些配置很是适宜的。</p>
@@ -367,9 +367,9 @@ yum install --downloadonly --downloaddir=. the_rpm_name
 <p>此外template模块可以利用本地的模板文件（jinja2模块系统）来生成一个配置文件。</p>
 <h2 id="_8">只在某个版本的操作系统下才执行某个动作</h2>
 <p>用 <code>when</code> 语句来表达，下面的意思是只在远程机器操作系统是CentOS而且版本号是7.2时才执行某个动作（参考了 <a href="https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html">这个网页</a>。</p>
-<div class="highlight"><pre><span></span>- name: only for centos7.2 do some tweak
-  command: ...
-  when: ansible_distribution == 'CentOS' and ansible_distribution_version.startswith('7.2')
+<div class="highlight"><pre><span></span><span class="o">-</span> <span class="nv">name</span>: <span class="nv">only</span> <span class="k">for</span> <span class="nv">centos7</span>.<span class="mi">2</span> <span class="k">do</span> <span class="nv">some</span> <span class="nv">tweak</span>
+  <span class="nv">command</span>: ...
+  <span class="nv">when</span>: <span class="nv">ansible_distribution</span> <span class="o">==</span> <span class="s1">'</span><span class="s">CentOS</span><span class="s1">'</span> <span class="nv">and</span> <span class="nv">ansible_distribution_version</span>.<span class="nv">startswith</span><span class="ss">(</span><span class="s1">'</span><span class="s">7.2</span><span class="s1">'</span><span class="ss">)</span>
 </pre></div>
 <p><code>ansible_distribution</code> 还可能是 Ubuntu ，Debian ， Red Hat Enterprise Linux 等。</p>
 <h2 id="register">register的用法</h2>
@@ -388,7 +388,7 @@ yum install --downloadonly --downloaddir=. the_rpm_name
     <span class="nt">debug</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">msg="{{ test['stdout'] }}"</span>
 </pre></div>
 <p>然后我们运行：</p>
-<div class="highlight"><pre><span></span>ansible-playbook -i "localhost," -c local test.yml
+<div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">-</span><span class="n">i</span> <span class="ss">"localhost,"</span> <span class="o">-</span><span class="k">c</span> <span class="k">local</span> <span class="n">test</span><span class="p">.</span><span class="n">yml</span>
 </pre></div>
 <p>运行结果就显示之前运行的那个date命令的结果已经注册到ansible的全局变量池里面去了，名字通过register来赋值，然后在后面的jinja2模板系统中都可以调用的。</p>
 <h2 id="with_items">with_items的用法</h2>

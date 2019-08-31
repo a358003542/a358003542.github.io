@@ -141,7 +141,7 @@
             
 <h2 id="_1">找到性能瓶颈所在</h2>
 <p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
-<div class="highlight"><pre><span></span>python -m cProfile test.py
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="n">test</span><span class="p">.</span><span class="n">py</span>
 </pre></div>
 <p>或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。</p>
 <p>目前我知道的循环结构提速很明显，然后指定静态类型会提速。</p>
@@ -195,41 +195,41 @@
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">expython.clib</span> <span class="kn">import</span> <span class="n">is_prime</span><span class="p">,</span> <span class="n">fibonacci</span><span class="p">,</span> <span class="n">factorial</span>
 </pre></div>
 <p>cgfun.c 的内容如下：</p>
-<div class="highlight"><pre><span></span>int cgcd(int x, int y) {
-    int g = y;
-    while (x &gt; 0) {
-        g = x;
-        x = y % x;
-        y = g;
+<div class="highlight"><pre><span></span><span class="nv">int</span> <span class="nv">cgcd</span><span class="ss">(</span><span class="nv">int</span> <span class="nv">x</span>, <span class="nv">int</span> <span class="nv">y</span><span class="ss">)</span> {
+    <span class="nv">int</span> <span class="nv">g</span> <span class="o">=</span> <span class="nv">y</span><span class="c1">;</span>
+    <span class="k">while</span> <span class="ss">(</span><span class="nv">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="ss">)</span> {
+        <span class="nv">g</span> <span class="o">=</span> <span class="nv">x</span><span class="c1">;</span>
+        <span class="nv">x</span> <span class="o">=</span> <span class="nv">y</span> <span class="o">%</span> <span class="nv">x</span><span class="c1">;</span>
+        <span class="nv">y</span> <span class="o">=</span> <span class="nv">g</span><span class="c1">;</span>
     }
-    return g;
+    <span class="k">return</span> <span class="nv">g</span><span class="c1">;</span>
 }
 
 
-long cfib(long n){
-    long i;
-    long a=0;
-    long b=1;
-    long tmp;
-    for (i=0; i&lt;n; ++i){
-        tmp = b;
-        b = a + b;
-        a = tmp;
+<span class="nv">long</span> <span class="nv">cfib</span><span class="ss">(</span><span class="nv">long</span> <span class="nv">n</span><span class="ss">)</span>{
+    <span class="nv">long</span> <span class="nv">i</span><span class="c1">;</span>
+    <span class="nv">long</span> <span class="nv">a</span><span class="o">=</span><span class="mi">0</span><span class="c1">;</span>
+    <span class="nv">long</span> <span class="nv">b</span><span class="o">=</span><span class="mi">1</span><span class="c1">;</span>
+    <span class="nv">long</span> <span class="nv">tmp</span><span class="c1">;</span>
+    <span class="k">for</span> <span class="ss">(</span><span class="nv">i</span><span class="o">=</span><span class="mi">0</span><span class="c1">; i&lt;n; ++i){</span>
+        <span class="nv">tmp</span> <span class="o">=</span> <span class="nv">b</span><span class="c1">;</span>
+        <span class="nv">b</span> <span class="o">=</span> <span class="nv">a</span> <span class="o">+</span> <span class="nv">b</span><span class="c1">;</span>
+        <span class="nv">a</span> <span class="o">=</span> <span class="nv">tmp</span><span class="c1">;</span>
     }
-    return a;
+    <span class="k">return</span> <span class="nv">a</span><span class="c1">;</span>
 }
 </pre></div>
 <p>cgfun.h 的内容如下：</p>
-<div class="highlight"><pre><span></span><span class="cp">#ifndef __CGFUN_H__</span>
-<span class="cp">#define __CGFUN_H__</span>
+<div class="highlight"><pre><span></span>#<span class="nv">ifndef</span> <span class="nv">__CGFUN_H__</span>
+#<span class="nv">define</span> <span class="nv">__CGFUN_H__</span>
 
-<span class="kt">int</span> <span class="nf">cgcd</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
-
-
-<span class="kt">long</span> <span class="nf">cfib</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">);</span>
+<span class="nv">int</span> <span class="nv">cgcd</span><span class="ss">(</span><span class="nv">int</span> <span class="nv">a</span>, <span class="nv">int</span> <span class="nv">b</span><span class="ss">)</span><span class="c1">;</span>
 
 
-<span class="cp">#endif</span>
+<span class="nv">long</span> <span class="nv">cfib</span><span class="ss">(</span><span class="nv">long</span> <span class="nv">n</span><span class="ss">)</span><span class="c1">;</span>
+
+
+#<span class="k">endif</span>
 </pre></div>
 <p>wrapped.pyx的内容如下：</p>
 <div class="highlight"><pre><span></span><span class="n">cimport</span> <span class="n">cython</span>

@@ -230,7 +230,7 @@ flask上下文释疑  · cdwanze的博文
 </pre></div>
 <p>然后request 和session的生存期就是本请求期，这是没有问题的。不过对于g这个变量还需要讨论下。第一个这个g最小粒度在线程这是没有问题的，各个线程之间g彼此完全不相干。而在线程内部接受的不同请求，由于他们都是引用的默认的那个相同的应用上下文环境，那么这个g是可以为多个请求公用的。但正如上面讨论的，不仅不同线程之间g不通用，而且就算某个线程内部，虽然可以应付多个请求，但对于多个应用情况来说g是和应用上下文绑定的，这些请求彼此并不公用g。</p>
 <p>flask推荐请求之间要记住某个值，推荐使用数据库或者session这个变量，session虽然是挂在请求上下文中的，但实际在请求上下文创建的时候其是直接接受session参数的：</p>
-<div class="highlight"><pre><span></span>def __init__(self, app, environ, request=None, session=None):
+<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">__init__</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="k">session</span><span class="o">=</span><span class="k">None</span><span class="p">):</span>
 </pre></div>
 <p>这个session具体怎么传递的还不是清楚，应该在werkzeug那边。</p>
 <p>flask推荐g的一种使用方式，是比如管理数据库的连接等，虽然g可能会为空，但只要如下，确保引用的时候，检查一下即可：</p>
@@ -261,8 +261,8 @@ flask上下文释疑  · cdwanze的博文
 </pre></div>
 <p>也就是单一线程接受不同的请求，这个请求是哪个app负责的，这个请求是哪个app负责的，依靠应用上下文环境栈是支持这种情况的。</p>
 <p>最后一般教程都会提到应用上下文环境可用于单元测试：</p>
-<div class="highlight"><pre><span></span>with app.app_context():
-    pass
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">app</span><span class="p">.</span><span class="n">app_context</span><span class="p">():</span>
+    <span class="n">pass</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hello</span> <span class="kn">import</span> <span class="n">app</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">current_app</span>
@@ -273,8 +273,8 @@ flask上下文释疑  · cdwanze的博文
 <h3 id="session">问题六 session到底是个什么东西</h3>
 <p>前面提到flask在创建请求上下文的时候session这个参数是不知道从哪里直接传进来的，那个flask的这个session到底是个什么东西？</p>
 <p>首先说下背景知识：我们知道服务器那么响应内容可以设置这样的响应头： <code>Set-Cookie</code> ，对应flask里面的：</p>
-<div class="highlight"><pre><span></span>r = Response('test')
-r.set_cookie('a','1')
+<div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span><span class="s1">'test'</span><span class="p">)</span>
+<span class="n">r</span><span class="p">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">)</span>
 </pre></div>
 <p>客服端client或者说浏览器在接收到这样的响应之后，下次对目标服务器的请求会在请求头上加上对应的Cookie。</p>
 <p>如下图所示：</p>

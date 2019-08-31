@@ -182,10 +182,10 @@ Tornado模块  · cdwanze的博文
 </pre></div>
 <p>这是一个同步的webapp框架，可能后面会用的较少，这里主要了解一下tornado编写的webapp的基本结构:</p>
 <h3 id="tornado">开启tornado的事件驱动循环:</h3>
-<div class="highlight"><pre><span></span>tornado.ioloop.IOLoop.current().start()
+<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">ioloop</span><span class="p">.</span><span class="n">IOLoop</span><span class="p">.</span><span class="k">current</span><span class="p">().</span><span class="k">start</span><span class="p">()</span>
 </pre></div>
 <p>这个大体类似于asyncio的:</p>
-<div class="highlight"><pre><span></span>asyncio.get_event_loop().run_forever()
+<div class="highlight"><pre><span></span><span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_forever</span><span class="p">()</span>
 </pre></div>
 <p>从tornado5.0开始，tornado已经自动和asyncio集成起来了，这里所谓的集成指的是：tornado的事件驱动自动挂载到asyncio的主事件驱动循环之上了。</p>
 <h3 id="make-a-app">make a app</h3>
@@ -266,11 +266,11 @@ Tornado模块  · cdwanze的博文
 </pre></div>
 <p>也许应该注意关闭动作里面的休眠时间使用的是 gen.sleep 。有待进一步观察。</p>
 <h2 id="application">Application对象</h2>
-<div class="highlight"><pre><span></span>tornado.web.Application(handlers=None, default_host='', transforms=None, **settings)
+<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">Application</span><span class="p">(</span><span class="n">handlers</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">default_host</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="k">transforms</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 </pre></div>
 <h3 id="url">url分发部分</h3>
 <p>上面的handlers参数主要进行url分发工作，其是一个列表，里面是一些所谓的 <code>URLSpec</code> 对象:</p>
-<div class="highlight"><pre><span></span>tornado.web.URLSpec(pattern, handler, kwargs=None, name=None)
+<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">URLSpec</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="k">handler</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
 </pre></div>
 <ul>
 <li>pattern就是一个匹配url分发的正则表达式</li>
@@ -279,7 +279,7 @@ Tornado模块  · cdwanze的博文
 <li>name，确切来说是给这个url分发规则取个名字，等下可以用 <code>Application.reverse_url(name,*args)</code> 来解析出具体的某个url，这个大体类似于flask的 url_for 和 endpoint的概念。</li>
 </ul>
 <p>然后pattern正则表达式我们知道有那个圆括号包围起来的group的概念，比如:</p>
-<div class="highlight"><pre><span></span>r"/story/([0-9]+)"
+<div class="highlight"><pre><span></span><span class="n">r</span><span class="ss">"/story/([0-9]+)"</span>
 </pre></div>
 <p>这里group匹配到的参数，将作为入口参数传递个 <code>RequestHandler</code> 对象的 HTTP method，也就是 <code>get</code> <code>post</code> 等。</p>
 <p>然后我们看到 <code>Application.reverse_url(name,*args)</code> 其后接受的一些参数也对应这里的正则表达式匹配，其反向解析url将进行匹配子group的替换操作。</p>

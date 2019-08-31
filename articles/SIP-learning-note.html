@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="protocol, 物联网, " />
+
+<meta property="og:title" content="SIP协议学习笔记 "/>
+<meta property="og:url" content="/articles/SIP-learning-note.html" />
+<meta property="og:description" content="前言 SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。 有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。 有关SIP协议基本介绍 下面是SIP协议的原文介绍，个人对翻译又完善了一下。 SIP协议介绍 Internet的许多应用都需要建立和管理一个会话，会话在这里的含义是在参与者之间的数据的交换。由于考虑到参与者的实际情况，这些应用的实现往往是很复杂的：用户可能在终端移动，他们可能有多个名字，他们可能使用不同的媒介（比如文本，多媒体，视频，音频等）——有时候都使用。人们创造了很多不同的通讯协议用来携带哪些实时的多媒体会话数据，比如声音，影像，或者文本。本SIP（会话初始协议）和这些协议是合作关系，SIP协议让网络终端（叫做用户代理UserAgent UA）发现彼此并同意哪些他们愿意分享的会话细节。为了能够定位预定的会话参与者，和其他目的，SIP要创建一些网络主机基础设施 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2019-08-30T00:00:00+08:00" />
+<meta property="" content="2019-08-30T00:00:00+08:00" />
+<meta name="twitter:title" content="SIP协议学习笔记 ">
+<meta name="twitter:description" content="前言 SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。 有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。 有关SIP协议基本介绍 下面是SIP协议的原文介绍，个人对翻译又完善了一下。 SIP协议介绍 Internet的许多应用都需要建立和管理一个会话，会话在这里的含义是在参与者之间的数据的交换。由于考虑到参与者的实际情况，这些应用的实现往往是很复杂的：用户可能在终端移动，他们可能有多个名字，他们可能使用不同的媒介（比如文本，多媒体，视频，音频等）——有时候都使用。人们创造了很多不同的通讯协议用来携带哪些实时的多媒体会话数据，比如声音，影像，或者文本。本SIP（会话初始协议）和这些协议是合作关系，SIP协议让网络终端（叫做用户代理UserAgent UA）发现彼此并同意哪些他们愿意分享的会话细节。为了能够定位预定的会话参与者，和其他目的，SIP要创建一些网络主机基础设施 …">
+
+    <title>
+SIP协议学习笔记  · cdwanze的博文
+</title>
+
+
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://www.cdwanze.work"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="">博文首页</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                        <li >
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="/gong-gao.html">公告</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="/articles/SIP-learning-note.html"> SIP协议学习笔记  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#sip">有关SIP协议基本介绍</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">前言</h2>
+<p>SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。</p>
+<p>有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。</p>
+<h2 id="sip">有关SIP协议基本介绍</h2>
+<p>下面是SIP协议的原文介绍，个人对翻译又完善了一下。</p>
+<blockquote>
+<p>SIP协议介绍</p>
+<p>Internet的许多应用都需要建立和管理一个会话，会话在这里的含义是在参与者之间的数据的交换。由于考虑到参与者的实际情况，这些应用的实现往往是很复杂的：用户可能在终端移动，他们可能有多个名字，他们可能使用不同的媒介（比如文本，多媒体，视频，音频等）——有时候都使用。人们创造了很多不同的通讯协议用来携带哪些实时的多媒体会话数据，比如声音，影像，或者文本。本SIP（会话初始协议）和这些协议是合作关系，SIP协议让网络终端（叫做用户代理UserAgent UA）发现彼此并同意哪些他们愿意分享的会话细节。为了能够定位预定的会话参与者，和其他目的，SIP要创建一些网络主机基础设施（叫做代理服务器），通过这些代理服务器，UA能够发送注册、邀请信息到会话中，当然也包括其他请求。SIP是一个轻量级的，多用途的工具，可以用来创建，修改和终止会话，它独立运作于通讯协议之下，不依赖于正要建立的会话类型。</p>
+<p>SIP协议功能概况</p>
+<p>SIP是一个应用层的控制协议，可以用来建立、修改、和终止多媒体会话（或者会议）例如Internet 电话。SIP也可以邀请参与者参加已经存在的会话，比如多方会议。媒体也可以从一个已经存在的会话中添加进来（或删除）。SIP显然也支持名字映射和重定向服务，这个可用于支持个人便携式设备－用户可以对外维护一个唯一的外部标志而不用考虑他们的实际网络地点。</p>
+<p>SIP建立和终止多媒体交流，有以下五个方面上的支持：</p>
+<p><strong>用户定位</strong>： 检查终端用户的位置，用于通讯。</p>
+<p><strong>用户有效性</strong>：检查用户参与会话的意愿程度。</p>
+<p><strong>用户能力</strong>：检查媒体和媒体的参数。</p>
+<p><strong>建立会话</strong>：”ringing”, 响铃 确立会话参数在呼叫方和被叫方。</p>
+<p><strong>会话管理</strong>：包括发送和终止会话，修改会话参数，激活服务等等。</p>
+<p>SIP不是要做一个垂直集成的通讯系统。SIP更宁愿做一个组件，可以被其他IETF协议锁使用来构造一个完整的多媒体架构。更具体一点来说，这些协议包括实时数据传输协议（RTP）（RFC 1889）用来传输实时的数据并且提供QoS反馈，实时流协议（RSTP）(RFC 2326)用于控制流媒体的的传输，媒体网关控制协议（MEGACO）(RFC 3015)用来控制到公共电话交换网（PSTN）的网关，还有会话描述协议（SDP）（RFC 2327）用于描述多媒体会话。因此，SIP应该和其他的协议一起工作，才能对终端用户的提供完整的服务。然而SIP协议的基本功能和操作是不依赖这些协议的。</p>
+<p>SIP本身并不提供服务，而是提供了一个基础来实现不同的服务。比如，SIP可以定位用户和传输一个封装好的对象到对方的当前位置且如果我们利用这点来通过SDP传输会话的描述，立刻，对方的用户代理可以得到这个会话的参数。如果我们用这个像传输会话描述（SESSION DESCRIPTION SD）一样传输呼叫方的照片，一个”呼叫ID”服务很容易就建立了。这个简单的例子说明了，SIP作为一个基础，可以在其上提供很多不同的服务。</p>
+<p>SIP并不提供会议控制服务（比如议席控制或者投票系统），并且并没有建议会议应该那样管理。可以通过在SIP上建立其他的会议控制协议来发起一个会议。由于SIP可以管理参与会议的各方的会话，所以会议可以跨异构的网络，SIP 并不能，也不打算提供任何形式的网络资源预定能力。</p>
+<p>安全对于提供的服务来说特别重要。要达到理想的安全程度，SIP提供了一套安全服务，包括防止拒绝服务，认证服务（用户到用户，代理到用户），完整性保证，加密和隐私服务。</p>
+<p>SIP可以基于IPV4也可以基于IPV6</p>
+</blockquote>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="/categories.html#wu-lian-wang-ref">物联网</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#protocol-ref">protocol
+                    <span>2</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
+
+
+    
+
+
+
+</body>
+</html>

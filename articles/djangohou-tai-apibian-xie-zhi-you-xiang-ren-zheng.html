@@ -139,10 +139,10 @@ django后台api编写之-邮箱认证  · cdwanze的博文
 <h2 id="_1">邮箱认证</h2>
 <p>参考了 <a href="https://medium.com/@frfahim/django-registration-with-confirmation-email-bb5da011e4ef">这篇文章</a> 。</p>
 <p>过程分为两步，发送验证邮箱，和接受确认邮箱链接：</p>
-<div class="highlight"><pre><span></span>    re_path(r'^users/verify_email/?$', VerifyEmailView.as_view(), name='users_verify_email'),
+<div class="highlight"><pre><span></span>    <span class="n">re_path</span><span class="p">(</span><span class="n">r</span><span class="s1">'^users/verify_email/?$'</span><span class="p">,</span> <span class="n">VerifyEmailView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'users_verify_email'</span><span class="p">),</span>
 
-    re_path(r'^users/confirm_email/(?P&lt;uidb64&gt;[0-9A-Za-z_\-]+)/(?P&lt;token&gt;[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$',
-            ConfirmEmailView.as_view(), name='users_confirm_email'),
+    <span class="n">re_path</span><span class="p">(</span><span class="n">r</span><span class="s1">'^users/confirm_email/(?P&lt;uidb64&gt;[0-9A-Za-z_\-]+)/(?P&lt;token&gt;[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$'</span><span class="p">,</span>
+            <span class="n">ConfirmEmailView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'users_confirm_email'</span><span class="p">),</span>
 </pre></div>
 <p>发送邮件的过程主要是填写一些必要信息，发送邮件即可：</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VerifyEmailView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
@@ -193,9 +193,9 @@ django后台api编写之-邮箱认证  · cdwanze的博文
 </pre></div>
 <p>这其中最大的技术点就是传递的token的加密解密过程。</p>
 <p>具体这里利用了django自带的密码重置的token检验系统：</p>
-<div class="highlight"><pre><span></span>'token': PasswordResetTokenGenerator().make_token(user),
+<div class="highlight"><pre><span></span><span class="s1">'token'</span><span class="p">:</span> <span class="n">PasswordResetTokenGenerator</span><span class="p">().</span><span class="n">make_token</span><span class="p">(</span><span class="k">user</span><span class="p">),</span>
 </pre></div>
-<div class="highlight"><pre><span></span>PasswordResetTokenGenerator().check_token(user, token)
+<div class="highlight"><pre><span></span><span class="n">PasswordResetTokenGenerator</span><span class="p">().</span><span class="n">check_token</span><span class="p">(</span><span class="k">user</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
 </pre></div>
 <p>这个有点类似于JWT 的token过程，然后额外加上的uid方便判断登录用户。</p>
             

@@ -161,53 +161,53 @@ django后台api编写之-其他技巧  · cdwanze的博文
 <h3 id="migrations">重置migrations</h3>
 <p>一般的方法把migrations文件删掉，把表格删掉并不能成功，因为他们忽视了django_migrations这个表格里面的数据（参考了 <a href="https://stackoverflow.com/questions/23755523/how-to-reset-migrations-in-django-1-7">这个网页</a>）。</p>
 <p>如果你把 <code>django_migrations</code> 里面的对应app的迁移数据删掉，然后再makemigrations和migrate，那么就更重新开始的一样。</p>
-<div class="highlight"><pre><span></span>python manage.py makemigrations app_name
-python manage.py migrate app_name
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">app_name</span>
+<span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="n">app_name</span>
 </pre></div>
 <h3 id="_2">处理列表对象</h3>
 <p>我们需要自定义一个model的新Field对象来解决这个问题，具体就叫做ListField。</p>
-<div class="highlight"><pre><span></span><span class="nx">def</span> <span class="nx">parse_to_python</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="o">:</span>
-    <span class="k">try</span><span class="o">:</span>
-        <span class="nx">value</span> <span class="o">=</span> <span class="nx">ast</span><span class="p">.</span><span class="nx">literal_eval</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nx">value</span>
-    <span class="nx">except</span> <span class="nx">Exception</span> <span class="kr">as</span> <span class="nx">e</span>:
-        <span class="kt">rasie</span> <span class="nx">ValidationError</span>
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">parse_to_python</span><span class="ss">(</span><span class="nv">value</span><span class="ss">)</span>:
+    <span class="nv">try</span>:
+        <span class="nv">value</span> <span class="o">=</span> <span class="nv">ast</span>.<span class="nv">literal_eval</span><span class="ss">(</span><span class="nv">value</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">value</span>
+    <span class="nv">except</span> <span class="nv">Exception</span> <span class="nv">as</span> <span class="nv">e</span>:
+        <span class="nv">rasie</span> <span class="nv">ValidationError</span>
 
 
-<span class="kr">class</span> <span class="nx">ListField</span><span class="p">(</span><span class="nx">models</span><span class="p">.</span><span class="nx">TextField</span><span class="p">)</span><span class="o">:</span>
+<span class="nv">class</span> <span class="nv">ListField</span><span class="ss">(</span><span class="nv">models</span>.<span class="nv">TextField</span><span class="ss">)</span>:
     <span class="s2">"""</span>
-<span class="s2">    存储python列表对象</span>
-<span class="s2">    """</span>
-    <span class="nx">description</span> <span class="o">=</span> <span class="nx">_</span><span class="p">(</span><span class="s2">"Stores a python list"</span><span class="p">)</span>
+    存储<span class="nv">python</span>列表对象
+    <span class="s2">"""</span>
+    <span class="nv">description</span> <span class="o">=</span> <span class="nv">_</span><span class="ss">(</span><span class="s2">"</span><span class="s">Stores a python list</span><span class="s2">"</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="o">*</span><span class="nx">args</span><span class="p">,</span> <span class="o">**</span><span class="nx">kwargs</span><span class="p">)</span><span class="o">:</span>
-        <span class="kr">super</span><span class="p">(</span><span class="nx">ListField</span><span class="p">,</span> <span class="nx">self</span><span class="p">).</span><span class="nx">__init__</span><span class="p">(</span><span class="o">*</span><span class="nx">args</span><span class="p">,</span> <span class="o">**</span><span class="nx">kwargs</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">__init__</span><span class="ss">(</span><span class="nv">self</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">super</span><span class="ss">(</span><span class="nv">ListField</span>, <span class="nv">self</span><span class="ss">)</span>.<span class="nv">__init__</span><span class="ss">(</span><span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">to_python</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">value</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">value</span> <span class="o">=</span> <span class="nx">value</span>
+    <span class="nv">def</span> <span class="nv">to_python</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">value</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">value</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="nv">value</span> <span class="o">=</span> <span class="nv">value</span>
 
-        <span class="k">if</span> <span class="nx">isinstance</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span><span class="o">:</span>
-            <span class="k">return</span> <span class="nx">value</span>
+        <span class="k">if</span> <span class="nv">isinstance</span><span class="ss">(</span><span class="nv">value</span>, <span class="nv">list</span><span class="ss">)</span>:
+            <span class="k">return</span> <span class="nv">value</span>
 
-        <span class="k">return</span> <span class="nx">parse_to_python</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nv">parse_to_python</span><span class="ss">(</span><span class="nv">value</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">get_prep_value</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">value</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">return</span> <span class="nx">value</span>
+    <span class="nv">def</span> <span class="nv">get_prep_value</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">value</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">value</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="k">return</span> <span class="nv">value</span>
 
-        <span class="nx">value</span> <span class="o">=</span> <span class="nx">six</span><span class="p">.</span><span class="nx">text_type</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nx">value</span>
+        <span class="nv">value</span> <span class="o">=</span> <span class="nv">six</span>.<span class="nv">text_type</span><span class="ss">(</span><span class="nv">value</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">value</span>
 
-    <span class="nx">def</span> <span class="nx">value_to_string</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">value</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">value_from_object</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">get_prep_value</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+    <span class="nv">def</span> <span class="nv">value_to_string</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">obj</span><span class="ss">)</span>:
+        <span class="nv">value</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">value_from_object</span><span class="ss">(</span><span class="nv">obj</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">get_prep_value</span><span class="ss">(</span><span class="nv">value</span><span class="ss">)</span>
 
-    <span class="nx">def</span> <span class="nx">from_db_value</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">expression</span><span class="p">,</span> <span class="nx">connection</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">value</span> <span class="nx">is</span> <span class="nx">None</span>:
-            <span class="kt">return</span> <span class="nx">value</span>
+    <span class="nv">def</span> <span class="nv">from_db_value</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">value</span>, <span class="nv">expression</span>, <span class="nv">connection</span>, <span class="nv">context</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">value</span> <span class="nv">is</span> <span class="nv">None</span>:
+            <span class="k">return</span> <span class="nv">value</span>
 
-        <span class="k">return</span> <span class="nx">parse_to_python</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nv">parse_to_python</span><span class="ss">(</span><span class="nv">value</span><span class="ss">)</span>
 </pre></div>
 <ul>
 <li>
@@ -224,17 +224,17 @@ python manage.py migrate app_name
 <p><code>value_to_string</code> 和序列化有关，和<code>to_python</code> 是相对的。<code>get_prep_value</code> 和我们在输入get(what='20170809') 执行查询是有关，讲过其转化成为sql实际查询中用到的字符串（比如说datetimefield）就做了一些额外的处理工作。 </p>
 <h3 id="_3">多数据库处理</h3>
 <p>一个django项目里面可能因为某些原因，某些app需要单独操作另外的数据库，这种情况你首先在 <code>settings</code> 那里定义好数据库的配置：</p>
-<div class="highlight"><pre><span></span>    DATABASES = {
-        'default': {
-            ...
-        },
-        'newdb': {
-            'ENGINE': 'django.db.backends.mysql',
-            ...
-        },
+<div class="highlight"><pre><span></span>    <span class="n">DATABASES</span> <span class="o">=</span> <span class="err">{</span>
+        <span class="s1">'default'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="p">...</span>
+        <span class="err">}</span><span class="p">,</span>
+        <span class="s1">'newdb'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'ENGINE'</span><span class="p">:</span> <span class="s1">'django.db.backends.mysql'</span><span class="p">,</span>
+            <span class="p">...</span>
+        <span class="err">}</span><span class="p">,</span>
 </pre></div>
 <p>然后加上这个dbroute对象：</p>
-<div class="highlight"><pre><span></span>DATABASE_ROUTERS = ['articles.dbrouter.ArticlesRouter']
+<div class="highlight"><pre><span></span><span class="n">DATABASE_ROUTERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'articles.dbrouter.ArticlesRouter'</span><span class="p">]</span>
 </pre></div>
 <p>然后在你的app那里定义好dbroute对象：</p>
 <div class="highlight"><pre><span></span><span class="x">class ArticlesRouter(object):</span>
@@ -263,33 +263,33 @@ python manage.py migrate app_name
 <h3 id="django">如何根据django的模型对象来获取其对应的表格的名字</h3>
 <p>参看 <a href="http://stackoverflow.com/questions/233045/how-to-read-the-database-table-name-of-a-model-instance">这个网页</a> 。</p>
 <p>答: </p>
-<div class="highlight"><pre><span></span>model_instance._meta.db_table
+<div class="highlight"><pre><span></span><span class="n">model_instance</span><span class="p">.</span><span class="n">_meta</span><span class="p">.</span><span class="n">db_table</span>
 </pre></div>
 <h3 id="djangoimagefield">如何使用好django的ImageField</h3>
 <p>参考了 <a href="http://gregblogs.com/django-saving-an-image-using-imagefield-explain-a-little/">这篇文章</a> 。</p>
 <p>ImageField和FileField很类似，除了还多了 <code>width</code> 和 <code>height</code> 属性，然后就是在上传的时候确保文件是图片文件。</p>
 <p>具体在模型文件中的定义如下:</p>
-<div class="highlight"><pre><span></span>banner = models.ImageField(upload_to=game_2048_images, blank=True,
-                           storage=OverwriteStorage(), default="placeholder.jpg")
+<div class="highlight"><pre><span></span><span class="n">banner</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="n">game_2048_images</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="k">True</span><span class="p">,</span>
+                           <span class="k">storage</span><span class="o">=</span><span class="n">OverwriteStorage</span><span class="p">(),</span> <span class="k">default</span><span class="o">=</span><span class="ss">"placeholder.jpg"</span><span class="p">)</span>
 </pre></div>
 <p>上面的 <code>upload_to</code> 是控制图片在计算机中的保存路径，可以直接指定一个文件夹路径，但这通常不够灵活，这里通过一个函数来实现更加灵活的路径指定:</p>
-<div class="highlight"><pre><span></span>def game_2048_images(instance, filename):
-    """
-    where image upload to.
-    """
-    return 'game/2048/images/{}/{}'.format(instance.user.username, filename)
+<div class="highlight"><pre><span></span><span class="nv">def</span> <span class="nv">game_2048_images</span><span class="ss">(</span><span class="nv">instance</span>, <span class="nv">filename</span><span class="ss">)</span>:
+    <span class="s2">"""</span>
+    <span class="nv">where</span> <span class="nv">image</span> <span class="nv">upload</span> <span class="nv">to</span>.
+    <span class="s2">"""</span>
+    <span class="k">return</span> <span class="s1">'</span><span class="s">game/2048/images/{}/{}</span><span class="s1">'</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">instance</span>.<span class="nv">user</span>.<span class="nv">username</span>, <span class="nv">filename</span><span class="ss">)</span>
 </pre></div>
 <p>这里具体路径是根据你在 <code>settings</code> 里面指定的 <code>MEDIA_ROOT</code> 而来，然后再指定里面的具体的文件夹路径。我们看到函数还可以接受具体模型对应的实例，从而建立自动根据user用户名来分配不同的文件夹路径。</p>
 <p><code>storage=OverwriteStorage()</code> 实现了如果文件名重复则覆盖的逻辑:</p>
-<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">OverwriteStorage</span><span class="p">(</span><span class="nx">FileSystemStorage</span><span class="p">)</span><span class="o">:</span>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">OverwriteStorage</span><span class="ss">(</span><span class="nv">FileSystemStorage</span><span class="ss">)</span>:
     <span class="s1">'''</span>
-<span class="s1">    存储文件或图片，如果文件名重复则覆盖。</span>
-<span class="s1">    '''</span>
+    存储文件或图片，如果文件名重复则覆盖。
+    <span class="s1">'''</span>
 
-    <span class="nx">def</span> <span class="nx">get_available_name</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">self</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">:</span>
-            <span class="nx">os</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">MEDIA_ROOT</span><span class="p">,</span> <span class="nx">name</span><span class="p">))</span>
-        <span class="k">return</span> <span class="nx">name</span>
+    <span class="nv">def</span> <span class="nv">get_available_name</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">name</span><span class="ss">)</span>:
+        <span class="k">if</span> <span class="nv">self</span>.<span class="nv">exists</span><span class="ss">(</span><span class="nv">name</span><span class="ss">)</span>:
+            <span class="nv">os</span>.<span class="nv">remove</span><span class="ss">(</span><span class="nv">os</span>.<span class="nv">path</span>.<span class="nv">join</span><span class="ss">(</span><span class="nv">settings</span>.<span class="nv">MEDIA_ROOT</span>, <span class="nv">name</span><span class="ss">))</span>
+        <span class="k">return</span> <span class="nv">name</span>
 </pre></div>
 <p>ImageField 可以和rest_framework的序列化类形成很好的联动，最后序列化之后返回的是文件路径url字符串，测试的时候我们可以如下用django来挂载这些静态资源文件，实际运营的时候则推荐用nginx怎么设置一下url分发。</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.conf.urls.static</span> <span class="kn">import</span> <span class="n">static</span>
@@ -299,35 +299,35 @@ python manage.py migrate app_name
     <span class="n">urlpatterns</span> <span class="o">+=</span> <span class="n">static</span><span class="p">(</span><span class="s1">'/data/'</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span><span class="p">)</span>
 </pre></div>
 <p>在保存传过来的图片文件的时候，常规构建form对象也是可行的:</p>
-<div class="highlight"><pre><span></span>form = Game2048InfoForm(
-    request.POST, request.FILES, instance=target_info)
+<div class="highlight"><pre><span></span><span class="nv">form</span> <span class="o">=</span> <span class="nv">Game2048InfoForm</span><span class="ss">(</span>
+    <span class="nv">request</span>.<span class="nv">POST</span>, <span class="nv">request</span>.<span class="nv">FILES</span>, <span class="nv">instance</span><span class="o">=</span><span class="nv">target_info</span><span class="ss">)</span>
 
-if form.is_valid():
-    new_game_info = form.save()
-else:
-    logger.warning('form invalid')
+<span class="k">if</span> <span class="nv">form</span>.<span class="nv">is_valid</span><span class="ss">()</span>:
+    <span class="nv">new_game_info</span> <span class="o">=</span> <span class="nv">form</span>.<span class="nv">save</span><span class="ss">()</span>
+<span class="k">else</span>:
+    <span class="nv">logger</span>.<span class="nv">warning</span><span class="ss">(</span><span class="s1">'</span><span class="s">form invalid</span><span class="s1">'</span><span class="ss">)</span>
 </pre></div>
 <p>否则你需要通过:</p>
-<div class="highlight"><pre><span></span>request.FILES['imgfield']
+<div class="highlight"><pre><span></span><span class="n">request</span><span class="p">.</span><span class="n">FILES</span><span class="p">[</span><span class="s1">'imgfield'</span><span class="p">]</span>
 </pre></div>
 <p>这样的语法来获取图片内容。</p>
 <h3 id="djangomessages">django的messages系统</h3>
 <p>本小节主要参看了 <a href="https://www.webforefront.com/django/setupdjangomessages.html">这个网页</a> 。</p>
 <p>使用django的messages系统，首先需要如下所示在settings里面进行一些配置：</p>
-<div class="highlight"><pre><span></span>INSTALLED_APPS = [
-    'django.contrib.messages',
-    ......
+<div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="p">......</span>
 
-MIDDLEWARE_CLASSES = [
-    'django.contrib.messages.middleware.MessageMiddleware',
-    ......
+<span class="n">MIDDLEWARE_CLASSES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'django.contrib.messages.middleware.MessageMiddleware'</span><span class="p">,</span>
+    <span class="p">......</span>
 
-TEMPLATES = [
-    {
-         'OPTIONS': {
-            'context_processors': [
-                'django.contrib.messages.context_processors.messages',
-                ......
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="err">{</span>
+         <span class="s1">'OPTIONS'</span><span class="p">:</span> <span class="err">{</span>
+            <span class="s1">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s1">'django.contrib.messages.context_processors.messages'</span><span class="p">,</span>
+                <span class="p">......</span>
 </pre></div>
 <p>然后在views那边，使用 <code>messages.add_message()</code> 来往django信息系统里面发送一个信息，此外还有如下的这些快捷方法：</p>
 <ul>
@@ -360,18 +360,18 @@ TEMPLATES = [
     <span class="k">return</span> <span class="s1">'ok'</span>
 </pre></div>
 <p>之所以做这样的封装是为了更好地对接sweetalert这个javascript库，然后模块加入如下内容从而从而实现信息的具体弹出行为。</p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">messages</span> <span class="cp">%}</span>
-<span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">"</span><span class="cp">{%</span> <span class="k">static</span> <span class="s1">'js/sweetalert.min.js'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script&gt;</span>
-<span class="cp">{%</span> <span class="k">for</span> <span class="nv">msg</span> <span class="k">in</span> <span class="nv">messages</span> <span class="cp">%}</span>
-    sweetAlert({
-        title: '<span class="cp">{{</span><span class="nv">msg.extra_args</span><span class="cp">}}</span>',
-        text: '<span class="cp">{{</span> <span class="nv">msg.message</span> <span class="cp">}}</span>',
-        type: '<span class="cp">{{</span> <span class="nv">msg.level_tag</span> <span class="cp">}}</span>',
-      })
-<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
-<span class="nt">&lt;/script&gt;</span>
-<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="k">if</span> <span class="nv">messages</span> <span class="o">%</span>}
+<span class="o">&lt;</span><span class="nv">script</span> <span class="nv">src</span><span class="o">=</span><span class="s2">"</span><span class="s">{% static 'js/sweetalert.min.js' %}</span><span class="s2">"</span><span class="o">&gt;&lt;/</span><span class="nv">script</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nv">script</span><span class="o">&gt;</span>
+{<span class="o">%</span> <span class="k">for</span> <span class="nv">msg</span> <span class="nv">in</span> <span class="nv">messages</span> <span class="o">%</span>}
+    <span class="nv">sweetAlert</span><span class="ss">(</span>{
+        <span class="nv">title</span>: <span class="s1">'</span><span class="s">{{msg.extra_args}}</span><span class="s1">'</span>,
+        <span class="nv">text</span>: <span class="s1">'</span><span class="s">{{ msg.message }}</span><span class="s1">'</span>,
+        <span class="nv">type</span>: <span class="s1">'</span><span class="s">{{ msg.level_tag }}</span><span class="s1">'</span>,
+      }<span class="ss">)</span>
+{<span class="o">%</span> <span class="nv">endfor</span> <span class="o">%</span>}
+<span class="o">&lt;/</span><span class="nv">script</span><span class="o">&gt;</span>
+{<span class="o">%</span> <span class="k">endif</span> <span class="o">%</span>}
 </pre></div>
             
             

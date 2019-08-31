@@ -166,20 +166,20 @@ bash脚本入门  · cdwanze的博文
             
 <p>下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。</p>
 <h2 id="_1">变量</h2>
-<div class="highlight"><pre><span></span>i=2
+<div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">2</span>
 
-echo $i
+<span class="n">echo</span> <span class="err">$</span><span class="n">i</span>
 </pre></div>
 <p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
 <p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
 <h3 id="_2">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span>export PS1="=&gt;"
+<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS1</span><span class="o">=</span><span class="ss">"=&gt;"</span>
 </pre></div>
 <p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
 <p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
 <p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
 <p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span>export PS2="&gt;"
+<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS2</span><span class="o">=</span><span class="ss">"&gt;"</span>
 </pre></div>
 <h2 id="echo">echo命令</h2>
 <p>echo命令前面接触很多了，这里不赘述了。echo命令就是用于查看某个变量的值或者直接输出一行字符串。</p>
@@ -235,9 +235,9 @@ echo $i
 <div class="highlight"><pre><span></span><span class="k">for</span> animate in <span class="k">$(</span>seq <span class="m">4</span>.0 <span class="m">0</span>.1 <span class="m">8</span>.0<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  <span class="nb">echo</span> <span class="si">${</span><span class="nv">animate</span><span class="si">}</span> <span class="p">;</span> <span class="k">done</span>
 </pre></div>
 <p>关于seq命令我简单说下，请通过 <code>--help</code> 来查阅具体信息：</p>
-<div class="highlight"><pre><span></span>用法：seq [选项]... 尾数
-    或：seq [选项]... 首数 尾数
-    或：seq [选项]... 首数 增量 尾数
+<div class="highlight"><pre><span></span><span class="err">用法：</span><span class="n">seq</span> <span class="p">[</span><span class="err">选项</span><span class="p">]...</span> <span class="err">尾数</span>
+    <span class="err">或：</span><span class="n">seq</span> <span class="p">[</span><span class="err">选项</span><span class="p">]...</span> <span class="err">首数</span> <span class="err">尾数</span>
+    <span class="err">或：</span><span class="n">seq</span> <span class="p">[</span><span class="err">选项</span><span class="p">]...</span> <span class="err">首数</span> <span class="err">增量</span> <span class="err">尾数</span>
 </pre></div>
 <h3 id="_5">应用：批量创建文件</h3>
 <p>在文件夹里面输入如下命令：</p>
@@ -298,10 +298,10 @@ hello python
 <div class="highlight"><pre><span></span>python ~/thepython/scripts/whatdump_autoremove.py <span class="cp">${</span><span class="n">ALLOWED</span><span class="p">[</span><span class="err">@</span><span class="p">]</span><span class="cp">}</span>
 </pre></div>
 <p>就是将收集到的所有允许的文件名array传递进python脚本中去了。在python脚本中一个粗糙的做法就是如下这样引用</p>
-<div class="highlight"><pre><span></span>def main(args,path=""):
-    print args
+<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="ss">""</span><span class="p">):</span>
+    <span class="n">print</span> <span class="n">args</span>
 
-main(sys.argv[1:])
+<span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 </pre></div>
 <p>这样所有的这些array就传递进args里面去了，读者有兴趣可以试一下，这个args在python中就是一个列表对象了。到python里面了更复杂的逻辑我们都可以很快写出来了，我就不说了。</p>
 <p>大概类似下面所示，注意这里的pathlib在python3.4之后才会有，之前需要用pip安装之。</p>
@@ -338,7 +338,7 @@ main(sys.argv[1:])
 <p>之所以把date命令放在一章是因为date命令如果单独作为一个命令来使用，打印显示日期其实意义不是很大。但是在bash脚本中，在管道中，date命令却变得非常有用了。读者可以用 <code>--help</code> 查看一下帮助信息，这个命令比我们预想的还要复杂的多，而且这里的那些输出格式参数控制语法，就是到了其他编程语言中也是有用的（比如python的time模块中的strftime函数）。</p>
 <h3 id="date_1">date返回日期字符</h3>
 <p>date命令返回某个特定格式的日期在某些shell脚本中很有用，如下所示就是一个简单的例子：</p>
-<div class="highlight"><pre><span></span>date=$(date +"%F_%R");echo $date
+<div class="highlight"><pre><span></span><span class="nb">date</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="nb">date</span> <span class="o">+</span><span class="ss">"%F_%R"</span><span class="p">);</span><span class="n">echo</span> <span class="err">$</span><span class="nb">date</span>
 </pre></div>
 <p>date命令前面已谈到一点，更多信息请参看 <a href="http://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/">这篇文章</a>  。这里就不赘述了。</p>
             

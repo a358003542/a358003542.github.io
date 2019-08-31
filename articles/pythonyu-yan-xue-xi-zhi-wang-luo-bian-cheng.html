@@ -210,23 +210,23 @@ python语言学习之-网络编程  · cdwanze的博文
 <p>host最简单就是人们熟知的IP地址，然后就是由本地hosts文件解析或者网络DNS系统解析的名字。比如
 <code>localhost</code> 或者 <code>python.org</code> 等。socket模块里面有 <code>gethostbyname</code>
 函数，可以获取该hostname具体对应的IP地址。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; socket.gethostbyname('python.org')
-'104.130.43.121'
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">socket</span><span class="p">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="s1">'python.org'</span><span class="p">)</span>
+<span class="s1">'104.130.43.121'</span>
 </pre></div>
 <p>不过gethostbyname函数只支持IPv4地址，现在推荐使用 <code>getaddrinfo</code>
 函数，其同时支持IPv4和IPv6地址。其参数设置如下:</p>
-<div class="highlight"><pre><span></span>socket.getaddrinfo(host, port, family=0, type=0, proto=0, flags=0)
+<div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="k">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">proto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 <p>port可以填写80或者'http'这样的形式，或者设置为None。然后后面的family是地址族，type是套接字类型等，这些这里先暂时略过讨论。</p>
 <p>这个函数的返回值是一个列表，其内元素有如下结构:</p>
-<div class="highlight"><pre><span></span>(family, type, proto, canonname, sockaddr)
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">family</span><span class="p">,</span> <span class="k">type</span><span class="p">,</span> <span class="n">proto</span><span class="p">,</span> <span class="n">canonname</span><span class="p">,</span> <span class="n">sockaddr</span><span class="p">)</span>
 </pre></div>
 <p>具体如下所示:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; socket.getaddrinfo('www.github.com','https')
-[(&lt;AddressFamily.AF_INET: 2&gt;, &lt;SocketType.SOCK_STREAM: 1&gt;, 6, '', ('192.30.252.131', 443)),
-(&lt;AddressFamily.AF_INET: 2&gt;, &lt;SocketType.SOCK_DGRAM: 2&gt;, 17, '', ('192.30.252.131', 443)), 
-(&lt;AddressFamily.AF_INET: 2&gt;, &lt;SocketType.SOCK_STREAM: 1&gt;, 6, '', ('192.30.252.128', 443)), 
-(&lt;AddressFamily.AF_INET: 2&gt;, &lt;SocketType.SOCK_DGRAM: 2&gt;, 17, '', ('192.30.252.128', 443))]
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">socket</span><span class="p">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="s1">'www.github.com'</span><span class="p">,</span><span class="s1">'https'</span><span class="p">)</span>
+<span class="p">[(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketType</span><span class="p">.</span><span class="n">SOCK_STREAM</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="p">(</span><span class="s1">'192.30.252.131'</span><span class="p">,</span> <span class="mi">443</span><span class="p">)),</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketType</span><span class="p">.</span><span class="n">SOCK_DGRAM</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="p">(</span><span class="s1">'192.30.252.131'</span><span class="p">,</span> <span class="mi">443</span><span class="p">)),</span> 
+<span class="p">(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketType</span><span class="p">.</span><span class="n">SOCK_STREAM</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="p">(</span><span class="s1">'192.30.252.128'</span><span class="p">,</span> <span class="mi">443</span><span class="p">)),</span> 
+<span class="p">(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketType</span><span class="p">.</span><span class="n">SOCK_DGRAM</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="p">(</span><span class="s1">'192.30.252.128'</span><span class="p">,</span> <span class="mi">443</span><span class="p">))]</span>
 </pre></div>
 <p>这里的 <code>AF_INET</code>
 地址族是创建socket套接字对象时的默认地址族，其就是对应的IPv4地址。然后套接字类型
@@ -302,9 +302,9 @@ SOCK_RAW ， SOCK_RDM ， SOCK_SEQPACKET</p>
 </dd>
 </dl>
 <h2 id="timeout">timeout</h2>
-<div class="highlight"><pre><span></span>socket.settimeout(None)
-socket.settimeout(0)
-socket.settimeout(sec)
+<div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">.</span><span class="n">settimeout</span><span class="p">(</span><span class="k">None</span><span class="p">)</span>
+<span class="n">socket</span><span class="p">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">socket</span><span class="p">.</span><span class="n">settimeout</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
 </pre></div>
 <ul>
 <li>
@@ -320,15 +320,15 @@ socket.settimeout(sec)
 </ul>
 <p>此外还有 <code>setdefaulttimeout</code>
 函数可以全局设置后面所有创建的socket对象的timeout。</p>
-<div class="highlight"><pre><span></span>socket.setdefaulttimeout(10)
+<div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 <p>阻塞模式还可以如下设置：</p>
-<div class="highlight"><pre><span></span>socket.setblocking(True)
-socket.setblocking(False)
+<div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">.</span><span class="n">setblocking</span><span class="p">(</span><span class="k">True</span><span class="p">)</span>
+<span class="n">socket</span><span class="p">.</span><span class="n">setblocking</span><span class="p">(</span><span class="k">False</span><span class="p">)</span>
 </pre></div>
 <h2 id="listen">listen方法</h2>
 <p>服务器端套接字具体开始监听。</p>
-<div class="highlight"><pre><span></span>socket.listen([backlog])
+<div class="highlight"><pre><span></span><span class="n">socket</span><span class="p">.</span><span class="n">listen</span><span class="p">(</span><span class="o">[</span><span class="n">backlog</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <p>从python3.5开始，backlog参数为可选参数了。这个backlog的意思是最大等待连接数（如果超过这个数，新的连接将被拒绝）。这个数以前一般设置为5，因为那个时候系统最大也才允许是5，但现在可能需要再提高一点了，现在python3.5起，这个数成为可选参数了，文档上说会自动设置一个合适的数，所以就不需要我们操心了。</p>
 <p>更多细节请参看官方文档。</p>
@@ -726,16 +726,16 @@ socket.setblocking(False)
 </pre></div>
 </td></tr></table>
 <p>读者可以利用上面的两个脚本来具体测试一下效果。上面的两个脚本，客户端和服务器端都是阻塞式的。我们先开一个服务器端:</p>
-<div class="highlight"><pre><span></span>python3 slowpoetry.py -p 10000 ecstasy.txt
+<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">slowpoetry</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">p</span> <span class="mi">10000</span> <span class="n">ecstasy</span><span class="p">.</span><span class="n">txt</span>
 </pre></div>
 <p>然后开两个终端，同时刷如下命令，我们就能看到其中后执行的那个终端的获取文本是被阻塞了的------这是服务器阻塞了。</p>
-<div class="highlight"><pre><span></span>python3 slowpoetry.py -p 10000 ecstasy.txt
+<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">slowpoetry</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">p</span> <span class="mi">10000</span> <span class="n">ecstasy</span><span class="p">.</span><span class="n">txt</span>
 </pre></div>
 <p>然后我们在开一个服务器端:</p>
-<div class="highlight"><pre><span></span>python3 slowpoetry.py -p 10001  fascination.txt
+<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">slowpoetry</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">p</span> <span class="mi">10001</span>  <span class="n">fascination</span><span class="p">.</span><span class="n">txt</span>
 </pre></div>
 <p>然后一个客户端运行如下:</p>
-<div class="highlight"><pre><span></span>python3 get_poetry.py 10000 10001
+<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">get_poetry</span><span class="p">.</span><span class="n">py</span> <span class="mi">10000</span> <span class="mi">10001</span>
 </pre></div>
 <p>然后我们看到这个客户端获取文本是一个个来的，这是客户端阻塞了。</p>
 <p>这种一个个来，一个任务做完才能进行下一个的模式是很好理解的，但进程间的通信可以不是这样，请看下面的select风格I/O复用的讨论。</p>
@@ -764,20 +764,20 @@ socket.setblocking(False)
 。python中的twisted模块和python3.4之后新出来的<strong>asyncio</strong>
 模块里面的事件循环都是基于 然后再建立起来的类异步I/O概念。</p>
 <p>下面将重点结合python的selectors模块来分析这种I/O复用模型。selectors模块从python3.4开始才有，其建构在select模块之上。其有如下五种内置的Selector:</p>
-<div class="highlight"><pre><span></span>-   SelectSelector
--   PollSelector
--   EpollSelector
--   DevpollSelector
--   KqueueSelector
+<div class="highlight"><pre><span></span><span class="o">-</span>   <span class="n">SelectSelector</span>
+<span class="o">-</span>   <span class="n">PollSelector</span>
+<span class="o">-</span>   <span class="n">EpollSelector</span>
+<span class="o">-</span>   <span class="n">DevpollSelector</span>
+<span class="o">-</span>   <span class="n">KqueueSelector</span>
 </pre></div>
 <p>不过我们实际使用就使用 <code>DefaultSelector</code>
 即可，python会自动选择当前平台最好的Selector。</p>
 <p>具体创建一个Selector对象如下所示:</p>
-<div class="highlight"><pre><span></span>sel = selectors.DefaultSelector()
+<div class="highlight"><pre><span></span><span class="n">sel</span> <span class="o">=</span> <span class="n">selectors</span><span class="p">.</span><span class="n">DefaultSelector</span><span class="p">()</span>
 </pre></div>
 <h3 id="_7">监控文件读写事件</h3>
 <p>Selector对象有个register方法，如下所示：</p>
-<div class="highlight"><pre><span></span>register(fileobj, events, data=None)
+<div class="highlight"><pre><span></span><span class="n">register</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="k">data</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
 </pre></div>
 <p>其中fileobj为某文件对象（在Linux中一切皆文件，所以套接字也可以视为一个文件。）。</p>
 <p>这里可以监控的事件有:</p>
@@ -1645,12 +1645,12 @@ socket.setblocking(False)
 </pre></div>
 </td></tr></table>
 <p>值得一提的是这里的读完毕的判断逻辑:</p>
-<div class="highlight"><pre><span></span>    if not bstring:##end fo reading
-        eventloop.remove_reader(sock)
-        sock.close()
-        infile.close()
-        print('end of reading')
-        return True
+<div class="highlight"><pre><span></span>    <span class="k">if</span> <span class="nv">not</span> <span class="nv">bstring</span>:##<span class="k">end</span> <span class="nv">fo</span> <span class="nv">reading</span>
+        <span class="nv">eventloop</span>.<span class="nv">remove_reader</span><span class="ss">(</span><span class="nv">sock</span><span class="ss">)</span>
+        <span class="nv">sock</span>.<span class="nv">close</span><span class="ss">()</span>
+        <span class="nv">infile</span>.<span class="nv">close</span><span class="ss">()</span>
+        <span class="nv">print</span><span class="ss">(</span><span class="s1">'</span><span class="s">end of reading</span><span class="s1">'</span><span class="ss">)</span>
+        <span class="k">return</span> <span class="nv">True</span>
 </pre></div>
 <p>如果读半部关闭，则将返回0，所以可以如上来判断读操作是否完毕了。</p>
 <h3 id="_8">自定义协议版</h3>

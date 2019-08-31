@@ -244,14 +244,14 @@ python语言学习之-官方模块第三谈  · cdwanze的博文
 </dd>
 </dl>
 <h3 id="re_2">re模块中的特殊字符类</h3>
-<div class="highlight"><pre><span></span>\w  任意的字母或数字  [a-zA-Z0-9_]  (meaning word)
-\W  匹配任何非字母非数字 [^a-zA-Z0-9_]
-\d   [0-9]   (digit) 数字
-\D  [^0-9] 非数字
-\s   匹配任何空白字符   [ \t\n\r\f\v] 。
-\S  匹配任何非空白字符
-匹配中文:[\u4e00-\u9fa5]
-\b  文档说严格的定义是\w 和\W 之间的边界，反之亦然。粗略的理解可以看作是英文单词头或者尾。
+<div class="highlight"><pre><span></span><span class="err">\</span><span class="n">w</span>  <span class="err">任意的字母或数字</span>  <span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">zA</span><span class="o">-</span><span class="n">Z0</span><span class="o">-</span><span class="mi">9</span><span class="n">_</span><span class="p">]</span>  <span class="p">(</span><span class="n">meaning</span> <span class="n">word</span><span class="p">)</span>
+<span class="err">\</span><span class="n">W</span>  <span class="err">匹配任何非字母非数字</span> <span class="p">[</span><span class="o">^</span><span class="n">a</span><span class="o">-</span><span class="n">zA</span><span class="o">-</span><span class="n">Z0</span><span class="o">-</span><span class="mi">9</span><span class="n">_</span><span class="p">]</span>
+<span class="err">\</span><span class="n">d</span>   <span class="p">[</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span>   <span class="p">(</span><span class="n">digit</span><span class="p">)</span> <span class="err">数字</span>
+<span class="err">\</span><span class="n">D</span>  <span class="p">[</span><span class="o">^</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span> <span class="err">非数字</span>
+<span class="err">\</span><span class="n">s</span>   <span class="err">匹配任何空白字符</span>   <span class="p">[</span> <span class="err">\</span><span class="n">t</span><span class="err">\</span><span class="n">n</span><span class="err">\</span><span class="n">r</span><span class="err">\</span><span class="n">f</span><span class="err">\</span><span class="n">v</span><span class="p">]</span> <span class="err">。</span>
+<span class="err">\</span><span class="n">S</span>  <span class="err">匹配任何非空白字符</span>
+<span class="err">匹配中文</span><span class="p">:[</span><span class="err">\</span><span class="n">u4e00</span><span class="o">-</span><span class="err">\</span><span class="n">u9fa5</span><span class="p">]</span>
+<span class="err">\</span><span class="n">b</span>  <span class="err">文档说严格的定义是\</span><span class="n">w</span> <span class="err">和\</span><span class="n">W</span> <span class="err">之间的边界，反之亦然。粗略的理解可以看作是英文单词头或者尾。</span>
 </pre></div>
 <p>其中\^在方括号[]里面，只有在最前面，才表示排除型字符组的意思。</p>
 <h3 id="_1">转义问题</h3>
@@ -264,8 +264,8 @@ object这一条线这里略过了，接下来的讨论全部基于（原始的�
 <p>字符串模板前面提及(?m)和(?s)的用法了，然后<strong>(?i)</strong>表示忽略大小写。</p>
 <h4 id="_2">匹配和查找</h4>
 <p>search，match方法简单地用法就是：</p>
-<div class="highlight"><pre><span></span>re.search(字符串模板, 待匹配字符串)
-re.match(pattern, string)
+<div class="highlight"><pre><span></span><span class="n">re</span><span class="p">.</span><span class="k">search</span><span class="p">(</span><span class="err">字符串模板</span><span class="p">,</span> <span class="err">待匹配字符串</span><span class="p">)</span>
+<span class="n">re</span><span class="p">.</span><span class="k">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
 </pre></div>
 <p>它们将会返回一个match object或者none，其中match
 object在逻辑上就是真值的意思。match对字符串的匹配是必须从一开始就精确匹配，这对于正则表达式多少0有点突兀。推荐使用search方法，如果一定要限定行首，或者字符串开始可以用前面讨论的正则表达式各个符号来表达。请看下面的例子。</p>
@@ -285,12 +285,12 @@ object在逻辑上就是真值的意思。match对字符串的匹配是必须从
     <span class="k">print</span><span class="p">(</span><span class="s1">'return the none value'</span><span class="p">)</span>
 </pre></div>
 <p>前面说道圆括号的部分将会记忆起来，作为匹配的结果，默认整个正则表达式所匹配的全部是group中的第0个元素，然后从左到右，子group编号依次是1，2，3......。</p>
-<div class="highlight"><pre><span></span>所使用的正则表达式是： re.compile('(?m)^today', re.MULTILINE)
-所输入的字符串是： this is test line.
-this is the second line.
-today is sunday.
-匹配的结果是： today
-匹配的字符串index (44, 49)
+<div class="highlight"><pre><span></span><span class="err">所使用的正则表达式是：</span> <span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'(?m)^today'</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+<span class="err">所输入的字符串是：</span> <span class="n">this</span> <span class="k">is</span> <span class="n">test</span> <span class="n">line</span><span class="p">.</span>
+<span class="n">this</span> <span class="k">is</span> <span class="n">the</span> <span class="k">second</span> <span class="n">line</span><span class="p">.</span>
+<span class="n">today</span> <span class="k">is</span> <span class="n">sunday</span><span class="p">.</span>
+<span class="err">匹配的结果是：</span> <span class="n">today</span>
+<span class="err">匹配的字符串</span><span class="k">index</span> <span class="p">(</span><span class="mi">44</span><span class="p">,</span> <span class="mi">49</span><span class="p">)</span>
 </pre></div>
 <p>具体这些信息是为了说明情况，实际最简单的情况可能就需要判断一下是不是真值，字符串模板是不是匹配到了即可。</p>
 <h4 id="_3">分割操作</h4>
@@ -319,15 +319,15 @@ today is sunday.
 <p>基于正则表达式的替换操作非常的有用，其实前面的search方法，再加上具体匹配字符串的索引值，然后修改原字符串，然后再search这样循环操作下去，就是一个替换操作了。re模块有sub方法来专门解决这个问题。</p>
 <h4 id="_5">非最长匹配</h4>
 <p>本小节参考了 python cookbook 的 2.7 小节，比如说：</p>
-<div class="highlight"><pre><span></span>re.compile(r'"(.*)"')
+<div class="highlight"><pre><span></span><span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">r</span><span class="s1">'"(.*)"'</span><span class="p">)</span>
 </pre></div>
 <p>这将匹配两个双引号之间的内容，其默认是最长匹配，也就是多个双引号组成的句子都会匹配进去，你可以如下要要求最短匹配：</p>
-<div class="highlight"><pre><span></span>re.compile(r'"(.*?)"')
+<div class="highlight"><pre><span></span><span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">r</span><span class="s1">'"(.*?)"'</span><span class="p">)</span>
 </pre></div>
 <h4 id="_6">非捕获组</h4>
 <p>看下面的正则表达式， <code>(?:...)</code> 这个括号的组是非捕获组，也就是不会进入
 .group 里面去。</p>
-<div class="highlight"><pre><span></span>re.search(r'((?:.|\n)*)',text2)
+<div class="highlight"><pre><span></span><span class="n">re</span><span class="p">.</span><span class="k">search</span><span class="p">(</span><span class="n">r</span><span class="s1">'((?:.|\n)*)'</span><span class="p">,</span><span class="n">text2</span><span class="p">)</span>
 </pre></div>
 <p>然后默认 <code>.</code> 是不会匹配换行符号的，如果要引入换行符则要如上所示加上。</p>
 <h2 id="abc">abc模块</h2>
@@ -365,13 +365,13 @@ today is sunday.
 </pre></div>
 <p>这是简单的一个例子了，现在脚本还不可以接受任何参数，只可以用 <code>-h</code> 或
 <code>--help</code> 来查看一些信息，如下所示。</p>
-<div class="highlight"><pre><span></span>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
-usage: 
-this is a example to show argparse usage
- [-h]
+<div class="highlight"><pre><span></span><span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu64</span>:<span class="o">~/</span>桌面$ <span class="nv">python3</span> <span class="nv">hello</span>.<span class="nv">py</span> <span class="o">-</span><span class="nv">h</span>
+<span class="nv">usage</span>: 
+<span class="nv">this</span> <span class="nv">is</span> <span class="nv">a</span> <span class="nv">example</span> <span class="nv">to</span> <span class="k">show</span> <span class="nv">argparse</span> <span class="nv">usage</span>
+ [<span class="o">-</span><span class="nv">h</span>]
 
-optional arguments:
-  -h, --help  show this help message and exit
+<span class="nv">optional</span> <span class="nv">arguments</span>:
+  <span class="o">-</span><span class="nv">h</span>, <span class="o">--</span><span class="nv">help</span>  <span class="k">show</span> <span class="nv">this</span> <span class="nv">help</span> <span class="nv">message</span> <span class="nv">and</span> <span class="k">exit</span>
 </pre></div>
 <p>其首先是新建一个parser，上面ArgumentParser的usage是可选参数，就是命令行的一些描述信息。然后需要调用parser的
 <code>parse_args</code> 方法，其就是具体将命令行接受的一些参数刷进去。</p>
@@ -390,13 +390,13 @@ optional arguments:
 <span class="k">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 <p>这样命令行的帮助信息就变成如下所示了:</p>
-<div class="highlight"><pre><span></span>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
-usage: 
-this is a example to show argparse usage
+<div class="highlight"><pre><span></span><span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu64</span>:<span class="o">~/</span>桌面$ <span class="nv">python3</span> <span class="nv">hello</span>.<span class="nv">py</span> <span class="o">-</span><span class="nv">h</span>
+<span class="nv">usage</span>: 
+<span class="nv">this</span> <span class="nv">is</span> <span class="nv">a</span> <span class="nv">example</span> <span class="nv">to</span> <span class="k">show</span> <span class="nv">argparse</span> <span class="nv">usage</span>
 
-optional arguments:
-  -h, --help       show this help message and exit
-  --config CONFIG  the config file path
+<span class="nv">optional</span> <span class="nv">arguments</span>:
+  <span class="o">-</span><span class="nv">h</span>, <span class="o">--</span><span class="nv">help</span>       <span class="k">show</span> <span class="nv">this</span> <span class="nv">help</span> <span class="nv">message</span> <span class="nv">and</span> <span class="k">exit</span>
+  <span class="o">--</span><span class="nv">config</span> <span class="nv">CONFIG</span>  <span class="nv">the</span> <span class="nv">config</span> <span class="nv">file</span> <span class="nv">path</span>
 </pre></div>
 <p>如果我们如下输入则有:</p>
 <div class="highlight"><pre><span></span><span class="n">wanze@wanze</span><span class="o">-</span><span class="n">ubuntu64</span><span class="p">:</span><span class="err">~</span><span class="o">/</span><span class="err">桌面$</span> <span class="n">python3</span> <span class="n">hello</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">config</span><span class="o">=</span><span class="c">'config.cfg'</span>
@@ -442,8 +442,8 @@ optional arguments:
 <span class="k">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </pre></div>
 <p>然后我们看到字典输入如下:</p>
-<div class="highlight"><pre><span></span>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
-{'configpath': 'config.cfg'}
+<div class="highlight"><pre><span></span><span class="n">wanze</span><span class="nv">@wanze</span><span class="o">-</span><span class="nl">ubuntu64</span><span class="p">:</span><span class="o">~/</span><span class="n">桌面</span><span class="err">$</span><span class="w"> </span><span class="n">python3</span><span class="w"> </span><span class="n">hello</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="c1">--config='config.cfg'</span>
+<span class="err">{</span><span class="s1">'configpath'</span><span class="err">:</span><span class="w"> </span><span class="s1">'config.cfg'</span><span class="err">}</span><span class="w"></span>
 </pre></div>
 <p>当然一般就默认设置成为和长名字可选参数一致，没必要这么折腾。类似的你还可以继续用
 <code>add_argument</code> 方法来添加其他的可选参数，然后 <code>add_argument</code>
@@ -469,7 +469,7 @@ optional arguments:
 </dl>
 <p>必填参数的添加如下所示，除了这个\"target\"名字前面没有 <code>--</code>
 之外，和可选参数用法大致类似，其刷入args字典之后的key就是\"target\"这个名字。</p>
-<div class="highlight"><pre><span></span>parser.add_argument('target',help="必填参数")
+<div class="highlight"><pre><span></span><span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'target'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="ss">"必填参数"</span><span class="p">)</span>
 </pre></div>
 <p>不过必填参数和可选参数在某些细节上还是有点差异的，后面会提及。</p>
 <h4 id="nargs">nargs选项设置</h4>
@@ -554,29 +554,29 @@ optional arguments:
 </pre></div>
 </td></tr></table>
 <p>具体运行情况如下所示:</p>
-<div class="highlight"><pre><span></span>wanze@wanze-ubuntu64:~/图片$ python3 resizeimg.py --help
-usage: 
-resize the image
+<div class="highlight"><pre><span></span><span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu64</span>:<span class="o">~/</span>图片$ <span class="nv">python3</span> <span class="nv">resizeimg</span>.<span class="nv">py</span> <span class="o">--</span><span class="nv">help</span>
+<span class="nv">usage</span>: 
+<span class="nv">resize</span> <span class="nv">the</span> <span class="nv">image</span>
 
-positional arguments:
-  inputimg              the input image
+<span class="nv">positional</span> <span class="nv">arguments</span>:
+  <span class="nv">inputimg</span>              <span class="nv">the</span> <span class="nv">input</span> <span class="nv">image</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -c CONFIGPATH, --config CONFIGPATH
-                        the config file path
-  --width WIDTH         the input image
+<span class="nv">optional</span> <span class="nv">arguments</span>:
+  <span class="o">-</span><span class="nv">h</span>, <span class="o">--</span><span class="nv">help</span>            <span class="k">show</span> <span class="nv">this</span> <span class="nv">help</span> <span class="nv">message</span> <span class="nv">and</span> <span class="k">exit</span>
+  <span class="o">-</span><span class="nv">c</span> <span class="nv">CONFIGPATH</span>, <span class="o">--</span><span class="nv">config</span> <span class="nv">CONFIGPATH</span>
+                        <span class="nv">the</span> <span class="nv">config</span> <span class="nv">file</span> <span class="nv">path</span>
+  <span class="o">--</span><span class="nv">width</span> <span class="nv">WIDTH</span>         <span class="nv">the</span> <span class="nv">input</span> <span class="nv">image</span>
 
-wanze@wanze-ubuntu64:~/图片$ python3 resizeimg.py --width=300 *.png
-resize image
-the input image is 2015-01-27 13:16:46 的屏幕截图.png
-the target width is 300
-resize image
-the input image is 2015-05-03 18:17:19屏幕截图.png
-the target width is 300
-resize image
-the input image is 2015-05-03 18:20:45屏幕截图.png
-the target width is 300
+<span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu64</span>:<span class="o">~/</span>图片$ <span class="nv">python3</span> <span class="nv">resizeimg</span>.<span class="nv">py</span> <span class="o">--</span><span class="nv">width</span><span class="o">=</span><span class="mi">300</span> <span class="o">*</span>.<span class="nv">png</span>
+<span class="nv">resize</span> <span class="nv">image</span>
+<span class="nv">the</span> <span class="nv">input</span> <span class="nv">image</span> <span class="nv">is</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">27</span> <span class="mi">13</span>:<span class="mi">16</span>:<span class="mi">46</span> 的屏幕截图.<span class="nv">png</span>
+<span class="nv">the</span> <span class="nv">target</span> <span class="nv">width</span> <span class="nv">is</span> <span class="mi">300</span>
+<span class="nv">resize</span> <span class="nv">image</span>
+<span class="nv">the</span> <span class="nv">input</span> <span class="nv">image</span> <span class="nv">is</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">03</span> <span class="mi">18</span>:<span class="mi">17</span>:<span class="mi">19</span>屏幕截图.<span class="nv">png</span>
+<span class="nv">the</span> <span class="nv">target</span> <span class="nv">width</span> <span class="nv">is</span> <span class="mi">300</span>
+<span class="nv">resize</span> <span class="nv">image</span>
+<span class="nv">the</span> <span class="nv">input</span> <span class="nv">image</span> <span class="nv">is</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">03</span> <span class="mi">18</span>:<span class="mi">20</span>:<span class="mi">45</span>屏幕截图.<span class="nv">png</span>
+<span class="nv">the</span> <span class="nv">target</span> <span class="nv">width</span> <span class="nv">is</span> <span class="mi">300</span>
 ....
 </pre></div>
 <h3 id="_10">命令行选项关联其他动作</h3>
@@ -587,7 +587,7 @@ the target width is 300
 <h4 id="store95const">store_const</h4>
 <p>如果是默认的store，则通常是需要指明具体值的，如果设置action为
 <code>store_const</code> 了:</p>
-<div class="highlight"><pre><span></span>parser.add_argument('--foo', action='store_const', const=42)
+<div class="highlight"><pre><span></span><span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--foo'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">'store_const'</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
 <p>那么如下就会自动设置该值，这和default默认值的区别是这个选项的值要求是某个常量值。</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">python3</span> <span class="n">test2</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">foo</span>
@@ -595,7 +595,7 @@ the target width is 300
 </pre></div>
 <h4 id="store95true-store95false">store_true 和 store_false</h4>
 <p>如果写为:</p>
-<div class="highlight"><pre><span></span>parser.add_argument('--foo', action='store_true')
+<div class="highlight"><pre><span></span><span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--foo'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">'store_true'</span><span class="p">)</span>
 </pre></div>
 <p>则其存储的就是 <code>True</code> 值:</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">python3</span> <span class="n">test2</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">foo</span> 
@@ -673,19 +673,19 @@ float
 <h3 id="ordereddict">OrderedDict对象</h3>
 <p>python中的字典对象默认各个key是没有顺序的，OrderdDict对象的概念就是在字典概念的基础上让各个key有顺序。</p>
 <p>一个例子如下所示（来自官方文档）。简单的理解就是一个字典对象记住了各个key的插入顺序。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; d = {'banana': 3, 'apple':4, 'pear': 1, 'orange': 2}
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'banana'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'apple'</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'pear'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'orange'</span><span class="p">:</span> <span class="mi">2</span><span class="err">}</span>
 
-&gt;&gt;&gt; # dictionary sorted by key
-&gt;&gt;&gt; OrderedDict(sorted(d.items(), key=lambda t: t[0]))
-OrderedDict([('apple', 4), ('banana', 3), ('orange', 2), ('pear', 1)])
+<span class="o">&gt;&gt;&gt;</span> <span class="o">#</span> <span class="k">dictionary</span> <span class="n">sorted</span> <span class="k">by</span> <span class="k">key</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">items</span><span class="p">(),</span> <span class="k">key</span><span class="o">=</span><span class="n">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">OrderedDict</span><span class="p">([(</span><span class="s1">'apple'</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">'banana'</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">'orange'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">'pear'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
 
-&gt;&gt;&gt; # dictionary sorted by value
-&gt;&gt;&gt; OrderedDict(sorted(d.items(), key=lambda t: t[1]))
-OrderedDict([('pear', 1), ('orange', 2), ('banana', 3), ('apple', 4)])
+<span class="o">&gt;&gt;&gt;</span> <span class="o">#</span> <span class="k">dictionary</span> <span class="n">sorted</span> <span class="k">by</span> <span class="n">value</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">items</span><span class="p">(),</span> <span class="k">key</span><span class="o">=</span><span class="n">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">OrderedDict</span><span class="p">([(</span><span class="s1">'pear'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">'orange'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">'banana'</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">'apple'</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
 
-&gt;&gt;&gt; # dictionary sorted by length of the key string
-&gt;&gt;&gt; OrderedDict(sorted(d.items(), key=lambda t: len(t[0])))
-OrderedDict([('pear', 1), ('apple', 4), ('orange', 2), ('banana', 3)])
+<span class="o">&gt;&gt;&gt;</span> <span class="o">#</span> <span class="k">dictionary</span> <span class="n">sorted</span> <span class="k">by</span> <span class="k">length</span> <span class="k">of</span> <span class="n">the</span> <span class="k">key</span> <span class="n">string</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">items</span><span class="p">(),</span> <span class="k">key</span><span class="o">=</span><span class="n">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">len</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+<span class="n">OrderedDict</span><span class="p">([(</span><span class="s1">'pear'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">'apple'</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">'orange'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">'banana'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
 </pre></div>
 <h2 id="configparser">configparser模块</h2>
 <p>简单的配置文件管理就用python的内置模块configparser。python2对应的模块名字叫
@@ -697,29 +697,29 @@ ConfigParser 。</p>
 </pre></div>
 <h3 id="config">读取某个config文件</h3>
 <p>调用read方法具体读取某个config文件。</p>
-<div class="highlight"><pre><span></span>config.read('test.cfg')
+<div class="highlight"><pre><span></span><span class="n">config</span><span class="p">.</span><span class="k">read</span><span class="p">(</span><span class="s1">'test.cfg'</span><span class="p">)</span>
 </pre></div>
 <h3 id="configparser_2">如同字典一般操作configparser对象</h3>
 <p>然后接下来就是如同字典一般操作这个configparser对象。其中 'DEFAULT'
 是特殊的section，大致如下这样表达:</p>
-<div class="highlight"><pre><span></span>config['DEFAULT'] = {'ServerAliveInterval': '45',
-                     'Compression': 'yes',
-                     'CompressionLevel': '9'}
-config['bitbucket.org'] = {}
-config['bitbucket.org']['User'] = 'hg'
-config['topsecret.server.com'] = {}
+<div class="highlight"><pre><span></span><span class="n">config</span><span class="p">[</span><span class="s1">'DEFAULT'</span><span class="p">]</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'ServerAliveInterval'</span><span class="p">:</span> <span class="s1">'45'</span><span class="p">,</span>
+                     <span class="s1">'Compression'</span><span class="p">:</span> <span class="s1">'yes'</span><span class="p">,</span>
+                     <span class="s1">'CompressionLevel'</span><span class="p">:</span> <span class="s1">'9'</span><span class="err">}</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">'bitbucket.org'</span><span class="p">]</span> <span class="o">=</span> <span class="err">{}</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">'bitbucket.org'</span><span class="p">][</span><span class="s1">'User'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'hg'</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">'topsecret.server.com'</span><span class="p">]</span> <span class="o">=</span> <span class="err">{}</span>
 </pre></div>
 <h3 id="write">调用write方法写入</h3>
-<div class="highlight"><pre><span></span>with open('example.ini', 'w') as configfile:
-    config.write(configfile)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="k">open</span><span class="p">(</span><span class="s1">'example.ini'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
+    <span class="n">config</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="n">configfile</span><span class="p">)</span>
 </pre></div>
 <h3 id="_11">不默认更改大小写</h3>
 <p>具体请参看
 <a href="http://stackoverflow.com/questions/19359556/configparser-reads-capital-keys-and-make-them-lower-case">这个网页</a>
 ，configparser模块默认把 option name 也就是每个section的key
 name改成小写，我不太喜欢这种风格，因为将configparser刷成字典值时，我们通常认为字典的key大小写是区分的，可以如下改动，然后就不自动进行小写操作了:</p>
-<div class="highlight"><pre><span></span>self.cfg = configparser.ConfigParser()
-self.cfg.optionxform = str## not auto make it lowercase
+<div class="highlight"><pre><span></span><span class="k">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">configparser</span><span class="p">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="k">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="n">optionxform</span> <span class="o">=</span> <span class="n">str</span><span class="o">##</span> <span class="k">not</span> <span class="n">auto</span> <span class="n">make</span> <span class="n">it</span> <span class="n">lowercase</span>
 </pre></div>
 <h2 id="csv">csv模块</h2>
 <p>下面主要介绍了自定义csv方言的情况，更加简单的txt文本样式，有时使用pandas会很方便，有时就是简单的使用自己定义的逗号分隔，一行行附加打印入文本即可，并不需要特别的处理。</p>

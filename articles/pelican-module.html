@@ -166,10 +166,10 @@ pelican模块  · cdwanze的博文
 <p>然后发布到远程机器pulish还会有其他一些额外的东西，比如 <code>DISQUS_SITENAME</code> 这个值，很多模板会根据这个值来决定是否开启disqus的javascript引用，而DISQUS系统在本机调试的时候是没有意义的，一般会不设置这个值从而自动关闭它。</p>
 <p><code>publishconf.py</code> 也许还有其他一些考虑，这里就略过了，下面将集中将 <code>pelicanconf.py</code> 里面的配置。</p>
 <p>然后我们看到 <code>Makefile</code> 这个文件，这个脚本很好用，下面这些命令是很经常用到的：</p>
-<div class="highlight"><pre><span></span>make html
-make serve
-make github
-...
+<div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">html</span>
+<span class="n">make</span> <span class="n">serve</span>
+<span class="n">make</span> <span class="n">github</span>
+<span class="p">...</span>
 </pre></div>
 <p>其中make github会把你的output里面的内容刷到github pages对应的项目上去，其依赖于生成目标 <code>publish</code> ，而make publish和make html的惟一区别就是上面讨论的调用的那个具体的配置文件的不同。</p>
 <p>这个Makefile文件我做了一些精简，这些都是无关紧要的，惟一值得一提的就是github目标的生成命令我参考官方文档做了一些更改（请 <a href="http://docs.getpelican.com/en/3.6.3/tips.html#publishing-to-github">参看这里</a> ）：</p>
@@ -182,43 +182,43 @@ make github
 <h2 id="contentoutput">content和output文件夹说明</h2>
 <p>content 文件夹里面放着静态网站生成的源文件，接下来的讨论有些纯粹只是个人的设置偏好了，但都统一一并讲解了，具体DIY看读者自己的个人喜好了。</p>
 <p>articles里面放着markdown或者html的源文件，其中articles文件夹下还有一层子文件夹，这些文件夹的名字最后会成为 <code>Category</code> 。而这在设置有： </p>
-<div class="highlight"><pre><span></span>USE_FOLDER_AS_CATEGORY = True
+<div class="highlight"><pre><span></span><span class="n">USE_FOLDER_AS_CATEGORY</span> <span class="o">=</span> <span class="k">True</span>
 </pre></div>
 <p>然后html文件需要额外说一下，原网页的body里面的内容都会完整传过去，但是原html网页head部分里面除了必要的meta标签和title标签之外，其他多余的内容是传不过去的。那么css或者js的设置怎么弄呢，这个请参看后面的相关讨论，到时候设置好相关的meta标签即可。</p>
 <p>images和pdfs和data和extra文件夹其实名字都是随意的，只是一般这样写罢了，pdfs里面放pdf，images里面放图片等。这几个文件夹都是所谓的静态资源文件夹，等下生成output文件夹的时候，里面的内容都放送入到output文件夹里面去。你需要如下设置：</p>
-<div class="highlight"><pre><span></span>STATIC_PATHS = ['images',
-                'pdfs',
-                'data',
-                'extra',]
+<div class="highlight"><pre><span></span><span class="n">STATIC_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'images'</span><span class="p">,</span>
+                <span class="s1">'pdfs'</span><span class="p">,</span>
+                <span class="s1">'data'</span><span class="p">,</span>
+                <span class="s1">'extra'</span><span class="p">,]</span>
 </pre></div>
 <h2 id="_3">引用静态资源</h2>
 <p>比如在markdown里面引入图片如下所示：</p>
 <div class="highlight"><pre><span></span>![<span class="nt">img</span>](<span class="na">{static}/images/chemistry/Naphthalene.png</span>)
 </pre></div>
 <p>这里 <code>{static}</code> 后面就是具体要引用的文件路径。具体就是content文件夹下面的images文件夹，这个文件夹默认是要copy到输出文件夹根目录哪里去的。下面对extra这个文件夹多做一些说明，其是为了让网页加入favicon.ico静态文件的，你还需要如下设置：</p>
-<div class="highlight"><pre><span></span>EXTRA_PATH_METADATA = {
-    'extra/favicon.ico': {'path': 'favicon.ico'}
-}
+<div class="highlight"><pre><span></span><span class="n">EXTRA_PATH_METADATA</span> <span class="o">=</span> <span class="err">{</span>
+    <span class="s1">'extra/favicon.ico'</span><span class="p">:</span> <span class="err">{</span><span class="s1">'path'</span><span class="p">:</span> <span class="s1">'favicon.ico'</span><span class="err">}</span>
+<span class="err">}</span>
 </pre></div>
 <p>这里参考了 <a href="http://stackoverflow.com/questions/31270373/how-to-add-a-favicon-to-a-pelican-blog">这个网页</a> 。</p>
 <h2 id="jscss">引用js和css</h2>
 <p>js和css也是静态资源，但和上面的处理有有所不同，前面也提及了html源文件如果在head部分有css引用语句，都是会丢失的。你需要如下加上这样的meta标签语句：</p>
-<div class="highlight"><pre><span></span>&lt;meta name="javascripts" content="周易之摇卦.js" /&gt;
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">meta</span> <span class="n">name</span><span class="o">=</span><span class="ss">"javascripts"</span> <span class="n">content</span><span class="o">=</span><span class="ss">"周易之摇卦.js"</span> <span class="o">/&gt;</span>
 </pre></div>
 <p>然后你还需要安装pelican-plugins里面的 <code>pelican_javascript</code> 如下所示：</p>
-<div class="highlight"><pre><span></span>PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
+<div class="highlight"><pre><span></span><span class="n">PLUGIN_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'pelican-plugins'</span><span class="p">]</span>
+<span class="n">PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'pelican_javascript'</span><span class="p">,</span> <span class="s1">'tipue_search'</span><span class="p">,</span> <span class="s1">'extract_toc'</span><span class="p">]</span>
 </pre></div>
 <p>更多信息请参看项目的 <a href="https://github.com/mortada/pelican_javascript">github地址</a> 。</p>
 <h2 id="output">output输出控制</h2>
-<div class="highlight"><pre><span></span>ARTICLE_URL = '{category}/{slug}.html'
-ARTICLE_SAVE_AS = ARTICLE_URL
-PAGE_URL = '{slug}.html'
-PAGE_SAVE_AS = PAGE_URL
-CATEGORY_URL = '{slug}/index.html'
-CATEGORY_SAVE_AS = CATEGORY_URL
-TAG_URL = 'tag/{slug}.html'
-TAG_SAVE_AS = TAG_URL
+<div class="highlight"><pre><span></span><span class="n">ARTICLE_URL</span> <span class="o">=</span> <span class="s1">'{category}/{slug}.html'</span>
+<span class="n">ARTICLE_SAVE_AS</span> <span class="o">=</span> <span class="n">ARTICLE_URL</span>
+<span class="n">PAGE_URL</span> <span class="o">=</span> <span class="s1">'{slug}.html'</span>
+<span class="n">PAGE_SAVE_AS</span> <span class="o">=</span> <span class="n">PAGE_URL</span>
+<span class="n">CATEGORY_URL</span> <span class="o">=</span> <span class="s1">'{slug}/index.html'</span>
+<span class="n">CATEGORY_SAVE_AS</span> <span class="o">=</span> <span class="n">CATEGORY_URL</span>
+<span class="n">TAG_URL</span> <span class="o">=</span> <span class="s1">'tag/{slug}.html'</span>
+<span class="n">TAG_SAVE_AS</span> <span class="o">=</span> <span class="n">TAG_URL</span>
 </pre></div>
 <ul>
 <li><code>ARTICLE_URL</code> 定义了文章的URL显示，其中slug你可以在文件头属性那边自定义。</li>
@@ -227,19 +227,19 @@ TAG_SAVE_AS = TAG_URL
 </ul>
 <h1 id="_4">其他技巧</h1>
 <h2 id="themetheme">THEME设置或自定义THEME</h2>
-<div class="highlight"><pre><span></span>THEME = 'mytheme'
+<div class="highlight"><pre><span></span><span class="n">THEME</span> <span class="o">=</span> <span class="s1">'mytheme'</span>
 </pre></div>
 <p>具体自定义THEME其实就是copy一下别人的THEME，然后根据自己的jinja2知识等适当做一些修改。</p>
 <h2 id="_5">目录自动生成</h2>
 <p>你需要安装 <code>extract_toc</code> 插件，然后你的virtuaenv环境里面需要安装了beautifulsoup4, 然后python-markdown那边你需要设置好 <code>toc</code> 插件开启。</p>
-<div class="highlight"><pre><span></span>MARKDOWN = ['toc']
+<div class="highlight"><pre><span></span><span class="n">MARKDOWN</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'toc'</span><span class="p">]</span>
 </pre></div>
 <p>然后在markdown那边加上这么一行即可：</p>
-<div class="highlight"><pre><span></span>[TOC]
+<div class="highlight"><pre><span></span><span class="o">[</span><span class="n">TOC</span><span class="o">]</span><span class="w"></span>
 </pre></div>
 <h2 id="github-markdown">github markdown语法支持</h2>
 <p>在python-markdown那边开启 <code>fenced_code</code> 插件。</p>
-<div class="highlight"><pre><span></span>MARKDOWN = ['toc', 'fenced_code','codehilite(css_class=highlight, linenums=True)']
+<div class="highlight"><pre><span></span><span class="n">MARKDOWN</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'toc'</span><span class="p">,</span> <span class="s1">'fenced_code'</span><span class="p">,</span><span class="s1">'codehilite(css_class=highlight, linenums=True)'</span><span class="p">]</span>
 </pre></div>
 <p>上面还设置了语法高亮类和显示行数。</p>
             
