@@ -180,50 +180,6 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="/articles/jquery.html">前端开发之-jquery
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="/categories.html#html5-ref">html5
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-05-27T00:00:00+08:00">2018年 5月 27日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="jquery">jquery基本语法</h2>
-<p>jquery的基本语法就是:</p>
-<div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">action</span><span class="p">()</span>
-</pre></div>
-<p>如果单 <code>$(selector)</code> 将返回找到的对象的数组，而进行某个action的时候是对所有找到的对象都进行如此动作。</p>
-<h2 id="_1">文档初始化之后执行的动作</h2>
-<div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-   <span class="c1">// jQuery methods go here...</span>
-<span class="p">});</span>
-</pre></div>
-<p>此外我们还常见一种简化的写法：</p>
-<div class="highlight"><pre><span></span><span class="err">$</span><span class="p">(</span><span class="k">function</span><span class="p">()</span><span class="err">{}</span><span class="p">);</span>
-</pre></div>
-<p>然后有时你会看到这种写法：</p>
-<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="err">$</span><span class="p">)</span><span class="err">{…}</span><span class="p">)(</span><span class="n">jQuery</span><span class="p">)</span>
-</pre></div>
-<p>这是运行了一个匿名函数，其参数为(JQuery)，前面用 <code>$</code> 符号，是为了不与其他库冲突。（<a href="https://blog.csdn.net/javazw123/article/details/6217988">参考这篇文章</a>）</p>
-<h2 id="_2">获取屏幕的宽度和高度</h2>
-<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>
-<span class="kd">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span>
-</pre></div>
-<p>这两个方法更确切的描述是返回所选元素的宽度或高度。此外还有 <code>innerWidth</code> 和 <code>innerHeight</code> 方法（包含内边距）， <code>outerWidth</code> 和 <code>outerHeight</code> 包含内边距和边框。</p>
-<h2 id="hide">hide方法</h2>
-<p>实际上就是css设置 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="/articles/djangohou-tai-apibian-xie-zhi-apishe-ji-yuan-ze.html">django后台api编写之-API设计原则
  </a></h1>
 
@@ -938,6 +894,41 @@ WSGIPythonPath "/home/wanze/venv/webapp"
 </pre></div>
 <p>调用序列化类的save方法来进一步完成相应的数据库操作。</p>
 <div class="highlight"><pre><span></span><span class="n">serializer</span><span class="p">.</span><span class="n">save …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/djangohou-tai-apibian-xie-zhi-you-xiang-ren-zheng.html">django后台api编写之-邮箱认证
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#django-ref">django
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">邮箱认证</h2>
+<p>参考了 <a href="https://medium.com/@frfahim/django-registration-with-confirmation-email-bb5da011e4ef">这篇文章</a> 。</p>
+<p>过程分为两步，发送验证邮箱，和接受确认邮箱链接：</p>
+<div class="highlight"><pre><span></span>    <span class="n">re_path</span><span class="p">(</span><span class="n">r</span><span class="s1">'^users/verify_email/?$'</span><span class="p">,</span> <span class="n">VerifyEmailView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'users_verify_email'</span><span class="p">),</span>
+
+    <span class="n">re_path</span><span class="p">(</span><span class="n">r</span><span class="s1">'^users/confirm_email/(?P&lt;uidb64&gt;[0-9A-Za-z_\-]+)/(?P&lt;token&gt;[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$'</span><span class="p">,</span>
+            <span class="n">ConfirmEmailView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'users_confirm_email'</span><span class="p">),</span>
+</pre></div>
+<p>发送邮件的过程主要是填写一些必要信息，发送邮件即可：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VerifyEmailView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+    <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">IsAuthenticated</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">user …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">

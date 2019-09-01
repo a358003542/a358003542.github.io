@@ -162,6 +162,73 @@ cdwanze的博文 - 思想 category</title>
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="/articles/12factor-app-talk.html">软件即服务的12因素方法论
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#si-xiang-ref">思想
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-13T00:00:00+08:00">2018年 6月 13日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>本文主要学习 <a href="https://12factor.net/zh_cn/">这个网站</a> ，这个网站提出了软件即服务架构的12因素方法论。在目前软件开发，部署docker化，微服务，云服务，分布式架构等大趋势下，软件即对外提供一种http api服务的定位是很具有普遍性的。本文的一些讨论是很值得我们细细去思考的。</p>
+<h2 id="_1">前言</h2>
+<p>Adam Wiggins 研究了数以百计的应用程序的开发和部署，并在Heroku平台上数十万应用程序的开发运作和扩展过程，写作了这个博客： <a href="https://12factor.net/zh_cn/">https://12factor.net/zh_cn/</a> 。</p>
+<p>在互联网Internet的大背景下，软件作为一种服务，更确切来说作为一种api服务而存在是一种具有普适性的架构模式，不管软件自身功能如何，但软件本身只是一个提供了一些对外api接口的工具的定位，无疑是面向整个互联网和面向未来的。</p>
+<p>同时这里的讨论不光涉及到部署和运维，实际上，在软件开始编写时的架构设计和具体编码部分内部细节，编码者的思路也需要作出相应的调整。</p>
+<h2 id="_2">总的原则</h2>
+<ul>
+<li>使用<strong>标准化</strong>流程自动配置，从而使新的开发者花费最少的学习成本加入这个项目。</li>
+<li>和操作系统之间尽可能的<strong>划清界限</strong>，在各个系统中提供<strong>最大的可移植性</strong>。</li>
+<li>适合<strong>部署</strong>在现代的<strong>云计算平台</strong>，从而在服务器和系统管理方面节省资源。</li>
+<li>将开发环境和生产环境的<strong>差异降至最低</strong>，并使用<strong>持续交付</strong>实施敏捷开发 …</li></ul>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/data-process-design-principle.html">数据处理的程序的设计原则讨论
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#si-xiang-ref">思想
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-03-06T15:34:00+08:00">2018年 3月 6日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>数据量很大的情况下，通常指数据库下数据量较大的情况下，我们编写数据处理程序应该具有怎样的设计原则：</p>
+<p>我对分布式流式计算框架不太熟悉，也许使用那些框架是个思路，现在是我纯粹从自己面对的问题作出的一些然后提出的一些原则：</p>
+<ol>
+<li>
+<p>大的基本操作应考虑以从数据库的某处移动到某处来标记操作的完成，因为大的基本操作变动性并不是太大，这样数据库某个地方的数据都是有特别含义的。</p>
+</li>
+<li>
+<p>大的基本操作下还有一些小的操作步骤，这是一个难点，第一入口数据不断更新甚至老数据也会有变化，第二处理代码也可能会有变更，这部分并没有一劳永逸的完美的可扩展方案，有有的时候也是带来了太多的复杂性。一个比较好的建议是记录如下operations的处理信息：</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">operations</span><span class="o">:</span> <span class="n">op_name</span> <span class="n">op_state</span> <span class="n">last_op_time</span> <span class="n">op_day</span>
+</pre></div>
+<p>2.1 操作名</p>
+<p>2.2 op_state 操作状态，每个操作前都将state调为2，最后程序快结束的最后一行，state调为1，这样确保了op操作 state=0 或者 =2 或者没有state这个参量都表示本操作有问题</p>
+<p>2.3 操作碎片化，一个好的建议以目标数据的 进入天数 作为一个小的处理单元，这样某一步出现问题，可以重复刷，保证数据处理的可中断，状态可记录。</p>
+<p>2.4 上一次的操作时间 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="/articles/ren-gong-zhi-neng-di-yi-tan.html">人工智能第一谈
  </a></h1>
 
