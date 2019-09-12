@@ -17,13 +17,13 @@
 
 <meta property="og:title" content="SIP协议学习笔记 "/>
 <meta property="og:url" content="https://docs.cdwanze.work/articles/SIP-learning-note.html" />
-<meta property="og:description" content="前言 SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。 有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。 下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。 一个简单的会话建立例子 Tesla先给Marconi发送INVITE消息 INVITE sip:marconi@radio.org SIP/2.0 Via: SIP/2.0/UDP lab.high …" />
+<meta property="og:description" content="前言 SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。 有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。 下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。 一个简单的会话建立例子 Tesla先给Marconi发送INVITE消息 INVITE sip:marconi@radio.org SIP/2.0 Via: SIP/2.0/UDP lab.high-voltage …" />
 <meta property="og:site_name" content="cdwanze的博文" />
 <meta property="og:article:author" content="cdwanze" />
 <meta property="og:article:published_time" content="2019-08-30T00:00:00+08:00" />
 <meta property="" content="2019-08-30T00:00:00+08:00" />
 <meta name="twitter:title" content="SIP协议学习笔记 ">
-<meta name="twitter:description" content="前言 SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。 有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。 下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。 一个简单的会话建立例子 Tesla先给Marconi发送INVITE消息 INVITE sip:marconi@radio.org SIP/2.0 Via: SIP/2.0/UDP lab.high …">
+<meta name="twitter:description" content="前言 SIP协议算是物联网的核心底层基础了，网上有一份关于SIP协议RFC3261的中文翻译版本了，只是翻译质量实在堪忧。本文对于协议的一些核心内容会重新翻译。然后会阅读一些基本的入门教程，然后结合阅读 《SIP Understanding Session Initiation Protocol》这本书籍来对SIP协议做更深入的了解。 有关协议实际内容部分，我会关注最前面的通俗理解部分，但关于协议的具体细节和内容，我的建议还是阅读原英文文档，没有一家翻译是完美的。本文随着作者的学习会继续对SIP协议做深入的学习介绍，只是不敢保证是大而全的。 下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。 一个简单的会话建立例子 Tesla先给Marconi发送INVITE消息 INVITE sip:marconi@radio.org SIP/2.0 Via: SIP/2.0/UDP lab.high-voltage …">
 
     <title>
 SIP协议学习笔记  · cdwanze的博文
@@ -139,6 +139,19 @@ SIP协议学习笔记  · cdwanze的博文
 <li><a href="#6">6. 术语解释</a></li>
 <li><a href="#7-sip">7. SIP消息</a><ul>
 <li><a href="#71">7.1 请求</a></li>
+<li><a href="#72">7.2 响应</a></li>
+<li><a href="#73">7.3 头字段</a><ul>
+<li><a href="#731">7.3.1 头字段的格式</a></li>
+<li><a href="#732">7.3.2 头字段分类</a></li>
+<li><a href="#733">7.3.3 紧促格式</a></li>
+</ul>
+</li>
+<li><a href="#74">7.4 信息体</a><ul>
+<li><a href="#741">7.4.1 信息体类型</a></li>
+<li><a href="#742">7.4.2 信息体长度</a></li>
+</ul>
+</li>
+<li><a href="#75">7.5 构造信息体</a></li>
 </ul>
 </li>
 <li><a href="#8-user-agent">8. 一般User Agent行为</a></li>
@@ -172,103 +185,103 @@ SIP协议学习笔记  · cdwanze的博文
 <hr/>
 <p><strong>下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 </strong> ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。</p>
 <h2 id="_2">一个简单的会话建立例子</h2>
-<p><img alt="Jietu20190910-150709" src="/Users/beixi/Desktop/Jietu20190910-150709.jpg"/></p>
+<p><img alt="img" src="https://docs.cdwanze.work/images/sip_example_1.jpg"/></p>
 <ol>
 <li>Tesla先给Marconi发送INVITE消息</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">INVITE</span><span class="w"> </span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="w"></span>
-<span class="nl">Via</span><span class="p">:</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="n">UDP</span><span class="w"> </span><span class="n">lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="nl">org</span><span class="p">:</span><span class="mi">5060</span><span class="p">;</span><span class="n">branch</span><span class="o">=</span><span class="n">z9hG4bKfw19b</span><span class="w"> </span>
-<span class="nf">Max</span><span class="o">-</span><span class="nl">Forwards</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="w"></span>
-<span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="w"> </span><span class="n">Marconi</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">Marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="w"></span>
-<span class="k">From</span><span class="err">:</span><span class="w"> </span><span class="n">Nikola</span><span class="w"> </span><span class="n">Tesla</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="mi">76341</span><span class="w"> </span>
-<span class="k">Call</span><span class="o">-</span><span class="nl">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">123456789</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="nl">CSeq</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">INVITE</span><span class="w"></span>
-<span class="nl">Subject</span><span class="p">:</span><span class="w"> </span><span class="n">About</span><span class="w"> </span><span class="n">That</span><span class="w"> </span><span class="nf">Power</span><span class="w"> </span><span class="n">Outage</span><span class="p">...</span><span class="w"></span>
-<span class="nl">Contact</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Type</span><span class="p">:</span><span class="w"> </span><span class="n">application</span><span class="o">/</span><span class="n">sdp</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Length</span><span class="p">:</span><span class="w"> </span><span class="mi">158</span><span class="w"></span>
+<div class="highlight"><pre><span></span>INVITE sip:marconi@radio.org SIP/2.0
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b 
+Max-Forwards: 70
+To: G. Marconi &lt;sip:Marconi@radio.org&gt;
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 INVITE
+Subject: About That Power Outage...
+Contact: &lt;sip:n.tesla@lab.high-voltage.org&gt;
+Content-Type: application/sdp
+Content-Length: 158
 
-<span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
-<span class="n">o</span><span class="o">=</span><span class="n">Tesla</span><span class="w"> </span><span class="mi">2890844526</span><span class="w"> </span><span class="mi">2890844526</span><span class="w"> </span><span class="ow">IN</span><span class="w"> </span><span class="n">IP4</span><span class="w"> </span><span class="n">lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"> </span>
-<span class="n">s</span><span class="o">=</span><span class="n">Phone</span><span class="w"> </span><span class="k">Call</span><span class="w"></span>
-<span class="n">c</span><span class="o">=</span><span class="ow">IN</span><span class="w"> </span><span class="n">IP4</span><span class="w"> </span><span class="mf">100.101.102.103</span><span class="w"></span>
-<span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">m</span><span class="o">=</span><span class="n">audio</span><span class="w"> </span><span class="mi">49170</span><span class="w"> </span><span class="n">RTP</span><span class="o">/</span><span class="n">AVP</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">a</span><span class="o">=</span><span class="nl">rtpmap</span><span class="p">:</span><span class="mi">0</span><span class="w"> </span><span class="n">PCMU</span><span class="o">/</span><span class="mi">8000</span><span class="w"></span>
+v=0
+o=Tesla 2890844526 2890844526 IN IP4 lab.high-voltage.org 
+s=Phone Call
+c=IN IP4 100.101.102.103
+t=0 0
+m=audio 49170 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
 </pre></div>
 <p>关于头字段的的含义解释更多的请参看官方文档对应部分。</p>
 <ol>
 <li>Marconi给Tesla发送180响应 （To From Call-Id CSeq 都是直接Copy过来的， Via添加了一个received参数）更多响应信息制造细节参看官方文档</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="w"> </span><span class="mi">180</span><span class="w"> </span><span class="n">Ringing</span><span class="w"></span>
-<span class="nl">Via</span><span class="p">:</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="n">UDP</span><span class="w"> </span><span class="n">lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="nl">org</span><span class="p">:</span><span class="mi">5060</span><span class="p">;</span><span class="n">branch</span><span class="o">=</span><span class="n">z9hG4bKfw19b</span><span class="w"></span>
-<span class="p">;</span><span class="n">received</span><span class="o">=</span><span class="mf">100.101.102.103</span><span class="w"></span>
-<span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="w"> </span><span class="n">Marconi</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="n">a53e42</span><span class="w"></span>
-<span class="k">From</span><span class="err">:</span><span class="w"> </span><span class="n">Nikola</span><span class="w"> </span><span class="n">Tesla</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="mi">76341</span><span class="w"> </span>
-<span class="k">Call</span><span class="o">-</span><span class="nl">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">123456789</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="nl">CSeq</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">INVITE</span><span class="w"></span>
-<span class="nl">Contact</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@tower</span><span class="p">.</span><span class="n">radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Length</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<div class="highlight"><pre><span></span>SIP/2.0 180 Ringing
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b
+;received=100.101.102.103
+To: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 INVITE
+Contact: &lt;sip:marconi@tower.radio.org&gt;
+Content-Length: 0
 </pre></div>
 <ol>
 <li>180响应会被忽略</li>
 <li>200响应 （还包含了sdp载体）</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="n">OK</span><span class="w"></span>
-<span class="nl">Via</span><span class="p">:</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="n">UDP</span><span class="w"> </span><span class="n">lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="nl">org</span><span class="p">:</span><span class="mi">5060</span><span class="p">;</span><span class="n">branch</span><span class="o">=</span><span class="n">z9hG4bKfw19b</span><span class="w"></span>
-<span class="p">;</span><span class="n">received</span><span class="o">=</span><span class="mf">100.101.102.103</span><span class="w"></span>
-<span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="w"> </span><span class="n">Marconi</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="n">a53e42</span><span class="w"></span>
-<span class="k">From</span><span class="err">:</span><span class="w"> </span><span class="n">Nikola</span><span class="w"> </span><span class="n">Tesla</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="mi">76341</span><span class="w"> </span>
-<span class="k">Call</span><span class="o">-</span><span class="nl">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">123456789</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="nl">CSeq</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">INVITE</span><span class="w"></span>
-<span class="nl">Contact</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@tower</span><span class="p">.</span><span class="n">radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Type</span><span class="p">:</span><span class="w"> </span><span class="n">application</span><span class="o">/</span><span class="n">sdp</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Length</span><span class="p">:</span><span class="w"> </span><span class="mi">155</span><span class="w"></span>
+<div class="highlight"><pre><span></span>SIP/2.0 200 OK
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b
+;received=100.101.102.103
+To: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 INVITE
+Contact: &lt;sip:marconi@tower.radio.org&gt;
+Content-Type: application/sdp
+Content-Length: 155
 
-<span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
-<span class="n">o</span><span class="o">=</span><span class="n">Marconi</span><span class="w"> </span><span class="mi">2890844528</span><span class="w"> </span><span class="mi">2890844528</span><span class="w"> </span><span class="ow">IN</span><span class="w"> </span><span class="n">IP4</span><span class="w"> </span><span class="n">tower</span><span class="p">.</span><span class="n">radio</span><span class="p">.</span><span class="n">org</span><span class="w"> </span>
-<span class="n">s</span><span class="o">=</span><span class="n">Phone</span><span class="w"> </span><span class="k">Call</span><span class="w"></span>
-<span class="n">c</span><span class="o">=</span><span class="ow">IN</span><span class="w"> </span><span class="n">IP4</span><span class="w"> </span><span class="mf">200.201.202.203</span><span class="w"></span>
-<span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">m</span><span class="o">=</span><span class="n">audio</span><span class="w"> </span><span class="mi">60000</span><span class="w"> </span><span class="n">RTP</span><span class="o">/</span><span class="n">AVP</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">a</span><span class="o">=</span><span class="nl">rtpmap</span><span class="p">:</span><span class="mi">0</span><span class="w"> </span><span class="n">PCMU</span><span class="o">/</span><span class="mi">8000</span><span class="w"></span>
+v=0
+o=Marconi 2890844528 2890844528 IN IP4 tower.radio.org 
+s=Phone Call
+c=IN IP4 200.201.202.203
+t=0 0
+m=audio 60000 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
 </pre></div>
 <ol>
 <li>T给M发送ACK消息</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">ACK</span><span class="w"> </span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@tower</span><span class="p">.</span><span class="n">radio</span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="w"></span>
-<span class="nl">Via</span><span class="p">:</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="n">UDP</span><span class="w"> </span><span class="n">lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="nl">org</span><span class="p">:</span><span class="mi">5060</span><span class="p">;</span><span class="n">branch</span><span class="o">=</span><span class="n">z9hG4bK321g</span><span class="w"> </span>
-<span class="nf">Max</span><span class="o">-</span><span class="nl">Forwards</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="w"></span>
-<span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="w"> </span><span class="n">Marconi</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="n">a53e42</span><span class="w"></span>
-<span class="k">From</span><span class="err">:</span><span class="w"> </span><span class="n">Nikola</span><span class="w"> </span><span class="n">Tesla</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="mi">76341</span><span class="w"> </span>
-<span class="k">Call</span><span class="o">-</span><span class="nl">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">123456789</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="nl">CSeq</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">ACK</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Length</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<div class="highlight"><pre><span></span>ACK sip:marconi@tower.radio.org SIP/2.0
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bK321g 
+Max-Forwards: 70
+To: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 ACK
+Content-Length: 0
 </pre></div>
 <ol>
 <li>实际媒体会话过程</li>
 <li>M给T发送BYE消息</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">BYE</span><span class="w"> </span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="w"></span>
-<span class="nl">Via</span><span class="p">:</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="n">UDP</span><span class="w"> </span><span class="n">tower</span><span class="p">.</span><span class="n">radio</span><span class="p">.</span><span class="nl">org</span><span class="p">:</span><span class="mi">5060</span><span class="p">;</span><span class="n">branch</span><span class="o">=</span><span class="n">z9hG4bK392kf</span><span class="w"> </span>
-<span class="nf">Max</span><span class="o">-</span><span class="nl">Forwards</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="w"></span>
-<span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">Nikola</span><span class="w"> </span><span class="n">Tesla</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="mi">76341</span><span class="w"> </span>
-<span class="k">From</span><span class="err">:</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="w"> </span><span class="n">Marconi</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="n">a53e42</span><span class="w"> </span>
-<span class="k">Call</span><span class="o">-</span><span class="nl">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">123456789</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="nl">CSeq</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">BYE</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Length</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<div class="highlight"><pre><span></span>BYE sip:n.tesla@lab.high-voltage.org SIP/2.0
+Via: SIP/2.0/UDP tower.radio.org:5060;branch=z9hG4bK392kf 
+Max-Forwards: 70
+To: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+From: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 BYE
+Content-Length: 0
 </pre></div>
 <ol>
 <li>T给M发送BYE消息的200响应</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="n">OK</span><span class="w"></span>
-<span class="nl">Via</span><span class="p">:</span><span class="w"> </span><span class="n">SIP</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="n">UDP</span><span class="w"> </span><span class="n">tower</span><span class="p">.</span><span class="n">radio</span><span class="p">.</span><span class="nl">org</span><span class="p">:</span><span class="mi">5060</span><span class="p">;</span><span class="n">branch</span><span class="o">=</span><span class="n">z9hG4bK392kf</span><span class="w"></span>
-<span class="p">;</span><span class="n">received</span><span class="o">=</span><span class="mf">200.201.202.203</span><span class="w"></span>
-<span class="k">To</span><span class="err">:</span><span class="w"> </span><span class="n">Nikola</span><span class="w"> </span><span class="n">Tesla</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">n</span><span class="p">.</span><span class="n">tesla</span><span class="nv">@high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="mi">76341</span><span class="w"> </span>
-<span class="k">From</span><span class="err">:</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="w"> </span><span class="n">Marconi</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">marconi</span><span class="nv">@radio</span><span class="p">.</span><span class="n">org</span><span class="o">&gt;</span><span class="p">;</span><span class="n">tag</span><span class="o">=</span><span class="n">a53e42</span><span class="w"> </span>
-<span class="k">Call</span><span class="o">-</span><span class="nl">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">123456789</span><span class="nv">@lab</span><span class="p">.</span><span class="n">high</span><span class="o">-</span><span class="n">voltage</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="nl">CSeq</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">BYE</span><span class="w"></span>
-<span class="n">Content</span><span class="o">-</span><span class="nl">Length</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<div class="highlight"><pre><span></span>SIP/2.0 200 OK
+Via: SIP/2.0/UDP tower.radio.org:5060;branch=z9hG4bK392kf
+;received=200.201.202.203
+To: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+From: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 BYE
+Content-Length: 0
 </pre></div>
 <p>INVITE方法是SIP协议里面很重要的一个方法，本例子可以说是最核心的SIP协议功能实现了。</p>
 <p>关于本例子更多细节请参见官方文档，下面我会补充说明一些东西。</p>
@@ -466,7 +479,7 @@ SIP协议学习笔记  · cdwanze的博文
 <p>起始行，每个头字段行，空行都必须以 CRLF 符号终止【也就是 <code>\r\n</code>】。注意即时信息体body没有也需要把那个空行加上。</p>
 <p>【上面的内容简单看下即可，大概说的就是上面文字描述的意思，然后后面多看点SIP具体信息，大概心里就有数了。其实基本格式上的规范和HTTP协议很相似，也可能他们都属于RFC2822规范吧】</p>
 <h3 id="71">7.1 请求</h3>
-<p>SIP的请求可以通过起始行为请求行来分辨。一个请求行包含一个方法名，一个请求URI，协议版本号，由单个空格(SP)字符分割。</p>
+<p>SIP的请求可以通过有请求行作为第一行来分辨。一个请求行包含一个方法名，一个请求URI，协议版本号，由单个空格(SP)字符分割。</p>
 <p>请求行以CRLF结束【这个上面说过了】，然后请求行里面不允许出现 CR 和 LF 字符，除了最后的CRLF。LWS字符在请求行各元素中不允许出现。【LWS linear whitespace 我查了一下，并不是某个特定的键盘按键字符，具体指的是任意数目的空白SP或者制表符】</p>
 <div class="highlight"><pre><span></span><span class="n">Request</span><span class="o">-</span><span class="n">Line</span>  <span class="o">=</span>  <span class="k">Method</span> <span class="n">SP</span> <span class="n">Request</span><span class="o">-</span><span class="n">URI</span> <span class="n">SP</span> <span class="n">SIP</span><span class="o">-</span><span class="k">Version</span> <span class="n">CRLF</span>
 </pre></div>
@@ -479,6 +492,109 @@ SIP协议学习笔记  · cdwanze的博文
 <li>SIP-Version 请求和响应都包含一个SIP的版本号，为了考虑版本顺序，便于管理依赖，升级版本数字。服从本协议的应用发送SIP消息应该包含SIP-Version <code>"SIP/2.0"</code> 。SIP-Version字符串是大小写不敏感的，具体实现发送的时候还是一定要大写。</li>
 </ul>
 <p>不像 <code>HTTP/1.1</code> ，SIP把这版本数字看做一个字面意义上的字符串，实践上，还是应该没有什么区别的。</p>
+<h3 id="72">7.2 响应</h3>
+<p>SIP响应可以通过有状态行作为第一行来分辨。一个状态行由协议版本号，跟着一个数字状态码和与之相关的文本组成，每个元素彼此用SP符号分割。</p>
+<p>CR和LF符号是不允许的，除了最后的CRLF字符。</p>
+<div class="highlight"><pre><span></span><span class="n">Status</span><span class="o">-</span><span class="n">Line</span>  <span class="o">=</span>  <span class="n">SIP</span><span class="o">-</span><span class="k">Version</span> <span class="n">SP</span> <span class="n">Status</span><span class="o">-</span><span class="n">Code</span> <span class="n">SP</span> <span class="n">Reason</span><span class="o">-</span><span class="n">Phrase</span> <span class="n">CRLF</span>
+</pre></div>
+<p>状态码是一个3位的整数结果码，指出了试图理解和满足请求的结果。Reason-Phrase试图给状态码一个简短的文本描述。状态码是准备给自动机用的，Reason-phrase原因文本是准备给人类使用的。客户端并不要求检查或显示原因文本。</p>
+<p>本协议对于原因文本建议的具体用语，在实践中可能选择其他文本，比如说使用在请求的Accept-Language头字段中指示的语言。</p>
+<p>状态码的第一个数字位定义了响应的类型。最后两位数字并没有分类的作用。因此，任何响应的状态码在100到199之间的都可认为是 1xx 响应。任何响应的状态码在200到299之间的都可认为是2xx 响应，以此类推。SIP/2.0 的第一位数字允许六个值：</p>
+<ul>
+<li>1xx 临时响应 请求已接收 继续处理中</li>
+<li>2xx 成功响应 行为已成功接收，理解和接受。</li>
+<li>3xx 重定向响应 需要进一步的行为来完成本请求</li>
+<li>4xx 客户端错误 请求包含错误的语法，服务器不能完成本请求</li>
+<li>5xx 服务器错误 服务器对于完成这个看起来是有效的请求处理失败了</li>
+<li>6xx 全局失败 请求不能在任何服务器上完成</li>
+</ul>
+<p>第21节定义了这些类型并分别描述了这些状态码。</p>
+<h3 id="73">7.3 头字段</h3>
+<p>SIP的头字段和HTTP的头字段在语法和语义上都很相似。具体来说SIP头字段遵从H4.2 定义的语法（对于信息头和头字段扩展到多行的规则）然而，多行扩展规则在HTTP是用隐含的空白和折叠folding，本协议遵从的是RFC2234，只使用明确的空白和作为语法集的一部分的折叠。</p>
+<p>H4.2 也定义了多个头字段有相同的头字段名时，它们的值是逗号分隔的，能够合并为一个头字段。这在SIP中也是如此，但具体的规则有所不同，因为使用的是不同的语法。具体来说，任何SIP头字段格式使用如下语法是允许通过逗号分隔列表合并为一个头字段，在相同的头字段名下。</p>
+<div class="highlight"><pre><span></span><span class="n">header</span>  <span class="o">=</span>  <span class="ss">"header-name"</span> <span class="n">HCOLON</span> <span class="n">header</span><span class="o">-</span><span class="n">value</span> <span class="o">*</span><span class="p">(</span><span class="n">COMMA</span> <span class="n">header</span><span class="o">-</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+<p>Contact头字段允许逗号comma分隔列表除非头字段的值是 <code>*</code> 。</p>
+<h4 id="731">7.3.1 头字段的格式</h4>
+<p>头字段遵从RFC2822第2.2小节给定的通用头字段格式。每个头字段有一个字段名，后面跟着colon冒号，然后是字段值。</p>
+<div class="highlight"><pre><span></span><span class="n">field</span><span class="o">-</span><span class="n">name</span><span class="p">:</span> <span class="n">field</span><span class="o">-</span><span class="n">value</span>
+</pre></div>
+<p>第25节规定的信息头的正式语法是允许冒号两侧有任意数量的空白的，然而，实践中应该避免字段名和冒号之间的空白，然后在冒号和字段值之间用一个SP即可。</p>
+<div class="highlight"><pre><span></span><span class="n">Subject</span><span class="o">:</span>      <span class="n">lunch</span>
+<span class="n">Subject</span>   <span class="o">:</span>     <span class="n">lunch</span>
+<span class="n">Subject</span>       <span class="o">:</span><span class="n">lunch</span>
+<span class="n">Subject</span><span class="o">:</span> <span class="n">lunch</span>
+</pre></div>
+<p>因此，上面的都是有效的和等同的，但最后的是推荐的格式。</p>
+<p>头字段能够扩展到多行，额外的行之前至少应该有一个SP或者HT【制表符】。换行和后续行之前的空白会被认为是一个SP字符。因此下面是等同的：</p>
+<div class="highlight"><pre><span></span><span class="n">Subject</span><span class="o">:</span> <span class="n">I</span> <span class="n">know</span> <span class="n">you</span><span class="err">’</span><span class="n">re</span> <span class="n">there</span><span class="o">,</span> <span class="n">pick</span> <span class="n">up</span> <span class="n">the</span> <span class="n">phone</span> <span class="n">and</span> <span class="n">talk</span> <span class="n">to</span> <span class="n">me</span><span class="o">!</span>
+<span class="n">Subject</span><span class="o">:</span> <span class="n">I</span> <span class="n">know</span> <span class="n">you</span><span class="err">’</span><span class="n">re</span> <span class="n">there</span><span class="o">,</span>
+         <span class="n">pick</span> <span class="n">up</span> <span class="n">the</span> <span class="n">phone</span>
+         <span class="n">and</span> <span class="n">talk</span> <span class="n">to</span> <span class="n">me</span><span class="o">!</span>
+</pre></div>
+<p>有不同字段名的头字段之间的相对顺序是不重要的，然而，<strong>推荐</strong> 那些被代理处理需要的头字段（比如 Via Route Record-Route Proxy-Require Max-Forward Proxy-Authorization ）最好出现在信息的顶部，方便快速分析。相同字段名的头字段们的相对顺序是重要的，多个头字段行有着相同的字段名在信息中可能表示当且仅当整个字段值对于该头字段是一个逗号分隔的列表（也就是它遵从第7.3节定义的语法）。它必须可能将多个头字段行组合成为一个 <code>field-name: field-value</code> 对，通过appending操作将后续的field-value到append第一个，用逗号分隔，然后不改变信息的语义。这个规则是由例外的，比如 <code>WWW-Authenticate</code> <code>Authorization</code> <code>Proxy-Authenticate</code> <code>Proxy-Authorization</code> 头字段，这些名字的多个头字段行在信息中，然而因为它们的语法并不遵从第7.3节的基本格式，它们一定不能合并为一个单一的头字段行。</p>
+<p>实现必须能够处理多个头字段行有相同头字段名的，不管是单值单行形式，还是逗号分隔值的形式。</p>
+<p>如下头字段行组是有效的和等同的：</p>
+<div class="highlight"><pre><span></span>Route: &lt;sip:alice@atlanta.com&gt;
+Subject: Lunch
+Route: &lt;sip:bob@biloxi.com&gt;
+Route: &lt;sip:carol@chicago.com&gt;
+
+Route: &lt;sip:alice@atlanta.com&gt;, &lt;sip:bob@biloxi.com&gt;
+Route: &lt;sip:carol@chicago.com&gt;
+Subject: Lunch
+
+Subject: Lunch
+Route: &lt;sip:alice@atlanta.com&gt;, &lt;sip:bob@biloxi.com&gt;,
+&lt;sip:carol@chicago.com&gt;
+</pre></div>
+<p>下面的块是有效的但是并不等同于其他的【看的出来是顺序不同】：</p>
+<div class="highlight"><pre><span></span><span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">alice</span><span class="nv">@atlanta</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">bob</span><span class="nv">@biloxi</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">carol</span><span class="nv">@chicago</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">bob</span><span class="nv">@biloxi</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">alice</span><span class="nv">@atlanta</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">carol</span><span class="nv">@chicago</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="nl">Route</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">alice</span><span class="nv">@atlanta</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">carol</span><span class="nv">@chicago</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="p">,</span><span class="w"></span>
+<span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">bob</span><span class="nv">@biloxi</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+</pre></div>
+<p>一个头字段值得格式是由具体某个头字段名来定义的。它总是要某是一个难懂的TEXT-UTF8八进制序列，要某是空白，标记，分隔符和转义字符的组合。很多已经存在的头字段将会依附一种通用形式的值，由分号分隔，后面是一系列的参数名和参数值：</p>
+<div class="highlight"><pre><span></span><span class="nt">field-name</span><span class="o">:</span> <span class="nt">field-value</span> <span class="o">*(;</span><span class="nt">parameter-name</span><span class="o">=</span><span class="nt">parameter-value</span><span class="o">)</span>
+</pre></div>
+<p>尽管任意数目的参数对可以依附在头字段值上，但给定的参数名一定不要出现多于一次。</p>
+<p>当比较头字段时，头字段名总是大小写不敏感的。除非在定义中指出某个特定的头字段，头字段名，参数名和参数值是大小写敏感的。Token标记通常是大小写敏感的，除非特别指出。通过双引号表达的字符串是大小写敏感的，比如：</p>
+<div class="highlight"><pre><span></span><span class="nl">Contact</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">alice</span><span class="nv">@atlanta</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="p">;</span><span class="n">expires</span><span class="o">=</span><span class="mi">3600</span><span class="w"></span>
+<span class="nl">CONTACT</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">sip</span><span class="p">:</span><span class="n">alice</span><span class="nv">@atlanta</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="p">;</span><span class="n">ExPiReS</span><span class="o">=</span><span class="mi">3600</span><span class="w"></span>
+</pre></div>
+<p>是相等的。</p>
+<div class="highlight"><pre><span></span><span class="nt">Content-Disposition</span><span class="o">:</span> <span class="nt">session</span><span class="o">;</span><span class="nt">handling</span><span class="o">=</span><span class="nt">optional</span>
+<span class="nt">content-disposition</span><span class="o">:</span> <span class="nt">Session</span><span class="o">;</span><span class="nt">HANDLING</span><span class="o">=</span><span class="nt">OPTIONAL</span>
+</pre></div>
+<p>是相等的</p>
+<div class="highlight"><pre><span></span><span class="n">Warning</span><span class="o">:</span> <span class="mi">370</span> <span class="n">devnull</span> <span class="s2">"Choose a bigger pipe"</span>
+<span class="n">Warning</span><span class="o">:</span> <span class="mi">370</span> <span class="n">devnull</span> <span class="s2">"CHOOSE A BIGGER PIPE"</span>
+</pre></div>
+<p>是不相等的。</p>
+<h4 id="732">7.3.2 头字段分类</h4>
+<p>有些头字段只在请求或者响应中才有意义，它们被分别称为请求头字段和响应头字段。如果一个头字段在信息中和它的分类不匹配（比如一个请求头字段在响应中），它 <strong>一定</strong> 要被忽略。第20节对每个头字段的分类进行了讨论。</p>
+<h4 id="733">7.3.3 紧促格式</h4>
+<p>SIP提供了一种机制去表达常见的头字段名以一种缩写形式。当信息变得很大时，这对于传输层传输信息可能会有用（比如说用UDP的时候超过了MTU最大传输单位）。这些紧促格式在第20节中定义。一个紧促格式可能任何时候去取代一个头字段名的长名格式，而不会更改信息的语义。一个头字段名在相同的信息中即可能是长名格式，也可能是紧促格式。实现一定要同时接收相同头字段名的长名格式和紧促格式。</p>
+<h3 id="74">7.4 信息体</h3>
+<p>请求，包括本协议的扩展协议定义的请求，可能包含信息体，除非特别说明。具体信息体的解释在各个请求方法哪里，</p>
+<p>对于响应信息来说，请求方法和响应状态码决定了它的类型和信息体的解释。所有响应可能包含信息体。</p>
+<h4 id="741">7.4.1 信息体类型</h4>
+<p>信息体的互联网媒体类型一定要在 Content-Type 头字段中给定。如果信息体经历了编码比如说压缩，那么它一定要在 Content-Encoding 头字段中说明。否则，Content-Encoding 头字段一定要省略。如果合适的话，信息体的字符集可以由Content-Type头字段的某部分值给定。</p>
+<p>由RFC2046定义的多部分信息MIME类型可能在信息体中使用。如果远程实现发送的请求Accept头字段并不含有multipart，实现发送请求包含多部分信息体一定要发送一个会话描述，这个会话描述是一个非多部分信息体。</p>
+<p>SIP信息可能含有二进制信息体或者部分，当没有明确的字符集参数提供的时，媒体类型中的text类型默认的字符集是UTF-8。</p>
+<h4 id="742">7.4.2 信息体长度</h4>
+<p>信息体的长度由Content-Length提供（单位bytes）。第20.12描述了这个头字段必要的内容和细节。</p>
+<p>chunked 传输编码，HTTP/1.1使用的一定不能用于SIP（chunked编码修改信息体为了把它转换为一系列的chunks，每一个有它自己的size说明）</p>
+<h3 id="75">7.5 构造信息体</h3>
+<p>不同于HTTP，SIP实现可以使用UDP或其他不可靠的datagram协议。每个datagram携带一个请求或者响应。第18节说了一些不可靠传输的使用上的约束。</p>
+<p>实现处理SIP消息在流向传输中一定要忽略开头的任何 CRLF 作为起始行。</p>
+<p>Content-Lenght头字段被用户定位本SIP消息在流的结束，它在SIP消息通过流向传输中一定要展示出来。</p>
 <h2 id="8-user-agent">8. 一般User Agent行为</h2>
 <p>一个user agent代表了一个终端系统。它包含user agent client (UAC)，这产生请求，和一个user agent server，这响应请求。一个UAC能够产生请求基于一些外部刺激（用户点击按钮或者PSTN行的信号）然后处理响应。一个UAS能够接收请求然后产生响应基于用户的输入，外部刺激，程序的执行结果或者其他机制。</p>
 <p>当一个UAC发送请求，请求通过一些代理服务器，这将把请求转发到UAS。当UAS产生了一个响应，响应也会转发到达UAC。</p>
