@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="protocol, sip, 物联网, " />
+
+<meta property="og:title" content="理解SIP协议一书补充材料 "/>
+<meta property="og:url" content="https://docs.cdwanze.work/articles/understanding-sip-book-learning-notes.html" />
+<meta property="og:description" content="理解SIP一书补充材料 下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。 一个简单的会话建立例子 Tesla先给Marconi发送INVITE消息 INVITE sip:marconi@radio.org SIP/2.0 Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b Max-Forwards: 70 To: G. Marconi &lt;sip:Marconi@radio.org&gt; From: Nikola Tesla &lt;sip:n.tesla …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2019-08-30T00:00:00+08:00" />
+<meta property="" content="2019-09-20T00:00:00+08:00" />
+<meta name="twitter:title" content="理解SIP协议一书补充材料 ">
+<meta name="twitter:description" content="理解SIP一书补充材料 下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。 一个简单的会话建立例子 Tesla先给Marconi发送INVITE消息 INVITE sip:marconi@radio.org SIP/2.0 Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b Max-Forwards: 70 To: G. Marconi &lt;sip:Marconi@radio.org&gt; From: Nikola Tesla &lt;sip:n.tesla …">
+
+    <title>
+理解SIP协议一书补充材料  · cdwanze的博文
+</title>
+
+
+        <link href="https://docs.cdwanze.work/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://docs.cdwanze.work/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://www.cdwanze.work"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://docs.cdwanze.work/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="https://docs.cdwanze.work">博文首页</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                        <li >
+                            <a href="https://docs.cdwanze.work/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="https://docs.cdwanze.work/gong-gao.html">公告</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://docs.cdwanze.work/articles/understanding-sip-book-learning-notes.html"> 理解SIP协议一书补充材料  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#sip">理解SIP一书补充材料</a><ul>
+<li><a href="#_1">一个简单的会话建立例子</a></li>
+<li><a href="#sip_1">通过代理建立SIP呼叫例子</a></li>
+<li><a href="#sip_2">SIP注册例子</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h1 id="sip">理解SIP一书补充材料</h1>
+<p><strong>下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 </strong> ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。</p>
+<h2 id="_1">一个简单的会话建立例子</h2>
+<p><img alt="img" src="https://docs.cdwanze.work/images/sip_example_1.jpg"/></p>
+<ol>
+<li>Tesla先给Marconi发送INVITE消息</li>
+</ol>
+<div class="highlight"><pre><span></span>INVITE sip:marconi@radio.org SIP/2.0
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b 
+Max-Forwards: 70
+To: G. Marconi &lt;sip:Marconi@radio.org&gt;
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 INVITE
+Subject: About That Power Outage...
+Contact: &lt;sip:n.tesla@lab.high-voltage.org&gt;
+Content-Type: application/sdp
+Content-Length: 158
+
+v=0
+o=Tesla 2890844526 2890844526 IN IP4 lab.high-voltage.org 
+s=Phone Call
+c=IN IP4 100.101.102.103
+t=0 0
+m=audio 49170 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
+</pre></div>
+<p>关于头字段的的含义解释更多的请参看官方文档对应部分。</p>
+<ol>
+<li>Marconi给Tesla发送180响应 （To From Call-Id CSeq 都是直接Copy过来的， Via添加了一个received参数）更多响应信息制造细节参看官方文档</li>
+</ol>
+<div class="highlight"><pre><span></span>SIP/2.0 180 Ringing
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b
+;received=100.101.102.103
+To: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 INVITE
+Contact: &lt;sip:marconi@tower.radio.org&gt;
+Content-Length: 0
+</pre></div>
+<ol>
+<li>180响应会被忽略</li>
+<li>200响应 （还包含了sdp载体）</li>
+</ol>
+<div class="highlight"><pre><span></span>SIP/2.0 200 OK
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b
+;received=100.101.102.103
+To: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 INVITE
+Contact: &lt;sip:marconi@tower.radio.org&gt;
+Content-Type: application/sdp
+Content-Length: 155
+
+v=0
+o=Marconi 2890844528 2890844528 IN IP4 tower.radio.org 
+s=Phone Call
+c=IN IP4 200.201.202.203
+t=0 0
+m=audio 60000 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
+</pre></div>
+<ol>
+<li>T给M发送ACK消息</li>
+</ol>
+<div class="highlight"><pre><span></span>ACK sip:marconi@tower.radio.org SIP/2.0
+Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bK321g 
+Max-Forwards: 70
+To: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42
+From: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 ACK
+Content-Length: 0
+</pre></div>
+<ol>
+<li>实际媒体会话过程</li>
+<li>M给T发送BYE消息</li>
+</ol>
+<div class="highlight"><pre><span></span>BYE sip:n.tesla@lab.high-voltage.org SIP/2.0
+Via: SIP/2.0/UDP tower.radio.org:5060;branch=z9hG4bK392kf 
+Max-Forwards: 70
+To: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+From: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 BYE
+Content-Length: 0
+</pre></div>
+<ol>
+<li>T给M发送BYE消息的200响应</li>
+</ol>
+<div class="highlight"><pre><span></span>SIP/2.0 200 OK
+Via: SIP/2.0/UDP tower.radio.org:5060;branch=z9hG4bK392kf
+;received=200.201.202.203
+To: Nikola Tesla &lt;sip:n.tesla@high-voltage.org&gt;;tag=76341 
+From: G. Marconi &lt;sip:marconi@radio.org&gt;;tag=a53e42 
+Call-ID: 123456789@lab.high-voltage.org
+CSeq: 1 BYE
+Content-Length: 0
+</pre></div>
+<p>INVITE方法是SIP协议里面很重要的一个方法，本例子可以说是最核心的SIP协议功能实现了。</p>
+<p>关于本例子更多细节请参见官方文档，下面我会补充说明一些东西。</p>
+<h2 id="sip_1">通过代理建立SIP呼叫例子</h2>
+<p><img alt="Jietu20190911-114217" src="/Users/beixi/Desktop/Jietu20190911-114217.jpg"/></p>
+<h2 id="sip_2">SIP注册例子</h2>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-09-20T00:00:00+08:00">2019年 9月 20日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://docs.cdwanze.work/categories.html#wu-lian-wang-ref">物联网</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://docs.cdwanze.work/tags.html#protocol-ref">protocol
+                    <span>4</span>
+</a></li>
+                <li><a href="https://docs.cdwanze.work/tags.html#sip-ref">sip
+                    <span>2</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://docs.cdwanze.work/theme/js/jquery.min.js"></script>
+    <script src="https://docs.cdwanze.work/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
+
+
+    
+
+
+
+</body>
+</html>

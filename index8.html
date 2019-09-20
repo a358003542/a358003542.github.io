@@ -180,6 +180,41 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/mol-file.html">mol文件格式
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#chemistry-ref">chemistry
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-04T14:47:00+08:00">2017年 12月 4日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>本文主要参考了Molfile的 <a href="https://en.wikipedia.org/wiki/Chemical_table_file">wiki页面</a> 。</p>
+<p>因为openbabel在heroku上不好安装，其有c依赖，然后pubchem数据库那边是可以输出sdf文件的，然后chemdoodle那边是可以接受mol文件格式从而显示分子的3D图形的，一开始我试着用openbabel将smiles输出到mol file：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">smi2mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    read smiles string , retrun 3d mol file content.</span>
+<span class="sd">    :param smiles:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">"smi"</span><span class="p">,</span> <span class="n">smiles</span><span class="p">)</span>
+    <span class="n">mol</span><span class="o">.</span><span class="n">make3D</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">mol</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"mol"</span><span class="p">)</span>
+</pre></div>
+<p>这大体是没有问题的。后来看到pubchem restful api输出record全记录时有很详细的原子数目和坐标，所以想可不可以根据这些数据自动输出mol file。</p>
+<p>目前最简单的方法是，利用pubchem获得目标分子的sdf文件，sdf文件是前兼容mol 文件的，我在前端网页初步测试结果也是将文件前一行到 <code>M  END</code> 之间的内容复制粘贴新建成为一个mol file，经过测试是可行的 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/cheminformatics-talk-two.html">化学信息学第二谈
  </a></h1>
 
@@ -976,43 +1011,6 @@
 <li>稀疏优于稠密。 </li>
 <li>可读性是有重要价值的。</li>
 <li>特例可以有 …</li></ol>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pythonyu-yan-xue-xi-zhi-ce-shi-kai-fa.html">python语言学习之-测试开发
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-06-06T00:00:00+08:00">2017年 6月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
-<h2 id="pytest">pytest简介</h2>
-<p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
-<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">test_prime</span><span class="p">():</span>
-    <span class="n">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
-</pre></div>
-<h3 id="_1">确认抛出某个异常</h3>
-<p>把官方的例子copy过来了，看一下就懂了。</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
-    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">test_mytest</span><span class="p">():</span>
-    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">):</span>
-        <span class="n">f</span><span class="p">()</span>
-</pre></div>
-<p>完了，如果你赶时间的话 …</p>
                             </article>
 
  <nav aria-label="Page Navigation">

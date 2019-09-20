@@ -180,6 +180,41 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/wxpython-style-guide.html">wxpython编码风格推荐
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#wxpython-ref">wxpython
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-10-10T00:00:00+08:00">2018年 10月 10日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">基本建议</h2>
+<ol>
+<li>使用</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wx</span>
+</pre></div>
+<p>不要使用 <code>from what import *</code> 这样的引入语法。</p>
+<ol>
+<li>使用 size=(500,400)，不推荐使用 wx.Size ，这个提法是 <a href="https://wiki.wxpython.org/wxPython%20Style%20Guide">这个网页</a> 说的，可能会有点争议性，他说简单比复杂好。因为点就x, y两个值，所以就目前个人使用来说，确实直接用数组对会方便点，而且在编码的时候，具体size参数实际上已经指明了第一个参数是x，第二个参数是y了。</li>
+<li>凡是面板都应该子类化，然后面板类的各个控件可以被面板管理。这个不是说要全部这样做，但这样做的好处很多。面板类的控件可管理，对你的后续管理操作编码带来很多便利，而面板的子类化是大型GUI程序的必然道路。</li>
+<li>多个按钮推荐使用 <code>StdDialogButtonSizer</code> ， TODO ，后面我个人使用体验之后再讨论几句。</li>
+</ol>
+<div class="highlight"><pre><span></span>    <span class="n">okButton</span> <span class="o">=</span> <span class="n">wx</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">wx</span><span class="p">.</span><span class="n">ID_OK</span><span class="p">,</span> <span class="ss">"&amp;OK"</span><span class="p">)</span>
+    <span class="n">okButton</span><span class="p">.</span><span class="n">SetDefault</span><span class="p">()</span>
+    <span class="n">cancelButton</span> <span class="o">=</span> <span class="n">wx …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/suan-fa-fu-za-du.html">算法复杂度
  </a></h1>
 
@@ -855,51 +890,6 @@
 <p>为了便于理解，上面这个makefile我有意采用了一种和bash shell接近的风格。前面 <code>project=</code> 就是一个定义变量的行为。这个project变量就是本脚本的名字。然后makefile下面的主体部分格式如下:</p>
 <div class="highlight"><pre><span></span><span class="nf">target</span><span class="o">:</span> <span class="n">prerequisites</span>
     the <span class="nb">command …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/python2he-python3de-jian-rong-xing.html">python2和python3的兼容性
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-18T00:00:00+08:00">2018年 6月 18日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="2to3">2to3内置模块</h2>
-<p>python有个 <strong>2to3</strong> 内置模块可以自动进行python2脚本到python3脚本的移植工作，不过我感觉最好是不要过分依赖这个工具，这只是适合初学者的。因为python2和python3很多地方不一样了。如果你对这个模块有很深的了解，可能自己手工进行修改会更合适一些（其中可能会涉及到新的编写思路）。具体模块的使用请参看官方文档。</p>
-<h2 id="_1"><code>//</code> 和 <code>/</code></h2>
-<p>在python2中，两个整数相除会返回一个整数，也就是python3的 <code>//</code>。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span><span class="o">/</span><span class="mi">2</span>
-<span class="mi">2</span>
-</pre></div>
-<h3 id="_2">兼容方案</h3>
-<p>在文件头上加上一行：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-</pre></div>
-<p>这样就都是使用python3的语法规则，即:  <code>/</code> 表示常规除法， <code>//</code> 表示整除——返回商。</p>
-<h2 id="print">print函数</h2>
-<p>这是最常见的错误了，推荐第一步就在文档里面进行find print这个字符串操作，然后将所有：</p>
-<div class="highlight"><pre><span></span>    <span class="n">print</span> <span class="p">...</span>
-</pre></div>
-<p>这样的形式都换成：</p>
-<div class="highlight"><pre><span></span>    <span class="n">print</span><span class="p">(...)</span>
-</pre></div>
-<p>这是目前python2和python3都兼容的形式了，所以没有什么好犹豫的，大胆的修改就是了。</p>
-<p>其中python2 </p>
-<div class="highlight"><pre><span></span>    <span class="n">print</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
-</pre></div>
-<p>似乎还有点小复杂，简单的理解就是对应到python3的</p>
-<div class="highlight"><pre><span></span>    <span class="nv">print</span><span class="ss">(</span><span class="mi">1</span>, <span class="mi">2</span>, <span class="k">end …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
