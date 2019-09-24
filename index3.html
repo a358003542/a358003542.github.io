@@ -180,6 +180,44 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/wxpython-talk-two.html">wxpython第二谈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#wxpython-ref">wxpython
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-10-19T00:00:00+08:00">2018年 10月 19日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">动态多组件切换</h2>
+<p>用boxsizer来挂载一些面板，然后隐藏一些面板，并显示初始你想要显示的那个panel。Add, Show Hide 等方法来操作，最后注意Layout一下，这是基本功了。</p>
+<p>这里值得一提的是，如果你只是本panel基本的Layout，那么多个panel切换父panel给那些子panel的size都是一致的，因为你的子panel各个size大小不同，如果你动态切换需要更好的效果，那么应该调用父panel的Layout。</p>
+<h3 id="panel">某个子Panel的重写</h3>
+<p>一些参数的变化，你的子panel需要重写，这个时候推荐使用box的Replace方法：</p>
+<div class="highlight"><pre><span></span>        <span class="n">old_panel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_sp2_panel</span>
+        <span class="n">new_panel</span> <span class="o">=</span> <span class="n">CategorySPInnerPanel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_list</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">old_panel</span><span class="p">,</span> <span class="n">new_panel</span><span class="p">)</span>
+        <span class="n">old_panel</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category_sp2_panel</span> <span class="o">=</span> <span class="n">new_panel</span>
+</pre></div>
+<p>大体过程如上，实际切换推荐采用如下写法：</p>
+<ol>
+<li>首先隐藏box所包含的所有子面板：</li>
+</ol>
+<div class="highlight"><pre><span></span>    <span class="nv">def</span> <span class="nv">hide_all_panel</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
+        <span class="k">for</span> <span class="nv">panel</span> <span class="nv">in</span> <span class="nv">self</span>.<span class="nv">box</span>.<span class="nv">GetChildren …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/wxpython-style-guide.html">wxpython编码风格推荐
  </a></h1>
 
@@ -846,50 +884,6 @@
 <p>现在我们往这个数据库里面加入一点东西:</p>
 <div class="highlight"><pre><span></span><span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu64</span>:<span class="o">~/</span>桌面$ <span class="nv">sqlite3</span> <span class="nv">mydb</span>
 <span class="nv">SQLite</span> <span class="nv">version</span> <span class="mi">3</span>.<span class="mi">8</span>.<span class="mi">2 …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/makefileni-bu-lai-yi-fa-ma.html">makefile你不来一发吗
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-18T00:00:00+08:00">2018年 6月 18日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="makefile">简单了解下makefile</h2>
-<p>makefile一般只能在Linux环境下运行，更确切来说要有gnu make这个工具去运行Makefile这个文件。</p>
-<p>makefile里面内容其实很丰富的，实际上甚至有点过于复杂了。不过有的时候只是简单使用其基本功能还是很便利的。</p>
-<div class="highlight"><pre><span></span><span class="nv">project</span><span class="o">=</span>helloworld
-<span class="nv">cflags</span><span class="o">=</span>-g -Wall  <span class="si">${</span><span class="nv">CCFLAGS</span><span class="si">}</span>
-
-<span class="nf">${project}</span><span class="o">:</span> 
-    <span class="si">${</span><span class="nv">CC</span><span class="si">}</span>  helloworld.c -o <span class="nv">$@</span> <span class="si">${</span><span class="nv">cflags</span><span class="si">}</span>
-
-<span class="nf">clean</span><span class="o">:</span>
-    rm <span class="si">${</span><span class="nv">project</span><span class="si">}</span>
-
-<span class="nf">install</span><span class="o">:</span>
-    cp <span class="si">${</span><span class="nv">project</span><span class="si">}</span> /usr/local/bin
-
-<span class="nf">uninstall</span><span class="o">:</span>
-    rm /usr/local/bin/<span class="si">${</span><span class="nv">project</span><span class="si">}</span>
-
-<span class="nf">.PHONY</span><span class="o">:</span>
-    clean uninstall install
-</pre></div>
-<p>为了便于理解，上面这个makefile我有意采用了一种和bash shell接近的风格。前面 <code>project=</code> 就是一个定义变量的行为。这个project变量就是本脚本的名字。然后makefile下面的主体部分格式如下:</p>
-<div class="highlight"><pre><span></span><span class="nf">target</span><span class="o">:</span> <span class="n">prerequisites</span>
-    the <span class="nb">command …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
