@@ -198,16 +198,75 @@ cdwanze的博文 - tutorial tag</title>
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/understanding-web-server.html">理解web服务器
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-10-18T00:00:00+08:00">2016年 10月 18日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>本文主要是对 <a href="http://aosabook.org/en/500L/a-simple-web-server.html">500lines</a> 项目的这篇文章的学习和讨论，这篇文章写得是极好的，除了对如何编码有一些很好的借鉴参考价值，还主要能让读者对http web server 做的事情有了一个清楚的认识。这篇文章弄清楚了，对django或者flask在做一些什么事，就很胸有成竹了，甚至包括nginx等服务器在做一些什么事也有一个大致的了解了。</p>
+<p>关于计算机网络和HTTP相关不在本文讨论了，笔者也自觉这一块有时间还需要再深入补一补。</p>
+<p>我们的web服务器要做的工作如下：</p>
+<ul>
+<li>占着个端口等着某个HTTP 请求包发过来</li>
+<li>你知道的HTTP请求包有一定的格式，具体哪些信息进行parse操作</li>
+<li>确定该请求要做点什么（分发GET POST）</li>
+<li>程序做点什么</li>
+<li>形成返回的数据格式，比如html等。</li>
+<li>将返回的数据传回去</li>
+</ul>
+<p>上面步骤的前两步和最后一步python的 <code>HTTPServer</code> 已经帮我们自动做了，更不用说django和flask这些框架，也早就帮我们做好了。我们只需要关注的是，请求过来的是GET还是POST等，然后当然是程序总要干点什么事，最后就是把要送回去的数据整理好，再一并发过去即可。</p>
+<p>更高级的web server 如flask之类的，会提供很多额外的支持，比如请求参数，请求头等信息的整理，然后如果你希望实现restful风格api，只返回一个字典值，对应的一些响应头封装也帮你做好了，当然在返回数据上，比如html会引入jinja2模块引擎等，这些都是很好理解的 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/network-basic.html">计算机网络基础
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-10-17T00:00:00+08:00">2016年 10月 17日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">先找到目标计算机</h2>
+<p>首先让我们简单回顾一下在学习Linux系统时接触到的网络知识，Internet源起于美国的ARPAnet项目，其有个基本的知识点就是 <strong>只有两个位于同一网域的计算机才可以直接进行文件交互</strong> 。那么读者就会问了什么是网域，所谓网域说白了就是把一个大的互联网分割分割再分割的一个产物。而分割手段就是 <strong>子网掩码</strong> ，怎么判断两个计算机是同一网域呢？就是把这个计算机的IP地址和子网掩码相加，结果相同我们就说他们位于同一网域。</p>
+<p>现在我们说一台计算机要对另外一台计算机发送一个信息包，首先这个计算机会分析自己的路由表，如果发现目标机器和自己在同一网域，那么就直接发送信息了。如果不在同一网域，那么这个计算机就要根据路由表将这个信息包发送给默认的路由器（gateway）。路由器或者交换机在网络世界里扮演着一个特殊的角色，那就是它们不具体处理数据，只负责数据分发。具体过程实际上就是上面描述的过程的不断迭代重复，也就是路由器也有一个自己的路由表，然后看看目标机器是不是和自己在同一网域等等，如果不则将信息包发送给另外一个默认的路由器或交换机之类的等等，直到最终目标机器和自己位于同一网域，然后将信息包发送给目标机器。</p>
+<h2 id="_2">通信协议</h2>
+<p>计算机找到目标计算机了就可以开口说话了，但是不能随便说话也就是发送一堆乱码过去，那样目标机器是看不懂的。这个时候我们就需要制定计算机之间的通信协议。那么什么是计算机之间的通信协议？简单来说就好比两个人之间对话的某种规范，或者两个国家进行外交协商的某种特定交互流程。比如一个人对另外一个人说"你好"，另外一个人收到则回应"你好"，表明我已经收到了，然后第一个如果收到这个回应，则表明协议牵手成功，然后继续进行其他会话，比如"今天星期几"，发送过去，然后另外一个人收到之后回应"今天星期一"……就是类似这样的交互方式 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/requests-module.html">requests模块
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonpa-chong-ref">python爬虫
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2016-10-16T10:42:00+08:00">2016年 10月 16日
+                                              datetime="2016-10-16T00:00:00+08:00">2016年 10月 16日
                                         </time>
                                     </div>
                                 </section>

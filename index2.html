@@ -180,634 +180,6 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/matplotlib-module.html">matplotlib模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-04-06T00:00:00+08:00">2019年 4月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>之前数据绘图一文简单介绍了下如何在jupyter notebook 下绘制简单的直线图、饼图等等，本文主要是作为matplotlib模块绘图的综合性简要介绍。</p>
-<p>经常看到一些简单的例子，比如如何画出散点图或者等等，从简单的直白的到复杂的一大堆参数调配的都有，让人迷惑。matplotlib模块还可以和PyQt或者wxpython等后端结合起来等等高级功能，但我现在最急切的就是想要理解matplotlib模块到底做了一些什么事情，那些是必要的常规操作，那些是对外的数据接口。</p>
-<p>比如下面的调配中文字体支持的，是matplotlib模块的外围操作，应该绘图前就要调配好的：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_matplotlib_support_chinese</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s1">'SimHei'</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    设置matplotlib支持中文</span>
-<span class="sd">    :param font:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    """</span>
-    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
-
-    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.family'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sans-serif'</span>
-    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.sans-serif'</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">font</span><span class="p">)</span>  <span class="c1"># 插入中文字体</span>
-    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># 用来正常显示负号</span>
-</pre></div>
-<p>然后我们对之前pandas的绘图接口操作发现，除了传递必要的x，y数值进去外，还需要传一个 ax …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/sklearnmo-kuai.html">sklearn模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-03-11T00:00:00+08:00">2019年 3月 11日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>sklearn的很多内容在机器学习相关文章中都有所提及，这里作为拾遗性质。</p>
-<h3 id="sklearnpipeline">关于sklearn的pipeline</h3>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">FeatureUnion</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
-</pre></div>
-<p>Pipeline 用来创建sklearn数据处理流模型，FeatureUnion可整合多个特征。</p>
-<p>sklearn的pipeline不是数据处理管道流的万能灵药，不是说所有的数据处理流都要写成pipeline模式。实际上pipeline里面的transformer和estimator都有一些限定，若一定要贯穿数据处理始终，是很不方便的。</p>
-<ol>
-<li>pipeline里面的组件多接受X，机器学习中数据处理的核心数据矩阵</li>
-<li>调用pipeline 的fit 和 predict方法有一套固定作业模式，简单来说属于机器学习中常见的训练测试数据格式模式。fit的话, transformer 的 fit 和 transform方法都要执行一下，两个方法接受相同的X ，然后前面的transformer的transform方法返回的X是下一个transformer和fit接受的X。而pipeline的predict方法，前面的transformer的transform方法也都会执行一下，然后最后再执行estimator的predict方法。</li>
-<li>这套固定的作业模式，对于机器学习尤其是监督学习问题，是具有普适性的，而且利用pipeline，将所有数据预处理缩放整合进来 …</li></ol>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/spark-learning-note.html">spark学习笔记
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#da-shu-ju-ref">大数据
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-03-07T00:00:00+08:00">2019年 3月 7日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>总的说来数据挖掘，数据处理，机器学习直到深度学习等，实际上其骨子里面的很多东西都是相通的。而从实践的角度出发，我们可以把这个领域看做更多的矩阵或者张量运算的领域，虽然大数据这个词概念不是很清晰，到底何种程度上才算得上大数据，我的一个总的看法是，如果你面对的计算，矩阵的维度数是非常大的，至少是上万的级别，而且随着你的项目程序运行，这个矩阵的大小还会进一步膨胀，这个时候就算得上大数据了吧。</p>
-<p>现在单机的运算能力比以前又提升了不少，假设你面临一个算法问题，虽然暂时能够在单机上运算，但如果你面临的这个问题在一个很合理的时间范围内矩阵大小还会膨胀，直到超过你的单机承受能力，而你的算法代码，整个都是建立在矩阵这个思维之上的，这个时候我觉得你面对的就是一个大数据问题。</p>
-<p>大数据问题是这样一个问题，可能我这样说不太确切，但大体也可以这样说，大数据问题就是矩阵过大的问题。</p>
-<p>而现在似乎比较前沿的人工智能芯片问题实际上就是如何更好地设计芯片来加速矩阵运算的问题。</p>
-<p>也就是大数据问题并不讨论算法细节，机器学习细节等。原则上你应该写一套非大数据工具下的测试代码小规模测试下你的算法代码，再移植到大数据工具上，而一个设计得很好的大数据工具，就是要让你从部署，维护到移植都感觉非常的舒适。</p>
-<p>基于上面的讨论，这就引来了第一个问题，spark自带的机器学习包可能并不是很推荐使用，首先不得不承认spark精力有限，其自带的机器学习包功能很有限，更不用说新出来的神经网络等技术层出不穷，spark是不可能照顾得过来的。而keras那边对于这个领域是越做越好了，要让算法开发人员放弃这些模块，这是不可能的。所以我们在学习spark的时候必须要有这个底线，这个底线就是简单的根据spark做些简单的运算这是可以接受的，但复杂的算法实现不应该用spark那边提供的语言来写。如果不行 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/bayes-theory.html">贝叶斯理论
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-02-26T00:00:00+08:00">2019年 2月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>贝叶斯理论的应用非常广泛，本文重点描述贝叶斯统计的相关理论知识，并介绍了朴素贝叶斯的分类器的搭建。</p>
-<p>假定 x1 x2 x3 为观察事物的各个特征 y1 y2 y3 为观察事物的标签值</p>
-<h2 id="_2">贝叶斯定理</h2>
-<p>加入已经观察到某个事物具有特征 x1 那么判断该事物具有某个标签y1的概率计算如下
-</p>
-<div class="math">$$
-P(y1|x1) = \frac{P(x1|y1)*P(y1)}{P(x1)}
-$$</div>
-<p>
-其中P(x1|y1)是观察到事物已经具有y1特征，然后其具有x1特征的概率；而P(y1)是观察到事物具有y1特征的概率；而P(x1)是观察到事物具有x1特征的概率。</p>
-<h2 id="_3">朴素贝叶斯</h2>
-<p>现在再看到多个特征情况下的贝叶斯定理，比如说：
-</p>
-<div class="math">$$
-P(y1|x1,x2) = \frac{P(x1,x2 …</div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/crf-model.html">条件随机场模型
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#zi-ran-yu-yan-chu-li-ref">自然语言处理
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-02-26T00:00:00+08:00">2019年 2月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-seven.html">机器学习第七谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-02-26T00:00:00+08:00">2019年 2月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">模型的评估</h2>
-<p>模型的评估在后期你编写自己的机器学习算法和模型的时候就变的很重要起来了，实际上机器学习这块概念具有很大的通用性，因为推荐系统也属于机器学习范畴，深度学习等也属于机器学习范畴，后面你会看到机器学习的模型评估的这块知识，在很多地方都有涉及。</p>
-<p>模型预测 正类成了正类 计数TP</p>
-<p>模型预测 正类成了负类 计数FN</p>
-<p>模型预测 负类成了正类 计数 FP</p>
-<p>模型预测 负类成了负类 计数 TN</p>
-<p>模型总预测数 ALL</p>
-<h3 id="_2">准确率</h3>
-<div class="math">$$
-accuracy = \frac{TP+TN}{ALL}
-$$</div>
-<h3 id="_3">精确率</h3>
-<div class="math">$$
-precision = \frac{TP}{TP+FP}
-$$</div>
-<h3 id="_4">召回率</h3>
-<div class="math">$$
-recall = \frac{TP}{TP+FN}
-$$</div>
-<p>准确率可以简单理解为模型的正确率，正的都预测为正，负的都预测为负，那么准确率为1，这个模型真准。</p>
-<p>召回率就是针对正类的样本池，模型预测为正类的比率。</p>
-<p>在推荐系统，精确率又叫做查准率 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/flask-module.html">flask模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-01-03T00:00:00+08:00">2019年 1月 3日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>django是一种构建大型商务网站的解决方案，除非目前贵公司的技术栈是已经架构在django之上的，否则不管是个人性质的小项目，或者刚刚开始的新的项目，个人推荐flask多于django的。当然在flask和tornado之间如何选择上，个人觉得更多的是在你对python的异步这一块的理解上，如果你懂python的异步，并且也知道你要做的api对并发和速度都有很高的要求，那么就应该选择tornado，否则就选择flask。</p>
-<p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
-<h2 id="_2">推荐的启动方式</h2>
-<p>目前flask推荐的启动方式是通过：</p>
-<div class="highlight"><pre><span></span><span class="n">flask</span> <span class="n">run</span>
-</pre></div>
-<p>或者</p>
-<div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">flask</span> <span class="n">run</span> 
-</pre></div>
-<p>来启动flask。【这个方式很适合开发和测试，实际部署还是WSGI server来进行】</p>
-<p>要正常执行上面的命令，你需要设置好一些环境变量，最主要的是 <code>FLASK_APP</code> 这个变量：</p>
-<p>windows </p>
-<div class="highlight"><pre><span></span><span class="k">set</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">hello</span><span class="p">.</span><span class="n">py</span>
-<span class="n">flask</span> <span class="n">run</span>
-</pre></div>
-<p>linux </p>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">hello</span><span class="p">.</span><span class="n">py</span>
-<span class="n">flask</span> <span class="n">run</span>
-</pre></div>
-<p>推荐是通过在当前工作目录下加上 <code>.env</code> 这个文件 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-six.html">机器学习第六谈之pipeline
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-12-26T00:00:00+08:00">2018年 12月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="pipeline">机器学习第六谈之pipeline</h2>
-<p>前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。</p>
-<p>在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。</p>
-<p>sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。</p>
-<p>【pipeline工作流程图】</p>
-<p>本图片摘自 <a href="http://frankchen.xyz/2018/04/08/pipeline-in-machine-learning/">这篇文章</a></p>
-<p><img alt="" src="http://frankchen.xyz/images/15231783974167.jpg"/></p>
-<p>其中pipeline前面的叫做transformer，最后一个叫做estimator。</p>
-<h3 id="transformer">transformer</h3>
-<p>transformer必须要有fit和tranform两个方法，当你调用 <code>pipeline.fit</code> 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 <code>TransformerMixin</code> 这个类 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/python-c++-dll-in-windows.html">python和c++的dll的对接_in_windows
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-12-24T00:00:00+08:00">2018年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                <h2 id="ctypes">ctypes模块</h2>
-<p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
-<p>基本的使用如下：</p>
-<div class="highlight"><pre><span></span><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
-</pre></div>
-
-
-<p>假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。</p>
-<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">helloworld</span><span class="p">()</span>
-</pre></div>
-
-
-<p>接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。）</p>
-<p><a href="https://docs.python.org/3.7/library/ctypes.html">官方文档</a> 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。</p>
-<p>首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YOU_STRUCTURE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    基础信息结构体</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">),</span>  
-        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">24</span><span class="p">),</span> 
-        <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">40</span><span class="p">),</span> 
-    <span class="p">]</span>
-</pre></div>
-
-
-<p>然后实际使用如下：</p>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">YOU_STRUCTURE</span><span class="p">()</span>
-<span class="n">_ref_s</span>  <span class="o">=</span> <span class="n">ctypes …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-five.html">机器学习第五谈之数据预处理
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。</p>
-<p>本文介绍的内容，以下面代码形式展示出来：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
-
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">sk_normalize</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">binarize</span> <span class="k">as</span> <span class="n">sk_binarize</span>
-
-
-<span class="k">def</span> <span class="nf">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">old_df</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    输入ndarray值，然后根据给的老df的column列名来输出一个新的df</span>
-<span class="sd">    :param df_value:</span>
-<span class="sd">    :param old_df:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    """</span>
-    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/wxpython-talk-three.html">wxpython第三谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wxpython-ref">wxpython
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="textctrl">TextCtrl用代码改变文本</h2>
-<p>TextCtrl用代码直接改变文本的方法有：</p>
-<ul>
-<li>AppendText 尾部添加文本</li>
-<li>Clear </li>
-<li>EmulateKeyPress 产生一个按键事件</li>
-<li>SetInsertionPoint 设置插入点</li>
-<li>SetValue</li>
-<li>WriteText 在当前插入点插入文本</li>
-<li>Remove 删除指定范围文本</li>
-<li>Replace 替换指定范围文本</li>
-</ul>
-<h2 id="_1">对接系统的剪贴板</h2>
-<h3 id="_2">将文本放入剪贴板</h3>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextDataObject</span><span class="p">()</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"your text"</span>
-<span class="n">data</span><span class="o">.</span><span class="n">SetText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Open</span><span class="p">():</span>
-    <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">SetData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1">#将数据放置到剪贴板上</span>
-    <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'剪贴板打不开..'</span><span class="p">)</span>
-</pre></div>
-<h3 id="_3">从剪贴板中取内容</h3>
-<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextDataObject</span><span class="p">()</span>
-<span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">TheClipboard</span><span class="o">.</span><span class="n">Open …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pypubsub-module.html">pypubsub模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wxpython-ref">wxpython
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-29T00:00:00+08:00">2018年 11月 29日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>pypubsub模块的基本使用这里就不赘述了，简单的看下官方文档即可。这里我要说的是debug问题：</p>
-<p>pypubsub引入之后程序经常出现问题之后是没有任何异常信息直接退出，这给日常编码带来了很多困扰，下面重点解决这个问题。</p>
-<p>官方文档的高级使用部分有相关介绍，不过似乎有点杂乱，然后语焉不详。</p>
-<p>搜索到 <a href="https://wxpython.org/Phoenix/docs/html/wx.lib.pubsub.core.listener.IListenerExcHandler.html">这个页面</a> ，似乎是要这样配置就能捕捉到异常信息。</p>
-<p>我试着跟着他写了一下，然后发现 listenerID 和 topicObj.getName() 只有消息的名字，具体程序捕捉到了什么异常并没有写明。</p>
-<p>在简单了解Topic和Linstener对象之后发现也找不到存储异常信息的地方。</p>
-<p>只好翻文档，在API的utils里面有个ExcPublisher引起来了我的兴趣，看了下源码，简单的使用哪个 ExcPublisher 发现能够打印出异常信息，但是还是有其他异常。然后发现其核心实际上就是这里：</p>
-<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listenerID</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">topicObj</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Handle the exception raised by given listener. Send the</span>
-<span class="sd">        Traceback to all subscribers of …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/recommender-talk-two.html">推荐系统第二谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-27T00:00:00+08:00">2018年 11月 27日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>由于我对于推荐系统属于摸索性质，然后又过了一段时间，再来看之前写的推荐系统第一谈文章，基本上要全部删掉重写。但这里还是叫做推荐系统第二谈吧，一些大概没什么太大问题的东西都放在下面的基本概念了解部分了。</p>
-<h2 id="_2">基本概念了解</h2>
-<p>推荐系统本质上是隶属于机器学习系统的，所以在简单了解下推荐系统相关算法之后，具体实现推荐系统的架构，是应该基于机器学习系统架构，然后在这之上引入新的处理流即可。</p>
-<p>推荐系统分为两类推荐：一类是评分预测推荐；另一类是topN推荐。之前我们看的很多教材和案例基本上都在做评分预测推荐，大概如下面表格的数据：</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">物品1</th>
-<th align="center">物品2</th>
-<th align="center">物品3</th>
-<th align="center">物品4</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">用户1</td>
-<td align="center">2</td>
-<td align="center">?</td>
-<td align="center">3</td>
-<td align="center">?</td>
-</tr>
-<tr>
-<td align="center">用户2</td>
-<td align="center">1</td>
-<td align="center">2</td>
-<td align="center">5</td>
-<td align="center">?</td>
-</tr>
-<tr>
-<td align="center">用户3</td>
-<td align="center">?</td>
-<td align="center">?</td>
-<td align="center">?</td>
-<td align="center">?</td>
-</tr>
-</tbody>
-</table>
-<p>然后用户对某些物品有些评分，然后开始开展推荐工作。老实说这些教材一开始给了我很大的困扰，因为我现在活着说一般做推荐系统刚开始，基本上是没有评分数据的。甚至不要说一开始，就是到了网站运营后期也可能没有这个收集用户评分的需求。在这里要感谢项亮的书籍【参考资料2】，提醒了我，还有另外一类推荐系统，叫做topN推荐，返回一些推荐列表数据，这才是通常我们常见的应用类型。</p>
-<h3 id="usercf">评分预测推荐的usercf方法</h3>
-<p>usercf也就是所谓的协同过滤推荐感觉教材里面到处都有，但实际因为缺少用户评分数据是不现实的，最大的用处可能就是让我们理解这个思路，那就是通过用户评分的相似性继而扩展到用户行为的相似性，从而找到相似的用户 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/wxpython-drawing-custom-widget.html">wxpython绘图和自定义窗体
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wxpython-ref">wxpython
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-23T00:00:00+08:00">2018年 11月 23日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>本文重点讨论wxpython较为底层的绘图知识和利用这些知识来建立自定义的一些窗体。</p>
-<h2 id="gdi">GDI</h2>
-<p>wxpython底层绘图有个GDI（Graphics Device Interface）的概念，可以理解为通用绘图接口，利用这个通用绘图接口，一套绘图方法，就可以向显示器，打印机等绘图。这样程序员可以不用考虑硬件底层来进行绘图编程了。</p>
-<p>这个GDI具体来说就是一些绘图的类和方法。</p>
-<h2 id="dc">DC</h2>
-<p>在开始绘图前，你需要创建一个设备上下文DC（device context），这个DC具体来说就是wx.DC类。实际使用中不应该使用wx.DC类，而应该选择更具体的设备向的DC子类。这些子类具体分为三类：</p>
-<ul>
-<li>用于绘制到屏幕的上下文</li>
-<li>用于绘制到另外地方而非屏幕</li>
-<li>用于缓冲一个设备上下文</li>
-</ul>
-<h3 id="_2">用于绘制到屏幕</h3>
-<ul>
-<li>wx.ClientDC </li>
-<li>wx.PaintDC 如果你是在EVT_PAINT事件中，那么你应该使用这个设备上下文，其他时候必须使用wx.ClientDC 。</li>
-<li>wx.WindowDC 如果你不光希望在客户区绘制，窗体的边框，标题栏等你都想绘制，那么就使用这个。</li>
-<li>wx.ScreenDC 如果你希望在整个屏幕上绘制，那么就使用这个。</li>
-</ul>
-<h3 id="_3">非屏幕设备上下文</h3>
-<ul>
-<li>wx …</li></ul>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/websockets-module.html">websockets模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-22T00:00:00+08:00">2018年 11月 22日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>python和websokets相关的模块在github得星差不多的大概有三个，一个autobahn在使用上更偏向twisted，而且个人使用的时候在连接上会报websocket upgrade error这样的错误，可能是我的问题，而另外一个更偏向javascript那边websocket的使用风格，因为个人没有使用过，不做点评，本文重点关注的是这个模块：</p>
-<p><a href="https://github.com/aaugustin/websockets">https://github.com/aaugustin/websockets</a></p>
-<p>这个模块使用还是很简单的，不过需要读者对asyncio那块异步编程要有所熟悉。</p>
-<h2 id="websocket">全局websocket</h2>
-<p>首先你的应用启动的时候和服务器建立websocket连接，最好让这个websocket成为一个全局变量，后续的发送和监听消息需求都根据这个websocket来。</p>
-<h2 id="gui">和其他GUI框架的继承问题</h2>
-<p>这个websockets模块和GUI框架的继承问题更多的是在于该GUI框架如何和asyncio的事件循环集成起来。这个在目标GUI框架的时候会有所讨论，就不在这里讨论了。</p>
-<p>简单来说就是asyncio的事件循环里面你将添加一个或者多个任务，在目标任务中，完成websoket的相关工作。</p>
-<h2 id="_2">常驻监听模式</h2>
-<p>请读者看下面代码，下面建立了一种常驻监听模式，由于可能存在各种原因websocket服务器那边可能会强制把websocket连接关闭，所以你需要捕捉这个异常，然后试着重新建立一个全局websocket连接。</p>
-<div class="highlight"><pre><span></span>    <span class="n">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        主面板初始化新建一个全局的websocket</span>
-<span class="sd">        然后开始websocket监听</span>
-<span class="sd">        :return:</span>
-<span class="sd">        """</span>
-        <span class="n">ws_url</span> <span class="o">=</span> <span class="n">create_ws_url</span><span class="p">()</span>
-
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">async</span> <span class="k">with</span> <span class="n">websockets …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-four.html">机器学习第四谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-07T00:00:00+08:00">2018年 11月 7日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>在前面第三谈中谈论的典型的二分类问题，多分类问题和回归问题在机器学习中都属于监督学习。此外还有无监督学习，自监督学习和强化学习。</p>
-<h3 id="_2">无监督学习</h3>
-<p>无监督学习是数据分析的必备技能，在解决监督学习问题之前，为了更好地了解数据集，它通常是一个必要步骤。</p>
-<p>降维 聚类 是常见的无监督学习方法。</p>
-<h3 id="_3">自监督学习</h3>
-<p>自编码器 (autoencoder) 是有名的自监督学习例子。</p>
-<h3 id="_4">强化学习</h3>
-<p>智能体接受环境的信息，为了某种奖励最大化而学习选择行为。</p>
-<h2 id="_5">机器学习通用工作流程</h2>
-<h3 id="_6">定义问题，收集数据集</h3>
-<ul>
-<li>你的输入数据是什么？你要预测什么？</li>
-<li>你面对的是什么类型的问题？是二分类问题还是多分类问题等等。</li>
-</ul>
-<h3 id="_7">选择衡量成功的指标</h3>
-<p>模型要优化什么，它应该直接和你的业务目标相关。</p>
-<h3 id="_8">确定评估方法</h3>
-<ul>
-<li>留出验证集 数据量很大的时候采用 
-  具体操作就是训练数据里面一部分作为训练集，剩下来的一部分作为验证集，然后用训练集训练，验证集评估当前模型的好坏。模型参数调节好训练好之后，记得最后用整个训练集从头训练一次，最后用另外的测试集数据测试下模型的实际效果。</li>
-<li>K折交叉验证</li>
-<li>重复的K折验证</li>
-</ul>
-<h3 id="_9">准备数据</h3>
-<h4 id="_10">数据张量化</h4>
-<p>神经网络的所有输入和输出目标都必须是浮点数张量（某些情况下可以是整数张量）。无论面对的是声音，文本，图像还是视频，都必须先将其转换成为张量 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/machine-learning-talk-three.html">机器学习第三谈
  </a></h1>
 
@@ -962,6 +334,602 @@ x …</p>
 <li>搜索引擎根据你的点击记录来优化你的下次搜索结果</li>
 <li>你在网上点击或者查看或者买了某个东西，网站记录你的这些活动，从而更好地为你推荐商品，或者推荐优惠券。</li>
 <li>手写数字识别 …</li></ul>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/suan-fa-fu-za-du.html">算法复杂度
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-10-06T00:00:00+08:00">2018年 10月 6日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>一般讨论算法复杂度主要关注的是算法的时间复杂度，而真到了该思考算法的时间复杂度了，那么这时目标算法将应对的是一个输入规模n很大的情况。人们常说的大O表示法将一些细枝末节的东西都省略了的，因为输入规模n很大，还关心那多出来的几步是没有意义的。</p>
+<p>所以我们更多的是专注于算法中的循环部分，而对于循环部分，若循环次数和输入规模无关，则记为O(1) 常数运行时间。</p>
+<p>如果我们遇到了如下的循环：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+<p>这个循环和输入规模n相关，我们记作 O(n) 线性运行时间。</p>
+<p>假设一个算法里面又有上面提到的O(1) ，又有上面的O(n) ，那么我们应该将O(1) 项去掉：</p>
+<ul>
+<li>如果运行时间是一个多项式的和，那么保留增长速度最快的项，去掉其他各项</li>
+</ul>
+<p>那么上面提到的算法复杂度就可简单记为 O(n) 。</p>
+<p>又假设有个算法，有两个这样的循环：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/logbook-module.html">logbook模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-08-27T00:00:00+08:00">2018年 8月 27日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>logbook似乎是个不错的模块可以改进我们的日志功能，可以看做系统logging模块的第三方升级版，但还是有很多地方不同的。</p>
+<p>一开始我接触的最大的不同就是logbook官方文档并不推荐将某个handler注册在某个logger的那种做法，logbook的handler可以注册在整个线程或者整个进程上。或者我们看到官方文档的第一个例子是这种写法：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span><span class="o">.</span><span class="n">push_application</span><span class="p">()</span>
+<span class="n">warn</span><span class="p">(</span><span class="s1">'This is a warning'</span><span class="p">)</span>
+</pre></div>
+<p>或者写作：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">log_handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">log_handler</span><span class="o">.</span><span class="n">applicationbound</span><span class="p">():</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s1">'This is too cool for stdlib'</span><span class="p">)</span>
+</pre></div>
+<p>这是单个注册在整个程序上的，此外还有 <code>threadbound</code> 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/greedy-algorithm.html">贪婪算法
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-08-26T00:00:00+08:00">2018年 8月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>任何问题总可以通过暴力穷举算法求解，当然有些问题组合数情况太多了，尤其是某些问题，没有快速算法，即NP完全问题。那么可以试着用一些近似算法来快速找到一个近似解。贪婪算法就是其中的一个近似解。</p>
+<p>贪婪算法并不是某种具体的算法，更像是写算法时的一种思路参考。如果你要解决问题，而该问题可以分解为多个步骤，那么你可以通过寻找每步的局部最优解，来<strong>近似</strong>得到目标问题的全局最优解。（贪婪算法并不保证你得到的解一定是全局最优解，但一般这个解是很靠近全局最优解了。）</p>
+<p>对于一个问题，如果贪婪算法是有效的，那么一般贪婪算法就是解决这个问题最好的算法。</p>
+<h2 id="_1">背包问题</h2>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">items</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
+
+    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/sqlalchemy-module.html">sqlalchemy模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-07-10T00:00:00+08:00">2018年 7月 10日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>本文分为两个部分，sqlalchemy的非ORM部分和ORM部分。一般使用是推荐使用ORM，这将让你的代码更python，更易读易懂。但ORM部分要用好，很多非ORM部分知识是需要的,，下面根据笔者的实践列出一些非ORM部分非常常用的一些知识部分：</p>
+<ul>
+<li>创建Engine 理解创建Engine部分将有助于你在很多地方理解如何配置sqlalchemy的数据库连接</li>
+<li>列的属性 列的数据类型 这两个是必看的，你在定义ORM模型的时候必然要参考这个</li>
+<li>select语句和理解RowProxy对象 帮助你理解如何在query中编写select语句和出来的结果如何使用</li>
+</ul>
+<h3 id="_2">安装</h3>
+<p>sqlalchemy的安装简单用pip命令安装之即可:</p>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sqlalchemy</span>
+</pre></div>
+<h3 id="_3">引用惯例</h3>
+<p>在后面都默认有如下引用:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+<p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。</p>
+<h2 id="_4">简介</h2>
+<p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
+<p><img alt="img" src="https://docs.cdwanze.work/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>
+<p>和数据库直接相连的是我们熟悉的那些DBAPI接口模块，比如: sqlite3, pymysql, psycopg2等，然后中间的核心层有Engine，连接池，方言 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/alembic-module.html">alembic模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
+<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
+<h2 id="_1">基本使用</h2>
+<h3 id="alembic">初始化alembic项目</h3>
+<div class="highlight"><pre><span></span><span class="n">alembic</span> <span class="n">init</span> <span class="n">alembic</span>
+</pre></div>
+<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
+<h3 id="modelspy">根据models.py来</h3>
+<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
+<div class="highlight"><pre><span></span><span class="n">alembic</span> <span class="n">revision</span> <span class="c1">--autogenerate -m "add_some_key"</span>
+</pre></div>
+<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myapp …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/pandasmo-kuai.html">pandas模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>本文对pandas模块的一些核心概念进行说明。</p>
+<h2 id="_1">基本入门</h2>
+<p>pandas最核心的两个数据结构就是 Series 类和 DataFrame 类。其中DataFrame可能会用的偏多一点，Series相当于一维情况下较简单的DataFrame，有的时候会用到。本文重点讨论DataFrame类。</p>
+<p>DataFrame之所以很常用是因为这种数据结构太常见了，在excel中，在csv中，在sql中，等等来源的数据都可以汇总成为DataFrame数据结构，然后进行一些后面必要的数据处理，包括送入机器学习或者深度学习的模型中去。</p>
+<h2 id="_2">读写文件支持</h2>
+<p>pandas的io子模块写得很便捷，实际上我经常看到有些python程序员并不是在做数据处理，有时都会调用下pandas的io来做一些读写操作。</p>
+<p>其大体有这些函数：</p>
+<ul>
+<li>read_csv    to_csv</li>
+<li>read_json   to_json</li>
+<li>read_html to_html</li>
+<li>read_excel to_excel</li>
+<li>read_sql to_sql</li>
+</ul>
+<p>这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。</p>
+<h3 id="txt">读txt文件</h3>
+<p>实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/airflow-module.html">airflow模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-24T00:00:00+08:00">2018年 6月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>airflow和luigi模块相比有以下优点：</p>
+<ol>
+<li>通用的DAG概念来描述工作流，更专业点。</li>
+<li>集成系统的crontab从而支持周期性任务，这样airflow就只能在linux系统下运行了。</li>
+<li>图形界面很美观，功能更强大。</li>
+</ol>
+<p>老实说我不喜欢crontab，如果只是简单调度，用apscheduler或者之类的工具简单写下就能集成到你的软件系统中去，而再复杂点的工作流，任务流程等等管理，都推荐使用airflow这样的框架来管理。</p>
+<p>而至于说到大数据上的那些流式数据处理工具，实际上只有百分之几的公司因为业务需要必须上大数据，大部分公司是没必要上大数据的，因为大数据引入了太多的复杂度了，如果没有必要，而仅仅追求时髦去玩大数据，那显然是违背我们程序界公认的KISS原则的【Keep it simple and stupid.】。</p>
+<h3 id="airflow">安装airflow</h3>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">apache</span><span class="o">-</span><span class="n">airflow</span>
+</pre></div>
+<h3 id="_2">推荐起步</h3>
+<p>推荐 项目工作目录下 <code>.env</code> 文件下写上：</p>
+<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">AIRFLOW_HOME</span><span class="o">=</span><span class="p">.</span>
+</pre></div>
+<p>这样使用pipenv或者其他工具在当前目录激活工作环境的时候，也自动激活了airflow在当前目录下工作的配置。这样我们airflow相关works配置的相关代码都放在这里。</p>
+<p>激活虚拟环境后，然后我们有如下操作：</p>
+<h3 id="_3">初始化数据库</h3>
+<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">initdb</span>
+</pre></div>
+<h3 id="webserver">启动webserver</h3>
+<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">webserver</span>
+</pre></div>
+<h2 id="_4">使用其他数据库 …</h2>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/makefileni-bu-lai-yi-fa-ma.html">makefile你不来一发吗
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-18T00:00:00+08:00">2018年 6月 18日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="makefile">简单了解下makefile</h2>
+<p>makefile一般只能在Linux环境下运行，更确切来说要有gnu make这个工具去运行Makefile这个文件。</p>
+<p>makefile里面内容其实很丰富的，实际上甚至有点过于复杂了。不过有的时候只是简单使用其基本功能还是很便利的。</p>
+<div class="highlight"><pre><span></span><span class="nv">project</span><span class="o">=</span>helloworld
+<span class="nv">cflags</span><span class="o">=</span>-g -Wall  <span class="si">${</span><span class="nv">CCFLAGS</span><span class="si">}</span>
+
+<span class="nf">${project}</span><span class="o">:</span> 
+    <span class="si">${</span><span class="nv">CC</span><span class="si">}</span>  helloworld.c -o <span class="nv">$@</span> <span class="si">${</span><span class="nv">cflags</span><span class="si">}</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+    rm <span class="si">${</span><span class="nv">project</span><span class="si">}</span>
+
+<span class="nf">install</span><span class="o">:</span>
+    cp <span class="si">${</span><span class="nv">project</span><span class="si">}</span> /usr/local/bin
+
+<span class="nf">uninstall</span><span class="o">:</span>
+    rm /usr/local/bin/<span class="si">${</span><span class="nv">project</span><span class="si">}</span>
+
+<span class="nf">.PHONY</span><span class="o">:</span>
+    clean uninstall install
+</pre></div>
+<p>为了便于理解，上面这个makefile我有意采用了一种和bash shell接近的风格。前面 <code>project=</code> 就是一个定义变量的行为。这个project变量就是本脚本的名字。然后makefile下面的主体部分格式如下:</p>
+<div class="highlight"><pre><span></span><span class="nf">target</span><span class="o">:</span> <span class="n">prerequisites</span>
+    the <span class="nb">command …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/docker.html">docker
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>关于docker是什么请参看 <a href="https://docker_practice.gitee.io/introduction/what.html">这个网页</a> ，说docker将改变软件生态确实是不为过的。老实说在接触docker之后感觉之前学到的很多东西，比如linux系统相关的一些，ansible等等部署工具相关的一些，virtualbox和 vagrant相关的一些，都在慢慢过时和淘汰了。当然那些工具还是很有用的，说他们被淘汰了是有点过了，更确切来说，对于一般玩家来说，可以节省更多的精力和时间，而不需要折腾那些工具那些配置学习折腾个老半天了。</p>
+<blockquote>
+<p>That‘s why we love docker.</p>
+</blockquote>
+<p>但实际上docker带来的变化远远不止于只是一个可以节省开发者做某些事情的时间的一个不错的工具那么简单，其伴随着SPPS，软件即服务，更确切来说整个互联网的大背景下，应运而生的。与之相应的，开发者们顺应这个时代，在编码，软件应用的很多方面，都需要做出改变。请读者进一步阅读 https://12factor.net/zh_cn/ 里面的讨论。</p>
+<p>实际上之前我折腾vagrant的时候，就很是认同这个理念： 那就是开发，测试，生产一致的环境，彻底解决，在这里可以运行，在这里就不行了的问题。而vagrant的控制virtualbox创建虚拟机的方式，在我看来显得略微笨拙了点，配置的繁琐，似乎并没有很好地解决这个问题 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/python-dateutilmo-kuai.html">python-dateutil模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                                        </time>
+                                    </div>
+                                </section>
+                                <p>一般能够使用python的内置模块datetime解决的问题或者简单写几个辅助函数就能解决的问题是没必要上 python-dateutil 模块的，但有的时候某些问题，上python-dateutil模块会非常的方便，然后我发现好多有名的模块都默认安装这个模块了。</p>
+<h2 id="relativedelta">relativedelta</h2>
+<p>某些问题，用datetime的replace将某个值设为0或者什么值，或者用timedelta来减去什么值，大部分都能解决，但有的时候，比如跨月份涉及到要考虑天数不等或者其他等等问题，用relativedelta还是很方便的。</p>
+<p>总的说来涉及到datetime的某个跨度的计算问题，还是推荐使用 relativedelta函数。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dateutil.relativedelta</span> <span class="kn">import</span> <span class="n">relativedelta</span>
+<span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="n">sdt</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">relativedelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="n">months</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="rrule">rrule</h2>
+<p>虽然没有lrule，但根据上面的relativedelta配置的起始时间，然后指定结束时间，通过rrule函数来生成一个时间区间，有时是很方便的。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dateutil.rrule</span> <span class="kn">import</span> <span class="n">rrule</span><span class="p">,</span> <span class="n">MONTHLY</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">rrule</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="n">MONTHLY</span><span class="p">,</span> <span class="n">dtstart</span><span class="o">=</span><span class="n">sdt</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="n">now …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/shi-yong-cythonlai-jia-su-python.html">使用cython来加速python
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">找到性能瓶颈所在</h2>
+<p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="n">test</span><span class="p">.</span><span class="n">py</span>
+</pre></div>
+<p>或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。</p>
+<p>目前我知道的循环结构提速很明显，然后指定静态类型会提速。</p>
+<p>一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。</p>
+<p>参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。</p>
+<p>在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。</p>
+<h2 id="pyx">pyx文件</h2>
+<p>关于pyx文件的更多请查看cython的官方手册。</p>
+<p>下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来，</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/httpzhi-shi.html">http知识
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#html5-ref">html5
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-28T00:00:00+08:00">2018年 5月 28日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="http">HTTP知识</h2>
+<h2 id="url">URL结构</h2>
+<p>URL结构如下:</p>
+<div class="highlight"><pre><span></span><span class="n">scheme</span><span class="p">:[</span><span class="o">//</span><span class="p">[</span><span class="k">user</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="p">]</span><span class="k">host</span><span class="p">[:</span><span class="n">port</span><span class="p">]][</span><span class="o">/</span><span class="p">]</span><span class="n">path</span><span class="p">[</span><span class="o">?</span><span class="n">query</span><span class="p">][</span><span class="o">#</span><span class="n">fragment</span><span class="p">]</span>
+</pre></div>
+<p>其中:</p>
+<ul>
+<li><strong>scheme:</strong> 描述访问服务器的协议，也就是如何获取该资源，最常见的是http，此外还有ftp等。</li>
+<li><strong>user:password:</strong> 这里用于http认证</li>
+<li><strong>host:</strong> 那里获取资源</li>
+<li><strong>port:</strong> 连接端口号是多少</li>
+<li><strong>path:</strong> 具体访问该资源的path</li>
+<li><strong>query:</strong> 其他额外参数</li>
+<li><strong>fragment:</strong> 片段，为client使用。还有一个params不太常用。</li>
+</ul>
+<p>URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作。具体转义字符是 <code>%</code> ，比如空格SPACE，具体在URL中的表示就是 <code>%20</code> 。即使是ascii里面，也有一些字符需要转义，然后比如中文字符等，也需要如此utf-8编码和转义。比如 "书"</p>
+<div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="s1">'书'</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+    <span class="n">b</span><span class="s1">'\xe4\xb9 …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/html5dai-ma-gui-fan.html">html5代码规范
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#html5-ref">html5
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-05-26T00:00:00+08:00">2018年 5月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="html5">html5代码规范</h1>
+<p>本文参考了 <a href="http://codeguide.bootcss.com">这篇文章</a> 和 <a href="http://alloyteam.github.io/CodeGuide/">这篇文章</a> 还有 <a href="https://github.com/airbnb/javascript">aribnb的javascript规范</a> 。</p>
+<p>需要指出的是这些都是一些代码建议，其中有一些还有点大头开蛋还是小头开蛋的意思，比如到底是空四个空格还是两个空格，这些有分歧的我就不写出来了，读者自行决定吧。</p>
+<h2 id="_1">总的原则</h2>
+<ol>
+<li>无论团队人数多少，代码应该看起来就好像一个人写的。——这个原则为大家所公认。</li>
+<li>文件名推荐是小写字母加下划线。（小写字母加连字符也是可以的，但是绝对不推荐带上空格）</li>
+</ol>
+<h2 id="html">html</h2>
+<ol>
+<li>
+<p>缩进，这个一个好的编辑器会提供这个自动缩进功能的。</p>
+</li>
+<li>
+<p>属性名全部小写，用 <code>-</code> 隔开。</p>
+</li>
+<li>
+<p>属性的定义用 <strong>双引号</strong> 包围起来。</p>
+</li>
+<li>
+<p><code>&lt;hr&gt;</code> <code>&lt;img src=...&gt;</code> 这样的不用后面加个 <code>/</code> 号了。</p>
+</li>
+<li>
+<p>关闭标签不要省略 <code>&lt;li&gt;...&lt;/li&gt;</code>  这是没有疑问的。</p>
+</li>
+<li>
+<p>开头格式都是： <code>&lt;!DOCTYPE html&gt;</code> </p>
+</li>
+<li>
+<p>语言指定遵循规范 ，<code>&lt;html lang="zh-cn"&gt;</code> </p>
+</li>
+<li>
+<p>字符编码推荐指定utf8，<code>&lt;meta charset="utf-8"&gt;</code> </p>
+</li>
+<li>
+<p>IE兼容模式，推荐加上这样一行 …</p></li></ol>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/learning-gunicorn.html">学习gunicorn
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-03-12T00:00:00+08:00">2018年 3月 12日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>gunicorn 挂载python的 wsgi 服务还是不错的，多进程多线程支持，大大提升服务性能。</p>
+<h2 id="_2">配置</h2>
+<p>配置可以就是一个python文件，然后大体内容如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">cpu_count</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span>
+
+<span class="k">def</span> <span class="nf">max_workers</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">cpu_count</span><span class="p">()</span>
+
+
+<span class="n">bind</span> <span class="o">=</span> <span class="s1">'127.0.0.1:8000'</span>
+<span class="n">max_requests</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">worker_class</span> <span class="o">=</span> <span class="s1">'gevent'</span>
+<span class="n">workers</span> <span class="o">=</span> <span class="n">max_workers</span><span class="p">()</span>
+</pre></div>
+<p>写上这么一个python文件之后，启动gunicorn挂载django服务大体如下：</p>
+<div class="highlight"><pre><span></span><span class="n">gunicorn</span> <span class="o">-</span><span class="k">c</span> <span class="n">gunicorn_config</span><span class="p">.</span><span class="n">py</span> <span class="n">youapp</span><span class="p">.</span><span class="n">wsgi</span>
+</pre></div>
+<p>其他配置还有：</p>
+<ul>
+<li>pidfile</li>
+<li>reload 代码改变之后自动reload，这个前期开发会很有用</li>
+<li>accesslog access日志所在地</li>
+<li>errorlog …</li></ul>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/fire-module.html">fire模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-02-22T15:25:00+08:00">2018年 2月 22日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>初次接触 <a href="https://github.com/google/python-fire">fire模块</a> 就不自觉的和 <a href="https://github.com/pallets/click">click模块</a> 进行对比，老实说我一开始还真不太相信这是google团队的作品，google团队的产品会这么简洁，不过毕竟后面写着 ： <code>This is not an official Google product.</code></p>
+<p>首先说下fire模块的优点，这个初步了解一下优点是很明显的： 可以让你少写点代码。作为一个程序员最大的愿望是什么： 少写点代码就能把事办成了。当然继续往下说，fire模块可以让你的代码更简洁，现在真的一个python脚本就是一个命令行工具了，一句废话都没有了，包括函数类里面的文档定义都是有用的。就作为一般最简单的命令行需求，我是推荐fire模块的。</p>
+<p>但是fire模块目前github上 commit很少，版本号也才 0.1.2，可能模块还有很多不稳定或者bug都是可能的，如果读者在项目需求上只是一两个python脚本需要做成命令行工具，我还是推荐click模块。如果读者有大量的python脚本转成命令行工具的需求，这在目前数据处理工作越来越多的大环境（实际上我怀疑这也是他们开发fire模块的初衷），那么使用fire模块无疑是能省点力气的，毕竟当初人们觉得click模块方便那也是只是相对于写一个命令行工具而言，现在情况确实有所不同了。</p>
+<div class="highlight"><pre><span></span>pip install fire
+</pre></div>
+<p>官方文档已经说的很详细了，本身使用是很简单的，下面我随便说说吧。</p>
+<h2 id="_2">第一个例子 …</h2>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/learning-centos7-system.html">学习centeos7系统
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-02-19T00:00:00+08:00">2018年 2月 19日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">安装系统</h2>
+<p>centos7的安装目前最大的难点在硬盘分区上，加上新生代的uefi启动方式，还是有些新的问题需要讨论的。</p>
+<p>记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照 鸟哥的私房菜   一章的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了，总之，分出3-4Gswap分区意思一下就可以了。</p>
+<h3 id="linux">各个硬件在linux下的名字</h3>
+<p>这个需要了解下，参考 <a href="http://linux.vbird.org/linux_basic/0130designlinux.php">鸟哥的私房菜第二章</a> ，</p>
+<ul>
+<li>硬盘或者USB模拟的硬盘 ：   /dev/sd[a-p]</li>
+<li>CDROM或者DVDROM :  /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1]</li>
+<li>打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15]</li>
+<li>鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标)</li>
+</ul>
+<h3 id="uefi">UEFI …</h3>
                             </article>
 
  <nav aria-label="Page Navigation">

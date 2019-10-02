@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="protocol, draft, " />
+
+<meta property="og:title" content="SDP协议 "/>
+<meta property="og:url" content="https://docs.cdwanze.work/drafts/SDP-protocol.html" />
+<meta property="og:description" content="前言 本文翻译自 RFC2327 即 SDP协议英文版，本文简要翻译之。 简介 在互联网组播（multicast）网络架构中【Mbone -- 组播，IP数据传输三大模型之一，另外还有单播和广播。】一个会话目录工具被应用于分发多媒体会议和协商会议地址和分享会议的具体工具信息。本文档描述了一个会话描述协议用于这个目的，本备忘录不描述组播地址分配或者SDP信息分发细节。这些都描述在相关备忘录中，SDP也不打算讨论媒体的编码细节。 背景 Mbone是互联网的一部分支持IP组播模式，所以允许有效的多对多沟通交流。这个在多媒体会议中经常用到。这样的会议通常都有这样的性质，那就是会议的组员并不要求协调好，去接收一个会议，一个用户，在Mbone站点通常只需要知道会议的数据流的组播群地址和UDP的端口号。 【TODO】 术语列表 【TODO】 SDP用法 组播声明 SDP是一个会话描述协议用户多媒体会话。一个常见的使用模式是一个client去声明一个会议会话，通过周期组播一个声明包到一个大家知道的组播地址和端口号哪里，使用的是会话声明协议SAP（Session Announcement Protocol）。 SAP包是一个UDP套接字用如下格式： |--------------------| | SAP header | |--------------------| | text payload | |////////// header是SAP的header，SAP具体描述在相关备忘录中。 text payload是SDP协议描述，具体内容就是本备忘录描述的 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2019-08-30T00:00:00+08:00" />
+<meta property="" content="2019-08-30T00:00:00+08:00" />
+<meta name="twitter:title" content="SDP协议 ">
+<meta name="twitter:description" content="前言 本文翻译自 RFC2327 即 SDP协议英文版，本文简要翻译之。 简介 在互联网组播（multicast）网络架构中【Mbone -- 组播，IP数据传输三大模型之一，另外还有单播和广播。】一个会话目录工具被应用于分发多媒体会议和协商会议地址和分享会议的具体工具信息。本文档描述了一个会话描述协议用于这个目的，本备忘录不描述组播地址分配或者SDP信息分发细节。这些都描述在相关备忘录中，SDP也不打算讨论媒体的编码细节。 背景 Mbone是互联网的一部分支持IP组播模式，所以允许有效的多对多沟通交流。这个在多媒体会议中经常用到。这样的会议通常都有这样的性质，那就是会议的组员并不要求协调好，去接收一个会议，一个用户，在Mbone站点通常只需要知道会议的数据流的组播群地址和UDP的端口号。 【TODO】 术语列表 【TODO】 SDP用法 组播声明 SDP是一个会话描述协议用户多媒体会话。一个常见的使用模式是一个client去声明一个会议会话，通过周期组播一个声明包到一个大家知道的组播地址和端口号哪里，使用的是会话声明协议SAP（Session Announcement Protocol）。 SAP包是一个UDP套接字用如下格式： |--------------------| | SAP header | |--------------------| | text payload | |////////// header是SAP的header，SAP具体描述在相关备忘录中。 text payload是SDP协议描述，具体内容就是本备忘录描述的 …">
+
+    <title>
+SDP协议  · cdwanze的博文
+</title>
+
+
+        <link href="https://docs.cdwanze.work/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://docs.cdwanze.work/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://www.cdwanze.work"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://docs.cdwanze.work/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="https://docs.cdwanze.work">博文首页</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                        <li >
+                            <a href="https://docs.cdwanze.work/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="https://docs.cdwanze.work/gong-gao.html">公告</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://docs.cdwanze.work/drafts/SDP-protocol.html"> SDP协议  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">简介</a></li>
+<li><a href="#_3">背景</a></li>
+<li><a href="#_4">术语列表</a></li>
+<li><a href="#sdp">SDP用法</a><ul>
+<li><a href="#_5">组播声明</a></li>
+<li><a href="#emailwww-announcements">Email和WWW Announcements</a></li>
+</ul>
+</li>
+<li><a href="#_6">依赖和建议</a><ul>
+<li><a href="#_7">媒体信息</a></li>
+<li><a href="#_8">时间信息</a></li>
+</ul>
+</li>
+<li><a href="#sdp_1">SDP具体细节</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">前言</h2>
+<p>本文翻译自 RFC2327 即 SDP协议英文版，本文简要翻译之。</p>
+<h2 id="_2">简介</h2>
+<p>在互联网组播（multicast）网络架构中【Mbone -- 组播，IP数据传输三大模型之一，另外还有单播和广播。】一个会话目录工具被应用于分发多媒体会议和协商会议地址和分享会议的具体工具信息。本文档描述了一个会话描述协议用于这个目的，本备忘录不描述组播地址分配或者SDP信息分发细节。这些都描述在相关备忘录中，SDP也不打算讨论媒体的编码细节。</p>
+<h2 id="_3">背景</h2>
+<p>Mbone是互联网的一部分支持IP组播模式，所以允许有效的多对多沟通交流。这个在多媒体会议中经常用到。这样的会议通常都有这样的性质，那就是会议的组员并不要求协调好，去接收一个会议，一个用户，在Mbone站点通常只需要知道会议的数据流的组播群地址和UDP的端口号。</p>
+<p>【TODO】</p>
+<h2 id="_4">术语列表</h2>
+<p>【TODO】</p>
+<h2 id="sdp">SDP用法</h2>
+<h3 id="_5">组播声明</h3>
+<p>SDP是一个会话描述协议用户多媒体会话。一个常见的使用模式是一个client去声明一个会议会话，通过周期组播一个声明包到一个大家知道的组播地址和端口号哪里，使用的是会话声明协议SAP（Session Announcement Protocol）。</p>
+<p>SAP包是一个UDP套接字用如下格式：</p>
+<div class="highlight"><pre><span></span><span class="o">|</span><span class="c1">--------------------|</span>
+<span class="o">|</span> <span class="n">SAP</span> <span class="n">header</span>         <span class="o">|</span>
+<span class="o">|</span><span class="c1">--------------------|</span>
+<span class="o">|</span> <span class="nb">text</span> <span class="n">payload</span>       <span class="o">|</span>
+<span class="o">|//////////</span>
+</pre></div>
+<p>header是SAP的header，SAP具体描述在相关备忘录中。</p>
+<p>text payload是SDP协议描述，具体内容就是本备忘录描述的。text payload不应该大于1KB，如果是SAP声明，一个会话声明只允许一个套接字。</p>
+<h3 id="emailwww-announcements">Email和WWW Announcements</h3>
+<p>另一个说法是传输会话描述包括电子邮箱和the World Wide Web。对于email和WWW的分发，应该使用的是MIME content type  "application/sdp" 。这将使得那些参与会话中的应用，比如WWW client或电子邮箱的阅读器，自动按照标准方式去加载。</p>
+<p>注意组播会话声明确立，只是通过电子邮箱或者WWW的，不一定能够接受到这个会话，因为组播会话可能被严格限定在某个scope内。而访问这个WWW服务器或者接收邮箱可能是在这个scope之外的。SAP声明并没有这个不匹配问题。</p>
+<h2 id="_6">依赖和建议</h2>
+<p>SDP的目的是要传输关于媒体流的信息，在多媒体会话中，去允许会话描述的接受者参与到会话中。SDP主要是用于在互联网中，当然它也足够通用是能够使用在其他网络环境中去描述会议。</p>
+<p>多媒体会话，被描述为一系列的媒体流，存在于某个时间段内。媒体流可以是多对多的。一个会话活跃的时间应该是非连续的。</p>
+<p>因此在互联网上遥远的组播会话和很多其他形式的会议不同的，任何人都可以接受并参与到这个会话信道中（除非这个会话信道被加密了）。这种环境下，SDP服务有两个基本点：它是一种方法用于沟通会话的存在，它是一种方法用于传输充足的信息使得会话中的参与者能够参与进来。在组播环境下，只有第二点要求似乎是相关的。</p>
+<p>因此SDP包括：</p>
+<ul>
+<li>会话的名字和意图</li>
+<li>会话的活跃时间</li>
+<li>会话中媒体的组成</li>
+<li>接收这些媒体的细节（地址，端口号。格式等）</li>
+</ul>
+<p>因为参与会话的资源可能被限定，还可能需要以下额外的信息：</p>
+<ul>
+<li>关于会议带宽的信息</li>
+<li>会话中人员回应的联系信息</li>
+</ul>
+<p>一般来说，SDP一定要传输充足的信息，好使得人们可以加入会话中来（包括可能的加密key），然后也需要告知那些信息让想要加入进来的人们知道。</p>
+<h3 id="_7">媒体信息</h3>
+<p>SDP 包括</p>
+<ul>
+<li>
+<p>媒体的类型（视频、音频等）</p>
+</li>
+<li>
+<p>传输协议（RTP/UDP/IP H.320 等）</p>
+</li>
+<li>媒体格式（H.261 vidoe MPEG viedo 等）</li>
+</ul>
+<p>对于IP组播会话来说，以下信息将要被传输</p>
+<ul>
+<li>组播媒体的地址</li>
+<li>组播媒体的端口号</li>
+</ul>
+<p>这个地址和端口号是组播流的目标地址和端口号，不管是发送或者接收等。</p>
+<p>对于IP单播会话来说，以下信息将要被传输：</p>
+<ul>
+<li>远程媒体的地址</li>
+<li>远程连接的端口号</li>
+</ul>
+<p>具体地址和端口号的格式由媒体和传输协议定义。默认情况下，这就是远程发送数据的机器地址和端口号和短程接收数据的地址和端口号。有时，一些媒体可能被定义为通过建立某种control channel来传输某种媒体流。</p>
+<h3 id="_8">时间信息</h3>
+<p>会话可能被时间限定或者没有，不管怎么样，会话都会被限定。它们只会在某个具体的时间段内活跃。</p>
+<p>SDP能够传输</p>
+<p>【TODO】</p>
+<h2 id="sdp_1">SDP具体细节</h2>
+<p>SDP会话描述的整个文本都应该使用 ISO 10646字符集（在UTF-8字符集中）。SDP域的名字和属性的名字只能够使用 US-ASCII 字符集，但是文本领域和属性值可以使用ISO10646字符集。文本格式</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://docs.cdwanze.work/categories.html#draft-ref">draft</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://docs.cdwanze.work/tags.html#protocol-ref">protocol
+                    <span>1</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://docs.cdwanze.work/theme/js/jquery.min.js"></script>
+    <script src="https://docs.cdwanze.work/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
+
+
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", python好伙伴, " />
+
+<meta property="og:title" content="pytest模块 "/>
+<meta property="og:url" content="https://docs.cdwanze.work/articles/pytestmo-kuai.html" />
+<meta property="og:description" content="测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。 pytest简介 pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 unittest.TestCase 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 assert 确认返回为 True 即可。 def test_prime(): assert prime(4) == 7 确认抛出某个异常 把官方的例子copy过来了，看一下就懂了。 import pytest def f(): raise SystemExit(1) def test_mytest(): with pytest.raises(SystemExit): f() 完了，如果你赶时间的话 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2017-06-06T00:00:00+08:00" />
+<meta name="twitter:title" content="pytest模块 ">
+<meta name="twitter:description" content="测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。 pytest简介 pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 unittest.TestCase 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 assert 确认返回为 True 即可。 def test_prime(): assert prime(4) == 7 确认抛出某个异常 把官方的例子copy过来了，看一下就懂了。 import pytest def f(): raise SystemExit(1) def test_mytest(): with pytest.raises(SystemExit): f() 完了，如果你赶时间的话 …">
+
+    <title>
+pytest模块  · cdwanze的博文
+</title>
+
+
+        <link href="https://docs.cdwanze.work/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://docs.cdwanze.work/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://docs.cdwanze.work/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://www.cdwanze.work"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://docs.cdwanze.work/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="https://docs.cdwanze.work">博文首页</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                        <li >
+                            <a href="https://docs.cdwanze.work/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                        </li>
+                        <li >
+                            <a href="https://docs.cdwanze.work/gong-gao.html">公告</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://docs.cdwanze.work/articles/pytestmo-kuai.html"> pytest模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#pytest">pytest简介</a><ul>
+<li><a href="#_1">确认抛出某个异常</a></li>
+<li><a href="#_2">实时修改代码实时测试</a></li>
+<li><a href="#_3">只单独测试某个文件</a></li>
+<li><a href="#_4">自动发现测试文件</a></li>
+<li><a href="#fixture">fixture功能</a></li>
+<li><a href="#_5">测试过一次下次不测试了</a></li>
+</ul>
+</li>
+<li><a href="#mock">mock模块的使用</a><ul>
+<li><a href="#just-patch-it">just patch it</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
+<h2 id="pytest">pytest简介</h2>
+<p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
+<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">test_prime</span><span class="p">():</span>
+    <span class="n">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+</pre></div>
+<h3 id="_1">确认抛出某个异常</h3>
+<p>把官方的例子copy过来了，看一下就懂了。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_mytest</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">):</span>
+        <span class="n">f</span><span class="p">()</span>
+</pre></div>
+<p>完了，如果你赶时间的话，这就足够了。下面说一些让你更加优雅地进行测试工作的技巧。</p>
+<h3 id="_2">实时修改代码实时测试</h3>
+<p>推荐安装的有：<code>pytest</code> 和 <code>pytest-runner</code> 。然后新建 <code>setup.cfg</code> 文件，里面的内容是：</p>
+<div class="highlight"><pre><span></span><span class="k">[aliases]</span>
+<span class="na">test</span><span class="o">=</span><span class="s">pytest</span>
+</pre></div>
+<p>这样当你输入 <code>python setup.py test</code> 实际等于输入 <code>python setup.py pytest</code> 。</p>
+<p>以后你要测试就输入：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span>
+</pre></div>
+<p>这样做的好处是，其是直接利用本地修改的源码，也就是一边修改源码一边实时测试。</p>
+<p>这样写的话记得要给pytest传递参数需要加上 <code>--addopts=</code> 选项，比如打印更多的信息：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span> <span class="c1">--addopts="-v"</span>
+</pre></div>
+<p>可能每次写 <code>--addopts="-v"</code> 有点麻烦，在 <code>setup.cfg</code> 上加上这样一句吧：</p>
+<div class="highlight"><pre><span></span><span class="k">[tool:pytest]</span>
+<span class="na">addopts</span> <span class="o">=</span> <span class="s">--verbose</span>
+</pre></div>
+<p>好了，就是：</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span>
+</pre></div>
+<p>然后专心一边测试一边写代码吧。</p>
+<h3 id="_3">只单独测试某个文件</h3>
+<p>还是跟着上面的 <code>--addopts=</code> 选项来，把具体某个测试py文件相对路径写上即可。</p>
+<h3 id="_4">自动发现测试文件</h3>
+<p>pytest是支持自动发现测试文件的，所有的 <code>test_*.py</code> 和 <code>*_test.py</code> 文件都被认为是测试文件。</p>
+<p>一般是推荐统一管理测试文件，如这样设置：新建一个 <code>pytest.ini</code> 文件，里面的内容是：</p>
+<div class="highlight"><pre><span></span><span class="k">[pytest]</span>
+<span class="na">testpaths</span> <span class="o">=</span> <span class="s">tests</span>
+</pre></div>
+<p>这样pytest就只处理这个tests文件夹下的测试文件了。</p>
+<p>可能有某些情况你希望你的测试文件和代码文件在一起（请确定你必须这样做，毕竟将测试代码和模块源码放在一起很不美观），没问题，写上就是了，pytest会自动发现它的。记得将上面的那个 <code>pytest.ini</code> 文件的 <code>testpaths</code> 配置删除掉算了。</p>
+<h3 id="fixture">fixture功能</h3>
+<p>pytest里面比较高级一点的功能大概就是fixture功能了，这个等下再讲。TODO。</p>
+<h3 id="_5">测试过一次下次不测试了</h3>
+<p>函数上加上这个装饰器。</p>
+<div class="highlight"><pre><span></span><span class="nv">@pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">skip</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="ss">"i have test it"</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+<h2 id="mock">mock模块的使用</h2>
+<p>在大型框架中写单元测试，在涉及到网络，套接字等编程问题是，必然有这个需求，那就是你希望伪造一些数据，拦截某些函数或类的返回值，从而将整个测试从大型软件框架中抽离出来，这个时候就必须要了解mock模块了。python3自带的有mock模块，直接用就是了：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
+</pre></div>
+<p>使用mock模块最关键性的问题是理解mock在做什么。mock模块里面最核心的概念是 <code>Mock</code> 类 ，我们看到官方文档的这个例子：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
+<span class="k">class</span> <span class="nc">Test</span><span class="p">():</span> <span class="k">pass</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">()</span>
+<span class="n">t</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">method</span><span class="p">()</span>
+<span class="mi">3</span>
+<span class="n">t</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="mi">3</span>
+</pre></div>
+<p>一开始的话我们还是不要管那个 MagicMock 是个什么东西吧，暂时 Mock够用了。然后Mock也可以通过 <code>side_effect</code> 来定制抛出异常。</p>
+<p>在来个定制函数返回的例子：</p>
+<div class="highlight"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">mock</span><span class="p">.</span><span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="s1">'hello world.'</span><span class="p">)</span>
+<span class="n">test</span><span class="p">()</span>
+<span class="s1">'hello world.'</span>
+</pre></div>
+<h3 id="just-patch-it">just patch it</h3>
+<p>实际编码中我们更多的是和现有的代码或者现有的第三方库的代码来交互，而不是凭空创造个Mock对象进行测试。我们看下面这个例子：</p>
+<div class="highlight"><pre><span></span>    @<span class="nv">mock</span>.<span class="nv">patch</span><span class="ss">(</span><span class="s1">'</span><span class="s">users.views.WXAPPAPI.jscode2session</span><span class="s1">'</span>, \
+                <span class="nv">return_value</span><span class="o">=</span>{<span class="s2">"</span><span class="s">openid</span><span class="s2">"</span>: <span class="s2">"</span><span class="s">o1ZL90Blemh5ylei7sBfQotG7PLM</span><span class="s2">"</span>, <span class="s2">"</span><span class="s">session_key</span><span class="s2">"</span>: <span class="s2">"</span><span class="s">4XXDVTc0e4nuDVp20CIcOg==</span><span class="s2">"</span>,
+                              <span class="s2">"</span><span class="s">expires_in</span><span class="s2">"</span>: <span class="mi">7200</span>}<span class="ss">)</span>
+    <span class="nv">def</span> <span class="nv">test_login</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">mock_jscode2session</span><span class="ss">)</span>:
+        <span class="nv">data</span> <span class="o">=</span> {<span class="s1">'</span><span class="s">js_code</span><span class="s1">'</span>: <span class="s1">'</span><span class="s">003xXUd30hnknF1gLeg30ua5e30xXUdr</span><span class="s1">'</span>}
+        <span class="nv">response</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">client</span>.<span class="nv">get</span><span class="ss">(</span><span class="nv">reverse</span><span class="ss">(</span><span class="s1">'</span><span class="s">mini-login</span><span class="s1">'</span><span class="ss">)</span>, <span class="nv">data</span><span class="ss">)</span>
+
+        # <span class="k">for</span> <span class="k">next</span> <span class="nv">testcase</span>
+        <span class="nv">self</span>.<span class="nv">our_session_key</span> <span class="o">=</span> <span class="nv">response</span>.<span class="nv">data</span>.<span class="nv">get</span><span class="ss">(</span><span class="s1">'</span><span class="s">our_session_key</span><span class="s1">'</span><span class="ss">)</span>
+
+        <span class="nv">self</span>.<span class="nv">assertEqual</span><span class="ss">(</span><span class="nv">response</span>.<span class="nv">status_code</span>, <span class="nv">status</span>.<span class="nv">HTTP_200_OK</span><span class="ss">)</span>
+</pre></div>
+<p>如何理解上面的代码？当这段测试代码运行的时候，它的变量名字空间被patch给污染了，比如上面的 <code>users.views.WXAPPAPI.jscode2session</code> 这个函数，被污染成为一个 Mock 对象了，这个Mock对象传递给了这个函数的第二个参数（额外的的这个参数哪怕你后面不用也必须写上） <code>mock_jscode2session</code> 。</p>
+<p>然后代码在运行的时候遇到<code>jscode2session</code> 总会返回上面给出的值，这样你就不用考虑数据库啊，网络情况之类的问题了。上面还有一些小技巧和django框架相关，比如 <code>self.client.get(reverse('mini-login'), data)</code> 是直接利用自己django，然后自己请求自己的url获得什么响应，这个和django相关，在这里就不多说了。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2017-06-06T00:00:00+08:00">2017年 6月 6日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://www.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://docs.cdwanze.work/theme/js/jquery.min.js"></script>
+    <script src="https://docs.cdwanze.work/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
+
+
+    
+
+
+
+</body>
+</html>

@@ -162,45 +162,6 @@ cdwanze的博文 - python好伙伴 category</title>
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/flask-context-faq.html">flask上下文释疑
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-07-22T00:00:00+08:00">2019年 7月 22日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h3 id="gunicornflask">问题一 gunicorn多进程模式是怎样和flask作用的</h3>
-<p>参考 <a href="https://stackoverflow.com/questions/670891/is-there-a-way-for-multiple-processes-to-share-a-listening-socket#">这个问题</a> 的解答：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-    <span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8888</span><span class="p">))</span>
-    <span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># Child Process</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"child"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
-
-    <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">c</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/loguru-module.html">loguru模块
  </a></h1>
 
@@ -227,89 +188,6 @@ cdwanze的博文 - python好伙伴 category</title>
 </pre></div>
 <p>此外还支持这样带时间戳的文件名：</p>
 <div class="highlight"><pre><span></span><span class="n">logger</span><span class="p">.</span><span class="k">add</span><span class="p">(</span><span class="s1">'file_{time …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/flask-module.html">flask模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-01-03T00:00:00+08:00">2019年 1月 3日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>django是一种构建大型商务网站的解决方案，除非目前贵公司的技术栈是已经架构在django之上的，否则不管是个人性质的小项目，或者刚刚开始的新的项目，个人推荐flask多于django的。当然在flask和tornado之间如何选择上，个人觉得更多的是在你对python的异步这一块的理解上，如果你懂python的异步，并且也知道你要做的api对并发和速度都有很高的要求，那么就应该选择tornado，否则就选择flask。</p>
-<p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
-<h2 id="_2">推荐的启动方式</h2>
-<p>目前flask推荐的启动方式是通过：</p>
-<div class="highlight"><pre><span></span><span class="n">flask</span> <span class="n">run</span>
-</pre></div>
-<p>或者</p>
-<div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">flask</span> <span class="n">run</span> 
-</pre></div>
-<p>来启动flask。【这个方式很适合开发和测试，实际部署还是WSGI server来进行】</p>
-<p>要正常执行上面的命令，你需要设置好一些环境变量，最主要的是 <code>FLASK_APP</code> 这个变量：</p>
-<p>windows </p>
-<div class="highlight"><pre><span></span><span class="k">set</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">hello</span><span class="p">.</span><span class="n">py</span>
-<span class="n">flask</span> <span class="n">run</span>
-</pre></div>
-<p>linux </p>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">hello</span><span class="p">.</span><span class="n">py</span>
-<span class="n">flask</span> <span class="n">run</span>
-</pre></div>
-<p>推荐是通过在当前工作目录下加上 <code>.env</code> 这个文件 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/websockets-module.html">websockets模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-22T00:00:00+08:00">2018年 11月 22日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>python和websokets相关的模块在github得星差不多的大概有三个，一个autobahn在使用上更偏向twisted，而且个人使用的时候在连接上会报websocket upgrade error这样的错误，可能是我的问题，而另外一个更偏向javascript那边websocket的使用风格，因为个人没有使用过，不做点评，本文重点关注的是这个模块：</p>
-<p><a href="https://github.com/aaugustin/websockets">https://github.com/aaugustin/websockets</a></p>
-<p>这个模块使用还是很简单的，不过需要读者对asyncio那块异步编程要有所熟悉。</p>
-<h2 id="websocket">全局websocket</h2>
-<p>首先你的应用启动的时候和服务器建立websocket连接，最好让这个websocket成为一个全局变量，后续的发送和监听消息需求都根据这个websocket来。</p>
-<h2 id="gui">和其他GUI框架的继承问题</h2>
-<p>这个websockets模块和GUI框架的继承问题更多的是在于该GUI框架如何和asyncio的事件循环集成起来。这个在目标GUI框架的时候会有所讨论，就不在这里讨论了。</p>
-<p>简单来说就是asyncio的事件循环里面你将添加一个或者多个任务，在目标任务中，完成websoket的相关工作。</p>
-<h2 id="_2">常驻监听模式</h2>
-<p>请读者看下面代码，下面建立了一种常驻监听模式，由于可能存在各种原因websocket服务器那边可能会强制把websocket连接关闭，所以你需要捕捉这个异常，然后试着重新建立一个全局websocket连接。</p>
-<div class="highlight"><pre><span></span>    <span class="n">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        主面板初始化新建一个全局的websocket</span>
-<span class="sd">        然后开始websocket监听</span>
-<span class="sd">        :return:</span>
-<span class="sd">        """</span>
-        <span class="n">ws_url</span> <span class="o">=</span> <span class="n">create_ws_url</span><span class="p">()</span>
-
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">async</span> <span class="k">with</span> <span class="n">websockets …</span></pre></div>
                             </article>
 
 
@@ -346,51 +224,6 @@ cdwanze的博文 - python好伙伴 category</title>
     <span class="n">warn</span><span class="p">(</span><span class="s1">'This is too cool for stdlib'</span><span class="p">)</span>
 </pre></div>
 <p>这是单个注册在整个程序上的，此外还有 <code>threadbound</code> 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/airflow-module.html">airflow模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-24T00:00:00+08:00">2018年 6月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>airflow和luigi模块相比有以下优点：</p>
-<ol>
-<li>通用的DAG概念来描述工作流，更专业点。</li>
-<li>集成系统的crontab从而支持周期性任务，这样airflow就只能在linux系统下运行了。</li>
-<li>图形界面很美观，功能更强大。</li>
-</ol>
-<p>老实说我不喜欢crontab，如果只是简单调度，用apscheduler或者之类的工具简单写下就能集成到你的软件系统中去，而再复杂点的工作流，任务流程等等管理，都推荐使用airflow这样的框架来管理。</p>
-<p>而至于说到大数据上的那些流式数据处理工具，实际上只有百分之几的公司因为业务需要必须上大数据，大部分公司是没必要上大数据的，因为大数据引入了太多的复杂度了，如果没有必要，而仅仅追求时髦去玩大数据，那显然是违背我们程序界公认的KISS原则的【Keep it simple and stupid.】。</p>
-<h3 id="airflow">安装airflow</h3>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">apache</span><span class="o">-</span><span class="n">airflow</span>
-</pre></div>
-<h3 id="_2">推荐起步</h3>
-<p>推荐 项目工作目录下 <code>.env</code> 文件下写上：</p>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">AIRFLOW_HOME</span><span class="o">=</span><span class="p">.</span>
-</pre></div>
-<p>这样使用pipenv或者其他工具在当前目录激活工作环境的时候，也自动激活了airflow在当前目录下工作的配置。这样我们airflow相关works配置的相关代码都放在这里。</p>
-<p>激活虚拟环境后，然后我们有如下操作：</p>
-<h3 id="_3">初始化数据库</h3>
-<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">initdb</span>
-</pre></div>
-<h3 id="webserver">启动webserver</h3>
-<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">webserver</span>
-</pre></div>
-<h2 id="_4">使用其他数据库 …</h2>
                             </article>
 
 
@@ -568,83 +401,6 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/jupyter-notebook.html">jupyter notebook
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-21T11:27:00+08:00">2018年 1月 21日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="magic-function">magic function</h2>
-<h3 id="python">运行某个python脚本</h3>
-<div class="highlight"><pre><span></span><span class="nf">%run</span> <span class="n">test</span><span class="p">.</span><span class="n">py</span>
-</pre></div>
-<p>运行某个python脚本，里面的变量也会赋值在里面</p>
-<h3 id="_1">运行系统的某个命令</h3>
-<div class="highlight"><pre><span></span><span class="sx">!cat text.txt</span>
-</pre></div>
-<p>在windows下是：</p>
-<div class="highlight"><pre><span></span><span class="sx">!type text.txt</span>
-</pre></div>
-<h3 id="_2">脚本或命令运行计时</h3>
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">what</span>
-</pre></div>
-<h3 id="matplotlib">更好地集成matplotlib</h3>
-<div class="highlight"><pre><span></span><span class="nf">%matplotlib</span> <span class="kr">inline</span>
-</pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/luigi-module.html">luigi模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-13T20:56:00+08:00">2018年 1月 13日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>luigi模块其实很早以前就接触过，但因为当时没有特别的需求所以对这个模块还是处于一种浅尝辄止的状态。到现在因为各种数据处理任务，开始强烈感觉到需要一个大的框架来管理这些小的数据处理脚本任务，使之更加的自动化和流程化。然后我开始找相应的软件，最后发现相关的软件不是少而是杂而多，请读者参看 <a href="http://ju.outofmemory.cn/entry/221885">这篇文章</a> 。</p>
-<p>首先有这么多项目证明程序员对于这个软件需求是很强烈的，但是如此的杂乱，大概两三百个，没有像scrapy或者django那种特别出色脱颖而出的项目，这多少是令人遗憾的。这也间接反应了这个问题，那就是这方面任务，恐怕最后还是要靠程序员自己编写大量定制代码来完成任务，而不能完全依靠某个工具。</p>
-<p>我选luigi学习的原因无非有二：</p>
-<ol>
-<li>python</li>
-<li>github星数靠前</li>
-</ol>
-<p>其实之前对luigi似乎是不太满意的，官方文档是一部分原因，可能以前对这块需求也不是特别强烈是一部分原因，或者还有其他？但还是决定硬着头皮学习，然后再慢慢定制吧。</p>
-<h2 id="_2">定义任务</h2>
-<p>首先当然是定义任务，其继承自 <code>luigi.Task</code> ，其内有特殊含义的方法有： </p>
-<ul>
-<li>run 实际执行任务的动作</li>
-<li>output 描述任务的输出对象</li>
-<li>requires 描述任务的依赖</li>
-</ul>
-<h3 id="requires">requires</h3>
-<p>返回某个任务对象或者某些任务对象列表，作为本任务的前置任务。看得出来作为任务对象的一些参数是区别对待的，比如即使是依赖于本对象，如果参数是前一日期时间，则需要上一任务完成之后再执行本任务。</p>
-<h3 id="target">依赖于某个Target</h3>
-<p>可以如下创建一个 <code>ExternalTask …</code></p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/jinja2-template.html">jinja2模板
  </a></h1>
 
@@ -691,6 +447,82 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/beautifulsoup-module.html">beautifulsoup模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-10-11T07:04:00+08:00">2017年 10月 11日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">简介</h1>
+<p>BeautifulSoup模块在python网页分析这一块是很有名的一个模块，其确实让网页分析任务变得轻松而easy了。本文将对bs4模块进行简单的介绍，更多细节请参看 <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a> 。</p>
+<h2 id="_2">安装</h2>
+<p>安装就简单用pip命令安装之:</p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">beautifulsoup</span>
+</pre></div>
+<h2 id="_3">第一个例子</h2>
+<p>然后在使用上因为python2和python3的urllib相关改动很大，加上urllib在使用上不是很友好，强烈推荐大家直接用requests模块来进行相关操作。然后beautifulsoup的引入语句一般如下所示:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</pre></div>
+<p>最简单的和requests的组合使用如下所示:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://www.pythonscraping.com/exercises/exercise1.html"</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+<p>在上面soup.title返回的是一个标签对象。然后标签对象里面如果有标签的话又可以继续点号索引标签:</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; soup.body …</pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/pytestmo-kuai.html">pytest模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-06-06T00:00:00+08:00">2017年 6月 6日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
+<h2 id="pytest">pytest简介</h2>
+<p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
+<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">test_prime</span><span class="p">():</span>
+    <span class="n">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+</pre></div>
+<h3 id="_1">确认抛出某个异常</h3>
+<p>把官方的例子copy过来了，看一下就懂了。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_mytest</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">):</span>
+        <span class="n">f</span><span class="p">()</span>
+</pre></div>
+<p>完了，如果你赶时间的话 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/faker-module.html">faker模块
  </a></h1>
 
@@ -708,7 +540,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <h1 id="_1">简介</h1>
 <p>faker模块是一个很有特色的模块，所以其在github上得到的star也较多。其可以用来生成一些伪数据，比如用来做测试用途等等。其github项目地址在 <a href="https://github.com/joke2k/faker">这里</a> 。</p>
 <p>该项目支持pip安装:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">fake</span><span class="o">-</span><span class="n">factory</span>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Faker</span>
 </pre></div>
 <p>其使用还是很简单的，大概如下所示:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Factory</span>
@@ -724,7 +556,11 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <span class="n">faker</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'zh_CN'</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name …</span></pre></div>
+    <span class="k">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+</pre></div>
+<h1 id="faker">faker所含方法清单</h1>
+<ul>
+<li><strong>address …</strong></li></ul>
                             </article>
 
 
@@ -757,50 +593,6 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="sd">"""Simple program that greets NAME for a total of COUNT times."""</span>
     <span class="k">for …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/tornado-module.html">Tornado模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2016-10-07T00:00:00+08:00">2016年 10月 7日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>tornado是python的异步的网络框架模块，tornado在应对高并发请求上性能很好。</p>
-<h3 id="_2">安装</h3>
-<h3 id="_3">第一个例子</h3>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tornado.ioloop</span>
-<span class="kn">import</span> <span class="nn">tornado.web</span>
-
-<span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Hello, world"</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">make_app</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">([</span>
-        <span class="p">(</span><span class="sa">r</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">),</span>
-    <span class="p">])</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">make_app</span><span class="p">()</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
-    <span class="n">tornado</span><span class="o">.</span><span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</pre></div>
-<p>这是一个同步的webapp框架，可能后面会用的较少，这里主要了解一下tornado编写的webapp的基本结构:</p>
-<h3 id="tornado">开启tornado的事件驱动循环:</h3>
-<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">ioloop …</span></pre></div>
                             </article>
 
 

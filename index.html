@@ -178,94 +178,12 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/wxpython-bone.html">wxpython桌面编程骨架推荐
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wxpython-ref">wxpython
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-09-24T00:00:00+08:00">2019年 9月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>笔者钻研wxpython桌面编程有一段时间了，一些样例请参见 <a href="https://github.com/a358003542/wxpython_examples">这个项目</a> 。</p>
-<p>然后多查看wxpython的demo程序还有API文档。</p>
-<p>剩下来的就是具体编程需求，思考如何界面设计等等问题。</p>
-<p>不过在开始编写项目之前，wxpython还是有一个通用的骨架可以参考的，这和后面的实际编程需求或者说业务并不是很相关。</p>
-<p>具体读者可以参考 <a href="https://github.com/a358003542/image_process_tool">这个项目</a> 的前面几个commit。下面简要说明下。</p>
-<h3 id="_2">图片文件管理</h3>
-<p>图片文件都应该放在一个文件夹里面，然后编写 <a href="https://github.com/a358003542/image_process_tool/blob/master/encode_bitmaps.py">encode_bitmaps.py</a> 文件，然后你的项目里面通过</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">images</span>
-<span class="n">images</span><span class="o">.</span><span class="n">Favicon</span>
-</pre></div>
-<p>来获取图片对象。</p>
-<h3 id="_3">程序主入口</h3>
-<p>你应该编写一个程序主入口文件， <a href="https://github.com/a358003542/image_process_tool/blob/master/image_process_tool.py">image_process_tool.py</a> ，这对于你平时测试运行是方便的，对于你后面利用 pyinstaller 来编译exe文件，也是需要这样一个脚本文件入口的。</p>
-<h3 id="pyinstallerspec">编写pyinstaller的spec文件</h3>
-<p>从个人实践经验来看，推荐你还是手工编写pyinstaller的spec文件。</p>
-<h3 id="_4">编写一个全局变量文件</h3>
-<p>某些参数和全局变量是推荐编写一个 <a href="https://github.com/a358003542/image_process_tool/blob/master/global_var.py">global_var.py</a> 文件，同样后面在程序中可以直接</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">global_var</span> <span class="kn">as</span> <span class="nn">g_var</span>
-</pre></div>
-<p>来调用，很多情况下这是很方便的 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/SDP-protocol.html">SDP协议
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wu-lian-wang-ref">物联网
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>本文翻译自 RFC2327 即 SDP协议英文版，本文简要翻译之。</p>
-<h2 id="_2">简介</h2>
-<p>在互联网组播（multicast）网络架构中【Mbone -- 组播，IP数据传输三大模型之一，另外还有单播和广播。】一个会话目录工具被应用于分发多媒体会议和协商会议地址和分享会议的具体工具信息。本文档描述了一个会话描述协议用于这个目的，本备忘录不描述组播地址分配或者SDP信息分发细节。这些都描述在相关备忘录中，SDP也不打算讨论媒体的编码细节。</p>
-<h2 id="_3">背景</h2>
-<p>Mbone是互联网的一部分支持IP组播模式，所以允许有效的多对多沟通交流。这个在多媒体会议中经常用到。这样的会议通常都有这样的性质，那就是会议的组员并不要求协调好，去接收一个会议，一个用户，在Mbone站点通常只需要知道会议的数据流的组播群地址和UDP的端口号。</p>
-<p>【TODO】</p>
-<h2 id="_4">术语列表</h2>
-<p>【TODO】</p>
-<h2 id="sdp">SDP用法</h2>
-<h3 id="_5">组播声明</h3>
-<p>SDP是一个会话描述协议用户多媒体会话。一个常见的使用模式是一个client去声明一个会议会话，通过周期组播一个声明包到一个大家知道的组播地址和端口号哪里，使用的是会话声明协议SAP（Session Announcement Protocol）。</p>
-<p>SAP包是一个UDP套接字用如下格式：</p>
-<div class="highlight"><pre><span></span><span class="o">|</span><span class="c1">--------------------|</span>
-<span class="o">|</span> <span class="n">SAP</span> <span class="n">header</span>         <span class="o">|</span>
-<span class="o">|</span><span class="c1">--------------------|</span>
-<span class="o">|</span> <span class="nb">text</span> <span class="n">payload</span>       <span class="o">|</span>
-<span class="o">|//////////</span>
-</pre></div>
-<p>header是SAP的header，SAP具体描述在相关备忘录中。</p>
-<p>text payload是SDP协议描述，具体内容就是本备忘录描述的 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/SIP-protocol.html">SIP协议官方文档
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wu-lian-wang-ref">物联网
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -285,118 +203,7 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/rfc3428.html">rfc3428
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wu-lian-wang-ref">物联网
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>本文翻译自 RFC3428 英文版，本文简要翻译之。</p>
-<p>本协议主要讨论了SIP协议的扩展方法Message 方法。</p>
-<h2 id="_2">简介</h2>
-<p>即时通信（IM）被定义为一组用户之间几乎实时的内容交换，，这里的内容一般指的是短文本信息，不过在这种情况下并不是要求如此的。被用于交换的信息一般不会被存储，同样也不是要求如此的。即时通信和电子邮箱在一般使用上是有所不同的，即时通信经常成群组在一起成一种简短的实时谈论形式，由很多小的信息来来回回组成。</p>
-<p>即时通信作为一种服务存在于内部网和IP网络内已经有一段时间了。最早的实现包括zephyr，一个UNIX对话程序，然后还有IRC。更多的，即时通信作为一个服务用于一个好友列表，当一个好友上线，用户就能够知道，然后就可以去给那个好友发送消息。用于完成这些操作的协议都是专属的，这很大程度上阻碍了互通性。</p>
-<p>集成即时通信，展现和会话导向的沟通是很强大的。SIP提供了这样的机制，可用于展示应用，一种会话导向的沟通应用，不过不是即时通信的。</p>
-<p>本文档提出了SIP的一种扩展方法 MESSAGE 方法，MESSAGE方法请求通常携带了即时通信内容体。</p>
-<p>RFC2778和RFC2779对于即时通信的协议和展示给了一个模型和要求。实现MESSAGE方法应该支持即时通信在RFC2779中提到在相关适用领域的那些要求</p>
-<h2 id="2">2. 适用领域</h2>
-<p>【TODO】</p>
-<h2 id="3">3. 操作概览</h2>
-<p>当一个用户想要发送一个即时信息给另一个用户时，发送者将组织和发送一个SIP请求，使用的是本文档描述的新的MESSAGE方法。请求的URI一般是即时信息接收者的 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/understanding-sip-book-learning-notes.html">理解SIP协议一书补充材料
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wu-lian-wang-ref">物联网
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-08-30T00:00:00+08:00">2019年 8月 30日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h1 id="sip">理解SIP一书补充材料</h1>
-<p><strong>下面是学习 Alan B. Johnston SIP Understanding the Session Initiation Protocol 这本书的内容 </strong> ，在学习阅读官方协议文档的基础上，选择了某些内容摘记在这里。</p>
-<h2 id="_1">一个简单的会话建立例子</h2>
-<p><img alt="img" src="https://docs.cdwanze.work/images/sip_example_1.jpg"/></p>
-<ol>
-<li>Tesla先给Marconi发送INVITE消息</li>
-</ol>
-<div class="highlight"><pre><span></span>INVITE sip:marconi@radio.org SIP/2.0
-Via: SIP/2.0/UDP lab.high-voltage.org:5060;branch=z9hG4bKfw19b 
-Max-Forwards: 70
-To: G. Marconi &lt;sip:Marconi@radio.org&gt;
-From: Nikola Tesla &lt;sip:n.tesla …</pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/c-lang-basic.html">C语言编程之-C语言基础
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#cyu-yan-ref">C语言
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-08-28T00:00:00+08:00">2019年 8月 28日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="helloworld">helloworld</h2>
-<p>第一个helloworld的例子实在是太经典了。</p>
-<div class="highlight"><pre><span></span>#<span class="k">include</span> <span class="o">&lt;</span><span class="nv">stdio</span>.<span class="nv">h</span><span class="o">&gt;</span>
-#<span class="k">include</span> <span class="o">&lt;</span><span class="nv">stdlib</span>.<span class="nv">h</span><span class="o">&gt;</span>
-
-<span class="nv">int</span> <span class="nv">main</span><span class="ss">(</span><span class="nv">void</span><span class="ss">)</span> {
-    <span class="nv">printf</span><span class="ss">(</span><span class="s2">"</span><span class="s">hello world!</span><span class="se">\n</span><span class="s2">"</span><span class="ss">)</span><span class="c1">;</span>
-    <span class="nv">system</span><span class="ss">(</span><span class="s2">"</span><span class="s">pause</span><span class="s2">"</span><span class="ss">)</span><span class="c1">;</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="c1">;</span>
-}
-</pre></div>
-<p>这里 <code>#</code> 开头标识了C语言的预处理语句，然后 <code>#include</code> 是包含另外一个头文件。stdio.h 里面提供了一些标准输入输出支持，比如下面的 printf 函数就是这个包提供的。</p>
-<p>然后相比较一般的helloworld程序多了下面两行，主要是让屏幕暂停一下，否则屏幕会一闪而过，我们会看不清具体打印了什么字。</p>
-<div class="highlight"><pre><span></span>#<span class="k">include</span> <span class="o">&lt;</span><span class="nv">stdlib</span>.<span class="nv">h</span><span class="o">&gt;</span>
-
-<span class="nv">system</span><span class="ss">(</span><span class="s2">"</span><span class="s">pause</span><span class="s2">"</span><span class="ss">)</span><span class="c1">;</span>
-</pre></div>
-<p>下面实际上是一种定义函数的写法，只是这个函数名字比较特殊，叫做main，C程序会将main函数视为程序的入口。</p>
-<p>按照C11的标准推荐main函数采用这样的写法：</p>
-<div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="err">{</span>
-
-<span class="err">}</span>
-</pre></div>
-<h2 id="_1">计算最大公约数</h2>
-<h3 id="_2">除法和求余数</h3>
-<p>下面主要演示下除法和求余数 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/html5-cookbook.html">html5技巧
+                                        href="https://docs.cdwanze.work/articles/html5-cookbook.html">html5学习之cookbook篇
  </a></h1>
 
                                 <section>
@@ -428,7 +235,7 @@ From: Nikola Tesla &lt;sip:n.tesla …</pre></div>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -462,35 +269,20 @@ From: Nikola Tesla &lt;sip:n.tesla …</pre></div>
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/python-advanced.html">python语言学习进阶
+                                        href="https://docs.cdwanze.work/articles/flask-sqlalchemy.html">flask-sqlalchemy
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
+                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2019-06-24T00:00:00+08:00">2019年 6月 24日
+                                              datetime="2019-07-22T00:00:00+08:00">2019年 7月 22日
                                         </time>
                                     </div>
                                 </section>
                                 
-<h2 id="_1">前言</h2>
-<p>淘得好书 《深入理解python特性》和 《流畅的python》，来对自己的python语言知识继续进阶查漏补缺之。</p>
-<h3 id="_2">最疯狂的字典表达式</h3>
-<div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="s1">'yes'</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">'no'</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">:</span> <span class="s1">'maybe'</span><span class="p">}</span>
-<span class="n">t</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="s1">'maybe'</span><span class="p">}</span>
-</pre></div>
-<p>造成这样的结果首先是python的字典的key相同的判断机制，比如是 值相同 而且是 hash 值相同 才认为是 key相同。</p>
-<p>其次是认为key相同key就不做改变了，而值是取最新的。也正是因为这样，下面的字典更新语句写法是可行的：</p>
-<div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span><span class="mi">2</span><span class="err">}</span>
-<span class="n">y</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'b'</span><span class="p">:</span><span class="mi">3</span><span class="err">}</span>
-<span class="n">z</span> <span class="o">=</span> <span class="err">{</span><span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">y</span><span class="err">}</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">z</span>
-<span class="k">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="err">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span> <span class="mi">3 …</span></pre></div>
                             </article>
 
 
@@ -502,7 +294,7 @@ From: Nikola Tesla &lt;sip:n.tesla …</pre></div>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -594,7 +386,7 @@ From: Nikola Tesla &lt;sip:n.tesla …</pre></div>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -628,124 +420,12 @@ From: Nikola Tesla &lt;sip:n.tesla …</pre></div>
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/impala.html">impala
+                                        href="https://docs.cdwanze.work/articles/ji-suan-yu-xian.html">计算余弦
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#da-shu-ju-ref">大数据
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-05-21T00:00:00+08:00">2019年 5月 21日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="impala">impala</h2>
-<p>impala是用于处理Hadoop集群上的大量数据的SQL处理引擎。</p>
-<p>impala可以让你使用传统的SQL知识以极快的速度处理存储在HDFS上的数据。</p>
-<p>impala和传统SQL关系数据库还是有一些区别的：</p>
-<ul>
-<li>impala无法更新或删除单个记录</li>
-<li>impala不支持事务</li>
-<li>impala不支持索引</li>
-</ul>
-<h2 id="pythonimpala">python连接impala</h2>
-<p><a href="https://github.com/cloudera/impyla">impyla</a> 模块可以让python连接impala，简单的连接下面的README简单的说了一下。</p>
-<p>具体各个使用语法就是符合python通用的db api 2，如果读者使用过sqlite3，python的官方模块，那么大概该怎么使用它心里已经有个数了。</p>
-<p>不熟悉也没关系，简单的连接下看看输出结果，大概情况也就了解了。这一块主要是SQL语法。</p>
-<h2 id="dataframe">导出到DataFrame对象</h2>
-<p>这个还是需要说一下，cursor对象executor某个语句之后，其可以如下转成pandas的DataFrame对象，有时这样转了之后，后面很多数据处理工作会很方便的。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">impala.util</span> <span class="kn">import</span> <span class="n">as_pandas</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">as_pandas</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
-</pre></div>
-<h2 id="_1">参考资料</h2>
-<ol>
-<li><a href="https://www.w3cschool.cn/impala/">w3cschool 的impala教程</a></li>
-</ol>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/hadoop-file-system.html">hadoop文件系统
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#da-shu-ju-ref">大数据
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-05-10T00:00:00+08:00">2019年 5月 10日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>hdfs的全称是hadoop分布式文件系统。</p>
-<p>HDFS采用master/slave架构。一个HDFS集群是由一个Namenode和一定数目的Datanode组成的。</p>
-<p>hdfs的设计主要针对那些只写入一次，多次读取的数据。</p>
-<h2 id="pyarrowhdfs">pyarrow连接hdfs</h2>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="kn">as</span> <span class="nn">pa</span>
-<span class="n">fs</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">hdfs</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
-</pre></div>
-<p>连接之后返回的是HDFS文件对象，该文件对象可以继续调用如下命令：</p>
-<ul>
-<li>
-<p>cat</p>
-</li>
-<li>
-<p>chmod</p>
-</li>
-<li>
-<p>chown</p>
-</li>
-<li>
-<p>delete</p>
-</li>
-<li>
-<p>df</p>
-</li>
-<li>
-<p>exists</p>
-</li>
-<li>
-<p>get_capacity</p>
-</li>
-<li>
-<p>get_space_used</p>
-</li>
-<li>
-<p>info</p>
-</li>
-<li>
-<p>ls</p>
-</li>
-<li>
-<p>rm</p>
-</li>
-<li>
-<p>rename</p>
-</li>
-<li>
-<p>upload</p>
-</li>
-</ul>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/ke-xue-ji-suan-ji-qiao-za-xiang.html">科学计算技巧杂项
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -770,45 +450,6 @@ $$</div>
 <p>
 具体就是叫做该向量的l2范数，也是该向量的欧几里得距离。</p>
 <p>而如果我们对某个向量进行sklearn的 <code>normalize</code> 归一化操作，也就是让这个向量的l2范数=1，默认是l2范数，你也可以设置为其他范数。比如l1范数就是所有值的绝对值相加等于1（这在某些数据预处理中 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/dask-module.html">dask模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#da-shu-ju-ref">大数据
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-05-06T00:00:00+08:00">2019年 5月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>总的说来对于python生态圈来说，大数据解决方案我是推荐dask多于pyspark。接触pyspark之后最大的痛苦就是，之前学习机器学习积累下来的numpy，pandas，sklearn的知识，全部不能继续使用了。而dask作为python的大数据解决方案，不说完全无缝对接，这也是不现实的，毕竟到了大数据那块，不说其他东西，就是你要应对的变量，也必然是惰性加载和惰性求值的，这也是一个区别点。但总的给我的感觉就是，作为python爱好者，之于大数据解决方案，dask真的用的很爽。</p>
-<p>dask的官方文档写的很厚实，主要是这块东西也多。本文作者尽我所知简要地说下个人使用经验吧。其他深入研究还是要读者去研究 <a href="https://docs.dask.org/en/latest/">官方文档</a> 的。</p>
-<h2 id="hadoop">大数据hadoop简介</h2>
-<p>现在的hadoop2的架构大概如下所示：</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/大数据/HADOOP.png"/></p>
-<p>底层是hadoop分布式文件系统作为大数据的文件存储支持。HDFS的基本架构如下图所示：</p>
-<p><img alt="img" src="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png"/></p>
-<p>然后中层是YARN对计算资源进行调度分配。YARN的基本架构如下图所示：</p>
-<p><img alt="img" src="http://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/yarn_architecture.gif"/></p>
-<p>如上图所示，Yarn有一个Scheduler，也就是Resource Manager 进行资源调度，然后还有很多 个worker，也就是Node Manager进行实际的应用计算任务。</p>
-<p>而最高层MapReduce框架是分布式应用程序的一个支持性框架，现在Hadoop2可扩展性很好，dask，spark等这些框架都是可以运行在Yarn之上的。</p>
-<h2 id="dask">dask简介</h2>
-<p>dask主要由两部分组成：</p>
-<ol>
-<li>基于计算优化的动态调度 </li>
-<li>大数据级别的集合</li>
-</ol>
-<p>简单来说就是dask基于python常见的那些数据类型概念 …</p>
                             </article>
 
 
@@ -921,6 +562,346 @@ $$</div>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">decisions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/matplotlib-module.html">matplotlib模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-04-06T00:00:00+08:00">2019年 4月 6日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>之前数据绘图一文简单介绍了下如何在jupyter notebook 下绘制简单的直线图、饼图等等，本文主要是作为matplotlib模块绘图的综合性简要介绍。</p>
+<p>经常看到一些简单的例子，比如如何画出散点图或者等等，从简单的直白的到复杂的一大堆参数调配的都有，让人迷惑。matplotlib模块还可以和PyQt或者wxpython等后端结合起来等等高级功能，但我现在最急切的就是想要理解matplotlib模块到底做了一些什么事情，那些是必要的常规操作，那些是对外的数据接口。</p>
+<p>比如下面的调配中文字体支持的，是matplotlib模块的外围操作，应该绘图前就要调配好的：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_matplotlib_support_chinese</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="s1">'SimHei'</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    设置matplotlib支持中文</span>
+<span class="sd">    :param font:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
+
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.family'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sans-serif'</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.sans-serif'</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">font</span><span class="p">)</span>  <span class="c1"># 插入中文字体</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># 用来正常显示负号</span>
+</pre></div>
+<p>然后我们对之前pandas的绘图接口操作发现，除了传递必要的x，y数值进去外，还需要传一个 ax …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/sklearnmo-kuai.html">sklearn模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-03-11T00:00:00+08:00">2019年 3月 11日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>sklearn的很多内容在机器学习相关文章中都有所提及，这里作为拾遗性质。</p>
+<h3 id="sklearnpipeline">关于sklearn的pipeline</h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">FeatureUnion</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+</pre></div>
+<p>Pipeline 用来创建sklearn数据处理流模型，FeatureUnion可整合多个特征。</p>
+<p>sklearn的pipeline不是数据处理管道流的万能灵药，不是说所有的数据处理流都要写成pipeline模式。实际上pipeline里面的transformer和estimator都有一些限定，若一定要贯穿数据处理始终，是很不方便的。</p>
+<ol>
+<li>pipeline里面的组件多接受X，机器学习中数据处理的核心数据矩阵</li>
+<li>调用pipeline 的fit 和 predict方法有一套固定作业模式，简单来说属于机器学习中常见的训练测试数据格式模式。fit的话, transformer 的 fit 和 transform方法都要执行一下，两个方法接受相同的X ，然后前面的transformer的transform方法返回的X是下一个transformer和fit接受的X。而pipeline的predict方法，前面的transformer的transform方法也都会执行一下，然后最后再执行estimator的predict方法。</li>
+<li>这套固定的作业模式，对于机器学习尤其是监督学习问题，是具有普适性的，而且利用pipeline，将所有数据预处理缩放整合进来 …</li></ol>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/flask-module.html">flask模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-01-03T00:00:00+08:00">2019年 1月 3日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>django是一种构建大型商务网站的解决方案，除非目前贵公司的技术栈是已经架构在django之上的，否则不管是个人性质的小项目，或者刚刚开始的新的项目，个人推荐flask多于django的。当然在flask和tornado之间如何选择上，个人觉得更多的是在你对python的异步这一块的理解上，如果你懂python的异步，并且也知道你要做的api对并发和速度都有很高的要求，那么就应该选择tornado，否则就选择flask。</p>
+<p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
+<h2 id="_2">推荐的启动方式</h2>
+<p>目前flask推荐的启动方式是通过：</p>
+<div class="highlight"><pre><span></span><span class="n">flask</span> <span class="n">run</span>
+</pre></div>
+<p>或者</p>
+<div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">flask</span> <span class="n">run</span> 
+</pre></div>
+<p>来启动flask。【这个方式很适合开发和测试，实际部署还是WSGI server来进行】</p>
+<p>要正常执行上面的命令，你需要设置好一些环境变量，最主要的是 <code>FLASK_APP</code> 这个变量：</p>
+<p>windows </p>
+<div class="highlight"><pre><span></span><span class="k">set</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">hello</span><span class="p">.</span><span class="n">py</span>
+<span class="n">flask</span> <span class="n">run</span>
+</pre></div>
+<p>linux </p>
+<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">hello</span><span class="p">.</span><span class="n">py</span>
+<span class="n">flask</span> <span class="n">run</span>
+</pre></div>
+<p>推荐是通过在当前工作目录下加上 <code>.env</code> 这个文件 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-six.html">机器学习第六谈之pipeline
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-12-26T00:00:00+08:00">2018年 12月 26日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="pipeline">机器学习第六谈之pipeline</h2>
+<p>前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。</p>
+<p>在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。</p>
+<p>sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。</p>
+<p>【pipeline工作流程图】</p>
+<p>本图片摘自 <a href="http://frankchen.xyz/2018/04/08/pipeline-in-machine-learning/">这篇文章</a></p>
+<p><img alt="" src="http://frankchen.xyz/images/15231783974167.jpg"/></p>
+<p>其中pipeline前面的叫做transformer，最后一个叫做estimator。</p>
+<h3 id="transformer">transformer</h3>
+<p>transformer必须要有fit和tranform两个方法，当你调用 <code>pipeline.fit</code> 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 <code>TransformerMixin</code> 这个类 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/ctypes.html">ctypes模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-12-24T00:00:00+08:00">2018年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                <h2 id="ctypes">ctypes模块</h2>
+<p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
+<p>基本的使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">helloworld</span><span class="p">()</span>
+</pre></div>
+
+
+<p>接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。）</p>
+<p><a href="https://docs.python.org/3.7/library/ctypes.html">官方文档</a> 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。</p>
+<p>首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YOU_STRUCTURE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    基础信息结构体</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">),</span>  
+        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">24</span><span class="p">),</span> 
+        <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">40</span><span class="p">),</span> 
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>然后实际使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">YOU_STRUCTURE</span><span class="p">()</span>
+<span class="n">_ref_s</span>  <span class="o">=</span> <span class="n">ctypes …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-five.html">机器学习第五谈之数据预处理
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-12-13T00:00:00+08:00">2018年 12月 13日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。</p>
+<p>本文介绍的内容，以下面代码形式展示出来：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">sk_normalize</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">binarize</span> <span class="k">as</span> <span class="n">sk_binarize</span>
+
+
+<span class="k">def</span> <span class="nf">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">old_df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    输入ndarray值，然后根据给的老df的column列名来输出一个新的df</span>
+<span class="sd">    :param df_value:</span>
+<span class="sd">    :param old_df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/recommender-talk-two.html">推荐系统第二谈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-11-27T00:00:00+08:00">2018年 11月 27日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>由于我对于推荐系统属于摸索性质，然后又过了一段时间，再来看之前写的推荐系统第一谈文章，基本上要全部删掉重写。但这里还是叫做推荐系统第二谈吧，一些大概没什么太大问题的东西都放在下面的基本概念了解部分了。</p>
+<h2 id="_2">基本概念了解</h2>
+<p>推荐系统本质上是隶属于机器学习系统的，所以在简单了解下推荐系统相关算法之后，具体实现推荐系统的架构，是应该基于机器学习系统架构，然后在这之上引入新的处理流即可。</p>
+<p>推荐系统分为两类推荐：一类是评分预测推荐；另一类是topN推荐。之前我们看的很多教材和案例基本上都在做评分预测推荐，大概如下面表格的数据：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">物品1</th>
+<th align="center">物品2</th>
+<th align="center">物品3</th>
+<th align="center">物品4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">用户1</td>
+<td align="center">2</td>
+<td align="center">?</td>
+<td align="center">3</td>
+<td align="center">?</td>
+</tr>
+<tr>
+<td align="center">用户2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">?</td>
+</tr>
+<tr>
+<td align="center">用户3</td>
+<td align="center">?</td>
+<td align="center">?</td>
+<td align="center">?</td>
+<td align="center">?</td>
+</tr>
+</tbody>
+</table>
+<p>然后用户对某些物品有些评分，然后开始开展推荐工作。老实说这些教材一开始给了我很大的困扰，因为我现在活着说一般做推荐系统刚开始，基本上是没有评分数据的。甚至不要说一开始，就是到了网站运营后期也可能没有这个收集用户评分的需求。在这里要感谢项亮的书籍【参考资料2】，提醒了我，还有另外一类推荐系统，叫做topN推荐，返回一些推荐列表数据，这才是通常我们常见的应用类型。</p>
+<h3 id="usercf">评分预测推荐的usercf方法</h3>
+<p>usercf也就是所谓的协同过滤推荐感觉教材里面到处都有，但实际因为缺少用户评分数据是不现实的，最大的用处可能就是让我们理解这个思路，那就是通过用户评分的相似性继而扩展到用户行为的相似性，从而找到相似的用户 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-four.html">机器学习第四谈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-11-07T00:00:00+08:00">2018年 11月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>在前面第三谈中谈论的典型的二分类问题，多分类问题和回归问题在机器学习中都属于监督学习。此外还有无监督学习，自监督学习和强化学习。</p>
+<h3 id="_2">无监督学习</h3>
+<p>无监督学习是数据分析的必备技能，在解决监督学习问题之前，为了更好地了解数据集，它通常是一个必要步骤。</p>
+<p>降维 聚类 是常见的无监督学习方法。</p>
+<h3 id="_3">自监督学习</h3>
+<p>自编码器 (autoencoder) 是有名的自监督学习例子。</p>
+<h3 id="_4">强化学习</h3>
+<p>智能体接受环境的信息，为了某种奖励最大化而学习选择行为。</p>
+<h2 id="_5">机器学习通用工作流程</h2>
+<h3 id="_6">定义问题，收集数据集</h3>
+<ul>
+<li>你的输入数据是什么？你要预测什么？</li>
+<li>你面对的是什么类型的问题？是二分类问题还是多分类问题等等。</li>
+</ul>
+<h3 id="_7">选择衡量成功的指标</h3>
+<p>模型要优化什么，它应该直接和你的业务目标相关。</p>
+<h3 id="_8">确定评估方法</h3>
+<ul>
+<li>留出验证集 数据量很大的时候采用 
+  具体操作就是训练数据里面一部分作为训练集，剩下来的一部分作为验证集，然后用训练集训练，验证集评估当前模型的好坏。模型参数调节好训练好之后，记得最后用整个训练集从头训练一次，最后用另外的测试集数据测试下模型的实际效果。</li>
+<li>K折交叉验证</li>
+<li>重复的K折验证</li>
+</ul>
+<h3 id="_9">准备数据</h3>
+<h4 id="_10">数据张量化</h4>
+<p>神经网络的所有输入和输出目标都必须是浮点数张量（某些情况下可以是整数张量）。无论面对的是声音，文本，图像还是视频，都必须先将其转换成为张量 …</p>
                             </article>
 
  <nav aria-label="Page Navigation">

@@ -167,7 +167,7 @@ cdwanze的博文 - orm tag</title>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#shu-ju-ku-ref">数据库
+                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -177,16 +177,21 @@ cdwanze的博文 - orm tag</title>
                                 </section>
                                 
 <h2 id="_1">前言</h2>
-<p>老实说sqlalchemy这个模块特别难学，主要原因倒不是这个模块本身，阻碍我很好地学习这个模块的是这个心态，认为自己可以直接学习sqlalchemyORM封装就行了，不用学习SQL语句。这是错误的。要学好sqlalchemy必须先学习好SQL语句，要完全发挥出sqlalchemy的威力，也必须先学会SQL语句和对应的SQL实现。然后还有一个误区，我们在使用上也不一定要使用orm层的接口。实际上sqlalchemy这个模块里面内容是很丰富的，是很灵活的。它是可以完全取代sqlite3模块和psycopg2模块等初级的DB API，然后还提供了高级的ORM封装。</p>
+<p>本文分为两个部分，sqlalchemy的非ORM部分和ORM部分。一般使用是推荐使用ORM，这将让你的代码更python，更易读易懂。但ORM部分要用好，很多非ORM部分知识是需要的,，下面根据笔者的实践列出一些非ORM部分非常常用的一些知识部分：</p>
+<ul>
+<li>创建Engine 理解创建Engine部分将有助于你在很多地方理解如何配置sqlalchemy的数据库连接</li>
+<li>列的属性 列的数据类型 这两个是必看的，你在定义ORM模型的时候必然要参考这个</li>
+<li>select语句和理解RowProxy对象 帮助你理解如何在query中编写select语句和出来的结果如何使用</li>
+</ul>
 <h3 id="_2">安装</h3>
-<p>sqlalchemy的安装简单用pip3命令安装之即可:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip3</span> <span class="n">install</span> <span class="n">sqlalchemy</span>
+<p>sqlalchemy的安装简单用pip命令安装之即可:</p>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sqlalchemy</span>
 </pre></div>
 <h3 id="_3">引用惯例</h3>
 <p>在后面都默认有如下引用:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
-<p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。</p>
+<p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。</p>
 <h2 id="_4">简介</h2>
 <p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
 <p><img alt="img" src="https://docs.cdwanze.work/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>

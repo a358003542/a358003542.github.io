@@ -162,6 +162,117 @@ cdwanze的博文 - 算法 category</title>
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/gao-xiao-numpyhe-pandas.html">高效numpy和pandas
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-06-20T00:00:00+08:00">2019年 6月 20日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="numpy">高效numpy</h2>
+<h3 id="numpypandas">numpy总的来说比pandas快</h3>
+<p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
+<div class="highlight"><pre><span></span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+<p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
+<h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
+<p>比如下面的程序：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="o">%%</span><span class="nv">timeit</span> 
+
+<span class="nv">res</span> <span class="o">=</span> <span class="nv">np</span>.<span class="nv">vstack</span><span class="ss">(</span>[<span class="nv">x</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">10000</span><span class="ss">)</span>]<span class="ss">)</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="mi">50</span>.<span class="mi">7</span> <span class="nv">ms</span> ± <span class="mi">1</span>.<span class="mi">5</span> <span class="nv">ms</span> <span class="nv">per</span> <span class="k">loop</span> <span class="ss">(</span><span class="nv">mean</span> ± <span class="nv">std</span>. <span class="nv">dev</span>. <span class="nv">of …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/extract_pic_feature.html">提取图片的特征
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-06-05T00:00:00+08:00">2019年 6月 5日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">提取图片的特征</h2>
+<p>请参阅 <a href="https://www.cnblogs.com/my-love-is-python/p/10414135.html">这篇文章</a> ，老实说具体算法细节看不大懂，而且似乎短时间内是没希望看懂了..里面有太深的相关领域专业知识了。不过具体python代码还是很简单的：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">'test_1.jpg'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># 第二个参数设置为0就是自动灰度化了</span>
+<span class="n">sift</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">xfeatures2d</span><span class="o">.</span><span class="n">SIFT_create</span><span class="p">()</span>
+
+<span class="c1"># 找出关键点</span>
+<span class="n">kp</span> <span class="o">=</span> <span class="n">sift</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="c1"># 对关键点进行绘图</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">'ret'</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+<span class="c1"># 使用关键点找出sift特征向量</span>
+<span class="n">kp</span><span class="p">,</span> <span class="n">des</span> <span class="o">=</span> <span class="n">sift …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/ji-suan-yu-xian.html">计算余弦
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-05-07T00:00:00+08:00">2019年 5月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">计算余弦</h2>
+<p>按照 
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left | \vec{a} \right | \left | \vec{b} \right |
+}
+$$</div>
+<p>然后上面的向量的绝对值，是高中的写法，更确切应该写作如下形式：
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left \| \vec{a} \right \|_2 \left \| \vec{b} \right \|_2
+}
+$$</div>
+<p>
+具体就是叫做该向量的l2范数，也是该向量的欧几里得距离。</p>
+<p>而如果我们对某个向量进行sklearn的 <code>normalize</code> 归一化操作，也就是让这个向量的l2范数=1，默认是l2范数，你也可以设置为其他范数。比如l1范数就是所有值的绝对值相加等于1（这在某些数据预处理中 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/monte-carlo-simulation.html">蒙特卡罗模拟
  </a></h1>
 
@@ -227,6 +338,68 @@ cdwanze的博文 - 算法 category</title>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">decisions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/recommender-talk-two.html">推荐系统第二谈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-11-27T00:00:00+08:00">2018年 11月 27日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>由于我对于推荐系统属于摸索性质，然后又过了一段时间，再来看之前写的推荐系统第一谈文章，基本上要全部删掉重写。但这里还是叫做推荐系统第二谈吧，一些大概没什么太大问题的东西都放在下面的基本概念了解部分了。</p>
+<h2 id="_2">基本概念了解</h2>
+<p>推荐系统本质上是隶属于机器学习系统的，所以在简单了解下推荐系统相关算法之后，具体实现推荐系统的架构，是应该基于机器学习系统架构，然后在这之上引入新的处理流即可。</p>
+<p>推荐系统分为两类推荐：一类是评分预测推荐；另一类是topN推荐。之前我们看的很多教材和案例基本上都在做评分预测推荐，大概如下面表格的数据：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">物品1</th>
+<th align="center">物品2</th>
+<th align="center">物品3</th>
+<th align="center">物品4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">用户1</td>
+<td align="center">2</td>
+<td align="center">?</td>
+<td align="center">3</td>
+<td align="center">?</td>
+</tr>
+<tr>
+<td align="center">用户2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">?</td>
+</tr>
+<tr>
+<td align="center">用户3</td>
+<td align="center">?</td>
+<td align="center">?</td>
+<td align="center">?</td>
+<td align="center">?</td>
+</tr>
+</tbody>
+</table>
+<p>然后用户对某些物品有些评分，然后开始开展推荐工作。老实说这些教材一开始给了我很大的困扰，因为我现在活着说一般做推荐系统刚开始，基本上是没有评分数据的。甚至不要说一开始，就是到了网站运营后期也可能没有这个收集用户评分的需求。在这里要感谢项亮的书籍【参考资料2】，提醒了我，还有另外一类推荐系统，叫做topN推荐，返回一些推荐列表数据，这才是通常我们常见的应用类型。</p>
+<h3 id="usercf">评分预测推荐的usercf方法</h3>
+<p>usercf也就是所谓的协同过滤推荐感觉教材里面到处都有，但实际因为缺少用户评分数据是不现实的，最大的用处可能就是让我们理解这个思路，那就是通过用户评分的相似性继而扩展到用户行为的相似性，从而找到相似的用户 …</p>
                             </article>
 
 
@@ -325,6 +498,50 @@ cdwanze的博文 - 算法 category</title>
 <p>平均值的概念是大家最熟悉的，其是最基本的统计学手段。比如物理学上的测量，为了精确总是需要多次测量取平均值。再比如我们衡量某一类数据的大致平均情况，比如你的考试平均成绩，通过这个平均成绩可以大致得到你对待本学期学业的态度等。</p>
 <p>中位数和均值一样也能考察样本总体存在状态，不过区别是中位数对一些极值（特殊的偏离特别远的值）不敏感。以收入来举例子：某些人的收入特别的高，那么如果你用均值来考察社会的收入水平就会有抬高的嫌疑。因为不同的家庭之间的收入并没有共享，但是你在计算中却一并考虑了。这个时候用中位数来考察能更加合理地看着社会总体的收入水平。因此考察家庭平均收入要用中位数。</p>
 <p>众数只关注出现次数最多的数 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/nlp-talk-one.html">自然语言处理第一谈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-01-30T00:00:00+08:00">2018年 1月 30日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>自然语言处理的可能应用领域有：</p>
+<ul>
+<li>机器翻译</li>
+<li>自动文摘</li>
+<li>信息检索</li>
+<li>文档分类</li>
+<li>问答系统</li>
+<li>信息过滤，信息抽取</li>
+<li>文字编辑和自动校对</li>
+<li>作文自动评分</li>
+<li>语音识别</li>
+<li>语音合成，text to speech</li>
+<li>​</li>
+</ul>
+<h2 id="_2">信息熵</h2>
+<p>信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。</p>
+<p>不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为：
+</p>
+<div class="math">$$
+H = - p log_2{p}
+$$</div>
+<p>
+首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit …</p>
                             </article>
 
 
@@ -457,6 +674,162 @@ cdwanze的博文 - 算法 category</title>
 <p>比如上面图片的那个二叉树，假设我们要插入19，那么首先和8比较，大，则右，再和10比较，大则右，再和14比较，大则右，然后空就可以插入了。</p>
 <p>然后假设我们要查找19，那么过程大体也是类似的和8比较，大则右，再和10比较，大则右，再和14比较，大则右，然后相等则找到。我们看到我们的查找过程，涉及到一些比较判断操作等，假设元素两边分的话，那么树中一半的元素都跳过去了。所以利用这个数据结构加速查找和存储数据好处是显而易见的。</p>
 <h2 id="python">二叉搜索树的python实现 …</h2>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/shu-ju-hui-tu.html">数据绘图
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-11-02T00:00:00+08:00">2017年 11月 2日
+                                        </time>
+                                    </div>
+                                </section>
+                                <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在jupyter notebook 下首先推荐输入 <code>%matplotlib notebook</code> 。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">notebook</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>配置中文字体支持</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">rcParams</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sans-serif&#39;</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SimHei&#39;</span><span class="p">)</span> <span class="c1"># 插入中文字体</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">])</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span> <span class="c1">#用来正常显示负号</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;SimHei&#39;, &#39;DejaVu Sans&#39;, &#39;Bitstream Vera Sans&#39;, &#39;Computer …</pre></div></div></div></div></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/du-qu-shu-ju.html">读取数据
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-11-01T00:00:00+08:00">2017年 11月 1日
+                                        </time>
+                                    </div>
+                                </section>
+                                <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#20174;&#25991;&#26412;&#35835;&#21462;&#25968;&#25454;">&#20174;&#25991;&#26412;&#35835;&#21462;&#25968;&#25454;<a class="anchor-link" href="#&#20174;&#25991;&#26412;&#35835;&#21462;&#25968;&#25454;">&#182;</a></h2><p>in linux use <code>!cat the.txt</code>  in windows use <code>!type the.txt</code></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_csv</span> <span class="o">=</span> <span class="s1">&#39;./examples/test.csv&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="nb">open</span><span class="p">(</span><span class="n">test_csv</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>a,b,c,d,message
+ 1,2,3,4,hello
+ 5,6,7,8,world
+ 9,10,11 …</pre></div></div></div></div></div>
                             </article>
 
                      </div>

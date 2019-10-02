@@ -15,7 +15,7 @@
 
         <meta property="og:title" content="cdwanze的博文"/>
         <meta name="twitter:title" content="cdwanze的博文">
-    <meta property="og:url" content="https://docs.cdwanze.work"/>
+    <meta property="og:url" content=""/>
     <meta property="og:site_name" content="cdwanze的博文"/>
     <meta property="og:article:author" content="cdwanze"/>
     <title>
@@ -23,17 +23,17 @@
 </title>
 
 
-        <link href="https://docs.cdwanze.work/theme/css/font-awesome.css" rel="stylesheet"
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
               media="screen">
-        <link href="https://docs.cdwanze.work/theme/css/bootstrap.min.css" rel="stylesheet"
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
               media="screen">
 
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/pygments.css" media="screen">
+                  href="/theme/css/pygments.css" media="screen">
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/elegant.css" media="screen">
+                  href="/theme/css/elegant.css" media="screen">
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/custom.css" media="screen">
+                  href="/theme/css/custom.css" media="screen">
 
 
 
@@ -61,7 +61,7 @@
 
 
         <div class="navbar-collapse collapse">
-            <form action="https://docs.cdwanze.work/search.html"
+            <form action="/search.html"
                   onsubmit="return validateForm(this.elements['q'].value);"
                   class="navbar-form navbar-left">
                 <div class="form-group">
@@ -75,7 +75,7 @@
 
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li  class="active">
-                    <a href="https://docs.cdwanze.work">博文首页</a></li>
+                    <a href="">博文首页</a></li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"
@@ -92,10 +92,10 @@
 
 
                         <li >
-                            <a href="https://docs.cdwanze.work/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
                         </li>
                         <li >
-                            <a href="https://docs.cdwanze.work/gong-gao.html">公告</a>
+                            <a href="/gong-gao.html">公告</a>
                         </li>
             </ul>
 
@@ -153,7 +153,7 @@
                 <div class="col-md-8 col-md-offset-2">
                     <header>
                         <h1 id="recent-posts">最近博文
-                            <a id="allposts" href="https://docs.cdwanze.work/archives.html">所有博文</a>
+                            <a id="allposts" href="/archives.html">所有博文</a>
                         </h1>
                     </header>
 
@@ -162,14 +162,14 @@
 <nav aria-label="Page Navigation">
     <ul class="pager">
         <li class="previous">
-            <a href="https://docs.cdwanze.work/index6.html" aria-label="Previous" >
+            <a href="/index6.html" aria-label="Previous" >
                 <span aria-hidden="true">&larr;<span>Previous</span></span>
             </a>
         </li>
 
 
         <li class="next">
-            <a href="https://docs.cdwanze.work/index8.html" aria-label="Next" >
+            <a href="/index8.html" aria-label="Next" >
                 <span aria-hidden="true">&rarr;<span>Next</span></span>
             </a>
         </li>
@@ -180,722 +180,881 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/data-process-design-principle.html">数据处理的程序的设计原则讨论
+                                        href="/articles/binary-search.html">二分查找
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#si-xiang-ref">思想
+                                    <a href="/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2018-03-06T15:34:00+08:00">2018年 3月 6日
+                                              datetime="2017-11-24T00:00:00+08:00">2017年 11月 24日
                                         </time>
                                     </div>
                                 </section>
                                 
-<p>数据量很大的情况下，通常指数据库下数据量较大的情况下，我们编写数据处理程序应该具有怎样的设计原则：</p>
-<p>我对分布式流式计算框架不太熟悉，也许使用那些框架是个思路，现在是我纯粹从自己面对的问题作出的一些然后提出的一些原则：</p>
-<ol>
-<li>
-<p>大的基本操作应考虑以从数据库的某处移动到某处来标记操作的完成，因为大的基本操作变动性并不是太大，这样数据库某个地方的数据都是有特别含义的。</p>
-</li>
-<li>
-<p>大的基本操作下还有一些小的操作步骤，这是一个难点，第一入口数据不断更新甚至老数据也会有变化，第二处理代码也可能会有变更，这部分并没有一劳永逸的完美的可扩展方案，有有的时候也是带来了太多的复杂性。一个比较好的建议是记录如下operations的处理信息：</p>
-</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="n">operations</span><span class="o">:</span> <span class="n">op_name</span> <span class="n">op_state</span> <span class="n">last_op_time</span> <span class="n">op_day</span>
-</pre></div>
-<p>2.1 操作名</p>
-<p>2.2 op_state 操作状态，每个操作前都将state调为2，最后程序快结束的最后一行，state调为1，这样确保了op操作 state=0 或者 =2 或者没有state这个参量都表示本操作有问题</p>
-<p>2.3 操作碎片化，一个好的建议以目标数据的 进入天数 作为一个小的处理单元，这样某一步出现问题，可以重复刷，保证数据处理的可中断，状态可记录。</p>
-<p>2.4 上一次的操作时间 …</p>
+<h2 id="_1">二分查找</h2>
+<p>二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 <a href="https://github.com/qiwsir/algorithm/blob/master/bin_search.md">这个网页</a> ，其认为python的 <code>index</code> 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 <code>bisect</code> 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。</p>
+<p>关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。</p>
+<p>这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。</p>
+<h2 id="_2">抽象的二分查找思想讨论</h2>
+<p>现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …</p>
                             </article>
 
 
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/fire-module.html">fire模块
+                                        href="/articles/binary-search-tree.html">二叉搜索树
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    <a href="/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2018-02-22T15:25:00+08:00">2018年 2月 22日
+                                              datetime="2017-11-24T00:00:00+08:00">2017年 11月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">二叉搜索树</h2>
+<p>本文很大程度上参考了 <a href="https://github.com/nryoung/algorithms">algorithms</a> 项目，在此谢谢作者们了。</p>
+<p>二叉搜索树（Binary Search Tree）大概如下图所示这么个东西:</p>
+<p><img alt="img" src="/images/python/binary_search_tree.png" title="二叉搜索树"/></p>
+<p>其每一个节点都至多有两个子节点，然后所有的节点都满足以下三个条件</p>
+<ol>
+<li>左节点的值小于它的父节点</li>
+<li>右节点的值大于它的父节点</li>
+<li>所有节点的值均不相等</li>
+</ol>
+<p>二叉搜索树的插入复杂度是 <code>O(log n)</code> ，查找复杂度最好情况 <code>O(log n)</code> ，最坏情况 <code>O(n)</code> 。</p>
+<p>比如上面图片的那个二叉树，假设我们要插入19，那么首先和8比较，大，则右，再和10比较，大则右，再和14比较，大则右，然后空就可以插入了。</p>
+<p>然后假设我们要查找19，那么过程大体也是类似的和8比较，大则右，再和10比较，大则右，再和14比较，大则右，然后相等则找到。我们看到我们的查找过程，涉及到一些比较判断操作等，假设元素两边分的话，那么树中一半的元素都跳过去了。所以利用这个数据结构加速查找和存储数据好处是显而易见的。</p>
+<h2 id="python">二叉搜索树的python实现 …</h2>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/github-pages.html">github pages
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#za-xiang-ref">杂项
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-11-23T12:20:00+08:00">2017年 11月 23日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">自定义域名</h2>
+<p>简单来说就是写一个 <code>CNAME</code> 文件，实际上github的 settings那里还提供了功能，具体实际做的工作也就是创建了一个 <code>CNAME</code> 文件。</p>
+<p><img alt="github_pages_cname" src="/images/others/github_pages_cname.png"/></p>
+<h2 id="gitbook">挂上gitbook的内容</h2>
+<p>下面的内容过时了：</p>
+<div class="highlight"><pre><span></span><span class="err">把</span> <span class="n">gitbook</span> <span class="n">build</span>  <span class="err">之后的</span> <span class="n">_book</span> <span class="err">里面的内容复制到主目录下，然后如下引用即可：</span>
+
+    <span class="o">/</span><span class="n">html5</span><span class="o">-</span><span class="n">learning</span><span class="o">-</span><span class="n">notes</span>
+
+<span class="err">也就是指向文件夹就可以正常工作了。</span>
+</pre></div>
+<p>参考了 <a href="http://www.chengweiyang.cn/gitbook/github-pages/README.html">这个网页</a> 和 <code>create-react-app</code> 关于分支的管理建议 ，综合更好的解决方案如下：</p>
+<ol>
+<li>
+<p><code>yarn init</code>  如果读者对yarn npm不太熟悉的话，那么全部都 Enter 吧。</p>
+</li>
+<li>
+<p><code>yarn add gh-pages</code></p>
+</li>
+<li>
+<p>在 <code>packages.json</code> 里面加上 （PS: 注意json语法object最后一项不能带逗号）：</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span>    <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+      <span class="nt">"predeploy"</span><span class="p">:</span> <span class="s2">"npm run build"</span><span class="p">,</span>
+      <span class="nt">"deploy …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/numpy-module.html">numpy模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-11-15T00:00:00+08:00">2017年 11月 15日
                                         </time>
                                     </div>
                                 </section>
                                 
 <h2 id="_1">前言</h2>
-<p>初次接触 <a href="https://github.com/google/python-fire">fire模块</a> 就不自觉的和 <a href="https://github.com/pallets/click">click模块</a> 进行对比，老实说我一开始还真不太相信这是google团队的作品，google团队的产品会这么简洁，不过毕竟后面写着 ： <code>This is not an official Google product.</code></p>
-<p>首先说下fire模块的优点，这个初步了解一下优点是很明显的： 可以让你少写点代码。作为一个程序员最大的愿望是什么： 少写点代码就能把事办成了。当然继续往下说，fire模块可以让你的代码更简洁，现在真的一个python脚本就是一个命令行工具了，一句废话都没有了，包括函数类里面的文档定义都是有用的。就作为一般最简单的命令行需求，我是推荐fire模块的。</p>
-<p>但是fire模块目前github上 commit很少，版本号也才 0.1.2，可能模块还有很多不稳定或者bug都是可能的，如果读者在项目需求上只是一两个python脚本需要做成命令行工具，我还是推荐click模块。如果读者有大量的python脚本转成命令行工具的需求，这在目前数据处理工作越来越多的大环境（实际上我怀疑这也是他们开发fire模块的初衷），那么使用fire模块无疑是能省点力气的，毕竟当初人们觉得click模块方便那也是只是相对于写一个命令行工具而言，现在情况确实有所不同了。</p>
-<div class="highlight"><pre><span></span>pip install fire
-</pre></div>
-<p>官方文档已经说的很详细了，本身使用是很简单的，下面我随便说说吧。</p>
-<h2 id="_2">第一个例子 …</h2>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/learning-centos7-system.html">学习centeos7系统
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-19T00:00:00+08:00">2018年 2月 19日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">安装系统</h2>
-<p>centos7的安装目前最大的难点在硬盘分区上，加上新生代的uefi启动方式，还是有些新的问题需要讨论的。</p>
-<p>记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照 鸟哥的私房菜   一章的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了，总之，分出3-4Gswap分区意思一下就可以了。</p>
-<h3 id="linux">各个硬件在linux下的名字</h3>
-<p>这个需要了解下，参考 <a href="http://linux.vbird.org/linux_basic/0130designlinux.php">鸟哥的私房菜第二章</a> ，</p>
-<ul>
-<li>硬盘或者USB模拟的硬盘 ：   /dev/sd[a-p]</li>
-<li>CDROM或者DVDROM :  /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1]</li>
-<li>打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15]</li>
-<li>鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标)</li>
-</ul>
-<h3 id="uefi">UEFI …</h3>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pipenv-module.html">pipenv模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-14T11:45:00+08:00">2018年 2月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>pipenv模块刚开始听说觉得virtualenv够用了，就没太在意。后来一试发现真的可以，很方便的，在设计理念上和nodejs那边的包管理有点接近了，很不错。</p>
-<p>刚进入一个文件夹，然后运行：</p>
-<div class="highlight"><pre><span></span>pipenv install
-</pre></div>
-<p>当然运行前你需要：</p>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pipenv</span>
-</pre></div>
-<p>其会创建 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 这两个文件。如果读者有点熟悉nodejs那边的包管理机制，就对这两个文件的作用不需要做过多的说明了。</p>
-<p>那么怎么激活进入虚拟环境呢：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">shell</span>
-</pre></div>
-<p>或者你直接调用虚拟环境下运行某个命令：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">run</span> <span class="n">you_awesom_command</span>
-</pre></div>
-<p>读者打开 <code>Pipfile</code> 文件会发现这一行</p>
-<div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="ss">"https://pypi.douban.com/simple"</span>
-</pre></div>
-<p>以前还要在系统的另外的地方去配置，现在直接在这里修改就可以了。</p>
-<p>然后安装模块就是：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">install</span> <span class="n">requests</span>
-</pre></div>
-<p>或者remove模块：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">uninstall</span> <span class="n">requests</span>
-</pre></div>
-<p>值得注意的pipenv模块很好地解析的各个包包的依赖关系，这就是他比原 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pillow-module.html">pillow模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-06T12:04:00+08:00">2018年 2月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>pillow模块的前身是PIL模块，其有更好的github和pypi支持，所以简单的安装就可以通过pip命令安装之即可。不过pillow模块对于某些特殊格式的图片处理支持可能依赖于系统的一些额外的图形处理模块，比如libjpeg，libtiff等。可能你的系统已经安装了，也可能没有，根据具体情况来，这里就不一一讨论了。</p>
-<p>安装官方文档的叙述（also reference <a href="http://askubuntu.com/questions/427358/install-pillow-for-python-3">this</a> ），下面这些可能需要装上。</p>
-<div class="highlight"><pre><span></span>sudo apt-get install python3-dev python3-setuptools
-sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</span>
-    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-</pre></div>
-<h3 id="_2">测试安装情况</h3>
-<p>可以如下找个图片简单测试一下安装情况:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"test.jpg"</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/statistics-tutorial.html">统计学入门
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-06T00:00:00+08:00">2018年 2月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">均值中位数众数</h2>
-<ul>
-<li><strong>mean</strong> 也就是均值，也就是算术平均数，也就是大家熟知的把所有的数加起来然后除以个数，看看这些数平均有多大。</li>
-<li><strong>median</strong> 中位数，是这样的概念：如果我们把一组数从小到大排列，然后最中间的那个数就是中位数。其中最中间的解释是，如果一共有奇数个数字，那么去掉一个最小去掉一个最大，这样类推，最后剩下来的那个数就是中位数；如果一共有偶数个数字，那么最后会剩下两个数字，而中位数就是最后这两个数字的均值。</li>
-<li><strong>mode</strong> 众数，也就是这一组数中出现频率最高或者说分布最多的数。比如说[1,2,2,3]这样一个样本，其中数字2出现次数最多，我们就说这个样本的众数为2。</li>
-</ul>
-<h3 id="_2">统计意义</h3>
-<p>平均值的概念是大家最熟悉的，其是最基本的统计学手段。比如物理学上的测量，为了精确总是需要多次测量取平均值。再比如我们衡量某一类数据的大致平均情况，比如你的考试平均成绩，通过这个平均成绩可以大致得到你对待本学期学业的态度等。</p>
-<p>中位数和均值一样也能考察样本总体存在状态，不过区别是中位数对一些极值（特殊的偏离特别远的值）不敏感。以收入来举例子：某些人的收入特别的高，那么如果你用均值来考察社会的收入水平就会有抬高的嫌疑。因为不同的家庭之间的收入并没有共享，但是你在计算中却一并考虑了。这个时候用中位数来考察能更加合理地看着社会总体的收入水平。因此考察家庭平均收入要用中位数。</p>
-<p>众数只关注出现次数最多的数 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/nlp-talk-one.html">自然语言处理第一谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#zi-ran-yu-yan-chu-li-ref">自然语言处理
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-30T00:00:00+08:00">2018年 1月 30日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>自然语言处理的可能应用领域有：</p>
-<ul>
-<li>机器翻译</li>
-<li>自动文摘</li>
-<li>信息检索</li>
-<li>文档分类</li>
-<li>问答系统</li>
-<li>信息过滤，信息抽取</li>
-<li>文字编辑和自动校对</li>
-<li>作文自动评分</li>
-<li>语音识别</li>
-<li>语音合成，text to speech</li>
-<li>​</li>
-</ul>
-<h2 id="_2">信息熵</h2>
-<p>信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。</p>
-<p>不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为：
-</p>
-<div class="math">$$
-H = - p log_2{p}
-$$</div>
-<p>
-首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/directied-acyclic-graph.html">有向无环图
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-21T11:56:00+08:00">2018年 1月 21日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>图论，听起来挺高大上的，嗯，那就是数学家画圈圈和画线线还很有乐趣的地方。</p>
-<p>如果线没有方向，那么叫做无向图，如果线有方向，那么叫做有向图。</p>
-<p>在有向图中，任意一个节点的流向流着流着都流不回自身，那么我们就说这个图为 <strong>有向无环图</strong> ，英文缩写是 DAG，（directied acyclic graph）。</p>
-<p>这东西有什么用？</p>
-<p>一开始我最先接触 DAG 这个术语，是在找工作流软件的时候，一种工作流的通用表示方法就是用 DAG 来表示。为什么？假设你是工作流中的某个节点的员工，你按照某个workflow走下去，最后闭环了，然后你无限循环在某个流程中了，那可真蠢了。</p>
-<p>然后比如说 git 的版本控制，其内部也是用的 有向无环图表示，如果你版本修改修改，又回到某个老版本了，那版本控制也失效了。</p>
-<p>聪明的朋友肯定想到了我们的宇宙时间是不可逆的，也就是说如果用模型来表示宇宙所有的信息数据变动流结构的话，那么一定是有向无环图。</p>
-<h2 id="python">python实现</h2>
-<p>在 <a href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/digraph.py">algorithms项目的这里</a> 有有向图的实现代码，实际存储就是一个字典值，然后再加上了一些辅助方法，其中 key …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/jupyter-notebook.html">jupyter notebook
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-21T11:27:00+08:00">2018年 1月 21日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="magic-function">magic function</h2>
-<h3 id="python">运行某个python脚本</h3>
-<div class="highlight"><pre><span></span><span class="nf">%run</span> <span class="n">test</span><span class="p">.</span><span class="n">py</span>
-</pre></div>
-<p>运行某个python脚本，里面的变量也会赋值在里面</p>
-<h3 id="_1">运行系统的某个命令</h3>
-<div class="highlight"><pre><span></span><span class="sx">!cat text.txt</span>
-</pre></div>
-<p>在windows下是：</p>
-<div class="highlight"><pre><span></span><span class="sx">!type text.txt</span>
-</pre></div>
-<h3 id="_2">脚本或命令运行计时</h3>
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">what</span>
-</pre></div>
-<h3 id="matplotlib">更好地集成matplotlib</h3>
-<div class="highlight"><pre><span></span><span class="nf">%matplotlib</span> <span class="kr">inline</span>
-</pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/powershell-tutorial.html">powershell入门
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#others-ref">others
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-20T12:56:00+08:00">2018年 1月 20日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>之前一直在linux系统做服务器的环境下玩一些东西，现在竟然要在windows服务器下做一些东西，其实python这一块都还好，很多python模块现在都支持windows系统，就是到了很多和linux系统相关的进程等等东西就出现差异了。</p>
-<p>实际项目中确实有这样的需求，尤其到数据处理这一块，后台各个处理进程是多个杂的，luigi模块更多的关注工作流，有的时候有些处理进程各自是完全毫无关系的，这个时候就需要开两个进程等等。在linux系统下，进程的开启和后台管理还有bash脚本的编写都是基本功，在wondows下感觉这一块也是需要学习接触好的。</p>
-<p>bat脚本是针对cmd的，现在powershell越来越成为主流了，而且powershell功能也是更加强大和完善的，只是powershell更加不为人们熟悉罢了。</p>
-<p>本文作者也是一边用一边有问题，一边写吧，题目权记作 powershell 入门。</p>
-<p>powershell脚本的后缀是 <code>ps1</code> ，人们开始编写powershell遇到的第一个挫折就是会提示没有权限执行脚本，这是windows的默认安全策略，你需要以管理员身份运行：</p>
-<div class="highlight"><pre><span></span><span class="nb">set-executionpolicy</span> <span class="n">remotesigned</span>
-</pre></div>
-<h2 id="_2">启动一个进程</h2>
-<div class="highlight"><pre><span></span><span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="s2">"ping.exe"</span> <span class="n">-Args</span> <span class="s2">"www.baidu.com"</span>
-</pre></div>
-<p>然后进程的输出可以如下进行重定向：</p>
-<div class="highlight"><pre><span></span><span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="s2">"ping.exe"</span> <span class="n">-Args</span> <span class="s2">"www.baidu.com"</span> <span class="n">-RedirectStandardOutput …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/elasticsearch-database.html">elasticsearch数据库
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#shu-ju-ku-ref">数据库
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-17T19:08:00+08:00">2018年 1月 17日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>需求：一般的数据库对全文搜索支持不是很好，mongodb的中文全文搜索支持是只有企业版才有的功能，而且我估计中文分词效果等也不会太好，而elasticsearch专注于数据库搜索，所谓术业有专攻，对于这样的搜索需求，有时我们是需要elasticsearch来解决这个问题的。</p>
-<p>首先推荐elasticsearch的这个 <a href="https://github.com/medcl/elasticsearch-rtf">中文插件版</a> ，其集成了很多中文支持插件，elasticsearch官方内置的中文分词效果很是不好，比如其集成了 <a href="https://github.com/medcl/elasticsearch-analysis-ik">ik分词插件</a> ，其分词效果还是可以的。这个项目能够让新手马上上路，获得一个还算可以的效果，后面有精力再考虑进一步优化吧。</p>
-<p>elasticsearch的python接口有官方的 <a href="https://github.com/elastic/elasticsearch-py">elasticsearch-py</a> ，然后在实际编写代码的时候强烈推荐 <a href="https://github.com/elastic/elasticsearch-dsl-py">elasticsearch-dsl-py</a> 项目，其也是基于 elasticsearch-py 项目，并提供了更便捷的接口封装。</p>
-<p>elasticsearch数据库基本结构有点类似于mongodb，其一条记录也称为一个文档（doc），一个文档大体是一个字典值，可以字典套字典的那种。然后其还有一个索引（index）的概念，大体类似于database，然后其还有一个type概念，大体类似于collections。显然elasticsearch也属于nosql数据库，nosql数据库存储时很重要的一个思路就是，一个文档一个doc对应一个实体。</p>
-<p>elasticsearch是基于Lucene的，这我们应该了解下，喝水不忘挖井人吗。</p>
-<p>elasticsearch在windows下的安装还是很简单的，下载好代码，解压然后直接运行bin文件夹的 <code>elasticsearch.bat …</code></p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/luigi-module.html">luigi模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-01-13T20:56:00+08:00">2018年 1月 13日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>luigi模块其实很早以前就接触过，但因为当时没有特别的需求所以对这个模块还是处于一种浅尝辄止的状态。到现在因为各种数据处理任务，开始强烈感觉到需要一个大的框架来管理这些小的数据处理脚本任务，使之更加的自动化和流程化。然后我开始找相应的软件，最后发现相关的软件不是少而是杂而多，请读者参看 <a href="http://ju.outofmemory.cn/entry/221885">这篇文章</a> 。</p>
-<p>首先有这么多项目证明程序员对于这个软件需求是很强烈的，但是如此的杂乱，大概两三百个，没有像scrapy或者django那种特别出色脱颖而出的项目，这多少是令人遗憾的。这也间接反应了这个问题，那就是这方面任务，恐怕最后还是要靠程序员自己编写大量定制代码来完成任务，而不能完全依靠某个工具。</p>
-<p>我选luigi学习的原因无非有二：</p>
+<p>本文对于numpy模块具体各个函数细节不做过多说明，具体请参看文档。本文主要是就numpy的一些核心概念进行理清。</p>
+<p>numpy模块里面最核心的概念就是 ndarray对象，请参看 <a href="https://stackoverflow.com/questions/15879315/what-is-the-difference-between-ndarray-and-array-in-numpy">这个问题</a> ，当时我也有疑问，numpy里面的array函数和ndarray对象有什么区别，答案就是：一般使用推荐使用 <code>numpy.array</code> 来创建 ndarray对象，其他还有 zeros ，empty等等其他的函数，他们都是很好的接口去创建一个 numpy.ndarray 对象，当然你也可以通过 numpy.ndarray 来创建一个ndarray对象，但这不是 numpy模块开发人员推荐的风格。</p>
+<h2 id="numpy-ndarraypython">numpy ndarray对象和python的列表的区别</h2>
 <ol>
-<li>python</li>
-<li>github星数靠前</li>
+<li>numpy ndarray内部的item是固定内存size的，改变size将会重新创建一个ndarray。</li>
+<li>numpy ndarray内部的item是相同的data type的，因此是固定内存size的。</li>
+<li>numpy的ndarray有助于大型数据的高级数学运算或其他操作，比python的序列那些执行会更有效率。</li>
+<li>很多科学和数学计算的python模块都是基于numpy的ndarray的，当然他们支持python的序列类型输入，但都是转变成为numpy的array之后再进行相关计算的，然后他们的输出也通常是numpy的ndarray对象。</li>
 </ol>
-<p>其实之前对luigi似乎是不太满意的，官方文档是一部分原因，可能以前对这块需求也不是特别强烈是一部分原因，或者还有其他？但还是决定硬着头皮学习，然后再慢慢定制吧。</p>
-<h2 id="_2">定义任务</h2>
-<p>首先当然是定义任务，其继承自 <code>luigi.Task</code> ，其内有特殊含义的方法有： </p>
-<ul>
-<li>run 实际执行任务的动作</li>
-<li>output 描述任务的输出对象</li>
-<li>requires 描述任务的依赖</li>
-</ul>
-<h3 id="requires">requires</h3>
-<p>返回某个任务对象或者某些任务对象列表，作为本任务的前置任务。看得出来作为任务对象的一些参数是区别对待的，比如即使是依赖于本对象，如果参数是前一日期时间，则需要上一任务完成之后再执行本任务。</p>
-<h3 id="target">依赖于某个Target</h3>
-<p>可以如下创建一个 <code>ExternalTask …</code></p>
+<h2 id="ndarray">ndarray对象</h2>
+<p>numpy模块中很核心的一个概念就是ndarray对象。ndarray对象按照numpy官方手册的绘图是这样一个数据结构：</p>
+<p><img alt="img" src="/images/机器学习/ndarray.png" title="ndarray"/></p>
+<p>ndarray有一个头header来控制所有接下来存储的数据类型(dtype)，然后存储的数据则必然都是相同的数据类型 …</p>
                             </article>
 
 
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/mongodb.html">mongodb
+                                        href="/articles/shu-ju-hui-tu.html">数据绘图
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#shu-ju-ku-ref">数据库
+                                    <a href="/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2018-01-13T00:00:00+08:00">2018年 1月 13日
+                                              datetime="2017-11-02T00:00:00+08:00">2017年 11月 2日
+                                        </time>
+                                    </div>
+                                </section>
+                                <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在jupyter notebook 下首先推荐输入 <code>%matplotlib notebook</code> 。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">notebook</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>配置中文字体支持</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">rcParams</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sans-serif&#39;</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SimHei&#39;</span><span class="p">)</span> <span class="c1"># 插入中文字体</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">])</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span> <span class="c1">#用来正常显示负号</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;SimHei&#39;, &#39;DejaVu Sans&#39;, &#39;Bitstream Vera Sans&#39;, &#39;Computer …</pre></div></div></div></div></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/du-qu-shu-ju.html">读取数据
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-11-01T00:00:00+08:00">2017年 11月 1日
+                                        </time>
+                                    </div>
+                                </section>
+                                <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#20174;&#25991;&#26412;&#35835;&#21462;&#25968;&#25454;">&#20174;&#25991;&#26412;&#35835;&#21462;&#25968;&#25454;<a class="anchor-link" href="#&#20174;&#25991;&#26412;&#35835;&#21462;&#25968;&#25454;">&#182;</a></h2><p>in linux use <code>!cat the.txt</code>  in windows use <code>!type the.txt</code></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_csv</span> <span class="o">=</span> <span class="s1">&#39;./examples/test.csv&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="nb">open</span><span class="p">(</span><span class="n">test_csv</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>a,b,c,d,message
+ 1,2,3,4,hello
+ 5,6,7,8,world
+ 9,10,11 …</pre></div></div></div></div></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/nginx-web-server.html">nginx web服务器
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-10-22T07:34:00+08:00">2017年 10月 22日
                                         </time>
                                     </div>
                                 </section>
                                 
-<h2 id="_1">简介</h2>
-<p>mongodb作为一款主流的nosql和sql数据库区别还是很大的，虽然有类似的比较，比如mongodb的collection概念大体类似于table，或者其他等等，但最好还是摒弃这种思维。然后mongodb相对sql明显有这两个优点，在开发的时候最好要好好使用，而不要因为之前的sql思维而自我设限。</p>
-<ol>
-<li>mongodb是不要求一个collection里面各个文档具有相同的chema或者简单说，相同的key的。</li>
-<li>不要把sql的join思维带入进来了，而应该更好地利用mongodb可以字典里面套字典，列表里面塞字典的特性。对于这种数据结构，mongodb有对应的查询语法，速度还是很快的。</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="n">user_doc</span> <span class="o">=</span> <span class="n">dbh</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">"facebook.username"</span><span class="p">:</span><span class="s2">"foofacebook"</span><span class="p">})</span>
+<h2 id="_1">前言</h2>
+<p>nginx的官方文档在 <a href="http://nginx.org/en/docs/">这里</a> ，有问题主要还是参看官方文档吧。</p>
+<h3 id="_2">安装</h3>
+<p>debian系安装:</p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">nginx</span>
 </pre></div>
-<p>你看上面的例子，本来一个doc（mongodb把最小的一条记录叫做doc）大概类似一个字典了，然后我们还可以点着去查询，所以必要的时候，字典里面放字典，放心，对于这种结构速度还是有保证的。</p>
+<p>rpm系统安装:</p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">nginx</span>
+</pre></div>
+<h3 id="nginx">nginx配置基础</h3>
+<p>nginx的配置就是在 <code>/etc/nginx/sites-available</code> 那里新建一个配置文件，然后这样创建一个符号链接到 <code>sites-enabled</code> 那里。</p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span>
+</pre></div>
+<p>然后重启nginx即可。 </p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">nginx</span> <span class="k">restart</span>
+</pre></div>
+<p>nginx配置文件的基本格式是:</p>
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">section</span><span class="o">&gt;</span> <span class="err">{</span>
+    <span class="o">&lt;</span><span class="n">directive</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="k">parameters</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="err">}</span>
+</pre></div>
+<h3 id="nginx_1">nginx命令行 …</h3>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/jinja2-template.html">jinja2模板
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-10-12T00:00:00+08:00">2017年 10月 12日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>jinja2模板在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板还是很值得一学的。</p>
+<h2 id="_2">注释</h2>
+<p>这里面的内容是模板文件的注释内容。</p>
+<div class="highlight"><pre><span></span><span class="err">{</span><span class="o">#</span> <span class="p">...</span> <span class="o">#</span><span class="err">}</span>
+</pre></div>
+<h2 id="_3">变量</h2>
+<p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
+<div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="err">...</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+<p>然后 <code>object.a</code> 这样的dot法引用，或者 <code>object['a']</code> 这样的写法，甚至是调用实例的某个方法 <code>object.func()</code> 都是支持的。</p>
+<h2 id="filters">过滤器filters</h2>
+<p>变量可以进一步加上某个过滤器来进行进一步的处理。过滤器是有点类似于linux系统的管道作业风格，多个过滤器可以叠加，如： <code>{{ var | striptags | title }}</code> 。</p>
+<p>jinja2中内置的过滤器有：</p>
+<ul>
+<li><code>safe</code> 渲染值不转义</li>
+<li><code>capitalize</code> 值首字母大写 其他字母小写</li>
+<li><code>lower</code> 字母都小写</li>
+<li><code>upper</code> 字母都大写</li>
+<li><code>title</code> 值每个单词首字母大写</li>
+<li><code>trim</code>值首尾空格去除</li>
+<li><code>striptags</code> 渲染之前把所有HTML标签去掉</li>
+</ul>
+<p>关于safe过滤器请参看下面讨论的特殊符号的问题。</p>
+<h2 id="html">html特殊符号问题</h2>
+<p>如果你的变量有这些html的特殊符号 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/beautifulsoup-module.html">beautifulsoup模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-10-11T07:04:00+08:00">2017年 10月 11日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">简介</h1>
+<p>BeautifulSoup模块在python网页分析这一块是很有名的一个模块，其确实让网页分析任务变得轻松而easy了。本文将对bs4模块进行简单的介绍，更多细节请参看 <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a> 。</p>
 <h2 id="_2">安装</h2>
-<p>本来安装是不想多说了的，但因为历史原因，把以前在ubuntu下的一些东西放在这里吧，可能对读者有帮助。</p>
-<p>ubuntu下的安装是：</p>
-<div class="highlight"><pre><span></span>sudo apt install mongodb
+<p>安装就简单用pip命令安装之:</p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">beautifulsoup</span>
 </pre></div>
-<p>其中mongo命令是client接口，然后mongod命令是服务端接口。默认开启了mongod后台服务，你可以看一下：</p>
-<div class="highlight"><pre><span></span>sudo service --status-all …</pre></div>
+<h2 id="_3">第一个例子</h2>
+<p>然后在使用上因为python2和python3的urllib相关改动很大，加上urllib在使用上不是很友好，强烈推荐大家直接用requests模块来进行相关操作。然后beautifulsoup的引入语句一般如下所示:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</pre></div>
+<p>最简单的和requests的组合使用如下所示:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://www.pythonscraping.com/exercises/exercise1.html"</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+<p>在上面soup.title返回的是一个标签对象。然后标签对象里面如果有标签的话又可以继续点号索引标签:</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; soup.body …</pre></div>
                             </article>
 
 
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/crontab.html">crontab定时任务
+                                        href="/articles/scrapy-module.html">scrapy模块
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2017-12-30T23:04:00+08:00">2017年 12月 30日
+                                              datetime="2017-10-11T07:04:00+08:00">2017年 10月 11日
                                         </time>
                                     </div>
                                 </section>
                                 
-<p>crontab工具可以用来让系统执行一些周期性任务，其在ubuntu下服务名字叫cron；在centos下服务名字叫crond。</p>
-<p>你可以通过crontab这个命令查看或修改具体的配置：</p>
-<div class="highlight"><pre><span></span><span class="n">crontab</span> <span class="o">-</span><span class="n">l</span>  <span class="o">#</span><span class="err">列出配置文件内容</span>
+<h2 id="_1">简介</h2>
+<p>老实说Scrapy模块和Django模块在实用上包括在内容目录结构上都很相似，当然这两个项目干的完全是两个不同的事情，我想这种相似性更多的可以描述为类似于大多数GUI界面的那种类似。</p>
+<p>我之前尝试过写过一个小的Spider网络爬虫程序，其实网络爬取大体过程都是类似的，因此我学习Scrapy项目大体只是一些基本配置的了解，对于其内部原理已经很熟悉了，所以本文不会在这些地方赘述了。</p>
+<p>scrapy就是一个python模块，可以通过 <code>pip</code> 安装之，所以安装这块也不多说了。</p>
+<h3 id="_2">新建一个项目</h3>
+<div class="highlight"><pre><span></span><span class="n">scrapy</span><span class="w"> </span><span class="n">startproject</span><span class="w"> </span><span class="n">project_name</span><span class="w">  </span><span class="o">[</span><span class="n">path</span><span class="o">]</span><span class="w"> </span>
+</pre></div>
+<p>因为我喜欢创建python的venv虚拟环境，所以上面最后path设置为 <code>.</code> 当前目录下的意思。</p>
+<p>然后接下来就是编写爬虫Spider脚本还有等等其他一些配置了。</p>
+<h2 id="_3">第一个例子</h2>
+<p>下面是一个简单的例子：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MySpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">user_agent</span> <span class="o">=</span> <span class="n">get_random_user_agent</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"7yrt"</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://7yrt.com/html/rhrt/'</span><span class="p">]</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://7yrt.com/'</span><span class="p">]</span>
 
-<span class="n">crontab</span> <span class="o">-</span><span class="n">e</span>  <span class="o">#</span><span class="err">进入配置文件编辑</span>
-</pre></div>
-<p>编辑一般就是进入的vi编辑器。用crontab -e修改的配置会直接生效，不需要重启crontab的后台服务。如果重启后台服务了，那么所有的任务都会重新开始计时。当你的配置写着每隔一个小时执行某个任务，那么要等到下一个小时的时候才会执行任务。</p>
-<p>一开始推荐写上这样一个每分钟的echo命令来看看crontab的具体运行情况。</p>
-<div class="highlight"><pre><span></span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="n">echo</span> <span class="ss">"test"</span>
-</pre></div>
-<p>一般日志是默认在 <code>/var/log/cron</code> 那里（centos）。</p>
-<p>然后上面的配置含义是 ：</p>
-<div class="highlight"><pre><span></span><span class="err">分</span> <span class="err">时</span> <span class="err">日</span> <span class="err">月</span> <span class="err">星期几</span> <span class="err">命令</span>
-</pre></div>
-<p>其中小时是24时制，星期几0表示星期日，1表示星期一。后面的命令就是一行简单的shell命令，如果是多行命令的话建议写成bash脚本，然后给这个脚本可执行权限，然后写上该脚本的绝对路径名即可。</p>
-<p><strong>NOTICE</strong>： crontab里面执行的命令不是在shell环境下，比如pyenv环境就可能不会正常工作，推荐要使用什么命令什么文件都使用绝对路径。</p>
-<p>每五分钟：</p>
-<div class="highlight"><pre><span></span><span class="o">*/</span><span class="mi">5</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
-</pre></div>
-<p>每三个小时：</p>
-<div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">*/</span><span class="mi">3 …</span></pre></div>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url …</span></pre></div>
                             </article>
 
 
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/git.html">git版本控制
+                                        href="/articles/python-style-guide.html">python语言学习之-编码风格推荐
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    <a href="/categories.html#pythonyu-yan-ref">python语言
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2017-12-24T16:10:00+08:00">2017年 12月 24日
+                                              datetime="2017-06-06T00:00:00+08:00">2017年 6月 6日
                                         </time>
                                     </div>
                                 </section>
                                 
-<h2 id="git">git基础</h2>
-<p>下面就git命令使用的基本流程说明如下：</p>
-<ul>
-<li>远程仓库文件到本地 网上创建项目之后，你需要将网上的存档下载到本地，在你希望下载的地点，打开终端：</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">a358003542</span><span class="o">/</span><span class="n">xelatex</span><span class="o">-</span><span class="n">guide</span><span class="o">-</span><span class="n">book</span><span class="p">.</span><span class="n">git</span>
-</pre></div>
-<ul>
-<li>初始化本地仓库 <code>git init</code> 命令用于初始化本地仓库， <code>git clone</code> 下来的仓库文件已经初始化了，然后 <code>origin</code> 这个远程服务器名字也已经加上去了。</li>
-<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all …</code></li></ul>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/bash-tutorial.html">bash脚本入门
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T16:08:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。</p>
-<h2 id="_1">变量</h2>
-<div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">2</span>
-
-<span class="n">echo</span> <span class="err">$</span><span class="n">i</span>
-</pre></div>
-<p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
-<p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
-<h3 id="_2">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS1</span><span class="o">=</span><span class="ss">"=&gt;"</span>
-</pre></div>
-<p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
-<p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
-<p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
-<p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span><span class="n">export …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/ansible-auto-operations.html">ansible自动化运维
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T15:54:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
-<p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
-<div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="k">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
-</pre></div>
-<p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
-<h2 id="hosts">hosts文件配置</h2>
-<p>这里讨论的 <code>/etc/ansible/hosts</code> 这个文件是所谓的默认 inventory 文件，除了这个默认inventory配置文件之外，还可以写很多其他的配置文件的。而这些配置文件内容大体如下:</p>
-<div class="highlight"><pre><span></span><span class="k">[webservers]</span>
-<span class="na">foo.example.com</span>
- <span class="na">bar.example.com</span>
-</pre></div>
-<p>[webservers] 这个字段定义的是所谓的主机组的概念，之前我们随便写上去的那个主机没属于任何主机组 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/apache-web-server.html">apache web服务器
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T15:47:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>关于apache2 web server的简要介绍请参看 <a href="https://zh.wikipedia.org/wiki/Apache_HTTP_Server">apache http server wiki</a> 。目前推荐使用apache2.4，这是它的 <a href="http://httpd.apache.org/docs/2.4/">apache官方文档</a> 。</p>
-<p>Ubuntu系统或者Centos系统之间httpd的安装配置环境等差异很大，我想说的是那些知识都不是重点，跟着官方文档，咱首先折腾出一个绿色本地安装版本的httpd，然后跟着官方文档学配置才是王道。什么在那个系统那个命令啊，那个系统那个文件夹下那个配置啊都是不重要的东西。</p>
-<h2 id="apache">apache的本地安装</h2>
-<p>apache本地安装过程大体分为下面几步：</p>
+<p>PEP8代码风格规范是每个python程序员都应该了解的内容，其具体内容官方文档在 <a href="https://www.python.org/dev/peps/pep-0008/">这里</a> 。</p>
+<p>关于空白和其他一些格式现在的编辑器加上插件都可以做到自动pep8格式调整，比如 autopep8 模块等，这一块就不多说了。</p>
+<p>这里主要简单地说一下变量名的命名规范 【高质量python代码】：</p>
 <ul>
 <li>
-<p>安装apr</p>
+<p>字母都大写的变量，我们一般认为它是模块文件级别的常量，各单词用下划线隔开。</p>
 </li>
 <li>
-<p>安装apr-util</p>
-</li>
-<li>安装httpd</li>
-<li>安装mod_wsgi （可选项，使用django或者flask你需要它的）</li>
-</ul>
-<p>更多的细节在官方文档的 install 那一章节里，读者如果懂ansible的话，可以看看 我写的 <a href="https://github.com/a358003542/green-install">green-install项目</a>  里面的apache role 部分。</p>
-<p>正如前面说到的，日志文件在那里，配置文件在那里加载啊等等都是可以定制的，摸清楚配置语法才是王道。</p>
-<h2 id="_1">挂个简单的静态网站</h2>
-<p>首先httpd.conf 那里我们写上了 <code>LISTEN 80</code> 了，这样apache将会监听80端口。你的域名指向你的远程服务器ip就可以了。然后一般我们在httpd …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/linux-system-basic.html">linux系统基础
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T11:29:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="debianrpm">debian系或者rpm系</h2>
-<p>目前Linux主流的包管理系统分为debian系和rpm系这两个。CentOS和Redhat属于rpm系；ubuntu和debian系统属于rpm系。在ubuntu中第一个要学习的命令就是 apt 命令，通过它来进行系统软件的安装卸载更新等等工作；在centos第一个要学习的命令是 yum 命令，与apt命令类似进行了一系列的系统的软件包管理操作。</p>
-<h3 id="yumrpm">yum命令和rpm命令</h3>
-<ul>
-<li>yum install what 安装某个软件</li>
-<li>yum groupinstall what 安装某个软件组。</li>
-<li>yum update 更新系统软件包</li>
-<li>yum remove what 卸载某个软件</li>
-<li>yum groupremove what 卸载某个软件组</li>
-<li>yum clean 清除系统软件包管理相关的缓存</li>
-<li>rpm -i what.rpm  本地安装某个rpm包，一般使用会加上 <code>-vh</code> 选项来显示更多的安装信息和安装进度。    </li>
-</ul>
-<h3 id="aptdpkg">apt命令和dpkg命令</h3>
-<p>系统安装好之后第一件要做的事是选一个好的源，然后安装更新。在系统设置→软件和更新那里，在“下载自 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/vi-editor.html">vi编辑器
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T00:00:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>推荐先安装完整版的vim，这样一些按键乱码问题会自动解决。然后注意中文输入法状态下可能会造成你切换vi模式的困扰。</p>
-<p>进入vi编辑器第一条，记住按 <code>i</code> 进入编辑模式，下面的一些按键都需要按 <code>Esc</code> 退出编辑模式才有效。</p>
-<h2 id="_1">常用快捷键</h2>
-<p>这里按键是针对常见的键盘，MAC下按键对应会有所不同。</p>
-<ul>
-<li>Ctrl + f  屏幕向下移动一页</li>
-<li>
-<p>G 移动到最后一行</p>
+<p>首字母大写的我们一般认为它是类或者异常名字，多个单词的用驼峰写法表示。</p>
 </li>
 <li>
-<p>gg 移动到第一行 推荐就直接用 <code>1G</code> 行跳转操作， <code>100G</code> 意思是跳转到第100行。</p>
+<p>其他一律是小写字母，用下划线隔开。</p>
 </li>
-<li>dd 删除当前行</li>
-<li>yy 复制当前行</li>
-<li>p 粘贴</li>
-<li>u 撤销</li>
-<li>r redo</li>
+<li>一般开发者不应该命名下划线开头的变量，你若这样写你必须知道自己在干什么。</li>
 </ul>
-<h2 id="_2">块选择</h2>
-<p>按键 <code>v</code> 进入块选择，然后移动光标进行块选择。</p>
+<h2 id="_1">其他编码风格推荐</h2>
 <ul>
-<li>y 复制块</li>
-<li>d 删除块</li>
+<li>不要使用带两个以上for语句的列表解析。</li>
+<li>用生成器表达式改写数据量较大的列表解析。</li>
 </ul>
-<h2 id="_3">查找</h2>
-<h3 id="_4">匹配某个单词</h3>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Lao</span> <span class="n">Zi</span>
+<div class="highlight"><pre><span></span><span class="nv">it</span> <span class="o">=</span> <span class="ss">(</span><span class="nv">len</span><span class="ss">(</span><span class="nv">x</span><span class="ss">)</span> <span class="k">for</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">open</span><span class="ss">(</span><span class="s1">'</span><span class="s">/tmp/myfile.txt</span><span class="s1">'</span><span class="ss">))</span>
 </pre></div>
-<p>这样我们就开始搜索精确匹配含有“Lao …</p>
+<ul>
+<li>
+<p>不要在for和while循环后面写上else语句。这个建议有利于程序的简洁直观，可以接受。</p>
+</li>
+<li>
+<p>函数的返回值是你需要的返回值才有意义，如果不是，而只是某些特殊的情况，那么最好抛出异常。</p>
+</li>
+</ul>
+<h2 id="python">python哲学</h2>
+<p>参考了 <a href="https://github.com/oldratlee/translations/tree/master/python-philosophy">这个网页的翻译</a> 。</p>
+<ol>
+<li>美优于丑。</li>
+<li>直白优于隐晦。</li>
+<li>简单优于复杂。 </li>
+<li>复杂优于纠结。 </li>
+<li>扁平优于嵌套。 </li>
+<li>稀疏优于稠密。 </li>
+<li>可读性是有重要价值的。</li>
+<li>特例可以有 …</li></ol>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/mysql-database.html">mysql数据库
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#sql-ref">SQL
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-05-07T07:34:00+08:00">2017年 5月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">简介</h1>
+<p>本文已经假设读者对sql有一个初步的认识了，然后更加具体的讨论mysql的相关细节。安装在ubuntu下就简单用apt-get安装之，如下所示，不赘述了。</p>
+<div class="highlight"><pre><span></span>sudo apt-get  install mysql-server mysql-client
+</pre></div>
+<h1 id="mysql">mysql入门</h1>
+<p>本小节的代码依次演示了第一个例子，好让读者对mysql有个初步的认识。</p>
+<h2 id="_2">登录</h2>
+<p>以root用户登录</p>
+<div class="highlight"><pre><span></span><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">p</span>
+</pre></div>
+<p>具体密码是多少要根据你安装mysql时的情况来，若没有设置密码则直接按Enter。</p>
+<h2 id="mysql_1">mysql数据库配置</h2>
+<p>mysql除了在 <code>/etc</code> 那边 my.conf 的一些配置外，很多和自身相关的配置在一个名叫mysql的数据库里面。</p>
+<h2 id="_3">列出数据库</h2>
+<div class="highlight"><pre><span></span><span class="k">show</span> <span class="k">databases</span><span class="p">;</span>
+</pre></div>
+<h2 id="_4">切换数据库</h2>
+<p>我们先切换到那个mysql数据库看一下。</p>
+<div class="highlight"><pre><span></span><span class="k">use</span> <span class="n">mysql</span><span class="p">;</span>
+</pre></div>
+<h2 id="_5">列出表格</h2>
+<div class="highlight"><pre><span></span><span class="k">show</span> <span class="kp">tables</span><span class="p">;</span>
+</pre></div>
+<p>上面描述的这些过程你也可以用GUI程序（比如 <strong>emma</strong> 等）来点开看一下。我们先看到user这个表格，这个表格里面存储着mysql用户的一些信息。</p>
+<h2 id="_6">简单检索某个表格</h2>
+<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/faker-module.html">faker模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-04-13T06:13:00+08:00">2017年 4月 13日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">简介</h1>
+<p>faker模块是一个很有特色的模块，所以其在github上得到的star也较多。其可以用来生成一些伪数据，比如用来做测试用途等等。其github项目地址在 <a href="https://github.com/joke2k/faker">这里</a> 。</p>
+<p>该项目支持pip安装:</p>
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">fake</span><span class="o">-</span><span class="n">factory</span>
+</pre></div>
+<p>其使用还是很简单的，大概如下所示:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Factory</span>
+
+<span class="n">faker</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+</pre></div>
+<p>然后中文名字例子如下，就是在Factory的create方法那里指定语言locale（默认是"en_EN"）:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Factory</span>
+
+<span class="n">faker</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'zh_CN'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/pythonyu-yan-xue-xi-zhi-wang-luo-bian-cheng-pian.html">python语言学习之网络编程篇
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonyu-yan-ref">python语言
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-04-04T00:00:00+08:00">2017年 4月 4日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>下面只讨论TCP套接字编程，UDP协议暂不讨论。整个TCP套接字编程的过程如下所述:</p>
+<h2 id="_1">套接字编程</h2>
+<ol>
+<li>
+<p>客户机负责发起连接，其将新建一个套接字对象（在python中是通过<strong>socket</strong>函数来创建的），就好比在一个封闭的黑箱子里开了一个门，在创建这个套接字对象的过程中，你需要指定具体要连接的那个服务器的IP地址和端口号（<strong>connect</strong>方法）。</p>
+</li>
+<li>
+<p>接下来是进行TCP的三路握手过程，具体在传输层最底层的东西，客户机应用程序还是服务器应用程序都不用操心，其应该是是操作系统程序负责的。服务器程序需要关心的是在这三路握手期间，其类似于听到了敲门声，其需要开出一个门出来。服务器程序要听到这个敲门声，其应该处于监听该端口的状态。首先服务器程序需要创建一个套接字对象，然后<strong>bind</strong>某个端口号，然后调用<strong>listen</strong>方法开始监听这个端口。</p>
+</li>
+<li>
+<p>然后服务器那边的监听套接字调用<strong>accept</strong>方法，并形成阻塞，接下来就是听到了敲门声，这个敲门声是TCP三路握手第一路信号发送过来了，这后面TCP三路握手还有两路，这我们暂时不需要太关心了。等到TCP三路握手完成了，服务器之前的那个accept方法将创建一个套接字对象。这个套接字对象称之为<em>连接套接字</em>。我们在这里把服务器那边的连接套接字调用accept方法可以理解为接受了客户机的敲门，如果一切顺利的话，其将为客户机新开一个套接字，也就是一个新门。</p>
+</li>
+<li>
+<p>对于客户机那边只有一个套接字，情况稍微简单点，其往套接字里面塞信息（<strong>sendall …</strong></p></li></ol>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/click-module.html">click模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-11-13T06:13:00+08:00">2016年 11月 13日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">简介</h1>
+<p>click模块是一个类似getopt和argparse的python第三方模块，在简单了解之后，觉得其简直就是python快速创建命令行工具的类似requests之于urllib的存在，writed human-friendly。click的官方文档在 <a href="http://click.pocoo.org">这里</a> ，下面就让我们来学习这么好的一个模块吧。</p>
+<p>官方文档的第一个例子如下:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
+
+<span class="nd">@click.command</span><span class="p">()</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--count'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'Number of greetings.'</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name'</span><span class="p">,</span>
+              <span class="n">help</span><span class="o">=</span><span class="s1">'The person to greet.'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">"""Simple program that greets NAME for a total of COUNT times."""</span>
+    <span class="k">for …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/requests-module.html">requests模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-10-16T10:42:00+08:00">2016年 10月 16日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="urllibrequest">urllib.request内置模块</h1>
+<p>urllib.request模块我们可以在这里稍微了解一下，但一般实际使用主要是用后面要介绍的 <strong>requests</strong> 模块。</p>
+<h2 id="urlopen">urlopen函数</h2>
+<p>urlopen函数在urllib模块的request子模块，其提供了简单的获取目标url网页内容的接口。一个简单的例子如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'https://www.google.com.cn'</span><span class="p">,</span><span class="s1">'https://www.google.com'</span><span class="p">,</span>
+    <span class="s1">'http://www.google.com.cn'</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="k">print …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/tornado-module.html">Tornado模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-10-07T00:00:00+08:00">2016年 10月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>tornado是python的异步的网络框架模块，tornado在应对高并发请求上性能很好。</p>
+<h3 id="_2">安装</h3>
+<h3 id="_3">第一个例子</h3>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tornado.ioloop</span>
+<span class="kn">import</span> <span class="nn">tornado.web</span>
+
+<span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Hello, world"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">make_app</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">([</span>
+        <span class="p">(</span><span class="sa">r</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">),</span>
+    <span class="p">])</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">make_app</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+    <span class="n">tornado</span><span class="o">.</span><span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+<p>这是一个同步的webapp框架，可能后面会用的较少，这里主要了解一下tornado编写的webapp的基本结构:</p>
+<h3 id="tornado">开启tornado的事件驱动循环:</h3>
+<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">ioloop …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/zhou-yi-yao-gua.html">周易入门之摇卦
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#zhou-yi-ref">周易
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-10-02T09:50:00+08:00">2016年 10月 2日
+                                        </time>
+                                    </div>
+                                </section>
+                                <h2 id="_1">摇卦</h2>
+<p>在摇卦先静心，并问自己所求所疑问之事。</p>
+<p><button onclick="yaogua();" type="button">测一卦</button></p>
+<div>
+<!-- Nav tabs -->
+<ul id="tab" class="nav nav-tabs" style="padding-left:0px;" role="tablist">
+<li role="presentation" class="active"><a href="#yuanwen" aria-controls="yuanwen" role="tab" data-toggle="tab">原文</a></li>
+<li role="presentation"><a href="#jiegua" aria-controls="jiegua" role="tab" data-toggle="tab">解卦</a></li>
+<li role="presentation"><a href="#biangua-yuanwen" aria-controls="biangua-yuanwen" role="tab" data-toggle="tab">变卦原文</a></li>
+<li role="presentation"><a href="#biangua-jiegua" aria-controls="biangua-jiegua" role="tab" data-toggle="tab">变卦解卦</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="yuanwen">测一卦...</div>
+<div role="tabpanel" class="tab-pane" id="jiegua">测一卦...</div>
+​    
+<div role="tabpanel" class="tab-pane" id="biangua-yuanwen">测一卦...</div>
+<div role="tabpanel" class="tab-pane" id="biangua-jiegua">测一卦...</div>
+</div>
+
+</div>
+
+<h2 id="_2">帮助</h2>
+<p>主要看主卦，然后主卦和变卦比对可得变爻。一个卦表示一个事件，从初爻到上爻，变爻表示存在变数的环节，君子需参照《周易64卦详解》确定自己的行为准则。</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/pelican-module.html">pelican模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-09-25T00:00:00+08:00">2016年 9月 25日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h1 id="_1">简介</h1>
+<p>pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。</p>
+<p>首先按照官方的quickstart简单的刷一遍吧，下面就一些问题作出一些讨论。</p>
+<h2 id="_2">项目基本说明</h2>
+<p>python的虚拟环境控制这里就不多说了，下面主要讨论 <code>pelicanconf.py</code> 和 <code>publishconf.py</code> 和 <code>Makefile</code> 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。</p>
+<p>首先说明下 <code>publishconf.py</code> 和 <code>pelicanconf.py</code> 的区别， <code>publishconf.py</code> 文件里面有这样一句话：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pelicanconf</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+<p>也就是其将继承所有来自 <code>pelicanconf.py</code> 里面的配置参量，不同的是 <code>publishconf.py</code> 是对阵发布到那边服务器上的，而 <code>pelicanconf …</code></p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="/articles/guo-nei-yuan.html">国内源
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="/categories.html#za-xiang-ref">杂项
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-08-14T00:00:00+08:00">2016年 8月 14日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="pypi">pypi下载用国内源</h2>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="p">.</span><span class="n">douban</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="k">simple</span> <span class="n">carbon</span>
+</pre></div>
+<h2 id="js-cdn">js 用国内cdn源</h2>
+<p>推荐 <a href="http://www.bootcdn.cn/">这个网站</a> 。</p>
+<h2 id="docker">docker国内加速镜像</h2>
+<p>推荐用类似下面的命令：</p>
+<div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">daocloud</span><span class="p">.</span><span class="n">io</span><span class="o">/</span><span class="n">ubuntu</span><span class="p">:</span><span class="mi">16</span><span class="p">.</span><span class="mi">04</span>
+<span class="n">docker</span> <span class="n">pull</span> <span class="n">daocloud</span><span class="p">.</span><span class="n">io</span><span class="o">/</span><span class="n">centos</span><span class="p">:</span><span class="mi">7</span>
+<span class="n">docker</span> <span class="n">pull</span> <span class="n">daocloud</span><span class="p">.</span><span class="n">io</span><span class="o">/</span><span class="n">python</span><span class="p">:</span><span class="mi">3</span>
+</pre></div>
+<p>把镜像文件下载下来。</p>
+<h2 id="ubuntu">ubuntu的更新源</h2>
+<p>ubuntu的更新源换成国内的源。</p>
+<h2 id="android-studio-sdk">android studio sdk更新太慢</h2>
+<p>请参考 <a href="https://github.com/inferjay/AndroidDevTools">https://github.com/inferjay/AndroidDevTools</a> 。这个网站还有很多和android开发相关的资料。</p>
                             </article>
 
  <nav aria-label="Page Navigation">
     <ul class="pager">
         <li class="previous">
-            <a href="https://docs.cdwanze.work/index6.html" aria-label="Previous" >
+            <a href="/index6.html" aria-label="Previous" >
                 <span aria-hidden="true">&larr;<span>Previous</span></span>
             </a>
         </li>
 
 
         <li class="next">
-            <a href="https://docs.cdwanze.work/index8.html" aria-label="Next" >
+            <a href="/index8.html" aria-label="Next" >
                 <span aria-hidden="true">&rarr;<span>Next</span></span>
             </a>
         </li>
@@ -924,8 +1083,8 @@ $$</div>
 </div>
 </footer>
 
-        <script src="https://docs.cdwanze.work/theme/js/jquery.min.js"></script>
-    <script src="https://docs.cdwanze.work/theme/js/bootstrap.min.js"></script>
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
     <script>
         function validateForm(query) {
             return (query.length > 0);

@@ -16,7 +16,7 @@
 <meta name="keywords" content=", python语言, " />
 
 <meta property="og:title" content="python语言学习之-一切皆对象 "/>
-<meta property="og:url" content="https://docs.cdwanze.work/articles/pythonyu-yan-xue-xi-zhi-yi-qie-jie-dui-xiang.html" />
+<meta property="og:url" content="/articles/pythonyu-yan-xue-xi-zhi-yi-qie-jie-dui-xiang.html" />
 <meta property="og:description" content="首先说下python2和python3的兼容性，如果读者在python2.7环境下，那么推荐定义class的时候都如下跟上object： class Test(object): pass 本章节围绕着下面这些内容逐步展开，从而逐步实现对python类的各个行为的深度定制。 内省属性： __dict__ ， __class__ 进行某种运算符操作或调用某个常见的方法时的行为重载。 函数装饰器： 函数调用行为的定制 一般属性访问行为定制 特定属性访问时行为定制 类实例创建时行为定制------类装饰器 类对象创建时行为定制------metaclass __dict__ 参考了 这个网页 。 首先读者记住class是个类似于def一样的语句，其也管理一个名字空间，然后区块里面的语句逐步执行。然后我们看下面这个例子： class A(): def __init__(self, a): self.a = a def fun2(self, what): print(&#39;fun&#39;, what) @property def x(self): return 1 class …" />
 <meta property="og:site_name" content="cdwanze的博文" />
 <meta property="og:article:author" content="cdwanze" />
@@ -30,17 +30,17 @@ python语言学习之-一切皆对象  · cdwanze的博文
 </title>
 
 
-        <link href="https://docs.cdwanze.work/theme/css/font-awesome.css" rel="stylesheet"
+        <link href="/theme/css/font-awesome.css" rel="stylesheet"
               media="screen">
-        <link href="https://docs.cdwanze.work/theme/css/bootstrap.min.css" rel="stylesheet"
+        <link href="/theme/css/bootstrap.min.css" rel="stylesheet"
               media="screen">
 
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/pygments.css" media="screen">
+                  href="/theme/css/pygments.css" media="screen">
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/elegant.css" media="screen">
+                  href="/theme/css/elegant.css" media="screen">
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/custom.css" media="screen">
+                  href="/theme/css/custom.css" media="screen">
 
 
 
@@ -68,7 +68,7 @@ python语言学习之-一切皆对象  · cdwanze的博文
 
 
         <div class="navbar-collapse collapse">
-            <form action="https://docs.cdwanze.work/search.html"
+            <form action="/search.html"
                   onsubmit="return validateForm(this.elements['q'].value);"
                   class="navbar-form navbar-left">
                 <div class="form-group">
@@ -82,7 +82,7 @@ python语言学习之-一切皆对象  · cdwanze的博文
 
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li >
-                    <a href="https://docs.cdwanze.work">博文首页</a></li>
+                    <a href="">博文首页</a></li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"
@@ -99,10 +99,10 @@ python语言学习之-一切皆对象  · cdwanze的博文
 
 
                         <li >
-                            <a href="https://docs.cdwanze.work/guan-yu-ben-wang-zhan.html">关于本网站</a>
+                            <a href="/guan-yu-ben-wang-zhan.html">关于本网站</a>
                         </li>
                         <li >
-                            <a href="https://docs.cdwanze.work/gong-gao.html">公告</a>
+                            <a href="/gong-gao.html">公告</a>
                         </li>
             </ul>
 
@@ -118,7 +118,7 @@ python语言学习之-一切皆对象  · cdwanze的博文
 <article>
 <div class="row">
     <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://docs.cdwanze.work/articles/pythonyu-yan-xue-xi-zhi-yi-qie-jie-dui-xiang.html"> python语言学习之-一切皆对象  </a></h1>
+    <h1><a href="/articles/pythonyu-yan-xue-xi-zhi-yi-qie-jie-dui-xiang.html"> python语言学习之-一切皆对象  </a></h1>
     </header>
 </div>
 
@@ -651,7 +651,7 @@ function就会出错，然后type比较还要小心NoneType和其他空列表类
 <p>程序结构中最有用的就是多个操作的重复，其中有迭代和递归还有一般的循环语句。递归函式感觉对于某些特殊的问题很有用，然后一般基于数据结构的不是特别复杂的操作重复用迭代语句即可，最后才考虑一般循环语句。</p>
 <p>迭代语句中for语句运算效率最低，然后是map函数（不尽然），然后是列表解析。所以我们在处理问题的时候最pythonic的风格，运算效率最高的就是列表解析了，如果一个问题能够用列表解析解决那么就用列表解析解决，因为python的设计者的很多优化工作都是针对迭代操作进行的，然后python3进一步深化了迭代思想，最后python中的迭代是用c语言来实现的。</p>
 <p>可是让我们反思一下为什么列表解析在问题处理的时候如此通用？比如说range函数或者文件对象或者列表字符串等等，他们都可以称之为可迭代对象。可迭代对象有内置方法<code>__next__</code>这个我们之前有所谈及，可迭代对象最大的特色就是有一系列的元素，然后这一系列的元素可以通过上面的内置方法逐个调出来，而列表解析就是对这些调出来的元素进行了某个表达式操作，然后将其收集起来。这是什么？我们看下面这张图片：</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/lie-biao-jie-xi.png"/></p>
+<p><img alt="img" src="/images/python/lie-biao-jie-xi.png"/></p>
 <p>这张图片告诉我们列表解析和数学上所谓的集合还有函数的定义非常的类似，可迭代对象就好像是一个集合（有顺序或者没顺序都行），然后这些集合中的所有元素经过了某个操作，这个操作似乎就是我们数学中定义的函数，然后加上过滤条件，某些元素不参加运算，这样就生成了第二个可迭代对象（一般是列表也可以是字典什么的。）</p>
 <p>有一个哲学上的假定，那就是我们的世界一切问题都可以用数学来描述，而一些数学问题都可以用函数即如上的信息操作过滤流来描述之。当然这不尽然，但我们可以看到列表解析在一般问题处理上是很通用的思想。</p>
 <p>不过我们看到有限的元素的集合问题适合用迭代，但无限元素的集合问题也许用递归或者循环更适合一些。然后我们又想到集合的描述分为列举描述（有限个元素的列举）和定义描述。比如说 <code>1&lt;x&lt;10</code> ，x属于整数，这就定义了一个集合。那么我们就想到python存在这样的通过描述而不是列举（如列表一样）的集合吗？range函数似乎就是为了这样的目的而生的，比如说 <code>range(10)</code> 就定义了 <code>[0,10)</code>这一系列的整数集合，range函数生成一个range对象，range对象是一个可迭代对象，我们可以把它看作可迭代对象中的描述集合类型吧。这时我们就问了，既然 <code>0&lt;=x&lt;10</code>这样的整数集合可以通过描述来实现，那么更加复杂的函数描述可不可以实现呢？我们可不可以建立更加复杂的类似range对象的描述性可迭代对象呢？</p>
@@ -1020,14 +1020,14 @@ function就会出错，然后type比较还要小心NoneType和其他空列表类
 <span class="n">test</span>=<span class="n">D</span>()
 <span class="nb">print</span>(<span class="n">test</span>.<span class="o">x</span>)
 </pre></div>
-<p><img alt="多重继承示意图" src="https://docs.cdwanze.work/images/python/duo-chong-ji-cheng.png"/></p>
+<p><img alt="多重继承示意图" src="/images/python/duo-chong-ji-cheng.png"/></p>
 <p>你可以测试一下上面这个例子，首先当然结果是D自己的x被先查找，然后返回<em>'D'</em>，如果你把类D的x定义语句换成pass，结果就是<em>'B'</em>。这说明这里程序的逻辑是如果test实例找不到x，那么再找D，D找不到再接下来找D继承自的父类，首先是B，到目前为止，没什么新鲜事发生。</p>
 <p>然后我们再把B的x赋值语句换成pass，这时的结果是<em>'B1'</em>，也没什么好惊讶的。然后类似的一致操作下去，我们会发现python的值的查找顺序在这里是：D，B，B1，B2，B3，A，A1，A2。</p>
 <p>于是我们可以总结道：恩，类的多重继承就是深度优先法则，先把子类或者子类的子类都查找完，确认没有值之后再继续从左到右的查找。</p>
 <p>一般情况来说这么理解是没有问题的，但是在编程界多重继承中有个有名的问题------菱形难题。</p>
 <h3 id="_19">菱形难题</h3>
 <p>参考资料：<a href="http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">维基百科菱形难题</a></p>
-<p><img alt="菱形难题" src="https://docs.cdwanze.work/images/python/ling-xing-nan-ti.png"/></p>
+<p><img alt="菱形难题" src="/images/python/ling-xing-nan-ti.png"/></p>
 <p>菱形难题即在如上的类的继承中，如果C和A都有同名属性x，那么D会调用谁的呢？读者测试下面的例子：</p>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">E</span>():<span class="o">x</span>=<span class="s">'E'</span>
 <span class="k">class</span> <span class="n">F</span>():<span class="o">x</span>=<span class="s">'F'</span>
@@ -1240,7 +1240,7 @@ function就会出错，然后type比较还要小心NoneType和其他空列表类
 <time datetime="2019-06-25T00:00:00+08:00">2019年 6月 25日 </time>
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言</a>
+            <a class="category-link" href="/categories.html#pythonyu-yan-ref">python语言</a>
         </div>
         </section>
 </div>
@@ -1262,8 +1262,8 @@ function就会出错，然后type比较还要小心NoneType和其他空列表类
 </div>
 </footer>
 
-        <script src="https://docs.cdwanze.work/theme/js/jquery.min.js"></script>
-    <script src="https://docs.cdwanze.work/theme/js/bootstrap.min.js"></script>
+        <script src="/theme/js/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
     <script>
         function validateForm(query) {
             return (query.length > 0);

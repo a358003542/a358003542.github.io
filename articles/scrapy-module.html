@@ -13,7 +13,7 @@
         <meta property="og:type" content="article"/>
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="python, 网络抓取, python爬虫, " />
+<meta name="keywords" content="python, 网络抓取, WEB, " />
 
 <meta property="og:title" content="scrapy模块 "/>
 <meta property="og:url" content="https://docs.cdwanze.work/articles/scrapy-module.html" />
@@ -152,11 +152,23 @@ scrapy模块  · cdwanze的博文
 <li><a href="#id">按照id选择</a></li>
 <li><a href="#_6">继续往下选</a></li>
 <li><a href="#_7">选择目标标签的属性</a></li>
+<li><a href="#_8">选择属性</a></li>
+<li><a href="#_9">选择文本</a></li>
+<li><a href="#string">string</a></li>
 </ul>
 </li>
 <li><a href="#user-agent">user agent 设置</a></li>
-<li><a href="#_8">模拟用户登录</a></li>
-<li><a href="#_9">防止被封的策略</a></li>
+<li><a href="#_10">模拟用户登录</a><ul>
+<li><a href="#cookies">登录的cookies问题</a></li>
+</ul>
+</li>
+<li><a href="#_11">防止被封的策略</a><ul>
+<li><a href="#http">http请求头调整</a></li>
+<li><a href="#cookies_1">Cookies</a></li>
+<li><a href="#_12">表单陷阱</a></li>
+<li><a href="#403-forbidden">403 forbidden</a></li>
+</ul>
+</li>
 </ul>
 </div>
         </nav>
@@ -318,6 +330,27 @@ scrapy模块  · cdwanze的博文
 </pre></div>
 <h2 id="xpath">xpath语法</h2>
 <p>下面主要通过各个例子简要介绍xpath语法之，参考了 <a href="http://www.ruanyifeng.com/blog/2009/07/xpath_path_expressions.html">阮一峰的这篇文章</a> 和菜鸟教程的xpath教程。</p>
+<p>基本东西简单了解下即可，然后多看例子吧。</p>
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">what</span>   <span class="err">基本路径表达，下个节点</span>
+<span class="o">//</span><span class="n">what</span>  <span class="err">基本路径表达，任意位置的下个节点</span>
+</pre></div>
+<p>这里 <code>/</code> 表示在下个节点中匹配， <code>//</code> 下个或所有子节点匹配。 </p>
+<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='what'</span><span class="o">]</span><span class="w">   </span><span class="n">根据id定位</span><span class="w"></span>
+<span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='what'</span><span class="o">]/</span><span class="n">a</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="n">根据id定位后找下面的第一个a标签</span><span class="w"></span>
+<span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='what'</span><span class="o">]/</span><span class="n">a</span><span class="o">[</span><span class="n">*</span><span class="o">]</span><span class="w"> </span><span class="n">根据id定位后找下面的所有a标签</span><span class="w"></span>
+</pre></div>
+<p>这里 <code>*</code> 表示所有的意思。</p>
+<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@name</span><span class="o">]</span><span class="w">   </span><span class="n">找具有name属性的div标签</span><span class="w"></span>
+
+<span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@name='what'</span><span class="o">]</span><span class="w"> </span><span class="n">找name属性等于what的div标签</span><span class="w"> </span>
+
+<span class="o">/</span><span class="cm">/*[contains(@class,'what')] 找某个标签class属性有 what NOTICE: 这里的意思是有，多个class属性也是可以匹配的 class="what what_what"</span>
+<span class="cm">//div[@class='what'] 那个目标标签的class属性就是what，也就是匹配的是 class="what"</span>
+
+<span class="cm">//*[@id="list"]//dd[*]/a[@href and @title] 找id=list的标签下面的所有dd标签下面的a标签，a标签必须有href和title属性。</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">title</span><span class="p">[</span><span class="o">@*</span><span class="p">]</span>  <span class="err">选择</span><span class="n">title</span><span class="err">，随意属性，但</span><span class="n">title标签必须有属性</span>
+</pre></div>
 <h3 id="title">选择title</h3>
 <div class="highlight"><pre><span></span><span class="o">//</span><span class="n">title</span>
 </pre></div>
@@ -334,6 +367,16 @@ scrapy模块  · cdwanze的博文
 </pre></div>
 <h3 id="_7">选择目标标签的属性</h3>
 <div class="highlight"><pre><span></span><span class="o">///</span><span class="cm">/*[@id='js_profile_qrcode']//a/@href</span>
+</pre></div>
+<h3 id="_8">选择属性</h3>
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="cm">/*[@id="list"]//dd[*]/a[@href and @title]/@href  </span>
+</pre></div>
+<h3 id="_9">选择文本</h3>
+<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">title</span><span class="o">/</span><span class="nb">text</span><span class="p">()</span>
+</pre></div>
+<h3 id="string">string</h3>
+<p>对于选择的节点（注意如果返回的是节点集 nodeset将只取第一个），将所有的节点（也就是包括子节点）的文本抽取出来并合并。</p>
+<div class="highlight"><pre><span></span><span class="n">string</span><span class="p">(</span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@class="lemma-summary"</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <h2 id="user-agent">user agent 设置</h2>
 <p>你可以设置middlesware来设置useragent：</p>
@@ -354,7 +397,28 @@ scrapy模块  · cdwanze的博文
 <div class="highlight"><pre><span></span><span class="n">user_agent</span> <span class="o">=</span> <span class="n">what</span>
 </pre></div>
 <p>这样将覆写原来middleware指定的self.user_agent，实际上在middleware之前你的settings那里还可以设置user_agent，而那是最先的scrapy默认的useragentMiddleware的行为，本小节的讨论参考了 <a href="https://stackoverflow.com/questions/33444793/how-can-i-change-user-agent-in-scrapy-spider">这个网页 eLRuLL</a> 的回答和自己的一点小小的print。</p>
-<h2 id="_8">模拟用户登录</h2>
+<h2 id="_10">模拟用户登录</h2>
+<p>表单简单来说就是一个前端友好的界面，其实质就是发送了 一个 POST 请求。</p>
+<p>关键是要理解前端的表单界面，具体POST了哪些参量。</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"???"</span>
+    <span class="err">&lt;input</span> <span class="na">type=</span><span class="s">...</span> <span class="na">name=</span><span class="s">"firstname"</span> <span class="err">...</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="err">type</span> <span class="err">...</span>
+    <span class="err">submit</span>
+<span class="err">&lt;/form</span><span class="nt">&gt;</span>
+</pre></div>
+<p>input 的  <strong>name</strong> 就是具体 POST 的参量，然后就是action那边就是你要 POST 的目的地。</p>
+<p>类似的表单还有很多其他元素，比如checkbox之类的，其都不过是为了让用户快速地设置某个参量罢了。</p>
+<h3 id="cookies">登录的cookies问题</h3>
+<p>因为http无状态，所以有cookies 和 session ，服务端数据库记录session，cookies就是客户端。爬虫要正常登录，记得保留好登录成功之后的cookies。</p>
+<p>多次请求的时候，用requests的cookies保存和设置就不好用了。记得使用requests的session机制。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'username'</span><span class="p">:</span><span class="s1">'user'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">:</span> <span class="s1">'123456'</span> <span class="p">}</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">'login.html'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1">##### 继续用这个session来请求，没有任何问题</span>
+<span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'profile.html'</span><span class="p">)</span>
+</pre></div>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
 
 <span class="k">class</span> <span class="nc">LoginSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
@@ -376,13 +440,35 @@ scrapy模块  · cdwanze的博文
 
         <span class="c1"># continue scraping with authenticated session...</span>
 </pre></div>
-<h2 id="_9">防止被封的策略</h2>
+<h2 id="_11">防止被封的策略</h2>
 <ol>
 <li>设置随机的user agent策略</li>
 <li>禁用cookie <code>COOKIES_ENABLED = True</code></li>
 <li>设置下载停顿 <code>DOWNLOAD_DELAY = n</code></li>
 <li>使用代理池</li>
 </ol>
+<p>防止被封的首要策略就是尽量的为别人的服务器多考虑下，让自己写的爬虫少请求，每次请求都是有效的核心请求获取最核心的数据，不管是刷页面还是刷ajax，多次请求之间应该设置一个停顿时间。</p>
+<div class="highlight"><pre><span></span><span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+<p>在上面的首要原则的基础上，下面介绍的很多实战技巧，其实都符合一个大的原则：尽可能地让你的爬虫和人浏览网页没有区别。</p>
+<h3 id="http">http请求头调整</h3>
+<p>user-agent 设置，而且时不时的切换下。</p>
+<p>虽然目前还没有遇到，不过我推测可能 Referrer 这个header在某些场景下是有些文章的。</p>
+<p>还有 Accept-Language 也可能有用。</p>
+<h3 id="cookies_1">Cookies</h3>
+<p>有些情况下cookies的正常获取需要javascript的支持。cookies总的原则是第一次请求获取到cookies，然后后面的很多次请求都使用这个cookies即可。</p>
+<p>不过反爬虫cookies一般都会有个时间限制，一个简单的做法就是这边也设置个时间，定时获取最新的cookies或者，一定请求量之后再获取一个新的cookies。</p>
+<p>具体使用 scrapy-splash 了解下。</p>
+<h3 id="_12">表单陷阱</h3>
+<p>有的表单里面有：</p>
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="k">input</span> <span class="k">type</span><span class="o">=</span><span class="ss">"hidden"</span> <span class="p">...</span>
+</pre></div>
+<p>我们要记住人如果在页面上点击，这个没有显示的字段的值也会一并送过去，而他们服务器那边会根据这个值可能是个加密的某个值来判断这个请求是人点的还是爬虫行为。</p>
+<p>最好的策略是先把整个表单内容爬过来，收集好之后再发送表单请求。</p>
+<p>和上面的情况相反，还有一种情况，页面表单发送可能有特别的处理，某些表单字段，不管用户看得见看不见，你都不能发送过去，只要发送过去就会被毙掉。</p>
+<p>继续上面的表单陷阱，某些css也会动态将某个input 属于hidden属性，这个需要好好分析下。</p>
+<h3 id="403-forbidden">403 forbidden</h3>
+<p>这极有可能是你的爬虫被封了。</p>
             
             
             <hr/>
@@ -393,14 +479,14 @@ scrapy模块  · cdwanze的博文
             <h4>首发于：</h4>
             <time pubdate="pubdate" datetime="2017-10-11T07:04:00+08:00">2017年 10月 11日 </time>
             <h4>分类：</h4>
-            <a class="category-link" href="https://docs.cdwanze.work/categories.html#pythonpa-chong-ref">python爬虫</a>
+            <a class="category-link" href="https://docs.cdwanze.work/categories.html#web-ref">WEB</a>
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="https://docs.cdwanze.work/tags.html#python-ref">python
-                    <span>12</span>
+                    <span>14</span>
 </a></li>
                 <li><a href="https://docs.cdwanze.work/tags.html#wang-luo-zhua-qu-ref">网络抓取
-                    <span>3</span>
+                    <span>2</span>
 </a></li>
             </ul>
         </div>
