@@ -180,425 +180,6 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-three.html">机器学习第三谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-06T00:00:00+08:00">2018年 11月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>在上一文机器学习第二谈中，我们算是搭建了一个简单的神经网络，初步了解了一下大体情况。本文主要紧跟着对相关内容进行更细致的讨论。</p>
-<h2 id="relu">relu激活函数</h2>
-<p>relu激活函数具体的数学运算公式很简单，就是：</p>
-<div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</pre></div>
-<p>上面运算就是对z张量进行了relu运算了，按元素的，如果元素值大于0则为原元素的值，否则为0。</p>
-<h2 id="broadcasting">广播(broadcasting)</h2>
-<p>广播一种操作，shape较小的张量和shape较大的张量进行点对点运算时，需要对shape较小的张量进行广播操作，使其在运算上shape兼容。</p>
-<p>广播具体操作规则是：</p>
-<ul>
-<li>
-<p>shape较小的张量添加新的维度是的两个张量维度数相同</p>
-</li>
-<li>
-<p>shape较小的张量在新的维度中的数据是重复的，相当于没有原维度的数据，即： y[1,j] = y[2,j] = y[3,j] =... y[j]</p>
-</li>
-</ul>
-<h2 id="_2">张量点积</h2>
-<p>矩阵乘法也就是这里的张量点积学过线性代数的对这个概念还是很清楚了，不过到更高的维度的张量的点积情况似乎有点复杂了。这里我们需要把张量点积的shape变化弄清楚，后面可能会有用的，具体实际张量运算可以交给函数去做。</p>
-<div class="math">$$
-x \cdot y = z
-$$</div>
-<p>
-x …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-two.html">机器学习第二谈之初识多层神经网络
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-05T00:00:00+08:00">2018年 11月 5日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>本文先用tensorflow来实现单层神经网络处理mnist问题，然后用keras来写一个两层神经网络来解决mnist问题。最后试着用keras编写一个简单的深度学习模型，也就是多层神经网络来解决mnist问题。</p>
-<p>本文代码主要参考了keras的examples代码库，同时本文也考虑了一些输入数据的预处理统一化过程。</p>
-<h2 id="_2">数据预处理</h2>
-<p>首先我们利用keras来下载mnist相关数据并进行必要的预处理操作。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
-<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="n">train_images</span><span class="p">.</span><span class="n">shape</span>
-<span class="p">(</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
-<span class="n">train_labels</span><span class="p">.</span><span class="n">shape</span>
-<span class="p">(</span><span class="mi">60000</span><span class="p">,)</span>
-</pre></div>
-<p>train_images 的shape第一维度是60000，说明有6万个图片，然后标签第一维度也是6万与之对应。</p>
-<div class="highlight"><pre><span></span><span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
-<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
-<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
-</pre></div>
-<p>第一步将第二维第三维数据合并到一维。</p>
-<p>第二步是转换ndarray的dtype数据类型。</p>
-<p>第三部是将数据0-255 归一化为 0- 1 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/tensorflow-module.html">tensorflow模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-05T00:00:00+08:00">2018年 11月 5日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>本文档记录关于tensorflow模块学习中的一些东西。</p>
-<p>tensorflow是通用的数据流计算图框架，一般我们都会写上一个简单的hello world例子来简单了解一下目标框架：</p>
-<div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">' world.'</span><span class="p">)</span>
-
-<span class="n">hw</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">w</span>
-
-<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">hw</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</pre></div>
-<p><code>tf.constant</code> 表示一个常量，简单理解就相当于一个不断输出某个数值的节点。hw将两个常量相加，相当于连接两个节点执行了相加操作。tensorflow有个计算图的概念，在这个计算图中，具体计算只有在session回话实际 <code>run</code> 的时候才会执行：</p>
-<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
-    <span class="n">do</span> <span class="n">something</span>
-</pre></div>
-<h3 id="_2">神经网络结构</h3>
-<ol>
-<li>神经元中的数据，或者是输入的，或者是常数，其后神经元的数据则是在数据流动中生成出来的 …</li></ol>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/machine-learning-talk-one.html">机器学习第一谈
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-11-04T00:00:00+08:00">2018年 11月 4日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>目前很火热的深度学习其本质仍然属于机器学习中比较厉害的一种技术，但不管是更好地理解这门技术和使用这门技术，都还是要打好机器学习这门学科的基本功。所以本分类机器学习除了包括传统机器学习的讨论外，还将包括神经网络和深度学习，以及相关的模块keras，tensorflow，可能还会包括matplotlib或者numpy等相关模块的讨论。</p>
-<p>之所以这门技术不叫人工智能是很务实的态度，我很确信目前的深度学习等及其他技术将成为未来人工智能技术的基石，更确切来说是类似砖木一般的存在，但就目前机器学习的发展程度来说，还远远不足以称之为人工智能。因为目前机器学习的发展状态就是：对于人工智能领域最核心的一些问题，甚至连提出来的勇气都没有，更不要说解决他们了。</p>
-<p>我接下来重点在学习理解深度学习上，传统机器学习和神经网络会有所谈论只是为了更好地理解深度学习相关概念。</p>
-<h3 id="_2">机器学习能做什么</h3>
-<p>在开始讨论机器学习之前，我们程序员首先应该转变一种思维方式，机器学习并不是我们常见的那些算法，在那些算法里面，计算机该做什么，该处理什么数据，数据是什么含义都是程序员去定义的。而机器学习的意思是让机器自己去学习，去学习现实世界各个事物运行变化的规律，当然机器学习目前各个算法能力还是很有限的，但整个学科的发力方向就是这样，所以具体我们遇到某个问题的时候，程序员更多的不应该是去自己去分析研究对象的各个数据规律或者规则，而应该讲这些数据和答案（标签）送给机器学习算法，让机器自己总结出研究对象的规律或者规则。</p>
-<p>这看上去很神奇，其实就是一些数据转换的工作，更多的是工程上的东西。</p>
-<h3 id="_3">传统机器学习应用</h3>
-<p>传统机器学习可能应用领域如下：</p>
-<ul>
-<li>电子邮件垃圾邮件过滤算法</li>
-<li>搜索引擎根据你的点击记录来优化你的下次搜索结果</li>
-<li>你在网上点击或者查看或者买了某个东西，网站记录你的这些活动，从而更好地为你推荐商品，或者推荐优惠券。</li>
-<li>手写数字识别 …</li></ul>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/suan-fa-fu-za-du.html">算法复杂度
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-10-06T00:00:00+08:00">2018年 10月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>一般讨论算法复杂度主要关注的是算法的时间复杂度，而真到了该思考算法的时间复杂度了，那么这时目标算法将应对的是一个输入规模n很大的情况。人们常说的大O表示法将一些细枝末节的东西都省略了的，因为输入规模n很大，还关心那多出来的几步是没有意义的。</p>
-<p>所以我们更多的是专注于算法中的循环部分，而对于循环部分，若循环次数和输入规模无关，则记为O(1) 常数运行时间。</p>
-<p>如果我们遇到了如下的循环：</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-</pre></div>
-<p>这个循环和输入规模n相关，我们记作 O(n) 线性运行时间。</p>
-<p>假设一个算法里面又有上面提到的O(1) ，又有上面的O(n) ，那么我们应该将O(1) 项去掉：</p>
-<ul>
-<li>如果运行时间是一个多项式的和，那么保留增长速度最快的项，去掉其他各项</li>
-</ul>
-<p>那么上面提到的算法复杂度就可简单记为 O(n) 。</p>
-<p>又假设有个算法，有两个这样的循环：</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/logbook-module.html">logbook模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-08-27T00:00:00+08:00">2018年 8月 27日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>logbook似乎是个不错的模块可以改进我们的日志功能，可以看做系统logging模块的第三方升级版，但还是有很多地方不同的。</p>
-<p>一开始我接触的最大的不同就是logbook官方文档并不推荐将某个handler注册在某个logger的那种做法，logbook的handler可以注册在整个线程或者整个进程上。或者我们看到官方文档的第一个例子是这种写法：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span><span class="o">.</span><span class="n">push_application</span><span class="p">()</span>
-<span class="n">warn</span><span class="p">(</span><span class="s1">'This is a warning'</span><span class="p">)</span>
-</pre></div>
-<p>或者写作：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">log_handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">log_handler</span><span class="o">.</span><span class="n">applicationbound</span><span class="p">():</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s1">'This is too cool for stdlib'</span><span class="p">)</span>
-</pre></div>
-<p>这是单个注册在整个程序上的，此外还有 <code>threadbound</code> 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/greedy-algorithm.html">贪婪算法
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-08-26T00:00:00+08:00">2018年 8月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>任何问题总可以通过暴力穷举算法求解，当然有些问题组合数情况太多了，尤其是某些问题，没有快速算法，即NP完全问题。那么可以试着用一些近似算法来快速找到一个近似解。贪婪算法就是其中的一个近似解。</p>
-<p>贪婪算法并不是某种具体的算法，更像是写算法时的一种思路参考。如果你要解决问题，而该问题可以分解为多个步骤，那么你可以通过寻找每步的局部最优解，来<strong>近似</strong>得到目标问题的全局最优解。（贪婪算法并不保证你得到的解一定是全局最优解，但一般这个解是很靠近全局最优解了。）</p>
-<p>对于一个问题，如果贪婪算法是有效的，那么一般贪婪算法就是解决这个问题最好的算法。</p>
-<h2 id="_1">背包问题</h2>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">items</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
-
-    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="k">if …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/sqlalchemy-module.html">sqlalchemy模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-07-10T00:00:00+08:00">2018年 7月 10日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>本文分为两个部分，sqlalchemy的非ORM部分和ORM部分。一般使用是推荐使用ORM，这将让你的代码更python，更易读易懂。但ORM部分要用好，很多非ORM部分知识是需要的,，下面根据笔者的实践列出一些非ORM部分非常常用的一些知识部分：</p>
-<ul>
-<li>创建Engine 理解创建Engine部分将有助于你在很多地方理解如何配置sqlalchemy的数据库连接</li>
-<li>列的属性 列的数据类型 这两个是必看的，你在定义ORM模型的时候必然要参考这个</li>
-<li>select语句和理解RowProxy对象 帮助你理解如何在query中编写select语句和出来的结果如何使用</li>
-</ul>
-<h3 id="_2">安装</h3>
-<p>sqlalchemy的安装简单用pip命令安装之即可:</p>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sqlalchemy</span>
-</pre></div>
-<h3 id="_3">引用惯例</h3>
-<p>在后面都默认有如下引用:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-<p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。</p>
-<h2 id="_4">简介</h2>
-<p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>
-<p>和数据库直接相连的是我们熟悉的那些DBAPI接口模块，比如: sqlite3, pymysql, psycopg2等，然后中间的核心层有Engine，连接池，方言 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/alembic-module.html">alembic模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
-<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
-<h2 id="_1">基本使用</h2>
-<h3 id="alembic">初始化alembic项目</h3>
-<div class="highlight"><pre><span></span><span class="n">alembic</span> <span class="n">init</span> <span class="n">alembic</span>
-</pre></div>
-<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
-<h3 id="modelspy">根据models.py来</h3>
-<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
-<div class="highlight"><pre><span></span><span class="n">alembic</span> <span class="n">revision</span> <span class="c1">--autogenerate -m "add_some_key"</span>
-</pre></div>
-<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myapp …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pandasmo-kuai.html">pandas模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#ji-qi-xue-xi-ref">机器学习
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>本文对pandas模块的一些核心概念进行说明。</p>
-<h2 id="_1">基本入门</h2>
-<p>pandas最核心的两个数据结构就是 Series 类和 DataFrame 类。其中DataFrame可能会用的偏多一点，Series相当于一维情况下较简单的DataFrame，有的时候会用到。本文重点讨论DataFrame类。</p>
-<p>DataFrame之所以很常用是因为这种数据结构太常见了，在excel中，在csv中，在sql中，等等来源的数据都可以汇总成为DataFrame数据结构，然后进行一些后面必要的数据处理，包括送入机器学习或者深度学习的模型中去。</p>
-<h2 id="_2">读写文件支持</h2>
-<p>pandas的io子模块写得很便捷，实际上我经常看到有些python程序员并不是在做数据处理，有时都会调用下pandas的io来做一些读写操作。</p>
-<p>其大体有这些函数：</p>
-<ul>
-<li>read_csv    to_csv</li>
-<li>read_json   to_json</li>
-<li>read_html to_html</li>
-<li>read_excel to_excel</li>
-<li>read_sql to_sql</li>
-</ul>
-<p>这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。</p>
-<h3 id="txt">读txt文件</h3>
-<p>实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/airflow-module.html">airflow模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-24T00:00:00+08:00">2018年 6月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>airflow和luigi模块相比有以下优点：</p>
-<ol>
-<li>通用的DAG概念来描述工作流，更专业点。</li>
-<li>集成系统的crontab从而支持周期性任务，这样airflow就只能在linux系统下运行了。</li>
-<li>图形界面很美观，功能更强大。</li>
-</ol>
-<p>老实说我不喜欢crontab，如果只是简单调度，用apscheduler或者之类的工具简单写下就能集成到你的软件系统中去，而再复杂点的工作流，任务流程等等管理，都推荐使用airflow这样的框架来管理。</p>
-<p>而至于说到大数据上的那些流式数据处理工具，实际上只有百分之几的公司因为业务需要必须上大数据，大部分公司是没必要上大数据的，因为大数据引入了太多的复杂度了，如果没有必要，而仅仅追求时髦去玩大数据，那显然是违背我们程序界公认的KISS原则的【Keep it simple and stupid.】。</p>
-<h3 id="airflow">安装airflow</h3>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">apache</span><span class="o">-</span><span class="n">airflow</span>
-</pre></div>
-<h3 id="_2">推荐起步</h3>
-<p>推荐 项目工作目录下 <code>.env</code> 文件下写上：</p>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">AIRFLOW_HOME</span><span class="o">=</span><span class="p">.</span>
-</pre></div>
-<p>这样使用pipenv或者其他工具在当前目录激活工作环境的时候，也自动激活了airflow在当前目录下工作的配置。这样我们airflow相关works配置的相关代码都放在这里。</p>
-<p>激活虚拟环境后，然后我们有如下操作：</p>
-<h3 id="_3">初始化数据库</h3>
-<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">initdb</span>
-</pre></div>
-<h3 id="webserver">启动webserver</h3>
-<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">webserver</span>
-</pre></div>
-<h2 id="_4">使用其他数据库 …</h2>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/makefileni-bu-lai-yi-fa-ma.html">makefile你不来一发吗
  </a></h1>
 
@@ -930,6 +511,408 @@ x …</p>
 <li>鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标)</li>
 </ul>
 <h3 id="uefi">UEFI …</h3>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/pipenv-module.html">pipenv模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-02-14T11:45:00+08:00">2018年 2月 14日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>pipenv模块刚开始听说觉得virtualenv够用了，就没太在意。后来一试发现真的可以，很方便的，在设计理念上和nodejs那边的包管理有点接近了，很不错。</p>
+<p>刚进入一个文件夹，然后运行：</p>
+<div class="highlight"><pre><span></span>pipenv install
+</pre></div>
+<p>当然运行前你需要：</p>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pipenv</span>
+</pre></div>
+<p>其会创建 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 这两个文件。如果读者有点熟悉nodejs那边的包管理机制，就对这两个文件的作用不需要做过多的说明了。</p>
+<p>那么怎么激活进入虚拟环境呢：</p>
+<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">shell</span>
+</pre></div>
+<p>或者你直接调用虚拟环境下运行某个命令：</p>
+<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">run</span> <span class="n">you_awesom_command</span>
+</pre></div>
+<p>读者打开 <code>Pipfile</code> 文件会发现这一行</p>
+<div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="ss">"https://pypi.douban.com/simple"</span>
+</pre></div>
+<p>以前还要在系统的另外的地方去配置，现在直接在这里修改就可以了。</p>
+<p>然后安装模块就是：</p>
+<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">install</span> <span class="n">requests</span>
+</pre></div>
+<p>或者remove模块：</p>
+<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">uninstall</span> <span class="n">requests</span>
+</pre></div>
+<p>值得注意的pipenv模块很好地解析的各个包包的依赖关系，这就是他比原 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/pillow-module.html">pillow模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-02-06T12:04:00+08:00">2018年 2月 6日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>pillow模块的前身是PIL模块，其有更好的github和pypi支持，所以简单的安装就可以通过pip命令安装之即可。不过pillow模块对于某些特殊格式的图片处理支持可能依赖于系统的一些额外的图形处理模块，比如libjpeg，libtiff等。可能你的系统已经安装了，也可能没有，根据具体情况来，这里就不一一讨论了。</p>
+<p>安装官方文档的叙述（also reference <a href="http://askubuntu.com/questions/427358/install-pillow-for-python-3">this</a> ），下面这些可能需要装上。</p>
+<div class="highlight"><pre><span></span>sudo apt-get install python3-dev python3-setuptools
+sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</span>
+    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+</pre></div>
+<h3 id="_2">测试安装情况</h3>
+<p>可以如下找个图片简单测试一下安装情况:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"test.jpg"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/statistics-tutorial.html">统计学入门
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-02-06T00:00:00+08:00">2018年 2月 6日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">均值中位数众数</h2>
+<ul>
+<li><strong>mean</strong> 也就是均值，也就是算术平均数，也就是大家熟知的把所有的数加起来然后除以个数，看看这些数平均有多大。</li>
+<li><strong>median</strong> 中位数，是这样的概念：如果我们把一组数从小到大排列，然后最中间的那个数就是中位数。其中最中间的解释是，如果一共有奇数个数字，那么去掉一个最小去掉一个最大，这样类推，最后剩下来的那个数就是中位数；如果一共有偶数个数字，那么最后会剩下两个数字，而中位数就是最后这两个数字的均值。</li>
+<li><strong>mode</strong> 众数，也就是这一组数中出现频率最高或者说分布最多的数。比如说[1,2,2,3]这样一个样本，其中数字2出现次数最多，我们就说这个样本的众数为2。</li>
+</ul>
+<h3 id="_2">统计意义</h3>
+<p>平均值的概念是大家最熟悉的，其是最基本的统计学手段。比如物理学上的测量，为了精确总是需要多次测量取平均值。再比如我们衡量某一类数据的大致平均情况，比如你的考试平均成绩，通过这个平均成绩可以大致得到你对待本学期学业的态度等。</p>
+<p>中位数和均值一样也能考察样本总体存在状态，不过区别是中位数对一些极值（特殊的偏离特别远的值）不敏感。以收入来举例子：某些人的收入特别的高，那么如果你用均值来考察社会的收入水平就会有抬高的嫌疑。因为不同的家庭之间的收入并没有共享，但是你在计算中却一并考虑了。这个时候用中位数来考察能更加合理地看着社会总体的收入水平。因此考察家庭平均收入要用中位数。</p>
+<p>众数只关注出现次数最多的数 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/nlp-talk-one.html">自然语言处理第一谈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-01-30T00:00:00+08:00">2018年 1月 30日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>自然语言处理的可能应用领域有：</p>
+<ul>
+<li>机器翻译</li>
+<li>自动文摘</li>
+<li>信息检索</li>
+<li>文档分类</li>
+<li>问答系统</li>
+<li>信息过滤，信息抽取</li>
+<li>文字编辑和自动校对</li>
+<li>作文自动评分</li>
+<li>语音识别</li>
+<li>语音合成，text to speech</li>
+<li>​</li>
+</ul>
+<h2 id="_2">信息熵</h2>
+<p>信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。</p>
+<p>不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为：
+</p>
+<div class="math">$$
+H = - p log_2{p}
+$$</div>
+<p>
+首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/directied-acyclic-graph.html">有向无环图
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-01-21T11:56:00+08:00">2018年 1月 21日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>图论，听起来挺高大上的，嗯，那就是数学家画圈圈和画线线还很有乐趣的地方。</p>
+<p>如果线没有方向，那么叫做无向图，如果线有方向，那么叫做有向图。</p>
+<p>在有向图中，任意一个节点的流向流着流着都流不回自身，那么我们就说这个图为 <strong>有向无环图</strong> ，英文缩写是 DAG，（directied acyclic graph）。</p>
+<p>这东西有什么用？</p>
+<p>一开始我最先接触 DAG 这个术语，是在找工作流软件的时候，一种工作流的通用表示方法就是用 DAG 来表示。为什么？假设你是工作流中的某个节点的员工，你按照某个workflow走下去，最后闭环了，然后你无限循环在某个流程中了，那可真蠢了。</p>
+<p>然后比如说 git 的版本控制，其内部也是用的 有向无环图表示，如果你版本修改修改，又回到某个老版本了，那版本控制也失效了。</p>
+<p>聪明的朋友肯定想到了我们的宇宙时间是不可逆的，也就是说如果用模型来表示宇宙所有的信息数据变动流结构的话，那么一定是有向无环图。</p>
+<h2 id="python">python实现</h2>
+<p>在 <a href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/digraph.py">algorithms项目的这里</a> 有有向图的实现代码，实际存储就是一个字典值，然后再加上了一些辅助方法，其中 key …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/crontab.html">crontab定时任务
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-30T23:04:00+08:00">2017年 12月 30日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>crontab工具可以用来让系统执行一些周期性任务，其在ubuntu下服务名字叫cron；在centos下服务名字叫crond。</p>
+<p>你可以通过crontab这个命令查看或修改具体的配置：</p>
+<div class="highlight"><pre><span></span><span class="n">crontab</span> <span class="o">-</span><span class="n">l</span>  <span class="o">#</span><span class="err">列出配置文件内容</span>
+
+<span class="n">crontab</span> <span class="o">-</span><span class="n">e</span>  <span class="o">#</span><span class="err">进入配置文件编辑</span>
+</pre></div>
+<p>编辑一般就是进入的vi编辑器。用crontab -e修改的配置会直接生效，不需要重启crontab的后台服务。如果重启后台服务了，那么所有的任务都会重新开始计时。当你的配置写着每隔一个小时执行某个任务，那么要等到下一个小时的时候才会执行任务。</p>
+<p>一开始推荐写上这样一个每分钟的echo命令来看看crontab的具体运行情况。</p>
+<div class="highlight"><pre><span></span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="n">echo</span> <span class="ss">"test"</span>
+</pre></div>
+<p>一般日志是默认在 <code>/var/log/cron</code> 那里（centos）。</p>
+<p>然后上面的配置含义是 ：</p>
+<div class="highlight"><pre><span></span><span class="err">分</span> <span class="err">时</span> <span class="err">日</span> <span class="err">月</span> <span class="err">星期几</span> <span class="err">命令</span>
+</pre></div>
+<p>其中小时是24时制，星期几0表示星期日，1表示星期一。后面的命令就是一行简单的shell命令，如果是多行命令的话建议写成bash脚本，然后给这个脚本可执行权限，然后写上该脚本的绝对路径名即可。</p>
+<p><strong>NOTICE</strong>： crontab里面执行的命令不是在shell环境下，比如pyenv环境就可能不会正常工作，推荐要使用什么命令什么文件都使用绝对路径。</p>
+<p>每五分钟：</p>
+<div class="highlight"><pre><span></span><span class="o">*/</span><span class="mi">5</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
+</pre></div>
+<p>每三个小时：</p>
+<div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">*/</span><span class="mi">3 …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/git.html">git版本控制
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-24T16:10:00+08:00">2017年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="git">git基础</h2>
+<p>下面就git命令使用的基本流程说明如下：</p>
+<ul>
+<li>远程仓库文件到本地 网上创建项目之后，你需要将网上的存档下载到本地，在你希望下载的地点，打开终端：</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">a358003542</span><span class="o">/</span><span class="n">xelatex</span><span class="o">-</span><span class="n">guide</span><span class="o">-</span><span class="n">book</span><span class="p">.</span><span class="n">git</span>
+</pre></div>
+<ul>
+<li>初始化本地仓库 <code>git init</code> 命令用于初始化本地仓库， <code>git clone</code> 下来的仓库文件已经初始化了，然后 <code>origin</code> 这个远程服务器名字也已经加上去了。</li>
+<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all …</code></li></ul>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/bash-tutorial.html">bash脚本入门
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-24T16:08:00+08:00">2017年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。</p>
+<h2 id="_1">变量</h2>
+<div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">2</span>
+
+<span class="n">echo</span> <span class="err">$</span><span class="n">i</span>
+</pre></div>
+<p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
+<p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
+<h3 id="_2">应用：修改终端前缀</h3>
+<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS1</span><span class="o">=</span><span class="ss">"=&gt;"</span>
+</pre></div>
+<p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
+<p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
+<p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
+<p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
+<div class="highlight"><pre><span></span><span class="n">export …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/ansible-auto-operations.html">ansible自动化运维
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-24T15:54:00+08:00">2017年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
+<p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
+<div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="k">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
+</pre></div>
+<p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
+<h2 id="hosts">hosts文件配置</h2>
+<p>这里讨论的 <code>/etc/ansible/hosts</code> 这个文件是所谓的默认 inventory 文件，除了这个默认inventory配置文件之外，还可以写很多其他的配置文件的。而这些配置文件内容大体如下:</p>
+<div class="highlight"><pre><span></span><span class="k">[webservers]</span>
+<span class="na">foo.example.com</span>
+ <span class="na">bar.example.com</span>
+</pre></div>
+<p>[webservers] 这个字段定义的是所谓的主机组的概念，之前我们随便写上去的那个主机没属于任何主机组 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/linux-system-basic.html">linux系统基础
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-24T11:29:00+08:00">2017年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="debianrpm">debian系或者rpm系</h2>
+<p>目前Linux主流的包管理系统分为debian系和rpm系这两个。CentOS和Redhat属于rpm系；ubuntu和debian系统属于rpm系。在ubuntu中第一个要学习的命令就是 apt 命令，通过它来进行系统软件的安装卸载更新等等工作；在centos第一个要学习的命令是 yum 命令，与apt命令类似进行了一系列的系统的软件包管理操作。</p>
+<h3 id="yumrpm">yum命令和rpm命令</h3>
+<ul>
+<li>yum install what 安装某个软件</li>
+<li>yum groupinstall what 安装某个软件组。</li>
+<li>yum update 更新系统软件包</li>
+<li>yum remove what 卸载某个软件</li>
+<li>yum groupremove what 卸载某个软件组</li>
+<li>yum clean 清除系统软件包管理相关的缓存</li>
+<li>rpm -i what.rpm  本地安装某个rpm包，一般使用会加上 <code>-vh</code> 选项来显示更多的安装信息和安装进度。    </li>
+</ul>
+<h3 id="aptdpkg">apt命令和dpkg命令</h3>
+<p>系统安装好之后第一件要做的事是选一个好的源，然后安装更新。在系统设置→软件和更新那里，在“下载自 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/vi-editor.html">vi编辑器
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-24T00:00:00+08:00">2017年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>推荐先安装完整版的vim，这样一些按键乱码问题会自动解决。然后注意中文输入法状态下可能会造成你切换vi模式的困扰。</p>
+<p>进入vi编辑器第一条，记住按 <code>i</code> 进入编辑模式，下面的一些按键都需要按 <code>Esc</code> 退出编辑模式才有效。</p>
+<h2 id="_1">常用快捷键</h2>
+<p>这里按键是针对常见的键盘，MAC下按键对应会有所不同。</p>
+<ul>
+<li>Ctrl + f  屏幕向下移动一页</li>
+<li>
+<p>G 移动到最后一行</p>
+</li>
+<li>
+<p>gg 移动到第一行 推荐就直接用 <code>1G</code> 行跳转操作， <code>100G</code> 意思是跳转到第100行。</p>
+</li>
+<li>dd 删除当前行</li>
+<li>yy 复制当前行</li>
+<li>p 粘贴</li>
+<li>u 撤销</li>
+<li>r redo</li>
+</ul>
+<h2 id="_2">块选择</h2>
+<p>按键 <code>v</code> 进入块选择，然后移动光标进行块选择。</p>
+<ul>
+<li>y 复制块</li>
+<li>d 删除块</li>
+</ul>
+<h2 id="_3">查找</h2>
+<h3 id="_4">匹配某个单词</h3>
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Lao</span> <span class="n">Zi</span>
+</pre></div>
+<p>这样我们就开始搜索精确匹配含有“Lao …</p>
                             </article>
 
  <nav aria-label="Page Navigation">
