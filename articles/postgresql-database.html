@@ -149,12 +149,18 @@ postgresql数据库  · cdwanze的博文
 <li><a href="#postgresql">postgresql字段数据类型</a></li>
 </ul>
 </li>
-<li><a href="#_13">附录</a><ul>
-<li><a href="#_14">配置文件在那里</a></li>
+<li><a href="#cookbook">Cookbook</a><ul>
+<li><a href="#unique">修改某列为unique</a></li>
+<li><a href="#_13">删除基于某列重复值的重复行</a></li>
+<li><a href="#postgresqltimestamptz">理解postgresql的timestamptz字段类型</a></li>
+</ul>
+</li>
+<li><a href="#_14">附录</a><ul>
+<li><a href="#_15">配置文件在那里</a></li>
 <li><a href="#postgresql_1">重启postgresql服务</a></li>
 </ul>
 </li>
-<li><a href="#_15">参考资料</a></li>
+<li><a href="#_16">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -332,8 +338,36 @@ postgresql数据库  · cdwanze的博文
 char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
 <p>而postgresql支持的数据类型就多了，有：int，smallint，real，boolean，date，time，integer，text，char(N)，varchar(N) 甚至还有json。这个可以后面慢慢了解，更多细节请具体参看官方文档第八章 Data Types，这是 <a href="http://www.postgresql.org/docs/9.3/static/datatype.html">版本9.3的网页链接</a> 。</p>
 <p>其中对于整数简单的就用integer，字符串简单的就用text，然后小数简单的就用real，布尔值就用boolean，此外还有一些特殊用途的数据类型值得引起我们的注意，如uuid，json，arrays，money，bytea，还有日期和时间的date，time；几何类型支持的point，line等等</p>
-<h2 id="_13">附录</h2>
-<h3 id="_14">配置文件在那里</h3>
+<h2 id="cookbook">Cookbook</h2>
+<h3 id="unique">修改某列为unique</h3>
+<p>参考了 <a href="https://stackoverflow.com/questions/469471/how-do-i-alter-a-postgresql-table-and-make-a-column-unique">这个网页</a> 。</p>
+<div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">the_table</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="k">UNIQUE</span> <span class="p">(</span><span class="n">thecolumn</span><span class="p">);</span>
+</pre></div>
+<h3 id="_13">删除基于某列重复值的重复行</h3>
+<p>参考了 <a href="https://stackoverflow.com/questions/6583916/delete-duplicate-records-in-postgresql">这个网页</a> 。</p>
+<div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">dupes</span> <span class="n">T1</span>
+    <span class="k">USING</span>   <span class="n">dupes</span> <span class="n">T2</span>
+<span class="k">WHERE</span>   <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span>  <span class="c1">-- delete the older versions</span>
+    <span class="k">AND</span> <span class="n">T1</span><span class="p">.</span><span class="k">key</span>  <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="k">key</span><span class="p">;</span>  <span class="c1">-- add more columns if needed</span>
+</pre></div>
+<p>USING语句有点古怪，具体要参看postgresql的delete一章，里面就介绍了如下语法：</p>
+<div class="highlight"><pre><span></span><span class="n">DELETE</span> <span class="n">FROM</span> <span class="p">[</span> <span class="n">ONLY</span> <span class="p">]</span> <span class="n">table_name</span> <span class="p">[</span> <span class="o">*</span> <span class="p">]</span> <span class="p">[</span> <span class="p">[</span> <span class="n">AS</span> <span class="p">]</span> <span class="n">alias</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="n">USING</span> <span class="n">using_list</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="n">WHERE</span> <span class="n">condition</span> <span class="o">|</span> <span class="n">WHERE</span> <span class="n">CURRENT</span> <span class="n">OF</span> <span class="n">cursor_name</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="n">RETURNING</span> <span class="o">*</span> <span class="o">|</span> <span class="n">output_expression</span> <span class="p">[</span> <span class="p">[</span> <span class="n">AS</span> <span class="p">]</span> <span class="n">output_name</span> <span class="p">]</span> <span class="p">[,</span> <span class="p">...]</span> <span class="p">]</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="nv">using_list</span>
+<span class="nv">A</span> <span class="nv">list</span> <span class="nv">of</span> <span class="nv">table</span> <span class="nv">expressions</span>, <span class="nv">allowing</span> <span class="nv">columns</span> <span class="nv">from</span> <span class="nv">other</span> <span class="nv">tables</span> <span class="nv">to</span> <span class="nv">appear</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nv">WHERE</span> <span class="nv">condition</span>. <span class="nv">This</span> <span class="nv">is</span> <span class="nv">similar</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">list</span> <span class="nv">of</span> <span class="nv">tables</span> <span class="nv">that</span> <span class="nv">can</span> <span class="nv">be</span> <span class="nv">specified</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nv">FROM</span> <span class="nv">Clause</span> <span class="nv">of</span> <span class="nv">a</span> <span class="nv">SELECT</span> <span class="nv">statement</span><span class="c1">; for example, an alias for the table name can be specified. Do not repeat the target table in the using_list, unless you wish to set up a self-join.</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">films</span> <span class="k">USING</span> <span class="n">producers</span>
+  <span class="k">WHERE</span> <span class="n">producer_id</span> <span class="o">=</span> <span class="n">producers</span><span class="p">.</span><span class="n">id</span> <span class="k">AND</span> <span class="n">producers</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'foo'</span><span class="p">;</span>
+</pre></div>
+<p>这个using和select里面的using有点区别，这里的using更像是引用了某个表，让其可以在后面的where语句中使用。</p>
+<h3 id="postgresqltimestamptz">理解postgresql的timestamptz字段类型</h3>
+<p>首先数据库里面都应该是存放UTC时间，只是说以前使用timestamp的时候是属于程序上的强制性规范要求，这样避免各种纠结时区问题。而现在postgresql的timestamp字段对外说是支持时区的，但其实它内部存放的还是UTC时间，只是它帮你进行了一些自动转换。</p>
+<p>如果你是以isoformat格式存放进入timestamptz字段，或者以isoformat格式查询时间，程序员都是不用操心时区的问题的，因为isoformat里面已经有时区信息了。为了你的程序各方面表现良好，推荐你程序运行时的服务器时区设置好。然后如果你数据库服务器时区设置好在查看时间上会有更好的本地体验。</p>
+<h2 id="_14">附录</h2>
+<h3 id="_15">配置文件在那里</h3>
 <div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">psql</span> <span class="n">postgres</span>
 
 <span class="n">psql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span><span class="n">setting</span> <span class="k">FROM</span> <span class="n">pg_settings</span> <span class="k">WHERE</span> <span class="n">category</span> <span class="o">=</span> <span class="s1">'File Locations'</span><span class="p">;</span>
@@ -353,7 +387,7 @@ char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
 <p>或者</p>
 <div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="n">reload</span>
 </pre></div>
-<h2 id="_15">参考资料</h2>
+<h2 id="_16">参考资料</h2>
 <ol>
 <li>PostgreSQL官方参考文档</li>
 <li>PostgreSQL Up and Running, 2nd Edition</li>
