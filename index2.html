@@ -183,6 +183,79 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/sqlalchemy-module.html">sqlalchemy模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-07-10T00:00:00+08:00">2018年 7月 10日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>本文分为两个部分，sqlalchemy的非ORM部分和ORM部分。一般使用是推荐使用ORM，这将让你的代码更python，更易读易懂。但ORM部分要用好，很多非ORM部分知识是需要的,，下面根据笔者的实践列出一些非ORM部分非常常用的一些知识部分：</p>
+<ul>
+<li>创建Engine 理解创建Engine部分将有助于你在很多地方理解如何配置sqlalchemy的数据库连接</li>
+<li>列的属性 列的数据类型 这两个是必看的，你在定义ORM模型的时候必然要参考这个</li>
+<li>select语句和理解RowProxy对象 帮助你理解如何在query中编写select语句和出来的结果如何使用</li>
+</ul>
+<h3 id="_2">安装</h3>
+<p>sqlalchemy的安装简单用pip命令安装之即可:</p>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sqlalchemy</span>
+</pre></div>
+<h3 id="_3">引用惯例</h3>
+<p>在后面都默认有如下引用:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+<p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。</p>
+<h2 id="_4">简介</h2>
+<p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
+<p><img alt="img" src="https://docs.cdwanze.work/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>
+<p>和数据库直接相连的是我们熟悉的那些DBAPI接口模块，比如: sqlite3, pymysql, psycopg2等，然后中间的核心层有Engine，连接池，方言 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/alembic-module.html">alembic模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#sql-ref">SQL
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
+<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
+<h2 id="_1">基本使用</h2>
+<h3 id="alembic">初始化alembic项目</h3>
+<div class="highlight"><pre><span></span><span class="n">alembic</span> <span class="n">init</span> <span class="n">alembic</span>
+</pre></div>
+<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
+<h3 id="modelspy">根据models.py来</h3>
+<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
+<div class="highlight"><pre><span></span><span class="n">alembic</span> <span class="n">revision</span> <span class="c1">--autogenerate -m "add_some_key"</span>
+</pre></div>
+<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myapp …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/pandasmo-kuai.html">pandas模块
  </a></h1>
 
@@ -363,6 +436,40 @@
 <p>虽然没有lrule，但根据上面的relativedelta配置的起始时间，然后指定结束时间，通过rrule函数来生成一个时间区间，有时是很方便的。</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dateutil.rrule</span> <span class="kn">import</span> <span class="n">rrule</span><span class="p">,</span> <span class="n">MONTHLY</span>
 <span class="nb">list</span><span class="p">(</span><span class="n">rrule</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="n">MONTHLY</span><span class="p">,</span> <span class="n">dtstart</span><span class="o">=</span><span class="n">sdt</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="n">now …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/pythonpa-chong-zhi-zi-ti-fan-pa-chong.html">python爬虫之-字体反爬虫
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#za-xiang-ref">杂项
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
+                                        </time>
+                                    </div>
+                                </section>
+                                <p>在爬虫的时候，你分析网页会看到，某些东西看上去是乱码，其css设置了一种额外的字体。怎么破解里面的内容呢？</p>
+<p>首先你需要把目标字体下载下来，通常这种字体有各种各样的名字，里面的具体字体codepoint也是随机的...</p>
+<p>如果你下载一个fontcreator会看到具体哪个字对应哪个codepoint，而爬虫这边编码，我们需要使用python的 fonttools库来加载字体。</p>
+<p>首先你需要下载好字体，保存好字体做好缓存工作。</p>
+<p>见本文的参考资料2，然后就是利用 fonttools 模块加载目标字体。</p>
+<div class="highlight"><pre><span></span><span class="n">font</span> <span class="o">=</span> <span class="n">TTFont</span><span class="p">(</span><span class="n">font_filename</span><span class="p">)</span>
+</pre></div>
+
+
+<p>然后就是分析这个字体的cmap tables的cmap数据，不同的字体似乎情况不同，这个要实际分析，由于fonttools这个模块文档较少，加上我对字体知识不太多，所以只能简单摸索下了。</p>
+<div class="highlight"><pre><span></span><span class="n">font_mapping</span> <span class="o">=</span> <span class="n">font</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">].</span><span class="n">tables</span><span class="p">[</span><span class="o">?</span><span class="p">].</span><span class="n">cmap</span>
+</pre></div>
+
+
+<p>如果你找到 font_mapping 了，字符 用python的 ord 函数处理下，就能得到目标字符的 unicode code point，也就是我们上面说的字体的code point，在这个 font_mapping 里面你会看到的，然后具体什么内容就出来了 …</p>
                             </article>
 
 
@@ -817,104 +924,6 @@ $$</div>
 </pre></div>
 <p>每三个小时：</p>
 <div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">*/</span><span class="mi">3 …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/git.html">git版本控制
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T16:10:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="git">git基础</h2>
-<p>下面就git命令使用的基本流程说明如下：</p>
-<ul>
-<li>远程仓库文件到本地 网上创建项目之后，你需要将网上的存档下载到本地，在你希望下载的地点，打开终端：</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">a358003542</span><span class="o">/</span><span class="n">xelatex</span><span class="o">-</span><span class="n">guide</span><span class="o">-</span><span class="n">book</span><span class="p">.</span><span class="n">git</span>
-</pre></div>
-<ul>
-<li>初始化本地仓库 <code>git init</code> 命令用于初始化本地仓库， <code>git clone</code> 下来的仓库文件已经初始化了，然后 <code>origin</code> 这个远程服务器名字也已经加上去了。</li>
-<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all …</code></li></ul>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/bash-tutorial.html">bash脚本入门
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T16:08:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。</p>
-<h2 id="_1">变量</h2>
-<div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">2</span>
-
-<span class="n">echo</span> <span class="err">$</span><span class="n">i</span>
-</pre></div>
-<p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
-<p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
-<h3 id="_2">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS1</span><span class="o">=</span><span class="ss">"=&gt;"</span>
-</pre></div>
-<p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
-<p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
-<p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
-<p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span><span class="n">export …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/ansible-auto-operations.html">ansible自动化运维
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T15:54:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
-<p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
-<div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="k">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
-</pre></div>
-<p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
-<h2 id="hosts">hosts文件配置</h2>
-<p>这里讨论的 <code>/etc/ansible/hosts</code> 这个文件是所谓的默认 inventory 文件，除了这个默认inventory配置文件之外，还可以写很多其他的配置文件的。而这些配置文件内容大体如下:</p>
-<div class="highlight"><pre><span></span><span class="k">[webservers]</span>
-<span class="na">foo.example.com</span>
- <span class="na">bar.example.com</span>
-</pre></div>
-<p>[webservers] 这个字段定义的是所谓的主机组的概念，之前我们随便写上去的那个主机没属于任何主机组 …</p>
                             </article>
 
  <nav aria-label="Page Navigation">
