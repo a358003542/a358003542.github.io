@@ -182,19 +182,19 @@ cdwanze的博文 - 算法 category</title>
 <h2 id="numpy">高效numpy</h2>
 <h3 id="numpypandas">numpy总的来说比pandas快</h3>
 <p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
-<div class="highlight"><pre><span></span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">np.dot(df['a'],x)</span>
 </pre></div>
 <p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
 <h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
 <p>比如下面的程序：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="o">%%</span><span class="nv">timeit</span> 
+<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
 
-<span class="nv">res</span> <span class="o">=</span> <span class="nv">np</span>.<span class="nv">vstack</span><span class="ss">(</span>[<span class="nv">x</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">range</span><span class="ss">(</span><span class="mi">10000</span><span class="ss">)</span>]<span class="ss">)</span>
+<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)])</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="mi">50</span>.<span class="mi">7</span> <span class="nv">ms</span> ± <span class="mi">1</span>.<span class="mi">5</span> <span class="nv">ms</span> <span class="nv">per</span> <span class="k">loop</span> <span class="ss">(</span><span class="nv">mean</span> ± <span class="nv">std</span>. <span class="nv">dev</span>. <span class="nv">of …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="err">50.7 ms ± 1.5 ms per loop (mean ± std. dev. of …</span></pre></div>
                             </article>
 
 
@@ -217,14 +217,14 @@ cdwanze的博文 - 算法 category</title>
                                 
 <h2 id="_1">提取图片的特征</h2>
 <p>请参阅 <a href="https://www.cnblogs.com/my-love-is-python/p/10414135.html">这篇文章</a> ，老实说具体算法细节看不大懂，而且似乎短时间内是没希望看懂了..里面有太深的相关领域专业知识了。不过具体python代码还是很简单的：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cv2</span>
 
 <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">'test_1.jpg'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># 第二个参数设置为0就是自动灰度化了</span>
 <span class="n">sift</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">xfeatures2d</span><span class="o">.</span><span class="n">SIFT_create</span><span class="p">()</span>
 
 <span class="c1"># 找出关键点</span>
-<span class="n">kp</span> <span class="o">=</span> <span class="n">sift</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="n">kp</span> <span class="o">=</span> <span class="n">sift</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 <span class="c1"># 对关键点进行绘图</span>
 <span class="n">ret</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
@@ -338,9 +338,9 @@ $$</div>
 
 <span class="sd">    """</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">decisions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None …</span></pre></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">decisions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="kc">None …</span></pre></div>
                             </article>
 
 
@@ -365,7 +365,7 @@ $$</div>
 <p>所以我们更多的是专注于算法中的循环部分，而对于循环部分，若循环次数和输入规模无关，则记为O(1) 常数运行时间。</p>
 <p>如果我们遇到了如下的循环：</p>
 <div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 <p>这个循环和输入规模n相关，我们记作 O(n) 线性运行时间。</p>
 <p>假设一个算法里面又有上面提到的O(1) ，又有上面的O(n) ，那么我们应该将O(1) 项去掉：</p>
@@ -375,7 +375,7 @@ $$</div>
 <p>那么上面提到的算法复杂度就可简单记为 O(n) 。</p>
 <p>又假设有个算法，有两个这样的循环：</p>
 <div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in …</span></pre></div>
                             </article>
 
@@ -402,9 +402,9 @@ $$</div>
 <p>对于一个问题，如果贪婪算法是有效的，那么一般贪婪算法就是解决这个问题最好的算法。</p>
 <h2 id="_1">背包问题</h2>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">items</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
 
     <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
@@ -528,16 +528,16 @@ $$</div>
 <p>如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？</p>
 <p><img alt="img" src="https://docs.cdwanze.work/images/arithmetic/mindmaptree.png"/></p>
 <p>然后其对应的csv格式如下：</p>
-<div class="highlight"><pre><span></span><span class="err">奴隶社会</span><span class="p">,</span><span class="err">非洲</span><span class="p">,</span><span class="err">古埃及文明</span><span class="p">,</span><span class="err">金字塔</span>
-<span class="p">,</span><span class="err">亚洲</span><span class="p">,</span><span class="err">两河流域文明</span><span class="p">,</span><span class="err">汉谟拉比法典</span>
-<span class="p">,,</span><span class="err">古印度</span><span class="p">,</span><span class="err">种姓制度</span>
-<span class="p">,,,</span><span class="err">佛教的创立</span>
-<span class="p">,</span><span class="err">欧洲</span><span class="p">,</span><span class="err">希腊</span><span class="p">,</span><span class="err">希腊城邦</span>
-<span class="p">,,,</span><span class="err">雅典民主</span>
-<span class="p">,,</span><span class="err">罗马</span><span class="p">,</span><span class="err">城邦</span>
-<span class="p">,,,</span><span class="err">帝国的征服与扩展</span>
-<span class="p">,,</span><span class="err">希腊罗马古典文化</span><span class="p">,</span><span class="err">建筑艺术</span>
-<span class="p">,,,</span><span class="err">公历</span>
+<div class="highlight"><pre><span></span><span class="err">奴隶社会,非洲,古埃及文明,金字塔</span>
+<span class="err">,亚洲,两河流域文明,汉谟拉比法典</span>
+<span class="err">,,古印度,种姓制度</span>
+<span class="err">,,,佛教的创立</span>
+<span class="err">,欧洲,希腊,希腊城邦</span>
+<span class="err">,,,雅典民主</span>
+<span class="err">,,罗马,城邦</span>
+<span class="err">,,,帝国的征服与扩展</span>
+<span class="err">,,希腊罗马古典文化,建筑艺术</span>
+<span class="err">,,,公历</span>
 </pre></div>
 <p>这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。</p>
 <h2 id="_1">基本类的设计</h2>
@@ -547,7 +547,7 @@ $$</div>
 
 
 <span class="k">class</span> <span class="nc">MindMapTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent …</span></pre></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent …</span></pre></div>
                             </article>
 
 
@@ -708,7 +708,7 @@ $$</div>
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">rcParams</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
 <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sans-serif&#39;</span>
 <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SimHei&#39;</span><span class="p">)</span> <span class="c1"># 插入中文字体</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">])</span>

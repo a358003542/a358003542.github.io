@@ -190,14 +190,14 @@
     <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 <p>上面的 do_GET 方法内部作用原理如下：</p>
-<div class="highlight"><pre><span></span>    <span class="nv">mname</span> <span class="o">=</span> <span class="s1">'</span><span class="s">do_</span><span class="s1">'</span> <span class="o">+</span> <span class="nv">self</span>.<span class="nv">command</span>
-    <span class="k">if</span> <span class="nv">not</span> <span class="nv">hasattr</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">mname</span><span class="ss">)</span>:
-        <span class="nv">self</span>.<span class="nv">send_error</span><span class="ss">(</span>
-            <span class="nv">HTTPStatus</span>.<span class="nv">NOT_IMPLEMENTED</span>,
-            <span class="s2">"</span><span class="s">Unsupported method (%r)</span><span class="s2">"</span> <span class="o">%</span> <span class="nv">self</span>.<span class="nv">command</span><span class="ss">)</span>
-        <span class="k">return</span>
-    <span class="nv">method</span> <span class="o">=</span> <span class="nv">getattr</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">mname</span><span class="ss">)</span>
-    <span class="nv">method</span><span class="ss">()</span>
+<div class="highlight"><pre><span></span><span class="err">    mname = 'do_' + self.command</span>
+<span class="err">    if not hasattr(self, mname):</span>
+<span class="err">        self.send_error(</span>
+<span class="err">            HTTPStatus.NOT_IMPLEMENTED,</span>
+<span class="err">            "Unsupported method (%r)" % self.command)</span>
+<span class="err">        return</span>
+<span class="err">    method = getattr(self, mname)</span>
+<span class="err">    method()</span>
 </pre></div>
 <p>其中 self.command 就是http协议请求头传过来的GET或者POST等，然后 handler类会去找对应的方法，找到了再进行对应的操作。</p>
 <p>这种根据函数名来进行行为分发的编程模式，很值得引起大家的注意，在web server里面一直都存在着这个需求。从url server_name 到对应的虚拟server分发，从path method 到对应的函数行为分发，再到后面高级的参数验证valide_what 等也有类似的行为分发需求。</p>
@@ -206,31 +206,31 @@
 <h2 id="_4">挂载静态文件</h2>
 <p>静态文件就是找到对应的文件，然后返回就是了。当然对于 index.html 等特殊文件需要特别的处理。</p>
 <p>500lines该文后来提到一种有趣的编码写法：</p>
-<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">case_no_file</span><span class="ss">(</span><span class="nv">object</span><span class="ss">)</span>:
-    <span class="s1">'''</span><span class="s">File or directory does not exist.</span><span class="s1">'''</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">case_no_file</span>(<span class="n">object</span>):
+    <span class="s">'''File or directory does not exist.'''</span>
 
-    <span class="nv">def</span> <span class="nv">test</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">handler</span><span class="ss">)</span>:
-        <span class="k">return</span> <span class="nv">not</span> <span class="nv">os</span>.<span class="nv">path</span>.<span class="nv">exists</span><span class="ss">(</span><span class="nv">handler</span>.<span class="nv">full_path</span><span class="ss">)</span>
+    <span class="n">def</span> <span class="n">test</span>(<span class="k">self</span>, <span class="n">handler</span>):
+        <span class="k">return</span> <span class="nb">not</span> <span class="n">os</span>.<span class="n">path</span>.<span class="nb">exists</span>(<span class="n">handler</span>.<span class="n">full_path</span>)
 
-    <span class="nv">def</span> <span class="nv">act</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">handler</span><span class="ss">)</span>:
-        <span class="nv">raise</span> <span class="nv">ServerException</span><span class="ss">(</span><span class="s2">"</span><span class="s">'{0}' not found</span><span class="s2">"</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">handler</span>.<span class="nv">path</span><span class="ss">))</span>
+    <span class="n">def</span> <span class="n">act</span>(<span class="k">self</span>, <span class="n">handler</span>):
+        <span class="n">raise</span> <span class="n">ServerException</span>(<span class="s">"'{0}' not found"</span>.<span class="n">format</span>(<span class="n">handler</span>.<span class="n">path</span>))
 </pre></div>
-<div class="highlight"><pre><span></span>    <span class="nv">def</span> <span class="nv">do_GET</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
-        <span class="nv">try</span>:
+<div class="highlight"><pre><span></span>    <span class="n">def</span> <span class="n">do_GET</span><span class="p">(</span><span class="k">self</span><span class="p">):</span>
+        <span class="n">try</span><span class="p">:</span>
 
-            # <span class="nv">Figure</span> <span class="nv">out</span> <span class="nv">what</span> <span class="nv">exactly</span> <span class="nv">is</span> <span class="nv">being</span> <span class="nv">requested</span>.
-            <span class="nv">self</span>.<span class="nv">full_path</span> <span class="o">=</span> <span class="nv">os</span>.<span class="nv">getcwd</span><span class="ss">()</span> <span class="o">+</span> <span class="nv">self</span>.<span class="nv">path</span>
+            <span class="o">#</span> <span class="n">Figure</span> <span class="k">out</span> <span class="n">what</span> <span class="n">exactly</span> <span class="k">is</span> <span class="n">being</span> <span class="n">requested</span><span class="p">.</span>
+            <span class="k">self</span><span class="p">.</span><span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="k">self</span><span class="p">.</span><span class="n">path</span>
 
-            # <span class="nv">Figure</span> <span class="nv">out</span> <span class="nv">how</span> <span class="nv">to</span> <span class="nv">handle</span> <span class="nv">it</span>.
-            <span class="k">for</span> <span class="nv">case</span> <span class="nv">in</span> <span class="nv">self</span>.<span class="nv">Cases</span>:
-                <span class="nv">cond</span><span class="o">=</span> <span class="nv">case</span><span class="ss">()</span>
-                <span class="k">if</span> <span class="nv">cond</span>.<span class="nv">test</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
-                    <span class="nv">cond</span>.<span class="nv">act</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>
-                    <span class="k">break</span>
+            <span class="o">#</span> <span class="n">Figure</span> <span class="k">out</span> <span class="n">how</span> <span class="k">to</span> <span class="n">handle</span> <span class="n">it</span><span class="p">.</span>
+            <span class="k">for</span> <span class="k">case</span> <span class="k">in</span> <span class="k">self</span><span class="p">.</span><span class="n">Cases</span><span class="p">:</span>
+                <span class="n">cond</span><span class="o">=</span> <span class="k">case</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">cond</span><span class="p">.</span><span class="n">test</span><span class="p">(</span><span class="k">self</span><span class="p">):</span>
+                    <span class="n">cond</span><span class="p">.</span><span class="n">act</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>
+                    <span class="n">break</span>
 
-        # <span class="nv">Handle</span> <span class="nv">errors</span>.
-        <span class="nv">except</span> <span class="nv">Exception</span> <span class="nv">as</span> <span class="nv">msg</span>:
-            <span class="nv">self</span>.<span class="nv">handle_error</span><span class="ss">(</span><span class="nv">msg</span><span class="ss">)</span>
+        <span class="o">#</span> <span class="n">Handle</span> <span class="n">errors</span><span class="p">.</span>
+        <span class="k">except</span> <span class="k">Exception</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="k">self</span><span class="p">.</span><span class="n">handle_error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">RequestHandler</span>(<span class="n">BaseHTTPServer</span>.<span class="n">BaseHTTPRequestHandler</span>):
 

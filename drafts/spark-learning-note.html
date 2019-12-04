@@ -164,11 +164,11 @@ spark学习笔记  · cdwanze的博文
 <h2 id="_2">安装</h2>
 <p>spark的安装还是很简单的，在windows下如果你已经配置好了JAVA环境，设置好了 <code>JAVA_HOME</code> 这个环境变量，然后下载下来的安装包解压出来即可。</p>
 <p>以python来说，假设你安装了 </p>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyspark</span>
+<div class="highlight"><pre><span></span><span class="err">pip install pyspark</span>
 </pre></div>
 <p>似乎就可以启用pyspark的shell环境了。这个还是挺让我困惑的，pyspark应该还不知道我的spark解压在哪里的吧，也可能是pyspark安装的时候自带的有？</p>
 <p>但如果你想更加顺滑地在jupyter notebook下使用pyspark的语句的话，还是要把 <code>SPARK_HOME</code> 这个环境变量安装好，然后安装: </p>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">findspark</span>
+<div class="highlight"><pre><span></span><span class="err">pip install findspark</span>
 </pre></div>
 <p>然后再jupyter notebook 下运行：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">findspark</span>
@@ -187,7 +187,7 @@ spark学习笔记  · cdwanze的博文
 <p><code>SparkContext</code> 接受 <code>SparkConf</code> 指定的一些配置信息，然后与Spark集群进行连接，通过 <code>SparkContext</code> 可以进行创建RDD ，集群中广播变量等工作。</p>
 <h3 id="centos7spark">centos7上安装spark</h3>
 <p>参考了参考资料3，感觉类似windows下的绿色安装方式，关键是findspark指向正确的位置，或者设置好 <code>SPARK_HOME</code> 环境变量。唯一值得一提的就是需要安装好java</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">java</span>
+<div class="highlight"><pre><span></span><span class="err">sudo yum install java</span>
 </pre></div>
 <h2 id="pyspark">什么时候用pyspark那边的东西</h2>
 <p>在初步接触之后正如前面讨论的，pyspark那边情况复杂而相关运算python支持模块少，不是动不动就把数据处理的任务转成pyspark那边的东西然后再从头开始写代码，这有时只是在浪费精力。</p>
@@ -199,20 +199,20 @@ spark学习笔记  · cdwanze的博文
 <p>一个简单的说法就是spark的RDD是分成不同的区的，然后每个区的RDD交给不同的机器（或者说执行器）来运算。这个分区动作就解决了矩阵维度过大的问题，但具体设计到计算，实际上就不那么简单了。简单的矩阵加减法问题不大，但矩阵乘法spark是怎么做的？不管怎么说spark这个功能因为引入RDD这个概念，或者说矩阵分区动作，是能够通过扩充机器应对矩阵过大的问题的。</p>
 <p>spark工具还额外提供了大数据要对应的某个节点丢失之类的数据备份等等问题，这个算是大数据工具都要做的基本功了。</p>
 <p>新建一个RDD:</p>
-<div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">sc</span><span class="p">.</span><span class="n">parallelize</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">sc</span><span class="p">.</span><span class="n">parallelize</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<div class="highlight"><pre><span></span><span class="err">x = sc.parallelize([1,2,3,4,5])</span>
+<span class="err">y = sc.parallelize([[1,2,3],[4,5,6]])</span>
 </pre></div>
 <p>如果我运行：</p>
-<div class="highlight"><pre><span></span><span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="k">map</span><span class="p">(</span><span class="n">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">x2 = x.map(lambda x: x+1)</span>
 </pre></div>
 <p>然后试着打印RDD：</p>
-<div class="highlight"><pre><span></span><span class="n">x</span><span class="p">.</span><span class="n">collect</span><span class="p">()</span>
-<span class="n">x2</span><span class="p">.</span><span class="n">collect</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">x.collect()</span>
+<span class="err">x2.collect()</span>
 </pre></div>
 <p>似乎没什么问题，map每个元素执行了某个lambda算式，还好。</p>
 <p>但如果是：</p>
-<div class="highlight"><pre><span></span><span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="k">map</span><span class="p">(</span><span class="n">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">y2</span><span class="p">.</span><span class="n">collect</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">y2 = y.map(lambda y: y+1)</span>
+<span class="err">y2.collect()</span>
 </pre></div>
 <p>程序就会抛出异常。</p>
 <p>这里有两点，map的时候还没有实际计算，这叫做spark的惰性求值机制，第二点RDD在计算的面对的是原数据的一个一个——即第一层级，原始状态是不考虑矩阵这样的数据结构，而更接近于列表这种数据结构。</p>
@@ -225,7 +225,7 @@ spark学习笔记  · cdwanze的博文
 <h3 id="rddcache">RDD的cache方法</h3>
 <p>将目标RDD对象缓存到内存里面，</p>
 <h2 id="_3">广播变量</h2>
-<div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">sc</span><span class="p">.</span><span class="n">broadcase</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><span class="err">x = sc.broadcase([1,2,3])</span>
 </pre></div>
 <p>广播变量可以被工作节点访问，访问就是调用目标变量的 <code>value</code> 方法。暂时对这个广播变量还不是很懂，TODO</p>
 <h2 id="udf">自定义UDF函数对象</h2>

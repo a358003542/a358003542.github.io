@@ -185,10 +185,10 @@ Tornado模块  · cdwanze的博文
 </pre></div>
 <p>这是一个同步的webapp框架，可能后面会用的较少，这里主要了解一下tornado编写的webapp的基本结构:</p>
 <h3 id="tornado">开启tornado的事件驱动循环:</h3>
-<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">ioloop</span><span class="p">.</span><span class="n">IOLoop</span><span class="p">.</span><span class="k">current</span><span class="p">().</span><span class="k">start</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">tornado.ioloop.IOLoop.current().start()</span>
 </pre></div>
 <p>这个大体类似于asyncio的:</p>
-<div class="highlight"><pre><span></span><span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_forever</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">asyncio.get_event_loop().run_forever()</span>
 </pre></div>
 <p>从tornado5.0开始，tornado已经自动和asyncio集成起来了，这里所谓的集成指的是：tornado的事件驱动自动挂载到asyncio的主事件驱动循环之上了。</p>
 <h3 id="make-a-app">make a app</h3>
@@ -210,7 +210,7 @@ Tornado模块  · cdwanze的博文
 <span class="kn">import</span> <span class="nn">tornado.web</span>
 
 <span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Hello, world"</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">make_app</span><span class="p">():</span>
@@ -244,19 +244,19 @@ Tornado模块  · cdwanze的博文
         <span class="n">handlers</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'/pageone'</span><span class="p">,</span> <span class="n">PageOneHandler</span><span class="p">,</span> <span class="p">{</span><span class="s1">'configs'</span> <span class="p">:</span> <span class="n">configs</span><span class="p">}),</span>
                 <span class="p">(</span><span class="s1">'/pagetwo'</span><span class="p">,</span> <span class="n">PageTwoHandler</span><span class="p">,</span> <span class="p">{</span><span class="s1">'configs'</span><span class="p">:</span> <span class="n">configs</span><span class="p">})]</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">template_path</span><span class="o">=</span><span class="s1">'/templates'</span><span class="p">,</span>
-                    <span class="n">static_path</span><span class="o">=</span><span class="s1">'/static'</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="n">static_path</span><span class="o">=</span><span class="s1">'/static'</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handlers</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 </pre></div>
 <h2 id="tornado_2">如何正确的关闭tornado进程</h2>
 <p>因为有的时候需要定制tornado关闭动作，然后和supervisor配合有时会出现端口无法正常释放，加上希望tornado能够温和的关闭重启而不杀死正在进行的动作保证数据的完整和安全，这个问题在网上已经看到很多人提及了，经过一番搜索之后，感觉github仓库下的 <a href="https://github.com/tornadoweb/tornado/issues/1791">这个issue</a>【20190606还open着的】可能下面的描述更值得我们细看一下。</p>
 <p>这里面我获得的一个背景知识是，server.stop() 是只停止接收新的请求，但是那些keepalive的请求是无效的。</p>
 <p>然后supervisor默认发送的信号是 <code>signal.SIGTERM</code> ，可能有其他关闭信号是 <code>signal.SIGINT</code> 。</p>
-<div class="highlight"><pre><span></span><span class="n">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
     <span class="n">periodic_task</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="n">http_server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">ws_clients</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="n">client</span><span class="p">[</span><span class="s1">'handler'</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">await</span> <span class="n">gen</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">gen</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">exit_handler</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
@@ -269,11 +269,11 @@ Tornado模块  · cdwanze的博文
 </pre></div>
 <p>也许应该注意关闭动作里面的休眠时间使用的是 gen.sleep 。有待进一步观察。</p>
 <h2 id="application">Application对象</h2>
-<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">Application</span><span class="p">(</span><span class="n">handlers</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">default_host</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="k">transforms</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">tornado.web.Application(handlers=None, default_host='', transforms=None, **settings)</span>
 </pre></div>
 <h3 id="url">url分发部分</h3>
 <p>上面的handlers参数主要进行url分发工作，其是一个列表，里面是一些所谓的 <code>URLSpec</code> 对象:</p>
-<div class="highlight"><pre><span></span><span class="n">tornado</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">URLSpec</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="k">handler</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">tornado.web.URLSpec(pattern, handler, kwargs=None, name=None)</span>
 </pre></div>
 <ul>
 <li>pattern就是一个匹配url分发的正则表达式</li>
@@ -282,7 +282,7 @@ Tornado模块  · cdwanze的博文
 <li>name，确切来说是给这个url分发规则取个名字，等下可以用 <code>Application.reverse_url(name,*args)</code> 来解析出具体的某个url，这个大体类似于flask的 url_for 和 endpoint的概念。</li>
 </ul>
 <p>然后pattern正则表达式我们知道有那个圆括号包围起来的group的概念，比如:</p>
-<div class="highlight"><pre><span></span><span class="n">r</span><span class="ss">"/story/([0-9]+)"</span>
+<div class="highlight"><pre><span></span><span class="err">r"/story/([0-9]+)"</span>
 </pre></div>
 <p>这里group匹配到的参数，将作为入口参数传递个 <code>RequestHandler</code> 对象的 HTTP method，也就是 <code>get</code> <code>post</code> 等。</p>
 <p>然后我们看到 <code>Application.reverse_url(name,*args)</code> 其后接受的一些参数也对应这里的正则表达式匹配，其反向解析url将进行匹配子group的替换操作。</p>

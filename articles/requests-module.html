@@ -221,11 +221,11 @@ requests模块  · cdwanze的博文
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 <p>为什么刚开始就用这么一个稍显复杂的例子作为演示，well，天朝网络的特色。如果你用百度的url <code>http://www.baidu.com</code> ，可能大部分情况下你都不用操心这些问题，但既然我们处在天朝网络这个大背景下，还是早点介绍这个。这个例子的返回的error种类似乎间接地反映了GFW的工作原理。</p>
 <p>比如google的.com.cn的https连接还能正常工作（目前暂时。。），只是有时会有点慢，然后其http连接则会返回404错误，这是天朝网络常见的网络错误了，大家的分析是GFW进行了dns投毒。而对于google的.com连接不管是http或者https连接都会返回OSError错误，说的是：Network is unreachable，这表明GFW对于后缀google.com的url采取的完全硬件级别的网络掐断。</p>
@@ -258,19 +258,19 @@ requests模块  · cdwanze的博文
 <span class="k">try</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="s1">' need password, the 401 error'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="s1">' need password, the 401 error'</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 </pre></div>
 <p>运行会返回：</p>
-<div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mi">192</span><span class="p">.</span><span class="mi">168</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span>  <span class="n">need</span> <span class="n">password</span><span class="p">,</span> <span class="n">the</span> <span class="mi">401</span> <span class="n">error</span>
+<div class="highlight"><pre><span></span><span class="c">http://192.168.1.1  need password, the 401 error</span>
 </pre></div>
 <p>返回了401异常，那么这个网页需要经过网页认证才能访问。下面是一个简单的小脚本附带网页认证功能：</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">build_opener</span><span class="p">,</span> <span class="n">HTTPBasicAuthHandler</span><span class="p">,</span> <span class="n">urlopen</span>
@@ -283,10 +283,10 @@ requests模块  · cdwanze的博文
 
 <span class="n">url</span> <span class="o">=</span> <span class="s1">'http://192.168.1.1'</span>
 
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">username</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"Username:"</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
     <span class="n">password</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'try...'</span><span class="p">,</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'try...'</span><span class="p">,</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
 
     <span class="n">auth_handler</span> <span class="o">=</span> <span class="n">HTTPBasicAuthHandler</span><span class="p">()</span>
     <span class="n">auth_handler</span><span class="o">.</span><span class="n">add_password</span><span class="p">(</span><span class="n">realm</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span><span class="n">uri</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span><span class="n">passwd</span> <span class="o">=</span> <span class="n">password</span><span class="p">)</span>
@@ -296,17 +296,17 @@ requests模块  · cdwanze的博文
         <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
         <span class="c1">###install it gloably so urlopen can use it</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">'I found it'</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'I found it'</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
         <span class="k">break</span>
     <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="s1">' need password, the 401 error'</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="s1">' need password, the 401 error'</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 </pre></div>
 <p>这里的getpass内置模块的getpass函数提供了终端输入密码不显示的功能。然后我们看到 <code>build_opener()</code> 这个函数，其可以接受一系列的handler，根据 <code>HTTPBasicAuthHandler</code> 创建了一个handler实例，其通过 <code>add_password</code> 方法来加入用户名和密码属性，其中realm和uri我还不清楚。似乎通过你要认证的网页head可以看到。</p>
 <p>然后调用urllib子模块request的 <code>install_opener</code> 函数，其将全局性的安装这个openr，后面的urlopen函数就会使用这个opener了。如果不这样做，则需要使用opener.open单独打开一个response，这并不推荐。</p>
@@ -328,11 +328,11 @@ requests模块  · cdwanze的博文
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 <h2 id="urlget">通过修改url来GET数据</h2>
 <p>下面开始对接各个搜索引擎。</p>
@@ -355,17 +355,17 @@ requests模块  · cdwanze的博文
 
 <span class="n">url</span> <span class="o">=</span> <span class="n">addGETdata</span><span class="p">(</span><span class="n">search_engine</span><span class="p">,</span> <span class="s1">'python urllib'</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
 <span class="n">pyout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.html'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">,</span><span class="nb">file</span><span class="o">=</span><span class="n">pyout</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="n">pyout</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 <p>这里主要要讲的是addGETdata这个函数，其修改url为目标形式，然后后面都是一样的，这个要根据具体目标搜索引擎网站来了。</p>
 <h2 id="post">通过POST方法来获取数据</h2>
@@ -387,11 +387,11 @@ requests模块  · cdwanze的博文
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
         <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 </pre></div>
 <p>这里使用get函数对应HTTP的GET方法来获取网页的内容，然后注意现在 <span class="underline">不能通过socket全局设置timeout了</span> ，而需要设置一个timeout参数。提取文本内容简单的调用text属性即可，后面是一些错误捕捉，这里就不赘述了。</p>
 <h4 id="params">params参数</h4>
@@ -429,25 +429,25 @@ requests模块  · cdwanze的博文
 <span class="n">pyout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.html'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">search_engine</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
     <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="nb">file</span> <span class="o">=</span> <span class="n">pyout</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="n">pyout</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 
 <span class="n">pyout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 <p>其中search_engin的原始url做了一些修改，使得语法更加的简洁了。</p>
 <h3 id="post_1">post函数</h3>
 <p>和get函数一样如下使用：</p>
-<div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="ss">"http://httpbin.org/put"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">response = requests.put("http://httpbin.org/put")</span>
 </pre></div>
 <h4 id="data">data参数</h4>
 <p>data参数，就是POST方法实际传输过去的数据，可以是字符串，字典值，或者json数据（需要用json模块的dumps函数处理之）。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">payload</span> <span class="o">=</span> <span class="err">{</span><span class="s1">'key1'</span><span class="p">:</span> <span class="s1">'value1'</span><span class="p">,</span> <span class="s1">'key2'</span><span class="p">:</span> <span class="s1">'value2'</span><span class="err">}</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="ss">"http://httpbin.org/post"</span><span class="p">,</span> <span class="k">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; payload = {'key1': 'value1', 'key2': 'value2'}</span>
+<span class="err">&gt;&gt;&gt; r = requests.post("http://httpbin.org/post", data=payload)</span>
 </pre></div>
 <h4 id="headers">headers属性</h4>
 <p>接受一个字典值，用于定制POST方法的HTTP请求头。</p>
@@ -470,12 +470,12 @@ requests模块  · cdwanze的博文
     <span class="sd">'''简单的根据url下载文件函数，filefold为下载文件存放的下一级文件夹名'''</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">filefold</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">FileExistsError</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
         <span class="k">pass</span>
 
     <span class="n">filename</span> <span class="o">=</span> <span class="s1">'./'</span> <span class="o">+</span> <span class="n">filefold</span> <span class="o">+</span><span class="s1">'/'</span> <span class="o">+</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># NOTE the stream=True parameter</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span> <span class="c1"># filter out keep-alive new chunks</span>
@@ -518,11 +518,11 @@ requests模块  · cdwanze的博文
 <p>对于响应体含有content却内容较多的情况，可以通过 <code>Stream=True</code> 来让推迟content下载，而只获取header信息。后面遇到 <code>response.content</code> 才实际下载content。</p>
 <p>然后还有 <code>Response.iter_content</code> 和 <code>Response.iter_lines</code> 方法来控制工作流，或者以 <code>Response.raw</code> 通过底层urllib3来读取响应对象。</p>
 <h3 id="responseiter95content">response.iter_content</h3>
-<div class="highlight"><pre><span></span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decode_unicode</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">iter_content(chunk_size=1, decode_unicode=False)</span>
 </pre></div>
 <p>迭代读取响应体的content内容，设置一次读取多少 <code>chunk_size</code> 。</p>
 <h3 id="responseiter95lines">response.iter_lines</h3>
-<div class="highlight"><pre><span></span><span class="n">iter_lines</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">decode_unicode</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">iter_lines(chunk_size=512, decode_unicode=None)</span>
 </pre></div>
 <p>迭代读取响应体的content内容，一次读一行。行的内容应该小于chunk_size，一般不设置即可。</p>
 <h2 id="_6">身份验证</h2>
@@ -554,69 +554,69 @@ requests模块  · cdwanze的博文
 <h3 id="getpost">GET和POST的区别</h3>
 <p>参考了 <a href="http://blog.csdn.net/gideal_wang/article/details/4316691">这个网页</a> 。前面谈及的修改网页的url来获取资源，实质就是HTTP的GET方法，也就是GET方法的信息就放在url上的，然后web service服务器会分析这些url，从而相应的决定对客户机的回应方式。而POST方法并不修改url，web service服务器接受的url上并没有任何额外的信息，具体POST方法具体会另外传输一个信息包。一般能够通过GET方法和服务器互动的就采用GET方法，但因为url的局限性，可能某些GET方法并不适用，这是就需要服务器支持对应的POST方法来互动了。至于PUT还有DELETE方法就更加少用了，有些服务器甚至根本就不支持这些冷门的方法。</p>
 <h3 id="http_2">HTTP返回错误码含义</h3>
-<div class="highlight"><pre><span></span><span class="mi">100</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Continue</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Request received, please continue</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">101</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Switching Protocols</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Switching to new protocol; obey Upgrade header</span><span class="s1">'</span><span class="ss">)</span>,
+<div class="highlight"><pre><span></span><span class="nt">100</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Continue'</span><span class="o">,</span> <span class="s1">'Request received, please continue'</span><span class="o">),</span>
+    <span class="nt">101</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Switching Protocols'</span><span class="o">,</span>
+          <span class="s1">'Switching to new protocol; obey Upgrade header'</span><span class="o">),</span>
 
-    <span class="mi">200</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">OK</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Request fulfilled, document follows</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">201</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Created</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Document created, URL follows</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">202</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Accepted</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Request accepted, processing continues off-line</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">203</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Non-Authoritative Information</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Request fulfilled from cache</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">204</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">No Content</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Request fulfilled, nothing follows</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">205</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Reset Content</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Clear input form for further input.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">206</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Partial Content</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Partial content follows.</span><span class="s1">'</span><span class="ss">)</span>,
+    <span class="nt">200</span><span class="o">:</span> <span class="o">(</span><span class="s1">'OK'</span><span class="o">,</span> <span class="s1">'Request fulfilled, document follows'</span><span class="o">),</span>
+    <span class="nt">201</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Created'</span><span class="o">,</span> <span class="s1">'Document created, URL follows'</span><span class="o">),</span>
+    <span class="nt">202</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Accepted'</span><span class="o">,</span>
+          <span class="s1">'Request accepted, processing continues off-line'</span><span class="o">),</span>
+    <span class="nt">203</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Non-Authoritative Information'</span><span class="o">,</span> <span class="s1">'Request fulfilled from cache'</span><span class="o">),</span>
+    <span class="nt">204</span><span class="o">:</span> <span class="o">(</span><span class="s1">'No Content'</span><span class="o">,</span> <span class="s1">'Request fulfilled, nothing follows'</span><span class="o">),</span>
+    <span class="nt">205</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Reset Content'</span><span class="o">,</span> <span class="s1">'Clear input form for further input.'</span><span class="o">),</span>
+    <span class="nt">206</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Partial Content'</span><span class="o">,</span> <span class="s1">'Partial content follows.'</span><span class="o">),</span>
 
-    <span class="mi">300</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Multiple Choices</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Object has several resources -- see URI list</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">301</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Moved Permanently</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Object moved permanently -- see URI list</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">302</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Found</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Object moved temporarily -- see URI list</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">303</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">See Other</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Object moved -- see Method and URL list</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">304</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Not Modified</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Document has not changed since given time</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">305</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Use Proxy</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">You must use proxy specified in Location to access this </span><span class="s1">'</span>
-          <span class="s1">'</span><span class="s">resource.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">307</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Temporary Redirect</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Object moved temporarily -- see URI list</span><span class="s1">'</span><span class="ss">)</span>,
+    <span class="nt">300</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Multiple Choices'</span><span class="o">,</span>
+          <span class="s1">'Object has several resources -- see URI list'</span><span class="o">),</span>
+    <span class="nt">301</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Moved Permanently'</span><span class="o">,</span> <span class="s1">'Object moved permanently -- see URI list'</span><span class="o">),</span>
+    <span class="nt">302</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Found'</span><span class="o">,</span> <span class="s1">'Object moved temporarily -- see URI list'</span><span class="o">),</span>
+    <span class="nt">303</span><span class="o">:</span> <span class="o">(</span><span class="s1">'See Other'</span><span class="o">,</span> <span class="s1">'Object moved -- see Method and URL list'</span><span class="o">),</span>
+    <span class="nt">304</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Not Modified'</span><span class="o">,</span>
+          <span class="s1">'Document has not changed since given time'</span><span class="o">),</span>
+    <span class="nt">305</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Use Proxy'</span><span class="o">,</span>
+          <span class="s1">'You must use proxy specified in Location to access this '</span>
+          <span class="s1">'resource.'</span><span class="o">),</span>
+    <span class="nt">307</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Temporary Redirect'</span><span class="o">,</span>
+          <span class="s1">'Object moved temporarily -- see URI list'</span><span class="o">),</span>
 
-    <span class="mi">400</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Bad Request</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Bad request syntax or unsupported method</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">401</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Unauthorized</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">No permission -- see authorization schemes</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">402</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Payment Required</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">No payment -- see charging schemes</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">403</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Forbidden</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Request forbidden -- authorization will not help</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">404</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Not Found</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Nothing matches the given URI</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">405</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Method Not Allowed</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Specified method is invalid for this server.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">406</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Not Acceptable</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">URI not available in preferred format.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">407</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Proxy Authentication Required</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">You must authenticate with </span><span class="s1">'</span>
-          <span class="s1">'</span><span class="s">this proxy before proceeding.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">408</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Request Timeout</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Request timed out; try again later.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">409</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Conflict</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Request conflict.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">410</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Gone</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">URI no longer exists and has been permanently removed.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">411</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Length Required</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Client must specify Content-Length.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">412</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Precondition Failed</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Precondition in headers is false.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">413</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Request Entity Too Large</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Entity is too large.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">414</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Request-URI Too Long</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">URI is too long.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">415</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Unsupported Media Type</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Entity body in unsupported format.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">416</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Requested Range Not Satisfiable</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Cannot satisfy request range.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">417</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Expectation Failed</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Expect condition could not be satisfied.</span><span class="s1">'</span><span class="ss">)</span>,
+    <span class="nt">400</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Bad Request'</span><span class="o">,</span>
+          <span class="s1">'Bad request syntax or unsupported method'</span><span class="o">),</span>
+    <span class="nt">401</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Unauthorized'</span><span class="o">,</span>
+          <span class="s1">'No permission -- see authorization schemes'</span><span class="o">),</span>
+    <span class="nt">402</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Payment Required'</span><span class="o">,</span>
+          <span class="s1">'No payment -- see charging schemes'</span><span class="o">),</span>
+    <span class="nt">403</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Forbidden'</span><span class="o">,</span>
+          <span class="s1">'Request forbidden -- authorization will not help'</span><span class="o">),</span>
+    <span class="nt">404</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Not Found'</span><span class="o">,</span> <span class="s1">'Nothing matches the given URI'</span><span class="o">),</span>
+    <span class="nt">405</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Method Not Allowed'</span><span class="o">,</span>
+          <span class="s1">'Specified method is invalid for this server.'</span><span class="o">),</span>
+    <span class="nt">406</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Not Acceptable'</span><span class="o">,</span> <span class="s1">'URI not available in preferred format.'</span><span class="o">),</span>
+    <span class="nt">407</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Proxy Authentication Required'</span><span class="o">,</span> <span class="s1">'You must authenticate with '</span>
+          <span class="s1">'this proxy before proceeding.'</span><span class="o">),</span>
+    <span class="nt">408</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Request Timeout'</span><span class="o">,</span> <span class="s1">'Request timed out; try again later.'</span><span class="o">),</span>
+    <span class="nt">409</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Conflict'</span><span class="o">,</span> <span class="s1">'Request conflict.'</span><span class="o">),</span>
+    <span class="nt">410</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Gone'</span><span class="o">,</span>
+          <span class="s1">'URI no longer exists and has been permanently removed.'</span><span class="o">),</span>
+    <span class="nt">411</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Length Required'</span><span class="o">,</span> <span class="s1">'Client must specify Content-Length.'</span><span class="o">),</span>
+    <span class="nt">412</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Precondition Failed'</span><span class="o">,</span> <span class="s1">'Precondition in headers is false.'</span><span class="o">),</span>
+    <span class="nt">413</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Request Entity Too Large'</span><span class="o">,</span> <span class="s1">'Entity is too large.'</span><span class="o">),</span>
+    <span class="nt">414</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Request-URI Too Long'</span><span class="o">,</span> <span class="s1">'URI is too long.'</span><span class="o">),</span>
+    <span class="nt">415</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Unsupported Media Type'</span><span class="o">,</span> <span class="s1">'Entity body in unsupported format.'</span><span class="o">),</span>
+    <span class="nt">416</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Requested Range Not Satisfiable'</span><span class="o">,</span>
+          <span class="s1">'Cannot satisfy request range.'</span><span class="o">),</span>
+    <span class="nt">417</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Expectation Failed'</span><span class="o">,</span>
+          <span class="s1">'Expect condition could not be satisfied.'</span><span class="o">),</span>
 
-    <span class="mi">500</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Internal Server Error</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Server got itself in trouble</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">501</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Not Implemented</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">Server does not support this operation</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">502</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Bad Gateway</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Invalid responses from another server/proxy.</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">503</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Service Unavailable</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">The server cannot process the request due to a high load</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">504</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">Gateway Timeout</span><span class="s1">'</span>,
-          <span class="s1">'</span><span class="s">The gateway server did not receive a timely response</span><span class="s1">'</span><span class="ss">)</span>,
-    <span class="mi">505</span>: <span class="ss">(</span><span class="s1">'</span><span class="s">HTTP Version Not Supported</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">Cannot fulfill request.</span><span class="s1">'</span><span class="ss">)</span>,
+    <span class="nt">500</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Internal Server Error'</span><span class="o">,</span> <span class="s1">'Server got itself in trouble'</span><span class="o">),</span>
+    <span class="nt">501</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Not Implemented'</span><span class="o">,</span>
+          <span class="s1">'Server does not support this operation'</span><span class="o">),</span>
+    <span class="nt">502</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Bad Gateway'</span><span class="o">,</span> <span class="s1">'Invalid responses from another server/proxy.'</span><span class="o">),</span>
+    <span class="nt">503</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Service Unavailable'</span><span class="o">,</span>
+          <span class="s1">'The server cannot process the request due to a high load'</span><span class="o">),</span>
+    <span class="nt">504</span><span class="o">:</span> <span class="o">(</span><span class="s1">'Gateway Timeout'</span><span class="o">,</span>
+          <span class="s1">'The gateway server did not receive a timely response'</span><span class="o">),</span>
+    <span class="nt">505</span><span class="o">:</span> <span class="o">(</span><span class="s1">'HTTP Version Not Supported'</span><span class="o">,</span> <span class="s1">'Cannot fulfill request.'</span><span class="o">),</span>
 </pre></div>
 <h2 id="_9">参考资料</h2>
 <ol>

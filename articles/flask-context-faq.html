@@ -162,9 +162,9 @@ flask上下文释疑  · cdwanze的博文
     <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">c</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s1">'Got connection from in </span><span class="si">%s</span><span class="s1">'</span> <span class="o">%</span> <span class="n">message</span>
+        <span class="nb">print</span> <span class="s1">'Got connection from in </span><span class="si">%s</span><span class="s1">'</span> <span class="o">%</span> <span class="n">message</span>
         <span class="n">c</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">'Thank you for your connecting to </span><span class="si">%s</span><span class="se">\n</span><span class="s1">'</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -175,7 +175,7 @@ flask上下文释疑  · cdwanze的博文
 <p>多进程的情况我们大体是熟悉的，基本上都是独立运行的内部变量类之间完全不相同的程序了。flask wsgi源码中有如下代码：</p>
 <div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">wsgi_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_context</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">ctx</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
@@ -189,7 +189,7 @@ flask上下文释疑  · cdwanze的博文
             <span class="k">return</span> <span class="n">response</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_ignore_error</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
-                <span class="n">error</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">ctx</span><span class="o">.</span><span class="n">auto_pop</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 </pre></div>
 <p>其中environ环境中大概有本进程的 app类，然后ctx就是所谓的请求环境，简单了解下这个对后面的讨论有帮助。</p>
@@ -222,7 +222,7 @@ flask上下文释疑  · cdwanze的博文
 <p>在取的时候采用了如下代码使用了一种惰性的动态代理机制：</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_lookup_req_object</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="n">top</span> <span class="o">=</span> <span class="n">_request_ctx_stack</span><span class="o">.</span><span class="n">top</span>
-    <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">_request_ctx_err_msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
@@ -233,7 +233,7 @@ flask上下文释疑  · cdwanze的博文
 </pre></div>
 <p>然后request 和session的生存期就是本请求期，这是没有问题的。不过对于g这个变量还需要讨论下。第一个这个g最小粒度在线程这是没有问题的，各个线程之间g彼此完全不相干。而在线程内部接受的不同请求，由于他们都是引用的默认的那个相同的应用上下文环境，那么这个g是可以为多个请求公用的。但正如上面讨论的，不仅不同线程之间g不通用，而且就算某个线程内部，虽然可以应付多个请求，但对于多个应用情况来说g是和应用上下文绑定的，这些请求彼此并不公用g。</p>
 <p>flask推荐请求之间要记住某个值，推荐使用数据库或者session这个变量，session虽然是挂在请求上下文中的，但实际在请求上下文创建的时候其是直接接受session参数的：</p>
-<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">__init__</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="k">session</span><span class="o">=</span><span class="k">None</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="err">def __init__(self, app, environ, request=None, session=None):</span>
 </pre></div>
 <p>这个session具体怎么传递的还不是清楚，应该在werkzeug那边。</p>
 <p>flask推荐g的一种使用方式，是比如管理数据库的连接等，虽然g可能会为空，但只要如下，确保引用的时候，检查一下即可：</p>
@@ -245,11 +245,11 @@ flask上下文释疑  · cdwanze的博文
 
     <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">db</span>
 
-<span class="nd">@app.teardown_appcontext</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">teardown_appcontext</span>
 <span class="k">def</span> <span class="nf">teardown_db</span><span class="p">():</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 <h3 id="_2">问题五 多应用的情况是怎么回事</h3>
@@ -264,8 +264,8 @@ flask上下文释疑  · cdwanze的博文
 </pre></div>
 <p>也就是单一线程接受不同的请求，这个请求是哪个app负责的，这个请求是哪个app负责的，依靠应用上下文环境栈是支持这种情况的。</p>
 <p>最后一般教程都会提到应用上下文环境可用于单元测试：</p>
-<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">app</span><span class="p">.</span><span class="n">app_context</span><span class="p">():</span>
-    <span class="n">pass</span>
+<div class="highlight"><pre><span></span><span class="err">with app.app_context():</span>
+<span class="err">    pass</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hello</span> <span class="kn">import</span> <span class="n">app</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">current_app</span>
@@ -276,8 +276,8 @@ flask上下文释疑  · cdwanze的博文
 <h3 id="session">问题六 session到底是个什么东西</h3>
 <p>前面提到flask在创建请求上下文的时候session这个参数是不知道从哪里直接传进来的，那个flask的这个session到底是个什么东西？</p>
 <p>首先说下背景知识：我们知道服务器那么响应内容可以设置这样的响应头： <code>Set-Cookie</code> ，对应flask里面的：</p>
-<div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span><span class="s1">'test'</span><span class="p">)</span>
-<span class="n">r</span><span class="p">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">r = Response('test')</span>
+<span class="err">r.set_cookie('a','1')</span>
 </pre></div>
 <p>客服端client或者说浏览器在接收到这样的响应之后，下次对目标服务器的请求会在请求头上加上对应的Cookie。</p>
 <p>如下图所示：</p>

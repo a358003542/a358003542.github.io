@@ -155,7 +155,7 @@ websockets模块  · cdwanze的博文
 <p>简单来说就是asyncio的事件循环里面你将添加一个或者多个任务，在目标任务中，完成websoket的相关工作。</p>
 <h2 id="_2">常驻监听模式</h2>
 <p>请读者看下面代码，下面建立了一种常驻监听模式，由于可能存在各种原因websocket服务器那边可能会强制把websocket连接关闭，所以你需要捕捉这个异常，然后试着重新建立一个全局websocket连接。</p>
-<div class="highlight"><pre><span></span>    <span class="n">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        主面板初始化新建一个全局的websocket</span>
 <span class="sd">        然后开始websocket监听</span>
@@ -163,13 +163,13 @@ websockets模块  · cdwanze的博文
 <span class="sd">        """</span>
         <span class="n">ws_url</span> <span class="o">=</span> <span class="n">create_ws_url</span><span class="p">()</span>
 
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">ws_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+                <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">ws_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
                     <span class="n">g_var</span><span class="o">.</span><span class="n">websocket</span> <span class="o">=</span> <span class="n">websocket</span>
 
-                    <span class="n">ws_message</span> <span class="o">=</span> <span class="n">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">'websoket got message {ws_message}'</span><span class="p">)</span>
+                    <span class="n">ws_message</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">'websoket got message </span><span class="si">{ws_message}</span><span class="s1">'</span><span class="p">)</span>
 
                     <span class="n">res</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">ws_message</span><span class="p">)</span>
                     <span class="c1"># 先将听到的信息放入Queue中，后续统一处理</span>
@@ -185,14 +185,14 @@ websockets模块  · cdwanze的博文
 <span class="n">eventloop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
 <span class="n">eventloop</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">hello</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
-<span class="n">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
     <span class="n">websocket</span> <span class="o">=</span> <span class="n">g_var</span><span class="o">.</span><span class="n">websocket</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="n">f</span><span class="s1">'wanze{count}'</span><span class="p">}</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'wanze</span><span class="si">{count}</span><span class="s1">'</span><span class="p">}</span>
 
     <span class="n">name_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">name_obj</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"&gt; {name}"</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">name_obj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt; </span><span class="si">{name}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
             
             

@@ -225,46 +225,46 @@ postgresql数据库  · cdwanze的博文
 </pre></div>
 <h3 id="_4">新建用户</h3>
 <p>新建一个用户:</p>
-<div class="highlight"><pre><span></span><span class="k">create</span> <span class="k">role</span> <span class="n">the_name</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">create role the_name;</span>
 </pre></div>
 <p>但最起码要有登录login权限吧:</p>
-<div class="highlight"><pre><span></span><span class="k">create</span> <span class="k">role</span> <span class="n">the_name</span> <span class="n">login</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">create role the_name login;</span>
 </pre></div>
 <p>在使用postgresql时，如果某个用户不存在，那么PostgreSQL将会报错: </p>
-<div class="highlight"><pre><span></span><span class="nv">createdb</span>: <span class="nv">could</span> <span class="nv">not</span> <span class="k">connect</span> <span class="nv">to</span> <span class="nv">database</span> <span class="nv">template1</span>: <span class="nv">FATAL</span>:  <span class="nv">role</span> <span class="s2">"</span><span class="s">wanze</span><span class="s2">"</span> <span class="nv">does</span> <span class="nv">not</span> <span class="nv">exist</span>
+<div class="highlight"><pre><span></span><span class="n">createdb</span><span class="o">:</span> <span class="n">could</span> <span class="n">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="n">database</span> <span class="n">template1</span><span class="o">:</span> <span class="n">FATAL</span><span class="o">:</span>  <span class="n">role</span> <span class="s2">"wanze"</span> <span class="n">does</span> <span class="n">not</span> <span class="n">exist</span>
 </pre></div>
 <h3 id="_5">删除用户</h3>
-<div class="highlight"><pre><span></span><span class="k">drop</span> <span class="k">role</span> <span class="n">the_name</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">drop role the_name;</span>
 </pre></div>
 <p>或者该用户名不存在也不会报错的写法:</p>
-<div class="highlight"><pre><span></span><span class="nv">drop</span> <span class="nv">role</span> <span class="k">if</span> <span class="nv">exists</span> <span class="nv">the_name</span><span class="c1">;</span>
+<div class="highlight"><pre><span></span><span class="err">drop role if exists the_name;</span>
 </pre></div>
 <h3 id="_6">改变用户的权限</h3>
 <p>如下所示就改变一个用户的权限了。</p>
-<div class="highlight"><pre><span></span><span class="k">alter</span> <span class="k">role</span> <span class="n">the_name</span> <span class="k">createdb</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">alter role the_name createdb;</span>
 </pre></div>
 <p>参照手册，后面的关键词有:</p>
-<div class="highlight"><pre><span></span><span class="n">SUPERUSER</span> <span class="o">|</span> <span class="n">NOSUPERUSER</span>
-<span class="k">CREATEDB</span> <span class="o">|</span> <span class="k">NOCREATEDB</span>
-<span class="n">CREATEROLE</span> <span class="o">|</span> <span class="n">NOCREATEROLE</span>
-<span class="k">CREATEUSER</span> <span class="o">|</span> <span class="k">NOCREATEUSER</span>
-<span class="n">INHERIT</span> <span class="o">|</span> <span class="n">NOINHERIT</span>
-<span class="n">LOGIN</span> <span class="o">|</span> <span class="n">NOLOGIN</span>
-<span class="n">REPLICATION</span> <span class="o">|</span> <span class="n">NOREPLICATION</span>
+<div class="highlight"><pre><span></span><span class="err">SUPERUSER | NOSUPERUSER</span>
+<span class="err">CREATEDB | NOCREATEDB</span>
+<span class="err">CREATEROLE | NOCREATEROLE</span>
+<span class="err">CREATEUSER | NOCREATEUSER</span>
+<span class="err">INHERIT | NOINHERIT</span>
+<span class="err">LOGIN | NOLOGIN</span>
+<span class="err">REPLICATION | NOREPLICATION</span>
 </pre></div>
 <h3 id="_7">改变用户密码</h3>
 <p>在新建用户的时候，我们可以如下:</p>
-<div class="highlight"><pre><span></span><span class="k">create</span> <span class="k">role</span> <span class="n">the_name</span> <span class="n">password</span> <span class="ss">"the_password"</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">create role the_name password "the_password";</span>
 </pre></div>
 <p>后面也可以通过 <code>alter role</code> 来:</p>
-<div class="highlight"><pre><span></span><span class="k">alter</span> <span class="k">role</span> <span class="n">the_name</span> <span class="n">password</span> <span class="ss">"the_password"</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">alter role the_name password "the_password";</span>
 </pre></div>
 <h3 id="_8">新建一个群组</h3>
-<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">royalty</span> <span class="n">INHERIT</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">CREATE ROLE royalty INHERIT;</span>
 </pre></div>
 <p>给群组用户增加登录用户</p>
-<div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="n">royalty</span> <span class="k">TO</span> <span class="n">leo</span><span class="p">;</span>
-<span class="k">GRANT</span> <span class="n">royalty</span> <span class="k">TO</span> <span class="n">regina</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">GRANT royalty TO leo;</span>
+<span class="err">GRANT royalty TO regina;</span>
 </pre></div>
 <h3 id="pg_hbaconf">pg_hba.conf</h3>
 <p>很多连接问题就是因为这个文件没有配置好，下面详细研究这个文件之。</p>
@@ -313,11 +313,11 @@ postgresql数据库  · cdwanze的博文
 </ul>
 <h2 id="_9">数据库操作基础</h2>
 <h3 id="_10">创建数据库</h3>
-<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">mydb</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">CREATE DATABASE mydb;</span>
 </pre></div>
 <p>有 CREATEDB 权限的用户可以新建数据库。</p>
 <p>然后创建一个数据库，并指定这个数据库的owner。</p>
-<div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">mydb</span> <span class="k">WITH</span> <span class="k">owner</span> <span class="o">=</span> <span class="n">mydb_admin</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">CREATE DATABASE mydb WITH owner = mydb_admin;</span>
 </pre></div>
 <p>然后以mydb_admin登录开始进行数据库的其他操作。</p>
 <h3 id="_11">备份和还原</h3>
@@ -325,13 +325,13 @@ postgresql数据库  · cdwanze的博文
 用pg_restore 来还原，</p>
 <h3 id="_12">改变某个数据库的所有者</h3>
 <p>首先你需要以postgres的身份连接postgres数据库，因为你要进行更改某个数据库的所有者，就必须是目前该数据库的所有者。</p>
-<div class="highlight"><pre><span></span><span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu</span>:<span class="o">~</span>$ <span class="nv">sudo</span> <span class="o">-</span><span class="nv">u</span> <span class="nv">postgres</span> <span class="nv">psql</span> <span class="nv">postgres</span>
-<span class="nv">psql</span> <span class="ss">(</span><span class="mi">9</span>.<span class="mi">3</span>.<span class="mi">8</span><span class="ss">)</span>
-<span class="nv">Type</span> <span class="s2">"</span><span class="s">help</span><span class="s2">"</span> <span class="k">for</span> <span class="nv">help</span>.
+<div class="highlight"><pre><span></span><span class="n">wanze</span><span class="nv">@wanze</span><span class="o">-</span><span class="nl">ubuntu</span><span class="p">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">sudo</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="n">psql</span><span class="w"> </span><span class="n">postgres</span><span class="w"></span>
+<span class="n">psql</span><span class="w"> </span><span class="p">(</span><span class="mf">9.3.8</span><span class="p">)</span><span class="w"></span>
+<span class="n">Type</span><span class="w"> </span><span class="ss">"help"</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="p">.</span><span class="w"></span>
 
-<span class="nv">postgres</span><span class="o">=</span># <span class="nv">ALTER</span> <span class="nv">DATABASE</span> <span class="nv">mydb</span> <span class="nv">OWNER</span> <span class="nv">TO</span> <span class="nv">learner</span><span class="c1">;</span>
-<span class="nv">ALTER</span> <span class="nv">DATABASE</span>
-<span class="nv">postgres</span><span class="o">=</span># \<span class="nv">q</span>
+<span class="n">postgres</span><span class="o">=</span><span class="err">#</span><span class="w"> </span><span class="k">ALTER</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">mydb</span><span class="w"> </span><span class="n">OWNER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">learner</span><span class="p">;</span><span class="w"></span>
+<span class="k">ALTER</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"></span>
+<span class="n">postgres</span><span class="o">=</span><span class="err">#</span><span class="w"> </span><span class="err">\</span><span class="n">q</span><span class="w"></span>
 </pre></div>
 <p>这里ALTER DATABASE语句里面 mydb 是具体你要更改的数据库名字，然后后面的learner是具体更改为的所有者名字。</p>
 <p>类似上面谈及的，还有 <strong>dropdb</strong> 用于删除数据库， <strong>dropuser</strong> 用于删除用户。</p>
@@ -359,11 +359,11 @@ char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
     <span class="p">[</span> <span class="n">WHERE</span> <span class="n">condition</span> <span class="o">|</span> <span class="n">WHERE</span> <span class="n">CURRENT</span> <span class="n">OF</span> <span class="n">cursor_name</span> <span class="p">]</span>
     <span class="p">[</span> <span class="n">RETURNING</span> <span class="o">*</span> <span class="o">|</span> <span class="n">output_expression</span> <span class="p">[</span> <span class="p">[</span> <span class="n">AS</span> <span class="p">]</span> <span class="n">output_name</span> <span class="p">]</span> <span class="p">[,</span> <span class="p">...]</span> <span class="p">]</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="nv">using_list</span>
-<span class="nv">A</span> <span class="nv">list</span> <span class="nv">of</span> <span class="nv">table</span> <span class="nv">expressions</span>, <span class="nv">allowing</span> <span class="nv">columns</span> <span class="nv">from</span> <span class="nv">other</span> <span class="nv">tables</span> <span class="nv">to</span> <span class="nv">appear</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nv">WHERE</span> <span class="nv">condition</span>. <span class="nv">This</span> <span class="nv">is</span> <span class="nv">similar</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">list</span> <span class="nv">of</span> <span class="nv">tables</span> <span class="nv">that</span> <span class="nv">can</span> <span class="nv">be</span> <span class="nv">specified</span> <span class="nv">in</span> <span class="nv">the</span> <span class="nv">FROM</span> <span class="nv">Clause</span> <span class="nv">of</span> <span class="nv">a</span> <span class="nv">SELECT</span> <span class="nv">statement</span><span class="c1">; for example, an alias for the table name can be specified. Do not repeat the target table in the using_list, unless you wish to set up a self-join.</span>
+<div class="highlight"><pre><span></span><span class="err">using_list</span>
+<span class="err">A list of table expressions, allowing columns from other tables to appear in the WHERE condition. This is similar to the list of tables that can be specified in the FROM Clause of a SELECT statement; for example, an alias for the table name can be specified. Do not repeat the target table in the using_list, unless you wish to set up a self-join.</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">films</span> <span class="k">USING</span> <span class="n">producers</span>
-  <span class="k">WHERE</span> <span class="n">producer_id</span> <span class="o">=</span> <span class="n">producers</span><span class="p">.</span><span class="n">id</span> <span class="k">AND</span> <span class="n">producers</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'foo'</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">DELETE FROM films USING producers</span>
+<span class="err">  WHERE producer_id = producers.id AND producers.name = 'foo';</span>
 </pre></div>
 <p>这个using和select里面的using有点区别，这里的using更像是引用了某个表，让其可以在后面的where语句中使用。</p>
 <h3 id="postgresqltimestamptz">理解postgresql的timestamptz字段类型</h3>
@@ -385,10 +385,10 @@ char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
 </pre></div>
 <h3 id="postgresql_1">重启postgresql服务</h3>
 <p>在linux下可以运行如下命令行来达到目的:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="k">restart</span>
+<div class="highlight"><pre><span></span><span class="err">sudo service postgresql restart</span>
 </pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="n">reload</span>
+<div class="highlight"><pre><span></span><span class="err">sudo service postgresql reload</span>
 </pre></div>
 <h2 id="_16">参考资料</h2>
 <ol>

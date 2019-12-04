@@ -185,12 +185,12 @@
 </pre></div>
 <p>这三个函数都接受一个可迭代对象，然后进行相关操作，如果是空数据，那么将raise <code>statistics.StatisticsError</code> 。</p>
 <p>值得注意的是mode还可以操作字符串：</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="k">mode</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'c'</span><span class="p">,</span><span class="s1">'d'</span><span class="p">])</span>
-<span class="s1">'a'</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; mode(['a','b','a','c','d'])</span>
+<span class="err">'a'</span>
 </pre></div>
 <p>然后mode函数并不能处理几个数都是频率最高的情况，比如运行下面命令，将raise <code>statistics.StatisticsError</code> 。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">mode</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; lst = [1,1,2,3,3]</span>
+<span class="err">&gt;&gt;&gt; mode(lst)</span>
 </pre></div>
 <p>我们可以利用collections模块的Counter类的most_common方法来获得更健壮的mode函数。</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
@@ -203,11 +203,11 @@
     <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="n">most</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">first</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
             <span class="n">most</span> <span class="o">=</span> <span class="n">v</span>
-            <span class="n">first</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">yield</span> <span class="n">k</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">most</span> <span class="o">==</span> <span class="n">v</span><span class="p">:</span>
@@ -220,17 +220,17 @@
 <li>首先我们需要把python的可迭代对象（Iterable）变成numpy的ndarray对象，然后如果已经是了，就pass掉。</li>
 <li>然后就是利用numpy和scipy的函数支持了。</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
-<span class="k">def</span> <span class="nf">to_ndarray</span><span class="p">(</span><span class="n">pyobj</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">to_ndarray</span><span class="p">(</span><span class="n">pyobj</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pyobj</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">'it is not a iterable object'</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pyobj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">pyobj</span>
 
-    <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pyobj</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pyobj</span><span class="p">)</span>
@@ -240,7 +240,7 @@
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
 </pre></div>
@@ -274,11 +274,11 @@ $$</div>
 <p>
 你可能已经注意到了，上面的是 (n-1) 而不是 (n) ，这其中有些统计学的考虑，什么无偏估计，也就是用样本来评估总体的方差的时候，总会估计值偏小，然后再加上一个额外的数据量来让估计值更准确些，大体就是这样，至于具体为何是 <code>n-1</code> ，那就是统计学里面的高级内容了，总之就是为了更好的估计（从样本估计总体）。</p>
 <p>python中的样本方差是 <code>variance</code> 函数，样本标准差是 <code>stdev</code> 函数:</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">variance</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="mi">8</span><span class="p">.</span><span class="mi">333333333333334</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">stdev</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="mi">2</span><span class="p">.</span><span class="mi">886751345948129</span>
-<span class="o">&gt;&gt;&gt;</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; variance([0,0,5,5])</span>
+<span class="err">8.333333333333334</span>
+<span class="err">&gt;&gt;&gt; stdev([0,0,5,5])</span>
+<span class="err">2.886751345948129</span>
+<span class="err">&gt;&gt;&gt;</span>
 </pre></div>
 <h3 id="_4">统计意义</h3>
 <p>方差是来描述数据集的离散程度的，标准差就是方差的平方根，当然同样可以用来描述数据集的离散程度。标准差和实际数据会更一致，比如说统计一班的身高的标准差是 10cm ，这样可以给人一个直观的感受。然后在正态分布中有 均值 $ \pm $  三个标准差，那么样本中大约 99点几的数据都包含在内了。  </p>
@@ -310,10 +310,10 @@ $$</div>
 <h2 id="_5">中位数和分位数</h2>
 <p>中位数前面谈过了，就是最中间的那个数。同时还有一种说法是数据集里有 50% 的数比它小，有 百分之50的数比它大。于是分位数的概念由此来了，比如 25% 分位数（quantile）的意思就是在数据集里有 25% 的数比它小。所以如果我们联想到统计学的分布图的话，进而可以把 25%的分位数看作以这个数画一条线，左边的面积是总面积的 25%。</p>
 <h3 id="python_2">python相关</h3>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">seq</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">seq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">seq</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">25</span><span class="p">)</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">seq</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">seq</span><span class="p">)</span>

@@ -145,16 +145,16 @@ mindmaptree  · cdwanze的博文
 <p>如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？</p>
 <p><img alt="img" src="https://docs.cdwanze.work/images/arithmetic/mindmaptree.png"/></p>
 <p>然后其对应的csv格式如下：</p>
-<div class="highlight"><pre><span></span><span class="err">奴隶社会</span><span class="p">,</span><span class="err">非洲</span><span class="p">,</span><span class="err">古埃及文明</span><span class="p">,</span><span class="err">金字塔</span>
-<span class="p">,</span><span class="err">亚洲</span><span class="p">,</span><span class="err">两河流域文明</span><span class="p">,</span><span class="err">汉谟拉比法典</span>
-<span class="p">,,</span><span class="err">古印度</span><span class="p">,</span><span class="err">种姓制度</span>
-<span class="p">,,,</span><span class="err">佛教的创立</span>
-<span class="p">,</span><span class="err">欧洲</span><span class="p">,</span><span class="err">希腊</span><span class="p">,</span><span class="err">希腊城邦</span>
-<span class="p">,,,</span><span class="err">雅典民主</span>
-<span class="p">,,</span><span class="err">罗马</span><span class="p">,</span><span class="err">城邦</span>
-<span class="p">,,,</span><span class="err">帝国的征服与扩展</span>
-<span class="p">,,</span><span class="err">希腊罗马古典文化</span><span class="p">,</span><span class="err">建筑艺术</span>
-<span class="p">,,,</span><span class="err">公历</span>
+<div class="highlight"><pre><span></span><span class="err">奴隶社会,非洲,古埃及文明,金字塔</span>
+<span class="err">,亚洲,两河流域文明,汉谟拉比法典</span>
+<span class="err">,,古印度,种姓制度</span>
+<span class="err">,,,佛教的创立</span>
+<span class="err">,欧洲,希腊,希腊城邦</span>
+<span class="err">,,,雅典民主</span>
+<span class="err">,,罗马,城邦</span>
+<span class="err">,,,帝国的征服与扩展</span>
+<span class="err">,,希腊罗马古典文化,建筑艺术</span>
+<span class="err">,,,公历</span>
 </pre></div>
 <p>这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。</p>
 <h2 id="_1">基本类的设计</h2>
@@ -164,7 +164,7 @@ mindmaptree  · cdwanze的博文
 
 
 <span class="k">class</span> <span class="nc">MindMapTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
@@ -175,8 +175,8 @@ mindmaptree  · cdwanze的博文
 <span class="sd">        """</span>
         <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'intorspection add node:{0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'intorspection add node:</span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
             <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">:</span>
@@ -185,15 +185,15 @@ mindmaptree  · cdwanze的博文
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt; has children: {1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:</span><span class="si">{0}</span><span class="s1">&gt; has children: </span><span class="si">{1}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:</span><span class="si">{0}</span><span class="s1">&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt; has children: {1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:</span><span class="si">{0}</span><span class="s1">&gt; has children: </span><span class="si">{1}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:{0}&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">'&lt;MindMapTree:</span><span class="si">{0}</span><span class="s1">&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child_data</span><span class="p">):</span>
         <span class="n">child</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">(</span><span class="n">child_data</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
@@ -218,7 +218,7 @@ mindmaptree  · cdwanze的博文
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">child</span>
 
@@ -227,9 +227,9 @@ mindmaptree  · cdwanze的博文
 
     <span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
@@ -246,21 +246,21 @@ mindmaptree  · cdwanze的博文
     <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"两河流域文明"</span><span class="p">,</span> <span class="s2">"汉谟拉比法典"</span><span class="p">)</span>
     <span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">"亚洲"</span><span class="p">,</span> <span class="s2">"古印度"</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">'######################'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'######################'</span><span class="p">)</span>
     <span class="n">stack</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">introspection</span><span class="p">()</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
 
     <span class="n">yazhou</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"亚洲"</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">introspection</span><span class="p">())</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">introspection</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">yazhou</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">get_path</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">get_path</span><span class="p">())</span>
 </pre></div>
 <h2 id="csv">csv的读写</h2>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">csv</span>
@@ -270,8 +270,8 @@ mindmaptree  · cdwanze的博文
 <span class="k">class</span> <span class="nc">MindMapCSV</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">Dialect</span><span class="p">):</span>
     <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">','</span>  <span class="c1"># 分隔符</span>
     <span class="n">quotechar</span> <span class="o">=</span> <span class="s1">'"'</span>  <span class="c1"># quote符号</span>
-    <span class="n">doublequote</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 双引号在字符中的情况</span>
-    <span class="n">skipinitialspace</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 分隔符后空白忽略</span>
+    <span class="n">doublequote</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># 双引号在字符中的情况</span>
+    <span class="n">skipinitialspace</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># 分隔符后空白忽略</span>
     <span class="n">lineterminator</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span>  <span class="c1"># 换行符</span>
     <span class="n">quoting</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span>  <span class="c1"># 最小quote</span>
 
@@ -290,16 +290,16 @@ mindmaptree  · cdwanze的博文
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">MindMapTree</span><span class="p">()</span>
 
         <span class="n">last_stack</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">first</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 根元素，目前还只处理一个根元素的情况</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># 根元素，目前还只处理一个根元素的情况</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'got original line data: {0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'got original line data: </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 
             <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">item</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
                         <span class="n">last_stack</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">set_nodedata</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                        <span class="n">first</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">last</span> <span class="o">=</span> <span class="n">last_stack</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
                         <span class="n">last_stack</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
@@ -307,7 +307,7 @@ mindmaptree  · cdwanze的博文
                 <span class="k">else</span><span class="p">:</span>  <span class="c1"># ""</span>
                     <span class="k">continue</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'init data: {0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">introspection</span><span class="p">()))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'init data: </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">introspection</span><span class="p">()))</span>
 
     <span class="k">def</span> <span class="nf">getdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
@@ -338,7 +338,7 @@ mindmaptree  · cdwanze的博文
 
         <span class="n">res</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
         <span class="kn">import</span> <span class="nn">json</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
 
@@ -347,22 +347,22 @@ mindmaptree  · cdwanze的博文
         <span class="n">target</span> <span class="o">=</span> <span class="n">mindmaptree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">return</span> <span class="s1">'.'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">get_path</span><span class="p">())</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span><span class="s1">'找不到关键字：{0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span><span class="s1">'找不到关键字：</span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">read_csv</span><span class="p">(</span><span class="s1">'history.csv'</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
     <span class="n">json_data</span> <span class="o">=</span> <span class="n">csv2json</span><span class="p">(</span><span class="s1">'history.csv'</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>
 
     <span class="n">find_res</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"汉谟拉比法典"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">find_res</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">find_res</span><span class="p">)</span>
 
     <span class="n">find_res</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"美洲"</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">find_res</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">find_res</span><span class="p">)</span>
 </pre></div>
             
             

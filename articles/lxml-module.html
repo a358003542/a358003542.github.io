@@ -163,7 +163,7 @@ lxml模块  · cdwanze的博文
 <span class="n">child_1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span>
 <span class="n">child_1</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">'this is a text'</span>
 <span class="n">child_2</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">'child_2'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 <p>实际上xml几乎是可以表达任何结构信息的，从简单的html到复杂的语法树。而基于xpath我们可以实现对于非常复杂的结构信息的精准信息搜索定位等操作。</p>
 <p>关于xml谁是element谁是属性并没有特别的标准了，很可能实际上完全是两个相同的结构信息会有不同的xml结构表达，这方面各个具体实现领域有不同的考量，但在实践上还是有很多参考指导建议的，这个感兴趣的可以看下<a href="https://www.ibm.com/developerworks/library/x-eleatt/">这个网页</a> 。</p>
@@ -173,13 +173,13 @@ lxml模块  · cdwanze的博文
 <h2 id="xpath">xpath简明教程</h2>
 <p>下面主要通过各个例子简要介绍xpath语法之，参考了 <a href="http://www.ruanyifeng.com/blog/2009/07/xpath_path_expressions.html">阮一峰的这篇文章</a> 和菜鸟教程的xpath教程。</p>
 <p>基本东西简单了解下即可，然后多看例子吧。</p>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">what</span>   <span class="err">基本路径表达，下个节点</span>
-<span class="o">//</span><span class="n">what</span>  <span class="err">基本路径表达，任意位置的下个节点</span>
+<div class="highlight"><pre><span></span><span class="err">/what   基本路径表达，下个节点</span>
+<span class="err">//what  基本路径表达，任意位置的下个节点</span>
 </pre></div>
 <p>这里 <code>/</code> 表示在下个节点中匹配， <code>//</code> 下个或所有子节点匹配。 </p>
-<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='what'</span><span class="o">]</span><span class="w">   </span><span class="n">根据id定位</span><span class="w"></span>
-<span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='what'</span><span class="o">]/</span><span class="n">a</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="n">根据id定位后找下面的第一个a标签</span><span class="w"></span>
-<span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='what'</span><span class="o">]/</span><span class="n">a</span><span class="o">[</span><span class="n">*</span><span class="o">]</span><span class="w"> </span><span class="n">根据id定位后找下面的所有a标签</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">//div[@id='what']   根据id定位</span>
+<span class="err">//div[@id='what']/a[1] 根据id定位后找下面的第一个a标签</span>
+<span class="err">//div[@id='what']/a[*] 根据id定位后找下面的所有a标签</span>
 </pre></div>
 <p>这里 <code>*</code> 表示所有的意思。</p>
 <div class="highlight"><pre><span></span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@name</span><span class="o">]</span><span class="w">   </span><span class="n">找具有name属性的div标签</span><span class="w"></span>
@@ -191,31 +191,31 @@ lxml模块  · cdwanze的博文
 
 <span class="cm">//*[@id="list"]//dd[*]/a[@href and @title] 找id=list的标签下面的所有dd标签下面的a标签，a标签必须有href和title属性。</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">title</span><span class="p">[</span><span class="o">@*</span><span class="p">]</span>  <span class="err">选择</span><span class="n">title</span><span class="err">，随意属性，但</span><span class="n">title标签必须有属性</span>
+<div class="highlight"><pre><span></span><span class="err">//title[@*]  选择title，随意属性，但title标签必须有属性</span>
 </pre></div>
 <h3 id="title">选择title</h3>
-<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">title</span>
+<div class="highlight"><pre><span></span><span class="err">//title</span>
 </pre></div>
 <p>这是选择到了文档中任意位置的 title 标签， <code>/</code> 开头的话会选择根节点，这不太好用。</p>
 <h3 id="title_1">选择title包含的文本</h3>
-<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">title</span><span class="o">/</span><span class="nb">text</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">//title/text()</span>
 </pre></div>
 <h3 id="">按照id选择</h3>
-<div class="highlight"><pre><span></span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@id='post-date'</span><span class="o">]/</span><span class="nc">text</span><span class="p">()</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">//div[@id='post-date']/text()</span>
 </pre></div>
 <p>上面例子的意思是选择一个div标签，其有id属性 <code>post-date</code> ，如果div改为 <code>*</code> 则为随便什么标签名字。</p>
 <h3 id="_2">继续往下选</h3>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="cm">/*[@id='js_profile_qrcode']/div/p[1]/span/text()</span>
+<div class="highlight"><pre><span></span><span class="err">//*[@id='js_profile_qrcode']/div/p[1]/span/text()</span>
 </pre></div>
 <h3 id="_3">选择目标标签的属性</h3>
-<div class="highlight"><pre><span></span><span class="o">///</span><span class="cm">/*[@id='js_profile_qrcode']//a/@href</span>
+<div class="highlight"><pre><span></span><span class="err">////*[@id='js_profile_qrcode']//a/@href</span>
 </pre></div>
 <h3 id="string">string</h3>
 <p>对于选择的节点（注意如果返回的是节点集 nodeset将只取第一个），将所有的节点（也就是包括子节点）的文本抽取出来并合并。</p>
-<div class="highlight"><pre><span></span><span class="n">string</span><span class="p">(</span><span class="o">//</span><span class="n">div</span><span class="o">[</span><span class="n">@class="lemma-summary"</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">string(//div[@class="lemma-summary"])</span>
 </pre></div>
 <p>如果你想提取本element节点下所有的问题：</p>
-<div class="highlight"><pre><span></span><span class="n">e</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">'string(.)'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">e.xpath('string(.)')</span>
 </pre></div>
 <p>这里 <code>.</code> 的意思是选取当前节点，而 <code>..</code> 是选取当前节点的父节点。</p>
             

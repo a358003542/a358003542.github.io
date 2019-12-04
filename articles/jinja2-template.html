@@ -155,7 +155,7 @@ jinja2模板  · cdwanze的博文
 <p>jinja2模板在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板还是很值得一学的。</p>
 <h2 id="_2">注释</h2>
 <p>这里面的内容是模板文件的注释内容。</p>
-<div class="highlight"><pre><span></span><span class="err">{</span><span class="o">#</span> <span class="p">...</span> <span class="o">#</span><span class="err">}</span>
+<div class="highlight"><pre><span></span><span class="err">{# ... #}</span>
 </pre></div>
 <h2 id="_3">变量</h2>
 <p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
@@ -177,8 +177,8 @@ jinja2模板  · cdwanze的博文
 <p>关于safe过滤器请参看下面讨论的特殊符号的问题。</p>
 <h2 id="_4">列表排序</h2>
 <p>参考了 <a href="https://stackoverflow.com/questions/1959386/how-do-you-sort-a-list-in-jinja2">这个网页</a> ：</p>
-<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="k">for</span> <span class="nv">movie</span> <span class="nv">in</span> <span class="nv">movie_list</span><span class="o">|</span><span class="nv">sort</span><span class="ss">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">'</span><span class="s">rating</span><span class="s1">'</span><span class="ss">)</span> <span class="o">%</span>}
-{<span class="o">%</span> <span class="k">for</span> <span class="nv">movie</span> <span class="nv">in</span> <span class="nv">movie_list</span><span class="o">|</span><span class="nv">sort</span><span class="ss">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">'</span><span class="s">rating</span><span class="s1">'</span>, <span class="nv">reverse</span> <span class="o">=</span> <span class="nv">True</span><span class="ss">)</span> <span class="o">%</span>}
+<div class="highlight"><pre><span></span><span class="err">{% for movie in movie_list|sort(attribute='rating') %}</span>
+<span class="err">{% for movie in movie_list|sort(attribute='rating', reverse = True) %}</span>
 </pre></div>
 <h2 id="html">html特殊符号问题</h2>
 <p>如果你的变量有这些html的特殊符号:</p>
@@ -201,25 +201,25 @@ jinja2模板  · cdwanze的博文
 </pre></div>
 <h2 id="if">if语句</h2>
 <p>条件分支主要用于有条件的显示某些内容。</p>
-<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="k">if</span> <span class="nv">user</span> <span class="o">%</span>}
- <span class="nv">Hello</span>, {{ <span class="nv">user</span> }}<span class="o">!</span>
- {<span class="o">%</span> <span class="k">else</span> <span class="o">%</span>}
- <span class="nv">Hello</span> , <span class="nv">stranger</span><span class="o">!</span>
- {<span class="o">%</span> <span class="k">endif</span> <span class="o">%</span>}
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">user</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x"> Hello, </span><span class="cp">{{</span> <span class="nv">user</span> <span class="cp">}}</span><span class="x">!</span>
+<span class="x"> </span><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x"> Hello , stranger!</span>
+<span class="x"> </span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 <h2 id="for">for语句</h2>
 <p>for语句结构如下所示:</p>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nv">ul</span><span class="o">&gt;</span>
-{<span class="o">%</span> <span class="k">for</span> <span class="nv">user</span> <span class="nv">in</span> <span class="nv">users</span> <span class="o">%</span>}
-  <span class="o">&lt;</span><span class="nv">li</span><span class="o">&gt;</span>{{ <span class="nv">user</span>.<span class="nv">username</span> }}<span class="o">&lt;/</span><span class="nv">li</span><span class="o">&gt;</span>
-{<span class="o">%</span> <span class="nv">endfor</span> <span class="o">%</span>}
-<span class="o">&lt;/</span><span class="nv">ul</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;ul&gt;</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">user</span> <span class="k">in</span> <span class="nv">users</span> <span class="cp">%}</span>
+  <span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">user.username</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="nt">&lt;/ul&gt;</span>
 </pre></div>
 <h2 id="_5">移除块前后的空白</h2>
 <p>这里所谓的空白指 空格，制表符，换行符等，jinja2这块有全局配置选项。或者可以如下手工配置，大体意思加上 <code>-</code> 表示这里要跟上一个 <code>trim_blocks</code> 操作。</p>
-<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="k">for</span> <span class="nv">item</span> <span class="nv">in</span> <span class="nv">seq</span> <span class="o">-%</span>}
-    {{ <span class="nv">item</span> }}
-{<span class="o">%-</span> <span class="nv">endfor</span> <span class="o">%</span>}
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">item</span> <span class="k">in</span> <span class="nv">seq</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="x"></span>
+<span class="cp">{%</span>- <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
 </pre></div>
 <h2 id="_6">模板文件继承机制</h2>
 <p>jinja2的模板文件有一种继承机制，可以让你基于某个模板文件来建构出另外一个模板文件。具体使用是在父模板（模板文件的模板文件）构建一些block区块，如下所示:</p>
@@ -242,15 +242,15 @@ jinja2模板  · cdwanze的博文
 </pre></div>
 <h2 id="_7">宏</h2>
 <p>宏 和python的函数类似，遇到即将其展开。</p>
-<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="nv">macro</span> <span class="nv">render_comment</span><span class="ss">(</span><span class="nv">comment</span><span class="ss">)</span> <span class="o">%</span>}
-<span class="o">&lt;</span><span class="nv">li</span><span class="o">&gt;</span>{{ <span class="nv">comment</span> }}<span class="o">&lt;/</span><span class="nv">li</span><span class="o">&gt;</span>
-{<span class="o">%</span> <span class="nv">endmacro</span> <span class="o">%</span>}
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">macro</span> <span class="nv">render_comment</span><span class="o">(</span><span class="nv">comment</span><span class="o">)</span> <span class="cp">%}</span>
+<span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">comment</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
+<span class="cp">{%</span> <span class="k">endmacro</span> <span class="cp">%}</span>
 
-<span class="o">&lt;</span><span class="nv">ul</span><span class="o">&gt;</span>
-{<span class="o">%</span> <span class="k">for</span> <span class="nv">comment</span> <span class="nv">in</span> <span class="nv">comments</span> <span class="o">%</span>}
-{{ <span class="nv">render_comment</span><span class="ss">(</span><span class="nv">comment</span><span class="ss">)</span> }}
-{<span class="o">%</span> <span class="nv">endfor</span> <span class="o">%</span>}
-<span class="o">&lt;/</span><span class="nv">ul</span><span class="o">&gt;</span>
+<span class="nt">&lt;ul&gt;</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">comment</span> <span class="k">in</span> <span class="nv">comments</span> <span class="cp">%}</span>
+<span class="cp">{{</span> <span class="nv">render_comment</span><span class="o">(</span><span class="nv">comment</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="nt">&lt;/ul&gt;</span>
 </pre></div>
 <p>外部宏文件 引入</p>
 <div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="kn">import</span> <span class="s1">'macros.html'</span> <span class="k">as</span> <span class="n">macros</span> <span class="o">%</span><span class="p">}</span>
@@ -267,10 +267,10 @@ jinja2模板  · cdwanze的博文
 <h2 id="include">include</h2>
 <p>宏文件是推荐使用import，模板文件已经有继承机制了，那么这个include语句主要有什么用呢？</p>
 <p>某个模板代码片段被多次反复使用推荐使用include语句。</p>
-<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="k">include</span> <span class="s1">'</span><span class="s">common.html</span><span class="s1">'</span> <span class="o">%</span>}
+<div class="highlight"><pre><span></span><span class="err">{% include 'common.html' %}</span>
 </pre></div>
 <p>同样include语句也可以要求传递上下文：</p>
-<div class="highlight"><pre><span></span>{<span class="o">%</span> <span class="k">include</span> <span class="s1">'</span><span class="s">header.html</span><span class="s1">'</span> <span class="nv">with</span> <span class="nv">context</span> <span class="o">%</span>}
+<div class="highlight"><pre><span></span><span class="err">{% include 'header.html' with context %}</span>
 </pre></div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>

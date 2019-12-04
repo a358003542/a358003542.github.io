@@ -181,6 +181,7 @@ cdwanze的博文 - python好伙伴 category</title>
                                 
 <h2 id="_1">简介</h2>
 <p>diskcache很好用，而且速度还挺快的。项目Github地址在 <a href="https://github.com/grantjenks/python-diskcache/">这里</a> 。虽然项目星数不是特别多，但从个人使用体验来说，基本上满足了个人的需求了。比如速度快，和python各个数据类型对接方便，更复杂的数据类型没有试过，也没必要，就一般的python数据类型来说，比如列表，字典，字符串之类的，基本上是无缝对接。然后一般缓存需要的过期时间功能它也是有的，所以基本上是一个不错的模块了。</p>
+<p>具体使用很方便和简单，建议简单看下官方文档即可。</p>
                             </article>
 
 
@@ -243,10 +244,10 @@ cdwanze的博文 - python好伙伴 category</title>
 <p>接触过logging的马上就知道这个logger是个什么东西了，然后就想通常那样 <code>logger.info('what')</code> 之类的去打日志即可。默认的logger的日志格式就已经非常好了。</p>
 <p>通常这个就已经够用了，实际上容器化了的应用或者某些应用场景，是要求你的日志都打印在默认终端上的，还有某些专门管理日志的工具，也要求你的应用就打印在默认终端。</p>
 <p>某些情况下你可能需要将日志同时打印到文件中：</p>
-<div class="highlight"><pre><span></span><span class="n">logger</span><span class="p">.</span><span class="k">add</span><span class="p">(</span><span class="s1">'&lt;filename&gt;.log'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">logger.add('&lt;filename&gt;.log')</span>
 </pre></div>
 <p>此外还支持这样带时间戳的文件名：</p>
-<div class="highlight"><pre><span></span><span class="n">logger</span><span class="p">.</span><span class="k">add</span><span class="p">(</span><span class="s1">'file_{time …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="err">logger.add('file_{time …</span></pre></div>
                             </article>
 
 
@@ -281,7 +282,7 @@ cdwanze的博文 - python好伙伴 category</title>
 
     <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.family'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sans-serif'</span>
     <span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.sans-serif'</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">font</span><span class="p">)</span>  <span class="c1"># 插入中文字体</span>
-    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># 用来正常显示负号</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># 用来正常显示负号</span>
 </pre></div>
 <p>然后我们对之前pandas的绘图接口操作发现，除了传递必要的x，y数值进去外，还需要传一个 ax …</p>
                             </article>
@@ -375,7 +376,7 @@ cdwanze的博文 - python好伙伴 category</title>
                                 
 <h2 id="_1">找到性能瓶颈所在</h2>
 <p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
-<div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">cProfile</span> <span class="n">test</span><span class="p">.</span><span class="n">py</span>
+<div class="highlight"><pre><span></span><span class="err">python -m cProfile test.py</span>
 </pre></div>
 <p>或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。</p>
 <p>目前我知道的循环结构提速很明显，然后指定静态类型会提速。</p>
@@ -439,24 +440,24 @@ cdwanze的博文 - python好伙伴 category</title>
 <div class="highlight"><pre><span></span>pipenv install
 </pre></div>
 <p>当然运行前你需要：</p>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pipenv</span>
+<div class="highlight"><pre><span></span><span class="err">pip install pipenv</span>
 </pre></div>
 <p>其会创建 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 这两个文件。如果读者有点熟悉nodejs那边的包管理机制，就对这两个文件的作用不需要做过多的说明了。</p>
 <p>那么怎么激活进入虚拟环境呢：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">shell</span>
+<div class="highlight"><pre><span></span><span class="err">pipenv shell</span>
 </pre></div>
 <p>或者你直接调用虚拟环境下运行某个命令：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">run</span> <span class="n">you_awesom_command</span>
+<div class="highlight"><pre><span></span><span class="err">pipenv run you_awesom_command</span>
 </pre></div>
 <p>读者打开 <code>Pipfile</code> 文件会发现这一行</p>
-<div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="ss">"https://pypi.douban.com/simple"</span>
+<div class="highlight"><pre><span></span><span class="err">url = "https://pypi.douban.com/simple"</span>
 </pre></div>
 <p>以前还要在系统的另外的地方去配置，现在直接在这里修改就可以了。</p>
 <p>然后安装模块就是：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">install</span> <span class="n">requests</span>
+<div class="highlight"><pre><span></span><span class="err">pipenv install requests</span>
 </pre></div>
 <p>或者remove模块：</p>
-<div class="highlight"><pre><span></span><span class="n">pipenv</span> <span class="n">uninstall</span> <span class="n">requests</span>
+<div class="highlight"><pre><span></span><span class="err">pipenv uninstall requests</span>
 </pre></div>
 <p>值得注意的pipenv模块很好地解析的各个包包的依赖关系，这就是他比原 …</p>
                             </article>
@@ -490,7 +491,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <p>可以如下找个图片简单测试一下安装情况:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"test.jpg"</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size …</span></pre></div>
+<span class="nb">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size …</span></pre></div>
                             </article>
 
 
@@ -515,7 +516,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <p>jinja2模板在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板还是很值得一学的。</p>
 <h2 id="_2">注释</h2>
 <p>这里面的内容是模板文件的注释内容。</p>
-<div class="highlight"><pre><span></span><span class="err">{</span><span class="o">#</span> <span class="p">...</span> <span class="o">#</span><span class="err">}</span>
+<div class="highlight"><pre><span></span><span class="err">{# ... #}</span>
 </pre></div>
 <h2 id="_3">变量</h2>
 <p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
@@ -561,7 +562,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <p>BeautifulSoup模块在python网页分析这一块是很有名的一个模块，其确实让网页分析任务变得轻松而easy了。本文将对bs4模块进行简单的介绍，更多细节请参看 <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a> 。</p>
 <h2 id="_2">安装</h2>
 <p>安装就简单用pip命令安装之:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">beautifulsoup</span>
+<div class="highlight"><pre><span></span><span class="err">sudo pip install beautifulsoup</span>
 </pre></div>
 <h2 id="_3">第一个例子</h2>
 <p>然后在使用上因为python2和python3的urllib相关改动很大，加上urllib在使用上不是很友好，强烈推荐大家直接用requests模块来进行相关操作。然后beautifulsoup的引入语句一般如下所示:</p>
@@ -572,7 +573,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://www.pythonscraping.com/exercises/exercise1.html"</span><span class="p">)</span>
 <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 </pre></div>
 <p>在上面soup.title返回的是一个标签对象。然后标签对象里面如果有标签的话又可以继续点号索引标签:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; soup.body …</pre></div>
@@ -640,8 +641,8 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
 <h2 id="pytest">pytest简介</h2>
 <p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
-<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">test_prime</span><span class="p">():</span>
-    <span class="n">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+<div class="highlight"><pre><span></span><span class="err">def test_prime():</span>
+<span class="err">    assert prime(4) == 7</span>
 </pre></div>
 <h3 id="_1">确认抛出某个异常</h3>
 <p>把官方的例子copy过来了，看一下就懂了。</p>
@@ -677,7 +678,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <h1 id="_1">简介</h1>
 <p>faker模块是一个很有特色的模块，所以其在github上得到的star也较多。其可以用来生成一些伪数据，比如用来做测试用途等等。其github项目地址在 <a href="https://github.com/joke2k/faker">这里</a> 。</p>
 <p>该项目支持pip安装:</p>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Faker</span>
+<div class="highlight"><pre><span></span><span class="err">pip install Faker</span>
 </pre></div>
 <p>其使用还是很简单的，大概如下所示:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Factory</span>
@@ -685,7 +686,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <span class="n">faker</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
 </pre></div>
 <p>然后中文名字例子如下，就是在Factory的create方法那里指定语言locale（默认是"en_EN"）:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Factory</span>
@@ -693,7 +694,7 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <span class="n">faker</span> <span class="o">=</span> <span class="n">Factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'zh_CN'</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
 </pre></div>
 <h1 id="faker">faker所含方法清单</h1>
 <ul>
@@ -723,9 +724,9 @@ sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</sp
 <p>官方文档的第一个例子如下:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
 
-<span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--count'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'Number of greetings.'</span><span class="p">)</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name'</span><span class="p">,</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--count'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'Number of greetings.'</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name'</span><span class="p">,</span>
               <span class="n">help</span><span class="o">=</span><span class="s1">'The person to greet.'</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="sd">"""Simple program that greets NAME for a total of COUNT times."""</span>

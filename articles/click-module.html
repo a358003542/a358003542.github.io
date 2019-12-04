@@ -166,9 +166,9 @@ click模块  · cdwanze的博文
 <p>官方文档的第一个例子如下:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
 
-<span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--count'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'Number of greetings.'</span><span class="p">)</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name'</span><span class="p">,</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--count'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'Number of greetings.'</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name'</span><span class="p">,</span>
               <span class="n">help</span><span class="o">=</span><span class="s1">'The person to greet.'</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="sd">"""Simple program that greets NAME for a total of COUNT times."""</span>
@@ -180,32 +180,32 @@ click模块  · cdwanze的博文
 </pre></div>
 <p>我们看到一切都是很直观明了的， <code>@click.command()</code> 用来装饰一个函数，然后用 <code>@click.option</code> 来具体添加命令行选项。其中第一个就是命令行选项的名字，然后 <code>help</code> ， <code>default</code> 的意义我们是清楚的（类似的还有 <code>type</code> 来控制数据类型）。然后我们注意到某个选项比如上面的name是可以请求输入来获得值的。然后我们可以用 <code>click.echo</code> 来进行打印操作（不是print函数是为了获得更好的python2和3的兼容性，这个是随意的，直接用print函数也是可以的）。</p>
 <p>具体脚本运行情况如下所示:</p>
-<div class="highlight"><pre><span></span>    <span class="nv">wanze</span>@<span class="nv">wanze</span><span class="o">-</span><span class="nv">ubuntu</span>:<span class="o">~/</span>桌面$ <span class="nv">python3</span> <span class="nv">test2</span>.<span class="nv">py</span> <span class="o">--</span><span class="nv">help</span>
-    <span class="nv">Usage</span>: <span class="nv">test2</span>.<span class="nv">py</span> [<span class="nv">OPTIONS</span>]
+<div class="highlight"><pre><span></span><span class="w">    </span><span class="n">wanze</span><span class="nv">@wanze</span><span class="o">-</span><span class="nl">ubuntu</span><span class="p">:</span><span class="o">~/</span><span class="n">桌面</span><span class="err">$</span><span class="w"> </span><span class="n">python3</span><span class="w"> </span><span class="n">test2</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="c1">--help</span>
+<span class="w">    </span><span class="k">Usage</span><span class="err">:</span><span class="w"> </span><span class="n">test2</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="o">[</span><span class="n">OPTIONS</span><span class="o">]</span><span class="w"></span>
 
-      <span class="nv">Simple</span> <span class="nv">program</span> <span class="nv">that</span> <span class="nv">greets</span> <span class="nv">NAME</span> <span class="k">for</span> <span class="nv">a</span> <span class="nv">total</span> <span class="nv">of</span> <span class="nv">COUNT</span> <span class="nv">times</span>.
+<span class="w">      </span><span class="n">Simple</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">greets</span><span class="w"> </span><span class="n">NAME</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nf">COUNT</span><span class="w"> </span><span class="n">times</span><span class="p">.</span><span class="w"></span>
 
-    <span class="nv">Options</span>:
-      <span class="o">--</span><span class="nv">count</span> <span class="nv">INTEGER</span>  <span class="nv">Number</span> <span class="nv">of</span> <span class="nv">greetings</span>.
-      <span class="o">--</span><span class="nv">name</span> <span class="nv">TEXT</span>      <span class="nv">The</span> <span class="nv">person</span> <span class="nv">to</span> <span class="nv">greet</span>.
-      <span class="o">--</span><span class="nv">help</span>           <span class="k">Show</span> <span class="nv">this</span> <span class="nv">message</span> <span class="nv">and</span> <span class="k">exit</span>.
+<span class="w">    </span><span class="nl">Options</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1">--count INTEGER  Number of greetings.</span>
+<span class="w">      </span><span class="c1">--name TEXT      The person to greet.</span>
+<span class="w">      </span><span class="c1">--help           Show this message and exit.</span>
 </pre></div>
 <p>我们看到该函数的 <code>__doc__</code> 说明文档就直接成了该命令行的描述性文档了。</p>
 <p>更棒的是其 <code>prompt</code> 机制和具体命令行输入参数是兼容的:</p>
-<div class="highlight"><pre><span></span><span class="w">    </span><span class="n">wanze</span><span class="nv">@wanze</span><span class="o">-</span><span class="nl">ubuntu</span><span class="p">:</span><span class="o">~/</span><span class="n">桌面</span><span class="err">$</span><span class="w"> </span><span class="n">python3</span><span class="w"> </span><span class="n">test2</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="c1">--count=3 --name=wanze</span>
-<span class="w">    </span><span class="n">Hello</span><span class="w"> </span><span class="n">wanze</span><span class="err">!</span><span class="w"></span>
-<span class="w">    </span><span class="n">Hello</span><span class="w"> </span><span class="n">wanze</span><span class="err">!</span><span class="w"></span>
-<span class="w">    </span><span class="n">Hello</span><span class="w"> </span><span class="n">wanze</span><span class="err">!</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">    wanze@wanze-ubuntu:~/桌面$ python3 test2.py --count=3 --name=wanze</span>
+<span class="err">    Hello wanze!</span>
+<span class="err">    Hello wanze!</span>
+<span class="err">    Hello wanze!</span>
 </pre></div>
 <h2 id="_2">必填参数，文件操作和如何测试</h2>
 <p>必填参数用 <code>@click.argument()</code> 来装饰添加之，如下所示:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
 
-<span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.argument</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'rb'</span><span class="p">))</span>
-<span class="nd">@click.argument</span><span class="p">(</span><span class="s1">'output'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'wb'</span><span class="p">))</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'rb'</span><span class="p">))</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">'output'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'wb'</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">inout</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">chunk</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
             <span class="k">break</span>
@@ -215,17 +215,17 @@ click模块  · cdwanze的博文
     <span class="n">inout</span><span class="p">()</span>
 </pre></div>
 <p>这里的 <code>click.File()</code> 接受一个文件名，然后就已经打开了，在函数里面直接作为一个文件对象可以使用了。文件就推荐使用click模块的这个类型来处理，其对Unicode和bytes处理较好，并有其他优化。当然你也可以使用 <code>click.Path</code> 类型，其在函数里面相当于一个优化的Path文件名，同样提供了Unicode和bytes兼容支持等。</p>
-<div class="highlight"><pre><span></span><span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.argument</span><span class="p">(</span><span class="s1">'f'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">'f'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">click</span><span class="o">.</span><span class="n">format_filename</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
 </pre></div>
 <p>在上面的例子中我们看到脚本最后那里写上:</p>
-<div class="highlight"><pre><span></span>    <span class="k">if</span> <span class="nv">__name__</span> <span class="o">==</span> <span class="s1">'</span><span class="s">__main__</span><span class="s1">'</span>:
-        <span class="nv">inout</span><span class="ss">()</span>
+<div class="highlight"><pre><span></span><span class="err">    if __name__ == '__main__':</span>
+<span class="err">        inout()</span>
 </pre></div>
 <p>脚本就可以正常测试了:</p>
-<div class="highlight"><pre><span></span>    <span class="n">bash</span><span class="o">&gt;&gt;&gt;</span> <span class="n">python3</span> <span class="n">test5</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span><span class="p">.</span><span class="n">py</span> <span class="k">output</span><span class="p">.</span><span class="n">txt</span>
+<div class="highlight"><pre><span></span><span class="err">    bash&gt;&gt;&gt; python3 test5.py test.py output.txt</span>
 </pre></div>
 <p>但是更好的做法是用测试式开发风格:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
@@ -233,11 +233,11 @@ click模块  · cdwanze的博文
 <span class="kn">from</span> <span class="nn">click.testing</span> <span class="kn">import</span> <span class="n">CliRunner</span>
 
 <span class="k">def</span> <span class="nf">test_inout</span><span class="p">():</span>
-    <span class="nd">@click.command</span><span class="p">()</span>
-    <span class="nd">@click.argument</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'rb'</span><span class="p">))</span>
-    <span class="nd">@click.argument</span><span class="p">(</span><span class="s1">'output'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'wb'</span><span class="p">))</span>
+    <span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+    <span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">'input'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'rb'</span><span class="p">))</span>
+    <span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">'output'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">'wb'</span><span class="p">))</span>
     <span class="k">def</span> <span class="nf">inout</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">chunk</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
                 <span class="k">break</span>
@@ -275,15 +275,15 @@ click模块  · cdwanze的博文
 <p>click模块在分组和建立多个子命令功能上也设计得很简洁:</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
 
-<span class="nd">@click.group</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">cli</span><span class="p">():</span>
     <span class="k">pass</span>
 
-<span class="nd">@cli.command</span><span class="p">()</span>
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">initdb</span><span class="p">():</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Initialized the database'</span><span class="p">)</span>
 
-<span class="nd">@cli.command</span><span class="p">()</span>
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">dropdb</span><span class="p">():</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Dropped the database'</span><span class="p">)</span>
 
@@ -301,12 +301,12 @@ click模块  · cdwanze的博文
 <p><code>nargs</code> 如果设置为大于等于1的值，则命令行中要刷入这么多值，这个和argparse模块类似，不同的是不定量的多个值的情况是 <code>nargs=-1</code> ，相当于内置模块argparse的 <code>*</code> 。然后对应argparse的 <code>+</code> 也就是必须要有一个以上的值的情况，则需要额外加上 <code>required=True</code> 来控制。</p>
 <h3 id="count">count</h3>
 <p>这个是option有，在某种情景下可能很有用。</p>
-<div class="highlight"><pre><span></span><span class="nv">@click</span><span class="p">.</span><span class="n">command</span><span class="p">()</span><span class="w"></span>
-<span class="nv">@click</span><span class="p">.</span><span class="k">option</span><span class="p">(</span><span class="s1">'-v'</span><span class="p">,</span><span class="w"> </span><span class="s1">'--verbose'</span><span class="p">,</span><span class="w"> </span><span class="nf">count</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="w"></span>
-<span class="n">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
-<span class="w">    </span><span class="n">click</span><span class="p">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Verbosity: %s'</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">verbose</span><span class="p">)</span><span class="w"></span>
-<span class="err">$</span><span class="w"> </span><span class="nf">log</span><span class="w"> </span><span class="o">-</span><span class="n">vvv</span><span class="w"></span>
-<span class="nl">Verbosity</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">@click.command()</span>
+<span class="err">@click.option('-v', '--verbose', count=True)</span>
+<span class="err">def log(verbose):</span>
+<span class="err">    click.echo('Verbosity: %s' % verbose)</span>
+<span class="err">$ log -vvv</span>
+<span class="c">Verbosity: 3</span>
 </pre></div>
 <h3 id="_7">布尔值</h3>
 <p>如果默认 <code>default=True</code> 这样设置了，那么默认就是存储的布尔值了，其实际上暗含加上了 <code>is_flag=True</code> 。所以如果没有设置default，则可以通过 <code>is_flag</code> 来控制具体存储的是布尔值。</p>
@@ -331,54 +331,54 @@ click模块  · cdwanze的博文
 <p>也就是通过上面的这种 <code>/</code> 分割语句来创建这种多个flag的布尔值控制，其中 <code>/</code> 左边是True，右边是False，然后短名选项跟着写入就是了。 <strong>注意</strong> 上面例子短名情况前面的空格是不可少的。</p>
 <p>如果你想要这样的效果，不输入某个flag那么该flag的值就是False，输入之后则是True。可以如下做到：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">click</span>
-<span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--break'</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--break'</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="k">break</span><span class="p">):</span>
     <span class="k">if</span> <span class="k">break</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">'break'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'break'</span><span class="p">)</span>
 </pre></div>
 <h3 id="choice">多个choice选项的用法</h3>
-<div class="highlight"><pre><span></span><span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--hash-type'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">'md5'</span><span class="p">,</span> <span class="s1">'sha1'</span><span class="p">]))</span>
+<div class="highlight"><pre><span></span><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--hash-type'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">'md5'</span><span class="p">,</span> <span class="s1">'sha1'</span><span class="p">]))</span>
 <span class="k">def</span> <span class="nf">digest</span><span class="p">(</span><span class="n">hash_type</span><span class="p">):</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">hash_type</span><span class="p">)</span>
 </pre></div>
 <h3 id="prompt">请求输入prompt控制</h3>
 <p>这个只是option才有的概念。最简单的情况如下所示:</p>
-<div class="highlight"><pre><span></span><span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name please'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--name'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s1">'Your name please'</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Hello </span><span class="si">%s</span><span class="s1">!'</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 </pre></div>
 <p>弹出提示只有在你没有输入 <code>--name=</code> 给出值时才会出来。</p>
 <h4 id="_9">请求输入密码</h4>
 <p>如下所示:</p>
-<div class="highlight"><pre><span></span><span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--password'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide_input</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-              <span class="n">confirmation_prompt</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--password'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hide_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+              <span class="n">confirmation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Encrypting password to </span><span class="si">%s</span><span class="s1">'</span> <span class="o">%</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'rot13'</span><span class="p">))</span>
 </pre></div>
 <p>也就是额外加上了两个选项控制: <code>hide_input=True</code> 和 <code>confirmation_prompt=True</code> 。上面的这种组合可以简单写为:</p>
-<div class="highlight"><pre><span></span><span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.password_option</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">password_option</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Encrypting password to </span><span class="si">%s</span><span class="s1">'</span> <span class="o">%</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'rot13'</span><span class="p">))</span>
 </pre></div>
 <h4 id="_10">请求的默认值控制</h4>
 <p>请求prompt是可以通过 <code>default</code> 来设置默认值的，在那种情况下你直接按下Enter就相当于输入默认值了。然后你还可以如下来获取系统环境下的某个值作为默认值。</p>
-<div class="highlight"><pre><span></span><span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--username'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--username'</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
               <span class="n">default</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'USER'</span><span class="p">,</span> <span class="s1">''</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">"Hello,"</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Hello,"</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
 </pre></div>
 <p>此外click模块还提供了如下的prompt快捷请求输入命令。</p>
-<div class="highlight"><pre><span></span>    <span class="n">value</span> <span class="o">=</span> <span class="n">click</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s1">'Please enter a valid integer'</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">    value = click.prompt('Please enter a valid integer', type=int)</span>
 </pre></div>
 <p>还有如下的 <code>confirm</code> 函数也很有用:</p>
-<div class="highlight"><pre><span></span>    <span class="k">if</span> <span class="nv">click</span>.<span class="nv">confirm</span><span class="ss">(</span><span class="s1">'</span><span class="s">Do you want to continue?</span><span class="s1">'</span><span class="ss">)</span>:
-        <span class="nv">click</span>.<span class="nv">echo</span><span class="ss">(</span><span class="s1">'</span><span class="s">Well done!</span><span class="s1">'</span><span class="ss">)</span>
+<div class="highlight"><pre><span></span><span class="err">    if click.confirm('Do you want to continue?'):</span>
+<span class="err">        click.echo('Well done!')</span>
 </pre></div>
 <h2 id="press-any-key-to-continue">Press any Key to continue</h2>
 <p>有的时候我们需要终端显示稍微停留那么一会，然后显示 Press any Key to continue ，随便按个键然后再退出，好让用户可以看到终端显示的一些信息。通过click你可以很简单的来实现这个效果：</p>
@@ -393,16 +393,16 @@ click模块  · cdwanze的博文
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Version 1.0'</span><span class="p">)</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
-<span class="nd">@click.command</span><span class="p">()</span>
-<span class="nd">@click.option</span><span class="p">(</span><span class="s1">'--version'</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">print_version</span><span class="p">,</span>
-              <span class="n">expose_value</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">is_eager</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--version'</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">print_version</span><span class="p">,</span>
+              <span class="n">expose_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">)</span>
 </pre></div>
 <p>这里最关键性的问题是理解 <code>ctx</code> <code>param</code> 和 <code>value</code> 这几个参数。</p>
 <h2 id="_12">带颜色的终端回显</h2>
 <p>click借助python模块 <code>colorama</code> 的力量有在终端显示带颜色的字体的功能，首先确认按照了 <code>colorama</code> :</p>
-<div class="highlight"><pre><span></span>    <span class="n">pip</span> <span class="n">install</span> <span class="n">colorama</span>
+<div class="highlight"><pre><span></span><span class="err">    pip install colorama</span>
 </pre></div>
 <p>简单的使用就是:</p>
 <div class="highlight"><pre><span></span>    <span class="kn">import</span> <span class="nn">click</span>
@@ -412,17 +412,17 @@ click模块  · cdwanze的博文
     <span class="n">click</span><span class="o">.</span><span class="n">secho</span><span class="p">(</span><span class="s1">'ATTENTION'</span><span class="p">,</span> <span class="n">blink</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bold</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 <p>其中fg是前景颜色，也可以说字体颜色吧，颜色选项有:</p>
-<div class="highlight"><pre><span></span>    <span class="n">Fore</span><span class="p">:</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">RED</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="n">BLUE</span><span class="p">,</span> <span class="n">MAGENTA</span><span class="p">,</span> <span class="n">CYAN</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">.</span>
+<div class="highlight"><pre><span></span><span class="err">    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE.</span>
 </pre></div>
 <p>然后bg是背景颜色:</p>
-<div class="highlight"><pre><span></span>    <span class="n">Back</span><span class="p">:</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">RED</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="n">BLUE</span><span class="p">,</span> <span class="n">MAGENTA</span><span class="p">,</span> <span class="n">CYAN</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">.</span>
+<div class="highlight"><pre><span></span><span class="err">    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE.</span>
 </pre></div>
 <p>然后还有其他一些style:</p>
-<div class="highlight"><pre><span></span>    <span class="n">dim</span><span class="o">=</span><span class="k">True</span>
-    <span class="n">bold</span><span class="o">=</span><span class="k">True</span>
-    <span class="n">blink</span><span class="o">=</span><span class="k">True</span>
-    <span class="n">underline</span><span class="o">=</span><span class="k">True</span>
-    <span class="n">reverse</span><span class="o">=</span><span class="k">True</span>
+<div class="highlight"><pre><span></span><span class="err">    dim=True</span>
+<span class="err">    bold=True</span>
+<span class="err">    blink=True</span>
+<span class="err">    underline=True</span>
+<span class="err">    reverse=True</span>
 </pre></div>
 <p>其中dim是淡化，bold是加粗，blink意思应该是闪烁，但是没看到效果。underline是下划线，reverse是前景色和背景色翻转。</p>
             

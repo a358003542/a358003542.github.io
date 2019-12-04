@@ -161,7 +161,7 @@ apache  · cdwanze的博文
 <p>正如前面说到的，日志文件在那里，配置文件在那里加载啊等等都是可以定制的，摸清楚配置语法才是王道。</p>
 <h2 id="_1">挂个简单的静态网站</h2>
 <p>首先httpd.conf 那里我们写上了 <code>LISTEN 80</code> 了，这样apache将会监听80端口。你的域名指向你的远程服务器ip就可以了。然后一般我们在httpd.conf 后面写上这么一句： </p>
-<div class="highlight"><pre><span></span><span class="k">Include</span> <span class="nv">conf</span>.<span class="nv">d</span><span class="cm">/*.conf</span>
+<div class="highlight"><pre><span></span><span class="err">Include conf.d/*.conf</span>
 </pre></div>
 <p>也就是conf.d文件夹下的所有配置自动加载进来。这个conf.d文件夹和conf文件夹是平行关系。然后conf.d里面我们主要就是定义 <code>VirtualHost</code> 。</p>
 <p>上个完整的例子吧：</p>
@@ -188,7 +188,7 @@ apache  · cdwanze的博文
 <li>DirectoryIndex ： 某些文件夹请求比如 /a/b ，如果这个文件夹下有index.html文件，那么将显示这个文件的内容。</li>
 <li>Directory： 文件夹权限管理，重要级别五颗星，不写就会出现没有权限访问错误。</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="mi">403</span> <span class="n">Forbidden</span> <span class="n">You</span> <span class="n">don</span><span class="err">'</span><span class="n">t</span> <span class="n">have</span> <span class="n">permission</span> <span class="k">to</span> <span class="k">access</span> <span class="o">/</span> <span class="k">on</span> <span class="n">this</span> <span class="n">server</span>
+<div class="highlight"><pre><span></span><span class="err">403 Forbidden You don't have permission to access / on this server</span>
 </pre></div>
 <p>apache2.4版本使用语法是 <code>Require all granted</code> ，对应的原2.2的配置是：</p>
 <div class="highlight"><pre><span></span><span class="k">Order</span> <span class="n">allow</span><span class="p">,</span><span class="n">deny</span>
@@ -200,25 +200,25 @@ apache  · cdwanze的博文
 Allow from all —— 所有都可以访问
 Deny from all —— 所有都拒绝</p>
 <p>2.2的这个配置</p>
-<div class="highlight"><pre><span></span><span class="k">Order</span> <span class="n">deny</span><span class="p">,</span><span class="n">allow</span>
-<span class="n">Deny</span> <span class="k">from</span> <span class="k">all</span>
+<div class="highlight"><pre><span></span><span class="err">Order deny,allow</span>
+<span class="err">Deny from all</span>
 </pre></div>
 <p>等同于2.4的：</p>
-<div class="highlight"><pre><span></span><span class="nv">Require</span> <span class="nv">all</span> <span class="nv">denied</span>
-\<span class="k">end</span>{<span class="nv">Verbatim</span>}
+<div class="highlight"><pre><span></span><span class="err">Require all denied</span>
+<span class="err">\end{Verbatim}</span>
 </pre></div>
 <p>然后2.2的这个：</p>
-<div class="highlight"><pre><span></span><span class="k">Order</span> <span class="n">Deny</span><span class="p">,</span><span class="n">Allow</span>
-<span class="n">Deny</span> <span class="k">from</span> <span class="k">all</span>
-<span class="n">Allow</span> <span class="k">from</span> <span class="n">example</span><span class="p">.</span><span class="n">org</span>
+<div class="highlight"><pre><span></span><span class="err">Order Deny,Allow</span>
+<span class="err">Deny from all</span>
+<span class="err">Allow from example.org</span>
 </pre></div>
 <p>意思是所有都拒绝，只允许 example.org的访问。</p>
 <p>等同于2.4：</p>
-<div class="highlight"><pre><span></span><span class="n">Require</span> <span class="k">host</span> <span class="n">example</span><span class="p">.</span><span class="n">org</span>
+<div class="highlight"><pre><span></span><span class="err">Require host example.org</span>
 </pre></div>
 <p>我们看到2.4的Require语句更简洁了，比如下面的这个：</p>
-<div class="highlight"><pre><span></span><span class="n">Require</span> <span class="k">all</span> <span class="k">granted</span>
-<span class="n">Require</span> <span class="k">not</span> <span class="n">ip</span> <span class="mi">10</span><span class="p">.</span><span class="mi">252</span><span class="p">.</span><span class="mi">46</span><span class="p">.</span><span class="mi">165</span>
+<div class="highlight"><pre><span></span><span class="err">Require all granted</span>
+<span class="err">Require not ip 10.252.46.165</span>
 </pre></div>
 <p>所有都允许，除了谁谁禁止访问。</p>
 <h2 id="wsgi">挂个wsgi站点</h2>

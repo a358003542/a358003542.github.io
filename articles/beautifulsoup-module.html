@@ -173,7 +173,7 @@ beautifulsoup模块  · cdwanze的博文
 <p>BeautifulSoup模块在python网页分析这一块是很有名的一个模块，其确实让网页分析任务变得轻松而easy了。本文将对bs4模块进行简单的介绍，更多细节请参看 <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a> 。</p>
 <h2 id="_2">安装</h2>
 <p>安装就简单用pip命令安装之:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">beautifulsoup</span>
+<div class="highlight"><pre><span></span><span class="err">sudo pip install beautifulsoup</span>
 </pre></div>
 <h2 id="_3">第一个例子</h2>
 <p>然后在使用上因为python2和python3的urllib相关改动很大，加上urllib在使用上不是很友好，强烈推荐大家直接用requests模块来进行相关操作。然后beautifulsoup的引入语句一般如下所示:</p>
@@ -184,7 +184,7 @@ beautifulsoup模块  · cdwanze的博文
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://www.pythonscraping.com/exercises/exercise1.html"</span><span class="p">)</span>
 <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 </pre></div>
 <p>在上面soup.title返回的是一个标签对象。然后标签对象里面如果有标签的话又可以继续点号索引标签:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; soup.body.h1
@@ -195,21 +195,21 @@ beautifulsoup模块  · cdwanze的博文
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://www.crummy.com/software/BeautifulSoup/bs4/doc/"</span><span class="p">)</span>
 <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 <p>我们看到soup返回的是第一个p标签，这可以看作下面要讲的find方法的简化css索引形式。</p>
 <h1 id="find">find方法</h1>
 <p>如下所示最简单的find定位实际上就类似于 <code>soup.p</code> 的用法。但find方法里面有更丰富的内容。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="nv">soup</span>.<span class="nv">find</span><span class="ss">(</span><span class="s1">'</span><span class="s">p</span><span class="s1">'</span><span class="ss">)</span>
-<span class="o">&lt;</span><span class="nv">p</span><span class="o">&gt;&lt;</span><span class="nv">a</span> <span class="nv">class</span><span class="o">=</span><span class="s2">"</span><span class="s">reference external</span><span class="s2">"</span> <span class="nv">href</span><span class="o">=</span><span class="s2">"</span><span class="s">http://www.crummy.com/software/BeautifulSoup/</span><span class="s2">"</span><span class="o">&gt;</span><span class="nv">Beautiful</span> <span class="nv">Soup</span><span class="o">&lt;/</span><span class="nv">a</span><span class="o">&gt;</span> <span class="nv">is</span> <span class="nv">a</span>
-<span class="nv">Python</span> <span class="nv">library</span> <span class="k">for</span> <span class="nv">pulling</span> <span class="nv">data</span> <span class="nv">out</span> <span class="nv">of</span> <span class="nv">HTML</span> <span class="nv">and</span> <span class="nv">XML</span> <span class="nv">files</span>. <span class="nv">It</span> <span class="nv">works</span>
-<span class="nv">with</span> <span class="nv">your</span> <span class="nv">favorite</span> <span class="nv">parser</span> <span class="nv">to</span> <span class="nv">provide</span> <span class="nv">idiomatic</span> <span class="nv">ways</span> <span class="nv">of</span> <span class="nv">navigating</span>,
-<span class="nv">searching</span>, <span class="nv">and</span> <span class="nv">modifying</span> <span class="nv">the</span> <span class="nv">parse</span> <span class="nv">tree</span>. <span class="nv">It</span> <span class="nv">commonly</span> <span class="nv">saves</span> <span class="nv">programmers</span>
-<span class="nv">hours</span> <span class="nv">or</span> <span class="nv">days</span> <span class="nv">of</span> <span class="nv">work</span>.<span class="o">&lt;/</span><span class="nv">p</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; soup.find('p')
+<span class="nt">&lt;p&gt;&lt;a</span> <span class="na">class=</span><span class="s">"reference external"</span> <span class="na">href=</span><span class="s">"http://www.crummy.com/software/BeautifulSoup/"</span><span class="nt">&gt;</span>Beautiful Soup<span class="nt">&lt;/a&gt;</span> is a
+Python library for pulling data out of HTML and XML files. It works
+with your favorite parser to provide idiomatic ways of navigating,
+searching, and modifying the parse tree. It commonly saves programmers
+hours or days of work.<span class="nt">&lt;/p&gt;</span>
 </pre></div>
 <p>find方法如果找不到就返回None，找到则返回目标标签元素。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">soup</span><span class="p">.</span><span class="n">test</span> <span class="k">is</span> <span class="k">None</span>
-<span class="k">True</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; soup.test is None</span>
+<span class="err">True</span>
 </pre></div>
 <h2 id="_4">过滤器</h2>
 <p>find方法最常用的形式是接受一个参数，这个参数叫做什么过滤器参数。过滤器可以是字符串或正则表达式或列表组成，其中列表里面的元素基于前面谈及的字符串或正则表达式，然后组成或逻辑，只要符合一个匹配条件就认为是匹配的。</p>
@@ -221,18 +221,18 @@ beautifulsoup模块  · cdwanze的博文
 <p>你可以通过 <code>id=</code> 来具体定位网页中的某个id，也是接受一个过滤器。</p>
 <h2 id="text">text参量</h2>
 <p>对网页各个标签内的字符串进行过滤操作，前面提及的过滤器一样都可以用，不过字符串是精确匹配的我估计用得会比较少。尽可能地用正则表达式。然后如果单独使用text参量</p>
-<div class="highlight"><pre><span></span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="nb">text</span><span class="o">=</span><span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'name'</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><span class="err">soup.find_all(text=re.compile('name'))</span>
 </pre></div>
 <p>标签里面的字符串也会被搜索，而且返回也不一定是标准的标签元素对象，这很不好。推荐采用如下形式:</p>
-<div class="highlight"><pre><span></span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="k">True</span><span class="p">,</span><span class="nb">text</span><span class="o">=</span><span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'name'</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><span class="err">soup.find_all(True,text=re.compile('name'))</span>
 </pre></div>
 <p>这样返回的必定是标签元素，而且text里面必定只搜索标签的text字符串内容，这更易于人们的理解。</p>
 <p>然后搜索完之后你可能定位到的是某个小标签，比如 <code>&lt;b&gt;</code> 之类的，然后你可以对目标标签元素使用 <code>.parent</code> ，则将返回更高一级的标签元素，这有时会很有用的:</p>
-<div class="highlight"><pre><span></span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="k">True</span><span class="p">,</span><span class="nb">text</span><span class="o">=</span><span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'name'</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">parent</span>
+<div class="highlight"><pre><span></span><span class="err">soup.find_all(True,text=re.compile('name'))[-1].parent</span>
 </pre></div>
 <h2 id="keywords">其他keywords</h2>
 <p>其他标签的各个属性都可以类似上面的作为关键词加上过滤器来搜索。比如</p>
-<div class="highlight"><pre><span></span><span class="n">oup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="ss">"elsie"</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><span class="err">oup.find_all(href=re.compile("elsie"))</span>
 </pre></div>
 <h2 id="recursive">recursive参量</h2>
 <p>recursive默认是True，也就是检索当前tag的所有子孙节点，如果只想搜索当前tag的第一级子节点，则使用 <code>recursive=False</code> 。</p>
@@ -282,25 +282,25 @@ beautifulsoup模块  · cdwanze的博文
 </pre></div>
 <p><b>标签和<c>标签就是一个html文档缩进深度，它们就属于一个层次的平行标签。而<a>和<d>也是属于平行标签，但<b>和<d>则不是。</d></b></d></a></c></b></p>
 <h3 id="_8">平行级别下标签</h3>
-<div class="highlight"><pre><span></span><span class="n">find_next_sibling</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">find_next_sibling(name, attrs, string, **kwargs)</span>
 </pre></div>
 <p>才外还有返回一些标签对象（对应find_all方法）的方法:</p>
-<div class="highlight"><pre><span></span><span class="n">find_next_siblings</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="k">limit</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">find_next_siblings(name, attrs, string, limit, **kwargs)</span>
 </pre></div>
 <p>比如上面的例子我们有:</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> [ <span class="nv">i</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">soup</span>.<span class="nv">a</span>.<span class="nv">next_siblings</span>]
-[<span class="s1">'</span><span class="se">\n</span><span class="s1">'</span>, <span class="o">&lt;</span><span class="nv">d</span><span class="o">&gt;</span><span class="nv">test3</span><span class="o">&lt;/</span><span class="nv">d</span><span class="o">&gt;</span>, <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span>]
-<span class="o">&gt;&gt;&gt;</span> [ <span class="nv">i</span> <span class="k">for</span> <span class="nv">i</span> <span class="nv">in</span> <span class="nv">soup</span>.<span class="nv">b</span>.<span class="nv">next_siblings</span>]
-[<span class="s1">'</span><span class="se">\n</span><span class="s1">'</span>, <span class="o">&lt;</span><span class="nv">c</span><span class="o">&gt;</span><span class="nv">text2</span><span class="o">&lt;/</span><span class="nv">c</span><span class="o">&gt;</span>, <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span>]
-<span class="o">&gt;&gt;&gt;</span>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; [ i for i in soup.a.next_siblings]
+['\n', <span class="nt">&lt;d&gt;</span>test3<span class="nt">&lt;/d&gt;</span>, '\n']
+&gt;&gt;&gt; [ i for i in soup.b.next_siblings]
+['\n', <span class="nt">&lt;c&gt;</span>text2<span class="nt">&lt;/c&gt;</span>, '\n']
+&gt;&gt;&gt;
 </pre></div>
 <p>这些方法的用法和前面谈及的 <code>find</code> 还有 <code>find_all</code> 类似，但多少有点令人沮丧的是，beautifulsoup受到换行符的干扰，在 <a href="https://stackoverflow.com/questions/23241641/how-to-ignore-empty-lines-while-using-next-sibling-in-beautifulsoup4-in-python">这篇网页</a> 中提到预处理网页将换行符都换成空格，然后将标签之间的各个空格符号都删除的解决方案，虽然不是很完美，但作为解决也是可以接受的，因为网络抓取实际上进来的网页简化预处理是必须要做的一步工作。</p>
 <h3 id="_9">平行级别上标签</h3>
 <p>平行级别上标签类似上面的描述，不过是往上走，这里就不赘述了。</p>
-<div class="highlight"><pre><span></span><span class="n">find_previous_sibling</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">find_previous_sibling(name, attrs, string, **kwargs)</span>
 </pre></div>
 <p>此外还有返回一些标签对象（对应find_all方法）的方法:</p>
-<div class="highlight"><pre><span></span><span class="n">find_previous_siblings</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="k">limit</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">find_previous_siblings(name, attrs, string, limit, **kwargs)</span>
 </pre></div>
 <h2 id="_10">非平行级别上下标签</h2>
 <p>find_parents(name, attrs, string, limit, **kwargs)
@@ -313,8 +313,8 @@ find_previous(name, attrs, string, **kwargs)
 <h1 id="select">select方法</h1>
 <p>select方法通过CSS选择器来进行标签元素的选择。原则上上面谈论的那些方法已经能够满足我们大部分的需求了，再加上专门针对某个个别网站的个别网页的css布局而进行抓取，这种抓取方法是很不灵活很有局限性的，所以select方法应该作为用户的最后备选方案。</p>
 <h2 id="_11">移除某个标签</h2>
-<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">soup</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'sup'</span><span class="p">)</span>
-<span class="n">s</span><span class="p">.</span><span class="k">extract</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">s = soup.find('sup')</span>
+<span class="err">s.extract()</span>
 </pre></div>
 <h1 id="_12">解析部分文档来提升效率</h1>
 <p>请看到下面这个函数，其用途是将整个webpage的所有a连接有href属性的链接收集起来。</p>
@@ -323,13 +323,13 @@ find_previous(name, attrs, string, **kwargs)
 <span class="sd">    绝对化路径 去除fragment 返回字典值去重</span>
 <span class="sd">    '''</span>
     <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">'lxml'</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="n">SoupStrainer</span><span class="p">(</span><span class="s1">'a'</span><span class="p">))</span>
-    <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'href'</span><span class="p">)</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="n">href</span><span class="o">=</span><span class="bp">True</span><span class="p">)]</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'href'</span><span class="p">)</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="n">href</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
     <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_absolute_url</span><span class="p">(</span><span class="n">baseurl</span><span class="p">,</span><span class="n">link</span><span class="p">)</span> <span class="k">for</span>  <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">]</span>
     <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">remove_url_fragment</span><span class="p">(</span><span class="n">link</span><span class="p">)</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">]</span>
     <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
 </pre></div>
 <p>其中:</p>
-<div class="highlight"><pre><span></span><span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">'lxml'</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="n">SoupStrainer</span><span class="p">(</span><span class="s1">'a'</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><span class="err">soup = BeautifulSoup(html, 'lxml', parse_only=SoupStrainer('a'))</span>
 </pre></div>
 <p><code>parse_only</code> 参数用于控制BeautifulSoup一开始刷文档时创建标签元素对象的时候，就只刷某些标签而进行了过滤操作，从而大大节省了工作量。具体参数是创建一个 <code>SoupStrainer</code> 对象，其接受的过滤器语法和前面叙述的一样。</p>
             

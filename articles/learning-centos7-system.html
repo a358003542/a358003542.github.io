@@ -183,7 +183,7 @@
 </ul>
 <h2 id="firewall-cmd">firewall-cmd</h2>
 <p>防火墙策略管理命令： <code>firewall-cmd</code> ， 其中 <code>--list-all</code> 列出开启的端口号等情况， <code>--add-port</code> 来开放某个端口号，比如：</p>
-<div class="highlight"><pre><span></span><span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="c1">--add-port=80/tcp</span>
+<div class="highlight"><pre><span></span><span class="err">firewall-cmd --add-port=80/tcp</span>
 </pre></div>
 <p>更多细节请参看 <a href="http://wangchujiang.com/linux-command/c/firewall-cmd.html">这篇文章</a> ，下面就一些常用的用法简要说明之。</p>
 <div class="highlight"><pre><span></span>firewall-cmd --get-active-zones <span class="c1"># 查看活动的区域</span>
@@ -237,44 +237,44 @@ firewall-cmd --get-services <span class="c1"># 列出所有可用服务</span>
 <p>systemd 东西还有点，后面有时间再慢慢补上，强烈推荐 <a href="http://www.jinbuguo.com/systemd/systemd.exec.html">金步国翻译的systemd中文手册</a> 。</p>
 <h3 id="_3">服务文件修改之后</h3>
 <p>一般是推荐配置文件外移，服务文件设置好之后就没必要修改了，如果服务文件修改了那么需要：</p>
-<div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
+<div class="highlight"><pre><span></span><span class="err">systemctl daemon-reload</span>
 </pre></div>
 <h3 id="_4">日志管理</h3>
 <p>systemd统一管理所有日志，可用 <code>jourlnalctl</code> 命令来查看之。点名要看某个服务Unit：</p>
-<div class="highlight"><pre><span></span><span class="n">jourlnalctl</span> <span class="c1">--unit=nginx</span>
+<div class="highlight"><pre><span></span><span class="err">jourlnalctl --unit=nginx</span>
 </pre></div>
 <h3 id="_5">启动服务等等</h3>
 <p>启动服务重启服务暂停服务等等我想大家都很熟悉了吧：</p>
-<div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="k">start</span> <span class="n">what</span><span class="p">.</span><span class="n">service</span>
-<span class="n">systemctl</span> <span class="n">stop</span> <span class="n">what</span><span class="p">.</span><span class="n">service</span>
-<span class="n">systemctl</span> <span class="k">restart</span> <span class="n">what</span><span class="p">.</span><span class="n">service</span>
+<div class="highlight"><pre><span></span><span class="err">systemctl start what.service</span>
+<span class="err">systemctl stop what.service</span>
+<span class="err">systemctl restart what.service</span>
 </pre></div>
 <h2 id="centos7dns">centos7配置dns</h2>
 <p>发现centos7配置dns之后重启 network 服务配置就会丢失，需要在</p>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">NetworkManager</span><span class="o">/</span><span class="n">NetworkManager</span><span class="p">.</span><span class="n">conf</span>
+<div class="highlight"><pre><span></span><span class="err">/etc/NetworkManager/NetworkManager.conf</span>
 </pre></div>
 <p>main哪里加上</p>
-<div class="highlight"><pre><span></span><span class="n">dns</span> <span class="o">=</span> <span class="k">none</span>
+<div class="highlight"><pre><span></span><span class="err">dns = none</span>
 </pre></div>
 <p>然后重启</p>
-<div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="k">restart</span> <span class="n">NetworkManager</span><span class="p">.</span><span class="n">service</span>
+<div class="highlight"><pre><span></span><span class="err">systemctl restart NetworkManager.service</span>
 </pre></div>
 <p>然后再如同以前一样修改 <code>/etc/resolv.conf</code> 。</p>
 <h2 id="_6">配置语言</h2>
 <h3 id="_7">查看当前操作系统语言</h3>
-<div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">locale</span><span class="p">.</span><span class="n">conf</span> 
+<div class="highlight"><pre><span></span><span class="err">cat /etc/locale.conf </span>
 </pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span><span class="n">localectl</span> <span class="n">status</span>
+<div class="highlight"><pre><span></span><span class="err">localectl status</span>
 </pre></div>
 <h3 id="_8">列出可用语言</h3>
-<div class="highlight"><pre><span></span><span class="n">locale</span> <span class="o">-</span><span class="n">a</span>
+<div class="highlight"><pre><span></span><span class="err">locale -a</span>
 </pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span><span class="n">localectl</span> <span class="n">list</span><span class="o">-</span><span class="n">locales</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">zh</span>
+<div class="highlight"><pre><span></span><span class="err">localectl list-locales | grep zh</span>
 </pre></div>
 <h3 id="_9">修改操作系统语言</h3>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">localectl</span> <span class="k">set</span><span class="o">-</span><span class="n">locale</span> <span class="n">LANG</span><span class="o">=</span><span class="n">zh_CN</span><span class="p">.</span><span class="n">utf8</span>
+<div class="highlight"><pre><span></span><span class="err">sudo localectl set-locale LANG=zh_CN.utf8</span>
 </pre></div>
 <h2 id="_10">参考资料</h2>
 <ol>

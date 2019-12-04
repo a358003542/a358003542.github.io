@@ -165,31 +165,31 @@
 <p>关于python的二叉树实现主要参考了 <a href="http://www.laurentluce.com/posts/binary-search-tree-library-in-python/">参考资料2</a> ，其中有个伙计的评论说为什么不合并为一个类，这个提议实际上非常的好。这样的话具体的data，也就是节点里面存储的数据，是什么都是可以的，这个根据实际需要来设计，然后我们在下面比较data的大小采用 <code>hash(object)</code> 也就是调用 <code>__hash__</code> 方法，同时判断时候相等采用 <code>==</code> ，也就是调用 <code>__eq__</code> 方法。</p>
 <h3 id="_2">基本结构和插入查找操作</h3>
 <p>值得一提的是key的比较大小判断采用的是 <code>hash(data)</code> 这种形式，就作为键的唯一id的一种方法，这是没有问题的。然后data不可以为sequence。然后需要强调的是这里的比较大小，并不具有某种实际意义。比如:</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">hash</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">hash</span><span class="p">(</span><span class="ss">"22"</span><span class="p">)</span>
-<span class="k">True</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; hash(11)&gt; hash("22")</span>
+<span class="err">True</span>
 </pre></div>
 <p>一般具有实际含义的某种比较大小，我们必须确保比较对象是属于同一个类，或者更抽象的讨论，属于同一个概念或同一个聚合类等。</p>
 <div class="highlight"><pre><span></span><span class="c1">### ref http://www.laurentluce.com/posts/binary-search-tree-library-in-python/</span>
 <span class="k">class</span> <span class="nc">BSTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">'''use hash(data) ,but notice the data can not be sequence'''</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">'&lt;BSTree {}&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">'&lt;BSTree </span><span class="si">{}</span><span class="s1">&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">'''insert data'''</span>
         <span class="k">if</span> <span class="nb">hash</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">BSTree</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">hash</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">BSTree</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -198,12 +198,12 @@
 
     <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hash</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">KeyError</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">hash</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">KeyError</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -228,12 +228,12 @@
 <p>这个函数看的参考资料的，稍微做了一些改动，返回的不是data，而是node对象，方便后续很多函数的支持调用。这种堆然后这种遍历老实说一开始我估计是想不出来的，看跟着程序走一下发现确实遍历树了，很是巧妙。</p>
 <p>然后绘图函数如下所示:</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_ymove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get_ymove</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
 
 <span class="k">def</span> <span class="nf">get_xmove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
 
     <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
@@ -248,14 +248,14 @@
     <span class="n">h</span> <span class="o">=</span> <span class="mi">600</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'RGB'</span><span class="p">,(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">),(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">))</span>
     <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-    <span class="n">last_x</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">last_y</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">last_x</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">last_y</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">introspection</span><span class="p">():</span>
         <span class="n">node_point_x</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_xmove</span><span class="p">()</span><span class="o">*</span><span class="mi">50</span> <span class="o">+</span> <span class="mi">400</span>
         <span class="n">node_point_y</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_ymove</span><span class="p">()</span><span class="o">*</span><span class="mi">50</span> <span class="o">+</span> <span class="mi">50</span>
 
 
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">node_point_x_parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get_xmove</span><span class="p">()</span><span class="o">*</span><span class="mi">50</span> <span class="o">+</span><span class="mi">400</span>
             <span class="n">node_point_y_parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get_ymove</span><span class="p">()</span><span class="o">*</span><span class="mi">50</span> <span class="o">+</span><span class="mi">50</span>
 
@@ -293,17 +293,17 @@
 <span class="sd">    """</span>
     <span class="c1"># get node containing data</span>
     <span class="n">node</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">children_count</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children_count</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">children_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># if node has no children, just remove it</span>
             <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="n">node</span><span class="p">:</span>
-                    <span class="n">parent</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">parent</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">parent</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">parent</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">elif</span> <span class="n">children_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># if node has 1 child</span>
             <span class="c1"># replace node by its child</span>
@@ -343,21 +343,21 @@
 <span class="sd">    @param node tree to compare</span>
 <span class="sd">    @returns True if the tree passed is identical to this tree</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">!=</span> <span class="n">node</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">compare_trees</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">compare_trees</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>

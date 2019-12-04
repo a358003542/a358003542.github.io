@@ -180,7 +180,7 @@ cdwanze的博文 - linux category</title>
                                 </section>
                                 
 <h2 id="xargs">xargs多行转一行</h2>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">rmdir</span> <span class="c1">--ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)</span>
+<div class="highlight"><pre><span></span><span class="err">sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)</span>
 </pre></div>
 <p>这是一个批量删除空文件夹的命令，假设现在空文件夹数目很多。首先 <code>ls -U</code> 单纯列出来，然后管道导向 <code>head</code> 只打印最开始的几行，然后管道导向 <code>xargs</code> 命令，这样多行转成一行，就可以作为 rmdir 的参数了。</p>
                             </article>
@@ -205,7 +205,7 @@ cdwanze的博文 - linux category</title>
                                 
 <h2 id="_1">简介</h2>
 <p>supervisor会开启一个后台服务 <code>supervisord</code> 可以通过：</p>
-<div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="n">status</span> <span class="n">supervisord</span>
+<div class="highlight"><pre><span></span><span class="err">systemctl status supervisord</span>
 </pre></div>
 <p>查看之。同样类似于nginx之类的做法，其通过各个配置文件来管理的，然后配置文件在 <code>/etc/supervisord.conf</code> 文件里面。</p>
 <p>一般会如下所示将配置文件放在另外的某个地方。</p>
@@ -254,21 +254,22 @@ cdwanze的博文 - linux category</title>
 <p>老实说我不喜欢crontab，如果只是简单调度，用apscheduler或者之类的工具简单写下就能集成到你的软件系统中去，而再复杂点的工作流，任务流程等等管理，都推荐使用airflow这样的框架来管理。</p>
 <p>而至于说到大数据上的那些流式数据处理工具，实际上只有百分之几的公司因为业务需要必须上大数据，大部分公司是没必要上大数据的，因为大数据引入了太多的复杂度了，如果没有必要，而仅仅追求时髦去玩大数据，那显然是违背我们程序界公认的KISS原则的【Keep it simple and stupid.】。</p>
 <h3 id="airflow">安装airflow</h3>
-<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">apache</span><span class="o">-</span><span class="n">airflow</span>
+<div class="highlight"><pre><span></span><span class="err">pip install apache-airflow</span>
 </pre></div>
 <h3 id="_2">推荐起步</h3>
 <p>推荐 项目工作目录下 <code>.env</code> 文件下写上：</p>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">AIRFLOW_HOME</span><span class="o">=</span><span class="p">.</span>
+<div class="highlight"><pre><span></span><span class="err">export AIRFLOW_HOME=.</span>
 </pre></div>
 <p>这样使用pipenv或者其他工具在当前目录激活工作环境的时候，也自动激活了airflow在当前目录下工作的配置。这样我们airflow相关works配置的相关代码都放在这里。</p>
 <p>激活虚拟环境后，然后我们有如下操作：</p>
 <h3 id="_3">初始化数据库</h3>
-<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">initdb</span>
+<div class="highlight"><pre><span></span><span class="err">airflow initdb</span>
 </pre></div>
 <h3 id="webserver">启动webserver</h3>
-<div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">webserver</span>
+<div class="highlight"><pre><span></span><span class="err">airflow webserver</span>
 </pre></div>
-<h2 id="_4">使用其他数据库 …</h2>
+<h2 id="_4">使用其他数据库</h2>
+<p>刚开始玩下sqlite3数据库 …</p>
                             </article>
 
 
@@ -378,7 +379,7 @@ cdwanze的博文 - linux category</title>
 <span class="n">workers</span> <span class="o">=</span> <span class="n">max_workers</span><span class="p">()</span>
 </pre></div>
 <p>写上这么一个python文件之后，启动gunicorn挂载django服务大体如下：</p>
-<div class="highlight"><pre><span></span><span class="n">gunicorn</span> <span class="o">-</span><span class="k">c</span> <span class="n">gunicorn_config</span><span class="p">.</span><span class="n">py</span> <span class="n">youapp</span><span class="p">.</span><span class="n">wsgi</span>
+<div class="highlight"><pre><span></span><span class="err">gunicorn -c gunicorn_config.py youapp.wsgi</span>
 </pre></div>
 <p>其他配置还有：</p>
 <ul>
@@ -446,19 +447,19 @@ cdwanze的博文 - linux category</title>
 </pre></div>
 <p>编辑一般就是进入的vi编辑器。用crontab -e修改的配置会直接生效，不需要重启crontab的后台服务。如果重启后台服务了，那么所有的任务都会重新开始计时。当你的配置写着每隔一个小时执行某个任务，那么要等到下一个小时的时候才会执行任务。</p>
 <p>一开始推荐写上这样一个每分钟的echo命令来看看crontab的具体运行情况。</p>
-<div class="highlight"><pre><span></span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="n">echo</span> <span class="ss">"test"</span>
+<div class="highlight"><pre><span></span><span class="err">* * * * * echo "test"</span>
 </pre></div>
 <p>一般日志是默认在 <code>/var/log/cron</code> 那里（centos）。</p>
 <p>然后上面的配置含义是 ：</p>
-<div class="highlight"><pre><span></span><span class="err">分</span> <span class="err">时</span> <span class="err">日</span> <span class="err">月</span> <span class="err">星期几</span> <span class="err">命令</span>
+<div class="highlight"><pre><span></span><span class="err">分 时 日 月 星期几 命令</span>
 </pre></div>
 <p>其中小时是24时制，星期几0表示星期日，1表示星期一。后面的命令就是一行简单的shell命令，如果是多行命令的话建议写成bash脚本，然后给这个脚本可执行权限，然后写上该脚本的绝对路径名即可。</p>
 <p><strong>NOTICE</strong>： crontab里面执行的命令不是在shell环境下，比如pyenv环境就可能不会正常工作，推荐要使用什么命令什么文件都使用绝对路径。</p>
 <p>每五分钟：</p>
-<div class="highlight"><pre><span></span><span class="o">*/</span><span class="mi">5</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
+<div class="highlight"><pre><span></span><span class="err">*/5 * * * *</span>
 </pre></div>
 <p>每三个小时：</p>
-<div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">*/</span><span class="mi">3 …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="err">0 */3 …</span></pre></div>
                             </article>
 
 
@@ -484,11 +485,13 @@ cdwanze的博文 - linux category</title>
 <ul>
 <li>远程仓库文件到本地 网上创建项目之后，你需要将网上的存档下载到本地，在你希望下载的地点，打开终端：</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">a358003542</span><span class="o">/</span><span class="n">xelatex</span><span class="o">-</span><span class="n">guide</span><span class="o">-</span><span class="n">book</span><span class="p">.</span><span class="n">git</span>
+<div class="highlight"><pre><span></span><span class="err">git clone https://github.com/a358003542/xelatex-guide-book.git</span>
 </pre></div>
 <ul>
 <li>初始化本地仓库 <code>git init</code> 命令用于初始化本地仓库， <code>git clone</code> 下来的仓库文件已经初始化了，然后 <code>origin</code> 这个远程服务器名字也已经加上去了。</li>
-<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all …</code></li></ul>
+<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all</code> 选项：</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="err">git …</span></pre></div>
                             </article>
 
 
@@ -518,13 +521,13 @@ cdwanze的博文 - linux category</title>
 <p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
 <p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
 <h3 id="_2">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS1</span><span class="o">=</span><span class="ss">"=&gt;"</span>
+<div class="highlight"><pre><span></span><span class="err">export PS1="=&gt;"</span>
 </pre></div>
 <p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
 <p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
 <p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
 <p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span><span class="n">export …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="err">export …</span></pre></div>
                             </article>
 
 
@@ -547,7 +550,7 @@ cdwanze的博文 - linux category</title>
                                 
 <p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
 <p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
-<div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="k">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
+<div class="highlight"><pre><span></span><span class="err">ansible all -m ping</span>
 </pre></div>
 <p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
 <h2 id="hosts">hosts文件配置</h2>
@@ -637,7 +640,7 @@ cdwanze的博文 - linux category</title>
 </ul>
 <h2 id="_3">查找</h2>
 <h3 id="_4">匹配某个单词</h3>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Lao</span> <span class="n">Zi</span>
+<div class="highlight"><pre><span></span><span class="err">/Lao Zi</span>
 </pre></div>
 <p>这样我们就开始搜索精确匹配含有“Lao …</p>
                             </article>
@@ -664,24 +667,27 @@ cdwanze的博文 - linux category</title>
 <p>nginx的官方文档在 <a href="http://nginx.org/en/docs/">这里</a> ，有问题主要还是参看官方文档吧。</p>
 <h3 id="_2">安装</h3>
 <p>debian系安装:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">nginx</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt-get install nginx</span>
 </pre></div>
 <p>rpm系统安装:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">nginx</span>
+<div class="highlight"><pre><span></span><span class="err">sudo yum install nginx</span>
 </pre></div>
 <h3 id="nginx">nginx配置基础</h3>
 <p>nginx的配置就是在 <code>/etc/nginx/sites-available</code> 那里新建一个配置文件，然后这样创建一个符号链接到 <code>sites-enabled</code> 那里。</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span>
+<div class="highlight"><pre><span></span><span class="err">sudo ln -s /etc/nginx/sites-available/cdwanze.work /etc/nginx/sites-enabled/cdwanze.work</span>
 </pre></div>
 <p>然后重启nginx即可。 </p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">nginx</span> <span class="k">restart</span>
+<div class="highlight"><pre><span></span><span class="err">sudo service nginx restart</span>
 </pre></div>
 <p>nginx配置文件的基本格式是:</p>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">section</span><span class="o">&gt;</span> <span class="err">{</span>
-    <span class="o">&lt;</span><span class="n">directive</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="k">parameters</span><span class="o">&gt;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">&lt;section&gt; {</span>
+<span class="err">    &lt;directive&gt;  &lt;parameters&gt;;</span>
 <span class="err">}</span>
 </pre></div>
-<h3 id="nginx_1">nginx命令行 …</h3>
+<h3 id="nginx_1">nginx命令行</h3>
+<ul>
+<li>
+<p>nginx -t  测试 …</p></li></ul>
                             </article>
 
                      </div>

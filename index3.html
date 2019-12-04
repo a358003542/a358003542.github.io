@@ -183,6 +183,47 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/crontab.html">crontab定时任务
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2017-12-30T23:04:00+08:00">2017年 12月 30日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>crontab工具可以用来让系统执行一些周期性任务，其在ubuntu下服务名字叫cron；在centos下服务名字叫crond。</p>
+<p>你可以通过crontab这个命令查看或修改具体的配置：</p>
+<div class="highlight"><pre><span></span><span class="n">crontab</span> <span class="o">-</span><span class="n">l</span>  <span class="o">#</span><span class="err">列出配置文件内容</span>
+
+<span class="n">crontab</span> <span class="o">-</span><span class="n">e</span>  <span class="o">#</span><span class="err">进入配置文件编辑</span>
+</pre></div>
+<p>编辑一般就是进入的vi编辑器。用crontab -e修改的配置会直接生效，不需要重启crontab的后台服务。如果重启后台服务了，那么所有的任务都会重新开始计时。当你的配置写着每隔一个小时执行某个任务，那么要等到下一个小时的时候才会执行任务。</p>
+<p>一开始推荐写上这样一个每分钟的echo命令来看看crontab的具体运行情况。</p>
+<div class="highlight"><pre><span></span><span class="err">* * * * * echo "test"</span>
+</pre></div>
+<p>一般日志是默认在 <code>/var/log/cron</code> 那里（centos）。</p>
+<p>然后上面的配置含义是 ：</p>
+<div class="highlight"><pre><span></span><span class="err">分 时 日 月 星期几 命令</span>
+</pre></div>
+<p>其中小时是24时制，星期几0表示星期日，1表示星期一。后面的命令就是一行简单的shell命令，如果是多行命令的话建议写成bash脚本，然后给这个脚本可执行权限，然后写上该脚本的绝对路径名即可。</p>
+<p><strong>NOTICE</strong>： crontab里面执行的命令不是在shell环境下，比如pyenv环境就可能不会正常工作，推荐要使用什么命令什么文件都使用绝对路径。</p>
+<p>每五分钟：</p>
+<div class="highlight"><pre><span></span><span class="err">*/5 * * * *</span>
+</pre></div>
+<p>每三个小时：</p>
+<div class="highlight"><pre><span></span><span class="err">0 */3 …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/git.html">git版本控制
  </a></h1>
 
@@ -202,11 +243,13 @@
 <ul>
 <li>远程仓库文件到本地 网上创建项目之后，你需要将网上的存档下载到本地，在你希望下载的地点，打开终端：</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">a358003542</span><span class="o">/</span><span class="n">xelatex</span><span class="o">-</span><span class="n">guide</span><span class="o">-</span><span class="n">book</span><span class="p">.</span><span class="n">git</span>
+<div class="highlight"><pre><span></span><span class="err">git clone https://github.com/a358003542/xelatex-guide-book.git</span>
 </pre></div>
 <ul>
 <li>初始化本地仓库 <code>git init</code> 命令用于初始化本地仓库， <code>git clone</code> 下来的仓库文件已经初始化了，然后 <code>origin</code> 这个远程服务器名字也已经加上去了。</li>
-<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all …</code></li></ul>
+<li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all</code> 选项：</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="err">git …</span></pre></div>
                             </article>
 
 
@@ -236,13 +279,13 @@
 <p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
 <p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
 <h3 id="_2">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PS1</span><span class="o">=</span><span class="ss">"=&gt;"</span>
+<div class="highlight"><pre><span></span><span class="err">export PS1="=&gt;"</span>
 </pre></div>
 <p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
 <p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
 <p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
 <p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span><span class="n">export …</span></pre></div>
+<div class="highlight"><pre><span></span><span class="err">export …</span></pre></div>
                             </article>
 
 
@@ -265,7 +308,7 @@
                                 
 <p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
 <p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
-<div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="k">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
+<div class="highlight"><pre><span></span><span class="err">ansible all -m ping</span>
 </pre></div>
 <p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
 <h2 id="hosts">hosts文件配置</h2>
@@ -355,7 +398,7 @@
 </ul>
 <h2 id="_3">查找</h2>
 <h3 id="_4">匹配某个单词</h3>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Lao</span> <span class="n">Zi</span>
+<div class="highlight"><pre><span></span><span class="err">/Lao Zi</span>
 </pre></div>
 <p>这样我们就开始搜索精确匹配含有“Lao …</p>
                             </article>
@@ -383,7 +426,7 @@
 <p><strong>外链</strong> 也就是别的网站引用本网站能有效提高本网站排名，在各个搜索引擎算法中现在仍然是一个很重要的指标。</p>
 <h3 id="meta">meta标记</h3>
 <p>早期搜索引擎是会爬取meta源标记信息，如下所示：</p>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">meta</span> <span class="n">name</span><span class="o">=</span><span class="ss">"keywords"</span> <span class="n">content</span><span class="o">=</span><span class="ss">"search engine optimization, SEO, Jennette Banks, 搜索引擎优化, tttwaca"</span><span class="o">/&gt;</span>
+<div class="highlight"><pre><span></span><span class="err">&lt;meta name="keywords" content="search engine optimization, SEO, Jennette Banks, 搜索引擎优化, tttwaca"/&gt;</span>
 </pre></div>
 <p>不过现在搜索引擎的发展方向是忽略这些指定的关键词，而是自己分析得到关键词。</p>
 <p>那么无疑现在seo最最重要的就是内容：</p>
@@ -449,16 +492,16 @@
 <p>如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？</p>
 <p><img alt="img" src="https://docs.cdwanze.work/images/arithmetic/mindmaptree.png"/></p>
 <p>然后其对应的csv格式如下：</p>
-<div class="highlight"><pre><span></span><span class="err">奴隶社会</span><span class="p">,</span><span class="err">非洲</span><span class="p">,</span><span class="err">古埃及文明</span><span class="p">,</span><span class="err">金字塔</span>
-<span class="p">,</span><span class="err">亚洲</span><span class="p">,</span><span class="err">两河流域文明</span><span class="p">,</span><span class="err">汉谟拉比法典</span>
-<span class="p">,,</span><span class="err">古印度</span><span class="p">,</span><span class="err">种姓制度</span>
-<span class="p">,,,</span><span class="err">佛教的创立</span>
-<span class="p">,</span><span class="err">欧洲</span><span class="p">,</span><span class="err">希腊</span><span class="p">,</span><span class="err">希腊城邦</span>
-<span class="p">,,,</span><span class="err">雅典民主</span>
-<span class="p">,,</span><span class="err">罗马</span><span class="p">,</span><span class="err">城邦</span>
-<span class="p">,,,</span><span class="err">帝国的征服与扩展</span>
-<span class="p">,,</span><span class="err">希腊罗马古典文化</span><span class="p">,</span><span class="err">建筑艺术</span>
-<span class="p">,,,</span><span class="err">公历</span>
+<div class="highlight"><pre><span></span><span class="err">奴隶社会,非洲,古埃及文明,金字塔</span>
+<span class="err">,亚洲,两河流域文明,汉谟拉比法典</span>
+<span class="err">,,古印度,种姓制度</span>
+<span class="err">,,,佛教的创立</span>
+<span class="err">,欧洲,希腊,希腊城邦</span>
+<span class="err">,,,雅典民主</span>
+<span class="err">,,罗马,城邦</span>
+<span class="err">,,,帝国的征服与扩展</span>
+<span class="err">,,希腊罗马古典文化,建筑艺术</span>
+<span class="err">,,,公历</span>
 </pre></div>
 <p>这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。</p>
 <h2 id="_1">基本类的设计</h2>
@@ -468,7 +511,7 @@
 
 
 <span class="k">class</span> <span class="nc">MindMapTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent …</span></pre></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent …</span></pre></div>
                             </article>
 
 
@@ -675,7 +718,7 @@
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">rcParams</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
 <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sans-serif&#39;</span>
 <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;SimHei&#39;</span><span class="p">)</span> <span class="c1"># 插入中文字体</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">])</span>
@@ -789,24 +832,27 @@
 <p>nginx的官方文档在 <a href="http://nginx.org/en/docs/">这里</a> ，有问题主要还是参看官方文档吧。</p>
 <h3 id="_2">安装</h3>
 <p>debian系安装:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">nginx</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt-get install nginx</span>
 </pre></div>
 <p>rpm系统安装:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">nginx</span>
+<div class="highlight"><pre><span></span><span class="err">sudo yum install nginx</span>
 </pre></div>
 <h3 id="nginx">nginx配置基础</h3>
 <p>nginx的配置就是在 <code>/etc/nginx/sites-available</code> 那里新建一个配置文件，然后这样创建一个符号链接到 <code>sites-enabled</code> 那里。</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">cdwanze</span><span class="p">.</span><span class="k">work</span>
+<div class="highlight"><pre><span></span><span class="err">sudo ln -s /etc/nginx/sites-available/cdwanze.work /etc/nginx/sites-enabled/cdwanze.work</span>
 </pre></div>
 <p>然后重启nginx即可。 </p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">nginx</span> <span class="k">restart</span>
+<div class="highlight"><pre><span></span><span class="err">sudo service nginx restart</span>
 </pre></div>
 <p>nginx配置文件的基本格式是:</p>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">section</span><span class="o">&gt;</span> <span class="err">{</span>
-    <span class="o">&lt;</span><span class="n">directive</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="k">parameters</span><span class="o">&gt;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">&lt;section&gt; {</span>
+<span class="err">    &lt;directive&gt;  &lt;parameters&gt;;</span>
 <span class="err">}</span>
 </pre></div>
-<h3 id="nginx_1">nginx命令行 …</h3>
+<h3 id="nginx_1">nginx命令行</h3>
+<ul>
+<li>
+<p>nginx -t  测试 …</p></li></ul>
                             </article>
 
 
@@ -831,7 +877,7 @@
 <p>jinja2模板在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板还是很值得一学的。</p>
 <h2 id="_2">注释</h2>
 <p>这里面的内容是模板文件的注释内容。</p>
-<div class="highlight"><pre><span></span><span class="err">{</span><span class="o">#</span> <span class="p">...</span> <span class="o">#</span><span class="err">}</span>
+<div class="highlight"><pre><span></span><span class="err">{# ... #}</span>
 </pre></div>
 <h2 id="_3">变量</h2>
 <p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
@@ -877,7 +923,7 @@
 <p>BeautifulSoup模块在python网页分析这一块是很有名的一个模块，其确实让网页分析任务变得轻松而easy了。本文将对bs4模块进行简单的介绍，更多细节请参看 <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">官方文档</a> 。</p>
 <h2 id="_2">安装</h2>
 <p>安装就简单用pip命令安装之:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">beautifulsoup</span>
+<div class="highlight"><pre><span></span><span class="err">sudo pip install beautifulsoup</span>
 </pre></div>
 <h2 id="_3">第一个例子</h2>
 <p>然后在使用上因为python2和python3的urllib相关改动很大，加上urllib在使用上不是很友好，强烈推荐大家直接用requests模块来进行相关操作。然后beautifulsoup的引入语句一般如下所示:</p>
@@ -888,7 +934,7 @@
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://www.pythonscraping.com/exercises/exercise1.html"</span><span class="p">)</span>
 <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 </pre></div>
 <p>在上面soup.title返回的是一个标签对象。然后标签对象里面如果有标签的话又可以继续点号索引标签:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; soup.body …</pre></div>
@@ -956,8 +1002,8 @@
 <p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
 <h2 id="pytest">pytest简介</h2>
 <p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
-<div class="highlight"><pre><span></span><span class="n">def</span> <span class="n">test_prime</span><span class="p">():</span>
-    <span class="n">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+<div class="highlight"><pre><span></span><span class="err">def test_prime():</span>
+<span class="err">    assert prime(4) == 7</span>
 </pre></div>
 <h3 id="_1">确认抛出某个异常</h3>
 <p>把官方的例子copy过来了，看一下就懂了。</p>
@@ -970,35 +1016,6 @@
         <span class="n">f</span><span class="p">()</span>
 </pre></div>
 <p>完了，如果你赶时间的话 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/html5-bootstrap.html">html5学习之bootstrap篇
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#html5-ref">html5
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-05-31T00:00:00+08:00">2017年 5月 31日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h1 id="bootstrap">bootstrap</h1>
-<p>本文点到为止讲解一下，读者简单了解即可，具体还是要自己练手来学习。</p>
-<h2 id="_1">安装</h2>
-<p>本文是如下加载的：</p>
-<div class="highlight"><pre><span></span><span class="o">&lt;!--</span> <span class="err">最新版本的</span> <span class="n">Bootstrap</span> <span class="err">核心</span> <span class="n">CSS</span> <span class="err">文件</span> <span class="o">--&gt;</span>
-<span class="o">&lt;</span><span class="n">link</span> <span class="n">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="n">href</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"</span> <span class="n">integrity</span><span class="o">=</span><span class="s">"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"</span> <span class="n">crossorigin</span><span class="o">=</span><span class="s">"anonymous"</span><span class="o">&gt;</span>
-
-<span class="o">&lt;!--</span> <span class="err">可选的</span> <span class="n">Bootstrap</span> <span class="err">主题文件（一般不用引入）</span> <span class="o">--&gt;</span>
-<span class="o">&lt;</span><span class="n">link</span> <span class="n">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="n">href</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/bootstrap@3 …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">

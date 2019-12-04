@@ -17,12 +17,12 @@
 
 <meta property="og:title" content="windows下的linux子系统 "/>
 <meta property="og:url" content="https://docs.cdwanze.work/drafts/wsl.html" />
-<meta property="og:description" content="WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。 WSL配置 首先需要用管理员方式运行powershell，然后运行： Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 然后重启系统。这个必须做，否则wsl会提示错误。 然后进去了之后设置用户名和密码，这个没什么好说的，这里的用户名不一定是root。 然后在windows系统的 Settings -&gt; Update and Security-&gt; For develops 哪里打开 Devoloper Mode，不清楚为什么，但推荐做一下，参看的是 官方文档的这里 。 这样你在windows下输入bash就可以进入ubuntu系统了， ssh连接 NOTICE： 本小节可选项，可以不看。 主要就是修改 /etc/ssh/sshd_config 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口 …" />
+<meta property="og:description" content="WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。 WSL配置 首先需要用管理员方式运行powershell，然后运行： Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 然后重启系统。这个必须做，否则wsl会提示错误。 然后进去了之后设置用户名和密码，这个没什么好说的，这里的用户名不一定是root。 然后在windows系统的 Settings -&gt; Update and Security-&gt; For develops 哪里打开 Devoloper Mode，不清楚为什么，但推荐做一下，参看的是 官方文档的这里 。 这样你在windows下输入bash就可以进入ubuntu系统了， ssh连接 NOTICE： 本小节可选项，可以不看。 主要就是修改 /etc/ssh/sshd_config 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口，然后： UsePrivilegeSeparation no #因为wsl没有实现chroot …" />
 <meta property="og:site_name" content="cdwanze的博文" />
 <meta property="og:article:author" content="cdwanze" />
 <meta property="og:article:published_time" content="2018-08-02T00:00:00+08:00" />
 <meta name="twitter:title" content="windows下的linux子系统 ">
-<meta name="twitter:description" content="WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。 WSL配置 首先需要用管理员方式运行powershell，然后运行： Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 然后重启系统。这个必须做，否则wsl会提示错误。 然后进去了之后设置用户名和密码，这个没什么好说的，这里的用户名不一定是root。 然后在windows系统的 Settings -&gt; Update and Security-&gt; For develops 哪里打开 Devoloper Mode，不清楚为什么，但推荐做一下，参看的是 官方文档的这里 。 这样你在windows下输入bash就可以进入ubuntu系统了， ssh连接 NOTICE： 本小节可选项，可以不看。 主要就是修改 /etc/ssh/sshd_config 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口 …">
+<meta name="twitter:description" content="WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。 WSL配置 首先需要用管理员方式运行powershell，然后运行： Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux 然后重启系统。这个必须做，否则wsl会提示错误。 然后进去了之后设置用户名和密码，这个没什么好说的，这里的用户名不一定是root。 然后在windows系统的 Settings -&gt; Update and Security-&gt; For develops 哪里打开 Devoloper Mode，不清楚为什么，但推荐做一下，参看的是 官方文档的这里 。 这样你在windows下输入bash就可以进入ubuntu系统了， ssh连接 NOTICE： 本小节可选项，可以不看。 主要就是修改 /etc/ssh/sshd_config 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口，然后： UsePrivilegeSeparation no #因为wsl没有实现chroot …">
 
     <title>
 windows下的linux子系统  · cdwanze的博文
@@ -131,7 +131,7 @@ windows下的linux子系统  · cdwanze的博文
             <p>WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。</p>
 <h2 id="wsl">WSL配置</h2>
 <p>首先需要用管理员方式运行powershell，然后运行：</p>
-<div class="highlight"><pre><span></span><span class="n">Enable</span><span class="o">-</span><span class="n">WindowsOptionalFeature</span> <span class="o">-</span><span class="n">Online</span> <span class="o">-</span><span class="n">FeatureName</span> <span class="n">Microsoft</span><span class="o">-</span><span class="n">Windows</span><span class="o">-</span><span class="n">Subsystem</span><span class="o">-</span><span class="n">Linux</span>
+<div class="highlight"><pre><span></span><span class="err">Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux</span>
 </pre></div>
 
 
@@ -142,30 +142,30 @@ windows下的linux子系统  · cdwanze的博文
 <h2 id="ssh">ssh连接</h2>
 <p><strong>NOTICE：</strong> 本小节可选项，可以不看。</p>
 <p>主要就是修改 <code>/etc/ssh/sshd_config</code> 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口，然后：</p>
-<div class="highlight"><pre><span></span><span class="n">UsePrivilegeSeparation</span> <span class="k">no</span> <span class="o">#</span><span class="err">因为</span><span class="n">wsl没有实现chroot</span>
-<span class="n">PasswordAuthentication</span> <span class="n">yes</span>
-<span class="n">ListenAddress</span> <span class="mi">127</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span>      <span class="o">#</span> <span class="err">安全考虑</span>
+<div class="highlight"><pre><span></span><span class="err">UsePrivilegeSeparation no #因为wsl没有实现chroot</span>
+<span class="err">PasswordAuthentication yes</span>
+<span class="err">ListenAddress 127.0.0.1      # 安全考虑</span>
 </pre></div>
 
 
 <p>然后会提示什么文件找不到错误，如下：</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">rsa</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssh</span><span class="o">/</span><span class="n">ssh_host_rsa_key</span>
-<span class="n">sudo</span> <span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">ecdsa</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssh</span><span class="o">/</span><span class="n">ssh_host_ecdsa_key</span>
-<span class="n">sudo</span> <span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">ed25519</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssh</span><span class="o">/</span><span class="n">ssh_host_ed25519_key</span>
+<div class="highlight"><pre><span></span><span class="err">sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key</span>
+<span class="err">sudo ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key</span>
+<span class="err">sudo ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key</span>
 </pre></div>
 
 
 <p>在重启ssh服务，应该问题不大了：</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">ssh</span> <span class="c1">--full-restart</span>
+<div class="highlight"><pre><span></span><span class="err">sudo service ssh --full-restart</span>
 </pre></div>
 
 
 <p><strong>NOTICE:</strong> 如果你把ubuntu关闭了，那么ssh也就连不上了，网上有些解决方案说制作一个开机脚本后台启动的，觉得太麻烦了，就这个任务不愿意这么折腾，开发的时候注意打开ssh服务就是了。</p>
 <h2 id="_1">额外的安装软件包</h2>
 <p>gcc g++ make cmake gdb这些软件包是需要在 WSL 里面安装的，推荐直接如下一并安装了：</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="k">update</span>
-<span class="n">sudo</span> <span class="n">apt</span> <span class="n">upgrade</span>
-<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">build</span><span class="o">-</span><span class="n">esstial</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt update</span>
+<span class="err">sudo apt upgrade</span>
+<span class="err">sudo apt install build-esstial</span>
 </pre></div>
 
 

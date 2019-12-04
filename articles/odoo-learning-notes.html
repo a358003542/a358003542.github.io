@@ -368,15 +368,15 @@ odoo学习笔记  · cdwanze的博文
 <h1 id="_4">安装和配置</h1>
 <p>因为odoo的git仓库比较大了，推荐还是下载odoo发布的压缩包文件作为源码。下面主要讨论的是从源码安装的过程和一些问题。这其中数据库的相关配置是个难点，后面会再详细的讨论之。下面本文的叙述更多的偏向centos7，当然了从源码安装本身基于linux系统大环境，其他linux发行版除了个别安装包的支持差异外，差别不是太大了。</p>
 <h2 id="_5">准备</h2>
-<div class="highlight"><pre><span></span><span class="n">yum</span> <span class="k">update</span>
-<span class="n">yum</span> <span class="n">install</span> <span class="n">epel</span><span class="o">-</span><span class="n">release</span>
-<span class="n">yum</span> <span class="n">groupinstall</span> <span class="n">Development</span> <span class="n">tools</span>
+<div class="highlight"><pre><span></span><span class="err">yum update</span>
+<span class="err">yum install epel-release</span>
+<span class="err">yum groupinstall Development tools</span>
 </pre></div>
 <h2 id="postgresql">PostgreSQL数据库</h2>
 <p>PostgreSQL是很有名的一个开源数据库，最初由加州大学伯克利分校的计算机系开发，其和sqlite3最大的区别就是其采用了client/server模型，Odoo搭建在PostgreSQL基础之上了，也继承了这种client/server模型。Odoo对PostgreSQL数据库的版本号要求不是很严格，用最新的也是可以的。</p>
-<div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">server</span>
-<span class="n">yum</span> <span class="n">install</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">contrib</span>
-<span class="n">postgresql</span><span class="o">-</span><span class="n">setup</span> <span class="n">initdb</span>
+<div class="highlight"><pre><span></span><span class="err">yum install postgresql-server</span>
+<span class="err">yum install postgresql-contrib</span>
+<span class="err">postgresql-setup initdb</span>
 </pre></div>
 <p>最基本的安装现在先暂时这样，关于数据库的配置后面我们再进一步讨论之。然后关于 Postgresql数据库的学习，读者可以简单参考我写的 postgresql数据库 一文。</p>
 <h2 id="python_1">python虚拟环境等的配置</h2>
@@ -434,35 +434,35 @@ odoo学习笔记  · cdwanze的博文
 </pre></div>
 <h3 id="ubuntu">ubuntu那边</h3>
 <p>关于python-ldap 模块的安装参考了 <a href="http://stackoverflow.com/questions/4768446/python-cant-install-python-ldap">这个网页</a> ，请确保下面两个软件包都安装了（否则会提示找不到lber.h错误）: </p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">libldap2</span><span class="o">-</span><span class="n">dev</span> 
-<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">libsasl2</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt-get install libldap2-dev </span>
+<span class="err">sudo apt-get install libsasl2-dev</span>
 </pre></div>
 <p>关于psycopg2模块请确保下面软件包安装了: </p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">libpq</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt-get install libpq-dev</span>
 </pre></div>
 <p>还有这几个软件包确保安装了，其中libxml2和lxml模块有关。</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">libxml2</span><span class="o">-</span><span class="n">dev</span>
-<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">libxslt1</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt-get install libxml2-dev</span>
+<span class="err">sudo apt-get install libxslt1-dev</span>
 </pre></div>
 <p>pillow模块需要安装下面这个软件包:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">libjpeg</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight"><pre><span></span><span class="err">sudo apt-get install libjpeg-dev</span>
 </pre></div>
 <h2 id="nodejs">nodejs方面</h2>
 <p>centos那边现在只需要简单的通过yum命令安装了，安装之后npm工具也自动装上了。</p>
-<div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">nodejs</span>
-<span class="n">npm</span> <span class="n">install</span> <span class="o">-</span><span class="k">g</span> <span class="k">less</span>
+<div class="highlight"><pre><span></span><span class="err">yum install nodejs</span>
+<span class="err">npm install -g less</span>
 </pre></div>
 <h2 id="odoo_3">安装odoo</h2>
 <p>由于odoo源码和addon生态较大，推荐不通过 <code>python setup.py install</code> 的方式安装，而是直接在odoo源码里面运行脚本启动。推荐方式如下，将setup文件夹里面的odoo文件重命名为 <code>odoo-bin</code> 然后移到项目主目录上，然后运行：</p>
-<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">odoo</span><span class="o">-</span><span class="n">bin</span>
+<div class="highlight"><pre><span></span><span class="err">python odoo-bin</span>
 </pre></div>
 <p>这样后面调试修改都方便一些。</p>
 <h2 id="_6">数据库那边的配置</h2>
 <p>数据库那边需要创建一个和你当前系统登录用户同名的用户，然后其要有创建数据库的权限，或者对某个数据库有所有权限。odoo将默认通过这个用户来和postgresql数据库进行交互（参考了 <a href="https://doc.odoo.com/7.0/install/linux/postgres/">这个网页</a> ）。postgres用户名，root用户名都是不允许的。</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="k">createuser</span> <span class="err">$</span><span class="k">USER</span>
+<div class="highlight"><pre><span></span><span class="err">sudo -u postgres createuser $USER</span>
 </pre></div>
 <p>如果某个用户不存在，那么PostgreSQL将会报错: </p>
-<div class="highlight"><pre><span></span><span class="nv">createdb</span>: <span class="nv">could</span> <span class="nv">not</span> <span class="k">connect</span> <span class="nv">to</span> <span class="nv">database</span> <span class="nv">template1</span>: <span class="nv">FATAL</span>:  <span class="nv">role</span> <span class="s2">"</span><span class="s">wanze</span><span class="s2">"</span> <span class="nv">does</span> <span class="nv">not</span> <span class="nv">exist</span>
+<div class="highlight"><pre><span></span><span class="n">createdb</span><span class="o">:</span> <span class="n">could</span> <span class="n">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="n">database</span> <span class="n">template1</span><span class="o">:</span> <span class="n">FATAL</span><span class="o">:</span>  <span class="n">role</span> <span class="s2">"wanze"</span> <span class="n">does</span> <span class="n">not</span> <span class="n">exist</span>
 </pre></div>
 <p>Odoo框架要求你这个用户还具有可以创建数据库的权限。这需要你如下这样去做: </p>
 <div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">psql</span> <span class="n">postgres</span>
@@ -474,16 +474,16 @@ odoo学习笔记  · cdwanze的博文
 <h3 id="pg_hbaconf">pg_hba.conf</h3>
 <p>postgresql很多连接配置出了问题都是 <code>pg_hba.conf</code> 这个文件没配置好，更多细节请参看我写的 postgresql数据库 一文。</p>
 <p>原来默认的配置是：</p>
-<div class="highlight"><pre><span></span><span class="k">local</span>   <span class="k">all</span>             <span class="k">all</span>                                     <span class="n">peer</span>
-<span class="o">#</span> <span class="n">IPv4</span> <span class="k">local</span> <span class="n">connections</span><span class="p">:</span>
-<span class="k">host</span>    <span class="k">all</span>             <span class="k">all</span>             <span class="mi">127</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="o">/</span><span class="mi">32</span>           <span class="n">ident</span>
-<span class="o">#</span> <span class="n">IPv6</span> <span class="k">local</span> <span class="n">connections</span><span class="p">:</span>
-<span class="k">host</span>    <span class="k">all</span>             <span class="k">all</span>             <span class="p">::</span><span class="mi">1</span><span class="o">/</span><span class="mi">128</span>                <span class="n">ident</span>
+<div class="highlight"><pre><span></span><span class="err">local   all             all                                     peer</span>
+<span class="err"># IPv4 local connections:</span>
+<span class="err">host    all             all             127.0.0.1/32           ident</span>
+<span class="err"># IPv6 local connections:</span>
+<span class="err">host    all             all             ::1/128                ident</span>
 </pre></div>
 <p>有<a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-centos-7">文章</a> 说下面两项需要改成 <code>md5</code> ， 然后postgresql的 <a href="https://github.com/abevoelker/docker-postgres/blob/master/pg_hba.conf.default">docker版</a> 的默认配置也是改成了md5，刚开始我似乎遇到问题后来改成md5就好了，但现在odoo能够正常运行后我改回ident之后发现也能行。</p>
 <p>总之记住odoo是用你当前的系统用户名来登录postgresql的，然后如果和数据库在一个系统内，那么用的就是后面两行的连接配置，推荐改成 md5 吧。</p>
 <p>然后重启PostgreSQL服务器:</p>
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="k">restart</span>
+<div class="highlight"><pre><span></span><span class="err">sudo service postgresql restart</span>
 </pre></div>
 <h2 id="_7">初步启动</h2>
 <p>运行 <code>python odoo-bin --help</code> 我们会看到很多选项，简单熟悉一下吧。</p>
@@ -599,97 +599,97 @@ odoo学习笔记  · cdwanze的博文
 <li>smtp_user  登录smtp服务所使用的用户名</li>
 <li>smtp_password 登录smtp服务所使用的密码</li>
 </ul>
-<div class="highlight"><pre><span></span><span class="c1">;用于导入导出的csv文件的默认分隔符</span>
-<span class="nv">csv_internal_sep</span> <span class="o">=</span> ,
-<span class="c1">;data目录，用于存放session信息、附件</span>
-<span class="nv">data_dir</span> <span class="o">=</span> <span class="nv">C</span>:\<span class="nv">Users</span>\<span class="nv">shun</span>\<span class="nv">AppData</span>\<span class="nv">Local</span>\<span class="nv">OpenERP</span> <span class="nv">S</span>.<span class="nv">A</span>.\<span class="nv">Odoo</span>
-<span class="c1">;哪些模块加载demo数据</span>
-<span class="nv">demo</span> <span class="o">=</span> {}
-<span class="c1">;在导入大量数据时使用这个选项，如果在导入期间程序宕机，你可以在当前状态下继续。指定一个存储中间导入状态的文件名。</span>
-<span class="nv">import_partial</span> <span class="o">=</span>
-<span class="c1">;一个处理器允许使用的最大物理内存</span>
-<span class="nv">limit_memory_hard</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;一个处理器允许使用的最大虚拟内存</span>
-<span class="nv">limit_memory_soft</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;一个处理器接受的最大请求数</span>
-<span class="nv">limit_request</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;一个请求最多占用多少处理器时间</span>
-<span class="nv">limit_time_cpu</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;一个请求允许的最长实时时间</span>
-<span class="nv">limit_time_real</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;是否允许显示数据库列表</span>
-<span class="nv">list_db</span> <span class="o">=</span> <span class="nv">True</span>
-<span class="c1">;是否将log写入db的ir_logging表</span>
-<span class="nv">log_db</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;保存在数据库中的日志记录的级别</span>
-<span class="nv">log_db_level</span> <span class="o">=</span> <span class="nv">warning</span>
-<span class="c1">;指定模块日志级别，可以是一组module:log_level对，默认值是:INFO（表示所有模块的默认日志级别为INFO级别）</span>
-<span class="nv">log_handler</span> <span class="o">=</span> :<span class="nv">INFO</span>
-<span class="c1">;日志的级别,可选值包括debug_rpc_answer,debug_rpc,debug,debug_sql,info,warning,error,critical</span>
-<span class="nv">log_level</span> <span class="o">=</span> <span class="nv">info</span>
-<span class="c1">;指定用来存储日志的文件</span>
-<span class="nv">logfile</span> <span class="o">=</span> <span class="nv">D</span>:\<span class="nv">Program</span> <span class="nv">Files</span> <span class="ss">(</span><span class="nv">x86</span><span class="ss">)</span>\<span class="nv">Odoo</span> <span class="mi">10</span>.<span class="mi">0</span>\<span class="nv">server</span>\<span class="nv">odoo</span>.<span class="nv">log</span>
-<span class="c1">;是否按天存放日志，保留最新的30天</span>
-<span class="k">logrotate</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;长连接池使用的端口号</span>
-<span class="nv">longpolling_port</span> <span class="o">=</span> <span class="mi">8072</span>
-<span class="c1">;处理当前计划任务的最大线程数</span>
-<span class="nv">max_cron_threads</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="c1">;强制保存在virtual osv_memory表中的记录的最长时间，以小时为单位</span>
-<span class="nv">osv_memory_age_limit</span> <span class="o">=</span> <span class="mi">1</span>.<span class="mi">0</span>
-<span class="c1">;强制一个virtual osv_memory表的最大记录数</span>
-<span class="nv">osv_memory_count_limit</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;数据库可执行文件的路径</span>
-<span class="nv">pg_path</span> <span class="o">=</span> <span class="nv">D</span>:\<span class="nv">Program</span> <span class="nv">Files</span> <span class="ss">(</span><span class="nv">x86</span><span class="ss">)</span>\<span class="nv">Odoo</span> <span class="mi">10</span>.<span class="mi">0</span>\<span class="nv">PostgreSQL</span>\<span class="nv">bin</span>
-<span class="c1">;存储服务器pid的文件名</span>
-<span class="nv">pidfile</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;是否使用反向代理模式</span>
-<span class="nv">proxy_mode</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;是否压缩报表</span>
-<span class="nv">reportgz</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;指定用于SSL连接的证书文件</span>
-<span class="nv">secure_cert_file</span> <span class="o">=</span> <span class="nv">server</span>.<span class="nv">cert</span>
-<span class="c1">;指定用于SSL连接的主密钥文件</span>
-<span class="nv">secure_pkey_file</span> <span class="o">=</span> <span class="nv">server</span>.<span class="nv">pkey</span>
-<span class="c1">;server范围的模块,以逗号分隔</span>
-<span class="nv">server_wide_modules</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;是否把日志发送给系统日志服务器</span>
-<span class="nv">syslog</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;是否提交YAML或XML测试造成的数据库更改</span>
-<span class="nv">test_commit</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;是否允许YAML和单元测试</span>
-<span class="nv">test_enable</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;YML测试文件</span>
-<span class="nv">test_file</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;报表的范例的存放位置</span>
-<span class="nv">test_report_directory</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;为系统提供一个参照的时区</span>
-<span class="nv">timezone</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;哪些模块可翻译,默认为all</span>
-<span class="nv">translate_modules</span> <span class="o">=</span> [<span class="s1">'</span><span class="s">all</span><span class="s1">'</span>]
-<span class="c1">;是否使用数据库的unaccent功能</span>
-<span class="nv">unaccent</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;在安装时哪些模块不加载演示数据</span>
-<span class="nv">without_demo</span> <span class="o">=</span> <span class="nv">False</span>
-<span class="c1">;要使用的处理器数量</span>
-<span class="nv">workers</span> <span class="o">=</span> <span class="nv">None</span>
-<span class="c1">;是否禁止使用XML-RPC协议</span>
-<span class="nv">xmlrpc</span> <span class="o">=</span> <span class="nv">True</span>
-<span class="c1">;指定使用XML-RPC协议的IP地址，为空时表示绑定到现有IP</span>
-<span class="nv">xmlrpc_interface</span> <span class="o">=</span>
-<span class="c1">;XML-RPC协议使用的TCP端口</span>
-<span class="nv">xmlrpc_port</span> <span class="o">=</span> <span class="mi">8069</span>
-<span class="c1">;是否禁止使用XML-RPC安全协议</span>
-<span class="nv">xmlrpcs</span> <span class="o">=</span> <span class="nv">True</span>
-<span class="c1">;指定使用XML-RPC安全协议的IP地址，为空时表示绑定到现有IP</span>
-<span class="nv">xmlrpcs_interface</span> <span class="o">=</span>
-<span class="c1">;XML-RPC安全协议使用的TCP端口</span>
-<span class="nv">xmlrpcs_port</span> <span class="o">=</span> <span class="mi">8071</span>
+<div class="highlight"><pre><span></span><span class="p">;</span><span class="err">用于导入导出的</span><span class="n">csv文件的默认分隔符</span>
+<span class="n">csv_internal_sep</span> <span class="o">=</span> <span class="p">,</span>
+<span class="p">;</span><span class="n">data目录</span><span class="err">，用于存放</span><span class="n">session信息</span><span class="err">、附件</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="k">C</span><span class="p">:</span><span class="err">\</span><span class="n">Users</span><span class="err">\</span><span class="n">shun</span><span class="err">\</span><span class="n">AppData</span><span class="err">\</span><span class="k">Local</span><span class="err">\</span><span class="n">OpenERP</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">.</span><span class="err">\</span><span class="n">Odoo</span>
+<span class="p">;</span><span class="err">哪些模块加载</span><span class="n">demo数据</span>
+<span class="n">demo</span> <span class="o">=</span> <span class="err">{}</span>
+<span class="p">;</span><span class="err">在导入大量数据时使用这个选项，如果在导入期间程序宕机，你可以在当前状态下继续。指定一个存储中间导入状态的文件名。</span>
+<span class="n">import_partial</span> <span class="o">=</span>
+<span class="p">;</span><span class="err">一个处理器允许使用的最大物理内存</span>
+<span class="n">limit_memory_hard</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">一个处理器允许使用的最大虚拟内存</span>
+<span class="n">limit_memory_soft</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">一个处理器接受的最大请求数</span>
+<span class="n">limit_request</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">一个请求最多占用多少处理器时间</span>
+<span class="n">limit_time_cpu</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">一个请求允许的最长实时时间</span>
+<span class="n">limit_time_real</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">是否允许显示数据库列表</span>
+<span class="n">list_db</span> <span class="o">=</span> <span class="k">True</span>
+<span class="p">;</span><span class="err">是否将</span><span class="n">log写入db的ir_logging表</span>
+<span class="n">log_db</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">保存在数据库中的日志记录的级别</span>
+<span class="n">log_db_level</span> <span class="o">=</span> <span class="n">warning</span>
+<span class="p">;</span><span class="err">指定模块日志级别，可以是一组</span><span class="n">module</span><span class="p">:</span><span class="n">log_level对</span><span class="err">，默认值是</span><span class="p">:</span><span class="n">INFO</span><span class="err">（表示所有模块的默认日志级别为</span><span class="n">INFO级别</span><span class="err">）</span>
+<span class="n">log_handler</span> <span class="o">=</span> <span class="p">:</span><span class="n">INFO</span>
+<span class="p">;</span><span class="err">日志的级别</span><span class="p">,</span><span class="err">可选值包括</span><span class="n">debug_rpc_answer</span><span class="p">,</span><span class="n">debug_rpc</span><span class="p">,</span><span class="n">debug</span><span class="p">,</span><span class="n">debug_sql</span><span class="p">,</span><span class="n">info</span><span class="p">,</span><span class="n">warning</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">critical</span>
+<span class="n">log_level</span> <span class="o">=</span> <span class="n">info</span>
+<span class="p">;</span><span class="err">指定用来存储日志的文件</span>
+<span class="n">logfile</span> <span class="o">=</span> <span class="n">D</span><span class="p">:</span><span class="err">\</span><span class="n">Program</span> <span class="n">Files</span> <span class="p">(</span><span class="n">x86</span><span class="p">)</span><span class="err">\</span><span class="n">Odoo</span> <span class="mi">10</span><span class="p">.</span><span class="mi">0</span><span class="err">\</span><span class="n">server</span><span class="err">\</span><span class="n">odoo</span><span class="p">.</span><span class="n">log</span>
+<span class="p">;</span><span class="err">是否按天存放日志，保留最新的</span><span class="mi">30</span><span class="err">天</span>
+<span class="n">logrotate</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">长连接池使用的端口号</span>
+<span class="n">longpolling_port</span> <span class="o">=</span> <span class="mi">8072</span>
+<span class="p">;</span><span class="err">处理当前计划任务的最大线程数</span>
+<span class="n">max_cron_threads</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="p">;</span><span class="err">强制保存在</span><span class="n">virtual</span> <span class="n">osv_memory表中的记录的最长时间</span><span class="err">，以小时为单位</span>
+<span class="n">osv_memory_age_limit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span>
+<span class="p">;</span><span class="err">强制一个</span><span class="n">virtual</span> <span class="n">osv_memory表的最大记录数</span>
+<span class="n">osv_memory_count_limit</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">数据库可执行文件的路径</span>
+<span class="n">pg_path</span> <span class="o">=</span> <span class="n">D</span><span class="p">:</span><span class="err">\</span><span class="n">Program</span> <span class="n">Files</span> <span class="p">(</span><span class="n">x86</span><span class="p">)</span><span class="err">\</span><span class="n">Odoo</span> <span class="mi">10</span><span class="p">.</span><span class="mi">0</span><span class="err">\</span><span class="n">PostgreSQL</span><span class="err">\</span><span class="n">bin</span>
+<span class="p">;</span><span class="err">存储服务器</span><span class="n">pid的文件名</span>
+<span class="n">pidfile</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">是否使用反向代理模式</span>
+<span class="n">proxy_mode</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">是否压缩报表</span>
+<span class="n">reportgz</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">指定用于</span><span class="n">SSL连接的证书文件</span>
+<span class="n">secure_cert_file</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">cert</span>
+<span class="p">;</span><span class="err">指定用于</span><span class="n">SSL连接的主密钥文件</span>
+<span class="n">secure_pkey_file</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">pkey</span>
+<span class="p">;</span><span class="n">server范围的模块</span><span class="p">,</span><span class="err">以逗号分隔</span>
+<span class="n">server_wide_modules</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">是否把日志发送给系统日志服务器</span>
+<span class="n">syslog</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">是否提交</span><span class="n">YAML或XML测试造成的数据库更改</span>
+<span class="n">test_commit</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">是否允许</span><span class="n">YAML和单元测试</span>
+<span class="n">test_enable</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="n">YML测试文件</span>
+<span class="n">test_file</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">报表的范例的存放位置</span>
+<span class="n">test_report_directory</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">为系统提供一个参照的时区</span>
+<span class="n">timezone</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">哪些模块可翻译</span><span class="p">,</span><span class="err">默认为</span><span class="k">all</span>
+<span class="n">translate_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'all'</span><span class="p">]</span>
+<span class="p">;</span><span class="err">是否使用数据库的</span><span class="n">unaccent功能</span>
+<span class="n">unaccent</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">在安装时哪些模块不加载演示数据</span>
+<span class="n">without_demo</span> <span class="o">=</span> <span class="k">False</span>
+<span class="p">;</span><span class="err">要使用的处理器数量</span>
+<span class="n">workers</span> <span class="o">=</span> <span class="k">None</span>
+<span class="p">;</span><span class="err">是否禁止使用</span><span class="n">XML</span><span class="o">-</span><span class="n">RPC协议</span>
+<span class="n">xmlrpc</span> <span class="o">=</span> <span class="k">True</span>
+<span class="p">;</span><span class="err">指定使用</span><span class="n">XML</span><span class="o">-</span><span class="n">RPC协议的IP地址</span><span class="err">，为空时表示绑定到现有</span><span class="n">IP</span>
+<span class="n">xmlrpc_interface</span> <span class="o">=</span>
+<span class="p">;</span><span class="n">XML</span><span class="o">-</span><span class="n">RPC协议使用的TCP端口</span>
+<span class="n">xmlrpc_port</span> <span class="o">=</span> <span class="mi">8069</span>
+<span class="p">;</span><span class="err">是否禁止使用</span><span class="n">XML</span><span class="o">-</span><span class="n">RPC安全协议</span>
+<span class="n">xmlrpcs</span> <span class="o">=</span> <span class="k">True</span>
+<span class="p">;</span><span class="err">指定使用</span><span class="n">XML</span><span class="o">-</span><span class="n">RPC安全协议的IP地址</span><span class="err">，为空时表示绑定到现有</span><span class="n">IP</span>
+<span class="n">xmlrpcs_interface</span> <span class="o">=</span>
+<span class="p">;</span><span class="n">XML</span><span class="o">-</span><span class="n">RPC安全协议使用的TCP端口</span>
+<span class="n">xmlrpcs_port</span> <span class="o">=</span> <span class="mi">8071</span>
 
-作者：<span class="nv">itrojan</span>
-链接：<span class="nv">https</span>:<span class="o">//</span><span class="nv">www</span>.<span class="nv">jianshu</span>.<span class="nv">com</span><span class="o">/</span><span class="nv">p</span><span class="o">/</span><span class="mi">8</span><span class="nv">fa53743bac8</span>
-來源：简书
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+<span class="err">作者：</span><span class="n">itrojan</span>
+<span class="err">链接：</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="p">.</span><span class="n">jianshu</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">p</span><span class="o">/</span><span class="mi">8</span><span class="n">fa53743bac8</span>
+<span class="err">來源：简书</span>
+<span class="err">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span>
 </pre></div>
 <h1 id="odoo_4">初入odoo</h1>
 <p>本章节主要浅显地讲一下刚进入odoo的界面熟悉，具体更多用户操作和开发者知识等都后面再慢慢讨论。</p>
@@ -726,34 +726,34 @@ odoo学习笔记  · cdwanze的博文
 <p>Odoo开发的一条黄金准则就是我们最好不要修改现有的模块，特别是官方内置的那些模块。这样做会让原始模块代码和我们的修改混为一谈，使得很难对软件进行升级管理。我们应该创建新的模块（在原有的模块基础之上）来达到修改和扩展功能的目的。Odoo提供了一种继承机制，允许第三方模块扩展现有模块，或者官方的或者来自社区的，这种继承修改可从任意层次来开展，从数据模型到业务逻辑到用户界面。</p>
 <h3 id="_21">快速生成模块骨架</h3>
 <p>可以如下快速生成一个模块骨架:</p>
-<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">odoo</span><span class="o">-</span><span class="n">bin</span> <span class="n">scaffold</span>  <span class="n">mymodule</span> <span class="n">myaddons</span>
+<div class="highlight"><pre><span></span><span class="err">python odoo-bin scaffold  mymodule myaddons</span>
 </pre></div>
 <p>这将在当前位置新建一个myaddons文件夹，然后在myaddons文件夹下创建一个名字叫mymodule的模块骨架。创建好了之后读者可以进入翻一下。官方推荐的模块结构如下所示：</p>
-<div class="highlight"><pre><span></span><span class="n">addons</span><span class="o">/&lt;</span><span class="n">my_module_name</span><span class="o">&gt;/</span>
-<span class="o">|</span><span class="c1">-- __init__.py</span>
-<span class="o">|</span><span class="c1">-- __manifest__.py</span>
-<span class="o">|</span><span class="c1">-- controllers/</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- __init__.py</span>
-<span class="o">|</span>    <span class="o">`</span><span class="c1">-- controllers.py</span>
-<span class="o">|</span><span class="c1">-- demo/</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- &lt;main_model&gt;_data.xml</span>
-<span class="o">|</span>    <span class="o">`</span><span class="c1">-- &lt;inherited_main_model&gt;_demo.xml</span>
-<span class="o">|</span><span class="c1">-- models/</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- __init__.py</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- modles.py</span>
-<span class="o">|</span><span class="c1">-- security/</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- ir.model.access.csv</span>
-<span class="o">|</span><span class="c1">-- static/</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- img/</span>
-<span class="o">|</span>    <span class="o">|</span><span class="c1">-- lib/</span>
-<span class="o">|</span>    <span class="o">`</span><span class="c1">-- src/</span>
-<span class="o">|</span>        <span class="o">|</span><span class="c1">-- js/</span>
-<span class="o">|</span>        <span class="o">|</span><span class="c1">-- css/</span>
-<span class="o">|</span>        <span class="o">|</span><span class="c1">-- less/</span>
-<span class="o">|</span>        <span class="o">`</span><span class="c1">-- xml/</span>
-<span class="o">`</span><span class="c1">-- views/</span>
-    <span class="o">|</span><span class="c1">-- templates.xml</span>
-    <span class="o">|</span><span class="c1">-- views.xml</span>
+<div class="highlight"><pre><span></span><span class="err">addons/&lt;my_module_name&gt;/</span>
+<span class="err">|-- __init__.py</span>
+<span class="err">|-- __manifest__.py</span>
+<span class="err">|-- controllers/</span>
+<span class="err">|    |-- __init__.py</span>
+<span class="err">|    `-- controllers.py</span>
+<span class="err">|-- demo/</span>
+<span class="err">|    |-- &lt;main_model&gt;_data.xml</span>
+<span class="err">|    `-- &lt;inherited_main_model&gt;_demo.xml</span>
+<span class="err">|-- models/</span>
+<span class="err">|    |-- __init__.py</span>
+<span class="err">|    |-- modles.py</span>
+<span class="err">|-- security/</span>
+<span class="err">|    |-- ir.model.access.csv</span>
+<span class="err">|-- static/</span>
+<span class="err">|    |-- img/</span>
+<span class="err">|    |-- lib/</span>
+<span class="err">|    `-- src/</span>
+<span class="err">|        |-- js/</span>
+<span class="err">|        |-- css/</span>
+<span class="err">|        |-- less/</span>
+<span class="err">|        `-- xml/</span>
+<span class="err">`-- views/</span>
+<span class="err">    |-- templates.xml</span>
+<span class="err">    |-- views.xml</span>
 </pre></div>
 <p>上面只是一个泛泛而论的情况，具体有些文件夹或文件可能是不需要的。下面对这些内容进一步说明之。</p>
 <p>推荐将所有的模型定义python文件都放入models文件夹中，然后其他一些简要介绍如下：</p>
@@ -789,14 +789,14 @@ odoo学习笔记  · cdwanze的博文
 <p>前面说了设置  <code>--addons-path=addons, myaddons</code> ，就可以加载自定义的模块了。具体安装就和安装其他模块没有两样，除了你需要清除搜索栏然后输入搜索关键词，如果你的模块是应用的话那么就可以直接在应用面板看到了。然后注意如果模块是第一次安装，那么需要 <u>激活开发者模式</u> ，然后 <u>更新应用列表</u> ，然后找到你想要的模块。</p>
 <p>自定义的模块如果只是简单内容修改，那么重启odoo即可当即生效，如果你的模块有数据库也就是模型定义的改动或者其他额外文件的添加等，那么还需要更新该模块。</p>
 <h2 id="_23">我们的第一个模块</h2>
-<div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">odoo</span><span class="o">-</span><span class="n">bin</span> <span class="n">scaffold</span>  <span class="k">first</span> <span class="n">myaddons</span>
+<div class="highlight"><pre><span></span><span class="err">python odoo-bin scaffold  first myaddons</span>
 </pre></div>
 <h3 id="controllers">controllers</h3>
 <p>首先修改controllers里面的 <code>controllers.py</code> 文件：</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
 
 <span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
-    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
+    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">"Hello, world"</span>
 </pre></div>
@@ -805,11 +805,11 @@ odoo学习笔记  · cdwanze的博文
 <p>如果没有什么问题，你应该能看到一行hello world文字，祝你好运。</p>
 <h3 id="views">views</h3>
 <p>views文件夹里面的内容更有点类似于django的模板文件，其使用的是odoo自定义的QWeb模板语法，后面会详细讨论之。首先先修改 <code>__manifest__.py</code> 文件中data属性，好把目标模板文件加载进来（这个最新的scaffold 命令已经写好了）：</p>
-<div class="highlight"><pre><span></span>    <span class="s1">'data'</span><span class="p">:</span> <span class="p">[</span>
-        <span class="o">#</span> <span class="s1">'security/ir.model.access.csv'</span><span class="p">,</span>
-        <span class="s1">'views/views.xml'</span><span class="p">,</span>
-        <span class="s1">'views/templates.xml'</span><span class="p">,</span>
-    <span class="p">],</span>
+<div class="highlight"><pre><span></span><span class="err">    'data': [</span>
+<span class="err">        # 'security/ir.model.access.csv',</span>
+<span class="err">        'views/views.xml',</span>
+<span class="err">        'views/templates.xml',</span>
+<span class="err">    ],</span>
 </pre></div>
 <p>templates.xml文件内容如下：</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
@@ -836,7 +836,7 @@ odoo学习笔记  · cdwanze的博文
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
 
 <span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
-    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
+    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"first.index"</span><span class="p">,</span>
                                    <span class="p">{</span><span class="s1">'fruits'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'apple'</span><span class="p">,</span> <span class="s1">'banana'</span><span class="p">,</span> <span class="s1">'pear'</span><span class="p">]})</span>
@@ -853,16 +853,16 @@ odoo学习笔记  · cdwanze的博文
 </pre></div>
 <h3 id="security">security</h3>
 <p>security文件夹里面已经有一个 <code>ir.model.access.csv</code> 文件了，其对模型的访问权限进行管理，加上记录：</p>
-<div class="highlight"><pre><span></span><span class="n">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">model_id</span><span class="p">:</span><span class="n">id</span><span class="p">,</span><span class="n">group_id</span><span class="p">:</span><span class="n">id</span><span class="p">,</span><span class="n">perm_read</span><span class="p">,</span><span class="n">perm_write</span><span class="p">,</span><span class="n">perm_create</span><span class="p">,</span><span class="n">perm_unlink</span>
-<span class="n">access_first_fruits</span><span class="p">,</span> <span class="n">access_first_fruits</span><span class="p">,</span><span class="n">model_first_fruits</span><span class="p">,,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<div class="highlight"><pre><span></span><span class="err">id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink</span>
+<span class="err">access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0</span>
 </pre></div>
 <p><code>group_id:id</code> 留空，这给所有用户对该模型读的权限。 </p>
 <p>然后在 <code>__manifest__.py</code> 那里把这个文件挂上：</p>
-<div class="highlight"><pre><span></span>    <span class="s1">'data'</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s1">'security/ir.model.access.csv'</span><span class="p">,</span>
-        <span class="s1">'views/views.xml'</span><span class="p">,</span>
-        <span class="s1">'views/templates.xml'</span><span class="p">,</span>
-    <span class="p">],</span>
+<div class="highlight"><pre><span></span><span class="err">    'data': [</span>
+<span class="err">        'security/ir.model.access.csv',</span>
+<span class="err">        'views/views.xml',</span>
+<span class="err">        'views/templates.xml',</span>
+<span class="err">    ],</span>
 </pre></div>
 <h3 id="demo_1">demo</h3>
 <p>在 <code>demo.xml</code> 上加上一些演示数据，方便测试我们写得模块。</p>
@@ -883,7 +883,7 @@ odoo学习笔记  · cdwanze的博文
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
 
 <span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
-    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
+    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">Fruits</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">'first.fruits'</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"first.index"</span><span class="p">,</span>
@@ -903,10 +903,10 @@ odoo学习笔记  · cdwanze的博文
 <h2 id="_24">美化网页</h2>
 <p>odoo有内置模块 <code>website</code> ，我们利用它们可以进一步开发出和原odoo网页统一风格的网页界面。</p>
 <p>首先我们需要在 <code>__manifest__.py</code> 的 "depends" 属性改为:</p>
-<div class="highlight"><pre><span></span><span class="s1">'depends'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'website'</span><span class="p">],</span>
+<div class="highlight"><pre><span></span><span class="err">'depends': ['website'],</span>
 </pre></div>
 <p>然后是controllers那里加上 <code>website=True</code> 这个设置。</p>
-<div class="highlight"><pre><span></span><span class="nv">@http</span><span class="p">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span><span class="w"> </span><span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span><span class="w"> </span><span class="n">website</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">@http.route('/first/first/', auth='public', website=True)</span>
 </pre></div>
 <p>最后是模块文件那里修改为:</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
@@ -927,9 +927,9 @@ odoo学习笔记  · cdwanze的博文
 <p>然后重启odoo server，然后升级模块之后看一下（更新manifest和template）。</p>
 <p>在网站的左边有 HTML编辑和主题选择等，在顶上右边有编辑模型等。<strong>注意：</strong> HTML编辑功能经过实验升级模块后会丢失。 </p>
 <h3 id="url-route">url route加入参数</h3>
-<div class="highlight"><pre><span></span>    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/academy/&lt;name&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/academy/&lt;name&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">teacher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">'&lt;h1&gt;{}&lt;/h1&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">'&lt;h1&gt;</span><span class="si">{}</span><span class="s1">&lt;/h1&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
 <p>其他的一些东西和django那边很是类似，这里先略过，后面有需要再详细查阅和讨论之，下面主要把如何定制 odoo 自带的商业系统弄清楚。</p>
 <h2 id="data">data文件</h2>
@@ -970,7 +970,7 @@ odoo学习笔记  · cdwanze的博文
 <p>这些动作对象是存放在 <code>ir_act_window</code> （对应模型名是 <code>IrActionsActWindow</code> <code>_name</code> 是 <code>ir.actions.act_window</code> ）表格中的。动作触发之后接下来是要处理视图问题。</p>
 <p>视图这边有所变动，具体视图都是存放在 <code>ir_ui_view</code> （对应的模型名是 <code>View</code> <code>_name</code> 是 <code>ir.ui.view</code> ）表格中的，然后找到视图是根据具体的模型和视图类型来的，视图类型默认是列表，还有表单，kanban等等。视图的解析过程是查找目标视图的 primary 视图的 arch 里面的内容，如果目标视图有parent，那么parent的视图也将解析，如果目标视图没有parent，那么arch里面的内容是什么就是什么，子视图也将逐步展开。</p>
 <p>比如：</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_view</span> <span class="k">where</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">'res.company'</span> <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select * from public.ir_ui_view where model = 'res.company' ;</span>
 </pre></div>
 <p>就会找到和 <code>res.company</code> 相关的视图，具体显示要根据目标类型对应的动作的 <code>view_mode</code> 这个字段来确定最优先的显示方案。</p>
 <p>具体研究对象的模型，视图，菜单，动作等，这些实际上都是odoo里面的模型，也就是具体对象的值是存放在某个具体的SQL表格里的，然后程序完成一系列的索引，取值等操作，并最终生成显示结果，这大概就是odoo框架里面发生的故事概貌了。</p>
@@ -1072,13 +1072,13 @@ odoo学习笔记  · cdwanze的博文
 <span class="k">class</span> <span class="nc">Qingjd</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">'qingjia.qingjd'</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="s1">'res.users'</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s2">"申请人"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">days</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Float</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">"天数"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">startdate</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Date</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">"开始日期"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="s1">'res.users'</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s2">"申请人"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">days</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Float</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">"天数"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">startdate</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Date</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">"开始日期"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">reason</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">"请假事由"</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">send_qingjd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sended</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sended</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sended</span>
 
     <span class="k">def</span> <span class="nf">confirm_qingjd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1121,33 +1121,33 @@ odoo学习笔记  · cdwanze的博文
 <p>新的API引入一个核心的概念就是 Recordset ，Recordset是个什么东西呢？就是前面讲的某一个模型（类）的所有对象（具体的实例）的集合就是一个Recordset对象。——这是recordset最大的情况，一个重要的限定条件就是其内元素必定是相同模型的，由这个最大的集合情况然后删除过滤掉一些元素（记录）之后仍然是recordset对象。</p>
 <p>按照官方文档的描述是，一个Recordset对象应该是已经排序了的同一模型的对象的集合。他还指出虽然现在还可以存放重复的元素，这个以后可能会变的。同时你从名字可能猜到这个Recordset对象应该支持集合的一些操作，事实确实如此。</p>
 <p>比如Recordset支持如下运算:</p>
-<div class="highlight"><pre><span></span><span class="nv">record</span> <span class="nv">in</span> <span class="nv">recset1</span>     # <span class="k">include</span>
-<span class="nv">record</span> <span class="nv">not</span> <span class="nv">in</span> <span class="nv">recset1</span> # <span class="nv">not</span> <span class="k">include</span>
-<span class="nv">recset1</span> <span class="o">+</span> <span class="nv">recset2</span>     # <span class="nv">extend</span> 
-<span class="nv">recset1</span> <span class="o">|</span> <span class="nv">recset2</span>     # <span class="nv">union</span>
-<span class="nv">recset1</span> <span class="o">&amp;</span> <span class="nv">recset2</span>     # <span class="nv">intersect</span>
-<span class="nv">recset1</span> <span class="o">-</span> <span class="nv">recset2</span>     # <span class="nv">difference</span>
-<span class="nv">recset</span>.<span class="nv">copy</span><span class="ss">()</span>         # <span class="nv">copy</span> <span class="nv">the</span> <span class="nv">recordset</span> <span class="ss">(</span><span class="nv">not</span> <span class="nv">a</span> <span class="nv">deep</span> <span class="nv">copy</span><span class="ss">)</span>
+<div class="highlight"><pre><span></span><span class="err">record in recset1     # include</span>
+<span class="err">record not in recset1 # not include</span>
+<span class="err">recset1 + recset2     # extend </span>
+<span class="err">recset1 | recset2     # union</span>
+<span class="err">recset1 &amp; recset2     # intersect</span>
+<span class="err">recset1 - recset2     # difference</span>
+<span class="err">recset.copy()         # copy the recordset (not a deep copy)</span>
 </pre></div>
 <p>上面的操作只有 <code>+</code> 还保留了次序，不过recordset是可以排序的，关于次序比如使用:</p>
-<div class="highlight"><pre><span></span><span class="k">for</span> <span class="nv">record</span> <span class="nv">in</span> <span class="nv">recordset</span>:
-    <span class="nv">print</span><span class="ss">(</span><span class="nv">record</span><span class="ss">)</span>
+<div class="highlight"><pre><span></span><span class="err">for record in recordset:</span>
+<span class="err">    print(record)</span>
 </pre></div>
 <p>具体的次序是否像集合set一样是不一定的还是如何呢？这里需要进一步的讨论。</p>
 <h4 id="apimulti"><code>@api.multi</code></h4>
 <p>默认行为就是这个，比如要返回一个 RecordSet，那么就返回RecordSet，并没有额外的操作。</p>
 <h4 id="apione"><code>@api.one</code></h4>
 <p>如果加上这个装饰器，那么方法里面的 <code>self</code> 是具体对应的本模型 RecordSet 的一条记录（也就是在multi装饰器的基础上，使用这个one装饰器，将自动循环每条记录）。</p>
-<div class="highlight"><pre><span></span>    <span class="nd">@api.one</span>
+<div class="highlight"><pre><span></span>    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
     <span class="k">def</span> <span class="nf">do_toggle_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_done</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_done</span>
-        <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">do_clear_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">done_recs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="bp">True</span><span class="p">)])</span>
-        <span class="n">done_recs</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'active'</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
-        <span class="k">return</span> <span class="bp">True</span>
+        <span class="n">done_recs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="kc">True</span><span class="p">)])</span>
+        <span class="n">done_recs</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'active'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+        <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 <h4 id="domain">domain语法</h4>
 <p>本小节主要参考了 <a href="http://stackoverflow.com/questions/14608775/how-to-filter-datas-in-openerp-using-domain-list">这个网页</a> 。</p>
@@ -1158,31 +1158,31 @@ odoo学习笔记  · cdwanze的博文
 <li>value 必须是和前面的field_name类型相同的某个值。</li>
 </ul>
 <p>然后这些圆括号包围的基本语句可以用以下几个逻辑运算符连接: <code>&amp;  | !</code> ，其中 <code>&amp;</code> 是默认的逻辑运算连接符，也就是你看到两个圆括号表达式中间没有逻辑运算连接符，则要视作其间加入了 <code>&amp;</code> 。具体形式大概类似这样:</p>
-<div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">'field_name1'</span><span class="p">,</span> <span class="s1">'operator'</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="s1">'!'</span><span class="p">,</span>  
-    <span class="p">(</span><span class="s1">'field_name2'</span><span class="p">,</span> <span class="s1">'operator'</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="s1">'|'</span><span class="p">,</span> 
-    <span class="p">(</span><span class="s1">'field_name3'</span><span class="p">,</span> <span class="s1">'operator'</span><span class="p">,</span> <span class="n">value</span><span class="p">),(</span><span class="s1">'field_name4'</span><span class="p">,</span> <span class="s1">'operator'</span><span class="p">,</span> <span class="n">value</span><span class="p">)]</span>
+<div class="highlight"><pre><span></span><span class="err">[('field_name1', 'operator', value), '!',  </span>
+<span class="err">    ('field_name2', 'operator', value), '|', </span>
+<span class="err">    ('field_name3', 'operator', value),('field_name4', 'operator', value)]</span>
 </pre></div>
 <p>多个逻辑运算符的情况有点复杂，具体是 <code>!</code> 先解析，其只作用于后面的第一个元素；然后 <code>&amp;</code> 和 <code>|</code> 作用于后面的两个元素。一个简单的解析步骤是先将 <code>!</code> 解析进去，比如是解析为不是等，然后再将 <code>|</code> 解析进去，相当于一个并联电路接进来，然后所有的过滤条件组成一个大的串联过滤线路。这样上面的表达式就解析为:</p>
-<div class="highlight"><pre><span></span><span class="mi">1</span><span class="err">表达式</span> <span class="k">and</span> <span class="mi">2</span><span class="err">表达式否</span> <span class="k">and</span> <span class="mi">3</span><span class="err">表达式或</span><span class="mi">4</span><span class="err">表达式</span>
+<div class="highlight"><pre><span></span><span class="err">1表达式 and 2表达式否 and 3表达式或4表达式</span>
 </pre></div>
 <p>然后前面的那个domain:</p>
-<div class="highlight"><pre><span></span><span class="k">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="k">True</span><span class="p">),</span>
-<span class="s1">'|'</span><span class="p">,</span> <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="s1">'self.env.uid'</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span><span class="s1">'='</span><span class="p">,</span><span class="k">False</span><span class="p">)]</span>
+<div class="highlight"><pre><span></span><span class="err">domain = [('is_done', '=', True),</span>
+<span class="err">'|', ('user_id', '=', 'self.env.uid'),</span>
+<span class="err">('user_id','=',False)]</span>
 </pre></div>
 <p>应该解析为:</p>
-<div class="highlight"><pre><span></span><span class="n">is_done是True</span> <span class="k">and</span> <span class="n">user_id</span> <span class="err">是</span><span class="k">self</span><span class="p">.</span><span class="n">env</span><span class="p">.</span><span class="n">uid</span> <span class="err">或</span> <span class="n">user_id是False</span>
+<div class="highlight"><pre><span></span><span class="err">is_done是True and user_id 是self.env.uid 或 user_id是False</span>
 </pre></div>
 <h4 id="search">search方法</h4>
 <p>一个recordset对象调用其search方法还是返回一个recordset对象。</p>
 <p>search方法接受一个参数，这个参数就是前面谈论的基于odoo domain语法的过滤器表达式。</p>
 <p>所以下面这个表达式:</p>
-<div class="highlight"><pre><span></span><span class="k">self</span><span class="p">.</span><span class="n">env</span><span class="p">[</span><span class="err">’</span><span class="n">res</span><span class="p">.</span><span class="n">users</span><span class="err">’</span><span class="p">].</span><span class="k">search</span><span class="p">([(</span><span class="err">’</span><span class="n">login</span><span class="err">’</span><span class="p">,</span> <span class="err">’</span><span class="o">=</span><span class="err">’</span><span class="p">,</span> <span class="err">’</span><span class="k">admin</span><span class="err">’</span><span class="p">)])</span>
+<div class="highlight"><pre><span></span><span class="err">self.env[’res.users’].search([(’login’, ’=’, ’admin’)])</span>
 </pre></div>
 <p>的含义就是调用 <code>res.users</code> 这个表格或者说recordset，然后执行search方法，具体选中的record是login这个字段等于admin的。</p>
 <p>接下来执行search方法，返回的done_recs也是一个recordset对象，对于这些recordset对象执行了 write 方法，其接受一个字典值，就是直接更改SQL表格里面的某个表头（属性），将其改为某个值。值得一提的是，recordset调用write方法会将本recordset内所有的record都进行修改操作的。</p>
 <p>前面讲到通过 super() 来继承修改原模型的某个方法，请看下面的例子:</p>
-<div class="highlight"><pre><span></span><span class="nd">@api.one</span>
+<div class="highlight"><pre><span></span><span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
 <span class="k">def</span> <span class="nf">do_toggle_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">'Only the responsible can do this!'</span><span class="p">)</span>
@@ -1191,14 +1191,14 @@ odoo学习笔记  · cdwanze的博文
 </pre></div>
 <p>这里 <code>@api.one</code> 自动遍历目标recordset，然后方法里面的self就是一个record。这里程序的逻辑很简单，就是如果用户名不是当前登录用户（因为todo task管理只是自己管理自己的任务计划），那么将会报错。如果是那么就调用之前的方法。</p>
 <h4 id="write">write方法</h4>
-<div class="highlight"><pre><span></span><span class="n">done_recs</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="err">{</span><span class="s1">'active'</span><span class="p">:</span> <span class="k">False</span><span class="err">}</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">done_recs.write({'active': False})</span>
 </pre></div>
 <p>在 <code>api.one</code> 方法下，每一次对属性的修改都将产生一次Record的write行为:</p>
-<div class="highlight"><pre><span></span><span class="nv">@api</span><span class="p">.</span><span class="n">one</span><span class="w"></span>
-<span class="n">def</span><span class="w"> </span><span class="n">dangerous_write</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">  </span><span class="n">self</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
-<span class="w">  </span><span class="n">self</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<div class="highlight"><pre><span></span><span class="err">@api.one</span>
+<span class="err">def dangerous_write(self):</span>
+<span class="err">  self.x = 1</span>
+<span class="err">  self.y = 2</span>
+<span class="err">  self.z = 4</span>
 </pre></div>
 <p>推荐如下进行 write 操作：</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">better_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1237,20 +1237,20 @@ odoo学习笔记  · cdwanze的博文
 <p>不管怎么说，现在我们通过新建一个模块 todo_user ，如前面描述的将模块设置配置好之后，原模块 todo_app 的todo.task模型就增加了新的两个field了，也就是两个新的表头了。</p>
 <h4 id="field_1">修改已有的field</h4>
 <p>按照上面的继承机制，我们可以如上类似处理，只修改你希望更改的某个field的某个属性即可。如下:</p>
-<div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="p">.</span><span class="nb">Char</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="ss">"can I help you"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">name = fields.Char(help="can I help you")</span>
 </pre></div>
 <p>这样原模型的namefield额外增加了help帮助信息了。</p>
 <h4 id="_33">重载原模型的方法</h4>
 <p>读者一定已经想到了，类似的在这种继承机制下，可以通过重写原模型的方法来重载该方法。事实上确实可以这样做，而这里要讲的是还有一种更加优雅的继承原模型的方法，那就是通过 <code>super()</code> 来调用父类的方法。</p>
 <p>首先我们看到下面这个例子:</p>
-<div class="highlight"><pre><span></span><span class="nd">@api.multi</span>
+<div class="highlight"><pre><span></span><span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <span class="k">def</span> <span class="nf">do_clear_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="bp">True</span><span class="p">),</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
     <span class="s1">'|'</span><span class="p">,</span> <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="s1">'self.env.uid'</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span><span class="s1">'='</span><span class="p">,</span><span class="bp">False</span><span class="p">)]</span>
+    <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span><span class="s1">'='</span><span class="p">,</span><span class="kc">False</span><span class="p">)]</span>
     <span class="n">done_recs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
-    <span class="n">done_recs</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'active'</span><span class="p">:</span><span class="bp">False</span><span class="p">})</span>
-    <span class="k">return</span> <span class="bp">True</span>
+    <span class="n">done_recs</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'active'</span><span class="p">:</span><span class="kc">False</span><span class="p">})</span>
+    <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 <h3 id="_34">视图的继承修改</h3>
 <p>本小节主要参考了 <a href="http://www.jeffzhang.cn/Odoo-Notes-2/">这篇文章</a> ，一个简单的例子如下所示：</p>
@@ -1289,22 +1289,22 @@ odoo学习笔记  · cdwanze的博文
 <h2 id="odoo_8">定制odoo实战</h2>
 <h3 id="_36">寻根问底第一谈</h3>
 <p>res.company 模型对应的 </p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_menu</span> <span class="k">where</span> <span class="n">parent_id</span> <span class="k">is</span> <span class="k">null</span>  <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select * from public.ir_ui_menu where parent_id is null  ;</span>
 </pre></div>
 <p>我们看到 settings -&gt; 4  ，然后我们继续：</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_menu</span> <span class="k">where</span> <span class="n">parent_id</span> <span class="o">=</span> <span class="mi">4</span>  <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select * from public.ir_ui_menu where parent_id = 4  ;</span>
 </pre></div>
 <p>看到 User &amp; Company 的 id 是 7 ，</p>
 <p>然后继续我们找到 Company 子菜单的 id 是54，其对应的action是 <code>"ir.actions.act_window,44"</code> ， 也就是其对应的是 第 44  号 动作，然后我们继续：</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_act_window</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">44</span> <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select * from public.ir_act_window where id = 44 ;</span>
 </pre></div>
 <p>我们看到这个动作对应的 模型就是 <code>res.company</code> 。启动的 <code>view_mode</code> 定义显示方案。具体视图是</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_view</span> <span class="k">where</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">'res.company'</span> <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select * from public.ir_ui_view where model = 'res.company' ;</span>
 </pre></div>
 <p>就会找到和 <code>res.company</code> 相关的视图。</p>
 <p>现在假设我们我要定义res.company 的某个视图，首先我们激活开发者模式，然后到目标视图那里，点击 <code>Fields View Get</code> ，我们看到 <code>form</code> 开头，也就是当前是表单视图。于是我们继续：</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="n">name</span><span class="p">,</span><span class="n">arch_db</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_view</span> <span class="k">where</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">'res.company'</span> <span class="k">and</span> 
-        <span class="k">type</span> <span class="o">=</span> <span class="s1">'form'</span> <span class="k">order</span> <span class="k">by</span> <span class="n">priority</span> <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select name,arch_db from public.ir_ui_view where model = 'res.company' and </span>
+<span class="err">        type = 'form' order by priority ;</span>
 </pre></div>
 <p>具体视图的名字只是方便描述记忆用的，也不是xml里面方便引用的external id，priority这个字段也定义了继承关系的顺序。</p>
 <p>首先我们看到第一个视图内容：</p>
@@ -1386,11 +1386,11 @@ odoo学习笔记  · cdwanze的博文
 <h3 id="pruchase">pruchase模块研究</h3>
 <h4 id="_37">删除询价单子菜单</h4>
 <p>这边直接创建采购单即可，不需要询价单，首先将询价单子菜单去除。我们找到采购的子菜单id 号是 265，然后继续：</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_menu</span> <span class="k">where</span> <span class="n">parent_id</span> <span class="o">=</span> <span class="mi">265</span>  <span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="err">select * from public.ir_ui_menu where parent_id = 265  ;</span>
 </pre></div>
 <p>我们看到目标子子菜单是：</p>
-<div class="highlight"><pre><span></span><span class="nv">id</span> <span class="nv">parent_left</span> <span class="nv">parent_right</span> <span class="nv">name</span>   <span class="nv">active</span> <span class="nv">sequence</span> <span class="nv">parent_id</span> <span class="nv">web_icon</span> <span class="nv">action</span>
-<span class="mi">278</span><span class="c1">;206;207;"Requests for Quotation";t;0;265;"";"ir.actions.act_window,375"</span>
+<div class="highlight"><pre><span></span><span class="err">id parent_left parent_right name   active sequence parent_id web_icon action</span>
+<span class="err">278;206;207;"Requests for Quotation";t;0;265;"";"ir.actions.act_window,375"</span>
 </pre></div>
 <p>然后我们需要把这个子子菜单的menuitem记录删除掉，具体查询到的是xml语句：</p>
 <div class="highlight"><pre><span></span>        <span class="nt">&lt;menuitem</span> <span class="na">action=</span><span class="s">"purchase_rfq"</span> <span class="na">id=</span><span class="s">"menu_purchase_rfq"</span>
@@ -1410,7 +1410,7 @@ odoo学习笔记  · cdwanze的博文
 <h2 id="odoo_9">继续深入学习odoo内部机制</h2>
 <h3 id="controller">controller</h3>
 <div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Academy</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
-    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/first/teachers/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/teachers/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">Teachers</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">'academy.teachers'</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"first.index"</span><span class="p">,</span>
@@ -1422,36 +1422,36 @@ odoo学习笔记  · cdwanze的博文
 <li>通过 <code>http.request.render</code> 来通过模版渲染网页，第一个参数是本模块的名字加上template id来选定模版，后面的字典值来返回一些参数供网页模版调用。</li>
 </ol>
 <p>url接受参数和类型限定，</p>
-<div class="highlight"><pre><span></span>    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/academy/&lt;int:id&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/academy/&lt;int:id&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">teacher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">'&lt;h1&gt;{} ({})&lt;/h1&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">'&lt;h1&gt;</span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">)&lt;/h1&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 </pre></div>
 <p>或者指定odoo内部的某个模型：</p>
-<div class="highlight"><pre><span></span>    <span class="nd">@http.route</span><span class="p">(</span><span class="s1">'/first/&lt;model("academy.teachers"):teacher&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/&lt;model("academy.teachers"):teacher&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">teacher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">teacher</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">'first.biography'</span><span class="p">,</span> <span class="p">{</span>
             <span class="s1">'person'</span><span class="p">:</span> <span class="n">teacher</span>
         <span class="p">})</span>
 </pre></div>
 <h3 id="security_1">security</h3>
-<div class="highlight"><pre><span></span><span class="n">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">model_id</span><span class="p">:</span><span class="n">id</span><span class="p">,</span><span class="n">group_id</span><span class="p">:</span><span class="n">id</span><span class="p">,</span><span class="n">perm_read</span><span class="p">,</span><span class="n">perm_write</span><span class="p">,</span><span class="n">perm_create</span><span class="p">,</span><span class="n">perm_unlink</span>
-<span class="n">access_first_teachers</span><span class="p">,</span> <span class="n">access_first_teachers</span><span class="p">,</span><span class="n">model_academy_teachers</span><span class="p">,,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<div class="highlight"><pre><span></span><span class="err">id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink</span>
+<span class="err">access_first_teachers, access_first_teachers,model_academy_teachers,,1,0,0,0</span>
 </pre></div>
 <p>前面的id和name名字都不是特别限定死，关键是 <code>model_id:id</code> 这个字段，名字一定是 <code>model_&lt;model_name&gt;</code> 这个里面的 <code>model_name</code> 和 <code>request.env</code> 或者在定义模型的时候 <code>self.env</code> 的引用都是一样的，只是这里的  <code>model_name</code> 只是将点号换成了下划线。</p>
 <h3 id="template_1">template</h3>
 <p>QWeb那边继续学习，QWeb里面原html标签直接写上就是了，区别就是 <code>t-</code> 开头的那些 QWeb 属性，或者 <code>t</code> 标签在条件渲染中不会渲染出来：</p>
 <h4 id="t-if">t-if</h4>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nv">t</span> <span class="nv">t</span><span class="o">-</span><span class="k">if</span><span class="o">=</span><span class="s2">"</span><span class="s">condition</span><span class="s2">"</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nv">p</span><span class="o">&gt;</span><span class="nv">Test</span><span class="o">&lt;/</span><span class="nv">p</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="nv">t</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;t</span> <span class="na">t-if=</span><span class="s">"condition"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Test<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/t&gt;</span>
 </pre></div>
 <p>若条件符合，也只是输出：</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;p&gt;</span>Test<span class="nt">&lt;/p&gt;</span>
 </pre></div>
 <p>而：</p>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nv">div</span> <span class="nv">t</span><span class="o">-</span><span class="k">if</span><span class="o">=</span><span class="s2">"</span><span class="s">condition</span><span class="s2">"</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nv">p</span><span class="o">&gt;</span><span class="nv">Test</span><span class="o">&lt;/</span><span class="nv">p</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="nv">div</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;div</span> <span class="na">t-if=</span><span class="s">"condition"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Test<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
 </pre></div>
 <p>的输出是：</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;div&gt;</span>
@@ -1459,7 +1459,7 @@ odoo学习笔记  · cdwanze的博文
 <span class="nt">&lt;/div&gt;</span>
 </pre></div>
 <h4 id="t-call">t-call</h4>
-<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">t</span> <span class="n">t</span><span class="o">-</span><span class="k">call</span><span class="o">=</span><span class="ss">"website.layout"</span> <span class="o">&gt;</span>
+<div class="highlight"><pre><span></span><span class="err">&lt;t t-call="website.layout" &gt;</span>
 </pre></div>
 <p>调用子模板，</p>
 <h4 id="_39">循环渲染</h4>
@@ -1703,10 +1703,10 @@ odoo学习笔记  · cdwanze的博文
 <h2 id="_45">会计学入门</h2>
 <p>会计系统反映了企业的两个基本方面: 自己有什么和欠别人什么。资产(assert)是企业拥有或控制的能够给企业带来未来经济效益的资源。例如: 现金，物料，设备和土地等。负债(liabilities)是企业欠非其所有者（债权人）的债务，未来需要用现金、产品或服务来偿还。权益(equity)是指企业所有人对企业资产所享有的求偿权。</p>
 <p>总的来说有:</p>
-<div class="highlight"><pre><span></span><span class="err">资产</span> <span class="o">=</span> <span class="err">负债</span> <span class="o">+</span> <span class="err">所有者权益</span>
+<div class="highlight"><pre><span></span><span class="err">资产 = 负债 + 所有者权益</span>
 </pre></div>
 <p>负债已经放在所有者权益前面，因为负债应该先被满足。此外还有一个扩展的会计公式:</p>
-<div class="highlight"><pre><span></span><span class="err">资产</span> <span class="o">=</span> <span class="err">负债</span> <span class="o">+</span> <span class="err">所有者名下的资本</span> <span class="o">-</span> <span class="err">所有者提取</span> <span class="o">+</span> <span class="err">收入</span> <span class="o">-</span> <span class="err">费用</span>
+<div class="highlight"><pre><span></span><span class="err">资产 = 负债 + 所有者名下的资本 - 所有者提取 + 收入 - 费用</span>
 </pre></div>
 <p>其中收入减去费用的部分便是净利润(net income)，如果费用大于收入，则会产生净损失(net loss)。</p>
 <p>常见的经济业务:</p>
@@ -1831,16 +1831,16 @@ odoo学习笔记  · cdwanze的博文
 <h3 id="_66">本页使用说明</h3>
 <p>子标题为模型具体通过 <code>self.env[name]</code> 可调用的名字，然后通过代码演示了该模型的具体代码定义的模型名或者也写上表格名。</p>
 <h3 id="baselanguageinstall">base.language.install</h3>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">BaseLanguageInstall</span>(<span class="n">models</span>.<span class="n">TransientModel</span>):
-    <span class="n">_name</span> = <span class="s">"base.language.install"</span>
+<div class="highlight"><pre><span></span><span class="err">class BaseLanguageInstall(models.TransientModel):</span>
+<span class="err">    _name = "base.language.install"</span>
 </pre></div>
 <h3 id="rescompany">res.company</h3>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Company</span>(<span class="n">models</span>.<span class="n">Model</span>):
-    <span class="n">_name</span> = <span class="s">"res.company"</span>
+<div class="highlight"><pre><span></span><span class="err">class Company(models.Model):</span>
+<span class="err">    _name = "res.company"</span>
 </pre></div>
 <h3 id="purchaseorder">purchase.order</h3>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">PurchaseOrder</span>(<span class="n">models</span>.<span class="n">Model</span>):
-    <span class="n">_name</span> = <span class="s">"purchase.order"</span>
+<div class="highlight"><pre><span></span><span class="err">class PurchaseOrder(models.Model):</span>
+<span class="err">    _name = "purchase.order"</span>
 </pre></div>
 <h3 id="resusers">res.users</h3>
 <p>res.uses 在网页视图下对应的菜单是: 设置→用户。 这个表格（或说模型）存储着一些登录用户的信息，比如用户名或密码等。</p>

@@ -180,17 +180,17 @@ luigi模块  · cdwanze的博文
 <p>然后依赖于这个外部文件对象，当目标文件对象创建之后，才会进行下面的任务。</p>
 <h3 id="parameter">Parameter对象</h3>
 <p>任务类里面可以定义一些 Parameter 对象，当我们通过命令行调用该任务的时候，可以提供这些参数。</p>
-<div class="highlight"><pre><span></span><span class="nb">date</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">DateParameter</span><span class="p">(</span><span class="k">default</span><span class="o">=</span><span class="n">datetime</span><span class="p">.</span><span class="nb">date</span><span class="p">.</span><span class="n">today</span><span class="p">())</span>
-<span class="n">date_interval</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">DateIntervalParameter</span><span class="p">()</span>
-<span class="n">use_hadoop</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">BoolParameter</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="err">date = luigi.DateParameter(default=datetime.date.today())</span>
+<span class="err">date_interval = luigi.DateIntervalParameter()</span>
+<span class="err">use_hadoop = luigi.BoolParameter()</span>
 </pre></div>
 <h3 id="input">input方法</h3>
 <p>input方法是luigi框架里面任务对象调用本任务的前依赖输出对象的便捷方法，比如你使用 <code>self.input</code> ，就对应本任务的 requires Target 对象，或者说当你调用 <code>self.input()</code> 实际上得到的就是 <code>self.requires()</code> 的输出。</p>
 <h2 id="_3">运行任务</h2>
-<div class="highlight"><pre><span></span><span class="n">luigi</span> <span class="c1">--module autowriting.workflow examples.HelloWorldTask --local-scheduler</span>
+<div class="highlight"><pre><span></span><span class="err">luigi --module autowriting.workflow examples.HelloWorldTask --local-scheduler</span>
 </pre></div>
 <p>一般生产环境会去掉 <code>--local-scheduler</code> 然后使用中央调度器，你需要用 </p>
-<div class="highlight"><pre><span></span><span class="n">luigid</span>
+<div class="highlight"><pre><span></span><span class="err">luigid</span>
 </pre></div>
 <p>来开启它。</p>
 <p>默认你可以在localhost的 <code>8082</code> 端口看到监视任务的画面。</p>
@@ -207,7 +207,7 @@ luigi模块  · cdwanze的博文
 <p>luigi 的日志不做任何调配的话，就是默认的 <code>luigi-interface</code> 然后流打印到终端。如下所示：</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_interface_logging</span><span class="p">(</span><span class="n">conf_file</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">level_name</span><span class="o">=</span><span class="s1">'DEBUG'</span><span class="p">):</span>
     <span class="c1"># use a variable in the function object to determine if it has run before</span>
-    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">setup_interface_logging</span><span class="p">,</span> <span class="s2">"has_run"</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">setup_interface_logging</span><span class="p">,</span> <span class="s2">"has_run"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
         <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">conf_file</span> <span class="o">==</span> <span class="s1">''</span><span class="p">:</span>
@@ -225,9 +225,9 @@ luigi模块  · cdwanze的博文
 
         <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">fileConfig</span><span class="p">(</span><span class="n">conf_file</span><span class="p">,</span> <span class="n">disable_existing_loggers</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">fileConfig</span><span class="p">(</span><span class="n">conf_file</span><span class="p">,</span> <span class="n">disable_existing_loggers</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="n">setup_interface_logging</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">setup_interface_logging</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="kc">True</span>
 </pre></div>
 <p>如果我们在运行luigi命令的工作目录下写上配置文件 <code>luigi.cfg</code> :</p>
 <div class="highlight"><pre><span></span><span class="k">[core]</span>
@@ -275,8 +275,8 @@ luigi模块  · cdwanze的博文
 <li>更多的logger -&gt; 多些几个就是了。</li>
 <li>RotateFileHandler 怎么加载 -&gt; 如下写法： </li>
 </ol>
-<div class="highlight"><pre><span></span><span class="k">class</span>=<span class="n">logging</span>.<span class="n">handlers</span>.<span class="n">RotatingFileHandler</span>
-<span class="n">args</span>=(<span class="s">'logs/elasticsearch_sync.log'</span>, <span class="s">'a'</span>, <span class="mi">200000</span>)
+<div class="highlight"><pre><span></span><span class="err">class=logging.handlers.RotatingFileHandler</span>
+<span class="err">args=('logs/elasticsearch_sync.log', 'a', 200000)</span>
 </pre></div>
 <ol>
 <li>经过测试每个logger的 <code>qualname</code> 参数不能省略。</li>
@@ -284,15 +284,15 @@ luigi模块  · cdwanze的博文
 <p><strong>NOTICE</strong> : logger最好放在任务类里面，否则你彼此引用任务脚本会把环境污染了。</p>
 <h2 id="_5">所有任务集中于一个任务</h2>
 <p>所有的任务每天都执行一次。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">AllReports</span>(<span class="n">luigi</span>.<span class="n">WrapperTask</span>):
-    <span class="n">date</span> = <span class="n">luigi</span>.<span class="n">DateParameter</span>(<span class="k">default</span>=<span class="n">datetime</span>.<span class="n">date</span>.<span class="n">today</span>())
-    <span class="n">def</span> <span class="n">requires</span>(<span class="k">self</span>):
-        <span class="n">yield</span> <span class="n">SomeReport</span>(<span class="k">self</span>.<span class="n">date</span>)
-        <span class="n">yield</span> <span class="n">SomeOtherReport</span>(<span class="k">self</span>.<span class="n">date</span>)
-        <span class="n">yield</span> <span class="n">CropReport</span>(<span class="k">self</span>.<span class="n">date</span>)
+<div class="highlight"><pre><span></span><span class="err">class AllReports(luigi.WrapperTask):</span>
+<span class="err">    date = luigi.DateParameter(default=datetime.date.today())</span>
+<span class="err">    def requires(self):</span>
+<span class="err">        yield SomeReport(self.date)</span>
+<span class="err">        yield SomeOtherReport(self.date)</span>
+<span class="err">        yield CropReport(self.date)</span>
 </pre></div>
 <h2 id="_6">执行循环任务</h2>
-<div class="highlight"><pre><span></span><span class="n">luigi</span> <span class="c1">--module all_reports RangeDailyBase --of AllReports --start 2015-01-01</span>
+<div class="highlight"><pre><span></span><span class="err">luigi --module all_reports RangeDailyBase --of AllReports --start 2015-01-01</span>
 </pre></div>
             
             

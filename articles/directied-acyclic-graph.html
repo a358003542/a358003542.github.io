@@ -153,7 +153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">check_initialized</span><span class="p">()</span>
         <span class="n">DAG</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
             <span class="n">tmplist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">k</span>
             <span class="n">frag</span> <span class="o">=</span> <span class="n">sentence</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
@@ -170,19 +170,19 @@
 <p>其大体也是类似这样的实现。</p>
 <p>也就是在实际操作中，并没有对无环条件进行判断，这多少有点出乎我的意料之外。图论里面关于这个已经有算法了，我们也没什么好想的，就是图论的拓扑排序方法来判断一个有向图是否是无环的。</p>
 <p>wiki上有伪代码，我们可以下看一下：</p>
-<div class="highlight"><pre><span></span><span class="nv">L</span> ← <span class="nv">Empty</span> <span class="nv">list</span> <span class="nv">that</span> <span class="nv">will</span> <span class="nv">contain</span> <span class="nv">the</span> <span class="nv">sorted</span> <span class="nv">elements</span>
-<span class="nv">S</span> ← <span class="nv">Set</span> <span class="nv">of</span> <span class="nv">all</span> <span class="nv">nodes</span> <span class="nv">with</span> <span class="nv">no</span> <span class="nv">incoming</span> <span class="nv">edge</span>
-<span class="k">while</span> <span class="nv">S</span> <span class="nv">is</span> <span class="nv">non</span><span class="o">-</span><span class="nv">empty</span> <span class="k">do</span>
-    <span class="nv">remove</span> <span class="nv">a</span> <span class="nv">node</span> <span class="nv">n</span> <span class="nv">from</span> <span class="nv">S</span>
-    <span class="nv">add</span> <span class="nv">n</span> <span class="nv">to</span> <span class="nv">tail</span> <span class="nv">of</span> <span class="nv">L</span>
-    <span class="k">for</span> <span class="nv">each</span> <span class="nv">node</span> <span class="nv">m</span> <span class="nv">with</span> <span class="nv">an</span> <span class="nv">edge</span> <span class="nv">e</span> <span class="nv">from</span> <span class="nv">n</span> <span class="nv">to</span> <span class="nv">m</span> <span class="k">do</span>
-        <span class="nv">remove</span> <span class="nv">edge</span> <span class="nv">e</span> <span class="nv">from</span> <span class="nv">the</span> <span class="nv">graph</span>
-        <span class="k">if</span> <span class="nv">m</span> <span class="nv">has</span> <span class="nv">no</span> <span class="nv">other</span> <span class="nv">incoming</span> <span class="nv">edges</span> <span class="k">then</span>
-            <span class="nv">insert</span> <span class="nv">m</span> <span class="nv">into</span> <span class="nv">S</span>
-<span class="k">if</span> <span class="nv">graph</span> <span class="nv">has</span> <span class="nv">edges</span> <span class="k">then</span>
-    <span class="k">return</span> <span class="nv">error</span> <span class="ss">(</span><span class="nv">graph</span> <span class="nv">has</span> <span class="nv">at</span> <span class="nv">least</span> <span class="nv">one</span> <span class="nv">cycle</span><span class="ss">)</span>
-<span class="k">else</span> 
-    <span class="k">return</span> <span class="nv">L</span> <span class="ss">(</span><span class="nv">a</span> <span class="nv">topologically</span> <span class="nv">sorted</span> <span class="nv">order</span><span class="ss">)</span>
+<div class="highlight"><pre><span></span><span class="err">L ← Empty list that will contain the sorted elements</span>
+<span class="err">S ← Set of all nodes with no incoming edge</span>
+<span class="err">while S is non-empty do</span>
+<span class="err">    remove a node n from S</span>
+<span class="err">    add n to tail of L</span>
+<span class="err">    for each node m with an edge e from n to m do</span>
+<span class="err">        remove edge e from the graph</span>
+<span class="err">        if m has no other incoming edges then</span>
+<span class="err">            insert m into S</span>
+<span class="err">if graph has edges then</span>
+<span class="err">    return error (graph has at least one cycle)</span>
+<span class="err">else </span>
+<span class="err">    return L (a topologically sorted order)</span>
 </pre></div>
 <p>这个算法叫做 Kahn 算法，具体思路就是请读者假想目标研究有向图里面有一个闭环，那么这个闭环里面的所有节点都有有进入箭头的，也就是其不可能在set S，其在算法中只可能在 m 中被选中，而且闭环中的节点一定不会出现在n中，这样上面的算法再怎么运算，if语句对于闭环中的m来说都不会成立。</p>
 <p>然后假设某几个节点都有入口，那么顺藤摸瓜，逐个删除是可以把这些节点都放到S里面去的。</p>
@@ -322,12 +322,12 @@
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"{0} vertices and {1} edges </span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex_count</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="s2"> vertices and </span><span class="si">{1}</span><span class="s2"> edges </span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex_count</span><span class="p">,</span>
                                                         <span class="bp">self</span><span class="o">.</span><span class="n">edge_count</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"{0}: "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="s2">: "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacent</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
-                <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"{0} "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="s2"> "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
             <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -335,9 +335,9 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"{0}: "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="s2">: "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacent</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
-                <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"{0} "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="s2"> "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
             <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -366,7 +366,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">target</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">indegree</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'queue append {0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'queue append </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
 
         <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -374,13 +374,13 @@
 
             <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacent</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
                 <span class="n">target</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'remove n-&gt;m {0} {1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'remove n-&gt;m </span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">indegree</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'append {0}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'append </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
                     <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">top_order</span>
 </pre></div>

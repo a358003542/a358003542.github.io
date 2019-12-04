@@ -166,8 +166,8 @@ python2和python3的兼容性  · cdwanze的博文
 <p>python有个 <strong>2to3</strong> 内置模块可以自动进行python2脚本到python3脚本的移植工作，不过我感觉最好是不要过分依赖这个工具，这只是适合初学者的。因为python2和python3很多地方不一样了。如果你对这个模块有很深的了解，可能自己手工进行修改会更合适一些（其中可能会涉及到新的编写思路）。具体模块的使用请参看官方文档。</p>
 <h2 id="_1"><code>//</code> 和 <code>/</code></h2>
 <p>在python2中，两个整数相除会返回一个整数，也就是python3的 <code>//</code>。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span><span class="o">/</span><span class="mi">2</span>
-<span class="mi">2</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; 5/2</span>
+<span class="err">2</span>
 </pre></div>
 <h3 id="_2">兼容方案</h3>
 <p>在文件头上加上一行：</p>
@@ -176,23 +176,23 @@ python2和python3的兼容性  · cdwanze的博文
 <p>这样就都是使用python3的语法规则，即:  <code>/</code> 表示常规除法， <code>//</code> 表示整除——返回商。</p>
 <h2 id="print">print函数</h2>
 <p>这是最常见的错误了，推荐第一步就在文档里面进行find print这个字符串操作，然后将所有：</p>
-<div class="highlight"><pre><span></span>    <span class="n">print</span> <span class="p">...</span>
+<div class="highlight"><pre><span></span><span class="err">    print ...</span>
 </pre></div>
 <p>这样的形式都换成：</p>
-<div class="highlight"><pre><span></span>    <span class="n">print</span><span class="p">(...)</span>
+<div class="highlight"><pre><span></span><span class="err">    print(...)</span>
 </pre></div>
 <p>这是目前python2和python3都兼容的形式了，所以没有什么好犹豫的，大胆的修改就是了。</p>
 <p>其中python2 </p>
-<div class="highlight"><pre><span></span>    <span class="n">print</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><span class="err">    print 1, 2,</span>
 </pre></div>
 <p>似乎还有点小复杂，简单的理解就是对应到python3的</p>
-<div class="highlight"><pre><span></span>    <span class="nv">print</span><span class="ss">(</span><span class="mi">1</span>, <span class="mi">2</span>, <span class="k">end</span><span class="o">=</span><span class="s1">'</span><span class="s"> </span><span class="s1">'</span><span class="ss">)</span>
+<div class="highlight"><pre><span></span><span class="err">    print(1, 2, end=' ')</span>
 </pre></div>
 <p>然后python2支持这样的重定向语法 </p>
-<div class="highlight"><pre><span></span><span class="n">print</span> <span class="o">&gt;&gt;</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+<div class="highlight"><pre><span></span><span class="err">print &gt;&gt;sys.stderr, 1, 2, 3</span>
 </pre></div>
 <p>其对应python3的就是file选项： </p>
-<div class="highlight"><pre><span></span><span class="n">print</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="err">print(1, 2, 3, file=sys.stderr)</span>
 </pre></div>
 <h3 id="_3">兼容性方案</h3>
 <p>目前推荐在模块最上面写上:</p>
@@ -207,26 +207,26 @@ python2和python3的兼容性  · cdwanze的博文
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
 </pre></div>
 <p>如上面写了之后python2中随便定义的字符串</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span><span class="ss">"test"</span>
-<span class="n">u</span><span class="s1">'test'</span>
+<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt;"test"</span>
+<span class="err">u'test'</span>
 </pre></div>
 <p>返回的将是unicode类型，可以对应于python3的str类型。程序员在 （\cite{高质量python代码}） 编码时应该更多地考虑业务逻辑而不是考虑具体字符是什么编码什么二进制形式存放的。</p>
 <p>简单起见字符串都只是简单认为是字符串（或者说文本），然后程序员一般也不会考虑编码问题，只是确实到了某个点，需要直接操作字符的bytes形式，确实有需要，然后再考虑进行转换操作。</p>
 <p>具体的转换：</p>
-<div class="highlight"><pre><span></span># <span class="nv">python2</span>
-<span class="nv">def</span> <span class="nv">to_unicode</span><span class="ss">(</span><span class="nv">unicode_or_str</span><span class="ss">)</span>:
-    <span class="k">if</span> <span class="nv">isinstance</span><span class="ss">(</span><span class="nv">unicode_or_str</span>, <span class="nv">str</span><span class="ss">)</span>:
-        <span class="nv">value</span> <span class="o">=</span> <span class="nv">unicode_or_str</span>.<span class="nv">decode</span><span class="ss">(</span><span class="s1">'</span><span class="s">utf-8</span><span class="s1">'</span><span class="ss">)</span>
-    <span class="k">else</span>:
-        <span class="nv">value</span> <span class="o">=</span> <span class="nv">unicode_or_str</span>
-    <span class="k">return</span> <span class="nv">value</span>
+<div class="highlight"><pre><span></span><span class="o">#</span> <span class="n">python2</span>
+<span class="n">def</span> <span class="n">to_unicode</span><span class="p">(</span><span class="n">unicode_or_str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">isinstance</span><span class="p">(</span><span class="n">unicode_or_str</span><span class="p">,</span> <span class="n">str</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">unicode_or_str</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">unicode_or_str</span>
+    <span class="k">return</span> <span class="n">value</span>
 
-<span class="nv">def</span> <span class="nv">to_str</span><span class="ss">(</span><span class="nv">unicode_or_str</span><span class="ss">)</span>:
-    <span class="k">if</span> <span class="nv">isinstance</span><span class="ss">(</span><span class="nv">unicode_or_str</span>, <span class="nv">unicode</span><span class="ss">)</span>:
-        <span class="nv">value</span> <span class="o">=</span> <span class="nv">unicode_or_str</span>.<span class="nv">encode</span><span class="ss">(</span><span class="s1">'</span><span class="s">utf-8</span><span class="s1">'</span><span class="ss">)</span>
-    <span class="k">else</span>:
-        <span class="nv">value</span> <span class="o">=</span> <span class="nv">unicode_or_str</span>
-    <span class="k">return</span> <span class="nv">value</span>
+<span class="n">def</span> <span class="n">to_str</span><span class="p">(</span><span class="n">unicode_or_str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">isinstance</span><span class="p">(</span><span class="n">unicode_or_str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">unicode_or_str</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">unicode_or_str</span>
+    <span class="k">return</span> <span class="n">value</span>
 </pre></div>
 <p>而对于那些历史遗留的代码，非常遗憾，考虑到python2和python3在这一块如此巨大的裂痕，更加详细的阅读和修改甚至重写代码恐怕是避免不了的了。</p>
 <p>​    </p>
@@ -253,15 +253,15 @@ python2和python3的兼容性  · cdwanze的博文
 </pre></div>
 <h2 id="execfile">execfile函数</h2>
 <p>在python2中execfile是个内置函数，可以直接运行，用来执行某个python脚本。</p>
-<div class="highlight"><pre><span></span><span class="nv">execfile</span><span class="ss">(</span><span class="nv">join</span><span class="ss">(</span><span class="k">dirname</span><span class="ss">(</span><span class="nv">__file__</span><span class="ss">)</span>, <span class="s1">'</span><span class="s">openerp</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">release.py</span><span class="s1">'</span><span class="ss">))</span>  # <span class="nv">Load</span> <span class="nv">release</span> <span class="nv">variables</span>
-<span class="nv">lib_name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">openerp</span><span class="s1">'</span>
+<div class="highlight"><pre><span></span><span class="n">execfile</span><span class="p">(</span><span class="k">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s1">'openerp'</span><span class="p">,</span> <span class="s1">'release.py'</span><span class="p">))</span>  <span class="o">#</span> <span class="k">Load</span> <span class="n">release</span> <span class="n">variables</span>
+<span class="n">lib_name</span> <span class="o">=</span> <span class="s1">'openerp'</span>
 
 
-<span class="k">exec</span><span class="ss">(</span><span class="nv">compile</span><span class="ss">(</span><span class="nv">open</span><span class="ss">(</span><span class="nv">join</span><span class="ss">(</span><span class="k">dirname</span><span class="ss">(</span><span class="nv">__file__</span><span class="ss">)</span>, <span class="s1">'</span><span class="s">openerp</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">release.py</span><span class="s1">'</span><span class="ss">))</span>.<span class="nv">read</span><span class="ss">()</span>, <span class="nv">join</span><span class="ss">(</span><span class="k">dirname</span><span class="ss">(</span><span class="nv">__file__</span><span class="ss">)</span>, <span class="s1">'</span><span class="s">openerp</span><span class="s1">'</span>, <span class="s1">'</span><span class="s">release.py</span><span class="s1">'</span><span class="ss">)</span>, <span class="s1">'</span><span class="s">exec</span><span class="s1">'</span><span class="ss">))</span> 
- <span class="nv">lib_name</span> <span class="o">=</span> <span class="s1">'</span><span class="s">openerp</span><span class="s1">'</span>
+<span class="k">exec</span><span class="p">(</span><span class="n">compile</span><span class="p">(</span><span class="k">open</span><span class="p">(</span><span class="k">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s1">'openerp'</span><span class="p">,</span> <span class="s1">'release.py'</span><span class="p">)).</span><span class="k">read</span><span class="p">(),</span> <span class="k">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s1">'openerp'</span><span class="p">,</span> <span class="s1">'release.py'</span><span class="p">),</span> <span class="s1">'exec'</span><span class="p">))</span> 
+ <span class="n">lib_name</span> <span class="o">=</span> <span class="s1">'openerp'</span>
 </pre></div>
 <h3 id="_6">兼容方案</h3>
-<div class="highlight"><pre><span></span><span class="k">exec</span><span class="ss">(</span><span class="nv">compile</span><span class="ss">(</span><span class="nv">open</span><span class="ss">(</span><span class="s1">'</span><span class="s">myfile.py</span><span class="s1">'</span><span class="ss">)</span>.<span class="nv">read</span><span class="ss">()))</span>
+<div class="highlight"><pre><span></span><span class="err">exec(compile(open('myfile.py').read()))</span>
 </pre></div>
 <h2 id="_7">&lt;&gt;替换为 !=</h2>
 <p>不等于号&lt;&gt;被废弃了，推荐用!=，这样python2和python3都是兼容的。</p>

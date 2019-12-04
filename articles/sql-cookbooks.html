@@ -134,6 +134,7 @@ sql_cookbooks  · cdwanze的博文
 <li><a href="#_1">前言</a></li>
 <li><a href="#_2">根据某些条件删除某个表格的重复行</a></li>
 <li><a href="#_3">根据表格的某个字段值更新本表格</a></li>
+<li><a href="#_4">快速检查某一行是否存在</a></li>
 </ul>
 </div>
         </nav>
@@ -176,26 +177,26 @@ sql_cookbooks  · cdwanze的博文
 </tbody>
 </table>
 <p>如果self-join后形成了这样的组合：</p>
-<div class="highlight"><pre><span></span><span class="mi">1</span> <span class="n">a</span> <span class="c1">--- 1 a</span>
-<span class="mi">1</span> <span class="n">a</span> <span class="c1">--- 2 b</span>
-<span class="mi">1</span> <span class="n">a</span> <span class="c1">--- 3 a</span>
-<span class="mi">2</span> <span class="n">b</span> <span class="c1">--- 1 a</span>
-<span class="mi">2</span> <span class="n">b</span> <span class="c1">--- 2 b</span>
-<span class="mi">2</span> <span class="n">b</span> <span class="c1">--- 3 a</span>
-<span class="mi">3</span> <span class="n">a</span> <span class="c1">--- 1 a</span>
-<span class="mi">3</span> <span class="n">a</span> <span class="c1">--- 2 b</span>
-<span class="mi">3</span> <span class="n">a</span> <span class="c1">--- 3 a</span>
+<div class="highlight"><pre><span></span><span class="err">1 a --- 1 a</span>
+<span class="err">1 a --- 2 b</span>
+<span class="err">1 a --- 3 a</span>
+<span class="err">2 b --- 1 a</span>
+<span class="err">2 b --- 2 b</span>
+<span class="err">2 b --- 3 a</span>
+<span class="err">3 a --- 1 a</span>
+<span class="err">3 a --- 2 b</span>
+<span class="err">3 a --- 3 a</span>
 </pre></div>
 <p>然后再过滤，首先是url相等的行 </p>
 <div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">newtable</span> <span class="n">T1</span>  
 <span class="k">inner</span> <span class="k">join</span> <span class="n">newtable</span> <span class="n">T2</span>
 <span class="k">on</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="mi">1</span> <span class="n">a</span> <span class="c1">--- 1 a</span>
-<span class="mi">1</span> <span class="n">a</span> <span class="c1">--- 3 a</span>
-<span class="mi">2</span> <span class="n">b</span> <span class="c1">--- 2 b</span>
-<span class="mi">3</span> <span class="n">a</span> <span class="c1">--- 1 a</span>
-<span class="mi">3</span> <span class="n">a</span> <span class="c1">--- 3 a</span>
+<div class="highlight"><pre><span></span><span class="err">1 a --- 1 a</span>
+<span class="err">1 a --- 3 a</span>
+<span class="err">2 b --- 2 b</span>
+<span class="err">3 a --- 1 a</span>
+<span class="err">3 a --- 3 a</span>
 </pre></div>
 <p>其次是 id小一点的</p>
 <div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">newtable</span> <span class="n">T1</span>  
@@ -203,7 +204,7 @@ sql_cookbooks  · cdwanze的博文
 <span class="k">on</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span>
 <span class="k">where</span> <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span>
 </pre></div>
-<div class="highlight"><pre><span></span><span class="mi">1</span> <span class="n">a</span> <span class="c1">--- 3 a</span>
+<div class="highlight"><pre><span></span><span class="err">1 a --- 3 a</span>
 </pre></div>
 <p>最后得到的T1 的 1 a 这一行，然后执行delete操作将其删掉。</p>
 <p>这里我们看到self-join的情况要非常注意重复行的过滤，比如如果上面是 T1.id &lt;= T2.id 那么就会将整个表格给删掉。</p>
@@ -215,6 +216,11 @@ sql_cookbooks  · cdwanze的博文
 </pre></div>
 <p>同样参考postgresql的官方文档，这里update...from... 也类似于 select 里面的from_list table，如果是本表格自身的话那么就是 self join。</p>
 <p>这样self join之后后面你的update操作是可以引用这个表格的值的。</p>
+<h2 id="_4">快速检查某一行是否存在</h2>
+<p>参考了 <a href="https://stackoverflow.com/questions/7471625/fastest-check-if-row-exists-in-postgresql">这个网页</a> ，如下所示：</p>
+<div class="highlight"><pre><span></span><span class="err">select exists(select 1 from contact where id=12)</span>
+</pre></div>
+<p>这里值得一提的是，用python的SQL数据库通用的DB2接口，也就是pymysql或者psycopg2查询得到的直接是python的bool对象，True或者False，因为上面使用exists函数。</p>
             
             
             <hr/>

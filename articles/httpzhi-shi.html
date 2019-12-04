@@ -152,7 +152,7 @@ http知识  · cdwanze的博文
 <h2 id="http">HTTP知识</h2>
 <h2 id="url">URL结构</h2>
 <p>URL结构如下:</p>
-<div class="highlight"><pre><span></span><span class="n">scheme</span><span class="p">:[</span><span class="o">//</span><span class="p">[</span><span class="k">user</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="p">]</span><span class="k">host</span><span class="p">[:</span><span class="n">port</span><span class="p">]][</span><span class="o">/</span><span class="p">]</span><span class="n">path</span><span class="p">[</span><span class="o">?</span><span class="n">query</span><span class="p">][</span><span class="o">#</span><span class="n">fragment</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><span class="c">scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]</span>
 </pre></div>
 <p>其中:</p>
 <ul>
@@ -165,8 +165,8 @@ http知识  · cdwanze的博文
 <li><strong>fragment:</strong> 片段，为client使用。还有一个params不太常用。</li>
 </ul>
 <p>URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作。具体转义字符是 <code>%</code> ，比如空格SPACE，具体在URL中的表示就是 <code>%20</code> 。即使是ascii里面，也有一些字符需要转义，然后比如中文字符等，也需要如此utf-8编码和转义。比如 "书"</p>
-<div class="highlight"><pre><span></span>    <span class="o">&gt;&gt;&gt;</span> <span class="s1">'书'</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-    <span class="n">b</span><span class="s1">'\xe4\xb9\xa6'</span>
+<div class="highlight"><pre><span></span><span class="err">    &gt;&gt;&gt; '书'.encode('utf-8')</span>
+<span class="err">    b'\xe4\xb9\xa6'</span>
 </pre></div>
 <p>在URL中对应的就是 <code>%e4%b9%a6</code> 。还有其他一些细节，当然实际操作中各个编程语言都提供了良好的函数接口了的，比如python的urlencode函数。</p>
 <h3 id="http-header">http header详解</h3>
@@ -181,10 +181,10 @@ http知识  · cdwanze的博文
     <span class="o">&lt;</span><span class="n">entity</span><span class="o">-</span><span class="n">body</span><span class="o">&gt;</span>
 </pre></div>
 <p>比如打开google主页的请求包是:</p>
-<div class="highlight"><pre><span></span>    <span class="nt">GET</span> <span class="o">/</span> <span class="nt">HTTP</span><span class="o">/</span><span class="nt">1</span><span class="p">.</span><span class="nc">1</span>
-    <span class="nt">Host</span><span class="o">:</span> <span class="nt">www</span><span class="p">.</span><span class="nc">google</span><span class="p">.</span><span class="nc">com</span>
-    <span class="nt">User-Agent</span><span class="o">:</span> <span class="nt">Mozilla</span><span class="o">/</span><span class="nt">5</span><span class="p">.</span><span class="nc">0</span> <span class="o">(</span><span class="nt">X11</span><span class="o">;</span> <span class="nt">Ubuntu</span><span class="o">;</span> <span class="nt">Linux</span> <span class="nt">x86_64</span><span class="o">;</span> <span class="nt">rv</span><span class="p">:</span><span class="nd">40</span><span class="p">.</span><span class="nc">0</span><span class="o">)</span> <span class="nt">Gecko</span><span class="o">/</span><span class="nt">20100101</span> <span class="nt">Firefox</span><span class="o">/</span><span class="nt">40</span><span class="p">.</span><span class="nc">0</span>
-    <span class="o">........</span>
+<div class="highlight"><pre><span></span><span class="err">    GET / HTTP/1.1</span>
+<span class="err">    Host: www.google.com</span>
+<span class="err">    User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0</span>
+<span class="err">    ........</span>
 </pre></div>
 <p>其中第一行为大家熟知， 就是 <code>GET</code> 方法，具体打开的URL是 <code>/</code> ，然后http的version是 <code>HTTP/1.1</code> 。然后后面的请求包header内容不定，后面再细讲。请求信息包大多都没有entity-body，也就是额外的content内容，但就算没有header完了也要留一空白行。</p>
 <h3 id="headers">请求headers详解</h3>
@@ -363,12 +363,12 @@ http知识  · cdwanze的博文
     <span class="o">&lt;</span><span class="n">entity</span><span class="o">-</span><span class="n">body</span><span class="o">&gt;</span>
 </pre></div>
 <p>比如:</p>
-<div class="highlight"><pre><span></span>    <span class="nt">HTTP</span><span class="o">/</span><span class="nt">1</span><span class="p">.</span><span class="nc">1</span> <span class="nt">200</span> <span class="nt">OK</span>
-    <span class="nt">Cache-Control</span><span class="o">:</span> <span class="nt">private</span>
-    <span class="nt">Content-Length</span><span class="o">:</span> <span class="nt">231</span>
-    <span class="nt">Content-Type</span><span class="o">:</span> <span class="nt">text</span><span class="o">/</span><span class="nt">html</span><span class="o">;</span> <span class="nt">charset</span><span class="o">=</span><span class="nt">UTF-8</span>
-    <span class="nt">Date</span><span class="o">:</span> <span class="nt">Wed</span><span class="o">,</span> <span class="nt">02</span> <span class="nt">Sep</span> <span class="nt">2015</span> <span class="nt">08</span><span class="p">:</span><span class="nd">47</span><span class="p">:</span><span class="nd">52</span> <span class="nt">GMT</span>
-    <span class="o">....</span>
+<div class="highlight"><pre><span></span><span class="err">    HTTP/1.1 200 OK</span>
+<span class="err">    Cache-Control: private</span>
+<span class="err">    Content-Length: 231</span>
+<span class="err">    Content-Type: text/html; charset=UTF-8</span>
+<span class="err">    Date: Wed, 02 Sep 2015 08:47:52 GMT</span>
+<span class="err">    ....</span>
 </pre></div>
 <p>这个响应体 <code>HTTP/1.1</code> 就是的就是http的version，然后 <code>200</code> 是具体的http状态码，然后 <code>OK</code> 是一个描述文字。然后是响应体的header，然后空一行，然后是响应信息包的具体发送的cotent内容。</p>
 <p>http的方法method和状态码为大家所熟知，下面就header的一些内容列出来说明之。</p>
@@ -533,16 +533,16 @@ http知识  · cdwanze的博文
 <ul>
 <li><strong>MIME type:</strong> 其全称是Multipurpose Internet Mail Extensions ，可以看得出来和email系统有关，但不管怎么说，我们知道其在http里面用于描述文件类型即可。具体就是对应的</li>
 </ul>
-<div class="highlight"><pre><span></span>    <span class="n">Content</span><span class="o">-</span><span class="k">type</span> <span class="p">:</span> <span class="n">image</span><span class="o">/</span><span class="n">jpeg</span>
+<div class="highlight"><pre><span></span><span class="err">    Content-type : image/jpeg</span>
 </pre></div>
 <p>这一行，image/jpeg 就是MIME type描述，image是主文件类型，jpeg是次文件类型。最常见的是html文件，其MIME type是 <code>text/html</code> 。</p>
 <ul>
 <li><strong>URI:</strong> Uniform Resource Identifier ，此外常见的还有URN和URL概念。参考了 <a href="http://stackoverflow.com/questions/4913343/what-is-the-difference-between-uri-url-and-urn">这个网页</a> 。URN和URL都属于URI的范畴，也就是都视同用一连串的字符串来将所有的资源文件分别表示出来，而URN和URL是两种不同的标识方法，URL有点类似于门牌号码街道的描述，其大致有如下结构:</li>
 </ul>
-<div class="highlight"><pre><span></span>    <span class="n">scheme</span><span class="p">:[</span><span class="o">//</span><span class="p">[</span><span class="k">user</span><span class="p">:</span><span class="n">password</span><span class="o">@</span><span class="p">]</span><span class="k">host</span><span class="p">[:</span><span class="n">port</span><span class="p">]][</span><span class="o">/</span><span class="p">]</span><span class="n">path</span><span class="p">[</span><span class="o">?</span><span class="n">query</span><span class="p">][</span><span class="o">#</span><span class="n">fragment</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><span class="err">    scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]</span>
 </pre></div>
 <p>而URN比如:</p>
-<div class="highlight"><pre><span></span>    <span class="n">urn</span><span class="p">:</span><span class="n">isbn</span><span class="p">:</span><span class="mi">0451450523</span>
+<div class="highlight"><pre><span></span><span class="err">    urn:isbn:0451450523</span>
 </pre></div>
 <p>目前几乎绝大部分URI就是URL，URN只在某些特别领域使用。</p>
             
