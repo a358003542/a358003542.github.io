@@ -180,6 +180,161 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/bash-advanced.html">bash脚本进阶
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-06-17T00:00:00+08:00">2019年 6月 17日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="xargs">xargs多行转一行</h2>
+<div class="highlight"><pre><span></span><span class="err">sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)</span>
+</pre></div>
+<p>这是一个批量删除空文件夹的命令，假设现在空文件夹数目很多。首先 <code>ls -U</code> 单纯列出来，然后管道导向 <code>head</code> 只打印最开始的几行，然后管道导向 <code>xargs</code> 命令，这样多行转成一行，就可以作为 rmdir 的参数了。</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/loguru-module.html">loguru模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-06-10T00:00:00+08:00">2019年 6月 10日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>keep it simple , keep it stupid . loguru模块大概是符合这一精神的，其让你把精力从一些日志的调配的琐碎事情上抽离出来，好让你有更多的精力去解决核心问题。基本上使用过之后，就好像使用了python的新特性 <code>f-string</code> 一样，you just can not stop to use it. 你会忍不住想要使用它。</p>
+<p>就最简单的使用：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</pre></div>
+<p>接触过logging的马上就知道这个logger是个什么东西了，然后就想通常那样 <code>logger.info('what')</code> 之类的去打日志即可。默认的logger的日志格式就已经非常好了。</p>
+<p>通常这个就已经够用了，实际上容器化了的应用或者某些应用场景，是要求你的日志都打印在默认终端上的，还有某些专门管理日志的工具，也要求你的应用就打印在默认终端。</p>
+<p>某些情况下你可能需要将日志同时打印到文件中：</p>
+<div class="highlight"><pre><span></span><span class="err">logger.add('&lt;filename&gt;.log')</span>
+</pre></div>
+<p>此外还支持这样带时间戳的文件名：</p>
+<div class="highlight"><pre><span></span><span class="err">logger.add('file_{time …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/extract_pic_feature.html">提取图片的特征
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-06-05T00:00:00+08:00">2019年 6月 5日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">提取图片的特征</h2>
+<p>请参阅 <a href="https://www.cnblogs.com/my-love-is-python/p/10414135.html">这篇文章</a> ，老实说具体算法细节看不大懂，而且似乎短时间内是没希望看懂了..里面有太深的相关领域专业知识了。不过具体python代码还是很简单的：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">'test_1.jpg'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># 第二个参数设置为0就是自动灰度化了</span>
+<span class="n">sift</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">xfeatures2d</span><span class="o">.</span><span class="n">SIFT_create</span><span class="p">()</span>
+
+<span class="c1"># 找出关键点</span>
+<span class="n">kp</span> <span class="o">=</span> <span class="n">sift</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># 对关键点进行绘图</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">'ret'</span><span class="p">,</span> <span class="n">ret</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+<span class="c1"># 使用关键点找出sift特征向量</span>
+<span class="n">kp</span><span class="p">,</span> <span class="n">des</span> <span class="o">=</span> <span class="n">sift …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/quan-zhi-quan-neng-de-shang-di-bing-bu-cun-zai.html">全知全能的上帝并不存在
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#wen-zhe-ref">文哲
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-05-28T00:00:00+08:00">2019年 5月 28日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>这个世界为什么不存在全知全能的上帝，如果如果他存在，我肯定不会觉得迷茫，每个人都会心中充满了目的。</p>
+<p>一个努力积极工作的人的却突然不知道该做什么了，迷失了方向，觉得迷茫，这是管理人员的失职。</p>
+<p>上帝的职责是管理宇宙，而作为活在这个宇宙之中的我，当然也是上帝的管理的一部分。一个努力积极生活的人却突然不知道该做什么了，迷失了方向，觉得迷茫，这难道不是上帝的失职。</p>
+<p>失职的上帝怎么可能是全知全能的，所以全知全能的上帝并不存在。</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/ji-suan-yu-xian.html">计算余弦
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-05-07T00:00:00+08:00">2019年 5月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">计算余弦</h2>
+<p>按照 
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left | \vec{a} \right | \left | \vec{b} \right |
+}
+$$</div>
+<p>然后上面的向量的绝对值，是高中的写法，更确切应该写作如下形式：
+</p>
+<div class="math">$$
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\left \| \vec{a} \right \|_2 \left \| \vec{b} \right \|_2
+}
+$$</div>
+<p>
+具体就是叫做该向量的l2范数，也是该向量的欧几里得距离。</p>
+<p>而如果我们对某个向量进行sklearn的 <code>normalize</code> 归一化操作，也就是让这个向量的l2范数=1，默认是l2范数，你也可以设置为其他范数。比如l1范数就是所有值的绝对值相加等于1（这在某些数据预处理中 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/supervisor.html">supervisor
  </a></h1>
 
@@ -215,6 +370,40 @@
 <li>start <code>&lt;name&gt;</code> 启用某个进程</li>
 <li>start all 启用所有进程</li>
 <li>status <code>&lt;name …</code></li></ul>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/gu-mu-li-ying-jue-qi-nu-wu-dong-ku-da-fa.html">古墓丽影崛起女巫洞窟打法
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#wen-zhe-ref">文哲
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-04-21T00:00:00+08:00">2019年 4月 21日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>也叫 芭芭雅嘎：女巫神庙 ，我遇到的就两个难点，</p>
+<p>一个是要利用绳索翻到那个高点的。</p>
+<ol>
+<li>先射对面的滚轮，固定到下面的滚轮，然后再射对面的滚轮固定到旁边的固定柱上，注意调整好两个平台的高度，好让你可以爬到右边的高地上。</li>
+<li>爬到右边的高地之后射下面的滚轮，固定到高地上的滚轮，然后人滑下去。</li>
+<li>再射对面的滚轮，固定到下面的滚轮，然后再射对面的滚轮固定到旁边的固定柱上，注意这次调整两个平台的高度是要让你从右边的高地上到左边的高地上。</li>
+<li>等对面的小平台，跳到中间的绳索上，等到右边的高地</li>
+<li>转右边高地的滚轮，按C脱离之后，下面整个过程要快跑，跳平台，跑左边的高地，跳平台，连跳爬上去。</li>
+</ol>
+<p>另一个就是BOSS的打法。</p>
+<p>最核心的打法就是站在滚轮旁，射BOSS的飞船，在滚轮自动将BOSS拉过来的时候【一层不用射箭，后面二层三层是需要向BOSS射一箭，不一定射准，BOSS有AI，你一射，他就躲起来，防止BOSS烧绳子】</p>
+<p>拉过来之后，打开锅炉盖，烧BOSS一下。这是最关键的点，其他的清小兵就不用说了。</p>
+<p>然后就是一层两个烧完，之后上二层，二层两个烧完，做中间的平台转。</p>
+<p>最后三层还有一个，是坐最高层的转平台，这个在中间的平台的一个小隔间哪里按E就行了 …</p>
                             </article>
 
 
@@ -707,215 +896,6 @@
 </pre></div>
 <h2 id="_4">使用其他数据库</h2>
 <p>刚开始玩下sqlite3数据库 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/makefileni-bu-lai-yi-fa-ma.html">makefile你不来一发吗
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-18T00:00:00+08:00">2018年 6月 18日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="makefile">简单了解下makefile</h2>
-<p>makefile一般只能在Linux环境下运行，更确切来说要有gnu make这个工具去运行Makefile这个文件。</p>
-<p>makefile里面内容其实很丰富的，实际上甚至有点过于复杂了。不过有的时候只是简单使用其基本功能还是很便利的。</p>
-<div class="highlight"><pre><span></span><span class="nv">project</span><span class="o">=</span>helloworld
-<span class="nv">cflags</span><span class="o">=</span>-g -Wall  <span class="si">${</span><span class="nv">CCFLAGS</span><span class="si">}</span>
-
-<span class="nf">${project}</span><span class="o">:</span> 
-    <span class="si">${</span><span class="nv">CC</span><span class="si">}</span>  helloworld.c -o <span class="nv">$@</span> <span class="si">${</span><span class="nv">cflags</span><span class="si">}</span>
-
-<span class="nf">clean</span><span class="o">:</span>
-    rm <span class="si">${</span><span class="nv">project</span><span class="si">}</span>
-
-<span class="nf">install</span><span class="o">:</span>
-    cp <span class="si">${</span><span class="nv">project</span><span class="si">}</span> /usr/local/bin
-
-<span class="nf">uninstall</span><span class="o">:</span>
-    rm /usr/local/bin/<span class="si">${</span><span class="nv">project</span><span class="si">}</span>
-
-<span class="nf">.PHONY</span><span class="o">:</span>
-    clean uninstall install
-</pre></div>
-<p>为了便于理解，上面这个makefile我有意采用了一种和bash shell接近的风格。前面 <code>project=</code> 就是一个定义变量的行为。这个project变量就是本脚本的名字。然后makefile下面的主体部分格式如下:</p>
-<div class="highlight"><pre><span></span><span class="nf">target</span><span class="o">:</span> <span class="n">prerequisites</span>
-    the <span class="nb">command …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/docker.html">docker
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>关于docker是什么请参看 <a href="https://docker_practice.gitee.io/introduction/what.html">这个网页</a> ，说docker将改变软件生态确实是不为过的。老实说在接触docker之后感觉之前学到的很多东西，比如linux系统相关的一些，ansible等等部署工具相关的一些，virtualbox和 vagrant相关的一些，都在慢慢过时和淘汰了。当然那些工具还是很有用的，说他们被淘汰了是有点过了，更确切来说，对于一般玩家来说，可以节省更多的精力和时间，而不需要折腾那些工具那些配置学习折腾个老半天了。</p>
-<blockquote>
-<p>That‘s why we love docker.</p>
-</blockquote>
-<p>但实际上docker带来的变化远远不止于只是一个可以节省开发者做某些事情的时间的一个不错的工具那么简单，其伴随着SPPS，软件即服务，更确切来说整个互联网的大背景下，应运而生的。与之相应的，开发者们顺应这个时代，在编码，软件应用的很多方面，都需要做出改变。请读者进一步阅读 https://12factor.net/zh_cn/ 里面的讨论。</p>
-<p>实际上之前我折腾vagrant的时候，就很是认同这个理念： 那就是开发，测试，生产一致的环境，彻底解决，在这里可以运行，在这里就不行了的问题。而vagrant的控制virtualbox创建虚拟机的方式，在我看来显得略微笨拙了点，配置的繁琐，似乎并没有很好地解决这个问题 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/python-dateutilmo-kuai.html">python-dateutil模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                <p>一般能够使用python的内置模块datetime解决的问题或者简单写几个辅助函数就能解决的问题是没必要上 python-dateutil 模块的，但有的时候某些问题，上python-dateutil模块会非常的方便，然后我发现好多有名的模块都默认安装这个模块了。</p>
-<h2 id="relativedelta">relativedelta</h2>
-<p>某些问题，用datetime的replace将某个值设为0或者什么值，或者用timedelta来减去什么值，大部分都能解决，但有的时候，比如跨月份涉及到要考虑天数不等或者其他等等问题，用relativedelta还是很方便的。</p>
-<p>总的说来涉及到datetime的某个跨度的计算问题，还是推荐使用 relativedelta函数。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dateutil.relativedelta</span> <span class="kn">import</span> <span class="n">relativedelta</span>
-<span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-<span class="n">sdt</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">relativedelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="n">months</span><span class="p">)</span>
-</pre></div>
-
-
-<h2 id="rrule">rrule</h2>
-<p>虽然没有lrule，但根据上面的relativedelta配置的起始时间，然后指定结束时间，通过rrule函数来生成一个时间区间，有时是很方便的。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dateutil.rrule</span> <span class="kn">import</span> <span class="n">rrule</span><span class="p">,</span> <span class="n">MONTHLY</span>
-<span class="nb">list</span><span class="p">(</span><span class="n">rrule</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="n">MONTHLY</span><span class="p">,</span> <span class="n">dtstart</span><span class="o">=</span><span class="n">sdt</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="n">now …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pythonpa-chong-zhi-zi-ti-fan-pa-chong.html">python爬虫之-字体反爬虫
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#za-xiang-ref">杂项
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                <p>在爬虫的时候，你分析网页会看到，某些东西看上去是乱码，其css设置了一种额外的字体。怎么破解里面的内容呢？</p>
-<p>首先你需要把目标字体下载下来，通常这种字体有各种各样的名字，里面的具体字体codepoint也是随机的...</p>
-<p>如果你下载一个fontcreator会看到具体哪个字对应哪个codepoint，而爬虫这边编码，我们需要使用python的 fonttools库来加载字体。</p>
-<p>首先你需要下载好字体，保存好字体做好缓存工作。</p>
-<p>见本文的参考资料2，然后就是利用 fonttools 模块加载目标字体。</p>
-<div class="highlight"><pre><span></span><span class="err">font = TTFont(font_filename)</span>
-</pre></div>
-
-
-<p>然后就是分析这个字体的cmap tables的cmap数据，不同的字体似乎情况不同，这个要实际分析，由于fonttools这个模块文档较少，加上我对字体知识不太多，所以只能简单摸索下了。</p>
-<div class="highlight"><pre><span></span><span class="err">font_mapping = font[&#39;cmap&#39;].tables[?].cmap</span>
-</pre></div>
-
-
-<p>如果你找到 font_mapping 了，字符 用python的 ord 函数处理下，就能得到目标字符的 unicode code point，也就是我们上面说的字体的code point，在这个 font_mapping 里面你会看到的，然后具体什么内容就出来了 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/shi-yong-cythonlai-jia-su-python.html">使用cython来加速python
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-06-14T00:00:00+08:00">2018年 6月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">找到性能瓶颈所在</h2>
-<p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
-<div class="highlight"><pre><span></span><span class="err">python -m cProfile test.py</span>
-</pre></div>
-<p>或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。</p>
-<p>目前我知道的循环结构提速很明显，然后指定静态类型会提速。</p>
-<p>一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。</p>
-<p>参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。</p>
-<p>在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。</p>
-<h2 id="pyx">pyx文件</h2>
-<p>关于pyx文件的更多请查看cython的官方手册。</p>
-<p>下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来，</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/httpzhi-shi.html">http知识
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#html5-ref">html5
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-05-28T00:00:00+08:00">2018年 5月 28日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="http">HTTP知识</h2>
-<h2 id="url">URL结构</h2>
-<p>URL结构如下:</p>
-<div class="highlight"><pre><span></span><span class="c">scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]</span>
-</pre></div>
-<p>其中:</p>
-<ul>
-<li><strong>scheme:</strong> 描述访问服务器的协议，也就是如何获取该资源，最常见的是http，此外还有ftp等。</li>
-<li><strong>user:password:</strong> 这里用于http认证</li>
-<li><strong>host:</strong> 那里获取资源</li>
-<li><strong>port:</strong> 连接端口号是多少</li>
-<li><strong>path:</strong> 具体访问该资源的path</li>
-<li><strong>query:</strong> 其他额外参数</li>
-<li><strong>fragment:</strong> 片段，为client使用。还有一个params不太常用。</li>
-</ul>
-<p>URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作。具体转义字符是 <code>%</code> ，比如空格SPACE，具体在URL中的表示就是 <code>%20</code> 。即使是ascii里面，也有一些字符需要转义，然后比如中文字符等，也需要如此utf-8编码和转义。比如 "书"</p>
-<div class="highlight"><pre><span></span><span class="err">    &gt;&gt;&gt; '书'.encode('utf-8')</span>
-<span class="err">    b'\xe4\xb9 …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
