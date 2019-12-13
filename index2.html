@@ -180,12 +180,102 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/flask-module.html">flask模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-01-03T00:00:00+08:00">2019年 1月 3日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>django是一种构建大型商务网站的解决方案，除非目前贵公司的技术栈是已经架构在django之上的，否则不管是个人性质的小项目，或者刚刚开始的新的项目，个人推荐flask多于django的。当然在flask和tornado之间如何选择上，个人觉得更多的是在你对python的异步这一块的理解上，如果你懂python的异步，并且也知道你要做的api对并发和速度都有很高的要求，那么就应该选择tornado，否则就选择flask。</p>
+<p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
+<h2 id="_2">推荐的启动方式</h2>
+<p>目前flask推荐的启动方式是通过：</p>
+<div class="highlight"><pre><span></span><span class="err">flask run</span>
+</pre></div>
+<p>或者</p>
+<div class="highlight"><pre><span></span><span class="err">python -m flask run </span>
+</pre></div>
+<p>来启动flask。【这个方式很适合开发和测试，实际部署还是WSGI server来进行】</p>
+<p>要正常执行上面的命令，你需要设置好一些环境变量，最主要的是 <code>FLASK_APP</code> 这个变量：</p>
+<p>windows </p>
+<div class="highlight"><pre><span></span><span class="err">set FLASK_APP=hello.py</span>
+<span class="err">flask run</span>
+</pre></div>
+<p>linux </p>
+<div class="highlight"><pre><span></span><span class="err">export FLASK_APP=hello.py</span>
+<span class="err">flask run</span>
+</pre></div>
+<p>推荐是通过在当前工作目录下加上 <code>.env</code> 这个文件 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/ctypes.html">ctypes模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-12-24T00:00:00+08:00">2018年 12月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                <h2 id="ctypes">ctypes模块</h2>
+<p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
+<p>基本的使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">helloworld</span><span class="p">()</span>
+</pre></div>
+
+
+<p>接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。）</p>
+<p><a href="https://docs.python.org/3.7/library/ctypes.html">官方文档</a> 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。</p>
+<p>首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YOU_STRUCTURE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    基础信息结构体</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">),</span>  
+        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">24</span><span class="p">),</span> 
+        <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">40</span><span class="p">),</span> 
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>然后实际使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">YOU_STRUCTURE</span><span class="p">()</span>
+<span class="n">_ref_s</span>  <span class="o">=</span> <span class="n">ctypes …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/machine-learning-learninng-notes.html">机器学习学习笔记
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#nlp-ref">NLP
+                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -839,83 +929,6 @@
 <li>鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标)</li>
 </ul>
 <h3 id="uefi">UEFI …</h3>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pipenv-module.html">pipenv模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-14T11:45:00+08:00">2018年 2月 14日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>pipenv模块刚开始听说觉得virtualenv够用了，就没太在意。后来一试发现真的可以，很方便的，在设计理念上和nodejs那边的包管理有点接近了，很不错。</p>
-<p>刚进入一个文件夹，然后运行：</p>
-<div class="highlight"><pre><span></span>pipenv install
-</pre></div>
-<p>当然运行前你需要：</p>
-<div class="highlight"><pre><span></span><span class="err">pip install pipenv</span>
-</pre></div>
-<p>其会创建 <code>Pipfile</code> 和 <code>Pipfile.lock</code> 这两个文件。如果读者有点熟悉nodejs那边的包管理机制，就对这两个文件的作用不需要做过多的说明了。</p>
-<p>那么怎么激活进入虚拟环境呢：</p>
-<div class="highlight"><pre><span></span><span class="err">pipenv shell</span>
-</pre></div>
-<p>或者你直接调用虚拟环境下运行某个命令：</p>
-<div class="highlight"><pre><span></span><span class="err">pipenv run you_awesom_command</span>
-</pre></div>
-<p>读者打开 <code>Pipfile</code> 文件会发现这一行</p>
-<div class="highlight"><pre><span></span><span class="err">url = "https://pypi.douban.com/simple"</span>
-</pre></div>
-<p>以前还要在系统的另外的地方去配置，现在直接在这里修改就可以了。</p>
-<p>然后安装模块就是：</p>
-<div class="highlight"><pre><span></span><span class="err">pipenv install requests</span>
-</pre></div>
-<p>或者remove模块：</p>
-<div class="highlight"><pre><span></span><span class="err">pipenv uninstall requests</span>
-</pre></div>
-<p>值得注意的pipenv模块很好地解析的各个包包的依赖关系，这就是他比原 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/pillow-module.html">pillow模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#pythonhao-huo-ban-ref">python好伙伴
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-02-06T12:04:00+08:00">2018年 2月 6日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">简介</h2>
-<p>pillow模块的前身是PIL模块，其有更好的github和pypi支持，所以简单的安装就可以通过pip命令安装之即可。不过pillow模块对于某些特殊格式的图片处理支持可能依赖于系统的一些额外的图形处理模块，比如libjpeg，libtiff等。可能你的系统已经安装了，也可能没有，根据具体情况来，这里就不一一讨论了。</p>
-<p>安装官方文档的叙述（also reference <a href="http://askubuntu.com/questions/427358/install-pillow-for-python-3">this</a> ），下面这些可能需要装上。</p>
-<div class="highlight"><pre><span></span>sudo apt-get install python3-dev python3-setuptools
-sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev <span class="se">\</span>
-    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-</pre></div>
-<h3 id="_2">测试安装情况</h3>
-<p>可以如下找个图片简单测试一下安装情况:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"test.jpg"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">

@@ -180,6 +180,91 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/python-cookbook.html">python语言学习之cookbook篇
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-03-08T00:00:00+08:00">2016年 3月 8日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">读取文件推荐方式</h2>
+<p>因为文件对象本身是可迭代的，我们简单迭代文件对象就可以对文件的一行行内容进行一些操作。比如：</p>
+<div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="k">open</span><span class="p">(</span><span class="s1">'removeduplicate.py'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span><span class="k">end</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
+</pre></div>
+<p>这个代码就将打印这个文件，其中end="的意思是取消<code>\n</code>，因为原来的行里面已经有<code>\n</code>了。</p>
+<p>然后代码稍作修改就可以在每一行之前加上<code>&gt;&gt;&gt;</code>这个符号了。</p>
+<div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="k">open</span><span class="p">(</span><span class="s1">'removeduplicate.py'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">print</span><span class="p">(</span><span class="s1">'&gt;&gt;&gt;'</span><span class="p">,</span><span class="n">line</span><span class="p">,</span><span class="k">end</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
+</pre></div>
+<p>什么？这个输出只是在终端，没有到某个文件里面去，行，加上file参数。然后代码变成如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'removeduplicate.py'</span><span class="p">)</span>
+<span class="n">pyout</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">sys …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/python-pypi.html">python语言学习之pypi生态圈
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#pythonyu-yan-ref">python语言
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2016-03-07T00:00:00+08:00">2016年 3月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="setuppy">setup.py配置</h2>
+<p>在上面模块那一章里对python模块包的知识还有python相关生态圈的知识几乎没有谈及，这里一并在本章中说明了。本章知识是我们理解前人编写的各个有用的模块包的基础，也是编写自己的模块包的基础。</p>
+<p>请结合Github上的 <a href="https://github.com/a358003542/pyskeleton">pyskeleton项目</a> 来阅读本章。</p>
+<p>虽然官方内置distutils模块也能实现类似的功能，不过现在人们更常用的是第三方模块setuptools，其相当于distutils模块的加强版，初学者推荐就使用setuptools模块。更多内容请参看setuptools模块的 <a href="https://pythonhosted.org/setuptools/index.html">官方文档</a> 。</p>
+<p>安装就是先安装pip3：</p>
+<div class="highlight"><pre><span></span>sudo apt-get install python3-pip
+</pre></div>
+<p>然后通过pip3来安装setuptools：</p>
+<div class="highlight"><pre><span></span>sudo pip3 install setuptools
+</pre></div>
+<p>最简单的"setup.py"文件如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"HelloWorld"</span><span class="p">,</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="s2">"0.1"</span><span class="p">,</span>
+    <span class="n">packages</span> <span class="o">=</span> <span class="n">find_packages</span><span class="p">(),</span>
+<span class="p">)</span>
+</pre></div>
+<p>第一行是从setuptools模块中引入setup函数和 <code>find_packages</code> 函数。</p>
+<p>setup函数接受一系列的字典值，下面就setup函数的一些字典值的含义慢慢道来：</p>
+<dl>
+<dt>name</dt>
+<dd>
+<p>本软件的名字</p>
+</dd>
+<dt>version …</dt></dl>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/python-style-guide.html">python语言学习之编码风格推荐
  </a></h1>
 
@@ -611,7 +696,7 @@ imp才能使用了。比如说：</p>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#cun-dang-ref">存档
+                                    <a href="https://docs.cdwanze.work/categories.html#web-ref">WEB
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -843,81 +928,6 @@ imp才能使用了。比如说：</p>
 </pre></div>
 <p>其中mongo命令是client接口，然后mongod命令是服务端接口。默认开启了mongod后台服务，你可以看一下：</p>
 <div class="highlight"><pre><span></span>sudo service --status-all …</pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/odoo-learning-notes.html">odoo学习笔记
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#cun-dang-ref">存档
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2012-12-21T00:00:00+08:00">2012年 12月 21日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h1 id="odoo">odoo学习笔记</h1>
-<h2 id="_1">第二次修订版前言</h2>
-<p>这是本文的第二次修订版，前身是精通odoo，当然，现在不敢妄谈精通了，算是一个学习手册以供读者参考吧。</p>
-<h2 id="_2">历史</h2>
-<p>Odoo的前身是 Tiny ERP，最初是由比利时的Fabien Pinckaers 创建的。</p>
-<p><img alt="Fabien-Pinckaers" src="https://docs.cdwanze.work/images/odoo/Fabien-Pinckaers.png" title="Fabien Pinckaers"/></p>
-<p>到2009年的时候，发布第5版，公司获得风投，盈利增长迅速，软件更名为OpenERP。OpenERP这个名字最为人们熟知，当时软件已经包含几百个模块了，从财务管理、采购/销售管理、库存管理到人力资源管理、销售点管理、项目管理等等都有。</p>
-<p>在2014年9月，软件发布第8版，在之前版本逐渐优化的web client这一块的基础上，进行了大范围的功能加强。比如有了Website builder模块，可以方便公司快速架构出自己的网站；e-commerce模块方便公司快速搭建销售平台；还有business intelligence这个模块，可以辅助生成高质量的说明演示用的图形等等等等。这使得OpenERP这个名字已经不能很好地说明这个软件的雄心壮志了，于是软件更名为 <strong>Odoo</strong> 这个名字了。</p>
-<p>在2017年10月份odoo发布了最新的稳定版，odoo11版，本文是基于odoo11版来进行讨论的。</p>
-<p>该软件的基本架构就是基于web client/server模型，将公司内部所涉及到的所有的信息流都整合起来 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/python2he-python3de-jian-rong-xing.html">python2和python3的兼容性
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#cun-dang-ref">存档
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2012-12-21T00:00:00+08:00">2012年 12月 21日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="2to3">2to3内置模块</h2>
-<p>python有个 <strong>2to3</strong> 内置模块可以自动进行python2脚本到python3脚本的移植工作，不过我感觉最好是不要过分依赖这个工具，这只是适合初学者的。因为python2和python3很多地方不一样了。如果你对这个模块有很深的了解，可能自己手工进行修改会更合适一些（其中可能会涉及到新的编写思路）。具体模块的使用请参看官方文档。</p>
-<h2 id="_1"><code>//</code> 和 <code>/</code></h2>
-<p>在python2中，两个整数相除会返回一个整数，也就是python3的 <code>//</code>。</p>
-<div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; 5/2</span>
-<span class="err">2</span>
-</pre></div>
-<h3 id="_2">兼容方案</h3>
-<p>在文件头上加上一行：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-</pre></div>
-<p>这样就都是使用python3的语法规则，即:  <code>/</code> 表示常规除法， <code>//</code> 表示整除——返回商。</p>
-<h2 id="print">print函数</h2>
-<p>这是最常见的错误了，推荐第一步就在文档里面进行find print这个字符串操作，然后将所有：</p>
-<div class="highlight"><pre><span></span><span class="err">    print ...</span>
-</pre></div>
-<p>这样的形式都换成：</p>
-<div class="highlight"><pre><span></span><span class="err">    print(...)</span>
-</pre></div>
-<p>这是目前python2和python3都兼容的形式了，所以没有什么好犹豫的，大胆的修改就是了。</p>
-<p>其中python2 </p>
-<div class="highlight"><pre><span></span><span class="err">    print 1, 2,</span>
-</pre></div>
-<p>似乎还有点小复杂，简单的理解就是对应到python3的</p>
-<div class="highlight"><pre><span></span><span class="err">    print(1, 2, end …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
