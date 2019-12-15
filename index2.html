@@ -180,66 +180,6 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/gao-xiao-numpyhe-pandas.html">高效numpy和pandas
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#suan-fa-ref">算法
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-06-20T00:00:00+08:00">2019年 6月 20日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="numpy">高效numpy</h2>
-<h3 id="numpypandas">numpy总的来说比pandas快</h3>
-<p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
-<div class="highlight"><pre><span></span><span class="err">np.dot(df['a'],x)</span>
-</pre></div>
-<p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
-<h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
-<p>比如下面的程序：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="c">%%timeit </span>
-
-<span class="n">res</span> <span class="p">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="nb">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)])</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="err">50.7 ms ± 1.5 ms per loop (mean ± std. dev. of …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://docs.cdwanze.work/articles/bash-advanced.html">bash脚本进阶
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-06-17T00:00:00+08:00">2019年 6月 17日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="xargs">xargs多行转一行</h2>
-<div class="highlight"><pre><span></span><span class="err">sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)</span>
-</pre></div>
-<p>这是一个批量删除空文件夹的命令，假设现在空文件夹数目很多。首先 <code>ls -U</code> 单纯列出来，然后管道导向 <code>head</code> 只打印最开始的几行，然后管道导向 <code>xargs</code> 命令，这样多行转成一行，就可以作为 rmdir 的参数了。</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
                                         href="https://docs.cdwanze.work/articles/loguru-module.html">loguru模块
  </a></h1>
 
@@ -417,7 +357,7 @@ $$</div>
 
                                 <section>
                                     posted in
-                                    <a href="https://docs.cdwanze.work/categories.html#wen-zhe-ref">文哲
+                                    <a href="https://docs.cdwanze.work/categories.html#you-xi-ref">游戏
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
@@ -886,6 +826,96 @@ $$</div>
 <p>这其中，html的读写在网络抓取上有时可能有用，但不是很强大，还是推荐用专门的工具来做，sql的操作简单点可以用pandas那边的接口，但如果稍微复杂点还是推荐用sqlalchemy来做，这样写出来的代码可读性更好一些，orm层接口也更便捷写，代码里面全是一大堆sql语句，总不是太好的。</p>
 <h3 id="txt">读txt文件</h3>
 <p>实际上我们可能更常遇到的是txt文件，还是用 read_csv 函数来读，只是需要做一些额外的配置，比如 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/airflow-module.html">airflow模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-24T00:00:00+08:00">2018年 6月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>airflow和luigi模块相比有以下优点：</p>
+<ol>
+<li>通用的DAG概念来描述工作流，更专业点。</li>
+<li>集成系统的crontab从而支持周期性任务，这样airflow就只能在linux系统下运行了。</li>
+<li>图形界面很美观，功能更强大。</li>
+</ol>
+<p>老实说我不喜欢crontab，如果只是简单调度，用apscheduler或者之类的工具简单写下就能集成到你的软件系统中去，而再复杂点的工作流，任务流程等等管理，都推荐使用airflow这样的框架来管理。</p>
+<p>而至于说到大数据上的那些流式数据处理工具，实际上只有百分之几的公司因为业务需要必须上大数据，大部分公司是没必要上大数据的，因为大数据引入了太多的复杂度了，如果没有必要，而仅仅追求时髦去玩大数据，那显然是违背我们程序界公认的KISS原则的【Keep it simple and stupid.】。</p>
+<h3 id="airflow">安装airflow</h3>
+<div class="highlight"><pre><span></span><span class="err">pip install apache-airflow</span>
+</pre></div>
+<h3 id="_2">推荐起步</h3>
+<p>推荐 项目工作目录下 <code>.env</code> 文件下写上：</p>
+<div class="highlight"><pre><span></span><span class="err">export AIRFLOW_HOME=.</span>
+</pre></div>
+<p>这样使用pipenv或者其他工具在当前目录激活工作环境的时候，也自动激活了airflow在当前目录下工作的配置。这样我们airflow相关works配置的相关代码都放在这里。</p>
+<p>激活虚拟环境后，然后我们有如下操作：</p>
+<h3 id="_3">初始化数据库</h3>
+<div class="highlight"><pre><span></span><span class="err">airflow initdb</span>
+</pre></div>
+<h3 id="webserver">启动webserver</h3>
+<div class="highlight"><pre><span></span><span class="err">airflow webserver</span>
+</pre></div>
+<h2 id="_4">使用其他数据库</h2>
+<p>刚开始玩下sqlite3数据库 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://docs.cdwanze.work/articles/makefileni-bu-lai-yi-fa-ma.html">makefile你不来一发吗
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://docs.cdwanze.work/categories.html#linux-ref">linux
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-06-18T00:00:00+08:00">2018年 6月 18日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="makefile">简单了解下makefile</h2>
+<p>makefile一般只能在Linux环境下运行，更确切来说要有gnu make这个工具去运行Makefile这个文件。</p>
+<p>makefile里面内容其实很丰富的，实际上甚至有点过于复杂了。不过有的时候只是简单使用其基本功能还是很便利的。</p>
+<div class="highlight"><pre><span></span><span class="nv">project</span><span class="o">=</span>helloworld
+<span class="nv">cflags</span><span class="o">=</span>-g -Wall  <span class="si">${</span><span class="nv">CCFLAGS</span><span class="si">}</span>
+
+<span class="nf">${project}</span><span class="o">:</span> 
+    <span class="si">${</span><span class="nv">CC</span><span class="si">}</span>  helloworld.c -o <span class="nv">$@</span> <span class="si">${</span><span class="nv">cflags</span><span class="si">}</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+    rm <span class="si">${</span><span class="nv">project</span><span class="si">}</span>
+
+<span class="nf">install</span><span class="o">:</span>
+    cp <span class="si">${</span><span class="nv">project</span><span class="si">}</span> /usr/local/bin
+
+<span class="nf">uninstall</span><span class="o">:</span>
+    rm /usr/local/bin/<span class="si">${</span><span class="nv">project</span><span class="si">}</span>
+
+<span class="nf">.PHONY</span><span class="o">:</span>
+    clean uninstall install
+</pre></div>
+<p>为了便于理解，上面这个makefile我有意采用了一种和bash shell接近的风格。前面 <code>project=</code> 就是一个定义变量的行为。这个project变量就是本脚本的名字。然后makefile下面的主体部分格式如下:</p>
+<div class="highlight"><pre><span></span><span class="nf">target</span><span class="o">:</span> <span class="n">prerequisites</span>
+    the <span class="nb">command …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
