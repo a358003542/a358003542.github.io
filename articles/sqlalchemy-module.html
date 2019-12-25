@@ -16,7 +16,7 @@
 <meta name="keywords" content="orm, database, SQL, " />
 
 <meta property="og:title" content="sqlalchemy模块 "/>
-<meta property="og:url" content="https://docs.cdwanze.work/articles/sqlalchemy-module.html" />
+<meta property="og:url" content="https://a358003542.github.io/articles/sqlalchemy-module.html" />
 <meta property="og:description" content="前言 本文分为两个部分，sqlalchemy的非ORM部分和ORM部分。一般使用是推荐使用ORM，这将让你的代码更python，更易读易懂。但ORM部分要用好，很多非ORM部分知识是需要的,，下面根据笔者的实践列出一些非ORM部分非常常用的一些知识部分： 创建Engine 理解创建Engine部分将有助于你在很多地方理解如何配置sqlalchemy的数据库连接 列的属性 列的数据类型 这两个是必看的，你在定义ORM模型的时候必然要参考这个 select语句和理解RowProxy对象 帮助你理解如何在query中编写select语句和出来的结果如何使用 安装 sqlalchemy的安装简单用pip命令安装之即可: pip install sqlalchemy 引用惯例 在后面都默认有如下引用: from sqlalchemy import * 后面将不会再提及，也就是凡是 from sqlalchemy import what 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。 简介 通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 sqlalchemy architecture 一文的描述: 和数据库直接相连的是我们熟悉的那些DBAPI接口模块，比如: sqlite3, pymysql, psycopg2等，然后中间的核心层有Engine，连接池，方言 …" />
 <meta property="og:site_name" content="cdwanze的博文" />
 <meta property="og:article:author" content="cdwanze" />
@@ -30,17 +30,17 @@ sqlalchemy模块  · cdwanze的博文
 </title>
 
 
-        <link href="https://docs.cdwanze.work/theme/css/font-awesome.css" rel="stylesheet"
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
               media="screen">
-        <link href="https://docs.cdwanze.work/theme/css/bootstrap.min.css" rel="stylesheet"
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
               media="screen">
 
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/pygments.css" media="screen">
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/elegant.css" media="screen">
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
             <link rel="stylesheet" type="text/css"
-                  href="https://docs.cdwanze.work/theme/css/custom.css" media="screen">
+                  href="https://a358003542.github.io/theme/css/custom.css" media="screen">
 
 
 
@@ -62,13 +62,13 @@ sqlalchemy模块  · cdwanze的博文
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="https://docs.cdwanze.work/"><span
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
                     class=site-name>网站首页</span></a>
         </div>
 
 
         <div class="navbar-collapse collapse">
-            <form action="https://docs.cdwanze.work/search.html"
+            <form action="https://a358003542.github.io/search.html"
                   onsubmit="return validateForm(this.elements['q'].value);"
                   class="navbar-form navbar-left">
                 <div class="form-group">
@@ -82,7 +82,7 @@ sqlalchemy模块  · cdwanze的博文
 
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li >
-                    <a href="https://docs.cdwanze.work">博文首页</a></li>
+                    <a href="https://a358003542.github.io">博文首页</a></li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"
@@ -99,10 +99,10 @@ sqlalchemy模块  · cdwanze的博文
 
 
                         <li >
-                            <a href="https://docs.cdwanze.work/epub-ebooks.html">epub电子书籍</a>
+                            <a href="https://a358003542.github.io/epub-ebooks.html">epub电子书籍</a>
                         </li>
                         <li >
-                            <a href="https://docs.cdwanze.work/about.html">关于本网站</a>
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
                         </li>
             </ul>
 
@@ -118,7 +118,7 @@ sqlalchemy模块  · cdwanze的博文
 <article>
 <div class="row">
     <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://docs.cdwanze.work/articles/sqlalchemy-module.html"> sqlalchemy模块  </a></h1>
+    <h1><a href="https://a358003542.github.io/articles/sqlalchemy-module.html"> sqlalchemy模块  </a></h1>
     </header>
 </div>
 
@@ -243,7 +243,7 @@ sqlalchemy模块  · cdwanze的博文
 <p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。</p>
 <h2 id="_4">简介</h2>
 <p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>
 <p>和数据库直接相连的是我们熟悉的那些DBAPI接口模块，比如: sqlite3, pymysql, psycopg2等，然后中间的核心层有Engine，连接池，方言，SQL表达语言和类型系统。core层很重要，实际上有些模块是完全建构在core层之上的，不一定要用ORM方法。</p>
 <h2 id="orm">非ORM风格</h2>
 <h3 id="engine">创建Engine</h3>
@@ -1156,8 +1156,8 @@ sqlalchemy模块  · cdwanze的博文
 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 </pre></div>
 <p>然后用sqliteman观察数据库情况如下:</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/users_table.png" title="users_table"/></p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/emails_table.png" title="emails_talbe"/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/users_table.png" title="users_table"/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/emails_table.png" title="emails_talbe"/></p>
 <p><code>session.query(User,Email)</code> 返回的是笛卡尔积的形式:</p>
 <div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; session.query(User,Email).all()</span>
 <span class="err">[(&lt;User admin&gt;, &lt;Email mary@example.com&gt;), (&lt;User admin&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User admin&gt;, &lt;Email john@example.org&gt;), (&lt;User admin&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User Mary&gt;, &lt;Email mary@example.com&gt;), (&lt;User Mary&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User Mary&gt;, &lt;Email john@example.org&gt;), (&lt;User Mary&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User John&gt;, &lt;Email mary@example.com&gt;), (&lt;User John&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User John&gt;, &lt;Email john@example.org&gt;), (&lt;User John&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User Susan&gt;, &lt;Email mary@example.com&gt;), (&lt;User Susan&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User Susan&gt;, &lt;Email john@example.org&gt;), (&lt;User Susan&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User Carl&gt;, &lt;Email mary@example.com&gt;), (&lt;User Carl&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User Carl&gt;, &lt;Email john@example.org&gt;), (&lt;User Carl&gt;, &lt;Email carl@nospam.net&gt;)]</span>
@@ -1300,7 +1300,7 @@ sqlalchemy模块  · cdwanze的博文
 <p>many-to-one模型实际上和one-to-many模型就是一回事，而且如果我们如同上面的把 <code>backref</code> 设置好，针对多个Email对象实际上就可以直接找到某个User对象了，所以为了简单起见，我们可以就直接用one-to-many模型来理解之。</p>
 <h3 id="many-to-many">many-to-many模型</h3>
 <p>many-to-many模型有点复杂和难于理解，这是因为其还要求有一个额外的Table来管理原两个表格之间的元素的映射关系，幸好sqlalchemy官方文档专门有一小节对这个做出了一些说明。其描述的一个应用场景就是一篇博文有多个标签，然后一个标签有多篇博文（我们可以简单构建出这样一个功能，单击一个标签按钮，然后弹出所有有这些标签的文章出来）。一个博文有多个标签这很简单，一个one-to-many模型就解决了，大概就是 <code>blog.tags</code> ，就弹出一个list，里面装着一些标签对象。所以关键性的问题是如何实现出 <code>tag.blogs</code> ，就弹出一个list，里面装着一些博文对象。而在 <a href="http://code.tutsplus.com/articles/sql-for-beginners-part-3-database-relationships--net-8561">这篇文章</a> 的这幅图片中:</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/many_to_many.png" title='"many-to-many模型'/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/many_to_many.png" title='"many-to-many模型'/></p>
 <p>于是现在的情况变成这样的了，blog one-to-many，但to many的是一个中间表格，而tag one-to-many，这个many也是一个中间表格。我们知道所谓的many一方存储着外键约束值，所以这个中间表格就两列，左列外键引用blog，右列外键引用tag，具体每一个映射关系都要写一条记录上去。不管怎么说，看下面这个例子吧:</p>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
@@ -1374,9 +1374,9 @@ sqlalchemy模块  · cdwanze的博文
 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 </pre></div>
 <p>然后生成的表格如下所示:</p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/tags_table.png" title="tags_table"/></p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/blogs_table.png" title="blogs_table"/></p>
-<p><img alt="img" src="https://docs.cdwanze.work/images/python/blog_tags_table.png" title="blog_tags_table"/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/tags_table.png" title="tags_table"/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/blogs_table.png" title="blogs_table"/></p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/blog_tags_table.png" title="blog_tags_table"/></p>
 <p>然后执行结果如下:</p>
 <div class="highlight"><pre><span></span><span class="err">&gt;&gt;&gt; blog1</span>
 <span class="err">&lt;BLog learning mysql&gt;</span>
@@ -1682,13 +1682,13 @@ sqlalchemy模块  · cdwanze的博文
 <time datetime="2019-10-01T00:00:00+08:00">2019年 10月 1日 </time>
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://docs.cdwanze.work/categories.html#sql-ref">SQL</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#sql-ref">SQL</a>
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://docs.cdwanze.work/tags.html#database-ref">database
+                <li><a href="https://a358003542.github.io/tags.html#database-ref">database
                     <span>4</span>
 </a></li>
-                <li><a href="https://docs.cdwanze.work/tags.html#orm-ref">orm
+                <li><a href="https://a358003542.github.io/tags.html#orm-ref">orm
                     <span>1</span>
 </a></li>
             </ul>
@@ -1713,8 +1713,8 @@ sqlalchemy模块  · cdwanze的博文
 </div>
 </footer>
 
-        <script src="https://docs.cdwanze.work/theme/js/jquery.min.js"></script>
-    <script src="https://docs.cdwanze.work/theme/js/bootstrap.min.js"></script>
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
     <script>
         function validateForm(query) {
             return (query.length > 0);
