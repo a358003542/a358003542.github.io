@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="apache, web-server, draft, " />
+
+<meta property="og:title" content="apache "/>
+<meta property="og:url" content="https://a358003542.github.io/drafts/apache.html" />
+<meta property="og:description" content="关于apache2 web server的简要介绍请参看 apache http server wiki 。目前推荐使用apache2.4，这是它的 apache官方文档 。 Ubuntu系统或者Centos系统之间httpd的安装配置环境等差异很大，我想说的是那些知识都不是重点，跟着官方文档，咱首先折腾出一个绿色本地安装版本的httpd，然后跟着官方文档学配置才是王道。什么在那个系统那个命令啊，那个系统那个文件夹下那个配置啊都是不重要的东西。 apache的本地安装 apache本地安装过程大体分为下面几步： 安装apr 安装apr-util 安装httpd 安装mod_wsgi （可选项，使用django或者flask你需要它的） 更多的细节在官方文档的 install 那一章节里，读者如果懂ansible的话，可以看看 我写的 green-install项目 里面的apache role 部分。 正如前面说到的，日志文件在那里，配置文件在那里加载啊等等都是可以定制的，摸清楚配置语法才是王道。 挂个简单的静态网站 首先httpd.conf 那里我们写上了 LISTEN 80 了，这样apache将会监听80端口。你的域名指向你的远程服务器ip就可以了。然后一般我们在httpd …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2012-12-21T00:00:00+08:00" />
+<meta property="" content="2017-12-24T00:00:00+08:00" />
+<meta name="twitter:title" content="apache ">
+<meta name="twitter:description" content="关于apache2 web server的简要介绍请参看 apache http server wiki 。目前推荐使用apache2.4，这是它的 apache官方文档 。 Ubuntu系统或者Centos系统之间httpd的安装配置环境等差异很大，我想说的是那些知识都不是重点，跟着官方文档，咱首先折腾出一个绿色本地安装版本的httpd，然后跟着官方文档学配置才是王道。什么在那个系统那个命令啊，那个系统那个文件夹下那个配置啊都是不重要的东西。 apache的本地安装 apache本地安装过程大体分为下面几步： 安装apr 安装apr-util 安装httpd 安装mod_wsgi （可选项，使用django或者flask你需要它的） 更多的细节在官方文档的 install 那一章节里，读者如果懂ansible的话，可以看看 我写的 green-install项目 里面的apache role 部分。 正如前面说到的，日志文件在那里，配置文件在那里加载啊等等都是可以定制的，摸清楚配置语法才是王道。 挂个简单的静态网站 首先httpd.conf 那里我们写上了 LISTEN 80 了，这样apache将会监听80端口。你的域名指向你的远程服务器ip就可以了。然后一般我们在httpd …">
+
+    <title>
+apache  · cdwanze的博文
+</title>
+
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+            <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="https://a358003542.github.io">博文首页</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/drafts/apache.html"> apache  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#apache">apache的本地安装</a></li>
+<li><a href="#_1">挂个简单的静态网站</a></li>
+<li><a href="#wsgi">挂个wsgi站点</a></li>
+<li><a href="#_2">其他文件权限问题</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>关于apache2 web server的简要介绍请参看 <a href="https://zh.wikipedia.org/wiki/Apache_HTTP_Server">apache http server wiki</a> 。目前推荐使用apache2.4，这是它的 <a href="http://httpd.apache.org/docs/2.4/">apache官方文档</a> 。</p>
+<p>Ubuntu系统或者Centos系统之间httpd的安装配置环境等差异很大，我想说的是那些知识都不是重点，跟着官方文档，咱首先折腾出一个绿色本地安装版本的httpd，然后跟着官方文档学配置才是王道。什么在那个系统那个命令啊，那个系统那个文件夹下那个配置啊都是不重要的东西。</p>
+<h2 id="apache">apache的本地安装</h2>
+<p>apache本地安装过程大体分为下面几步：</p>
+<ul>
+<li>
+<p>安装apr</p>
+</li>
+<li>
+<p>安装apr-util</p>
+</li>
+<li>安装httpd</li>
+<li>安装mod_wsgi （可选项，使用django或者flask你需要它的）</li>
+</ul>
+<p>更多的细节在官方文档的 install 那一章节里，读者如果懂ansible的话，可以看看 我写的 <a href="https://github.com/a358003542/green-install">green-install项目</a>  里面的apache role 部分。</p>
+<p>正如前面说到的，日志文件在那里，配置文件在那里加载啊等等都是可以定制的，摸清楚配置语法才是王道。</p>
+<h2 id="_1">挂个简单的静态网站</h2>
+<p>首先httpd.conf 那里我们写上了 <code>LISTEN 80</code> 了，这样apache将会监听80端口。你的域名指向你的远程服务器ip就可以了。然后一般我们在httpd.conf 后面写上这么一句： </p>
+<div class="highlight"><pre><span></span><span class="err">Include conf.d/*.conf</span>
+</pre></div>
+<p>也就是conf.d文件夹下的所有配置自动加载进来。这个conf.d文件夹和conf文件夹是平行关系。然后conf.d里面我们主要就是定义 <code>VirtualHost</code> 。</p>
+<p>上个完整的例子吧：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span>
+    ServerName www.cdwanze.work
+    DocumentRoot /home/wanze/venv/html
+    DirectoryIndex index.html   
+
+    <span class="nt">&lt;Directory</span> <span class="err">/home/wanze/venv/html</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;IfVersion</span> <span class="nt">&gt;</span>= 2.4&gt;
+            Require all granted
+        <span class="nt">&lt;/IfVersion&gt;</span>
+        <span class="nt">&lt;IfVersion</span> <span class="err">&lt;</span> <span class="err">2.4</span><span class="nt">&gt;</span>
+            Order deny,allow
+            Allow from all
+        <span class="nt">&lt;/IfVersion&gt;</span>
+    <span class="nt">&lt;/Directory&gt;</span>
+
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+<ul>
+<li>ServerName： apache监听80端口的信号将经过这个ServerName进一步进行分发，比如请求域名是 api.cdwanze.work，那个这个情况将不会被上面例子的VirtualHost处理。</li>
+<li>DocumentRoot ： 服务的静态网站的那些内容所在的文件夹。重要级别五颗星。</li>
+<li>DirectoryIndex ： 某些文件夹请求比如 /a/b ，如果这个文件夹下有index.html文件，那么将显示这个文件的内容。</li>
+<li>Directory： 文件夹权限管理，重要级别五颗星，不写就会出现没有权限访问错误。</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="err">403 Forbidden You don't have permission to access / on this server</span>
+</pre></div>
+<p>apache2.4版本使用语法是 <code>Require all granted</code> ，对应的原2.2的配置是：</p>
+<div class="highlight"><pre><span></span><span class="k">Order</span> <span class="n">allow</span><span class="p">,</span><span class="n">deny</span>
+
+<span class="n">Allow</span> <span class="k">from</span> <span class="k">all</span>
+</pre></div>
+<p>有考究癖的可以了解下2.2这种写法的意思： </p>
+<p>Order allow,deny —— 先写allow规则，再写deny规则
+Allow from all —— 所有都可以访问
+Deny from all —— 所有都拒绝</p>
+<p>2.2的这个配置</p>
+<div class="highlight"><pre><span></span><span class="err">Order deny,allow</span>
+<span class="err">Deny from all</span>
+</pre></div>
+<p>等同于2.4的：</p>
+<div class="highlight"><pre><span></span><span class="err">Require all denied</span>
+<span class="err">\end{Verbatim}</span>
+</pre></div>
+<p>然后2.2的这个：</p>
+<div class="highlight"><pre><span></span><span class="err">Order Deny,Allow</span>
+<span class="err">Deny from all</span>
+<span class="err">Allow from example.org</span>
+</pre></div>
+<p>意思是所有都拒绝，只允许 example.org的访问。</p>
+<p>等同于2.4：</p>
+<div class="highlight"><pre><span></span><span class="err">Require host example.org</span>
+</pre></div>
+<p>我们看到2.4的Require语句更简洁了，比如下面的这个：</p>
+<div class="highlight"><pre><span></span><span class="err">Require all granted</span>
+<span class="err">Require not ip 10.252.46.165</span>
+</pre></div>
+<p>所有都允许，除了谁谁禁止访问。</p>
+<h2 id="wsgi">挂个wsgi站点</h2>
+<p>上例子吧：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;IfModule</span> <span class="err">!wsgi_module</span><span class="nt">&gt;</span>
+    LoadModule wsgi_module modules/mod_wsgi.so
+<span class="nt">&lt;/IfModule&gt;</span>
+
+WSGIPythonHome "/home/wanze/venv"
+WSGIPythonPath "/home/wanze/venv/webapp"
+
+<span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span>
+    ServerName api.cdwanze.work
+
+    WSGIScriptAlias / /home/wanze/venv/webapp/webapp/wsgi.py
+
+    <span class="nt">&lt;Directory</span> <span class="err">/home/wanze/venv/webapp</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;IfVersion</span> <span class="nt">&gt;</span>= 2.4&gt;
+            Require all granted
+        <span class="nt">&lt;/IfVersion&gt;</span>
+        <span class="nt">&lt;IfVersion</span> <span class="err">&lt;</span> <span class="err">2.4</span><span class="nt">&gt;</span>
+            Order deny,allow
+            Allow from all
+        <span class="nt">&lt;/IfVersion&gt;</span>
+    <span class="nt">&lt;/Directory&gt;</span>
+
+    Alias "/static" "/home/wanze/venv/webapp/static"
+
+    <span class="nt">&lt;Directory</span>  <span class="err">/home/wanze/venv/webapp/static</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;IfVersion</span> <span class="nt">&gt;</span>= 2.4&gt;
+            Require all granted
+        <span class="nt">&lt;/IfVersion&gt;</span>
+        <span class="nt">&lt;IfVersion</span> <span class="err">&lt;</span> <span class="err">2.4</span><span class="nt">&gt;</span>
+            Order deny,allow
+            Allow from all
+        <span class="nt">&lt;/IfVersion&gt;</span>
+    <span class="nt">&lt;/Directory&gt;</span>
+
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+<ul>
+<li>
+<p>首先是检测wsgi模块加载了没有，没有把它加载上。</p>
+</li>
+<li>
+<p>WSGIPythonHome 这个设置你的python的虚拟环境的所在目录，比如上面的例子 venv/bin下面就是python可执行脚本。</p>
+</li>
+<li>
+<p>WSGIPythonPath 这个设置你的Django项目目录所在</p>
+</li>
+<li>WSGIScriptAlias 这个设置你的WSGI文件所在</li>
+<li>Alias 和下面Directory 设置是服务你的项目的静态文件的。</li>
+</ul>
+<h2 id="_2">其他文件权限问题</h2>
+<p>除了上面设置好 Directory 之外，你可能还会遇到其他某些文件的读写权限问题，在查看日志的时候发现提示说那个文件没有权限读写了。这个时候首先要明确httpd的执行User和Group是谁，然后在看目标文件夹或文件的具体权限。</p>
+<p>Django项目的wsgi文件是需要有执行权限的。还有Django项目操纵数据库，比如sqlite3这种文件数据库，你可能也会遇到读写权限问题。</p>
+<p>还有值得一提的是如果某个母文件夹没有可执行权限，那么里面的所有文件都是不可见的。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2012-12-21T00:00:00+08:00">2012年 12月 21日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2017-12-24T00:00:00+08:00">2017年 12月 24日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#draft-ref">draft</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#apache-ref">apache
+</a></li>
+                <li><a href="https://a358003542.github.io/tags.html#web-server-ref">web-server
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://docs.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        function adjust_markdown_css(){
+            $('table').addClass('table');
+            $('table').addClass('table-striped');
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+            adjust_markdown_css();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
+
+
+    
+
+
+
+</body>
+</html>
