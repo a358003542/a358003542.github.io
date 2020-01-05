@@ -144,32 +144,37 @@ emacs学习笔记  · cdwanze的博文
 </ul>
 </li>
 <li><a href="#_10">自定义命令</a></li>
+<li><a href="#clisp">CLISP开发环境搭建</a><ul>
+<li><a href="#quicklispcl-project">利用quicklisp安装cl-project</a></li>
+<li><a href="#_11">加载自己编写的项目</a></li>
+</ul>
+</li>
 <li><a href="#smex">加入smex插件</a><ul>
-<li><a href="#_11">自定义按键配置</a></li>
+<li><a href="#_12">自定义按键配置</a></li>
 </ul>
 </li>
 <li><a href="#tabspace">tab都自动换成space</a></li>
 <li><a href="#80">80列规则</a></li>
 <li><a href="#python">python模式</a><ul>
-<li><a href="#_12">分窗口控制</a></li>
+<li><a href="#_13">分窗口控制</a></li>
 </ul>
 </li>
 <li><a href="#emacs_1">快速启动emacs</a><ul>
 <li><a href="#frame">关闭frame和以前的不同了</a></li>
-<li><a href="#_13">字体问题</a></li>
+<li><a href="#_14">字体问题</a></li>
 </ul>
 </li>
-<li><a href="#_14">左侧文件树面板</a><ul>
+<li><a href="#_15">左侧文件树面板</a><ul>
 <li><a href="#pdf">pdf文件打开卡住问题</a></li>
-<li><a href="#_15">可能的其他问题</a></li>
+<li><a href="#_16">可能的其他问题</a></li>
 </ul>
 </li>
-<li><a href="#_16">多个窗口之间的编号切换</a></li>
+<li><a href="#_17">多个窗口之间的编号切换</a></li>
 <li><a href="#markdown">markdown模式</a></li>
 <li><a href="#markdown_1">markdown实时预览</a></li>
 <li><a href="#emacs_2">文字模式下的emacs操作</a><ul>
-<li><a href="#_17">移动光标</a></li>
-<li><a href="#_18">切换窗口焦点</a></li>
+<li><a href="#_18">移动光标</a></li>
+<li><a href="#_19">切换窗口焦点</a></li>
 </ul>
 </li>
 </ul>
@@ -315,6 +320,61 @@ emacs学习笔记  · cdwanze的博文
 <span class="p">(</span><span class="nv">defalias</span> <span class="ss">'buffer</span> <span class="ss">'switch-to-buffer</span><span class="p">)</span>
 </pre></div>
 <p>然后我们再进入emacs，我们发现smex里面多了一个open命令，之前没有的，然后原有的find-file命令也还在。</p>
+<h2 id="clisp">CLISP开发环境搭建</h2>
+<p>推荐使用 <strong>protacle</strong> 。</p>
+<h3 id="quicklispcl-project">利用quicklisp安装cl-project</h3>
+<p>在slime-repl里面输入：</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">ql:quickload</span> <span class="ss">:quickproject</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">quickproject:make-project</span> <span class="s">"wanze_clisp_project"</span><span class="p">)</span>
+</pre></div>
+<p>这就是一个快速创建lisp项目的模板项目，参考一下即可。</p>
+<p>quicklisp 大概有这些操作：</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">ql:quickload</span> <span class="s">"vecto"</span><span class="p">)</span> 
+<span class="p">(</span><span class="nv">ql:uninstall</span> <span class="nv">system-name</span><span class="p">)</span>
+</pre></div>
+<h3 id="_11">加载自己编写的项目</h3>
+<p>新建的项目移动到 protacle 安装目录的 projects那个文件夹下，然后就可以调用：</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">ql:quickload</span> <span class="s">"wanze_clisp_project"</span><span class="p">)</span> 
+</pre></div>
+<p>但是这样加载之后还什么东西都没有，package.lisp 下如要加上如下内容：</p>
+<div class="highlight"><pre><span></span><span class="c1">;;;; package.lisp</span>
+
+<span class="p">(</span><span class="nb">defpackage</span> <span class="ss">#:wanze_clisp_project</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="ss">#:cl</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">:export</span> <span class="ss">#:hello</span>
+  <span class="p">))</span>
+
+<span class="p">(</span><span class="nb">in-package</span> <span class="nv">wanze_clisp_project</span><span class="p">)</span>
+</pre></div>
+<p>然后把那个hello函数加到 <code>wanze_clisp_project.lisp</code> 文件里面去。</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">defun</span> <span class="nv">hello</span> <span class="p">()</span> <span class="p">(</span><span class="nb">print</span> <span class="s">"hello"</span><span class="p">))</span>
+</pre></div>
+<p>现在在slime repr 哪里你可以这样做了：</p>
+<div class="highlight"><pre><span></span>CL-USER&gt; (ql:quickload :wanze_clisp_project)
+To load "wanze_clisp_project":
+  Load 1 ASDF system:
+    wanze_clisp_project
+; Loading "wanze_clisp_project"
+
+(:WANZE_CLISP_PROJECT)
+CL-USER&gt; (wanze_clisp_project:hello)
+
+"hello" 
+"hello"
+CL-USER&gt; 
+</pre></div>
+<p>这是一种做法，此外你还可以在emacs打开文件，一边编写函数一边在slime repr哪里测试。</p>
+<p>具体就是首先在slime repr哪里加载目标项目，然后运行：</p>
+<div class="highlight"><pre><span></span><span class="err">(in-package wanze_clisp_project)</span>
+</pre></div>
+<p>现在你可以在slime repr哪里直接运行：</p>
+<div class="highlight"><pre><span></span><span class="err">(hello)</span>
+</pre></div>
+<p>然后你打开主lisp文件编写函数，然后光标放在那个函数哪里，然后执行 <code>Ctrl+c Ctrl+c</code> ，重新编译该函数。</p>
+<p>然后再到slime repr 哪里运行 </p>
+<div class="highlight"><pre><span></span><span class="err">(hello)</span>
+</pre></div>
+<p>你会发现函数新的修改立马生效了。</p>
 <hr/>
 <p><strong>下面的部分读者根据情况来阅读之。</strong></p>
 <hr/>
@@ -357,7 +417,7 @@ emacs学习笔记  · cdwanze的博文
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">require</span> <span class="ss">'smex</span><span class="p">)</span><span class="c1">;加载某个模块</span>
 </pre></div>
 <p><strong>require</strong> 函数后面跟着插件的名字，对应的就是那个smex.el文件。</p>
-<h3 id="_11">自定义按键配置</h3>
+<h3 id="_12">自定义按键配置</h3>
 <p>接下来是进一步的按键配置：</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"M-x"</span><span class="p">)</span> <span class="ss">'smex</span><span class="p">)</span>
 <span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"M-X"</span><span class="p">)</span> <span class="ss">'smex-major-mode-commands</span><span class="p">)</span>
@@ -395,7 +455,7 @@ emacs学习笔记  · cdwanze的博文
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">'load-path</span> <span class="s">"~/工作空间/myemacs/python-mode"</span><span class="p">)</span><span class="c1">;加入新的搜索路径</span>
 <span class="p">(</span><span class="nb">require</span> <span class="ss">'python-mode</span><span class="p">)</span>
 </pre></div>
-<h3 id="_12">分窗口控制</h3>
+<h3 id="_13">分窗口控制</h3>
 <p>参考了 <a href="http://stackoverflow.com/questions/24119221/customize-window-splitting-in-emacs-python-mode">这个网页</a> ，如果你希望在运行 <code>C-c C-c</code> 之后，弹出的窗口是左右平行的模式，而不是上下模式，可以如下设置:</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="k">setq-default</span> <span class="nv">py-split-windows-on-execute-function</span> <span class="ss">'split-window-horizontally</span><span class="p">)</span>
 </pre></div>
@@ -416,7 +476,7 @@ emacs学习笔记  · cdwanze的博文
 <p>首先通过查看进程号然后kill相应的emacs daemon进程的做法最好不要用，在emacs里面可以输入命令 <code>kill-emacs</code> 来关闭emacs的后台服务进程，这个方法最好也不要用。总之手工kill emacs后台服务进程这个操作最好不要使用，如果你需要调试，就用以前的 <code>emacs test.org</code> 方式来启动另外一个完成的meacs进程来进行调试。</p>
 <p>然后如果你觉得接下来应该不需要使用emacs了，那么正确关闭emacs做法是使用快捷键 <code>C-x C-c</code> ，其对应的函数是 <code>save-buffers-kill-terminal</code> ，这个快捷键以前我已经接触过了，在一个完整emacs进程中，其就是退出emacs命令，其将确保所有的buffer都保存了，然后退出。值得一提的是这个函数并没有关闭emacs后台服务进程，实际上在熟悉emacsclient操作之后，最好不要去管emacs daemon这个概念，就认为这个 <code>C-x C-c</code> 就是正常退出emacs的命令即可。</p>
 <p>最后是关闭buffer操作，如果你只是简单点击窗口的关闭图标，那么只是关闭frame，buffer还是在那里。如果你编辑完了想要关闭这个buffer，那么执行 <code>kill-buffer</code> 即可，文档没有保存其会提示你的，并且最后还会提示你是否关闭本frame。</p>
-<h3 id="_13">字体问题</h3>
+<h3 id="_14">字体问题</h3>
 <p>因为emacs daemon在启动的时候是没有图形界面的，所以之前的字体设置失效了，你需要如下设置<sup><a class="footref" href="#fn.3" id="fnr.3">3</a></sup>:</p>
 <div class="highlight"><pre><span></span><span class="c1">;; 解决client模式下的字体问题</span>
 <span class="p">(</span><span class="nb">defun</span> <span class="nv">myfontset</span> <span class="p">()</span>
@@ -431,7 +491,7 @@ emacs学习笔记  · cdwanze的博文
                <span class="p">(</span><span class="nv">myfontset</span><span class="p">)))</span>
 </pre></div>
 <p>这里的思路就是等frame加载完成之后再加载之前的那些字体配置。</p>
-<h2 id="_14">左侧文件树面板</h2>
+<h2 id="_15">左侧文件树面板</h2>
 <p>一般现代IDE最大的一个特色就是左侧有一个文件树面板，方便快速切换文件，这个emacs下的neotree宏包可以实现类似的功能。该项目的github地址在 <a href="https://github.com/jaypei/emacs-neotree">这里</a> 。</p>
 <p>具体使用很简单，就是常规的加载:</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="k">add</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="n">list</span><span class="w"> </span><span class="s1">'load-path "/some/path/neotree")</span>
@@ -445,9 +505,9 @@ emacs学习笔记  · cdwanze的博文
 <span class="err"> '(doc-view-continuous nil)</span>
 <span class="err"> )</span>
 </pre></div>
-<h3 id="_15">可能的其他问题</h3>
+<h3 id="_16">可能的其他问题</h3>
 <p>neotree这个项目看得出来还有很多地方可以进一步完善，比如说emacsclient模式下似乎根目录读取有问题。</p>
-<h2 id="_16">多个窗口之间的编号切换</h2>
+<h2 id="_17">多个窗口之间的编号切换</h2>
 <p>window-numbering这个宏包不错，其github项目地址在 <a href="https://github.com/nschum/window-numbering.el">这里</a> 。该宏包实现了对各个窗口进行编号，使得你通过按 <code>M-1</code> 之类的就能快速切换各个窗口焦点。</p>
 <p>官方推荐的一个配置如下所示:</p>
 <div class="highlight"><pre><span></span><span class="err">(setq window-numbering-assign-func</span>
@@ -488,7 +548,7 @@ emacs学习笔记  · cdwanze的博文
 <p>然后在emacsclient下另外开启一个frame还需要执行一下命令 <code>livedown:preview</code> 网页才会切换到这个md的预览。</p>
 <h2 id="emacs_2">文字模式下的emacs操作</h2>
 <p>通过ssh在远程主机上用emacs编辑文件，那就必须在文字模块下操作emacs，这带来了一些新的问题。</p>
-<h3 id="_17">移动光标</h3>
+<h3 id="_18">移动光标</h3>
 <p>参考了 <a href="http://dsec.pku.edu.cn/~jinlong/emacs/emacs.html">这个网页</a> 。</p>
 <p>一般通过键盘上的方向键移动辅助搜索跳转还是很快的，但有时不知怎么方向键移动也会出问题。这是只好借助下面这些快捷键了。</p>
 <div class="highlight"><pre><span></span><span class="k">C</span><span class="o">-</span><span class="n">f</span>    <span class="err">前进一个字符</span>
@@ -502,7 +562,7 @@ emacs学习笔记  · cdwanze的博文
 <span class="k">C</span><span class="o">-</span><span class="n">a</span>    <span class="err">行首</span>
 <span class="k">C</span><span class="o">-</span><span class="n">e</span>    <span class="err">行尾</span>
 </pre></div>
-<h3 id="_18">切换窗口焦点</h3>
+<h3 id="_19">切换窗口焦点</h3>
 <p>这个前面也提过了，但在这里显然是一个重要问题，需要再次强调一下。 <code>C-x o</code> 进行切换各个窗口操作。</p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
