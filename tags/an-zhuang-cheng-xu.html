@@ -19,7 +19,7 @@
     <meta property="og:site_name" content="cdwanze的博文"/>
     <meta property="og:article:author" content="cdwanze"/>
     <title>
-cdwanze的博文 - 安装 tag</title>
+cdwanze的博文 - 安装程序 tag</title>
 
 
         <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
@@ -159,36 +159,33 @@ cdwanze的博文 - 安装 tag</title>
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/pyinstaller-module.html">pyinstaller模块
+                                        href="https://a358003542.github.io/articles/yong-nsiszhi-zuo-an-zhuang-cheng-xu.html">用nsis制作安装程序
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://a358003542.github.io/categories.html#python-ref">python
+                                    <a href="https://a358003542.github.io/categories.html#other-ref">other
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2020-01-17T00:00:00+08:00">2020年 1月 17日
+                                              datetime="2020-01-20T00:00:00+08:00">2020年 1月 20日
                                         </time>
                                     </div>
                                 </section>
                                 
-<h2 id="_1">简介</h2>
-<p>所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。</p>
-<p>推荐使用pyinstaller。 pyinstaller的官网在 <a href="http://www.pyinstaller.org/">这里</a> 。安装就是用pip 安装即可。</p>
-<p>然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。</p>
-<p><strong>NOTICE:</strong>  注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。</p>
-<p>具体使用很简单：</p>
-<div class="highlight"><pre><span></span>pyinstaller you_entry_point.py
+<p>nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。</p>
+<p>首先你需要下载 nsis基本程序，推荐到 <a href="https://nsis.sourceforge.io/Main_Page">这里</a> 下载 。</p>
+<p>然后推荐下载 <a href="http://hmne.sourceforge.net/">HM NIS Edit</a> 这个简单的程序，这个程序可以向导式生成一个nsi脚本文件。具体nsi文件的编写倒不一定要在哪里编写。</p>
+<p><strong>NOTICE</strong> HM NIS Edit 这个软件界面不推荐选择中文，输出的文件编码会是GBK的，这和现在通用的UTF8编码很不兼容了。</p>
+<p>利用HM NIS Edit填写一些信息，这个具体倒是很直观，没什么好说的。生成的脚本到另外的编辑器上一般还要做一些进一步的修改。这个脚本刷文件夹所有的文件变动还是很方便的。</p>
+<h3 id="_1">界面语言选择</h3>
+<p>默认的界面语言选择没看到中文，我翻了一遍确实没有，难道是S开头的我当时没看到？无所谓了，NSIS的modren UI是支持简体中文的，如下修改：</p>
+<div class="highlight"><pre><span></span>!insertmacro MUI_LANGUAGE "SimpChinese"
 </pre></div>
-<p>如果一切顺利，到 <code>dist</code> 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。</p>
-<p>首先你不能依靠自动生成的 <code>.spec</code> 文件了，接下来讨论了很多定制都是基于对这个 <code>.spec</code> 文件的修改。修改好了之后要如下运行了：</p>
-<div class="highlight"><pre><span></span>pyinstaller you_entry_point.spec
-</pre></div>
-<p>比如将exe下来的一个参数选项调为 <code>console=False</code>，这样生成的exe执行的时候就不会弹出另外那个cmd窗口了。</p>
-<h3 id="_2">添加额外的文件</h3>
-<p>spec文件下配置 <code>datas</code> 这个列表值：</p>
-<div class="highlight"><pre><span></span>datas=[ ('src/README.txt' …</pre></div>
+<p>繁体中文是 TradChinese 。</p>
+<h3 id="_2">快捷方式加图标</h3>
+<p>默认的快捷方式向导是没有加图标的操作的，你可以如下加上图标：</p>
+<div class="highlight"><pre><span></span>  CreateShortCut "$SMPROGRAMS\timer\timer.lnk" "$INSTDIR …</pre></div>
                             </article>
 
                      </div>
