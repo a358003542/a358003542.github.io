@@ -13,19 +13,20 @@
         <meta property="og:type" content="article"/>
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="notes, writing, " />
+<meta name="keywords" content="nlp, nlp, " />
 
-<meta property="og:title" content="2020个人随笔 "/>
-<meta property="og:url" content="https://a358003542.github.io/articles/2020-notes.html" />
-<meta property="og:description" content="1-14 有一说一，编程是有一种乐趣在里面的，让年龄见鬼去吧，在这个万物易变万物皆死的世界，乐趣永存。 1-11 写作和编程就是我的事业。 1-10 我既不在过去也不在未来；我既不在他人的眼目中、抑或口舌中，也不在自己的想象中。我只是存在，存在于现在。 1-4 爱自己！ 1-1 人都是要死的，不管以何种形式，所以对于人类来说，任何事情都有一个deadline，过了那个deadline哪怕你有力气继续跑下去也要停下来了。因为对于这个昙花一现的外在现实世界来说，没有什么非做不可的事，只有几件在当时最重要的该做的事情，过了就过了，仅此而已。若说人要知命，这就是最大的运命。这就好比到了该睡觉的时候就该放下一些去睡觉，再怎么折腾不过是自欺欺人，不愿明智的接受运命罢了。" />
+<meta property="og:title" content="如何按照规则生成字符串 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/ru-he-an-zhao-gui-ze-sheng-cheng-zi-fu-chuan.html" />
+<meta property="og:description" content="前言 实际上还没有到生成自然语言，我们也经常看到人们在讨论自然语言处理里面，以前的形式学派是如何的失败，他们举得例子就是按照语法规则随机生成的句子虽然看起来句子是通顺的，但本质上就是在胡言乱语【这里我要吐槽下所谓的统计学派，现在最高端的深度学习弄出来的写作程序其实也是在胡言乱语，只是似乎语句更加连贯一点了，但其实区别不大】。 如果我们把要求降低那么一点，不是人类的自然语言，而是程序中的某些规则，那么我们会发现形式学派的那些研究是非常有用的。比如本文讨论的如何按照规则生成字符串，这个字符串不是自然语言，就是编程中的某一段多变的字符串。以pubchem的网站url组合生成为例： https://pubchem.ncbi.nlm.nih.gov/rest/pug/&lt;input specification&gt;/&lt;operation specification&gt;/[&lt;output specification&gt;][?&lt;operation_options&gt;] &lt;input specification&gt; = &lt;domain&gt;/&lt;namespace&gt;/&lt;identifiers&gt; &lt;domain&gt; = substance | compound | assay | &lt;other inputs&gt; compound domain &lt;namespace&gt; = cid | name | smiles …" />
 <meta property="og:site_name" content="cdwanze的博文" />
 <meta property="og:article:author" content="cdwanze" />
-<meta property="og:article:published_time" content="2020-01-01T00:00:00+08:00" />
-<meta name="twitter:title" content="2020个人随笔 ">
-<meta name="twitter:description" content="1-14 有一说一，编程是有一种乐趣在里面的，让年龄见鬼去吧，在这个万物易变万物皆死的世界，乐趣永存。 1-11 写作和编程就是我的事业。 1-10 我既不在过去也不在未来；我既不在他人的眼目中、抑或口舌中，也不在自己的想象中。我只是存在，存在于现在。 1-4 爱自己！ 1-1 人都是要死的，不管以何种形式，所以对于人类来说，任何事情都有一个deadline，过了那个deadline哪怕你有力气继续跑下去也要停下来了。因为对于这个昙花一现的外在现实世界来说，没有什么非做不可的事，只有几件在当时最重要的该做的事情，过了就过了，仅此而已。若说人要知命，这就是最大的运命。这就好比到了该睡觉的时候就该放下一些去睡觉，再怎么折腾不过是自欺欺人，不愿明智的接受运命罢了。">
+<meta property="og:article:published_time" content="2020-01-20T00:00:00+08:00" />
+<meta property="" content="2020-01-20T00:00:00+08:00" />
+<meta name="twitter:title" content="如何按照规则生成字符串 ">
+<meta name="twitter:description" content="前言 实际上还没有到生成自然语言，我们也经常看到人们在讨论自然语言处理里面，以前的形式学派是如何的失败，他们举得例子就是按照语法规则随机生成的句子虽然看起来句子是通顺的，但本质上就是在胡言乱语【这里我要吐槽下所谓的统计学派，现在最高端的深度学习弄出来的写作程序其实也是在胡言乱语，只是似乎语句更加连贯一点了，但其实区别不大】。 如果我们把要求降低那么一点，不是人类的自然语言，而是程序中的某些规则，那么我们会发现形式学派的那些研究是非常有用的。比如本文讨论的如何按照规则生成字符串，这个字符串不是自然语言，就是编程中的某一段多变的字符串。以pubchem的网站url组合生成为例： https://pubchem.ncbi.nlm.nih.gov/rest/pug/&lt;input specification&gt;/&lt;operation specification&gt;/[&lt;output specification&gt;][?&lt;operation_options&gt;] &lt;input specification&gt; = &lt;domain&gt;/&lt;namespace&gt;/&lt;identifiers&gt; &lt;domain&gt; = substance | compound | assay | &lt;other inputs&gt; compound domain &lt;namespace&gt; = cid | name | smiles …">
 
     <title>
-2020个人随笔  · cdwanze的博文
+如何按照规则生成字符串  · cdwanze的博文
 </title>
 
 
@@ -114,7 +115,7 @@
 <article>
 <div class="row">
     <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://a358003542.github.io/articles/2020-notes.html"> 2020个人随笔  </a></h1>
+    <h1><a href="https://a358003542.github.io/articles/ru-he-an-zhao-gui-ze-sheng-cheng-zi-fu-chuan.html"> 如何按照规则生成字符串  </a></h1>
     </header>
 </div>
 
@@ -124,11 +125,7 @@
         <h4>目录</h4>
         <div class="toc">
 <ul>
-<li><a href="#1-14">1-14</a></li>
-<li><a href="#1-11">1-11</a></li>
-<li><a href="#1-10">1-10</a></li>
-<li><a href="#1-4">1-4</a></li>
-<li><a href="#1-1">1-1</a></li>
+<li><a href="#_1">前言</a></li>
 </ul>
 </div>
         </nav>
@@ -137,16 +134,21 @@
 
             
             
-<h2 id="1-14">1-14</h2>
-<p>有一说一，编程是有一种乐趣在里面的，让年龄见鬼去吧，在这个万物易变万物皆死的世界，乐趣永存。</p>
-<h2 id="1-11">1-11</h2>
-<p>写作和编程就是我的事业。</p>
-<h2 id="1-10">1-10</h2>
-<p>我既不在过去也不在未来；我既不在他人的眼目中、抑或口舌中，也不在自己的想象中。我只是存在，存在于现在。</p>
-<h2 id="1-4">1-4</h2>
-<p>爱自己！</p>
-<h2 id="1-1">1-1</h2>
-<p>人都是要死的，不管以何种形式，所以对于人类来说，任何事情都有一个deadline，过了那个deadline哪怕你有力气继续跑下去也要停下来了。因为对于这个昙花一现的外在现实世界来说，没有什么非做不可的事，只有几件在当时最重要的该做的事情，过了就过了，仅此而已。若说人要知命，这就是最大的运命。这就好比到了该睡觉的时候就该放下一些去睡觉，再怎么折腾不过是自欺欺人，不愿明智的接受运命罢了。</p>
+<h3 id="_1">前言</h3>
+<p>实际上还没有到生成自然语言，我们也经常看到人们在讨论自然语言处理里面，以前的形式学派是如何的失败，他们举得例子就是按照语法规则随机生成的句子虽然看起来句子是通顺的，但本质上就是在胡言乱语【这里我要吐槽下所谓的统计学派，现在最高端的深度学习弄出来的写作程序其实也是在胡言乱语，只是似乎语句更加连贯一点了，但其实区别不大】。</p>
+<p>如果我们把要求降低那么一点，不是人类的自然语言，而是程序中的某些规则，那么我们会发现形式学派的那些研究是非常有用的。比如本文讨论的如何按照规则生成字符串，这个字符串不是自然语言，就是编程中的某一段多变的字符串。以pubchem的网站url组合生成为例：</p>
+<div class="highlight"><pre><span></span>https://pubchem.ncbi.nlm.nih.gov/rest/pug/&lt;input specification&gt;/&lt;operation specification&gt;/[&lt;output specification&gt;][?&lt;operation_options&gt;]
+
+
+&lt;input specification&gt; = &lt;domain&gt;/&lt;namespace&gt;/&lt;identifiers&gt;
+
+&lt;domain&gt; = substance | compound | assay | &lt;other inputs&gt;
+
+compound domain &lt;namespace&gt; = cid | name | smiles | inchi | sdf | inchikey | formula | &lt;structure search&gt; | &lt;xref&gt; | listkey | &lt;fast search&gt;
+
+.......
+</pre></div>
+<p>上面这些叫做BNF标记方法，按照wiki BNF标记方法是一种为上下无关文法CFG（context free grammar）设计的标记方法。那么什么是上下无关文法呢？</p>
             
             
             <hr/>
@@ -155,12 +157,16 @@
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-01-01T00:00:00+08:00">2020年 1月 1日 </time>
+            <time pubdate="pubdate" datetime="2020-01-20T00:00:00+08:00">2020年 1月 20日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2020-01-20T00:00:00+08:00">2020年 1月 20日 </time>
+
             <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#writing-ref">writing</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#nlp-ref">nlp</a>
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://a358003542.github.io/tags.html#notes-ref">notes
+                <li><a href="https://a358003542.github.io/tags.html#nlp-ref">nlp
                     <span>2</span>
 </a></li>
             </ul>
