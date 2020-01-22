@@ -198,6 +198,44 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/hashfen-tong-cao-zuo.html">hash分桶操作
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-01-22T00:00:00+08:00">2020年 1月 22日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>hashlib的md5算法作为实践级别的算法有一个很大的特点那就是输出的位数长度是固定的，这样很方面进行下一步的输出再分桶操作：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+
+<span class="k">def</span> <span class="nf">md5</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">hashkey</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hashkey</span><span class="p">])</span> <span class="o">%</span> <span class="n">n</span>
+</pre></div>
+<p>各个位数相加参考了 <a href="http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Map/hash.html">这个网站</a> ，但具体各个位数相加是否保证了分桶的均匀性，老实说我是不大确切的，如下做了一个简单的测试 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://a358003542.github.io/articles/ru-he-an-zhao-gui-ze-sheng-cheng-zi-fu-chuan.html">如何按照规则生成字符串
  </a></h1>
 
@@ -748,45 +786,6 @@ compound domain &lt;namespace&gt; = cid | name | smiles …</pre></div>
 <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">"submit"</span> <span class="na">name</span><span class="o">=</span><span class="s">"myButton"</span> <span class="na">value</span><span class="o">=</span><span class="s">"Submit"</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
 </pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/flask-context-faq.html">flask上下文释疑
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://a358003542.github.io/categories.html#python-ref">python
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2019-07-22T00:00:00+08:00">2019年 7月 22日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h3 id="gunicornflask">问题一 gunicorn多进程模式是怎样和flask作用的</h3>
-<p>参考 <a href="https://stackoverflow.com/questions/670891/is-there-a-way-for-multiple-processes-to-share-a-listening-socket#">这个问题</a> 的解答：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-    <span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8888</span><span class="p">))</span>
-    <span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># Child Process</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"child"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
-
-    <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">c</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">

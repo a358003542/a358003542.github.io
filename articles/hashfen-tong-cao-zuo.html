@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="baidu-site-verification" content="D4VqC4HppC"/>
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="cdwanze"/>
+        <meta name="copyright" content="cdwanze"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", algorithm, " />
+
+<meta property="og:title" content="hash分桶操作 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/hashfen-tong-cao-zuo.html" />
+<meta property="og:description" content="简介 hashlib的md5算法作为实践级别的算法有一个很大的特点那就是输出的位数长度是固定的，这样很方面进行下一步的输出再分桶操作： import random import string import hashlib from operator import add from functools import reduce from collections import defaultdict def md5(key): return hashlib.md5(key.encode()).hexdigest() def mapping(hashkey, n=10): return reduce(add, [ord(i) for i in hashkey]) % n 各个位数相加参考了 这个网站 ，但具体各个位数相加是否保证了分桶的均匀性，老实说我是不大确切的，如下做了一个简单的测试 …" />
+<meta property="og:site_name" content="cdwanze的博文" />
+<meta property="og:article:author" content="cdwanze" />
+<meta property="og:article:published_time" content="2020-01-22T00:00:00+08:00" />
+<meta property="" content="2020-01-22T00:00:00+08:00" />
+<meta name="twitter:title" content="hash分桶操作 ">
+<meta name="twitter:description" content="简介 hashlib的md5算法作为实践级别的算法有一个很大的特点那就是输出的位数长度是固定的，这样很方面进行下一步的输出再分桶操作： import random import string import hashlib from operator import add from functools import reduce from collections import defaultdict def md5(key): return hashlib.md5(key.encode()).hexdigest() def mapping(hashkey, n=10): return reduce(add, [ord(i) for i in hashkey]) % n 各个位数相加参考了 这个网站 ，但具体各个位数相加是否保证了分桶的均匀性，老实说我是不大确切的，如下做了一个简单的测试 …">
+
+    <title>
+hash分桶操作  · cdwanze的博文
+</title>
+
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+            <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+            <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/custom.css" media="screen">
+
+
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a href="https://a358003542.github.io">博文首页</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">查找文章<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="slowscroll" href="/categories.html">按分类</a>
+                            </li>
+                            <li><a class="slowscroll" href="/tags.html">按标签</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/hashfen-tong-cao-zuo.html"> hash分桶操作  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">简介</h2>
+<p>hashlib的md5算法作为实践级别的算法有一个很大的特点那就是输出的位数长度是固定的，这样很方面进行下一步的输出再分桶操作：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+
+<span class="k">def</span> <span class="nf">md5</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">hashkey</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hashkey</span><span class="p">])</span> <span class="o">%</span> <span class="n">n</span>
+</pre></div>
+<p>各个位数相加参考了 <a href="http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Map/hash.html">这个网站</a> ，但具体各个位数相加是否保证了分桶的均匀性，老实说我是不大确切的，如下做了一个简单的测试：</p>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">random_string_generator</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">random_length</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">random_length</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="o">+</span> <span class="s1">' '</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">random_string_generator</span><span class="p">()</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">(</span><span class="n">md5</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'"</span><span class="si">{s}</span><span class="s1">" mapping to bukket </span><span class="si">{c}</span><span class="s1">'</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+<p>初步看来随机生成的各种各样的字符串最终分桶基本上是均匀的。虽然我知道md5算法是能够保证每个位数上的随机，但进行ord处理得到数字，相加再取模，是否也是保证均匀性的，我只能说这是猜的，需要严格的数学证明。</p>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-01-22T00:00:00+08:00">2020年 1月 22日 </time>
+
+<h4>最近更新于：</h4>
+<time datetime="2020-01-22T00:00:00+08:00">2020年 1月 22日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="http://docs.cdwanze.work" title="cdwanze Home Page">cdwanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm(query) {
+            return (query.length > 0);
+        }
+    </script>
+
+    <script>
+        function adjust_search_width() {
+            var w = document.documentElement.clientWidth;
+            if ((w > 755) && (w < 975)) {
+                plus_width = w - 755;
+                $('.navbar-form .form-control').outerWidth(210 + plus_width);
+            } else if (w >= 975) {
+                $('.navbar-form .form-control').outerWidth(210 + 220);
+            } else if (w <= 755) {
+                $('.navbar-form .form-control').css('width', '100%')
+            }
+        }
+
+        function adjust_markdown_css(){
+            $('table').addClass('table');
+            $('table').addClass('table-striped');
+        }
+
+        $(document).ready(function () {
+            adjust_search_width();
+            adjust_markdown_css();
+        });
+
+        window.onresize = function () {
+            adjust_search_width();
+        }
+
+    </script>
+
+
+    
+
+
+
+</body>
+</html>

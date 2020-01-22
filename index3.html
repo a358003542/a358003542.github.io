@@ -177,6 +177,39 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/alembic-module.html">alembic模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#database-ref">database
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
+<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
+<h2 id="_1">基本使用</h2>
+<h3 id="alembic">初始化alembic项目</h3>
+<div class="highlight"><pre><span></span><span class="err">alembic init alembic</span>
+</pre></div>
+<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
+<h3 id="modelspy">根据models.py来</h3>
+<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
+<div class="highlight"><pre><span></span><span class="err">alembic revision --autogenerate -m "add_some_key"</span>
+</pre></div>
+<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myapp …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://a358003542.github.io/articles/pandasmo-kuai.html">pandas模块
  </a></h1>
 
@@ -878,42 +911,6 @@ $$</div>
 <li>本地仓库进入索引 你可以先用 <code>git status</code> 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 <code>git checkout what</code> 来放弃这个更改，如果某项改动你想提交上去，则用 <code>git add what</code> 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 <code>--all</code> 选项：</li>
 </ul>
 <div class="highlight"><pre><span></span><span class="err">git …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/bash-tutorial.html">bash脚本入门
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://a358003542.github.io/categories.html#linux-ref">linux
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2017-12-24T16:08:00+08:00">2017年 12月 24日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>下面简单讲一下 bash shell 脚本知识，点到为止，主要是关注一行之内的shell命令，更加复杂的逻辑请使用python来编写脚本。</p>
-<h2 id="_1">变量</h2>
-<div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">2</span>
-
-<span class="n">echo</span> <span class="err">$</span><span class="n">i</span>
-</pre></div>
-<p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
-<p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
-<h3 id="_2">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span><span class="err">export PS1="=&gt;"</span>
-</pre></div>
-<p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
-<p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
-<p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
-<p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span><span class="err">export …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">

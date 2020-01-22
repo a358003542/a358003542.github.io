@@ -177,6 +177,45 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/flask-context-faq.html">flask上下文释疑
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#python-ref">python
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-07-22T00:00:00+08:00">2019年 7月 22日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h3 id="gunicornflask">问题一 gunicorn多进程模式是怎样和flask作用的</h3>
+<p>参考 <a href="https://stackoverflow.com/questions/670891/is-there-a-way-for-multiple-processes-to-share-a-listening-socket#">这个问题</a> 的解答：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8888</span><span class="p">))</span>
+    <span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Child Process</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"child"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
+
+    <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">c</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://a358003542.github.io/articles/ru-he-dui-kang-ren-sheng-de-wu-liao.html">如何对抗人生的无聊
  </a></h1>
 
@@ -844,39 +883,6 @@ $$</div>
 <p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/layers.png" title="SQLAlchemy layer diagram"/></p>
 <p>和数据库直接相连的是我们熟悉的那些DBAPI接口模块，比如: sqlite3, pymysql, psycopg2等，然后中间的核心层有Engine，连接池，方言 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/alembic-module.html">alembic模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://a358003542.github.io/categories.html#database-ref">database
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-07-01T00:00:00+08:00">2018年 7月 1日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
-<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
-<h2 id="_1">基本使用</h2>
-<h3 id="alembic">初始化alembic项目</h3>
-<div class="highlight"><pre><span></span><span class="err">alembic init alembic</span>
-</pre></div>
-<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
-<h3 id="modelspy">根据models.py来</h3>
-<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
-<div class="highlight"><pre><span></span><span class="err">alembic revision --autogenerate -m "add_some_key"</span>
-</pre></div>
-<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myapp …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
