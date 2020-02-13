@@ -177,6 +177,71 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/sql-cookbooks.html">sql_cookbooks
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#database-ref">database
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-11-20T00:00:00+08:00">2019年 11月 20日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>这里列出一些个人日常操作遇到的案例，可以参考学习，也可以触类旁通的学习下SQL的高级知识。</p>
+<h2 id="_2">根据某些条件删除某个表格的重复行</h2>
+<div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">news</span> <span class="n">T1</span>
+   <span class="k">USING</span>  <span class="n">news</span> <span class="n">T2</span>
+ <span class="k">WHERE</span>  <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span> <span class="c1">-- delete the older versions</span>
+   <span class="k">AND</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span><span class="p">;</span> <span class="c1">-- add more columns if needed</span>
+</pre></div>
+<p>上面这句话的意思是删除本news表格中url重复的行，删除的是那些id小的行（T1.id&lt; T2.id）</p>
+<p>这里delete语句使用using说简单点就是后面的where子句可以使用该表格，类似于select的from；说复杂点如果是本表格的话，那么就是自连接self-join。</p>
+<p>对于join的简单理解就是 (a,b) * (a, b) =&gt; a a , a b …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/lxml-module.html">lxml模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#python-ref">python
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2019-11-05T00:00:00+08:00">2019年 11月 5日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>lxml模块最先接触是在爬虫那块，因为Beautifulsoup很好用，所有lxml模块基本上也就处于一个被调用阶段，并没有深入了解。但随着你对爬虫框架的研究深入，你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。这样lxml模块开始受到我的重视了，因为lxml对xpath语句有着很好的支持。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">html_e</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">'//title'</span><span class="p">)</span>
+</pre></div>
+<p>此外lxml还可以很方便的去构建一个xml或者lxml文本：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
+<span class="n">child_1</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">'child_1'</span><span class="p">)</span>
+<span class="n">child_1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span>
+<span class="n">child_1</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">'this is a text'</span>
+<span class="n">child_2</span> <span class="o">=</span> <span class="n">etree …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://a358003542.github.io/articles/html5-cookbook.html">html5学习之cookbook篇
  </a></h1>
 
@@ -802,74 +867,6 @@ $$</div>
 <div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in …</span></pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/logbook-module.html">logbook模块
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://a358003542.github.io/categories.html#python-ref">python
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-08-27T00:00:00+08:00">2018年 8月 27日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<h2 id="_1">前言</h2>
-<p>logbook似乎是个不错的模块可以改进我们的日志功能，可以看做系统logging模块的第三方升级版，但还是有很多地方不同的。</p>
-<p>一开始我接触的最大的不同就是logbook官方文档并不推荐将某个handler注册在某个logger的那种做法，logbook的handler可以注册在整个线程或者整个进程上。或者我们看到官方文档的第一个例子是这种写法：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span><span class="o">.</span><span class="n">push_application</span><span class="p">()</span>
-<span class="n">warn</span><span class="p">(</span><span class="s1">'This is a warning'</span><span class="p">)</span>
-</pre></div>
-<p>或者写作：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logbook</span> <span class="kn">import</span> <span class="n">warn</span><span class="p">,</span> <span class="n">StreamHandler</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">log_handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">log_handler</span><span class="o">.</span><span class="n">applicationbound</span><span class="p">():</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s1">'This is too cool for stdlib'</span><span class="p">)</span>
-</pre></div>
-<p>这是单个注册在整个程序上的，此外还有 <code>threadbound</code> 是注册在整个线程上的。一般桌面GUI程序推荐注册在整个程序上 …</p>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/greedy-algorithm.html">贪婪算法
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2018-08-26T00:00:00+08:00">2018年 8月 26日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>任何问题总可以通过暴力穷举算法求解，当然有些问题组合数情况太多了，尤其是某些问题，没有快速算法，即NP完全问题。那么可以试着用一些近似算法来快速找到一个近似解。贪婪算法就是其中的一个近似解。</p>
-<p>贪婪算法并不是某种具体的算法，更像是写算法时的一种思路参考。如果你要解决问题，而该问题可以分解为多个步骤，那么你可以通过寻找每步的局部最优解，来<strong>近似</strong>得到目标问题的全局最优解。（贪婪算法并不保证你得到的解一定是全局最优解，但一般这个解是很靠近全局最优解了。）</p>
-<p>对于一个问题，如果贪婪算法是有效的，那么一般贪婪算法就是解决这个问题最好的算法。</p>
-<h2 id="_1">背包问题</h2>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">items</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
-
-    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="k">if …</span></pre></div>
                             </article>
 
  <nav aria-label="Page Navigation">
