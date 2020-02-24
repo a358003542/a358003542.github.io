@@ -13,7 +13,7 @@
         <meta property="og:type" content="article"/>
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="GUI, python, " />
+<meta name="keywords" content="GUI, gui, " />
 
 <meta property="og:title" content="pyside2学习笔记 "/>
 <meta property="og:url" content="https://a358003542.github.io/articles/pyside2-learning-notes.html" />
@@ -1025,24 +1025,23 @@ pyside2学习笔记  · cdwanze的博文
 <p>windows下配置是放在注册表里面的。</p>
 <h3 id="iniformat">IniFormat</h3>
 <p>如果你希望配置文件都以ini形式存储，那么你需要采取如下格式初始化配置文件对象：</p>
-<div class="highlight"><pre><span></span><span class="err">self.settings = QSettings(QSettings.IniFormat,QSettings.UserScope,"Wise","wise")</span>
+<div class="highlight"><pre><span></span>self.settings = QSettings(QSettings.IniFormat,QSettings.UserScope,"Wise","wise")
 </pre></div>
 <p>这样配置文件就在这里： <code>/home/wanze/.config/Wise/wise.ini</code> 。这里是linux系统的情况，windows系统官方文档给出的是： <code>%APPDATA%\Wise\wise.ini</code> ，这个 <code>%APPDATA%</code> 一般是 <code>C:\Documents and Settings\*User Name*\Application Data</code></p>
 <p>你可以通过调用 <code>self.settings.fileName()</code> 来查看该配置文件对象具体的路径所在。</p>
 <p>推荐配置文件作为mainwindow实例的属性如上self.settings来确定，然后所有的子窗体都可以通过调用self来获得同一的配置文件对象。</p>
 <h4 id="inidiy">ini文件存放DIY</h4>
 <p>如果你希望ini文件放在你喜欢的地方，下面是配置文件构造函数的第三种形式：</p>
-<div class="highlight"><pre><span></span><span class="err">QSettings("wise.ini",QSettings.IniFormat)</span>
+<div class="highlight"><pre><span></span>QSettings("wise.ini",QSettings.IniFormat)
 </pre></div>
 <p>第一个参数是你的配置文件名，第二个参数是format。如上相对路径的话则是从你目前软件运行时的文件夹算起。</p>
-<p>你可以通过调用 <code>settings.fileName()</code> 来看看该配置文件的具体所在。</p>
 <h4 id="ini">ini文件注意事项</h4>
 <p>ini文件是大小写不敏感的，所以尽量避免两个变量名相近只是大小写不同。</p>
-<p>不要使用“\”和“/”。windows里\会转换成/，而“/”使用来表示配置文件中分组关系的。</p>
+<p>不要使用 <code>\</code> 和 <code>/</code> 。windows里 <code>\</code> 会转换成<code>/</code>，而 <code>/</code> 是用来表示配置文件中分组关系的。</p>
 <h4 id="_24">存值和读值</h4>
 <p>配置文件对象建立之后你就可以很方便地存放一些值和读取值了。存值用 <code>setValue</code> 方法，取值用 <code>value</code> 方法。如下所示：</p>
-<div class="highlight"><pre><span></span><span class="err">settings.setValue("editor/wrapMargin", 68)</span>
-<span class="err">margin = self.settings.value("editor/wrapMargin")</span>
+<div class="highlight"><pre><span></span><span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s2">"editor/wrapMargin"</span><span class="p">,</span> <span class="mi">68</span><span class="p">)</span>
+<span class="n">margin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"editor/wrapMargin"</span><span class="p">)</span>
 </pre></div>
 <p>如果setValue的键在配置文件对象中已经存在，那么将更新值，如果要修改立即生效，可以使用 <code>sync</code> 方法，sync方法不接受参数，就是立即同步配置文件中的更新。</p>
 <p><code>value</code> 方法第一个参数是“键”，第二个参数是可选值，也就是如果没找到这个键，那么将会返回的值。一般最好还是写上，否则可能配置文件不在了，你就会发生读取错误。</p>
@@ -1054,30 +1053,26 @@ pyside2学习笔记  · cdwanze的博文
 <li><strong>clear:</strong> 不接受参数，清除所有的“键”。</li>
 </ul>
 <h3 id="_25">群组管理</h3>
-<div class="highlight"><pre><span></span><span class="err">settings.setValue("editor/wrapMargin", 68)</span>
+<div class="highlight"><pre><span></span><span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s2">"editor/wrapMargin"</span><span class="p">,</span> <span class="mi">68</span><span class="p">)</span>
 </pre></div>
-<p>如上例子所示“/”表示数据结构中的分组，如果有很多值都有相同的前缀，也就是同属一组，那么可以使用beginGroup方法和endGroup方法来管理。如下所示：</p>
-<div class="highlight"><pre><span></span><span class="err">settings.beginGroup("editor")</span>
-<span class="err">settings.setValue("wrapMargin", 68)</span>
-<span class="err">settings.engGroup()</span>
+<p>如上例子所示 <code>/</code> 表示数据结构中的分组，如果有很多值都有相同的前缀，也就是同属一组，那么可以使用beginGroup方法和endGroup方法来管理。如下所示：</p>
+<div class="highlight"><pre><span></span><span class="n">settings</span><span class="o">.</span><span class="n">beginGroup</span><span class="p">(</span><span class="s2">"editor"</span><span class="p">)</span>
+<span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s2">"wrapMargin"</span><span class="p">,</span> <span class="mi">68</span><span class="p">)</span>
+<span class="n">settings</span><span class="o">.</span><span class="n">engGroup</span><span class="p">()</span>
 </pre></div>
+<hr/>
 <h2 id="tab">快捷键和Tab键管理</h2>
-<p>我们在创建ui文件的时候就可以把一些Action对应的快捷键给设置好。</p>
 <h3 id="_26">什么是伙伴关系</h3>
 <p>一般是通过QLabel的setBuddy方法来关联某个输入窗体。然后QLabel有一个快捷键，当你按下这个快捷键，输入焦点就会转到这个QLabel对应的伙伴输入窗体上。</p>
 <h3 id="_27">快捷键</h3>
 <p>QShortcut类</p>
-<p>文本前用&amp;会引入对应的Alt+w之类的快捷键。</p>
-<p>然后QAction在初始化的时候有</p>
-<p>然后QAction有方法</p>
 <h3 id="qkeysequence">QKeySequence</h3>
-<p><code>QKeySequence</code> 类在pyqt4和pyqt5中来自QtGui子模块，是快捷键的解决方案。比如可以直接引用 <code>QKeySequence.Open</code> 来表示快捷键Ctrl+O。可用的构造函数如下所示：</p>
-<div class="highlight"><pre><span></span><span class="err">QKeySequence(QKeySequence.Print)</span>
-<span class="err">QKeySequence(tr("Ctrl+P"))</span>
-<span class="err">QKeySequence(tr("Ctrl+p"))</span>
-<span class="err">QKeySequence(Qt.CTRL + Qt.Key_P)</span>
+<p><code>QKeySequence</code> 类是快捷键的解决方案。比如可以直接引用 <code>QKeySequence.Open</code> 来表示快捷键Ctrl+O。可用的构造函数如下所示：</p>
+<div class="highlight"><pre><span></span><span class="n">QKeySequence</span><span class="p">(</span><span class="n">QKeySequence</span><span class="o">.</span><span class="n">Print</span><span class="p">)</span>
+<span class="n">QKeySequence</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Ctrl+P"</span><span class="p">))</span>
+<span class="n">QKeySequence</span><span class="p">(</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Ctrl+p"</span><span class="p">))</span>
+<span class="n">QKeySequence</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">CTRL</span> <span class="o">+</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Key_P</span><span class="p">)</span>
 </pre></div>
-<p>我不太喜欢第一种表达方式，不是任何软件都有打印操作，况且打印和某个快捷键之间并没有逻辑联系，只有程序员的个人使用经验，这是不小的记忆负担。我比较喜欢第四种写法，看上去意义更加清晰，Qt来自QtCore子模块。</p>
 <p>字母按键就是类似 <code>Qt.Key_W</code> 这样的形式，Shift按键是Qt.SHIFT，Meta按键是Qt.META，CTRL按键是 <code>Qt.CTRL</code> ，ALT按键是 <code>Qt.ALT</code> 。</p>
             
             
@@ -1093,7 +1088,7 @@ pyside2学习笔记  · cdwanze的博文
 <time datetime="2020-01-15T00:00:00+08:00">2020年 1月 15日 </time>
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#python-ref">python</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#gui-ref">gui</a>
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="https://a358003542.github.io/tags.html#gui-ref">GUI
