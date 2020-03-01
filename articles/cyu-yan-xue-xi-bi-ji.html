@@ -183,9 +183,15 @@ C语言学习笔记  · cdwanze的博文
 </li>
 <li><a href="#_25">字符串操作</a><ul>
 <li><a href="#puts-gets_s">puts和 gets_s函数</a></li>
+<li><a href="#strcat">strcat函数</a></li>
+<li><a href="#strcmp">strcmp函数</a></li>
+<li><a href="#strcpy">strcpy函数</a></li>
+<li><a href="#_26">字符串排序</a></li>
+<li><a href="#_27">空指针</a></li>
 </ul>
 </li>
-<li><a href="#_26">参考资料</a></li>
+<li><a href="#_28">命令行参数</a></li>
+<li><a href="#_29">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -580,17 +586,18 @@ a-b 和 b的最大公约数也是 k。
 <p><code>&amp;</code> 运算符是用于获得某个变量的内存地址； <code>*</code> 运算符用于根据某个内存地址或者指针名来获得该指针指向地址上的值。</p>
 <h3 id="swap">swap函数</h3>
 <p>swap函数接受两个变量的值，然后交换这两个变量的值，这个函数在C语言里面的实现必须要用到指针。</p>
-<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span> <span class="n">p1</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span> <span class="n">p2</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">swap_int</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">p1</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// swap two int value</span>
     <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
-    <span class="o">*</span><span class="n">p1</span><span class="o">=</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
     <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 <div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">swap_int</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"%d %d"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
@@ -755,7 +762,74 @@ a-b 和 b的最大公约数也是 k。
 <span class="p">}</span>
 </pre></div>
 <p>上面num的含义是字符不包括 <code>\n</code> 的长度，从用户的角度理解可以看做允许的可见字符数。</p>
-<h2 id="_26">参考资料</h2>
+<h3 id="strcat">strcat函数</h3>
+<p>接受两个字符串参数，将后一个字符串附加到前一个字符串上，返回前一个字符串的指针，注意附加动作不要超过前一个字符串的容纳空间了。</p>
+<h3 id="strcmp">strcmp函数</h3>
+<p>比较两个字符串的实际内容，多余的<code>\0</code> 会被容忍，如果内容相同则返回0，否则返回非0。</p>
+<h3 id="strcpy">strcpy函数</h3>
+<p>接受两个字符串参数，将后一个字符串的内容拷贝到前一个字符串上，注意执行拷贝动作的时候内容不要超过前一个字符串的容纳空间了。</p>
+<h3 id="_26">字符串排序</h3>
+<p>现在我们实现一个 strsort函数，其接受一个字符串数组参数和该数组的长度，内部动作将会把这个字符串数组进行排序。</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">swap_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">p_1</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p_2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// swap two pointer value</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_1</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_2</span><span class="p">;</span>
+
+    <span class="kt">int</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">strsort</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">strings</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">strings</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">strings</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">swap_pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">strings</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">strings</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">st</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abcf"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">st2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abcd"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">st3</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"zzzz"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">st4</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"eeee"</span><span class="p">;</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">strings</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">st</span><span class="p">,</span> <span class="n">st2</span> <span class="p">,</span><span class="n">st3</span><span class="p">,</span> <span class="n">st4</span><span class="p">};</span>
+
+    <span class="n">strsort</span><span class="p">(</span><span class="n">strings</span><span class="p">,</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">strings</span><span class="p">));</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">strings</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">puts</span><span class="p">(</span><span class="n">strings</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>这里strcmp函数如果返回大于0的值意思是第一个字符串按照机器排序【并不是按照字母顺序排序】在后一个字符串前面。这只是一个临时排序方案，但在这里不是重点。上面的排序算法叫做选择排序，基本上就是一轮轮找序列最前面的值，将其放置在前面。</p>
+<p>这里特别需要值得一提的一点就是 <code>char * strings[]</code> 严格的叫法应该叫做字符串指针数组，实际上在C语言里面并没有所谓的字符串数组的说法，因为字符串长度不一是不可能在C语言形成数组。所谓这个字符串指针数组实际上存储的一系列指针，也正是因为如此，上面试着实现了一种通用的交换两个指针的值得swap_pointer 函数。上面的空指针操作值得特别说明一下。</p>
+<p><strong>上面的例子如果直接用swap_int也是可以的，但那显然是不规范的，只是恰好int型可以存储指针罢了。然后直接写 <code>strings[i]</code> 也是可以的，那也是不规范的，只是打印字符串正常显示，但感到奇怪的是字符串也就是字符数组的指针指向是可以修改的，所以 <code>char * st</code> 和 <code>char st[]</code> 还真的没啥区别，不过程序员还是要自我约束下，就上面的例子来说从逻辑清晰的角度出发，必然是要传递指向字符串指针的地址进去的。</strong> </p>
+<h3 id="_27">空指针</h3>
+<div class="highlight"><pre><span></span><span class="kt">int</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</pre></div>
+<p>上面这一行是声明了一个指针，具体值是0【需要注意的是这里的0不是本指针在内存里面实际存储的位置，那是程序另外分配的】。</p>
+<p>C语言在编写函数的时候可以如同上面这样声明 <code>void *</code> void类型指针：</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">swap_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">p_1</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p_2</span><span class="p">)</span> 
+</pre></div>
+<p>其可以接受随便指向什么类型的指针。但是在函数里面，接下来你需要针对这个空类型指针进行强制类型转换，否则无法使用：</p>
+<div class="highlight"><pre><span></span>    <span class="kt">int</span><span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_1</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_2</span><span class="p">;</span>
+</pre></div>
+<p>就上面这个 swap_pointer 函数例子来说，<code>int *</code> 是随便选的，因为这里的操作都是针对指针实际存储的值，而不是指针映射的值。</p>
+<h2 id="_28">命令行参数</h2>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[]){</span>
+
+<span class="p">}</span>
+</pre></div>
+<p>编写的程序如上编写接受命令行参数，argc是接受的参数个数，argv是参数字符串指针数组。</p>
+<h2 id="_29">参考资料</h2>
 <ol>
 <li>C Primer Plus 第六版中文版</li>
 <li>Practical C programming Steve Oualline</li>
