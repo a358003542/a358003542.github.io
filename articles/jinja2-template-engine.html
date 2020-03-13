@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 jinja2模板引擎在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板引擎还是很值得一学的。 jinja2模板引擎作为python的模块简单的使用如下所示： from jinja2 import Template template = Template(template_content) content = template.render(link_data=link_data) 这里的render函数就是将一些参数变量渲染进去，从而得到目标文本内容。 本文接下来的简要讨论下如何在flask或者pelican中编写模板文件，更详细的内容请参见 官方文档模板设计者文档一章 。 注释 注释写法如下所示，之所以这个放在最前面是因为模板引擎里面注释有时很有用，但很不同于其他编程语言里面的注释写法。 {# this is a comment #} 变量 如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。 {{ variable_name }} 然后 object.a 这样的dot法引用，或者 object[&#39;a&#39;] 这样的写法，甚至是调用实例的某个方法 object.func() 也是可以的，如果这个方法返回某个字符串的话。 有的时候我们需要debug一些变量一般是如上将这个变量值显示出来 …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="python, template-engine, python_companion, " />
+
+<meta property="og:title" content="jinja2模板引擎 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/jinja2-template-engine.html" />
+<meta property="og:description" content="前言 jinja2模板引擎在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板引擎还是很值得一学的。 jinja2模板引擎作为python的模块简单的使用如下所示： from jinja2 import Template template = Template(template_content) content = template.render(link_data=link_data) 这里的render函数就是将一些参数变量渲染进去，从而得到目标文本内容。 本文接下来的简要讨论下如何在flask或者pelican中编写模板文件，更详细的内容请参见 官方文档模板设计者文档一章 。 注释 注释写法如下所示，之所以这个放在最前面是因为模板引擎里面注释有时很有用，但很不同于其他编程语言里面的注释写法。 {# this is a comment #} 变量 如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。 {{ variable_name }} 然后 object.a 这样的dot法引用，或者 object[&#39;a&#39;] 这样的写法，甚至是调用实例的某个方法 object.func() 也是可以的，如果这个方法返回某个字符串的话。 有的时候我们需要debug一些变量一般是如上将这个变量值显示出来 …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-03-09T03:48:37.742417+08:00" />
+<meta name="twitter:title" content="jinja2模板引擎 ">
+<meta name="twitter:description" content="前言 jinja2模板引擎在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板引擎还是很值得一学的。 jinja2模板引擎作为python的模块简单的使用如下所示： from jinja2 import Template template = Template(template_content) content = template.render(link_data=link_data) 这里的render函数就是将一些参数变量渲染进去，从而得到目标文本内容。 本文接下来的简要讨论下如何在flask或者pelican中编写模板文件，更详细的内容请参见 官方文档模板设计者文档一章 。 注释 注释写法如下所示，之所以这个放在最前面是因为模板引擎里面注释有时很有用，但很不同于其他编程语言里面的注释写法。 {# this is a comment #} 变量 如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。 {{ variable_name }} 然后 object.a 这样的dot法引用，或者 object[&#39;a&#39;] 这样的写法，甚至是调用实例的某个方法 object.func() 也是可以的，如果这个方法返回某个字符串的话。 有的时候我们需要debug一些变量一般是如上将这个变量值显示出来 …">
+
+
+    <title>jinja2模板引擎  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/jinja2-template-engine.html"> jinja2模板引擎  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">注释</a></li>
+<li><a href="#_3">变量</a></li>
+<li><a href="#if">if语句</a></li>
+<li><a href="#for">for语句</a></li>
+<li><a href="#_4">过滤器</a></li>
+<li><a href="#html">html特殊符号问题</a></li>
+<li><a href="#_5">模板文件继承机制</a></li>
+<li><a href="#_6">宏</a></li>
+<li><a href="#include">include</a></li>
+<li><a href="#_7">其他技巧</a><ul>
+<li><a href="#_8">列表排序</a></li>
+<li><a href="#_9">移除块前后的空白</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h2 id="_1">前言</h2>
+<p>jinja2模板引擎在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板引擎还是很值得一学的。</p>
+<p>jinja2模板引擎作为python的模块简单的使用如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_content</span><span class="p">)</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">link_data</span><span class="o">=</span><span class="n">link_data</span><span class="p">)</span>
+</pre></div>
+<p>这里的render函数就是将一些参数变量渲染进去，从而得到目标文本内容。</p>
+<p>本文接下来的简要讨论下如何在flask或者pelican中编写模板文件，更详细的内容请参见 <a href="http://docs.jinkan.org/docs/jinja2/templates.html">官方文档模板设计者文档一章</a> 。</p>
+<h2 id="_2">注释</h2>
+<p>注释写法如下所示，之所以这个放在最前面是因为模板引擎里面注释有时很有用，但很不同于其他编程语言里面的注释写法。</p>
+<div class="highlight"><pre><span></span>{# this is a comment #}
+</pre></div>
+<h2 id="_3">变量</h2>
+<p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
+<div class="highlight"><pre><span></span>{{ variable_name }}
+</pre></div>
+<p>然后 <code>object.a</code> 这样的dot法引用，或者 <code>object['a']</code> 这样的写法，甚至是调用实例的某个方法 <code>object.func()</code> 也是可以的，如果这个方法返回某个字符串的话。</p>
+<p>有的时候我们需要debug一些变量一般是如上将这个变量值显示出来。</p>
+<h2 id="if">if语句</h2>
+<p>条件分支主要用于有条件的显示某些内容。</p>
+<div class="highlight"><pre><span></span>{% if user %}
+Hello, {{ user }}!
+{% else %}
+Hello , stranger!
+{% endif %}
+</pre></div>
+<p>此外还有elif语句的支持：</p>
+<div class="highlight"><pre><span></span>{% if kenny.sick %}
+    Kenny is sick.
+{% elif kenny.dead %}
+    You killed Kenny!  You bastard!!!
+{% else %}
+    Kenny looks okay --- so far
+{% endif %}
+</pre></div>
+<h2 id="for">for语句</h2>
+<p>for语句结构如下所示:</p>
+<div class="highlight"><pre><span></span>&lt;ul&gt;
+{% for user in users %}
+  &lt;li&gt;{{ user.username }}&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+</pre></div>
+<div class="highlight"><pre><span></span>&lt;dl&gt;
+{% for key, value in my_dict.iteritems() %}
+    &lt;dt&gt;{{ key|e }}&lt;/dt&gt;
+    &lt;dd&gt;{{ value|e }}&lt;/dd&gt;
+{% endfor %}
+&lt;/dl&gt;
+</pre></div>
+<p>此外在本循环区块中你还可以使用这些特殊的变量：</p>
+<ul>
+<li>loop.index 循环记数，从1开始</li>
+<li>loop.index0 循环记数，从0开始</li>
+<li>loop.first 是否是第一次迭代</li>
+<li>loop.last 是否是最后一次迭代</li>
+</ul>
+<p>还有一些这里就不赘述了，请参看官方文档For语句部分。</p>
+<h2 id="_4">过滤器</h2>
+<p>变量可以进一步加上某个过滤器来进行进一步的处理。过滤器是有点类似于linux系统的管道作业风格，多个过滤器可以叠加，如： <code>{{ var | striptags | title }}</code> 。</p>
+<p>下面列出一些过滤器的功能，更多过滤器参见官方文档的内置过滤器清单一小节。</p>
+<ul>
+<li><code>safe</code> 渲染值不转义</li>
+<li><code>capitalize</code> 值首字母大写 其他字母小写</li>
+<li><code>lower</code> 字母都小写</li>
+<li><code>upper</code> 字母都大写</li>
+<li><code>title</code> 值每个单词首字母大写</li>
+<li><code>trim</code>值首尾空格去除</li>
+<li><code>striptags</code> 渲染之前把所有HTML标签去掉</li>
+</ul>
+<p>关于safe过滤器请参看下面讨论的特殊符号的问题。</p>
+<h2 id="html">html特殊符号问题</h2>
+<p>如果你的变量有这些html的特殊符号:</p>
+<div class="highlight"><pre><span></span>&lt;  &gt;  &amp;  "
+</pre></div>
+<p>jinja2模板系统默认是不做处理的，比如：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; from jinja2 import Template
+&gt;&gt;&gt; t = Template('test {{ x }}')
+&gt;&gt;&gt; t.render(x = '&lt;h1&gt;abc&lt;/h1&gt;')
+'test &lt;h1&gt;abc&lt;/h1&gt;'
+</pre></div>
+<p>如上输出在html中是有html效果的，你可以使用 <strong>escape</strong> 过滤器来转义这些特殊符号:</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; t = Template('test {{ x|escape }}')
+&gt;&gt;&gt; t.render(x = '&lt;h1&gt;abc&lt;/h1&gt;')
+'test &amp;lt;h1&amp;gt;abc&amp;lt;/h1&amp;gt;'
+</pre></div>
+<p>转义之后的输出在html中只是单纯的显示 <code>&lt; &gt;</code> 等等这些符号，并不具有html效果了。</p>
+<p><strong>flask是设置为全局auto escape的</strong>，这一般是满足人们的需求的。但是如果你确实有某些html标签就希望是html标签的形式显示出来，而不经过escape，那么可以采用 <strong>safe</strong> 过滤器<sup><a class="footref" href="#fn.1" id="fnr.1">1</a></sup> 。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; t = Template('test {{ x|safe }}')
+&gt;&gt;&gt; t.render(x = '&lt;h1&gt;abc&lt;/h1&gt;')
+'test &lt;h1&gt;abc&lt;/h1&gt;'
+</pre></div>
+<p><code>escape</code> 过滤器有的模板作者会更喜欢使用别名缩写，一个小写字母 <code>e</code> 。</p>
+<h2 id="_5">模板文件继承机制</h2>
+<p>jinja2的模板文件有一种继承机制，可以让你基于某个模板文件来建构出另外一个模板文件。具体使用是在父模板（模板文件的模板文件）构建一些block区块，如下所示:</p>
+<div class="highlight"><pre><span></span>&lt;title&gt;{% block title %} {% endblock %}&lt;/title&gt;
+</pre></div>
+<p>这里构建了一个title区块。</p>
+<p>然后子模板首先继承父模板所有的内容:</p>
+<div class="highlight"><pre><span></span>{% extends "base.html" %}
+</pre></div>
+<p>然后一些需要定制的部分，比如说这里的title部分，做成block之后，子模板文件可以重新定义这个title block:</p>
+<div class="highlight"><pre><span></span>{% extends "base.html" %}
+{% block title %}the awesome title{% endblock %}
+</pre></div>
+<p>此外子模块在block重载的时候，你还可以用</p>
+<div class="highlight"><pre><span></span>{{ super() }}
+</pre></div>
+<p>来加载父模块在该block中的一些定义。</p>
+<p>本模板里面的块还可以如下重复打印使用：</p>
+<div class="highlight"><pre><span></span>{{ self.title() }}
+</pre></div>
+<h2 id="_6">宏</h2>
+<p>宏和python的函数类似，遇到即将其展开。</p>
+<div class="highlight"><pre><span></span>{% macro render_comment(comment) %}
+&lt;li&gt;{{ comment }}&lt;/li&gt;
+{% endmacro %}
+
+&lt;ul&gt;
+{% for comment in comments %}
+{{ render_comment(comment) }}
+{% endfor %}
+&lt;/ul&gt;
+</pre></div>
+<p>外部宏文件 引入</p>
+<div class="highlight"><pre><span></span>{% import 'macros.html' as macros %}
+
+&lt;ul&gt;
+{% for comment in comments %}
+{{ macros.render_comment(comment) }}
+{% endfor %}
+&lt;/ul&gt;
+</pre></div>
+<p>import 的模板是不会传递当前上下文的，你可以如下要求上下文也传递给引入进来的模板：</p>
+<div class="highlight"><pre><span></span>{% from 'forms.html' import input with context %}
+</pre></div>
+<h2 id="include">include</h2>
+<p>宏文件是推荐使用import，模板文件已经有继承机制了，那么这个include语句主要有什么用呢？</p>
+<p>某个模板代码片段被多次反复使用推荐使用include语句，该模板代码片段默认是可以访问外围的上下文的：</p>
+<div class="highlight"><pre><span></span>{% include 'common.html' %}
+</pre></div>
+<p>当然你明确要求包含上下文或者不包含上下文都是可以：</p>
+<div class="highlight"><pre><span></span>{% include 'header.html' with context %}
+{% include 'header.html' without context %}
+</pre></div>
+<h2 id="_7">其他技巧</h2>
+<h3 id="_8">列表排序</h3>
+<p>参考了 <a href="https://stackoverflow.com/questions/1959386/how-do-you-sort-a-list-in-jinja2">这个网页</a> ：</p>
+<div class="highlight"><pre><span></span>{% for movie in movie_list|sort(attribute='rating') %}
+{% for movie in movie_list|sort(attribute='rating', reverse = True) %}
+</pre></div>
+<h3 id="_9">移除块前后的空白</h3>
+<p>这里所谓的空白指 空格，制表符，换行符等，jinja2这块有全局配置选项。或者可以如下手工配置，大体意思加上 <code>-</code> 表示这里要跟上一个 <code>trim_blocks</code> 操作。</p>
+<div class="highlight"><pre><span></span>{% for item in seq -%}
+    {{ item }}
+{%- endfor %}
+</pre></div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+<div class="footdef"><sup><a class="footnum" href="#fnr.1" id="fn.1">1</a></sup> <div class="footpara">参考了 <a href="http://stackoverflow.com/questions/3206344/passing-html-to-template-using-flask-jinja2">这个网页</a> 。</div></div></div></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-03-09T03:48:37.742417+08:00">2020年 3月 9日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#python_companion-ref">python_companion</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#python-ref">python
+                    <span>13</span>
+</a></li>
+                <li><a href="https://a358003542.github.io/tags.html#template-engine-ref">template-engine
+                    <span>1</span>
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>

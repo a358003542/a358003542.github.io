@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="ctypes模块 如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。 基本的使用如下： lib_comm = ctypes.windll.LoadLibrary(get_dll_path(&#39;your_dll.dll&#39;)) 假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。 lib_comm.helloworld() 接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。） 官方文档 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。 首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体： class YOU_STRUCTURE(ctypes.Structure): &#34;&#34;&#34; 基础信息结构体 &#34;&#34;&#34; _fields_ = [ (&#39;a&#39;, ctypes.c_int), (&#39;b&#39;, ctypes.c_char * 24), (&#39;c&#39;, ctypes.c_char * 40), ] 然后实际使用如下： s = YOU_STRUCTURE() _ref_s = ctypes …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", others, " />
+
+<meta property="og:title" content="ctypes模块 "/>
+<meta property="og:url" content="https://a358003542.github.io/drafts/ctypesmo-kuai.html" />
+<meta property="og:description" content="ctypes模块 如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。 基本的使用如下： lib_comm = ctypes.windll.LoadLibrary(get_dll_path(&#39;your_dll.dll&#39;)) 假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。 lib_comm.helloworld() 接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。） 官方文档 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。 首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体： class YOU_STRUCTURE(ctypes.Structure): &#34;&#34;&#34; 基础信息结构体 &#34;&#34;&#34; _fields_ = [ (&#39;a&#39;, ctypes.c_int), (&#39;b&#39;, ctypes.c_char * 24), (&#39;c&#39;, ctypes.c_char * 40), ] 然后实际使用如下： s = YOU_STRUCTURE() _ref_s = ctypes …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-03-10T20:14:47.863270+08:00" />
+<meta name="twitter:title" content="ctypes模块 ">
+<meta name="twitter:description" content="ctypes模块 如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。 基本的使用如下： lib_comm = ctypes.windll.LoadLibrary(get_dll_path(&#39;your_dll.dll&#39;)) 假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。 lib_comm.helloworld() 接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。） 官方文档 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。 首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体： class YOU_STRUCTURE(ctypes.Structure): &#34;&#34;&#34; 基础信息结构体 &#34;&#34;&#34; _fields_ = [ (&#39;a&#39;, ctypes.c_int), (&#39;b&#39;, ctypes.c_char * 24), (&#39;c&#39;, ctypes.c_char * 40), ] 然后实际使用如下： s = YOU_STRUCTURE() _ref_s = ctypes …">
+
+
+    <title>ctypes模块  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/drafts/ctypesmo-kuai.html"> ctypes模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+        <div class="col-md-8 col-md-offset-2 article-content">
+
+            
+            <h2 id="ctypes">ctypes模块</h2>
+<p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
+<p>基本的使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>假设你的your_dll.dll 里面 helloworld 函数，那么就可以这样调用这个函数了。</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">helloworld</span><span class="p">()</span>
+</pre></div>
+
+
+<p>接下的使用主要就是考虑python的数据类型和dll里面的c语言数据类型的对接问题（可能还会牵涉到字符串编码问题。）</p>
+<p><a href="https://docs.python.org/3.7/library/ctypes.html">官方文档</a> 的那个数据类型对应表格是必看的。基本类型都还好，主要是指针和结构体这两块要理解清楚。</p>
+<p>首先你需要在python脚本中大概类似下面的创建一个对应于C语言的里面定义的结构体：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">YOU_STRUCTURE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    基础信息结构体</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">),</span>  
+        <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">24</span><span class="p">),</span> 
+        <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">40</span><span class="p">),</span> 
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>然后实际使用如下：</p>
+<div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">YOU_STRUCTURE</span><span class="p">()</span>
+<span class="n">_ref_s</span>  <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+
+
+<p>通过 byref 来获取到目标结构体的指针，实际调用dll里面的函数传递对应的结构体数据，就是把对应的指针，即上面的 <code>_ref_s</code> 传递过去。</p>
+<div class="highlight"><pre><span></span><span class="n">lib_comm</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">_ref_s</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="cdll">如何创建c++的dll</h2>
+<p>下面是我阅读官方 <a href="https://docs.microsoft.com/en-us/cpp/build/walkthrough-creating-and-using-a-dynamic-link-library-cpp?view=vs-2017">这篇文章</a> 关于如何利用visual studio 2017 创建 基于c++语言的dll的过程整理：</p>
+<p>首先是visual studio 要安装 C++的桌面开发环境。</p>
+<h3 id="_1">新建项目</h3>
+<p>新建项目选择 c++ 的windows 桌面 里的 windows 桌面向导</p>
+<p>点击下一步下一个界面选择 动态链接库 dll</p>
+<h3 id="_2">添加头文件</h3>
+<p>源文件里面的dllmain.cpp 一开始不需要做任何修改，然后你需要在头文件哪里新建一个.h文件，具体内容如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#ifdef MATHLIBRARY_EXPORTS</span>
+<span class="cp">#define MATHLIBRARY_API __declspec(dllexport)</span>
+<span class="cp">#else</span>
+<span class="cp">#define MATHLIBRARY_API __declspec(dllimport)</span>
+<span class="cp">#endif</span>
+
+
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="n">MATHLIBRARY_API</span> <span class="kt">int</span> <span class="n">_stdcall</span> <span class="n">test_call</span><span class="p">();</span>
+
+
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="n">MATHLIBRARY_API</span> <span class="kt">int</span> <span class="n">_stdcall</span> <span class="n">test_buf</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">outbuf</span><span class="p">);</span>
+</pre></div>
+
+
+<p>这里 <code>MATHLIBRARY</code> 名字是可以更改的，暂时懒得改了。是关于声明dll对外开放函数的一个修饰符。具体涉及到dll的相关知识，其实就是这样一种写法就是了，不用太深究的，毕竟重点还是c++语言写的函数。</p>
+<p>下面的 <code>_stdcall</code> ，说是什么标准windows API 调用，其实暂时也不用太深究这个，就是记得头文件和源文件函数定义哪里都加上这个修饰符，然后python那边 ctypes对接的时候要使用 windll，而如果不加则要使用 cdll。</p>
+<h3 id="_3">添加源文件</h3>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;stdafx.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;MathLibrary.h&quot;</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="n">_stdcall</span> <span class="nf">test_call</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">_stdcall</span> <span class="nf">test_buf</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">outbuf</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>   
+        <span class="n">outbuf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">num</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>然后点击 生成解决方案就在 debug文件夹下面 生成 dll了。下面讲如何和python项目集成起来。</p>
+<h2 id="python">和python项目集成</h2>
+<p>首先我们新建一个简单的python项目，就是一个最简单的那个python项目即可。</p>
+<p>这里主要做的事情就是把前面我们创建的那个生成dll的c++项目在本解决方案中添加进来。</p>
+<p>然后在python项目的引用中，把那个项目添加进来。</p>
+<p>这样那个生成dll的c++项目点击生成之后dll会输出到本解决方案的debug文件夹下面。</p>
+<p>然后python脚本这样引用即可：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="n">dll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s1">&#39;..\Debug\MathLibrary.dll&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dll</span><span class="o">.</span><span class="n">test_call</span><span class="p">())</span>
+
+<span class="n">test_buf</span> <span class="o">=</span> <span class="n">dll</span><span class="o">.</span><span class="n">test_buf</span>
+
+<span class="n">data_in</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+<span class="n">data_out</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">numbytes</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_long</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">test_buf</span><span class="p">(</span><span class="n">data_in</span><span class="p">,</span> <span class="n">numbytes</span><span class="p">,</span> <span class="n">data_out</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="n">res2</span> <span class="o">=</span> <span class="n">data_out</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+<span class="k">assert</span> <span class="nb">str</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">res2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">res2</span><span class="p">)</span>
+</pre></div>
+
+
+<p>我们看到实际上就是把路径指向上一层的debug文件里面的dll文件，这样python和dll就可以联动调试了。</p>
+<h2 id="_4">参考资料</h2>
+<ul>
+<li><a href="http://www.cnblogs.com/night-ride-depart/p/4907613.html">python ctypes探究</a></li>
+<li><a href="https://eli.thegreenplace.net/2008/08/31/ctypes-calling-cc-code-from-python">这篇文章关于ctypes和c++语言之间如何进行字符串沟通说明得很好</a></li>
+</ul>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-03-10T20:14:47.863270+08:00">2020年 3月 10日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>
