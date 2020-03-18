@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 C语言开发环境 windows下推荐使用visual studio，虽说是C++开发环境，不过因为C++是C语言的超集，所以同样也是支持的。具体就是选择新建空的C++项目，然后添加项的时候记得把默认的后缀 .cpp 改为 .c 。 helloworld 最简单最简单的版本： #include &lt;stdio.h&gt; int main(void){ printf(&#34;hello world.\n&#34;); } 就是定义了一个函数，这个函数名比较特殊，叫做 main ，是默认程序的入口函数名。然后利用printf函数打印了一个字符串，而这个printf函数需要你引入stdio这个包。 下面这个版本稍微做了一些修改：相比较一般的helloworld程序多了个system函数，主要是让屏幕暂停一下，否则屏幕会一闪而过，我们会看不清具体打印了什么字。 #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; int main …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-03-11T07:44:25.917102+08:00" />
+<meta property="og:article:published_time" content="2020-03-17T23:53:20.665612+08:00" />
 <meta name="twitter:title" content="C语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 C语言开发环境 windows下推荐使用visual studio，虽说是C++开发环境，不过因为C++是C语言的超集，所以同样也是支持的。具体就是选择新建空的C++项目，然后添加项的时候记得把默认的后缀 .cpp 改为 .c 。 helloworld 最简单最简单的版本： #include &lt;stdio.h&gt; int main(void){ printf(&#34;hello world.\n&#34;); } 就是定义了一个函数，这个函数名比较特殊，叫做 main ，是默认程序的入口函数名。然后利用printf函数打印了一个字符串，而这个printf函数需要你引入stdio这个包。 下面这个版本稍微做了一些修改：相比较一般的helloworld程序多了个system函数，主要是让屏幕暂停一下，否则屏幕会一闪而过，我们会看不清具体打印了什么字。 #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; int main …">
 
@@ -187,8 +187,20 @@
 <li><a href="#_32">统计文件字数程序</a></li>
 </ul>
 </li>
-<li><a href="#_33">结构体</a></li>
-<li><a href="#_34">参考资料</a></li>
+<li><a href="#_33">结构体</a><ul>
+<li><a href="#_34">结构体的基本使用</a></li>
+<li><a href="#typedef">typedef</a></li>
+<li><a href="#_35">链表</a></li>
+</ul>
+</li>
+<li><a href="#_36">其他</a><ul>
+<li><a href="#enum">enum</a></li>
+<li><a href="#union">union</a></li>
+<li><a href="#_37">更复杂的声明</a></li>
+<li><a href="#_38">指向函数的指针</a></li>
+</ul>
+</li>
+<li><a href="#_39">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -1017,11 +1029,117 @@ a-b 和 b的最大公约数也是 k。
 <span class="p">}</span>
 </pre></div>
 <h2 id="_33">结构体</h2>
-<h2 id="_34">参考资料</h2>
+<h3 id="_34">结构体的基本使用</h3>
+<p>结构体首先需要声明才能使用：</p>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">book</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">title</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">author</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
+<p>这样声明之后，后面使用 <code>struct book</code> 就可以类似 <code>int</code> 一样声明相应的变量了：</p>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">book</span> <span class="n">y</span><span class="p">;</span>
+</pre></div>
+<p>结构体的变量的初始化如下所示：</p>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">book</span> <span class="n">library</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"this is a title"</span><span class="p">,</span>
+    <span class="s">"author"</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+<p>此外C99和C11还提供了如下初始化语法：</p>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">book</span> <span class="n">library</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">"this is a title"</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">author</span> <span class="o">=</span> <span class="s">"author"</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+<p>访问结构体的成员变量采用 <code>.</code> 运算符：</p>
+<div class="highlight"><pre><span></span>library.title
+library.author
+</pre></div>
+<p>在函数参数上你可以直接传递结构体或者传递结构体指针，传递结构体指针的时候你可以采用如下语法来访问结构体成员变量：</p>
+<div class="highlight"><pre><span></span>library-&gt;title
+library-&gt;author
+</pre></div>
+<h3 id="typedef">typedef</h3>
+<p>typedef 为某一类型声明一个别名，比如：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">BYTE</span><span class="p">;</span>
+<span class="n">BYTE</span> <span class="n">x</span><span class="p">;</span>
+</pre></div>
+<p>typedef结合之前你定义的结构体类型会很好用：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">rows</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">cols</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">[];</span>
+<span class="p">}</span> <span class="n">Matrix2D</span><span class="p">;</span>
+
+<span class="n">Matrix2D</span> <span class="n">x</span><span class="p">;</span>
+</pre></div>
+<h3 id="_35">链表</h3>
+<p>现在来实现LISP语言中常见的链表数据结构，本小节主要参考了 <strong>参考资料4</strong> 。就基本的结构定义写法还是很清晰的：</p>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">node</span> <span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+<p>就是一个node节点里面第一个单元存储数据，第二个单元是一个指向下一个节点的指针。我在参考资料4看到如下的写法：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">node</span><span class="o">*</span> <span class="n">LIST</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">LIST</span> <span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+<p>老实说如果没有上面那个清晰的写法，初次看见这种写法还是有点让人困惑的。不过后面这个 <code>struct  node *</code> 也就是指向下一个节点的指针类型会经常出现，那么这种改写就可以接受了。</p>
+<p>首先是打印列表和简单熟悉下这个数据结构：</p>
+<div class="highlight"><pre><span></span><span class="cp">#define EMPTY_LIST NULL </span>
+
+<span class="kt">void</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">LIST</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LIST</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">list</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">[ "</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d, "</span><span class="p">,</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">" ]"</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">node</span> <span class="n">node2</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="nb">NULL</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">node</span> <span class="n">node1</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="o">&amp;</span><span class="n">node2</span>
+    <span class="p">};</span>
+
+    <span class="n">LIST</span> <span class="n">list1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">node1</span><span class="p">;</span>
+
+    <span class="n">print_list</span><span class="p">(</span><span class="n">EMPTY_LIST</span><span class="p">);</span>
+    <span class="n">print_list</span><span class="p">(</span><span class="n">list1</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>插入和删除和查找动作在参考资料4 C6.4 都有定义，我们来测试下。</p>
+<div class="highlight"><pre><span></span>
+</pre></div>
+<h2 id="_36">其他</h2>
+<h3 id="enum">enum</h3>
+<h3 id="union">union</h3>
+<h3 id="_37">更复杂的声明</h3>
+<h3 id="_38">指向函数的指针</h3>
+<h2 id="_39">参考资料</h2>
 <ol>
 <li>C Primer Plus 第六版中文版</li>
 <li>Practical C programming Steve Oualline</li>
 <li>菜鸟教程</li>
+<li>计算机科学的基础  Alfred V. Aho　Jeffrey D. Ullman</li>
 </ol>
             
             
@@ -1031,7 +1149,7 @@ a-b 和 b的最大公约数也是 k。
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-03-11T07:44:25.917102+08:00">2020年 3月 11日 </time>
+            <time pubdate="pubdate" datetime="2020-03-17T23:53:20.665612+08:00">2020年 3月 17日 </time>
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#c_language-ref">c_language</a>
         </div>
