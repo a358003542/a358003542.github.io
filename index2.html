@@ -149,7 +149,7 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/pytestmo-kuai.html">pytest模块
+                                        href="https://a358003542.github.io/articles/jinja2-template-engine.html">jinja2模板引擎
  </a></h1>
 
                                 <section>
@@ -158,28 +158,62 @@
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2020-03-07T00:17:47.538297+08:00">2020年 3月 7日
+                                              datetime="2020-03-09T03:48:37.742417+08:00">2020年 3月 9日
                                         </time>
                                     </div>
                                 </section>
                                 
-<p>测试开发风格是如此重要，下面进一步讨论之来提高我们的测试驱动型开发。首先推荐使用pytest。</p>
-<h2 id="pytest">pytest简介</h2>
-<p>pytest模块是站在unittest基础上的，就简单的应用如下，通过pip安装pytest，然后你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。），直接如下写测试函数就是了，然后也不确认就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
-<div class="highlight"><pre><span></span>def test_prime():
-    assert prime(4) == 7
+<h2 id="_1">前言</h2>
+<p>jinja2模板引擎在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板引擎还是很值得一学的。</p>
+<p>jinja2模板引擎作为python的模块简单的使用如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_content</span><span class="p">)</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">link_data</span><span class="o">=</span><span class="n">link_data</span><span class="p">)</span>
 </pre></div>
-<h3 id="_1">确认抛出某个异常</h3>
-<p>把官方的例子copy过来了，看一下就懂了。</p>
-<div class="highlight"><pre><span></span>import pytest
-def f():
-    raise SystemExit(1)
+<p>这里的render函数就是将一些参数变量渲染进去，从而得到目标文本内容。</p>
+<p>本文接下来的简要讨论下如何在flask或者pelican中编写模板文件，更详细的内容请参见 <a href="http://docs.jinkan.org/docs/jinja2/templates.html">官方文档模板设计者文档一章</a> 。</p>
+<h2 id="_2">注释</h2>
+<p>注释写法如下所示，之所以这个放在最前面是因为模板引擎里面注释有时很有用，但很不同于其他编程语言里面的注释写法。</p>
+<div class="highlight"><pre><span></span>{# this is a comment #}
+</pre></div>
+<h2 id="_3">变量</h2>
+<p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
+<div class="highlight"><pre><span></span>{{ variable_name }}
+</pre></div>
+<p>然后 <code>object.a</code> 这样的dot法引用，或者 <code>object['a']</code> 这样的写法，甚至是调用实例的某个方法 <code>object.func()</code> 也是可以的，如果这个方法返回某个字符串的话。</p>
+<p>有的时候我们需要debug一些变量一般是如上将这个变量值显示出来 …</p>
+                            </article>
 
-def test_mytest():
-    with pytest.raises(SystemExit):
-        f()
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/pelican-module.html">pelican模块
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#python_companion-ref">python_companion
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-07T01:27:46.117959+08:00">2020年 3月 7日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。</p>
+<p>首先按照官方的quickstart简单的刷一遍吧，下面就一些问题作出一些讨论。</p>
+<h2 id="_2">项目基本说明</h2>
+<p>python的虚拟环境控制这里就不多说了，下面主要讨论 <code>pelicanconf.py</code> 和 <code>publishconf.py</code> 和 <code>Makefile</code> 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。</p>
+<p>首先说明下 <code>publishconf.py</code> 和 <code>pelicanconf.py</code> 的区别， <code>publishconf.py</code> 文件里面有这样一句话：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pelicanconf</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
-<p>完了，如果你赶时间的话 …</p>
+<p>也就是其将继承所有来自 <code>pelicanconf.py</code> 里面的配置参量，不同的是 <code>publishconf.py</code> 是针对发布到远程服务器上的，而 <code>pelicanconf …</code></p>
                             </article>
 
 
@@ -847,40 +881,6 @@ for line in f:
 
 f = open('removeduplicate.py')
 pyout=open(sys …</pre></div>
-                            </article>
-
-
-                            <article>
-
-                                <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/python-web-programming.html">python语言学习教程五网络编程篇
- </a></h1>
-
-                                <section>
-                                    posted in
-                                    <a href="https://a358003542.github.io/categories.html#python_language-ref">python_language
-                                    </a>
-                                    <div class="recent-posts-time">
-                                        <time pubdate="pubdate"
-                                              datetime="2020-03-04T22:17:18.499039+08:00">2020年 3月 4日
-                                        </time>
-                                    </div>
-                                </section>
-                                
-<p>下面只讨论TCP套接字编程，UDP协议暂不讨论。整个TCP套接字编程的过程如下所述:</p>
-<h2 id="_1">套接字编程</h2>
-<ol>
-<li>
-<p>客户机负责发起连接，其将新建一个套接字对象（在python中是通过<strong>socket</strong>函数来创建的），就好比在一个封闭的黑箱子里开了一个门，在创建这个套接字对象的过程中，你需要指定具体要连接的那个服务器的IP地址和端口号（<strong>connect</strong>方法）。</p>
-</li>
-<li>
-<p>接下来是进行TCP的三路握手过程，具体在传输层最底层的东西，客户机应用程序还是服务器应用程序都不用操心，其应该是是操作系统程序负责的。服务器程序需要关心的是在这三路握手期间，其类似于听到了敲门声，其需要开出一个门出来。服务器程序要听到这个敲门声，其应该处于监听该端口的状态。首先服务器程序需要创建一个套接字对象，然后<strong>bind</strong>某个端口号，然后调用<strong>listen</strong>方法开始监听这个端口。</p>
-</li>
-<li>
-<p>然后服务器那边的监听套接字调用<strong>accept</strong>方法，并形成阻塞，接下来就是听到了敲门声，这个敲门声是TCP三路握手第一路信号发送过来了，这后面TCP三路握手还有两路，这我们暂时不需要太关心了。等到TCP三路握手完成了，服务器之前的那个accept方法将创建一个套接字对象。这个套接字对象称之为<em>连接套接字</em>。我们在这里把服务器那边的连接套接字调用accept方法可以理解为接受了客户机的敲门，如果一切顺利的话，其将为客户机新开一个套接字，也就是一个新门。</p>
-</li>
-<li>
-<p>对于客户机那边只有一个套接字，情况稍微简单点，其往套接字里面塞信息（<strong>sendall …</strong></p></li></ol>
                             </article>
 
  <nav aria-label="Page Navigation">
