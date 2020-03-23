@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="在heroku上部署项目其实很简单，本文将简单的将heroku的容器作用原理和简单的git推送和相应的一些额外的配置说明一下，整个过程不通过 heroku 命令行工具，或者网页操作，或者修改文件之。 本文主要面向python的，首先推荐读者参考一下 heroku 官方在github 上的项目，比如说 这个项目 。其是基于最近的django1.11的，看着这个模板理解一些东西，然后在heroku上设置好自动同github同步就可以了。 runtime.txt 这个文件用来执行python的版本，里面简单写上即可： python-3.6.3 这样，远程heroku会帮你确定python运行环境为python-3.6.3。 requirements.txt 熟悉python开发的人都知道这个文件是什么意思，只是在heroku这里，是必须填写好的一个文件了，其和heroku远程调配好pip的环境有关。 Procfile 这个文件包含了一些进程类型声明，每个进程类（process type）由一行组成是： &lt;process type&gt;: &lt;command&gt; 比如写着 web 的意思就是启动一个web server。 还有就是具体执行何命令来启动这个web server了 …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="heroku, others, " />
+
+<meta property="og:title" content="heroku "/>
+<meta property="og:url" content="https://a358003542.github.io/drafts/heroku.html" />
+<meta property="og:description" content="在heroku上部署项目其实很简单，本文将简单的将heroku的容器作用原理和简单的git推送和相应的一些额外的配置说明一下，整个过程不通过 heroku 命令行工具，或者网页操作，或者修改文件之。 本文主要面向python的，首先推荐读者参考一下 heroku 官方在github 上的项目，比如说 这个项目 。其是基于最近的django1.11的，看着这个模板理解一些东西，然后在heroku上设置好自动同github同步就可以了。 runtime.txt 这个文件用来执行python的版本，里面简单写上即可： python-3.6.3 这样，远程heroku会帮你确定python运行环境为python-3.6.3。 requirements.txt 熟悉python开发的人都知道这个文件是什么意思，只是在heroku这里，是必须填写好的一个文件了，其和heroku远程调配好pip的环境有关。 Procfile 这个文件包含了一些进程类型声明，每个进程类（process type）由一行组成是： &lt;process type&gt;: &lt;command&gt; 比如写着 web 的意思就是启动一个web server。 还有就是具体执行何命令来启动这个web server了 …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-03-24T05:59:36.668752+08:00" />
+<meta name="twitter:title" content="heroku ">
+<meta name="twitter:description" content="在heroku上部署项目其实很简单，本文将简单的将heroku的容器作用原理和简单的git推送和相应的一些额外的配置说明一下，整个过程不通过 heroku 命令行工具，或者网页操作，或者修改文件之。 本文主要面向python的，首先推荐读者参考一下 heroku 官方在github 上的项目，比如说 这个项目 。其是基于最近的django1.11的，看着这个模板理解一些东西，然后在heroku上设置好自动同github同步就可以了。 runtime.txt 这个文件用来执行python的版本，里面简单写上即可： python-3.6.3 这样，远程heroku会帮你确定python运行环境为python-3.6.3。 requirements.txt 熟悉python开发的人都知道这个文件是什么意思，只是在heroku这里，是必须填写好的一个文件了，其和heroku远程调配好pip的环境有关。 Procfile 这个文件包含了一些进程类型声明，每个进程类（process type）由一行组成是： &lt;process type&gt;: &lt;command&gt; 比如写着 web 的意思就是启动一个web server。 还有就是具体执行何命令来启动这个web server了 …">
+
+
+    <title>heroku  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/drafts/heroku.html"> heroku  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#runtimetxt">runtime.txt</a></li>
+<li><a href="#requirementstxt">requirements.txt</a></li>
+<li><a href="#procfile">Procfile</a></li>
+<li><a href="#git">通过git推送你的项目</a></li>
+<li><a href="#django">django的静态文件</a></li>
+<li><a href="#django_1">django的数据库</a></li>
+<li><a href="#heroku">heroku命令行工具</a><ul>
+<li><a href="#heroku-create">heroku create</a></li>
+</ul>
+</li>
+<li><a href="#_1">如何加入数据库</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<p>在heroku上部署项目其实很简单，本文将简单的将heroku的容器作用原理和简单的git推送和相应的一些额外的配置说明一下，整个过程不通过 <code>heroku</code> 命令行工具，或者网页操作，或者修改文件之。</p>
+<p>本文主要面向python的，首先推荐读者参考一下 heroku 官方在github 上的项目，比如说 <a href="https://github.com/heroku/heroku-django-template">这个项目</a> 。其是基于最近的django1.11的，看着这个模板理解一些东西，然后在heroku上设置好自动同github同步就可以了。</p>
+<h2 id="runtimetxt">runtime.txt</h2>
+<p>这个文件用来执行python的版本，里面简单写上即可：</p>
+<div class="highlight"><pre><span></span>python-3.6.3
+</pre></div>
+<p>这样，远程heroku会帮你确定python运行环境为python-3.6.3。</p>
+<h2 id="requirementstxt">requirements.txt</h2>
+<p>熟悉python开发的人都知道这个文件是什么意思，只是在heroku这里，是必须填写好的一个文件了，其和heroku远程调配好pip的环境有关。</p>
+<h2 id="procfile">Procfile</h2>
+<p>这个文件包含了一些进程类型声明，每个进程类（process type）由一行组成是： </p>
+<div class="highlight"><pre><span></span>&lt;process type&gt;: &lt;command&gt;
+</pre></div>
+<p>比如写着 <code>web</code> 的意思就是启动一个web server。</p>
+<p>还有就是具体执行何命令来启动这个web server了。我们看到gunicron的官方文档写着对django项目如下支持语法：</p>
+<div class="highlight"><pre><span></span>$ gunicorn myproject.wsgi
+
+或者明确指定django的settings位置
+$ gunicorn --env DJANGO_SETTINGS_MODULE=myproject.settings myproject.wsgi
+</pre></div>
+<p>所以我们在教程中看到如下一行：</p>
+<div class="highlight"><pre><span></span>web: gunicorn myproject.wsgi --log-file -
+</pre></div>
+<p>上面的 <code>--log-file -</code> 在gunicron那边是把日志输出到默认stdout的意思。</p>
+<h2 id="git">通过git推送你的项目</h2>
+<p>你可以设置github自动同步，这样直接推送到你的github仓库即可。这里讲的是heroku默认的git url。</p>
+<div class="highlight"><pre><span></span>git remote add heroku  https://git.heroku.com/{{heroku_project_name}}.git
+</pre></div>
+<p><strong>重要提示：添加的这个heroku的remote url直接和后面的heroku 命令行工具相关。</strong> （参阅了<a href="http://subin.logdown.com/posts/1594965">这个网页</a> ） </p>
+<p>那个heroku命令行工具因为在windows下环境有点不好配，所以很多功能都略过了，不过 <code>heroku run</code> 功能是无法回避的，有些工作比如django的数据库初始化要手工输入命令完成： </p>
+<div class="highlight"><pre><span></span>heroku run python manage.py makemigrations
+heroku run python manage.py migrate
+</pre></div>
+<h2 id="django">django的静态文件</h2>
+<p>我在heroku的处理日志中看到这样一行：</p>
+<div class="highlight"><pre><span></span>python manage.py collectstatic --noinput
+</pre></div>
+<p>说明其自动处理好了django的静态文件问题。</p>
+<h2 id="django_1">django的数据库</h2>
+<p>在官网上管理好项目addon，然后看到 <code>settings</code> 有个 <code>Config Vars</code> 字段，里面定义了一个 <code>DATABASE_URL</code> 值。</p>
+<p>然后 <code>dj-database-url</code> 这个pypi包会自动刷这个 <code>DATABASE_URL</code> 成为django的settings配置，如下配置：</p>
+<div class="highlight"><pre><span></span><span class="c1"># Update database configuration with $DATABASE_URL.</span>
+<span class="kn">import</span> <span class="nn">dj_database_url</span>
+<span class="n">db_from_env</span> <span class="o">=</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">conn_max_age</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">DATABASES</span><span class="p">[</span><span class="s1">'default'</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_from_env</span><span class="p">)</span>
+</pre></div>
+<h2 id="heroku">heroku命令行工具</h2>
+<h3 id="heroku-create">heroku create</h3>
+<p>大体类似于你在官网上操作新建一个app，只是名字是随机的。</p>
+<h2 id="_1">如何加入数据库</h2>
+<div class="highlight"><pre><span></span>heroku  pg:psql --app cheminfo
+
+heroku addons:add heroku-postgresql:dev --app cheminfo
+</pre></div>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-03-24T05:59:36.668752+08:00">2020年 3月 24日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#heroku-ref">heroku
+</a></li>
+            </ul>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>

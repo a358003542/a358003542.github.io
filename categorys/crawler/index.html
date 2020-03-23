@@ -23,7 +23,7 @@
     <meta property="og:site_name" content="wanze的博文"/>
     <meta property="og:article:author" content="wanze"/>
 
-    <title>wanze的博文 - bash tag</title>
+    <title>wanze的博文 - crawler category</title>
 
         <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
               media="screen">
@@ -132,35 +132,75 @@
                             <article>
 
                                 <h1 class="page-header"><a
-                                        href="https://a358003542.github.io/articles/bash-learning-notes.html">bash脚本学习笔记
+                                        href="https://a358003542.github.io/articles/scrapy-module.html">scrapy模块
  </a></h1>
 
                                 <section>
                                     posted in
-                                    <a href="https://a358003542.github.io/categories.html#linux-ref">linux
+                                    <a href="https://a358003542.github.io/categories.html#crawler-ref">crawler
                                     </a>
                                     <div class="recent-posts-time">
                                         <time pubdate="pubdate"
-                                              datetime="2020-03-24T06:07:50.702334+08:00">2020年 3月 24日
+                                              datetime="2020-03-24T06:06:08.718785+08:00">2020年 3月 24日
                                         </time>
                                     </div>
                                 </section>
                                 
-<h2 id="_1">前言</h2>
-<p>下面简单讲一下 bash shell 脚本知识，点到为止。就基本的了解在日常linux作业中还是很有用的。但作为一个蹩脚的编程语言【抱歉这么说】并不推荐大量编写bash脚本代码，如果有这块大量的需求，应该使用其他工具。</p>
-<h2 id="_2">变量</h2>
-<div class="highlight"><pre><span></span>i=2
+<h2 id="_1">简介</h2>
+<p>Scrapy模块和Django模块在使用上包括在内容目录结构上都很相似，当然这两个项目干的完全是两个不同的事情，我想这种相似性更多的可以描述为类似于大多数GUI界面的那种类似。</p>
+<p>我之前尝试过写过一个小的Spider网络爬虫程序，其实网络爬取大体过程都是类似的，因此我学习Scrapy项目大体只是一些基本配置的了解，对于其内部原理已经很熟悉了，所以本文不会在这些地方赘述了。</p>
+<p>scrapy就是一个python模块，可以通过 <code>pip</code> 安装之，所以安装这块也不多说了。</p>
+<h3 id="_2">新建一个项目</h3>
+<div class="highlight"><pre><span></span>scrapy startproject project_name  [path] 
+</pre></div>
+<p>因为我喜欢创建python的venv虚拟环境，所以上面最后path设置为 <code>.</code> 当前目录下的意思。</p>
+<p>然后接下来就是编写爬虫Spider脚本还有等等其他一些配置了。</p>
+<h2 id="_3">第一个例子</h2>
+<p>下面是一个简单的例子：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MySpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">user_agent</span> <span class="o">=</span> <span class="n">get_random_user_agent</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"7yrt"</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://7yrt.com/html/rhrt/'</span><span class="p">]</span>
 
-echo $i
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1">## do …</span></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/zi-ti-fan-pa-chong.html">字体反爬虫
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#crawler-ref">crawler
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T06:00:12.517340+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                <p>在爬虫的时候，你分析网页会看到，某些东西看上去是乱码，其css设置了一种额外的字体。怎么破解里面的内容呢？</p>
+<p>首先你需要把目标字体下载下来，通常这种字体有各种各样的名字，里面的具体字体codepoint也是随机的...</p>
+<p>如果你下载一个fontcreator会看到具体哪个字对应哪个codepoint，而爬虫这边编码，我们需要使用python的 fonttools库来加载字体。</p>
+<p>首先你需要下载好字体，保存好字体做好缓存工作。</p>
+<p>见本文的参考资料2，然后就是利用 fonttools 模块加载目标字体。</p>
+<div class="highlight"><pre><span></span>font = TTFont(font_filename)
 </pre></div>
-<p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
-<p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
-<h3 id="_3">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span>export PS1="=&gt;"
+
+
+<p>然后就是分析这个字体的cmap tables的cmap数据，不同的字体似乎情况不同，这个要实际分析，由于fonttools这个模块文档较少，加上我对字体知识不太多，所以只能简单摸索下了。</p>
+<div class="highlight"><pre><span></span>font_mapping = font[&#39;cmap&#39;].tables[?].cmap
 </pre></div>
-<p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
-<p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
-<p>这样可以节省点屏幕空间。你可以用pwd命令查看一下 …</p>
+
+
+<p>如果你找到 font_mapping 了，字符 用python的 ord 函数处理下，就能得到目标字符的 unicode code point，也就是我们上面说的字体的code point，在这个 font_mapping 里面你会看到的，然后具体什么内容就出来了 …</p>
                             </article>
 
                      </div>
