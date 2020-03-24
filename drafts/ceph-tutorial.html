@@ -303,7 +303,7 @@ ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin
    配置部分最复杂的就是硬盘分区文件夹对应管理，目前这一部分是没有问题的。</li>
 </ol>
 <p>后面的配置参考官方文档做了极大些简化，如下所示：</p>
-<div class="highlight"><pre><span></span># Mkfs osd
+<div class="highlight"><pre><span></span><code># Mkfs osd
 "/usr/bin/ceph-osd -i ${osdNum} --mkfs --mkkey"
 
 /usr/bin/ceph auth add osd.${osdNum} osd 'allow *' mon 'allow profile osd' -i /var/lib/ceph/osd/ceph-${osdNum}/keyring
@@ -317,7 +317,7 @@ check_return_code $? "Add osd.${osdNum} to ${localHostId}" ""
 # Start osd
 touch /var/lib/ceph/osd/ceph-${osdNum}/sysvinit
 service ceph start osd.${osdNum}
-</pre></div>
+</code></pre></div>
 <ol>
 <li>"/configure_osd.sh", "start_ceph_service"</li>
 </ol>
@@ -328,12 +328,12 @@ service ceph start osd.${osdNum}
 <p>cluster network主要是给osds通信用，所以ceph的其他组件其实还是都依赖于public network的。</p>
 <h3 id="mon_1">mon那边</h3>
 <p>ceph的monitor默认监听端口是 <code>6789</code> ，然后其只管public network，其用到的 <code>{iface}</code> 是public network 的interface，其所用到的 <code>{ip-address}</code> 是 public network 的IP address。其所用的netmask是public network的 <code>{netmask}</code> 。</p>
-<div class="highlight"><pre><span></span>sudo iptables -A INPUT -i {iface} -p tcp -s {ip-address}/{netmask} --dport 6789 -j ACCEPT
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo iptables -A INPUT -i {iface} -p tcp -s {ip-address}/{netmask} --dport 6789 -j ACCEPT
+</code></pre></div>
 <h3 id="mds">mds那边</h3>
 <p>ceph的mds server监听public network从 6800 开始的第一个可用的端口。类似上面的其也只管public network，其用到的 <code>{iface}</code> 是public network 的interface，其所用到的 <code>{ip-address}</code> 是 public network 的IP address。其所用的netmask是public network的 <code>{netmask}</code> 。</p>
-<div class="highlight"><pre><span></span>sudo iptables -A INPUT -i {iface} -m multiport -p tcp -s {ip-address}/{netmask} --dports 6800:6810 -j ACCEPT
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo iptables -A INPUT -i {iface} -m multiport -p tcp -s {ip-address}/{netmask} --dports 6800:6810 -j ACCEPT
+</code></pre></div>
 <h3 id="osd_1">osd那边</h3>
 <p>ceph的osd deamons从当前ceph节点上的6800端口开始找可用端口，一个osd deamon需要三个端口：</p>
 <ul>
@@ -343,8 +343,8 @@ service ceph start osd.${osdNum}
 </ul>
 <p>这些端口都是限于ceph节点Host机器上的，可以重复，为了防止osd deamons重启端口未正常释放，确保后面还有一些富余的端口号。</p>
 <p>公网和私网分离之后，clients会通过公网连接osds，然后各个osds之间会通过私网来连接。这些在iptables那边的rules是分开的。</p>
-<div class="highlight"><pre><span></span>sudo iptables -A INPUT -i {iface}  -m multiport -p tcp -s {ip-address}/{netmask} --dports 6800:6810 -j ACCEPT
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo iptables -A INPUT -i {iface}  -m multiport -p tcp -s {ip-address}/{netmask} --dports 6800:6810 -j ACCEPT
+</code></pre></div>
 <p>请确保上面的6810满足你的osd deamons数量要求。</p>
 <h3 id="cephconf">ceph.conf的配置</h3>
 <p>ceph.conf配置定义了整个ceph集群的一些信息，有：</p>
@@ -371,10 +371,10 @@ service ceph start osd.${osdNum}
 <h4 id="_3">具体配置的覆盖</h4>
 <p>具体配置的覆盖是 [global] -&gt; [mon] -&gt; [mon.a] ，其他daemon类似。</p>
 <h4 id="global">global</h4>
-<div class="highlight"><pre><span></span>[global]
+<div class="highlight"><pre><span></span><code>[global]
 public network = {public-network/netmask} # 注意用诸如10.0.0.0/24这样的格式
 cluster network = {cluster-network/netmask} # 如果你定义了cluster network，那么osds会把心跳，osds之间的replication recovery通信都走cluster network。
-</pre></div>
+</code></pre></div>
 <h4 id="_4">网络配置最小要求</h4>
 <p>网络配置最小要求是ceph的deamon进程在ceph.conf文件里面应该找到 <code>host</code> 变量，这个host变量也就是所谓的hostname也就是所谓的 <code>hostname -s</code> 。然后就是ceph集群已经指明monitor的ip address和端口。</p>
 <p>一般具体就是某个daemon section下设置 <code>host</code> ，然后mon或者某个mon section下设置 <code>mon addr</code> 这个变量。</p>
@@ -382,8 +382,8 @@ cluster network = {cluster-network/netmask} # 如果你定义了cluster network�
 <h2 id="_5">硬盘和文件系统配置</h2>
 <p>osd daemon最好在一个单独的硬盘上，如果你一定要在一个硬盘上做多个osd，那么最好是先做分区工作。</p>
 <p>生产上推荐是用 <code>XFS</code>  文件系统格式。如果你使用的是 <code>ext4</code> 文件系统格式，那么在你的ceph.conf配置的osd section上推荐加上这么一行：</p>
-<div class="highlight"><pre><span></span>filestore xattr use omap = true
-</pre></div>
+<div class="highlight"><pre><span></span><code>filestore xattr use omap = true
+</code></pre></div>
 <p>然后ceph官方手册说了一些 <code>btrfs</code> 文件格式的好话，说如果测试的话推荐用这个文件系统格式。</p>
 <h2 id="mon_2">mon的配置</h2>
 <p>ceph的mons们维护着一个 master copy of cluster map，也就是ceph client 能够找到所有的ceph monitors ， ceph osd daemons ， ceph mds servers 通过连接一个ceph monitor 然后提出当前的 cluster map。有了这个cluster map还有 CRUSH 算法，ceph client就能够找到所有对象的位置了。</p>
@@ -435,13 +435,13 @@ cluster network = {cluster-network/netmask} # 如果你定义了cluster network�
 <p>一个osd实际上就是一个ceph-osd deamon和Guest机上的一个存储点，如果一个Guest机上你设置了多个存储点，只需要一个ceph-osd deamon就可以了。</p>
 <p>生产环境一般是一个节点（Guest机器）一个osd daemon，一个存储盘。</p>
 <p>设置日志尺寸如下所示：</p>
-<div class="highlight"><pre><span></span>[osd]
+<div class="highlight"><pre><span></span><code>[osd]
 osd journal size = 10000
-</pre></div>
+</code></pre></div>
 <p>osd daemon 默认把数据放在 <code>/var/lib/ceph/osd/$cluster-$id</code> 这里。你可以通过 <code>osd data</code> 改变这个值，推荐系统盘和osd盘分开，然后osd盘作为挂载点使用你需要先将其挂载好。</p>
-<div class="highlight"><pre><span></span>sudo mkfs -t {fstype} /dev/{disk}
+<div class="highlight"><pre><span></span><code>sudo mkfs -t {fstype} /dev/{disk}
 sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
-</pre></div>
+</code></pre></div>
 <h3 id="osd_3">osd的心跳</h3>
 <p>osd之间会彼此检查心跳（每6秒），这个心跳周期可以通过参数 <code>osd heartbeat interval</code>  来设置。如果一个osd deamon 20秒内没有返回心跳信息，那么就会被认为这个osd deamon <code>down</code> 了。这个时间可以通过 <code>osd heartbeat grace</code> 来设置。mon那边需要接受某个osd deamon <code>down</code> 的信息 <code>三次</code> 才会认为这个osd deamon已经down了。这个次数可以通过 <code>mon osd min down reports</code> ，默认一个osd报告者就可以了，你可以通过 <code>mon osd min down reporters</code> 来设置要求的报告者数目。</p>
 <p>上面的是osd之间彼此沟通心跳，如果一个    osd没办法和任何其他的osd进行心跳沟通，那么每过30秒其会向mon请求最新的cluster map，这个时间由 <code>osd mon heartbeat interval</code>  设置。</p>
@@ -450,8 +450,8 @@ sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
 <p>日志的大小至少是 ( drive speed * filestore max sync interval ) * 2 ，不过最常见的实践是给日志文件专门弄个分区（SSD），然后把整个分区都挂载为专门用做存储日志。</p>
 <p>日志设置为 <code>osd journal</code> 默认路径是： <code>/var/lib/ceph/osd/$cluster-$id/journal</code> </p>
 <p>日志大小设置为 <code>osd journal size</code> 默认大小是： <code>0</code> ... ， 所以你想要日志就需要设置这个值。</p>
-<div class="highlight"><pre><span></span>osd journal size = {2 * (expected throughput * filestore max sync interval)}
-</pre></div>
+<div class="highlight"><pre><span></span><code>osd journal size = {2 * (expected throughput * filestore max sync interval)}
+</code></pre></div>
 <p>上面期待的吞吐量取硬盘吞吐量或网络吞吐量的最小值。</p>
 <h2 id="_6">认证配置</h2>
 <p>认证配置应该都是全局的放在global section哪里。</p>
@@ -494,26 +494,26 @@ sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
 <li><code>$name</code> 等价于 <code>$type.$id</code> </li>
 </ul>
 <h3 id="_8">运行时更改配置</h3>
-<div class="highlight"><pre><span></span>ceph tell {daemon-type}.{id or *} injectargs --{name} {value} [--{name} {value}]
-</pre></div>
+<div class="highlight"><pre><span></span><code>ceph tell {daemon-type}.{id or *} injectargs --{name} {value} [--{name} {value}]
+</code></pre></div>
 <p>具体配置名有可能需要加上 <code>_</code> 或 <code>-</code> 。</p>
 <h3 id="_9">运行时查看配置</h3>
-<div class="highlight"><pre><span></span>ceph daemon {daemon-type}.{id} config show | less
-</pre></div>
+<div class="highlight"><pre><span></span><code>ceph daemon {daemon-type}.{id} config show | less
+</code></pre></div>
 <h1 id="diamond">安装diamond模块</h1>
 <p><a href="https://github.com/python-diamond/Diamond">https://github.com/python-diamond/Diamond</a></p>
 <p>diamond是用来收集信息的，其发出的信息格式如下：</p>
-<div class="highlight"><pre><span></span>servers.wanze-ubuntu.iostat.sda6.writes_merged 60.000 1469329380
-</pre></div>
-<div class="highlight"><pre><span></span>什么path 值是多少 时间戳
-</pre></div>
+<div class="highlight"><pre><span></span><code>servers.wanze-ubuntu.iostat.sda6.writes_merged 60.000 1469329380
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>什么path 值是多少 时间戳
+</code></pre></div>
 <p>这种格式具有通用性，后面carbon部分就是接受这种信息格式，甚至后面自己写额外的数据发送也应该按照这种格式来。 </p>
 <p>diamond依赖 <code>configobj</code> 和 <code>psutil</code> 这两个模块。其中configobj似乎还依赖six模块，而psutil安装则需要花费一点功夫，首先需要安装 gcc</p>
-<div class="highlight"><pre><span></span>yum install gcc
-</pre></div>
+<div class="highlight"><pre><span></span><code>yum install gcc
+</code></pre></div>
 <p>然后是 python-devel </p>
-<div class="highlight"><pre><span></span>yum install python-devel
-</pre></div>
+<div class="highlight"><pre><span></span><code>yum install python-devel
+</code></pre></div>
 <p>diamond这里安装的是4.0.451，安装同上，然后这个模块安装后会在虚拟环境下创建一些额外功能的文件夹和文件，这个下面详细说明之。</p>
 <ol>
 <li>bin/diamond 虚拟环境下的可执行脚本，后面类似的不多说了。</li>
@@ -528,7 +528,7 @@ sudo mount -o user_xattr /dev/{hdd} /var/lib/ceph/osd/ceph-{osd-number}
 </ul>
 <p>现在我们虚拟环境下运行 <code>diamond</code> 就可以看到这个命令了，只是需要指定配置文件在哪里。</p>
 <p>将/opt/sdsom/venv/etc/diamond 下的 diamond.conf.example 改名为 diamond.conf （现在先这样编写，后面安装时可以考虑批量往etc等地方塞配置文件。）</p>
-<div class="highlight"><pre><span></span># Pid file
+<div class="highlight"><pre><span></span><code># Pid file
 pid_file = /opt/sdsom/venv/var/run/diamond.pid
 
 # Directory to load collector modules from
@@ -542,18 +542,18 @@ handlers_config_path = /opt/sdsom/venv/etc/diamond/handlers/
 
 # Directory to load handler modules from
 handlers_path = /opt/sdsom/venv/share/diamond/handlers/
-</pre></div>
+</code></pre></div>
 <p>原则上所有的这些文件都应该放入 <code>/opt/sdsom/venv</code> 里面，现在先暂时这样写死了，后面应该考虑配置文件自动基于模块填充的生成机制。</p>
-<div class="highlight"><pre><span></span>### Defaults options for all Handlers
+<div class="highlight"><pre><span></span><code>### Defaults options for all Handlers
 [[default]]
 
 [[ArchiveHandler]]
 
 # File to write archive log files
 log_file = /opt/sdsom/venv/var/log/diamond/archive.log
-</pre></div>
+</code></pre></div>
 <p>这里的host变量是sdsom模块后面怎么修改了的，现在测试简单填写为127.0.0.1即可。这里的port将和后面的carbon直接对应。</p>
-<div class="highlight"><pre><span></span>[[GraphiteHandler]]
+<div class="highlight"><pre><span></span><code>[[GraphiteHandler]]
 ### Options for GraphiteHandler
 
 # Graphite server host
@@ -561,8 +561,8 @@ host = 127.0.0.1
 
 # Port to send metrics to
 port = 6601
-</pre></div>
-<div class="highlight"><pre><span></span>[[GraphitePickleHandler]]
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[[GraphitePickleHandler]]
 ### Options for GraphitePickleHandler
 
 # Graphite server host
@@ -570,9 +570,9 @@ host = 127.0.0.1
 
 # Port to send metrics to
 port = 6602
-</pre></div>
+</code></pre></div>
 <p>默认的这些信息收集器是开启的：</p>
-<div class="highlight"><pre><span></span>[[CPUCollector]]
+<div class="highlight"><pre><span></span><code>[[CPUCollector]]
 enabled = True
 
 [[DiskSpaceCollector]]
@@ -589,66 +589,66 @@ enabled = True
 
 [[VMStatCollector]]
 enabled = True
-</pre></div>
+</code></pre></div>
 <p>先暂时留一两个方便测试用即可。</p>
-<div class="highlight"><pre><span></span>[handler_rotated_file]
-</pre></div>
-<div class="highlight"><pre><span></span>class = handlers.TimedRotatingFileHandler
+<div class="highlight"><pre><span></span><code>[handler_rotated_file]
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>class = handlers.TimedRotatingFileHandler
 level = DEBUG
 formatter = default
 # rotate at midnight, each day and keep 7 days
 args = ('/opt/sdsom/venv/var/log/diamond/diamond.log', 'midnight', 1, 7)
-</pre></div>
+</code></pre></div>
 <p>有些文件夹需要手工创建下：</p>
-<div class="highlight"><pre><span></span>mkdir -p /opt/sdsom/venv/var/log/diamond
+<div class="highlight"><pre><span></span><code>mkdir -p /opt/sdsom/venv/var/log/diamond
 mkdir -p /opt/sdsom/venv/var/run
-</pre></div>
+</code></pre></div>
 <p>配置完了之后，如下开启一个diamond进程，后续可以考虑用supervisor来管理开启。</p>
-<div class="highlight"><pre><span></span>diamond -c /opt/sdsom/venv/etc/diamond/diamond.conf 
-</pre></div>
+<div class="highlight"><pre><span></span><code>diamond -c /opt/sdsom/venv/etc/diamond/diamond.conf 
+</code></pre></div>
 <p>然后我们可以去看下创建的pid文件已经相应的日志文件。关闭该diamond进程就是kill掉该进程号即可。 </p>
 <h1 id="diamond_1">diamond配置进阶</h1>
 <h1 id="carbonwhisper">carbon和whisper合作收集和存储信息</h1>
 <p><strong>注意：</strong> carbon在虚拟环境下的安装需要额外安装参数配置。</p>
-<div class="highlight"><pre><span></span>pip install --install-option="--prefix=/opt/sdsom/venv" --install-option="--install-lib=/opt/sdsom/venv/lib/${PYTHON_VESRSION}/site-packages" carbon-0.9.15.tar.gz
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install --install-option="--prefix=/opt/sdsom/venv" --install-option="--install-lib=/opt/sdsom/venv/lib/${PYTHON_VESRSION}/site-packages" carbon-0.9.15.tar.gz
+</code></pre></div>
 <p>其依赖于 Twisted ，先把它安装上去。注意最新版本的twisted已经不支持python2.6了。（其依赖于zope.interface，不是很大直接从网络上安装了）</p>
 <p>其依赖于 txAMQP-0.6.2.tar.gz 直接从网络上安装了。</p>
 <p>其额外创建了 storage 文件夹前面已经提及。其额外创建的conf文件夹，里面是一些配置文件，后续建议都统一到 etc/carbon/ 文件夹里面去。</p>
 <p>examples 文件夹还不清楚有啥用。</p>
 <p>bin里面多了一些python可执行脚本文件，其中 <code>carbon-cache</code> 是直接和whisper交互的，然后aggregator和relay是高级功能，后续可以慢慢了解。</p>
-<div class="highlight"><pre><span></span>validate-storage-schemas.py
+<div class="highlight"><pre><span></span><code>validate-storage-schemas.py
 carbon-cache.py
 carbon-aggregator.py
 carbon-client.py
 carbon-relay.py
-</pre></div>
+</code></pre></div>
 <p>然后还需要安装 whisper 模块</p>
 <p>然后在虚拟环境文件夹下的那个conf文件夹里面有个carbon.conf.example，将其改名为carbon.conf，稍微做如下修改：</p>
-<div class="highlight"><pre><span></span>GRAPHITE_ROOT = /opt/sdsom/venv/
+<div class="highlight"><pre><span></span><code>GRAPHITE_ROOT = /opt/sdsom/venv/
 LOG_DIR = /opt/sdsom/venv/var/log/carbon/
 PID_DIR = /opt/sdsom/venv/var/run
-</pre></div>
+</code></pre></div>
 <p>类似的还需要创建一个 storage-schemas.conf 文件。</p>
 <p>启动carbon-cache进程如下执行：</p>
-<div class="highlight"><pre><span></span>carbon-cache.py start 
-</pre></div>
+<div class="highlight"><pre><span></span><code>carbon-cache.py start 
+</code></pre></div>
 <p>此外还有 status stop 子命令。 然后我们可以去storage那边去看下具体的输出wsp文件。</p>
 <h1 id="graphite-web">本地安装graphite-web</h1>
-<div class="highlight"><pre><span></span>pip install --install-option="--prefix=/opt/sdsom/venv" --install-option="--install-lib=/opt/sdsom/venv/webapp" graphite-web-0.9.15.tar.gz 
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install --install-option="--prefix=/opt/sdsom/venv" --install-option="--install-lib=/opt/sdsom/venv/webapp" graphite-web-0.9.15.tar.gz 
+</code></pre></div>
 <p>webapp那边实际上就是 graphite-web 的一个django app。</p>
 <h2 id="django">安装django</h2>
 <p>由于目前sdsom代码是基于django（1.5.1）此外graphite-web依赖于 django-tagging (0.3.1) ，这个最好先限定版本号。</p>
 <h2 id="graphite-web_1">graphite-web 数据库创建</h2>
-<div class="highlight"><pre><span></span>django-admin.py syncdb --pythonpath ./webapp  --settings graphite.settings 
-</pre></div>
+<div class="highlight"><pre><span></span><code>django-admin.py syncdb --pythonpath ./webapp  --settings graphite.settings 
+</code></pre></div>
 <h2 id="graphite-web-shell">graphite-web shell调试</h2>
-<div class="highlight"><pre><span></span>django-admin.py shell --pythonpath ./webapp  --settings graphite.settings 
-</pre></div>
+<div class="highlight"><pre><span></span><code>django-admin.py shell --pythonpath ./webapp  --settings graphite.settings 
+</code></pre></div>
 <h2 id="shell">第一次shell 测试</h2>
 <p>这里新引入一个依赖包 pytz </p>
-<div class="highlight"><pre><span></span>from graphite.render.attime import parseATTime
+<div class="highlight"><pre><span></span><code>from graphite.render.attime import parseATTime
 from graphite.render.datalib import fetchData
 from django.conf import settings
 import pytz
@@ -661,10 +661,10 @@ res = [i for i in series[0]]
 
 &gt;&gt;&gt; res
 [None, None, 2.727, None, None, None, None, 1.24, None, None, None, None, 2.63, None, None, None, None, 1.097, None, None, None, None, 1.077, None, None]
-</pre></div>
+</code></pre></div>
 <h2 id="graphite-web_2">开启graphite-web</h2>
-<div class="highlight"><pre><span></span>django-admin.py runserver --pythonpath ./webapp --settings graphite.settings 0.0.0.0:8080
-</pre></div>
+<div class="highlight"><pre><span></span><code>django-admin.py runserver --pythonpath ./webapp --settings graphite.settings 0.0.0.0:8080
+</code></pre></div>
 <h3 id="_10">重要信息</h3>
 <ol>
 <li>

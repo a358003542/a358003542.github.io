@@ -161,26 +161,26 @@
 <p>比如作为个人爱好去搭建的小网站或者api服务，那么选择flask是很适合的。本文也是作者有时鼓捣个人的小网站慢慢积累的一些东西。</p>
 <h2 id="_2">推荐的启动方式</h2>
 <p>目前flask推荐的启动方式是通过：</p>
-<div class="highlight"><pre><span></span>flask run
-</pre></div>
+<div class="highlight"><pre><span></span><code>flask run
+</code></pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span>python -m flask run 
-</pre></div>
+<div class="highlight"><pre><span></span><code>python -m flask run 
+</code></pre></div>
 <p>来启动flask。【这个方式很适合开发和测试，实际部署还是WSGI server来进行】</p>
 <p>要正常执行上面的命令，你需要设置好一些环境变量，最主要的是 <code>FLASK_APP</code> 这个变量：</p>
 <p>windows </p>
-<div class="highlight"><pre><span></span>set FLASK_APP=hello.py
+<div class="highlight"><pre><span></span><code>set FLASK_APP=hello.py
 flask run
-</pre></div>
+</code></pre></div>
 <p>linux </p>
-<div class="highlight"><pre><span></span>export FLASK_APP=hello.py
+<div class="highlight"><pre><span></span><code>export FLASK_APP=hello.py
 flask run
-</pre></div>
+</code></pre></div>
 <p>推荐是通过在当前工作目录下加上 <code>.env</code> 这个文件，里面定义：</p>
-<div class="highlight"><pre><span></span>FLASK_APP=myapp.py
+<div class="highlight"><pre><span></span><code>FLASK_APP=myapp.py
 FLASK_ENV=development
 FLASK_DEBUG=1
-</pre></div>
+</code></pre></div>
 <p>环境变量，在运行 flask 命令的时候会自动加载这些环境变量。【这种加载行为只是针对flask命令，load_dotenv 模块之前该做的还是要做，不受影响。】</p>
 <h3 id="flask_debug">FLASK_DEBUG</h3>
 <p>如果设置为1则开启flask调试模式：</p>
@@ -196,11 +196,11 @@ FLASK_DEBUG=1
 <p>类似的你还可以再加上一个 <code>python -m flask shell</code> 命令。</p>
 <h2 id="flask">flask的请求分发</h2>
 <p>查看flask当前app的url分发情况</p>
-<div class="highlight"><pre><span></span>app.url_map
-</pre></div>
+<div class="highlight"><pre><span></span><code>app.url_map
+</code></pre></div>
 <p>默认flask有个额外的路由</p>
-<div class="highlight"><pre><span></span>/static/&lt;filename&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>/static/&lt;filename&gt;
+</code></pre></div>
 <h2 id="flask_1">flask的请求对象</h2>
 <p>request请求对象有：</p>
 <ul>
@@ -236,9 +236,9 @@ FLASK_DEBUG=1
 </ul>
 <p>请求钩子和视图函数之间变量互通一般用上下文全局变量 g ，比如 <code>before_request</code> 处理的时候设置 <code>g.user</code> 为登录用户，后面视图函数可以调用 <code>g.user</code> 来得知当前登录用户。</p>
 <h2 id="flask_3">flask的响应对象</h2>
-<div class="highlight"><pre><span></span>response = make_response(content, status_code)
+<div class="highlight"><pre><span></span><code>response = make_response(content, status_code)
 response.set_cookie('a',1)
-</pre></div>
+</code></pre></div>
 <p>响应对象有以下属性或方法：</p>
 <ul>
 <li>status_code</li>
@@ -253,38 +253,38 @@ response.set_cookie('a',1)
 <p>特殊的响应： 重定向响应 状态码 302 Location部分写上目标URL flask提供 redirect函数快速生成这个重定向响应对象。</p>
 <p>abort函数 其返回的是状态码404 其是抛出异常 </p>
 <h2 id="_3">加入错误页面</h2>
-<div class="highlight"><pre><span></span>@app.errorhandler(404)
+<div class="highlight"><pre><span></span><code>@app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'),404
-</pre></div>
+</code></pre></div>
 <p>如果是蓝图的话，要有全局的效果，则应该使用 <code>app_errorhandler</code> ：</p>
-<div class="highlight"><pre><span></span><span class="nd">@main</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@main</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">page_not_found</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'404.html'</span><span class="p">),</span> <span class="mi">404</span>
-</pre></div>
+</code></pre></div>
 <h2 id="url_for">url_for</h2>
-<div class="highlight"><pre><span></span>url_for('index', _external=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>url_for('index', _external=True)
+</code></pre></div>
 <ol>
 <li>名字，</li>
 <li>送入一些参数进去</li>
 <li><code>_external</code> 绝对路径 ，一般使用相对路径即可，浏览器之外的某些链接一定要使用绝对路径</li>
 </ol>
 <p>如果是对应蓝图的视图函数，则前面应该加上蓝图名：</p>
-<div class="highlight"><pre><span></span>url_for('main.index')
-</pre></div>
+<div class="highlight"><pre><span></span><code>url_for('main.index')
+</code></pre></div>
 <h2 id="_4">静态文件</h2>
-<div class="highlight"><pre><span></span>url('static', filename='favicon.ico')
-</pre></div>
+<div class="highlight"><pre><span></span><code>url('static', filename='favicon.ico')
+</code></pre></div>
 <h2 id="flash">flash消息</h2>
 <p>flash消息方便让用户知道一些必要的信息。flash函数可以实现这点。然后模板文件上需要加上：</p>
-<div class="highlight"><pre><span></span>    {% for message in get_flashed_messages() %}
+<div class="highlight"><pre><span></span><code>    {% for message in get_flashed_messages() %}
         &lt;div class="alert alert-warning"&gt;
             &lt;button type="button" class="close" data-dismiss="alert"&gt;&amp;times;&lt;/button&gt;
             {{ message }}
         &lt;/div&gt;
     {% endfor %}
-</pre></div>
+</code></pre></div>
 <h2 id="_5">大型应用结构</h2>
 <p>请参看参考资料1，即有名的flasky项目的结构。下面简单说一下：</p>
 <ol>
@@ -327,19 +327,19 @@ def page_not_found(e):
 <p><code>__tablename__</code> 定义表名，默认的表名没有遵循使用复数命名的约定 like  <code>users</code>  。</p>
 <p>这一块东西后面会补充一些，但更多的是sqlalchemy和sql那边的知识。</p>
 <h2 id="flask-shell">flask shell命令定制</h2>
-<div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">shell_context_processor</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">shell_context_processor</span>
 <span class="k">def</span> <span class="nf">make_shell_context</span><span class="p">():</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">User</span><span class="o">=</span><span class="n">User</span><span class="p">,</span> <span class="n">Role</span><span class="o">=</span><span class="n">Role</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>运行： </p>
-<div class="highlight"><pre><span></span>flask shell
-</pre></div>
+<div class="highlight"><pre><span></span><code>flask shell
+</code></pre></div>
 <p>db那些变量是可以正常使用的。</p>
 <p>cmd里面要配置好环境变量 <code>export FLASK_APP=hello.py</code> </p>
 <h2 id="flask-migrate">flask-migrate</h2>
 <p><code>flask-migrate</code> 其基于sqlalchemy 的  alembic ，然后做了一些额外的工作。 主要提供了一些便捷的命令行接口，具体使用还是要熟悉sqlalchemy和alembic。</p>
 <p>一个简要的例子如下：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
 <span class="kn">from</span> <span class="nn">flask_sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemy</span>
 <span class="kn">from</span> <span class="nn">flask_migrate</span> <span class="kn">import</span> <span class="n">Migrate</span>
 
@@ -354,18 +354,18 @@ def page_not_found(e):
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p>新项目首先要运行：</p>
-<div class="highlight"><pre><span></span>flask db init
-</pre></div>
+<div class="highlight"><pre><span></span><code>flask db init
+</code></pre></div>
 <p>这对应alembic的 <code>alembic init</code> 命令，其将创建 <code>migrations</code> 文件夹，里面的文件就是alembic需要的，migrations文件夹是推荐和源代码一起加入版本控制的。</p>
 <p>和简单的使用的alembic不同，其新建的 <code>env.py</code> 有一些优化，flask的配置环境里只要配置了 <code>SQLALCHEMY_DATABASE_URI</code> 这样变量，alembic就能正确找到数据库了。</p>
 <p>然后：</p>
-<div class="highlight"><pre><span></span>flask db revision # 对应的是 alembic revison
+<div class="highlight"><pre><span></span><code>flask db revision # 对应的是 alembic revison
 flask db migrate # 对应的是 alembic revision --autogenerate
 flask db upgrade # 对应的是 alembic upgrade
 flask db downgrade # 对应的是 alembic downgrade
-</pre></div>
+</code></pre></div>
 <p>一般工作流程：</p>
 <ol>
 <li>修改数据库模型或者说数据库模型发生了变动</li>
@@ -381,7 +381,7 @@ flask db downgrade # 对应的是 alembic downgrade
 <li>首先我们在flask应用下加上这样两个命令，负责最开始的创建数据库和根本代码生成表格工作。</li>
 <li>表格生成成功之后后面都用flask-migrate 或者说 alembic来管理，经过测试比如在models.py 哪里新加一列，然后利用 <code>flask db migrate</code> 是能够自动检测新加入了一列，从而自动生成的代码会更加精准。</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">drop_database</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">drop_database</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">initdb</span><span class="p">():</span>
@@ -427,32 +427,32 @@ flask db downgrade # 对应的是 alembic downgrade
             <span class="nb">print</span><span class="p">(</span><span class="s1">'db not exists...'</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2 id="flask-moment">flask-moment</h2>
 <p>Moment JS 送入UTC时间会自动转换成为本地时间，服务器那边的时间戳最好是记录UTC时间。用户则应该看到本地时间。</p>
-<div class="highlight"><pre><span></span>{% block scripts %}
+<div class="highlight"><pre><span></span><code>{% block scripts %}
     {{ super() }}
     {{ moment.include_moment() }}
     {{ moment.lang("zh-cn") }}
 {% endblock %}
-</pre></div>
+</code></pre></div>
 <p>在模板上使用：</p>
-<div class="highlight"><pre><span></span>    &lt;p&gt;当前时间是： {{ moment(current_time).format('LLLL') }}.&lt;/p&gt;
+<div class="highlight"><pre><span></span><code>    &lt;p&gt;当前时间是： {{ moment(current_time).format('LLLL') }}.&lt;/p&gt;
     &lt;p&gt;{{ moment(current_time).fromNow(refresh=True) }}刷新过.&lt;/p&gt;
-</pre></div>
+</code></pre></div>
 <p>具体格式请参看 <a href="http://momentjs.cn/">MomentJs 官网</a> 。</p>
 <h2 id="flask-wtf">flask-wtf</h2>
 <p>这块初接触在理解上是有点困难的，其实flask-wtf提供的主要是对WTForms这个模块的集成支持，然后还有一些功能比如 <code>wtf.quick_form(form)</code> 这个是 flask-bootstrap 对 WTForms的一些额外的支持。这里理解上的关键在于理解 WTForms 这个模块到底在干什么事情。</p>
 <h3 id="wtforms">WTForms模块</h3>
 <p>简单来说WTForms模块做的工作就是方便你在模板引擎上比如jinja2模块引擎上快速创建输入表单和相关验证事宜。</p>
 <p>首先需要定义一个Form类：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">validators</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">validators</span>
 
 <span class="k">class</span> <span class="nc">RegistrationForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="n">username</span>     <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'Username'</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">25</span><span class="p">)])</span>
     <span class="n">email</span>        <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'Email Address'</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">35</span><span class="p">)])</span>
     <span class="n">accept_rules</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s1">'I accept the site rules'</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">InputRequired</span><span class="p">()])</span>
-</pre></div>
+</code></pre></div>
 <p>Form类里面有一些Field类，然后Field类里面可以通过一个列表定义一系列的Validators 验证器。每个Field都有一个Widget ，Widget的任务就是负责HTML的渲染工作。</p>
 <p>关于这个form类值得我们注意的有：</p>
 <ol>
@@ -460,68 +460,68 @@ flask db downgrade # 对应的是 alembic downgrade
 <li>如果你在定义这个form对象的时候定义了其他 <code>validate_&lt;field_name&gt;</code> 函数，这些函数会针对特定的field_name而进行调用。如果验证失败，则抛出 <code>ValidationError</code> 异常，异常的信息将作为错误信息。</li>
 </ol>
 <p>这个Form类在python中的代码使用如下：</p>
-<div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/submit'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/submit'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">submit</span><span class="p">():</span>
     <span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'POST'</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
          <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">'/success'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'submit.html'</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>然后 flask-wtf 下的使用代码如下：</p>
-<div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/submit'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/submit'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">submit</span><span class="p">():</span>
     <span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">'/success'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'submit.html'</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>flask-wtf 定义的Form类在使用上提供的便利有：</p>
 <ol>
 <li>会自动将 <code>request.form</code> 或者 <code>request.files</code> 塞进去。</li>
 <li>直接使用 <code>validate_on_submit</code> 方法即可，里面集成了对 request.method 的判断——<code>POST PUT PATCH DELETE</code> 都是可以的。</li>
 </ol>
 <p>WTForms 初始化接收值，除了第一个值 <code>request.form</code> 等，还支持对接某个model 对象，后面还可以跟上一些关键词参数：</p>
-<div class="highlight"><pre><span></span>form = MyForm(request.form, user, username='zhangsan')
-</pre></div>
+<div class="highlight"><pre><span></span><code>form = MyForm(request.form, user, username='zhangsan')
+</code></pre></div>
 <p>WTForms提供了很多内置的验证器支持，你还可以定义自己的验证器。这些验证器对应到上面的 <code>validate</code> 方法中，这个后面再说。</p>
 <h3 id="wtforms_1">WTForms的渲染</h3>
 <p>上面提到的form类实例中的Field是可以直接调用str() 来获得如下的一段HTML代码的：</p>
-<div class="highlight"><pre><span></span>&lt;input id="content" name="content" type="text" value="foobar" /&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>&lt;input id="content" name="content" type="text" value="foobar" /&gt;
+</code></pre></div>
 <p>我们看到一般模板引擎渲染时，比如jinja2，会接受form实例。然后一个一般的表单渲染如下：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LoginForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">LoginForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="n">username</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'Username'</span><span class="p">)</span>
     <span class="n">password</span> <span class="o">=</span> <span class="n">PasswordField</span><span class="p">(</span><span class="s1">'Password'</span><span class="p">)</span>
 
 <span class="n">form</span> <span class="o">=</span> <span class="n">LoginForm</span><span class="p">()</span>
-</pre></div>
-<div class="highlight"><pre><span></span>&lt;form method="POST" action="/login"&gt;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&lt;form method="POST" action="/login"&gt;
     &lt;div&gt;{{ form.username.label }}: {{ form.username(class="css_class") }}&lt;/div&gt;
     &lt;div&gt;{{ form.password.label }}: {{ form.password() }}&lt;/div&gt;
 &lt;/form&gt;
-</pre></div>
+</code></pre></div>
 <p>在python代码那边，form的Field部分是可以接受一些额外的关键词参数，其将作为属性传入从而作为input标签的属性。</p>
 <h3 id="csrf_token">csrf_token相关</h3>
 <p>WTForms 已经有了 <code>csrf_token</code> 的支持功能：</p>
-<div class="highlight"><pre><span></span> {{ form.csrf_token }}
-</pre></div>
+<div class="highlight"><pre><span></span><code> {{ form.csrf_token }}
+</code></pre></div>
 <p>关于这块具体细节请参看WTForms的csrf_token相关章节，这里不深究了，一个csrf_token安全校验。</p>
 <p>而 flask-wtf 这边推荐的写法是：</p>
-<div class="highlight"><pre><span></span>&lt;form method="POST" action="/"&gt;
+<div class="highlight"><pre><span></span><code>&lt;form method="POST" action="/"&gt;
     {{ form.hidden_tag() }}
     {{ form.name.label }} {{ form.name(size=20) }}
 &lt;/form&gt;
-</pre></div>
+</code></pre></div>
 <p><code>hidden_tag</code> 这个方法是flask-wtf提供的，就是将所有隐藏的html field 渲染在这里，因为 flask-wtf 默认会加上 csrf_token 支持，也就是上面的语句：</p>
-<div class="highlight"><pre><span></span> {{ form.csrf_token }}
-</pre></div>
+<div class="highlight"><pre><span></span><code> {{ form.csrf_token }}
+</code></pre></div>
 <p>这是一个hidden标签，所以最后还是会渲染在这里。</p>
 <h3 id="flask-bootstrap">flask-bootstrap提供的额外支持</h3>
 <p>flask-bootstrap又提供了一些额外的支持，简单来说就是编写了一些jinja2的宏。比如 <code>quick_form</code> 宏：</p>
-<div class="highlight"><pre><span></span>{{ wtf.quick_form(form) }}
-</pre></div>
+<div class="highlight"><pre><span></span><code>{{ wtf.quick_form(form) }}
+</code></pre></div>
 <p>大体对应于输出这样的语句：</p>
-<div class="highlight"><pre><span></span>{% import "bootstrap/wtf.html" as wtf %}
+<div class="highlight"><pre><span></span><code>{% import "bootstrap/wtf.html" as wtf %}
 &lt;form class="form form-horizontal" method="post" role="form"&gt;
   {{ form.hidden_tag() }}
   {{ wtf.form_errors(form, hiddens="only") }}
@@ -529,15 +529,15 @@ flask db downgrade # 对应的是 alembic downgrade
   {{ wtf.form_field(form.field1) }}
   {{ wtf.form_field(form.field2) }}
 &lt;/form&gt;
-</pre></div>
+</code></pre></div>
 <p>这里只是说大体对应，因为quick_form 宏还有一些参数可以调配。上面对应的只是默认参数的输出情况。</p>
 <p>然后上面的 <code>form_errors</code> 宏 和 <code>form_field</code> 宏也都是 flask-bootstrap 那个宏文件里面定义的。总之如果刚开始对表单的显示没有什么特别的要求的话， <code>quick_form</code> 宏还是很好用的。</p>
 <p>有的时候有特别的要求，个人觉得是没有必要深究flask-bootstrap 那边宏定义的情况，退化为上面的写法，再稍作定制看看是否满足你的要求。否则直接用 flask-wtf 如下这种最原始的写法，再调配下即可。</p>
-<div class="highlight"><pre><span></span>&lt;form method="POST" action="/"&gt;
+<div class="highlight"><pre><span></span><code>&lt;form method="POST" action="/"&gt;
     {{ form.hidden_tag() }}
     {{ form.name.label }} {{ form.name(size=20) }}
 &lt;/form&gt;
-</pre></div>
+</code></pre></div>
 <h3 id="wtformsfield">WTForms支持的Field</h3>
 <ul>
 <li>BooleanField 复选框</li>

@@ -156,26 +156,26 @@
 <p>返回某个任务对象或者某些任务对象列表，作为本任务的前置任务。看得出来作为任务对象的一些参数是区别对待的，比如即使是依赖于本对象，如果参数是前一日期时间，则需要上一任务完成之后再执行本任务。</p>
 <h3 id="target">依赖于某个Target</h3>
 <p>可以如下创建一个 <code>ExternalTask</code> ：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LogFiles</span><span class="p">(</span><span class="n">luigi</span><span class="o">.</span><span class="n">ExternalTask</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">LogFiles</span><span class="p">(</span><span class="n">luigi</span><span class="o">.</span><span class="n">ExternalTask</span><span class="p">):</span>
     <span class="n">date</span> <span class="o">=</span> <span class="n">luigi</span><span class="o">.</span><span class="n">DateParameter</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">luigi</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">hdfs</span><span class="o">.</span><span class="n">HdfsTarget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'/log/%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">))</span>
-</pre></div>
+</code></pre></div>
 <p>然后依赖于这个外部文件对象，当目标文件对象创建之后，才会进行下面的任务。</p>
 <h3 id="parameter">Parameter对象</h3>
 <p>任务类里面可以定义一些 Parameter 对象，当我们通过命令行调用该任务的时候，可以提供这些参数。</p>
-<div class="highlight"><pre><span></span>date = luigi.DateParameter(default=datetime.date.today())
+<div class="highlight"><pre><span></span><code>date = luigi.DateParameter(default=datetime.date.today())
 date_interval = luigi.DateIntervalParameter()
 use_hadoop = luigi.BoolParameter()
-</pre></div>
+</code></pre></div>
 <h3 id="input">input方法</h3>
 <p>input方法是luigi框架里面任务对象调用本任务的前依赖输出对象的便捷方法，比如你使用 <code>self.input</code> ，就对应本任务的 requires Target 对象，或者说当你调用 <code>self.input()</code> 实际上得到的就是 <code>self.requires()</code> 的输出。</p>
 <h2 id="_3">运行任务</h2>
-<div class="highlight"><pre><span></span>luigi --module autowriting.workflow examples.HelloWorldTask --local-scheduler
-</pre></div>
+<div class="highlight"><pre><span></span><code>luigi --module autowriting.workflow examples.HelloWorldTask --local-scheduler
+</code></pre></div>
 <p>一般生产环境会去掉 <code>--local-scheduler</code> 然后使用中央调度器，你需要用 </p>
-<div class="highlight"><pre><span></span>luigid
-</pre></div>
+<div class="highlight"><pre><span></span><code>luigid
+</code></pre></div>
 <p>来开启它。</p>
 <p>默认你可以在localhost的 <code>8082</code> 端口看到监视任务的画面。</p>
 <h2 id="target_1">Target对象</h2>
@@ -189,7 +189,7 @@ use_hadoop = luigi.BoolParameter()
 </ul>
 <h2 id="_4">日志管理</h2>
 <p>luigi 的日志不做任何调配的话，就是默认的 <code>luigi-interface</code> 然后流打印到终端。如下所示：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_interface_logging</span><span class="p">(</span><span class="n">conf_file</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">level_name</span><span class="o">=</span><span class="s1">'DEBUG'</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">setup_interface_logging</span><span class="p">(</span><span class="n">conf_file</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">level_name</span><span class="o">=</span><span class="s1">'DEBUG'</span><span class="p">):</span>
     <span class="c1"># use a variable in the function object to determine if it has run before</span>
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">setup_interface_logging</span><span class="p">,</span> <span class="s2">"has_run"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
         <span class="k">return</span>
@@ -212,13 +212,13 @@ use_hadoop = luigi.BoolParameter()
         <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">fileConfig</span><span class="p">(</span><span class="n">conf_file</span><span class="p">,</span> <span class="n">disable_existing_loggers</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">setup_interface_logging</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="kc">True</span>
-</pre></div>
+</code></pre></div>
 <p>如果我们在运行luigi命令的工作目录下写上配置文件 <code>luigi.cfg</code> :</p>
-<div class="highlight"><pre><span></span>[core]
+<div class="highlight"><pre><span></span><code>[core]
 logging_conf_file=luigi_logging.cfg
-</pre></div>
+</code></pre></div>
 <p>然后在 <code>luigi_logging.cfg</code> 里面写上一些logging的配置：</p>
-<div class="highlight"><pre><span></span>[loggers]
+<div class="highlight"><pre><span></span><code>[loggers]
 keys=luigi,root
 
 [logger_luigi]
@@ -248,36 +248,36 @@ args=(sys.stdout,)
 class=FileHandler
 formatter=simple
 args=('logs/luigi.log',)
-</pre></div>
+</code></pre></div>
 <p>这样所有的日志将输出到你指定的文件下。</p>
 <p>具体请进一步 参看 <code>logging.config.fileConfig</code> 中配置文件的写法。具体在luigi的任务脚本中如下使用 logger：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">'luigi'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>遗留的问题有：</p>
 <ol>
 <li>更多的logger -&gt; 多些几个就是了。</li>
 <li>RotateFileHandler 怎么加载 -&gt; 如下写法： </li>
 </ol>
-<div class="highlight"><pre><span></span>class=logging.handlers.RotatingFileHandler
+<div class="highlight"><pre><span></span><code>class=logging.handlers.RotatingFileHandler
 args=('logs/elasticsearch_sync.log', 'a', 200000)
-</pre></div>
+</code></pre></div>
 <ol>
 <li>经过测试每个logger的 <code>qualname</code> 参数不能省略。</li>
 </ol>
 <p><strong>NOTICE</strong> : logger最好放在任务类里面，否则你彼此引用任务脚本会把环境污染了。</p>
 <h2 id="_5">所有任务集中于一个任务</h2>
 <p>所有的任务每天都执行一次。</p>
-<div class="highlight"><pre><span></span>class AllReports(luigi.WrapperTask):
+<div class="highlight"><pre><span></span><code>class AllReports(luigi.WrapperTask):
     date = luigi.DateParameter(default=datetime.date.today())
     def requires(self):
         yield SomeReport(self.date)
         yield SomeOtherReport(self.date)
         yield CropReport(self.date)
-</pre></div>
+</code></pre></div>
 <h2 id="_6">执行循环任务</h2>
-<div class="highlight"><pre><span></span>luigi --module all_reports RangeDailyBase --of AllReports --start 2015-01-01
-</pre></div>
+<div class="highlight"><pre><span></span><code>luigi --module all_reports RangeDailyBase --of AllReports --start 2015-01-01
+</code></pre></div>
             
             
             <hr/>

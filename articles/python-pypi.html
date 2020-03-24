@@ -143,19 +143,19 @@
 <p>请结合Github上的 <a href="https://github.com/a358003542/pyskeleton">pyskeleton项目</a> 来阅读本章。</p>
 <p>虽然官方内置distutils模块也能实现类似的功能，不过现在人们更常用的是第三方模块setuptools，其相当于distutils模块的加强版，初学者推荐就使用setuptools模块。更多内容请参看setuptools模块的 <a href="https://pythonhosted.org/setuptools/index.html">官方文档</a> 。</p>
 <p>安装就是先安装pip3：</p>
-<div class="highlight"><pre><span></span>sudo apt-get install python3-pip
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo apt-get install python3-pip
+</code></pre></div>
 <p>然后通过pip3来安装setuptools：</p>
-<div class="highlight"><pre><span></span>sudo pip3 install setuptools
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo pip3 install setuptools
+</code></pre></div>
 <p>最简单的"setup.py"文件如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span>
 <span class="n">setup</span><span class="p">(</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">"HelloWorld"</span><span class="p">,</span>
     <span class="n">version</span> <span class="o">=</span> <span class="s2">"0.1"</span><span class="p">,</span>
     <span class="n">packages</span> <span class="o">=</span> <span class="n">find_packages</span><span class="p">(),</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>第一行是从setuptools模块中引入setup函数和 <code>find_packages</code> 函数。</p>
 <p>setup函数接受一系列的字典值，下面就setup函数的一些字典值的含义慢慢道来：</p>
 <dl>
@@ -224,18 +224,18 @@ long_description</p>
 <p>你的软件依赖的模块。一般如下使用： </p>
 </dd>
 </dl>
-<div class="highlight"><pre><span></span>packages = find_packages()
-</pre></div>
+<div class="highlight"><pre><span></span><code>packages = find_packages()
+</code></pre></div>
 <p>则文件夹下有 <code>__init__.py</code> 文件的，都将视作python模块包，其内的py文件都将加入进去。</p>
 <p>除此之外你也可以直接手工输入你的模块名字，具体就是字符串的列表。</p>
 <dl>
 <dt>entry_point</dt>
 <dd></dd>
 </dl>
-<div class="highlight"><pre><span></span>entry_points = {
+<div class="highlight"><pre><span></span><code>entry_points = {
 'console_scripts' :[ 'zwc=zwc.zwc:main',],
 }
-</pre></div>
+</code></pre></div>
 <p>其中zwc是你的shell调用的名字，然后zwc是你的模块，另外一个zwc是你的主模块的子模块，然后main是其中的main函数。这就是你的shell调用程序的接口了。类似的还有gui_script可以控制你调用GUI图形的命令入口。</p>
 <dl>
 <dt>install_requires</dt>
@@ -263,11 +263,11 @@ long_description</p>
 <p>data_files 前面的package_data是只能在你的模块文件夹里面的其他数据文件等，然后可能还有一些数据文件你需要包含的，用data_files来控制，具体后面跟着的参数格式如下面例子所示：</p>
 </li>
 </ul>
-<div class="highlight"><pre><span></span>data_files = [('icos',['icos/wise.ico'])],
+<div class="highlight"><pre><span></span><code>data_files = [('icos',['icos/wise.ico'])],
 #这是添加的icos文件夹下面的wise.ico文件
 data_files = [('',['skeleton.tar.gz'])],
 #这是添加的主目录下的skeleton.tar.gz文件
-</pre></div>
+</code></pre></div>
 <p>值得一提的是data_files不能接受glob语法。</p>
 <p>data_files已经不推荐使用了，推荐用package_data来管理，可以方便用pkg_resources里面的方法来引用其中的资源文件。具体说明请看后面。</p>
 <h2 id="pipdevelop">pip的develop模式</h2>
@@ -277,15 +277,15 @@ data_files = [('',['skeleton.tar.gz'])],
 <p>pipenv的 <code>pipenv install -e .</code> 也是这个develop模式，你修改的代码会实时生效。</p>
 <h2 id="pkg_resources">pkg_resources模块来管理读取资源文件</h2>
 <p>如下所示：</p>
-<div class="highlight"><pre><span></span>    from pkg_resources import resource_filename
+<div class="highlight"><pre><span></span><code>    from pkg_resources import resource_filename
     resource_stream('wise','icos/Folder-Documents.ico')
-</pre></div>
+</code></pre></div>
 <p>第一个参数是模块名字，第二个参数是模块中的文件的相对路径表达。</p>
 <p>上面的例子是resource_filename，返回的是引用的文件名。此外还有命令：resource_string，参数和resource_filename一样，除了它返回的是字节流。这个字节流可以赋值给某个变量从而直接使用，或者存储在某个文件里面。</p>
 <h2 id="pypi">在pypi上传你的软件</h2>
 <h3 id="readme">正确处理README文档</h3>
 <p>现在pypi已经支持markdow文档格式了。推荐按照官方文档 <a href="https://packaging.python.org/guides/making-a-pypi-friendly-readme/">这里</a> 来处理：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
 
 <span class="c1"># read the contents of your README file</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
@@ -299,48 +299,48 @@ data_files = [('',['skeleton.tar.gz'])],
     <span class="n">long_description</span><span class="o">=</span><span class="n">long_description</span><span class="p">,</span>
     <span class="n">long_description_content_type</span><span class="o">=</span><span class="s1">'text/markdown'</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>有段时间我用 <code>codecs</code> 来读取README文件一直出现一切奇怪的问题，原因不明。就如同上面这样直接读取即可。</p>
 <p>注意上面配置的 <code>long_description_content_type</code> ，如果你喜欢 <code>reStructuredText</code> 格式，那么设置为 <code>text/x-rst</code> 即可。</p>
 <p>首先推荐升级最新的setuptools，wheel和twine模块。</p>
 <p>然后直接用下面这句：</p>
-<div class="highlight"><pre><span></span>python setup.py sdist bdist_wheel
-</pre></div>
+<div class="highlight"><pre><span></span><code>python setup.py sdist bdist_wheel
+</code></pre></div>
 <p>这样将直接dist文件夹下面生成源码tar包和wheel包。</p>
 <p>然后推荐运行下：</p>
-<div class="highlight"><pre><span></span>twine check dist/*
-</pre></div>
+<div class="highlight"><pre><span></span><code>twine check dist/*
+</code></pre></div>
 <p>来确保你的文档格式没问题。</p>
 <h3 id="twine">推荐使用twine上传</h3>
 <p>使用twine上传到pypi很简单：</p>
-<div class="highlight"><pre><span></span>twine upload dist/*
-</pre></div>
+<div class="highlight"><pre><span></span><code>twine upload dist/*
+</code></pre></div>
 <p>你每次都需要输入用户名和密码，你可以安装 <code>keyring</code> 模块，然后运行：</p>
-<div class="highlight"><pre><span></span>keyring set https://upload.pypi.org/legacy/ your-username
-</pre></div>
+<div class="highlight"><pre><span></span><code>keyring set https://upload.pypi.org/legacy/ your-username
+</code></pre></div>
 <p>来本地安全保存你的用户名和密码。</p>
 <h2 id="pypi_1">pypi下载使用国内源</h2>
 <p>豆瓣的pypi源 <code>https://pypi.douban.com/simple</code>  或者 清华的pypi源 <code>https://pypi.tuna.tsinghua.edu.cn/simple</code> 都可以吧。</p>
 <p>临时使用用 <code>-i</code> 或者 <code>--index</code> 选项： </p>
-<div class="highlight"><pre><span></span>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
+</code></pre></div>
 <p>永久更改本地配置：</p>
-<div class="highlight"><pre><span></span>pip install pip -U
+<div class="highlight"><pre><span></span><code>pip install pip -U
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-</pre></div>
+</code></pre></div>
 <h2 id="pypi_2">pypi只下载软件源文件</h2>
 <p>下载pypi上的目标软件源文件而不是安装。参考了 <a href="http://stackoverflow.com/questions/7300321/how-to-use-pythons-pip-to-download-and-keep-the-zipped-files-for-a-package">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span>pip install --download="/pth/to/downloaded/files" package_name
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install --download="/pth/to/downloaded/files" package_name
+</code></pre></div>
 <h2 id="python">python虚拟环境管理</h2>
 <p>Virtualenv模块的主要作用就是建立一个封闭独立的python开发环境，因为一个python项目的开发通常会涉及到多个模块，而你激活virtualenv环境之后，通过pip命令安装的模块是安装在本项目文件夹内的，这样就建立了单独的固定某个模块版本的开发环境。通过python虚拟环境，一方面控制了python的版本，另一方面控制了python模块的版本，同时使得整个项目类似于绿色安装版具有可移植性。</p>
 <p>安装就是用pip来安装常规安装即可。</p>
-<div class="highlight"><pre><span></span>sudo pip install virtualenv
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo pip install virtualenv
+</code></pre></div>
 <h3 id="_1">新建一个项目</h3>
 <p>新建一个项目就是使用virutalenv命令，然后后面跟一个文件夹名字，等下要新建的文件夹名字。</p>
-<div class="highlight"><pre><span></span>virutalenv [path]
-</pre></div>
+<div class="highlight"><pre><span></span><code>virutalenv [path]
+</code></pre></div>
 <p>这里的path就是你的项目的名字，等下会创建该名字的文件夹，你也可以设定为 "." ，这样就是在当前文件夹下创建。 然后常用的选项有：</p>
 <ul>
 <li>
@@ -350,19 +350,19 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 <p><code>--system-site-packages</code> ，如果加上这个选项，那么你的虚拟环境是可以使用安装到系统里去的那些python模块的。参考了 <a href="http://stackoverflow.com/questions/3371136/revert-the-no-site-packages-option-with-virtualenv">这个网页</a> ，这是个很值得一提的小技巧，那就是如果你之前设定是venv可以引用系统级的那些python模块，后面你又不想了，这个时候是不需要重新安装虚拟环境的，只需要在虚拟环境中创建一个这个空白文件即可：</p>
 </li>
 </ul>
-<div class="highlight"><pre><span></span>lib/python3.5/no-global-site-packages.txt
-</pre></div>
+<div class="highlight"><pre><span></span><code>lib/python3.5/no-global-site-packages.txt
+</code></pre></div>
 <p>如果你又想引用系统级的那些python模块了，把这个文件删除即可。</p>
 <h3 id="_2">激活本地虚拟环境</h3>
 <p>运行下面的命令即进入本地虚拟环境：</p>
-<div class="highlight"><pre><span></span>cd venv
+<div class="highlight"><pre><span></span><code>cd venv
 source bin/activate
-</pre></div>
+</code></pre></div>
 <p>激活虚拟环境之后，使用python是使用的虚拟环境设定的python解释器，然后使用pip安装模块也是安装在虚拟环境之下。</p>
 <h3 id="_3">退出本地虚拟环境</h3>
 <p>运行deactivate命令即可</p>
-<div class="highlight"><pre><span></span>deactivate
-</pre></div>
+<div class="highlight"><pre><span></span><code>deactivate
+</code></pre></div>
             
             
             <hr/>

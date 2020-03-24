@@ -144,7 +144,7 @@
 <p>更高级的web server 如flask之类的，会提供很多额外的支持，比如请求参数，请求头等信息的整理，然后如果你希望实现restful风格api，只返回一个字典值，对应的一些响应头封装也帮你做好了，当然在返回数据上，比如html会引入jinja2模块引擎等，这些都是很好理解的。总的说来web server干的就是这些事。</p>
 <h2 id="_2">第一个例子</h2>
 <p>针对python3版本代码稍作修改。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
 
 <span class="k">class</span> <span class="nc">RequestHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
     <span class="sd">'''Handle HTTP requests by returning a fixed 'page'.'''</span>
@@ -172,9 +172,9 @@
     <span class="n">serverAddress</span> <span class="o">=</span> <span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">,</span> <span class="n">RequestHandler</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>上面的 do_GET 方法内部作用原理如下：</p>
-<div class="highlight"><pre><span></span>    mname = 'do_' + self.command
+<div class="highlight"><pre><span></span><code>    mname = 'do_' + self.command
     if not hasattr(self, mname):
         self.send_error(
             HTTPStatus.NOT_IMPLEMENTED,
@@ -182,7 +182,7 @@
         return
     method = getattr(self, mname)
     method()
-</pre></div>
+</code></pre></div>
 <p>其中 self.command 就是http协议请求头传过来的GET或者POST等，然后 handler类会去找对应的方法，找到了再进行对应的操作。</p>
 <p>这种根据函数名来进行行为分发的编程模式，很值得引起大家的注意，在web server里面一直都存在着这个需求。从url server_name 到对应的虚拟server分发，从path method 到对应的函数行为分发，再到后面高级的参数验证valide_what 等也有类似的行为分发需求。</p>
 <h2 id="_3">简单的模板输出方案</h2>
@@ -190,7 +190,7 @@
 <h2 id="_4">挂载静态文件</h2>
 <p>静态文件就是找到对应的文件，然后返回就是了。当然对于 index.html 等特殊文件需要特别的处理。</p>
 <p>500lines该文后来提到一种有趣的编码写法：</p>
-<div class="highlight"><pre><span></span>class case_no_file(object):
+<div class="highlight"><pre><span></span><code>class case_no_file(object):
     '''File or directory does not exist.'''
 
     def test(self, handler):
@@ -198,8 +198,8 @@
 
     def act(self, handler):
         raise ServerException("'{0}' not found".format(handler.path))
-</pre></div>
-<div class="highlight"><pre><span></span>    def do_GET(self):
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>    def do_GET(self):
         try:
 
             # Figure out what exactly is being requested.
@@ -215,17 +215,17 @@
         # Handle errors.
         except Exception as msg:
             self.handle_error(msg)
-</pre></div>
-<div class="highlight"><pre><span></span>class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     Cases = [case_no_file,
              case_existing_file,
              case_always_fail]
-</pre></div>
+</code></pre></div>
 <p>针对多种情况，实现了行为分发，有点像switch语句但更python风格更优美的写法。</p>
 <h2 id="cgi">简单的cgi接口实现</h2>
 <p>接下来的cgi接口实现代码也是很简单的：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">case_cgi_file</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">case_cgi_file</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">'''Something runnable.'''</span>
 
     <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
@@ -242,7 +242,7 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">child_stdout</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">child_stdout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_content</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>其核心就是针对某个python脚本文件，启动cgi协议接口，简单来说就是启动一个python解释器运行一下目标脚本文件，然后获取其返回的内容，作为web server的返回内容返回即可。</p>
 <p>然后下面有必要了解下cgi协议，所谓CGI协议，全称是（Common Gateway Interface）通用网关接口，说得再确切一点，是cgi程序和web server之间的接口标准，说得再简单粗糙点，一个web server，比如apache 或者 nginx 会把上面我们讨论的返回静态文件等做好，请读者进一步参看 <a href="https://zhuanlan.zhihu.com/p/25181849">这篇文章</a> 。</p>
 <p>然后有些请求，这些请求就是这里讨论的CGI协议，这里所谓的nginx就是web server，也是本例子中的大部分代码扮演的角色，而这里所谓的cgi程序，实际上就是那个python脚本，当然也可能是某个python框架，这个后面会讨论到。</p>
