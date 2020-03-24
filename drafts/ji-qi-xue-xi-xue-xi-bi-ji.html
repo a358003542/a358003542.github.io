@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="第一谈 目前很火热的深度学习其本质仍然属于机器学习中比较厉害的一种技术，但不管是更好地理解这门技术和使用这门技术，都还是要打好机器学习这门学科的基本功。所以本分类机器学习除了包括传统机器学习的讨论外，还将包括神经网络和深度学习，以及相关的模块keras，tensorflow，可能还会包括matplotlib或者numpy等相关模块的讨论。 之所以这门技术不叫人工智能是很务实的态度，我很确信目前的深度学习等及其他技术将成为未来人工智能技术的基石，更确切来说是类似砖木一般的存在，但就目前机器学习的发展程度来说，还远远不足以称之为人工智能。因为目前机器学习的发展状态就是：对于人工智能领域最核心的一些问题，甚至连提出来的勇气都没有，更不要说解决他们了。 我接下来重点在学习理解深度学习上，传统机器学习和神经网络会有所谈论只是为了更好地理解深度学习相关概念。 机器学习能做什么 在开始讨论机器学习之前，我们程序员首先应该转变一种思维方式，机器学习并不是我们常见的那些算法，在那些算法里面，计算机该做什么，该处理什么数据，数据是什么含义都是程序员去定义的。而机器学习的意思是让机器自己去学习，去学习现实世界各个事物运行变化的规律，当然机器学习目前各个算法能力还是很有限的，但整个学科的发力方向就是这样，所以具体我们遇到某个问题的时候，程序员更多的不应该是去自己去分析研究对象的各个数据规律或者规则，而应该讲这些数据和答案（标签）送给机器学习算法，让机器自己总结出研究对象的规律或者规则。 这看上去很神奇，其实就是一些数据转换的工作，更多的是工程上的东西。 传统机器学习应用 传统机器学习可能应用领域如下： 电子邮件垃圾邮件过滤算法 搜索引擎根据你的点击记录来优化你的下次搜索结果 你在网上点击或者查看或者买了某个东西，网站记录你的这些活动，从而更好地为你推荐商品，或者推荐优惠券。 手写数字识别 …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", others, " />
+
+<meta property="og:title" content="机器学习学习笔记 "/>
+<meta property="og:url" content="https://a358003542.github.io/drafts/ji-qi-xue-xi-xue-xi-bi-ji.html" />
+<meta property="og:description" content="第一谈 目前很火热的深度学习其本质仍然属于机器学习中比较厉害的一种技术，但不管是更好地理解这门技术和使用这门技术，都还是要打好机器学习这门学科的基本功。所以本分类机器学习除了包括传统机器学习的讨论外，还将包括神经网络和深度学习，以及相关的模块keras，tensorflow，可能还会包括matplotlib或者numpy等相关模块的讨论。 之所以这门技术不叫人工智能是很务实的态度，我很确信目前的深度学习等及其他技术将成为未来人工智能技术的基石，更确切来说是类似砖木一般的存在，但就目前机器学习的发展程度来说，还远远不足以称之为人工智能。因为目前机器学习的发展状态就是：对于人工智能领域最核心的一些问题，甚至连提出来的勇气都没有，更不要说解决他们了。 我接下来重点在学习理解深度学习上，传统机器学习和神经网络会有所谈论只是为了更好地理解深度学习相关概念。 机器学习能做什么 在开始讨论机器学习之前，我们程序员首先应该转变一种思维方式，机器学习并不是我们常见的那些算法，在那些算法里面，计算机该做什么，该处理什么数据，数据是什么含义都是程序员去定义的。而机器学习的意思是让机器自己去学习，去学习现实世界各个事物运行变化的规律，当然机器学习目前各个算法能力还是很有限的，但整个学科的发力方向就是这样，所以具体我们遇到某个问题的时候，程序员更多的不应该是去自己去分析研究对象的各个数据规律或者规则，而应该讲这些数据和答案（标签）送给机器学习算法，让机器自己总结出研究对象的规律或者规则。 这看上去很神奇，其实就是一些数据转换的工作，更多的是工程上的东西。 传统机器学习应用 传统机器学习可能应用领域如下： 电子邮件垃圾邮件过滤算法 搜索引擎根据你的点击记录来优化你的下次搜索结果 你在网上点击或者查看或者买了某个东西，网站记录你的这些活动，从而更好地为你推荐商品，或者推荐优惠券。 手写数字识别 …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-03-25T05:09:18.838559+08:00" />
+<meta name="twitter:title" content="机器学习学习笔记 ">
+<meta name="twitter:description" content="第一谈 目前很火热的深度学习其本质仍然属于机器学习中比较厉害的一种技术，但不管是更好地理解这门技术和使用这门技术，都还是要打好机器学习这门学科的基本功。所以本分类机器学习除了包括传统机器学习的讨论外，还将包括神经网络和深度学习，以及相关的模块keras，tensorflow，可能还会包括matplotlib或者numpy等相关模块的讨论。 之所以这门技术不叫人工智能是很务实的态度，我很确信目前的深度学习等及其他技术将成为未来人工智能技术的基石，更确切来说是类似砖木一般的存在，但就目前机器学习的发展程度来说，还远远不足以称之为人工智能。因为目前机器学习的发展状态就是：对于人工智能领域最核心的一些问题，甚至连提出来的勇气都没有，更不要说解决他们了。 我接下来重点在学习理解深度学习上，传统机器学习和神经网络会有所谈论只是为了更好地理解深度学习相关概念。 机器学习能做什么 在开始讨论机器学习之前，我们程序员首先应该转变一种思维方式，机器学习并不是我们常见的那些算法，在那些算法里面，计算机该做什么，该处理什么数据，数据是什么含义都是程序员去定义的。而机器学习的意思是让机器自己去学习，去学习现实世界各个事物运行变化的规律，当然机器学习目前各个算法能力还是很有限的，但整个学科的发力方向就是这样，所以具体我们遇到某个问题的时候，程序员更多的不应该是去自己去分析研究对象的各个数据规律或者规则，而应该讲这些数据和答案（标签）送给机器学习算法，让机器自己总结出研究对象的规律或者规则。 这看上去很神奇，其实就是一些数据转换的工作，更多的是工程上的东西。 传统机器学习应用 传统机器学习可能应用领域如下： 电子邮件垃圾邮件过滤算法 搜索引擎根据你的点击记录来优化你的下次搜索结果 你在网上点击或者查看或者买了某个东西，网站记录你的这些活动，从而更好地为你推荐商品，或者推荐优惠券。 手写数字识别 …">
+
+
+    <title>机器学习学习笔记  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/drafts/ji-qi-xue-xi-xue-xi-bi-ji.html"> 机器学习学习笔记  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">第一谈</a><ul>
+<li><a href="#_2">机器学习能做什么</a></li>
+<li><a href="#_3">传统机器学习应用</a></li>
+<li><a href="#_4">深度学习应用领域</a></li>
+<li><a href="#_5">理解神经网络</a><ul>
+<li><a href="#_6">反向传播算法</a></li>
+</ul>
+</li>
+<li><a href="#_7">理解张量</a><ul>
+<li><a href="#shape">张量的shape</a></li>
+<li><a href="#dtype">张量的dtype</a></li>
+<li><a href="#_8">样本维度</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_9">第二谈</a><ul>
+<li><a href="#_10">数据预处理</a></li>
+<li><a href="#_11">感知器</a><ul>
+<li><a href="#_12">交叉熵</a></li>
+<li><a href="#tensorflow">使用tensorflow自带的交叉熵方法</a></li>
+</ul>
+</li>
+<li><a href="#_13">多层感知器</a><ul>
+<li><a href="#_14">准备数据</a></li>
+<li><a href="#_15">建模</a></li>
+</ul>
+</li>
+<li><a href="#_16">多层神经网络或者深度学习</a><ul>
+<li><a href="#_17">保存模型</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_18">第三谈</a><ul>
+<li><a href="#relu">relu激活函数</a></li>
+<li><a href="#broadcasting">广播(broadcasting)</a></li>
+<li><a href="#_19">张量点积</a></li>
+<li><a href="#_20">张量变形</a></li>
+<li><a href="#_21">张量的导数</a></li>
+<li><a href="#sgd">随机梯度下降(SGD)</a></li>
+<li><a href="#_22">二分类问题</a><ul>
+<li><a href="#_23">准备数据</a></li>
+<li><a href="#_24">验证集</a></li>
+<li><a href="#history">history作图</a></li>
+<li><a href="#_25">总结</a></li>
+</ul>
+</li>
+<li><a href="#_26">多分类问题</a></li>
+<li><a href="#_27">回归问题</a><ul>
+<li><a href="#_28">取值范围差异很大的数据</a></li>
+<li><a href="#k">K折验证</a></li>
+<li><a href="#_29">总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_30">第四谈</a><ul>
+<li><a href="#_31">无监督学习</a></li>
+<li><a href="#_32">自监督学习</a></li>
+<li><a href="#_33">强化学习</a></li>
+<li><a href="#_34">机器学习通用工作流程</a><ul>
+<li><a href="#_35">定义问题，收集数据集</a></li>
+<li><a href="#_36">选择衡量成功的指标</a></li>
+<li><a href="#_37">确定评估方法</a></li>
+<li><a href="#_38">准备数据</a><ul>
+<li><a href="#_39">数据张量化</a></li>
+<li><a href="#_40">数据标准化</a></li>
+<li><a href="#_41">处理缺失值</a></li>
+<li><a href="#_42">特征工程</a></li>
+</ul>
+</li>
+<li><a href="#_43">开发比基准更好的模型</a></li>
+<li><a href="#_44">扩大模型规模，开发过拟合模型</a></li>
+<li><a href="#_45">模型正则化与调节超参数</a><ul>
+<li><a href="#dropout">添加Dropout层</a></li>
+<li><a href="#_46">尝试增加或者减少层</a></li>
+<li><a href="#l1-l2">尝试L1 L2正则化</a></li>
+<li><a href="#_47">尝试不同的超参数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_48">第五谈</a><ul>
+<li><a href="#_49">缩放操作</a><ul>
+<li><a href="#_50">均值移除</a></li>
+<li><a href="#minmax">minmax缩放</a></li>
+</ul>
+</li>
+<li><a href="#_51">归一化</a></li>
+<li><a href="#_52">二值化</a></li>
+<li><a href="#onehot">onehot编码</a></li>
+<li><a href="#label">label编码</a></li>
+<li><a href="#_53">计算误差</a><ul>
+<li><a href="#mae">平均绝对误差MAE</a></li>
+<li><a href="#mse">均方误差MSE</a></li>
+<li><a href="#rmse">均方根误差RMSE</a></li>
+<li><a href="#_54">中位数绝对误差</a></li>
+<li><a href="#_55">解释方差分</a></li>
+<li><a href="#r-r2-score">R方得分 R2 score</a></li>
+</ul>
+</li>
+<li><a href="#_56">缩放和归一化的再讨论</a></li>
+</ul>
+</li>
+<li><a href="#_57">第六谈</a><ul>
+<li><a href="#transformer">transformer</a></li>
+<li><a href="#estimator">estimator</a></li>
+<li><a href="#_58">特征的联合</a></li>
+<li><a href="#gridsearchcv">GridSearchCV</a></li>
+<li><a href="#_59">机器学习的一般过程整理</a></li>
+</ul>
+</li>
+<li><a href="#_60">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+            
+<h1 id="_1">第一谈</h1>
+<p>目前很火热的深度学习其本质仍然属于机器学习中比较厉害的一种技术，但不管是更好地理解这门技术和使用这门技术，都还是要打好机器学习这门学科的基本功。所以本分类机器学习除了包括传统机器学习的讨论外，还将包括神经网络和深度学习，以及相关的模块keras，tensorflow，可能还会包括matplotlib或者numpy等相关模块的讨论。</p>
+<p>之所以这门技术不叫人工智能是很务实的态度，我很确信目前的深度学习等及其他技术将成为未来人工智能技术的基石，更确切来说是类似砖木一般的存在，但就目前机器学习的发展程度来说，还远远不足以称之为人工智能。因为目前机器学习的发展状态就是：对于人工智能领域最核心的一些问题，甚至连提出来的勇气都没有，更不要说解决他们了。</p>
+<p>我接下来重点在学习理解深度学习上，传统机器学习和神经网络会有所谈论只是为了更好地理解深度学习相关概念。</p>
+<h3 id="_2">机器学习能做什么</h3>
+<p>在开始讨论机器学习之前，我们程序员首先应该转变一种思维方式，机器学习并不是我们常见的那些算法，在那些算法里面，计算机该做什么，该处理什么数据，数据是什么含义都是程序员去定义的。而机器学习的意思是让机器自己去学习，去学习现实世界各个事物运行变化的规律，当然机器学习目前各个算法能力还是很有限的，但整个学科的发力方向就是这样，所以具体我们遇到某个问题的时候，程序员更多的不应该是去自己去分析研究对象的各个数据规律或者规则，而应该讲这些数据和答案（标签）送给机器学习算法，让机器自己总结出研究对象的规律或者规则。</p>
+<p>这看上去很神奇，其实就是一些数据转换的工作，更多的是工程上的东西。</p>
+<h3 id="_3">传统机器学习应用</h3>
+<p>传统机器学习可能应用领域如下：</p>
+<ul>
+<li>电子邮件垃圾邮件过滤算法</li>
+<li>搜索引擎根据你的点击记录来优化你的下次搜索结果</li>
+<li>你在网上点击或者查看或者买了某个东西，网站记录你的这些活动，从而更好地为你推荐商品，或者推荐优惠券。</li>
+<li>手写数字识别 </li>
+<li>你的一切金融活动，各大银行都上线了机器学习算法来判断你的贷款资格和贷款额度</li>
+</ul>
+<h3 id="_4">深度学习应用领域</h3>
+<p>深度学习可能应用领域有：</p>
+<ul>
+<li>将向量数据映射到向量数据</li>
+<li>预测性医疗保健 分析患者的医疗保健数据</li>
+<li>产品质量控制 将与某件产品制成品相关的一组属性映射到产品明年会坏掉的概率</li>
+<li>将图像数据映射到向量数据</li>
+<li>医生助手  将医学影像幻灯片映射到是否有肿瘤的判断</li>
+<li>自动驾驶汽车 将车载摄像机的视频画面映射到方向盘角度控制命令</li>
+<li>饮食助手 将食物照片映射到食物的卡路里数量</li>
+<li>年龄预测 将自拍照片映射到人的年龄</li>
+<li>将时间序列数据映射到向量数据</li>
+<li>天气预报 将多个地点天气数据的时间序列映射到某地下周的天气数据</li>
+<li>脑机接口  将脑磁图MEG数据的时间序列映射到计算机命令</li>
+<li>行为定向  将网站上用户交互的时间序列映射到用户购买某件商品的概率</li>
+<li>
+<p>将文本映射到文本</p>
+</li>
+<li>
+<p>智能回复  将电子邮件映射到合理的单行回复</p>
+</li>
+<li>回答问题  将常识问题映射到答案</li>
+<li>
+<p>生成摘要  将一篇文章映射到文章摘要</p>
+</li>
+<li>
+<p>将图像映射到文本</p>
+</li>
+<li>图像描述 将图像映射到描述图像内容的简短说明</li>
+<li>将文本映射到图像</li>
+<li>
+<p>图像生成  将简短的文字映射到与这段描述相匹配的图像</p>
+</li>
+<li>
+<p>将图像映射到图像</p>
+</li>
+<li>
+<p>超分辨率  将缩小的图像映射到相同图像的更高分辨率版本</p>
+</li>
+</ul>
+<h2 id="_5">理解神经网络</h2>
+<p>学习深度学习不一定要了解神经生物学，对于传统机器学习各个算法也不一定要面面俱到，但对于神经网络基本概念和具体里面矩阵，现在应该升级了，叫做张量运算还是应该有所了解的。</p>
+<p>我们来看Keras的30s上手例子：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span>
+              <span class="n">optimizer</span><span class="o">=</span><span class="s1">'sgd'</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+</code></pre></div>
+<p>首先我们需要建立一个模型，最常用的模型是 Sequential 顺序模型。这是最常用的模型。</p>
+<p>神经网络现在的发展已经和大脑并无太多关系了，当然早期发展是吸收了一些灵感，所以人们也推荐神经网络应该叫做分层表示学习或者层级表示学习。</p>
+<p>注意看上面 layer 就是层的意思，深度学习模型就是层的堆叠。</p>
+<p>而上面的Dense 就是我们常说的全连接层。全连接层大概是这样的：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/机器学习/全连接层示意图.png" title="Dense"/></p>
+<p>全连接层的意思是 本层的每个节点都和后一层的每个节点相连。</p>
+<p>Dense的units参数是本层节点数的意思，其也还有一个意思，叫做本层的输出维度数。</p>
+<p>每一层神经网络发生了 <code>output = relu(dot(W, input) + b)</code>这样的数学运算。 其中 relu 是上面 Dense 指定的 <code>activation</code> 也就是激活函数。我觉得在这里去想神经网络原来那一套并不有助于我们的理解了，反倒是根据数学思维来更方便理解一些。每一层神经网络即这样一层数学运算层，能够对某一个数据集进行了某种线性变换，然后输出另外一个对应的数据集。就如同 弗朗索瓦·肖奈所打比方描述的：</p>
+<blockquote>
+<p>一张纸被揉的皱巴巴的，我们可以通过一系列步骤的几何变换，每一步都只是简单的几何变换，但最终完成了某个展平动作，于是我们看到了这张纸上面写着的字。深度学习模型就是解开高纬数据复杂流形的数学机器。</p>
+</blockquote>
+<p>我觉得弗朗索瓦·肖奈的另外一个比方也很好，很形象。可以把深度学习网络看做多级信息的蒸馏操作，信息穿越过滤器，然后纯度越来越高（对任务的帮助越来越大）。</p>
+<p>上面公式中 W 是每一层的权重，深度学习训练的过程就是给每一次找到更好的权重参数，从而整个深度学习神经网络能够更好地帮助任务。</p>
+<div class="highlight"><pre><span></span><code>model.fit(x_train, y_train, epochs=5, batch_size=32)
+</code></pre></div>
+<p>训练的过程 x_train 是具体的数据， y_train 是对应的标签数据， epoch 是迭代次数，也就是对于某个训练数据的重复训练次数。batch_size 是一次训练所含样本数，参考了 <a href="https://blog.csdn.net/u013041398/article/details/72841854">这个网页</a> ，因为一次把所有样本训练完开销太大，而每训练一次就算一下损失函数震荡又大，所以现在通用的做法是： mini-batch gradient decent ，小批量数据的梯度下降。这里的batch_size 是一次训练所含的样本数，那么1个epoch就是把所有训练数据都训练完的训练次数是总样本数除以batch_size。</p>
+<div class="highlight"><pre><span></span><code>model.compile(loss='categorical_crossentropy',
+              optimizer='sgd',
+              metrics=['accuracy'])
+</code></pre></div>
+<p>上面模型在compile的时候需要指定损失函数loss，损失函数是用来衡量模型得到的预测值和真实目标值之间的距离的，简单来说就是损失函数就是给目前模型打分的，来评价模型的效果好坏的。</p>
+<p>根据打分来对模型的各个权重参数进行微调使用的是反向传播算法。</p>
+<h3 id="_6">反向传播算法</h3>
+<p>反向传播算法（BP算法 backpropagation）。BP算法先将输入示例提供给输入层神经元，然后信号逐渐向前传递，直到产生输出层结果；然后计算输出层的误差，再将误差逆向传播直隐含层。最后根据隐含层神经元的误差来对连接权重和阈值进行调整的过程。改迭代过程循环进行，直到达到某个条件后停止。</p>
+<p>反向传播算法进行调节由优化函数或者说优化器 optimizer来完成。</p>
+<h2 id="_7">理解张量</h2>
+<p>标量 向量 矩阵 一般大家都有所接触了的，张量则是更多的维度的数据结构了。再谈到张量之后我发现之前那些图形几何上的理解的东西最好丢掉，而简单将张量理解为多个维度的数据结构。具体在python程序中就将张量看做numpy模块中的ndarray对象这是没有问题的。</p>
+<h3 id="shape">张量的shape</h3>
+<p>首先看下矩阵方面的情况：</p>
+<ul>
+<li>(1,3） 这是一个行矢量， for example: [1,2,3] </li>
+<li>(3,1) 这是一个列矢量，for example： </li>
+</ul>
+<div class="math">$$
+\begin{bmatrix}
+1\\ 
+2\\ 
+3
+\end{bmatrix}
+$$</div>
+<ul>
+<li>(2,3) 表示两行三列</li>
+</ul>
+<p>小维度情况带上几何思维这没有问题，但到张量了比如说 shape (3,3,2,3) ，那么最好的理解是这个张量数据有四个维度，其中第一个维度的数据容量是3个，第二个维度的数据容量也是3个。</p>
+<p>ndarray对象有这样的索引语法 ndarray[x, y , z] ，其中每一个维度也支持 ndarray[x1:x2, : , :] <code>start:end</code> 这样的语法。这样从维度来理解，就是第一个维度选择 x1:x2 之间，然后第二个维度选择所有，第三个维度选择组成的张量数据。总之在谈及张量的时候，即使是那些和空间关系很紧密的数据结构，我发现完全脱离几何思维，而只是单纯讨论维度会更方便些。</p>
+<h3 id="dtype">张量的dtype</h3>
+<p>numpy的 ndarray对象，有一个 dtype参数 。表示目标张量数据结构所包含的数据类型。张量一般都包含的是数值型数据，也可能会有char型张量，但没有字符串型张量。不过我看到即使是单个字符，可能是处于字符编码问题考虑吧，但就算是纯英文的单个字符，我看到大家的通用做法还是建立字典，转成对应的数值型张量，估计计算速度也是一个考虑点吧。</p>
+<h3 id="_8">样本维度</h3>
+<p>在深度学习领域，一般大家把第一个维度用作样本维度，所以我们看到MNIST例子中shape (60000,28,28)，第一个维度表示有60000个样本。</p>
+<p>然后前面说到batch_size 是一次训练所含的样本数，所以实际一次训练模型送入的batch数据如下：</p>
+<div class="highlight"><pre><span></span><code>batch_size = 128
+batch = train_images[:128] # 第一个批次
+batch = train_iamges[128:256] # 第二个批次
+...
+</code></pre></div>
+<h1 id="_9">第二谈</h1>
+<p>本文先用tensorflow来实现单层神经网络处理mnist问题，然后用keras来写一个两层神经网络来解决mnist问题。最后试着用keras编写一个简单的深度学习模型，也就是多层神经网络来解决mnist问题。</p>
+<p>本文代码主要参考了keras的examples代码库，同时本文也考虑了一些输入数据的预处理统一化过程。</p>
+<h2 id="_10">数据预处理</h2>
+<p>首先我们利用keras来下载mnist相关数据并进行必要的预处理操作。</p>
+<div class="highlight"><pre><span></span><code>from keras.datasets import mnist
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>train_images.shape
+(60000, 28, 28)
+train_labels.shape
+(60000,)
+</code></pre></div>
+<p>train_images 的shape第一维度是60000，说明有6万个图片，然后标签第一维度也是6万与之对应。</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
+</code></pre></div>
+<p>第一步将第二维第三维数据合并到一维。</p>
+<p>第二步是转换ndarray的dtype数据类型。</p>
+<p>第三部是将数据0-255 归一化为 0- 1 。</p>
+<p>类似的test_images也需要这样处理，这里就略过了。</p>
+<p>标签数据需要进行one-hot编码处理：</p>
+<div class="highlight"><pre><span></span><code>from keras.utils import to_categorical
+train_labels = to_categorical(train_labels)
+train_labels[0]
+array([0., 0., 0., 0., 0., 1., 0., 0., 0., 0.], dtype=float32)
+</code></pre></div>
+<p>one-hot编码的具体解释这里略过了，其他地方会讨论的。</p>
+<h2 id="_11">感知器</h2>
+<p>感知器就是一层或者说单层神经网络。感知器类似于逻辑回归模型，只能做线性分类任务。</p>
+<p>单层神经网络的编写用Keras非常的简单，但如果用tensorflow还是需要写一些代码的。不过作为一开始推荐还是用tensorflow来写一个简单的单层神经网络。因为Keras是基于tensorflow的更高层模块，这对于我们理解Keras具体做了什么工作很有帮助，也能帮助我们理解具体单层神经网络进行了那些数学运算。</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">784</span><span class="p">])</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">]))</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">y_logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y_logits</span> <span class="p">)</span>
+</code></pre></div>
+<p><img alt="img" src="D:/mycode/myblog/content/articles/机器学习/{static}/images/机器学习/单层神经网络数学运算.png" title="单层神经网络数学运算"/></p>
+<p>输入参数x第二维度784对应权重矩阵第一维度784，通常神经网络权重矩阵W的shape是(前一层节点数, 后一层节点数) 。这样输入参数矩阵x和权重矩阵W进行矩阵乘法【张量的点积，np.dot运算】之后得到第二维度等于权重矩阵第二维度的矩阵。输出的值数据送入 y_logits。这里 <code>tf.matmul</code> 就是进行的矩阵的乘法运算。</p>
+<p>这里 <code>tf.nn.softmax</code> 是激活函数，具体softmax激活函数的讨论这里略过了。</p>
+<h3 id="_12">交叉熵</h3>
+<p>tensorflow提供了专门的交叉熵计算函数，这里我们先用更原始的计算公式来看一下（参考了 <a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/tutorials/mnist_beginners.html">这篇文章</a> ）：</p>
+<div class="highlight"><pre><span></span><code><span class="n">cross_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">y_true</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span>
+</code></pre></div>
+<p>大体过程如下所示：
+</p>
+<div class="math">$$
+- \sum (1,0,0) * log((0.5,0.4,0.1)) = -(1*log0.5 + 0*log0.4 + 0*log0.1) = 0.301
+$$</div>
+<p>
+交叉熵越大那么预测值越偏离真实值，交叉熵越小那么预测值越接近真实值。</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cross_entropy</span><span class="p">)</span> <span class="c1"># 0.01是学习速率</span>
+</code></pre></div>
+<h3 id="tensorflow">使用tensorflow自带的交叉熵方法</h3>
+<p>推荐使用tensorflow自带的softmax+交叉熵方法来计算交叉熵，参考了 <a href="http://blog.csdn.net/behamcheung/article/details/71911133">这篇文章</a> ，说是计算会更稳定些。</p>
+<p>现在让我们把到目前的代码整理一下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+<span class="n">train_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">train_labels</span><span class="p">)</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">784</span><span class="p">])</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">]))</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">y_logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y_logits</span> <span class="p">)</span>
+<span class="n">cross_entropy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_logits</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">y_logits</span> <span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">y_true</span><span class="p">))</span>
+<span class="n">train_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cross_entropy</span><span class="p">)</span>
+</code></pre></div>
+<p>好了，我们的例子进入收尾阶段了：</p>
+<div class="highlight"><pre><span></span><code><span class="n">correct_mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">correct_mask</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span> 
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+
+    <span class="c1"># Train</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">())</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+        <span class="n">batch_xs</span> <span class="o">=</span> <span class="n">train_images</span><span class="p">[</span><span class="n">count</span><span class="o">*</span><span class="mi">128</span><span class="p">:</span><span class="mi">128</span><span class="o">*</span><span class="p">(</span><span class="n">count</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">batch_ys</span> <span class="o">=</span> <span class="n">train_labels</span><span class="p">[</span><span class="n">count</span><span class="o">*</span><span class="mi">128</span><span class="p">:</span><span class="mi">128</span><span class="o">*</span><span class="p">(</span><span class="n">count</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_step</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">batch_xs</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">batch_ys</span><span class="p">})</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">test_images</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">test_labels</span><span class="p">})</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Accuracy: </span><span class="si">{:.4}</span><span class="s2">%"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ans</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+    <span class="c1"># LAST</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">test_images</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">test_labels</span><span class="p">})</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Accuracy: </span><span class="si">{:.4}</span><span class="s2">%"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ans</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+</code></pre></div>
+<p>关于tf.argmax 函数请看下面的例子。不感兴趣的可以略过，其作用就是把标签解释出来，不是这里的重点。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">stddev</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="o">-----</span>
+<span class="n">array</span><span class="p">([[</span> <span class="mf">0.0919205</span> <span class="p">,</span>  <span class="mf">0.06030607</span><span class="p">,</span>  <span class="mf">0.01196606</span><span class="p">,</span>  <span class="mf">0.03031359</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.13546242</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.12748787</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.09680127</span><span class="p">,</span>  <span class="mf">0.12220833</span><span class="p">,</span>  <span class="mf">0.15264732</span><span class="p">,</span>  <span class="mf">0.05449662</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.01277541</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00535311</span><span class="p">,</span>  <span class="mf">0.03589706</span><span class="p">,</span>  <span class="mf">0.01658093</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.16726552</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.06979545</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14876817</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03735523</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0439501</span> <span class="p">,</span>  <span class="mf">0.15896702</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.05869294</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14986654</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.17551927</span><span class="p">,</span>  <span class="mf">0.08360171</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00648978</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.03274798</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05770732</span><span class="p">,</span>  <span class="mf">0.01505487</span><span class="p">,</span>  <span class="mf">0.13726853</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01670119</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.02666636</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05316785</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05433881</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02210794</span><span class="p">,</span>  <span class="mf">0.01175172</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.0674843</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.06402522</span><span class="p">,</span>  <span class="mf">0.00812987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.17738222</span><span class="p">,</span>  <span class="mf">0.01375954</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.01734987</span><span class="p">,</span>  <span class="mf">0.01096244</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.19889738</span><span class="p">,</span>  <span class="mf">0.08350741</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00222254</span><span class="p">,</span>
+         <span class="mf">0.05094135</span><span class="p">,</span>  <span class="mf">0.06777989</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01986633</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1863249</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.04648132</span><span class="p">]],</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+<span class="o">---</span>
+
+<span class="n">col_max</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span>
+<span class="o">----</span>
+<span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span>
+<span class="o">---</span>
+<span class="n">row_max</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> 
+<span class="o">---</span>
+<span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span>
+<span class="o">---</span>
+</code></pre></div>
+<p>所以 tf.argmax 第二个参数是1，那么返回一行数值最大的那个index索引值。 <code>tf.argmax(y_pred, 1)</code> 返回的那个索引值在本例中比较简单，就是实际预测的数字值。</p>
+<p>tf.reduce_mean 将所有维度的元素相加然后求平均值</p>
+<p>这个例子最后就是调用tensorflow的作业流程，启动运算数据流。然后评估一下对于测试数据现在精度如何了。这些不是这里的重点。就单层神经网络来说mnist例子很难超过90%的。</p>
+<h2 id="_13">多层感知器</h2>
+<p>多层感知器实际上就是两层全连接神经网络。理论上两层神经网络可以无限逼近任意连续的函数了。下面用Keras来实现一个多层感知器。</p>
+<p>首先我们试着把上面单层神经网络用Keras写一遍，下面是准备数据过程，后面都一样的。</p>
+<h3 id="_14">准备数据</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+<span class="n">train_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">train_labels</span><span class="p">)</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="_15">建模</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">'rmsprop'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 1s 13us/step - loss: 0.6063 - acc: 0.8482
+Epoch 2/5
+60000/60000 [==============================] - 1s 12us/step - loss: 0.3316 - acc: 0.9083
+Epoch 3/5
+60000/60000 [==============================] - 1s 12us/step - loss: 0.3025 - acc: 0.9159
+Epoch 4/5
+60000/60000 [==============================] - 1s 11us/step - loss: 0.2889 - acc: 0.9194
+Epoch 5/5
+60000/60000 [==============================] - 1s 12us/step - loss: 0.2806 - acc: 0.9219
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>score = model.evaluate(test_images, test_labels, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.2757013351589441
+Test accuracy: 0.9232
+</code></pre></div>
+<p>结果大概也是差不多的。因为这个例子多运行几次epoch，但单层神经网络再怎么优化也只能到92%了。</p>
+<p>上面的建模过程稍微加一行，我们就构建了一个多层感知器。一般多层神经网络前面的激活函数选relu会更好一些。也就多加了一层，最后输出节点数为10的神经网络。</p>
+<div class="highlight"><pre><span></span><code>from keras.models import Sequential
+from keras.layers import Dense
+model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dense(10, activation='softmax'))
+model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(train_images, train_labels, epochs=5, batch_size=128)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 5s 85us/step - loss: 0.2569 - acc: 0.9258
+Epoch 2/5
+60000/60000 [==============================] - 5s 84us/step - loss: 0.1037 - acc: 0.9688
+Epoch 3/5
+60000/60000 [==============================] - 5s 87us/step - loss: 0.0685 - acc: 0.9790
+Epoch 4/5
+60000/60000 [==============================] - 5s 85us/step - loss: 0.0508 - acc: 0.9848
+Epoch 5/5
+60000/60000 [==============================] - 5s 87us/step - loss: 0.0368 - acc: 0.9888
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.07560657636675751
+Test accuracy: 0.9777
+</code></pre></div>
+<p>精度能够到97%了。</p>
+<p>下面是Keras代码库examples里面的解决mnist问题的多层感知器，我根据上面的讨论将代码稍微调整下，建模过程如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span><span class="n">Dropout</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">RMSprop</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div>
+<p>区别就是又加了一层神经网络。</p>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 8s 139us/step - loss: 0.2197 - acc: 0.9320
+Epoch 2/5
+60000/60000 [==============================] - 8s 140us/step - loss: 0.0815 - acc: 0.9750
+Epoch 3/5
+60000/60000 [==============================] - 9s 145us/step - loss: 0.0530 - acc: 0.9836
+Epoch 4/5
+60000/60000 [==============================] - 9s 151us/step - loss: 0.0374 - acc: 0.9886
+Epoch 5/5
+60000/60000 [==============================] - 9s 151us/step - loss: 0.0302 - acc: 0.9899
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.08149926771794035
+Test accuracy: 0.9808
+</code></pre></div>
+<p>examples里面还新加入了Dropout层，这个是一种过拟合技术，我们加上之后会如何：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span><span class="n">Dropout</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">RMSprop</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 10s 162us/step - loss: 0.2439 - acc: 0.9253
+Epoch 2/5
+60000/60000 [==============================] - 10s 169us/step - loss: 0.1031 - acc: 0.9688
+Epoch 3/5
+60000/60000 [==============================] - 9s 151us/step - loss: 0.0760 - acc: 0.9771
+Epoch 4/5
+60000/60000 [==============================] - 10s 165us/step - loss: 0.0604 - acc: 0.9817
+Epoch 5/5
+60000/60000 [==============================] - 9s 155us/step - loss: 0.0512 - acc: 0.9846
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.07319687194137806
+Test accuracy: 0.9814
+</code></pre></div>
+<p>区别其实不大，至少就mnist来说提升最大的是又新加入了一层神经网络，加入Dropout层没看出区别。</p>
+<h2 id="_16">多层神经网络或者深度学习</h2>
+<p>卷积神经网络相关后面的讨论补上，这里我们主要来看下Keras代码库examples里面介绍的用CNN，深度学习神经网络来解决mnist问题效果如何。具体理解后面再说。</p>
+<div class="highlight"><pre><span></span><code>import tensorflow as tf
+from keras.datasets import mnist
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>from keras import backend as K
+if K.image_data_format() == 'channels_first':
+    train_images = train_images.reshape(60000, 1, 28, 28)
+    test_images = test_images.reshape(10000, 1, 28, 28)
+    input_shape = (1, 28, 28)
+else:
+    train_images = train_images.reshape(60000, 28, 28, 1)
+    test_images = test_images.reshape(10000, 28, 28, 1)
+    input_shape = (28, 28, 1)
+</code></pre></div>
+<p>这里似乎涉及到不同backend的图形维度选择问题，这个后面再说。</p>
+<div class="highlight"><pre><span></span><code>train_images = train_images.astype('float32')
+train_images = train_images / 255
+test_images = test_images.astype('float32')
+test_images = test_images / 255
+from keras.utils import to_categorical
+train_labels = to_categorical(train_labels)
+test_labels = to_categorical(test_labels)
+</code></pre></div>
+<p>继续之前的数据预处理。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">Flatten</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adadelta</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.25</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div>
+<p>本例子跑起来开始有点慢了。Dropout应该不算一层，Flatten我估计不算一层，那么上面例子大概有5层。</p>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - ETA: 0s - loss: 0.2683 - acc: 0.917 - 119s 2ms/step - loss: 0.2683 - acc: 0.9173
+Epoch 2/5
+60000/60000 [==============================] - 120s 2ms/step - loss: 0.0891 - acc: 0.9734
+Epoch 3/5
+60000/60000 [==============================] - 115s 2ms/step - loss: 0.0655 - acc: 0.9804
+Epoch 4/5
+60000/60000 [==============================] - 111s 2ms/step - loss: 0.0555 - acc: 0.9833
+Epoch 5/5
+60000/60000 [==============================] - 114s 2ms/step - loss: 0.0466 - acc: 0.9856
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.031076731445921907
+Test accuracy: 0.9898
+</code></pre></div>
+<p>例子报道说epochs=12的时候精度能够上升到99%。</p>
+<p>为了公平起见，绝对多层感知器和CNN神经网络这两个例子都按照epochs=12再跑一次来对比一下看看。</p>
+<p>多层感知器：</p>
+<div class="highlight"><pre><span></span><code>Test loss: 0.08958661408673184
+Test accuracy: 0.9821
+</code></pre></div>
+<p>和跑5次没有区别了。</p>
+<p>CNN的看了一下个人PC CPU基本上跑满了，然后GPU没怎么用，tensorflow决定换成tensorflow-gpu 【PS：注意之前你用pip安装tensorflow了的，再安装个tensorflow-gpu即可，原来那个tensorflow包不能删的。】然后再看下。然后发现我这里显卡写着Intel UHD，似乎只有NAVID才能开启gpu，算了。</p>
+<p>CNN神经网络：</p>
+<div class="highlight"><pre><span></span><code>Test loss: 0.028602463609369078
+Test accuracy: 0.992
+</code></pre></div>
+<p>精度提升到了99%，看来CNN多训练几次后续效果还能提升，别小看了这1%的提升啊！</p>
+<h3 id="_17">保存模型</h3>
+<p>一次训练有点费时了，那么如何保存训练好的模型呢？这个问题在keras文档FAQ里面有，算是很经典的一个问题了。</p>
+<div class="highlight"><pre><span></span><code>model.save('my_model.h5')
+</code></pre></div>
+<p>保存的数据有：</p>
+<ul>
+<li>模型的结构，方便重新创造模型</li>
+<li>模型训练得到的权重数据</li>
+<li>训练损失和优化器配置</li>
+<li>优化器状态，允许继续上一次训练</li>
+</ul>
+<p>下次使用模型如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
+<span class="k">if</span> <span class="n">K</span><span class="o">.</span><span class="n">image_data_format</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'channels_first'</span><span class="p">:</span>
+    <span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+    <span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>from keras.models import load_model
+model = load_model('cnn_for_mnist_model.h5')
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>score = model.evaluate(test_images, test_labels, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.028602463609369078
+Test accuracy: 0.992
+</code></pre></div>
+<h1 id="_18">第三谈</h1>
+<p>在上一文机器学习第二谈中，我们算是搭建了一个简单的神经网络，初步了解了一下大体情况。本文主要紧跟着对相关内容进行更细致的讨论。</p>
+<h2 id="relu">relu激活函数</h2>
+<p>relu激活函数具体的数学运算公式很简单，就是：</p>
+<div class="highlight"><pre><span></span><code>z = np.maximum(z, 0)
+</code></pre></div>
+<p>上面运算就是对z张量进行了relu运算了，按元素的，如果元素值大于0则为原元素的值，否则为0。</p>
+<h2 id="broadcasting">广播(broadcasting)</h2>
+<p>广播一种操作，shape较小的张量和shape较大的张量进行点对点运算时，需要对shape较小的张量进行广播操作，使其在运算上shape兼容。</p>
+<p>广播具体操作规则是：</p>
+<ul>
+<li>shape较小的张量添加新的维度是的两个张量维度数相同</li>
+<li>shape较小的张量在新的维度中的数据是重复的，相当于没有原维度的数据，即： y[1,j] = y[2,j] = y[3,j] =... y[j]</li>
+</ul>
+<h2 id="_19">张量点积</h2>
+<p>矩阵乘法也就是这里的张量点积学过线性代数的对这个概念还是很清楚了，不过到更高的维度的张量的点积情况似乎有点复杂了。这里我们需要把张量点积的shape变化弄清楚，后面可能会有用的，具体实际张量运算可以交给函数去做。
+</p>
+<div class="math">$$
+x \cdot y = z
+$$</div>
+<p>
+x shape (a, b) y shape (b,c) 输出 z的 shape(a, c) </p>
+<p>高维的情况如下：</p>
+<p>(a, b, c ,d) · (d,) -&gt; (a,b,c)</p>
+<p>(a, b, c ,d) · (d, e) -&gt; (a,b,c, e)</p>
+<h2 id="_20">张量变形</h2>
+<p>ndarray可以直接调用reshape方法来进行张量变形操作，变形后元素总个数应该不变，也就是各个维度容量乘积数不变。</p>
+<h2 id="_21">张量的导数</h2>
+<p>张量的导数叫做梯度。</p>
+<h2 id="sgd">随机梯度下降(SGD)</h2>
+<p>小批量SGD过程如下：</p>
+<ol>
+<li>抽取训练样本x和对应目标y组成数据批量</li>
+<li>在x上运行网络，得到预测值y_pred</li>
+<li>计算网络在这批数据上的损失，用于衡量y_pred和y之间的距离</li>
+<li>计算损失相对于网络参数的梯度</li>
+<li>将参数沿着梯度的反方向移动一点 W -= step * gradient ，从而使这批数据上的损失减小一点。这里的step即步长也叫学习率。</li>
+</ol>
+<p>目前实践中的优化器optimizer都采用的是随机梯度下降，不同的是各自进行了某些优化，这些SGD变体有：带动量的SGD，Adagrad，RMSProp等。</p>
+<h2 id="_22">二分类问题</h2>
+<p>imdb电影评论二分类问题，输出评论文字，然后得出评论积极还是消极。</p>
+<h3 id="_23">准备数据</h3>
+<p>imdb电影评论的数据，其内部建立了一个字典索引，某个整数对应某个单词。</p>
+<p>具体某一个评论是一个整数序列，下面有两种方法将这个整数序列张量化：</p>
+<ol>
+<li>填充或截取，使得每个整数序列具有相同的长度，然后神经网络第一层必须是 Embedding 层。</li>
+<li>对列表进行one-hot编码，比如说[3,5]在长度10的情况下编码为 [0,0,1,0,1,0,0,0,0,0] ，然后第一层使用Dense层，这个前面提到过了。</li>
+</ol>
+<h3 id="_24">验证集</h3>
+<p>在model.fit 里面你可以通过 <code>validation_data</code> 参数来指定验证集，验证集和训练模型无关，是一个epoch之后来运算验证当前模型的效果，可以及时发现模型出现过拟合问题或者其他问题，从而决定是否终止训练模型。</p>
+<p>你可以从训练集里面切一部分下来作为训练集，也可以直接使用测试集作为验证集【这里简单起见就直接用测试集做了验证集，正式的做法叫做留出验证集法，是应该操作如下：训练数据里面一部分作为训练集，剩下来的一部分作为验证集，然后用训练集训练，验证集评估当前模型的好坏。模型参数调节好训练好之后，记得最后用整个训练集从头训练一次，最后用另外的测试集数据测试下模型的实际效果】。</p>
+<div class="highlight"><pre><span></span><code>from keras.datasets import imdb
+import numpy as np
+(train_data, train_labels),(test_data, test_labels) = imdb.load_data(num_words=10000)
+y_train = np.asarray(train_labels).astype('float32')
+y_test = np.asarray(test_labels).astype('float32')
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>word_index = imdb.get_word_index()
+reversed_word_index = dict([value,key] for key,value in word_index.items())
+decoded_review = ' '.join([reversed_word_index.get(i-3, '?') for i in train_data[0]])
+decoded_review
+</code></pre></div>
+<p>这里采用的是one-hot编码，值得注意的是一句话如果有几个重复的单词，将是被忽略的，第一种方案填充截取方案会保留词语顺序，这个在自然语言处理中是很重要的一个因素。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">verctorize_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sequences</span><span class="p">),</span> <span class="n">dimension</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sequences</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>x_train = verctorize_sequences(train_data)
+x_test = verctorize_sequences(test_data)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>from keras.models import Sequential
+from keras.layers import Dense,Dropout
+from keras.optimizers import RMSprop
+model = Sequential()
+model.add(Dense(16, activation='relu', input_shape=(10000,)))
+model.add(Dense(16, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+model.summary()
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>history = model.fit(x_train, y_train, epochs=4, batch_size=512, validation_data=(x_test, y_test))
+</code></pre></div>
+<h3 id="history">history作图</h3>
+<p>keras出来的history并没提供作图函数，下面简单整理了一下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">plot_history_loss</span><span class="p">(</span><span class="n">history</span><span class="p">):</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'acc'</span><span class="p">]</span>
+    <span class="n">val_acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'val_acc'</span><span class="p">]</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'loss'</span><span class="p">]</span>
+    <span class="n">val_loss</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'val_loss'</span><span class="p">]</span>
+
+    <span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># "bo" is for "blue dot"</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="s1">'bo'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Training loss'</span><span class="p">)</span>
+    <span class="c1"># b is for "solid blue line"</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Validation loss'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Training and validation loss'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Epochs'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Loss'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plot_history_loss</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_history_acc</span><span class="p">(</span><span class="n">history</span><span class="p">):</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'acc'</span><span class="p">]</span>
+    <span class="n">val_acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'val_acc'</span><span class="p">]</span>
+
+    <span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="s1">'bo'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Training acc'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Validation acc'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Training and validation accuracy'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Epochs'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Loss'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plot_history_acc</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+</code></pre></div>
+<p>这个基本上ephch超过2,3之后就开始过拟合了，但是精度没有超过90%的。Keras中的example相关看了一下，就算使用CNN提升也不是很明显，倒是用了数据预处理这块使用了二元模型，准确度稍微提升了一点，可见就imdb这个例子，必须加上自然语言处理相关的数据预处理步骤才能更好地提升准确度。</p>
+<h3 id="_25">总结</h3>
+<ol>
+<li>使用验证集和绘图能够很好地观察过拟合现象，这个不能省，最后测试集环节省了验证集也不要省。</li>
+<li>二分类问题最后一层激活函数推荐 sigmoid，损失函数推荐 binary_crossentorpy</li>
+<li>relu激活的Dense层堆叠，可以解决很多问题。</li>
+<li>无论问题是什么，rmsprop优化器通常都是一个好的选择。</li>
+</ol>
+<h2 id="_26">多分类问题</h2>
+<p>将某个数据点划分为某一个类别，但是有多个分类的问题是单标签多分类问题；如果某个数据点可以划分为多个分类，则为多标签多分类问题。</p>
+<p>多分类问题在处理上和二分类问题很类似，除了一些细节上的差异：</p>
+<ol>
+<li>标签数据张量化可以使用 <code>to_categorical</code> 来进行one-hot编码，然后损失函数需要选择 <code>categorical_crossentropy</code> 。或者标签数据直接作为整数标签转成ndarray对象送入，这时需要选择损失函数 <code>sparse_categorical_crossentropy</code> ，这两者只是接口差异，内部算法一样的。</li>
+<li>多分类问题神经网络最后一层应该是对应N个分类的N个units的Dense层。</li>
+<li>多分类问题神经网络应该避免使用太小的中间层，以免出现信息瓶颈。</li>
+</ol>
+<h2 id="_27">回归问题</h2>
+<p>回归问题预测是连续的值而不是离散的标签。</p>
+<h3 id="_28">取值范围差异很大的数据</h3>
+<p>取值范围差异很大的数据送入神经网络需要先进行标准化处理。这里指的标准化是正态分布那边的概念，也就是计算每个特征值的z-score标准分。即 每个特征值减去本特征的平均值然后除以本特征的标准差。</p>
+<div class="highlight"><pre><span></span><code>mean = train_data.mean(axis=0)
+</code></pre></div>
+<p>这是计算维度0的均值，或者说是计算每个特征列的均值。减去操作如下：</p>
+<div class="highlight"><pre><span></span><code>train_data -= mean
+</code></pre></div>
+<p>这里往细上将还进行了mean的广播操作，所以才能按照元素点对点的执行了减法操作。</p>
+<p>这是计算每个特征列的标准差：</p>
+<div class="highlight"><pre><span></span><code>std = train_data.std(axis=0)
+</code></pre></div>
+<p><strong>注意：</strong> 用于测试数据标准化的均值和标准差都是训练数据上的。在工作流程上，你不能从测试数据上计算得到任何结果。</p>
+<h3 id="k">K折验证</h3>
+<p>如果可用数据较少，可以使用K折验证来可靠地评估模型。</p>
+<p>K折验证是将验证数据分成K分，重复K次，每次选取一个作为测试集，其他作为训练集。模型的最终验证分数等于K个验证分数的均值。</p>
+<h3 id="_29">总结</h3>
+<ol>
+<li>回归问题神经网络最后一层没有激活函数，可以返回任意范围内的值。</li>
+<li>回归问题常用损失函数：mse损失函数。MSE（mean squared error） 均方误差损失函数。</li>
+<li>回归问题监控指标：平均绝对误差。MAS （mean absolute error）是预测值和目标值之差的绝对值。</li>
+<li>如果可用的训练数据较少，最好使用隐藏层较少的小型网络，避免严重的过拟合</li>
+</ol>
+<h1 id="_30">第四谈</h1>
+<p>在前面第三谈中谈论的典型的二分类问题，多分类问题和回归问题在机器学习中都属于监督学习。此外还有无监督学习，自监督学习和强化学习。</p>
+<h3 id="_31">无监督学习</h3>
+<p>无监督学习是数据分析的必备技能，在解决监督学习问题之前，为了更好地了解数据集，它通常是一个必要步骤。</p>
+<p>降维 聚类 是常见的无监督学习方法。</p>
+<h3 id="_32">自监督学习</h3>
+<p>自编码器 (autoencoder) 是有名的自监督学习例子。</p>
+<h3 id="_33">强化学习</h3>
+<p>智能体接受环境的信息，为了某种奖励最大化而学习选择行为。</p>
+<h2 id="_34">机器学习通用工作流程</h2>
+<h3 id="_35">定义问题，收集数据集</h3>
+<ul>
+<li>你的输入数据是什么？你要预测什么？</li>
+<li>你面对的是什么类型的问题？是二分类问题还是多分类问题等等。</li>
+</ul>
+<h3 id="_36">选择衡量成功的指标</h3>
+<p>模型要优化什么，它应该直接和你的业务目标相关。</p>
+<h3 id="_37">确定评估方法</h3>
+<ul>
+<li>留出验证集 数据量很大的时候采用 
+  具体操作就是训练数据里面一部分作为训练集，剩下来的一部分作为验证集，然后用训练集训练，验证集评估当前模型的好坏。模型参数调节好训练好之后，记得最后用整个训练集从头训练一次，最后用另外的测试集数据测试下模型的实际效果。</li>
+<li>K折交叉验证</li>
+<li>重复的K折验证</li>
+</ul>
+<h3 id="_38">准备数据</h3>
+<h4 id="_39">数据张量化</h4>
+<p>神经网络的所有输入和输出目标都必须是浮点数张量（某些情况下可以是整数张量）。无论面对的是声音，文本，图像还是视频，都必须先将其转换成为张量。</p>
+<h4 id="_40">数据标准化</h4>
+<p>之前我们看到的数据标准化情况有：</p>
+<ul>
+<li>图像0-255数据整除缩减到 0-1 数据区间</li>
+<li>如果是多个特征的数据，那么推荐如前面提及的进行z-score的标准化处理</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">mean</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">-=</span> <span class="n">mean</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">/=</span> <span class="n">std</span>
+</code></pre></div>
+<h4 id="_41">处理缺失值</h4>
+<p>对于神经网络来说，将缺失值设置为 <code>0</code> 是安全的。</p>
+<h4 id="_42">特征工程</h4>
+<p>比如自然语言处理，根据自然语言处理学到的知识，选择二元模型对输入数据进行再处理。</p>
+<ul>
+<li>良好的特征工程仍然可以让你用更少的资源更优雅地解决问题</li>
+<li>良好的特征可以让你用更少的数据解决问题</li>
+</ul>
+<h3 id="_43">开发比基准更好的模型</h3>
+<p>简单来说就是先随便开发一个小模型，要求不要太高，但至少要比随机乱猜准确率要高点的模型。</p>
+<h3 id="_44">扩大模型规模，开发过拟合模型</h3>
+<p>一般是：</p>
+<ul>
+<li>添加更多的层</li>
+<li>让每一层变得更大</li>
+<li>训练更多次数</li>
+</ul>
+<p>要始终监控训练损失和验证损失，如果你发现模型随着训练次数增加在验证数据上性能下降了，那么就出现了过拟合。</p>
+<h3 id="_45">模型正则化与调节超参数</h3>
+<p>这一步是最费时间的：你将不断调节模型，训练，验证，再调节模型... 。下面是一些你可能尝试的手段</p>
+<h4 id="dropout">添加Dropout层</h4>
+<p>Dropout层是深度学习之父Hinton和他的学生首次提出来的，它的原理很简单：对某一层使用dropout即该层在训练的时候会随机舍弃一些输出特征（也就是值变为0）。dropout比率是被设为0的特征所占的比例，一般设0.2~0.5之间。</p>
+<p>添加Dropout层是最有效也最常用的正则化方法——正则化指降低过拟合。</p>
+<h4 id="_46">尝试增加或者减少层</h4>
+<p>一般实践中开始会选择较少的层和节点数，然后逐渐增加之，直到这种增加对验证损失影响变得很小。</p>
+<h4 id="l1-l2">尝试L1 L2正则化</h4>
+<p>L1正则化和L2正则化都属于权重正则化，这是一种降低过拟合的方法，强制让模型权重只能取较小的值。</p>
+<h4 id="_47">尝试不同的超参数</h4>
+<p>如每层的单元个数，优化器的学习率等。</p>
+<h1 id="_48">第五谈</h1>
+<p>sklearn里面有很多数据预处理支持函数，下面主要重点理解这些数据预处理技术。</p>
+<p>本文介绍的内容，以下面代码形式展示出来：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">sk_normalize</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">binarize</span> <span class="k">as</span> <span class="n">sk_binarize</span>
+
+
+<span class="k">def</span> <span class="nf">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">old_df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    输入ndarray值，然后根据给的老df的column列名来输出一个新的df</span>
+<span class="sd">    :param df_value:</span>
+<span class="sd">    :param old_df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">old_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_df</span>
+
+<span class="sd">"""</span>
+
+<span class="sd">- scale 缩放操作 (缩放器 df) 返回df</span>
+<span class="sd">- inverse_scale 反向缩放操作 (缩放器 df) 返回df</span>
+<span class="sd">- normalize(df, norm='l1') 归一化</span>
+<span class="sd">- binarize 二值化 阈值默认为0</span>
+
+<span class="sd">- encode 编码</span>
+<span class="sd">- inverse_encode 反编码 </span>
+
+<span class="sd">### 缩放器</span>
+<span class="sd">- z-score标准化 get_standard_scaler</span>
+<span class="sd">- minmax缩放 get_minmax_scaler</span>
+
+
+<span class="sd">"""</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
+
+<span class="sd">"""</span>
+
+<span class="sd">one hot encoding</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
+
+<span class="sd">"""</span>
+
+<span class="sd">LabelEncoder  标记编码</span>
+<span class="sd">"""</span>
+
+
+<span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="n">scaler</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    缩放操作</span>
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">inverse_scale</span><span class="p">(</span><span class="n">scaler</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    反向缩放操作 - 反向缩放的有：</span>
+
+<span class="sd">    - minmax</span>
+<span class="sd">    - stand</span>
+
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">'l1'</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    归一化 norm选项有 l1 范数 和 l2 范数 选项</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :param norm:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_normalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_normalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    二值化 给定阈值默认为0, 然后根据阈值来返回0和1</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :param threshold:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_binarize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">combine_df</span><span class="p">(</span><span class="n">df_value</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_df</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">sk_binarize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">fit_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    编码</span>
+<span class="sd">    :param encoder:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">fit_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">fit_data</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">LabelEncoder</span><span class="p">):</span>
+        <span class="n">df_value</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">inverse_encode</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    反向编码</span>
+
+<span class="sd">    可以反向编码的有：</span>
+<span class="sd">    - onehot</span>
+<span class="sd">    - label</span>
+
+<span class="sd">    :param encoder:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+
+    <span class="n">df_value</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_value</span>
+
+
+<span class="k">def</span> <span class="nf">get_standard_scaler</span><span class="p">():</span>
+    <span class="sd">"""</span>
+<span class="sd">    均值移除 或者 z-score标准化</span>
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">get_minmax_scaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="sd">"""</span>
+<span class="sd">    范围缩放，同样缩放到0-1，所以也叫做 0-1缩放</span>
+<span class="sd">    :param scaler:</span>
+<span class="sd">    :param df:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    """</span>
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="n">feature_range</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scaler</span>
+</code></pre></div>
+<p>代码不是很具实用性，但大概也说明了sklearn对于数据预处理这块的相关支持情况。</p>
+<h2 id="_49">缩放操作</h2>
+<h3 id="_50">均值移除</h3>
+<p>我更喜欢称之为z-score缩放，因为学习过统计学的就知道z-score标准分的含义，大体也知道这个缩放操作在做些什么事情。简单来说就是讲你的张量数据沿着各个特征维度，均值都为0，标准差都为1。</p>
+<p>sklearn提供了 <code>StandardScaler</code> ，然后你利用它进行fit和tranform操作即可，你还可以继续利用之前的缩放器反向回滚 <code>inverse_transform</code>。</p>
+<h3 id="minmax">minmax缩放</h3>
+<p>就是控制你的张量数据的最小值和最大值范围。</p>
+<p>sklearn提供了 <code>MinMaxScaler</code> 缩放器类，类似上面的你可以进行fit和tranform操作，同样可以利用之前的缩放器进行回滚操作。</p>
+<h2 id="_51">归一化</h2>
+<p>sklearn提供了normalize函数来支持你的张量数据的归一化操作，这是一个不可逆的操作。具体就是让特征维度的数据绝对值之和为1。</p>
+<h2 id="_52">二值化</h2>
+<p>就是给定一个阈值，你的张量数据转变成为0 1 值。这个估计在神经网络中有用。</p>
+<h2 id="onehot">onehot编码</h2>
+<p>onehot编码可以算是神经网络里面的基本入门知识了，简单来说就是将 数值或者字符 编码为空间扩展的  0 1 数值特征向量。 具体sklearn提供了 <code>OneHotEncoder</code> 来进行相关操作。</p>
+<p>比如说 </p>
+<div class="highlight"><pre><span></span><code>[
+    ['male', 10],
+    ['female',5],
+    ['male', 1]
+]
+</code></pre></div>
+<p>其中性别特征列有值 male female 两个值 这一列需要两个bit位 。
+而后面的数字列有 1 5 10 三个值   这个特征列需要三个bit位 。
+上面的例子一共需要 5 个bit位。</p>
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">'male'</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">'female'</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">'male'</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">get_onehot_encoder</span><span class="p">()</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">([[</span><span class="s1">'female'</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+</code></pre></div>
+<p>上面的例子中 <code>1 0</code> 表示 female <code>0 0 1</code> 表示 10 。</p>
+<h2 id="label">label编码</h2>
+<p>label编码的含义也是很直接简单的，就是给定一个字典值，然后给这些字典里面的单词赋值0,2,3...这样你的张量数据就变成了数值型了。</p>
+<p>具体sklearn提供了 <code>LabelEncoder</code> 来进行相关操作。</p>
+<h2 id="_53">计算误差</h2>
+<h3 id="mae">平均绝对误差MAE</h3>
+<p>数据集所有数据点的绝对误差的平均值</p>
+<div class="highlight"><pre><span></span><code>import sklearn.metrics as sm
+sm.mean_absolute_error(test_data, test_pred)
+</code></pre></div>
+<h3 id="mse">均方误差MSE</h3>
+<p>数据集所有数据点的误差的平方的平均值</p>
+<div class="highlight"><pre><span></span><code>sm.mean_squared_error(test_data, test_pred)
+</code></pre></div>
+<h3 id="rmse">均方根误差RMSE</h3>
+<p>均方误差开个根号，为了更好地描述模型的误差</p>
+<h3 id="_54">中位数绝对误差</h3>
+<p>数据集所有数据点的误差的中位数</p>
+<div class="highlight"><pre><span></span><code>sm.median_absolute_error(test_data, test_pred)
+</code></pre></div>
+<h3 id="_55">解释方差分</h3>
+<p>这个分数用来衡量我们的模型对于数据集波动的解释能力</p>
+<div class="highlight"><pre><span></span><code>sm.explained_variance_score(test_data, test_pred)
+</code></pre></div>
+<h3 id="r-r2-score">R方得分 R2 score</h3>
+<p>用来衡量模型对于未知样本的预测效果。</p>
+<div class="highlight"><pre><span></span><code>sm.r2_score(test_data, test_pred)
+</code></pre></div>
+<h2 id="_56">缩放和归一化的再讨论</h2>
+<p>关于物品的特征，可能有些算法对特征的数值差异容忍度很高，但一般来说一般的算法都是要求我们对特征值进行缩放处理的。尤其是那些基于特征值计算距离的算法，则是必须要对各个不同的特征值进行缩放，才能进入后面的算法处理的。某些情况可能可以通过通过二值化就能解决，剩下的问题则需要你对特征值进行缩放，z-score缩放和minmax缩放。</p>
+<p>这两个缩放手段其实都是可以的，如果时间充裕，两种缩放手段和算法评估工作都应该做的。</p>
+<p>这里顺便提一下归一化手段，归一化normalize默认是使用的l2范数，就是横向【是的其默认axis=1，不是特征维axis=0】所有的值的平方和等于1，而l1范数是横向所有的值【绝对值？】相加等于1。</p>
+<p>具体l1范数是否是绝对值这不是重点，归一化并不属于缩放范畴，其实严格意义上讲属于算法里面的一部分数据处理了。比如说频数列表 <code>[2,3,0,0]</code> 利用l1归一化，我们就能得到 <code>array([[0.4, 0.6, 0. , 0. ]])</code> 这里的0.4 就可以看做 2 发生的概率是0.4 ，然后l1范数正好满足 所有的概率的和等于1。具体某些应用场景是需要这个计算的。</p>
+<h1 id="_57">第六谈</h1>
+<p>前面的学习讨论从keras到numpy，从验证测试到各个算法，大概讨论是很零零碎碎的。甚至会让人产生机器学习内容太多了，太难了的感觉。前面的那些基础知识很多都是可以后面再慢慢补充学习的，说到底机器学习应用属于工程领域，工程上的思维更多的偏向用，偏向从顶向下的学习方法——即不是从底向上的，学习基础知识一步步上的，而是先跟着已经成熟的项目来学习，来看看别人是怎样做的，最好马上手头上就能编写出一个针对某个问题的某个粗糙的解决方案，然后再针对性的学习和一步步地优化。</p>
+<p>在之前的学习中应该说那个数据处理流如何去做的思考还是藏在脑子里面的，而慢慢接触到sklearn项目的pipeline概念，我们就会发现这个问题sklearn不说很完美地解决了，至少已经是部分解决了。并且在理解这个pipeline概念之后，我发现我的视角似乎更加的宏观和开阔了，甚至之前似乎分裂了的神经网络领域知识也融合进来了。下面是重点理解sklearn的Pipeline这个概念，然后试着在自己的机器学习项目中加以实践。</p>
+<p>sklearn的pipeline是进行机器学习数据处理流的很重要的一个工具，下面的这个图很重要，大概说明了pipeline的主要工作原理。</p>
+<p>【pipeline工作流程图】</p>
+<p>本图片摘自 <a href="http://frankchen.xyz/2018/04/08/pipeline-in-machine-learning/">这篇文章</a></p>
+<p><img alt="" src="http://frankchen.xyz/images/15231783974167.jpg"/></p>
+<p>其中pipeline前面的叫做transformer，最后一个叫做estimator。</p>
+<h3 id="transformer">transformer</h3>
+<p>transformer必须要有fit和tranform两个方法，当你调用 <code>pipeline.fit</code> 的时候，你的dataset (X, y) --&gt; 会逐个通过前面所有的transformer，其中fit方法是进行一些数据的内部处理，一般会返回self，然后transform方法会返回输出数据集 X ，一般你自定义的transformer都应该继承 <code>TransformerMixin</code> 这个类，这样你只需要定义fit和transform方法就有 <code>fit_transform</code> 方法了。</p>
+<p>下面是一个什么都没做的自定义的transformer的大概样子。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">TransformerMixin</span>
+<span class="k">class</span> <span class="nc">MyTransformer</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    定义自己的Transformer</span>
+
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        :param X:</span>
+<span class="sd">        :param y:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        :param X:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">X</span>
+</code></pre></div>
+<p>当你调用 <code>pipeline.predict</code> 方法，你的输入X同样也会经过前面所有的transformer的transform方法处理【没有调用fit方法了，因为你之前已经调用pipeline.fit了，然后你的模型或者说你的pipeline中的各个transformer已经处理过了，换句话说，你的pipeline中的各个模型都已经训练好了】，然后再调用的是你最后哪个 estimator的 <code>predict</code> 方法再得到结果。</p>
+<p>也就是说，我们完全可以将pipeline当做一个更大型的组合模型，现在在这个综合模型下，你输入数据集，训练，然后predict，而数据集的minmax scale或者各个标签标记等等都会自动处理，不需要你再这样考虑问题了：训练集已经scale了，我等下要输入一个实际的数据来使用模型，是不是还要先把数据scale一下，然后输出的结果我该转换成什么标记之类的问题了。</p>
+<p>sklearn真的是一个很Great的项目，如果你找到有些老旧教材来学习机器学习的话，你会发现机器学习中存在着太多的通用处理模式，你会考虑该怎么形成一种数据处理流模式，而sklearn的pipeline可以说初步解决这个问题了。在使用pipeline，基于pipeline之上构建你的机器学习项目，你完全可以把最终你搭建起来的某个pipeline当做某个综合模型，最后就剩下很简单的这样一个问题：选择参数，输入数据，训练模型，利用模型进行预测，评估模型。</p>
+<p>而关于选择参数，sklearn还基于pipeline提出了GridSearchCV网格搜索的概念，我只能说这是sklearn大成式的豪迈宣言了。通过GridSearchCV，在训练pipeline模型的时候，一些参数结合评估模型是可以自动完成优化工作的。</p>
+<p>这里还顺便提一下神经网络框架keras和sklearn的关系，正如机器学习是包含神经网络这门学科一样，sklearn模块在使用上是可以包含keras的，keras只是作为神经网络模型算法里面最核心的一部分，至少从输入数据处理流向上应该是这样的，这方面还要继续尝试——多个神经模型，和传统机器学习算法和其他数据处理等等最终形成一个大型的综合模型。</p>
+<h3 id="estimator">estimator</h3>
+<p>estimator只需要fit方法就可以了，这个fit方法的任务就是通过某种学习算法——从简单的线性回归到神经网络等等，训练好模型。然后其还应该提供 predict方法，这也是学习算法的本质要求，来利用训练好的这个模型。</p>
+<h3 id="_58">特征的联合</h3>
+<p>前面提到sklearn的pipeline相当于一个综合模型了，在进一步使用 <code>FeatureUnion</code> 之后可以让你对特征的操作和添加新特征更加的灵活，FeatureUnion类其实际上对应于一个 transformer，你可以提取然后组合出你想要的那几个特征。请读者多看看 kaggle 的 <a href="https://www.kaggle.com/baghern/a-deep-dive-into-sklearn-pipelines/notebook">这个小项目</a> ，个人觉得这种写法风格非常的优雅。</p>
+<p>针对每个特征进行了提取和处理工作，然后特征联合。此外FeatureUnion 哪里你当然还可以加上额外的特征，进行额外的运算之后得到的新的特征。</p>
+<p>还有这个小项目有一点很值得我们注意，也是这篇文章提醒了我，sklearn的train_test_split 分割pandas的DataFrame之后返回也是pandas的DataFrame或者Series【labels】对象。这种和pandas的无缝对接的写法也是很好的。</p>
+<p>我在构建pipeline的时候还参考了 <a href="http://zacstewart.com/2014/08/05/pipelines-of-featureunions-of-pipelines.html">这篇文章</a> 来更连贯地构建了一个综合模型，大概如下所示：</p>
+<div class="highlight"><pre><span></span><code>  <span class="n">text</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">TextSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'processed'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'tfidf'</span><span class="p">,</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">stop_words</span><span class="o">=</span><span class="s1">'english'</span><span class="p">))</span>
+    <span class="p">])</span>
+
+    <span class="n">length</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'length'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'words'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+    <span class="n">words_not_stopword</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'words_not_stopword'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+    <span class="n">avg_word_length</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'avg_word_length'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">])</span>
+    <span class="n">commas</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'selector'</span><span class="p">,</span> <span class="n">NumberSelector</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'commas'</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'standard'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+    <span class="n">feats</span> <span class="o">=</span> <span class="n">FeatureUnion</span><span class="p">([(</span><span class="s1">'text'</span><span class="p">,</span> <span class="n">text</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'length'</span><span class="p">,</span> <span class="n">length</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'words'</span><span class="p">,</span> <span class="n">words</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'words_not_stopword'</span><span class="p">,</span> <span class="n">words_not_stopword</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'avg_word_length'</span><span class="p">,</span> <span class="n">avg_word_length</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'commas'</span><span class="p">,</span> <span class="n">commas</span><span class="p">)])</span>
+
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">'features'</span><span class="p">,</span> <span class="n">feats</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">'classifier'</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+    <span class="p">])</span>
+</code></pre></div>
+<p>然后pipeline就好像一个大的综合模型一样，fit predict 等等之类的。</p>
+<h3 id="gridsearchcv">GridSearchCV</h3>
+<p>网格搜索用于调参，具体pipeline的参数名字是 :</p>
+<div class="highlight"><pre><span></span><code><span class="sa">f</span><span class="s1">'</span><span class="si">{transformer_or_estimator_name}</span><span class="s1">__</span><span class="si">{parameter_name}</span><span class="s1">'</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+
+<span class="n">hyperparameters</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">'features__text__tfidf__max_df'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">],</span>
+                    <span class="s1">'features__text__tfidf__ngram_range'</span><span class="p">:</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)],</span>
+                   <span class="s1">'classifier__max_depth'</span><span class="p">:</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">],</span>
+                    <span class="s1">'classifier__min_samples_leaf'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+                  <span class="p">}</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">hyperparameters</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Fit and tune model</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</code></pre></div>
+<p>上面这个例子名字有点长，因为要往下找，features --&gt; text --&gt; tfidf --&gt; 实际传进去的参数是 max_df</p>
+<p>这里运算稍微有点耗时，如果程序化的话可以考虑将这些最佳参数最后保存起来：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">joblib</span>
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s1">'filename.pkl'</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p>下次直接使用最佳clf是：</p>
+<div class="highlight"><pre><span></span><code><span class="n">reclf</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'filename.pkl'</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">reclf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</code></pre></div>
+<p>还有种保存方法，就是直接保存clf，这更加直观，估计兼容性也更好一点，只是模型文件稍微大了些：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">joblib</span>
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="s1">'filename.pkl'</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">reclf</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'filename.pkl'</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="_59">机器学习的一般过程整理</h3>
+<p>下面将机器学习的一般过程在Pipeline的基础上再整理一下：</p>
+<ul>
+<li>从各个数据来源中获取数据并汇总，这里pandas的io工具非常好用，没必要拒绝使用它。</li>
+<li>基于pandas的普遍性数据预处理【这个就要根据实际情况来了】</li>
+<li>分割训练集和测试集</li>
+<li>针对训练集编写Pipeline pipeline的过程大致涉及到目标特征的提取或者新特征的计算和特征融合，缩放，特征选择，直到最终算法的选择。</li>
+<li>pipeline.fit  训练模型</li>
+<li>pipeline.predict 使用模型</li>
+<li>K折基于训练数据的验证得分 </li>
+</ul>
+<div class="highlight"><pre><span></span><code>cross_val_score(pipeline, train_data, train_labels, cv=4)
+</code></pre></div>
+<ul>
+<li>pipeline.test 基于测试集的测试</li>
+<li>上面讨论的模型如何保存和再利用</li>
+<li>绘图表现也很重要，虽然这个工作可以往后面放一放。</li>
+<li>基于GridSearchCV的参数调优</li>
+<li>更多更多手段调优</li>
+</ul>
+<h1 id="_60">参考资料</h1>
+<ol>
+<li>机器学习实战 Peter Harrington 著 李锐 李鹏等译</li>
+<li><a href="http://ml.apachecn.org/mlia/">机器学习实战线上教程</a></li>
+<li>python深度学习 弗朗索瓦·肖奈</li>
+<li><a href="https://github.com/exacity/deeplearningbook-chinese">deep learning 中文版</a></li>
+<li>机器学习 周志华著</li>
+<li><a href="https://www.cnblogs.com/subconscious/p/5058741.html">这个文章介绍神经网络写的很好</a></li>
+<li><a href="https://blog.csdn.net/weixin_40040404/article/details/81291799">这篇文章不错</a></li>
+<li>python机器学习经典案例 Prateek Joshi 著  陶俊杰 陈小莉译</li>
+</ol>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+            
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-03-25T05:09:18.838559+08:00">2020年 3月 25日 </time>
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>

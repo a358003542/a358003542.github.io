@@ -132,6 +132,315 @@
                             <article>
 
                                 <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/mindmaptree.html">mindmaptree
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:05:45.947614+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>如下思维导图，我们如何设计一种数据格式来便捷的进行后续csv或者json操作？</p>
+<p><img alt="img" src="https://a358003542.github.io/images/arithmetic/mindmaptree.png"/></p>
+<p>然后其对应的csv格式如下：</p>
+<div class="highlight"><pre><span></span><code>奴隶社会,非洲,古埃及文明,金字塔
+,亚洲,两河流域文明,汉谟拉比法典
+,,古印度,种姓制度
+,,,佛教的创立
+,欧洲,希腊,希腊城邦
+,,,雅典民主
+,,罗马,城邦
+,,,帝国的征服与扩展
+,,希腊罗马古典文化,建筑艺术
+,,,公历
+</code></pre></div>
+<p>这个问题实际上和前面谈论的二叉搜索树有点类似，只是那个问题的变种罢了，同样在这种树形结构下不可避免要用到递归思维。下面是一个很粗糙版本的实现，其中最核心的一个点就是我这个Node只做好自己的分内事情就行了，然后放到整体的支持功能递归展开即可。</p>
+<h2 id="_1">基本类的设计</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MindMapTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent …</span></code></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/meng-te-qia-luo-mo-ni.html">蒙特卡罗模拟
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:05:06.472406+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">前言</h2>
+<p>蒙特卡罗模拟的蒙特卡罗是一个赌运气游戏的名字，而蒙特卡罗模拟在现代计算机发展到今天的背景下，这种思想已经越来越重要了。简单来说其试图将一个问题转成某种随机过程，然后用计算机来模拟这个随机过程从而得到解答。因为自然界存在着大量的问题，其本身就暗含随机性的，对于这样的过程对应建立基于随机性的模型是很直观的，但还存在着某些问题，比如计算 <span class="math">\(\pi\)</span> 值，和随机性不是很相关的，但通过某个随机过程，也能计算出 <span class="math">\(\pi\)</span> 值，这就是典型的蒙特卡罗模拟，或者叫做蒙特卡罗方法。</p>
+<p>比如我们常见的随机游走问题，直接对其建模就是一个蒙特卡罗模拟过程。</p>
+<p>本文除了讨论随机游走和一些随机过程，还会涉及到线性拟合，最小二乘法，线性回归和相关绘图等内容。</p>
+<p>基本的建模代码如下所示，参考了MIT的python编程导论一书：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+
+
+<span class="k">class</span> <span class="nc">Location</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">move …</span></code></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/er-fen-cha-zhao.html">二分查找
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:04:31.601316+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">二分查找</h2>
+<p>二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 <a href="https://github.com/qiwsir/algorithm/blob/master/bin_search.md">这个网页</a> ，其认为python的 <code>index</code> 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 <code>bisect</code> 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。</p>
+<p>关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。</p>
+<p>这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。</p>
+<h2 id="_2">抽象的二分查找思想讨论</h2>
+<p>现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/dong-tai-gui-hua.html">动态规划
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:04:09.938942+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>动态规划算法感觉这个名字取的很唬人，一开始也是类似于贪婪算法，采用分治思想，将某个大问题分解为一些小问题。而贪婪算法对于那些小问题求解局部最优即可，动态规划和朴素解法一样，也是要试着尝试各种组合情况的，所不同的是采用了记忆策略，来将某些类似的子问题一并解决。所以动态规划算法并不如它的名字那样感人，第一，其必须要求子问题有某种类似性；第二，具体也不过是一种记忆策略罢了。</p>
+<p>算法图解的动态规划算法是采用一种网格思路，这对于最长公共子序列问题似乎很适合，而MIT的python编程导论在解决背包问题的时候提出了一种决策树的思路。思考过之后觉得如果某个问题具有很强烈的空间排列组合特性，那么就采用类似解决最长公共子序列问题的网格思路；如果某个问题具有很强烈的时间决策展开性，应该选用决策树。</p>
+<h2 id="_1">背包问题</h2>
+<p>如下构建决策树之后：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">BinaryDecisionTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    二叉决策树</span>
+
+<span class="sd">    决策函数 data</span>
+<span class="sd">    decisions = [('a',True), ('b',False)] 决定了决策树中节点在决策树中的位置</span>
+
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">decisions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="kc">None …</span></code></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/tan-lan-suan-fa.html">贪婪算法
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:03:16.441480+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>任何问题总可以通过暴力穷举算法求解，当然有些问题组合数情况太多了，尤其是某些问题，没有快速算法，即NP完全问题。那么可以试着用一些近似算法来快速找到一个近似解。贪婪算法就是其中的一个近似解。</p>
+<p>贪婪算法并不是某种具体的算法，更像是写算法时的一种思路参考。如果你要解决问题，而该问题可以分解为多个步骤，那么你可以通过寻找每步的局部最优解，来<strong>近似</strong>得到目标问题的全局最优解。（贪婪算法并不保证你得到的解一定是全局最优解，但一般这个解是很靠近全局最优解了。）</p>
+<p>对于一个问题，如果贪婪算法是有效的，那么一般贪婪算法就是解决这个问题最好的算法。</p>
+<h2 id="_1">背包问题</h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">items</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span>
+
+    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if …</span></code></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/er-cha-sou-suo-shu.html">二叉搜索树
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:02:33.198540+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">二叉搜索树</h2>
+<p>本文很大程度上参考了 <a href="https://github.com/nryoung/algorithms">algorithms</a> 项目，在此谢谢作者们了。</p>
+<p>二叉搜索树（Binary Search Tree）大概如下图所示这么个东西:</p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/binary_search_tree.png" title="二叉搜索树"/></p>
+<p>其每一个节点都至多有两个子节点，然后所有的节点都满足以下三个条件</p>
+<ol>
+<li>左节点的值小于它的父节点</li>
+<li>右节点的值大于它的父节点</li>
+<li>所有节点的值均不相等</li>
+</ol>
+<p>二叉搜索树的插入复杂度是 <code>O(log n)</code> ，查找复杂度最好情况 <code>O(log n)</code> ，最坏情况 <code>O(n)</code> 。</p>
+<p>比如上面图片的那个二叉树，假设我们要插入19，那么首先和8比较，大，则右，再和10比较，大则右，再和14比较，大则右，然后空就可以插入了。</p>
+<p>然后假设我们要查找19，那么过程大体也是类似的和8比较，大则右，再和10比较，大则右，再和14比较，大则右，然后相等则找到。我们看到我们的查找过程，涉及到一些比较判断操作等，假设元素两边分的话，那么树中一半的元素都跳过去了。所以利用这个数据结构加速查找和存储数据好处是显而易见的。</p>
+<h2 id="python">二叉搜索树的python实现 …</h2>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/you-xiang-wu-huan-tu.html">有向无环图
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:02:01.395139+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>图论，听起来挺高大上的，嗯，那就是数学家画圈圈和画线线还很有乐趣的地方。</p>
+<p>如果线没有方向，那么叫做无向图，如果线有方向，那么叫做有向图。</p>
+<p>在有向图中，任意一个节点的流向流着流着都流不回自身，那么我们就说这个图为 <strong>有向无环图</strong> ，英文缩写是 DAG，（directied acyclic graph）。</p>
+<p>这东西有什么用？</p>
+<p>一开始我最先接触 DAG 这个术语，是在找工作流软件的时候，一种工作流的通用表示方法就是用 DAG 来表示。为什么？假设你是工作流中的某个节点的员工，你按照某个workflow走下去，最后闭环了，然后你无限循环在某个流程中了，那可真蠢了。</p>
+<p>然后比如说 git 的版本控制，其内部也是用的 有向无环图表示，如果你版本修改修改，又回到某个老版本了，那版本控制也失效了。</p>
+<p>聪明的朋友肯定想到了我们的宇宙时间是不可逆的，也就是说如果用模型来表示宇宙所有的信息数据变动流结构的话，那么一定是有向无环图。</p>
+<h2 id="python">python实现</h2>
+<p>在 <a href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/digraph.py">algorithms项目的这里</a> 有有向图的实现代码，实际存储就是一个字典值，然后再加上了一些辅助方法，其中 key …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/hashfen-tong-cao-zuo.html">hash分桶操作
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:01:24.571347+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<h2 id="_1">简介</h2>
+<p>hashlib的md5算法作为实践级别的算法有一个很大的特点那就是输出的位数长度是固定的，这样很方面进行下一步的输出再分桶操作：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+
+<span class="k">def</span> <span class="nf">md5</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">hashkey</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hashkey</span><span class="p">])</span> <span class="o">%</span> <span class="n">n</span>
+</code></pre></div>
+<p>各个位数相加参考了 <a href="http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Map/hash.html">这个网站</a> ，但具体各个位数相加是否保证了分桶的均匀性，老实说我是不大确切的，如下做了一个简单的测试 …</p>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
+                                        href="https://a358003542.github.io/articles/suan-fa-fu-za-du.html">算法复杂度
+ </a></h1>
+
+                                <section>
+                                    posted in
+                                    <a href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm
+                                    </a>
+                                    <div class="recent-posts-time">
+                                        <time pubdate="pubdate"
+                                              datetime="2020-03-24T19:01:02.862158+08:00">2020年 3月 24日
+                                        </time>
+                                    </div>
+                                </section>
+                                
+<p>一般讨论算法复杂度主要关注的是算法的时间复杂度，而真到了该思考算法的时间复杂度了，那么这时目标算法将应对的是一个输入规模n很大的情况。人们常说的大O表示法将一些细枝末节的东西都省略了的，因为输入规模n很大，还关心那多出来的几步是没有意义的。</p>
+<p>所以我们更多的是专注于算法中的循环部分，而对于循环部分，若循环次数和输入规模无关，则记为O(1) 常数运行时间。</p>
+<p>如果我们遇到了如下的循环：</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div>
+<p>这个循环和输入规模n相关，我们记作 O(n) 线性运行时间。</p>
+<p>假设一个算法里面又有上面提到的O(1) ，又有上面的O(n) ，那么我们应该将O(1) 项去掉：</p>
+<ul>
+<li>如果运行时间是一个多项式的和，那么保留增长速度最快的项，去掉其他各项</li>
+</ul>
+<p>那么上面提到的算法复杂度就可简单记为 O(n) 。</p>
+<p>又假设有个算法，有两个这样的循环：</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in …</span></code></pre></div>
+                            </article>
+
+
+                            <article>
+
+                                <h1 class="page-header"><a
                                         href="https://a358003542.github.io/articles/xuan-ze-pai-xu.html">选择排序
  </a></h1>
 
