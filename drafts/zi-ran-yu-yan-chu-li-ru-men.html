@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="简介 自然语言处理的可能应用领域有： 机器翻译 自动文摘 信息检索 文档分类 问答系统 信息过滤，信息抽取 文字编辑和自动校对 作文自动评分 语音识别 语音合成，text to speech 信息熵 信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。 不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为： $$ H = - p log_2{p} $$ 首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 1 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", others, " />
+
+<meta property="og:title" content="自然语言处理入门 "/>
+<meta property="og:url" content="https://a358003542.github.io/drafts/zi-ran-yu-yan-chu-li-ru-men.html" />
+<meta property="og:description" content="简介 自然语言处理的可能应用领域有： 机器翻译 自动文摘 信息检索 文档分类 问答系统 信息过滤，信息抽取 文字编辑和自动校对 作文自动评分 语音识别 语音合成，text to speech 信息熵 信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。 不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为： $$ H = - p log_2{p} $$ 首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 1 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-03-25T14:54:18.570349+08:00" />
+<meta name="twitter:title" content="自然语言处理入门 ">
+<meta name="twitter:description" content="简介 自然语言处理的可能应用领域有： 机器翻译 自动文摘 信息检索 文档分类 问答系统 信息过滤，信息抽取 文字编辑和自动校对 作文自动评分 语音识别 语音合成，text to speech 信息熵 信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。 不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为： $$ H = - p log_2{p} $$ 首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 1 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit …">
+
+
+    <title>自然语言处理入门  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/drafts/zi-ran-yu-yan-chu-li-ru-men.html"> 自然语言处理入门  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a></li>
+<li><a href="#_2">信息熵</a><ul>
+<li><a href="#_3">信息增益</a></li>
+<li><a href="#_4">联合熵和条件熵</a></li>
+<li><a href="#_5">互信息</a></li>
+<li><a href="#_6">相对熵或者交叉熵</a></li>
+</ul>
+</li>
+<li><a href="#_7">统计语言模型</a><ul>
+<li><a href="#_8">马尔科夫假设</a></li>
+<li><a href="#_9">大数定理</a></li>
+<li><a href="#_10">高阶语言模型</a></li>
+<li><a href="#-">古德-图灵估计</a></li>
+</ul>
+</li>
+<li><a href="#_11">中文分词</a></li>
+<li><a href="#_12">隐马尔科夫模型</a><ul>
+<li><a href="#_13">广义通信模型</a></li>
+<li><a href="#_14">马尔科夫模型</a></li>
+<li><a href="#_15">隐马尔科夫模型</a></li>
+</ul>
+</li>
+<li><a href="#_16">条件随机场</a></li>
+<li><a href="#_17">维特比算法</a></li>
+<li><a href="#_18">参考资料</a></li>
+<li><a href="#_19">脚注</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">简介</h2>
+<p>自然语言处理的可能应用领域有：</p>
+<ul>
+<li>机器翻译</li>
+<li>自动文摘</li>
+<li>信息检索</li>
+<li>文档分类</li>
+<li>问答系统</li>
+<li>信息过滤，信息抽取</li>
+<li>文字编辑和自动校对</li>
+<li>作文自动评分</li>
+<li>语音识别</li>
+<li>语音合成，text to speech</li>
+<li></li>
+</ul>
+<h2 id="_2">信息熵</h2>
+<p>信息熵是个非常让人难懂的概念，尤其是当你在很多领域都接触到信息熵的概念和各种应用的时候，你会发现你根本就没理解信息熵这个概念。比如自然语言处理领域，信息熵有着非常多的应用，然后自然信息传输领域也有很多应用，信息熵的概念基本上是现在信息论的基石吧。</p>
+<p>不管怎么说，我们先死记硬背一下，信息熵的定义，就是一个事物或者一个什么东西吧，在一个系统中出现的几率为p，则这个东西在这个系统中的信息熵为：
+</p>
+<div class="math">$$
+H = - p log_2{p}
+$$</div>
+<p>
+首先从最简单的抛硬币开始吧，对于正面来说出现的几率为1/2，则一次抛硬币你看到正面的信息熵为 0.5，然后反面的信息熵也是0.5 <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 。信息熵的单位是bit，然后信息熵服从可加性（也就是总系统的信息熵是各个子系统的信息熵的加和），所以抛一枚硬币，正面和反面的信息熵总和就是 1 bit。从信息论的角度来说就是用一个字节就可以描述抛一枚硬币的可能信息量了。信息论一开始就是专注于信息传输领域的。</p>
+<p>所以我们又看到这样一个问题，本问题摘自宗庆成统计自然语言处理第二版例2-3：</p>
+<blockquote>
+<p>假设a,b,c,d,e,f 6个字符出现的概率分别是 1/8 1/4 1/8  1/4 1/8 1/8 ，那么传输一个字符的信息熵为？</p>
+</blockquote>
+<p>传输一个字符 a b c d e f只可能有这六种情况，分别信息熵为：</p>
+<p>H = -[1/8log1/8 + 1/4log1/4 + 1/8log1/8 + 1/4log1/4 + 1/8log1/8 + 1/8log1/8] = 2.5 bit</p>
+<p>也就是传输这六个字母需要2.5bit，则给三个bit位就完全够用了，然后具体设计一种信息编码规则即可，在设计编码规则的时候还要考虑具体情况出现的概率问题，这里具体细节就不讨论了。总之信息熵一开始就是干这个用的。</p>
+<p>如果一个事件一定会发生，那么其信息熵等于0，如果一个事件发生的概率为0，其信息熵也等于0。信息熵为0表示这个事件发送给你并没有为你带来额外的信息。就以抛硬币来描述一个事件，则你对硬币一无所知的时候，信息熵=1为最大信息熵的可能，也就是一半一半0.5的情况。</p>
+<p>所以薛定谔的猫在一半生一半的死的情况下打开黑盒子，流出来的信息熵是最大的，或者说流出来的信息量是最多的。</p>
+<h3 id="_3">信息增益</h3>
+<p>信息增益在决策树算法的分类特征选择中很重要，暂时先简单理解为就是引入这个特征分类信息熵增量很大，这样获取这个特征对整个系统确定程度影响最大，或者简单来说就是这个特征好啊，引入之后能够收获更多的信息。</p>
+<h3 id="_4">联合熵和条件熵</h3>
+<p>实际是从概率分布的联合概率和条件概率推出来的概念。而所谓联合概率就是两个事件一起出现的概率；而所谓条件概率就是已知Y已经发生了，X事件发生的概率。
+</p>
+<div class="math">$$
+H(X,Y) = - \sum_{x \epsilon X} \sum_{y \epsilon Y} p(x,y)log(p(x,y))
+$$</div>
+<p>
+XY的联合熵是描述一对随机变量平均所需要的信息量。</p>
+<p>熵的连锁规则：
+</p>
+<div class="math">$$
+H(X_1,X_2 ...) = H(X_1) + H(X_2|X_1) + H(X_3| X_1, X_2)
+$$</div>
+<p>
+也就是多个事件一起出现的信息熵等于第一个事件出现的信息熵加上第一个事件出现了第二个事件再出现的信息熵，以此类推。</p>
+<h3 id="_5">互信息</h3>
+<p>互信息是用来衡量两个事件的相关度的。互信息的定义如下：
+</p>
+<div class="math">$$
+I(X;Y) = H(X) - H(X|Y)
+$$</div>
+<p>
+注意这个分号，如果是逗号，表示两个事件一起出现，如果是|则是Y已经出现了求X的条件概率。</p>
+<p>其含义就是X和Y的互信息是知道Y事件之后对X事件发生产生的信息熵的减少量。也就是假设不知道Y事件X事件的信息量=2，而知道Y之后X事件再发生的信息量=1，则X和Y的互信息量=1。</p>
+<p>假设XY不相干，则XY的互信息量=0；假设Y事件发生则X事件必发生，则XY的互信息量=X的信息熵。</p>
+<p>由熵的链式规则有：
+</p>
+<div class="math">$$
+I(X;Y) = H(X) - H(X|Y) = H(X) + H(Y) - H(X,Y)
+$$</div>
+<h3 id="_6">相对熵或者交叉熵</h3>
+<p>相对熵也被称为交叉熵【似乎相对熵和交叉熵是两个不同的概念，数学之美上的说法存疑。】，这个我们在机器学习核对学习算法的误差是接触过，相对熵是用来两个取值为正数的函数相似性的。</p>
+<ul>
+<li>对于两个完全相同的函数，他们的相对熵为0</li>
+<li>相对熵越大，两个函数差异越大，反之相对熵越小，两个函数差异越小。</li>
+<li>如上所述，相对熵可以用来衡量两个概率分布函数的差异性</li>
+</ul>
+<p>互信息就是两个事件的联合分布和独立分布的相对熵，所以两个事件越接近独立分布，则相关性越小，则相对熵越小，则互信息越小；反之两个事件越不接近独立分布，则相关性越大，则相对熵越大，则互信息越大。</p>
+<h2 id="_7">统计语言模型</h2>
+<p>S 表示一连串顺序排列的词语，S在文本中出现的可能性，P(S) ，</p>
+<p>利用条件概率：</p>
+<div class="math">$$
+P(S) = P(word1)P(word2|word1)P(word3|word1word2)...P(wordn|word1word2word3...wordn-1)
+$$</div>
+<h3 id="_8">马尔科夫假设</h3>
+<p>任何一连串事件序列某个状态发生的概率只依赖于它的前几个状态，这一事件序列叫做马尔科夫链。</p>
+<p>如果只依赖于它的前一个词，那么这种模型称为二元模型，也就是一阶马尔科夫链，记作 bigram</p>
+<p>如果依赖于它的前两个词，那么这种模型称为三元模型，也就是二阶马尔科夫链，记作 trigram</p>
+<p>下面以二元模型为例子，计算一句话出现的概率：</p>
+<div class="math">$$
+P(S) = P(word1)P(word2|word1)P(word3|word2)...P(wordn|wordn-1)
+$$</div>
+<p>
+<span class="math">\(P(w_i|w_{i-1})\)</span> 是一个词出现之后下一个词出现的条件概率，利用条件概率有：</p>
+<div class="math">$$
+P(w_i|w_{i-1}) = P(w_iw_{i-1})/P(w_{i-1})
+$$</div>
+<p>
+令句首标记为 <code>&lt;BOS&gt;</code>  令句末标记为 <code>&lt;EOS&gt;</code> 。</p>
+<p>其中 <span class="math">\(P(w_iw_{i-1})\)</span> 的概率就是两个词在整个文本中所占的频率，具体等于 目标两个词序列的记数/总文本记数</p>
+<p>而 <span class="math">\(P(w_{i-1})\)</span> 是前一个词出现的次数/总文本数，最后得到：
+</p>
+<div class="math">$$
+P(w_i|w_{i-1}) = 两个词序列计数/前一个词的计数
+$$</div>
+<p>
+请参看宗庆成的自然语言处理第二版P85的例子详细理解如何计算一个句子出现的概率的计算方法。</p>
+<h3 id="_9">大数定理</h3>
+<p>在试验不变的条件下，重复试验多次，随机事件的频率近似于它的概率。</p>
+<h3 id="_10">高阶语言模型</h3>
+<p>上面简单的二元模型只假设一个词只和其前面的那个词相关，如果假设前面的N-1个词和这个词相关，那么这个模型就称为N元模型。</p>
+<h3 id="-">古德-图灵估计</h3>
+<p>上面的统计一个句子出现概率的计算方法，某些序列在语料库（统计文本）中并没有出现过，或者出现次数极少。这些句子概率的计算都估算为零是不合适的。古德-图灵估计就是来解决这个问题的。</p>
+<blockquote>
+<p>对于没有看见的事件，我们不能认为它发生的概率就是零，因此我们从概率的总量中分配一个很小的比例给予这些没有看见的事件。</p>
+</blockquote>
+<p>基本计算公式是：
+</p>
+<div class="math">$$
+N = \sum_1^{\infty}r N_r
+$$</div>
+<p>
+这个公式含义很明显，就是出现1次（r=1）的词有多少个（<span class="math">\(N_r\)</span>），逐个相加得到总词数。写成下面的形式会简单一些：
+</p>
+<div class="math">$$
+N = 1N_1 + 2N_2 + 3N_3 ...
+$$</div>
+<p>
+而古德-图灵估计就是假设r次（一般要到非常小的时候才会上这个估计）有如下规律（因为次数低，甚至可能为0所以这里的多少次是未知的）：
+</p>
+<div class="math">$$
+r^* N_r = (r+1)N_{r+1}
+$$</div>
+<p>
+这个公式看起来很突兀，但我们可以这样理解：
+</p>
+<div class="math">$$
+N = 2N_2 + 3N_3 + 4N_4 ...
+$$</div>
+<p>
+也就是出现次数很少的词出现的次数乘以具体那些词的次数大体可以用次数加一，上一次数的情况来估计。因为次数很少，这个公式一直加到无穷大，是可以认为估计损失极小的。</p>
+<p>于是对于具体出现 <span class="math">\(r^*\)</span> 次的某个词，其出现的概率为：
+</p>
+<div class="math">$$
+P_r = \frac{r^*}{N}
+$$</div>
+<p>
+这种估计方法，还剩下来一个 <span class="math">\(1N_1\)</span> ，其就是给未知事件的，未知事件的概率估计为：
+</p>
+<div class="math">$$
+P_0 = \frac{N_1}{N}
+$$</div>
+<p>
+也就是未知事件出现的概率等于出现1次的词的计数除以总词数。</p>
+<h2 id="_11">中文分词</h2>
+<p>自然语言是上下相关的，自然语言研究需要为这种上下文相关的特性建立数学模型，这个数学模型就是人们常说的统计语言模型（Statistical Language Model）。</p>
+<p>贾里尼克认为： 一个句子是否合理，就看它的可能性大小如何。</p>
+<p>这其中有个问题就是如何穷举所有可能的分词方法：这是一个动态规划问题，可以利用维特比算法（Viterbi）来解决这个问题。</p>
+<p>总的说来如上面讨论的，基于统计和词典的，来获得一个最大可能性的句子的分词方法，是目前兼顾准确性和性能的最佳方案了，后续很多方法都应该站在其肩膀上，试着更好地解决词典完善和命名实体识别等等问题。</p>
+<h2 id="_12">隐马尔科夫模型</h2>
+<h3 id="_13">广义通信模型</h3>
+<p>人与人之间的语言，或者其他任何形式的信息交流，都可以看做是一种广义上的通信模型，一个信号编码序列通过某种信息载体在信道中发送出去，然后被接受者接受，并进行转码的过程。</p>
+<p>我们需要找到的就是根据观测信号o1 o2 o3... 对应的最大条件概率状态信号 s1 s2 s3... 。
+</p>
+<div class="math">$$
+s_1, s_2, s_3, \dots = \underset{all s_1,s_2,s3,\dots}{\arg\max} P(s_1,s_2,s_3,\dots | o_1,o_2,o_3,\dots)
+$$</div>
+<p>
+按照条件概率有：
+</p>
+<div class="math">$$
+s_1, s_2, s_3, \dots = \underset{all s_1,s_2,s3,\dots}{\arg\max} \frac{P(s_1,s_2,s_3,\dots) \cdot P( o_1,o_2,o_3,\dots |s_1,s_2,s_3,\dots)}{P(o_1,o_2,o_3,\dots)}
+$$</div>
+<p>
+因为要求最大值，具体观测信号的发射概率可以忽略：
+</p>
+<div class="math">$$
+s_1, s_2, s_3, \dots = \underset{all s_1,s_2,s3,\dots}{\arg\max} P(s_1,s_2,s_3,\dots) \cdot P( o_1,o_2,o_3,\dots |s_1,s_2,s_3,\dots)
+$$</div>
+<p>
+s1,s2--&gt; o1,o2 的条件概率是状态信息s1...在传输后成为接受者接受的o1...的概率。而 s1,s2...是发送端出现这个随机过程的概率。</p>
+<p>这个计算过程可以利用隐马尔科夫模型来计算。</p>
+<h3 id="_14">马尔科夫模型</h3>
+<p>首先是马尔科夫模型，其还是比较简单易懂的。首先从随机过程开始，假设你要研究一个系统，这个系统随机吐出一些信号，s1 s2 ... 具体就是这个系统的某种激活状态。这种随机过程的生成可以用下面的图形来描述：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/自然语言处理/马尔科夫模型.png"/></p>
+<p>这个例子来自宗庆成统计自然语言处理第二版P109。</p>
+<p>具体上面的转移矩阵如下所示：
+</p>
+<div class="math">$$
+\begin{bmatrix}0.3 &amp; 0.5 &amp; 0.2 \\ 0.5 &amp; 0.3 &amp; 0.2 \\ 0.4 &amp; 0.2 &amp; 0.4\end{bmatrix}
+$$</div>
+<p>
+这样我们观察到序列 <code>名 动 形 名</code> 的概率为 0.5 * 0.2 * 0.4 ，详细讨论请参看宗庆成统计自然语言处理第二版P109。</p>
+<p>在上面的习题中，我们已经看到了，马尔科夫模型其内暗含了这样的假定：</p>
+<ul>
+<li>其内的随机过程为马尔科夫链过程，状态只受前一个状态影响。</li>
+</ul>
+<h3 id="_15">隐马尔科夫模型</h3>
+<p>隐马尔科夫模型在上面的讨论上，引入这样的东西，那就是我们不能直接观察这个系统的s1 s2 状态，我们只能观察这个而系统抛出来的信号 o1 o2...，这就和之前讨论的广义通信模型有点接近了，也正因为如此隐马尔科夫模型很是通用，即使是后面的条件随机场模型也是站在隐马尔科夫模型的基础上的，因为隐马可夫模型其内有些思想内核是触及了广义通信模型的内核的，而广义通信模型几乎可以用来看待一些信息传输问题，包括自然语言，人的沟通交流也可以看做一种信息传输过程（我们也可以想象，人和机器语言若存在某种人机交互，那么也是符合这个广义通信模型的）。</p>
+<p>而隐马尔科夫模型又说我们观察到的 o1 o2 ... 是和这个系统的状态 s1 s2相关的，这是自然。继而隐马尔科夫模型应用马尔科夫链过程简单模型做了如下假定：</p>
+<ul>
+<li>o1只和最近的s1相关，o2只和最近的s2相关。</li>
+</ul>
+<p>我们看到隐马尔可夫模型大方向是没问题的，就是引入马尔科夫链对状态的前后相关性做了太多的简化，这个后面条件随机场模型会进一步完善。</p>
+<p>其实讨论到这里，我们算是基本理解隐马尔科夫模型了。下面就是数学了...</p>
+<p>一般会提及HMM的三个问题，这里我就提两个算是很实际的问题吧：</p>
+<ul>
+<li>如何训练模型？</li>
+<li>如何使用模型？</li>
+</ul>
+<p>这两个问题，一个是鲍姆-韦尔奇算法，一个是维特比算法。没什么好说的，硬下头皮来啃数学吧。</p>
+<h2 id="_16">条件随机场</h2>
+<p>条件随机场算是现在实际广泛应用中的一个算法了，其基于HMM隐马尔可夫模型。</p>
+<h2 id="_17">维特比算法</h2>
+<h2 id="_18">参考资料</h2>
+<ol>
+<li>数学之美 第二版 吴军著</li>
+<li>统计自然语言处理 第二版 宗成庆</li>
+</ol>
+<h2 id="_19">脚注</h2>
+<div class="footnote">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>请读者参看 <a href="https://www.zhihu.com/question/30828247">知乎这里</a> maxdeath的讨论。 <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+</ol>
+</div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-03-25T14:54:18.570349+08:00">2020年 3月 25日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>

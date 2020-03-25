@@ -127,7 +127,7 @@
 <h2 id="_1">前言</h2>
 <p>本文主要参考了Molfile的 <a href="https://en.wikipedia.org/wiki/Chemical_table_file">wiki页面</a> 。</p>
 <p>因为openbabel在heroku上不好安装，其有c依赖，然后pubchem数据库那边是可以输出sdf文件的，然后chemdoodle那边是可以接受mol文件格式从而显示分子的3D图形的，一开始我试着用openbabel将smiles输出到mol file：</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">smi2mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">smi2mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    read smiles string , retrun 3d mol file content.</span>
 <span class="sd">    :param smiles:</span>
@@ -136,7 +136,7 @@
     <span class="n">mol</span> <span class="o">=</span> <span class="n">pybel</span><span class="o">.</span><span class="n">readstring</span><span class="p">(</span><span class="s2">"smi"</span><span class="p">,</span> <span class="n">smiles</span><span class="p">)</span>
     <span class="n">mol</span><span class="o">.</span><span class="n">make3D</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">mol</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"mol"</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 <p>这大体是没有问题的。后来看到pubchem restful api输出record全记录时有很详细的原子数目和坐标，所以想可不可以根据这些数据自动输出mol file。</p>
 <p>目前最简单的方法是，利用pubchem获得目标分子的sdf文件，sdf文件是前兼容mol 文件的，我在前端网页初步测试结果也是将文件前一行到 <code>M  END</code> 之间的内容复制粘贴新建成为一个mol file，经过测试是可行的。所以一个最简单的方法就是写一个简单的函数，将这之间的内容返回出去即可。</p>
 <p>更复杂点的方法就是深入理解化学信息学的连接表结构，读取pubchem各个原子坐标和键信息，然后本地绘制连接表。</p>
@@ -155,10 +155,10 @@
 </ol>
 <h2 id="sdf">sdf文件</h2>
 <p>sdf文件在连接表内容上是一致的，1-3行header说明修改不影响分子的显示。然后sdf文件最后结尾会加上：</p>
-<div class="highlight"><pre><span></span><code>$$$$
-</code></pre></div>
+<div class="highlight"><pre><span></span>$$$$
+</pre></div>
 <p>mol file没有这个。之上会会继续写分子的其他属性信息：</p>
-<div class="highlight"><pre><span></span><code>&gt; &lt;PUBCHEM_IUPAC_OPENEYE_NAME&gt;
+<div class="highlight"><pre><span></span>&gt; &lt;PUBCHEM_IUPAC_OPENEYE_NAME&gt;
 1-bromobutane
 
 &gt; &lt;PUBCHEM_IUPAC_CAS_NAME&gt;
@@ -193,7 +193,7 @@ C4H9Br
 
 &gt; &lt;PUBCHEM_OPENEYE_CAN_SMILES&gt;
 CCCCBr
-</code></pre></div>
+</pre></div>
 <p>看的出来这种结构是很方便程序分析的，比pubchem返回的json格式还好分析一点。后面我应该更多的对接和分析sdf文件。</p>
 
             

@@ -138,7 +138,7 @@
 <p>简单来说就是asyncio的事件循环里面你将添加一个或者多个任务，在目标任务中，完成websoket的相关工作。</p>
 <h2 id="_2">常驻监听模式</h2>
 <p>请读者看下面代码，下面建立了一种常驻监听模式，由于可能存在各种原因websocket服务器那边可能会强制把websocket连接关闭，所以你需要捕捉这个异常，然后试着重新建立一个全局websocket连接。</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_websocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        主面板初始化新建一个全局的websocket</span>
 <span class="sd">        然后开始websocket监听</span>
@@ -160,11 +160,11 @@
 
             <span class="k">except</span> <span class="n">websockets</span><span class="o">.</span><span class="n">ConnectionClosed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">'websocket closed error'</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 <p>这里我先把请到的消息放到一个队列里面，然后后续再慢慢处理队列里面的消息，这个并没有什么特别的考虑，只是觉得这样写逻辑会更清晰一些。</p>
 <h2 id="_3">发送消息</h2>
 <p>发送消息就是简单的send，但你可能是在其他程序中，所以其他程序中更完整的表述是 在时间循环中添加一个任务，然后等着事件循环去完成目标任务。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="n">eventloop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
 <span class="n">eventloop</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">hello</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
@@ -176,7 +176,7 @@
     <span class="n">name_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">name_obj</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&gt; </span><span class="si">{name}</span><span class="s2">"</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 
             
             <hr/>
@@ -192,7 +192,7 @@
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>13</span>
+                    <span>14</span>
 </a></li>
             </ul>
 

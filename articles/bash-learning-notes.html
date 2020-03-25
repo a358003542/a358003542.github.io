@@ -154,29 +154,29 @@
 <h2 id="_1">前言</h2>
 <p>下面简单讲一下 bash shell 脚本知识，点到为止。就基本的了解在日常linux作业中还是很有用的。但作为一个蹩脚的编程语言【抱歉这么说】并不推荐大量编写bash脚本代码，如果有这块大量的需求，应该使用其他工具。</p>
 <h2 id="_2">变量</h2>
-<div class="highlight"><pre><span></span><code>i=2
+<div class="highlight"><pre><span></span>i=2
 
 echo $i
-</code></pre></div>
+</pre></div>
 <p>一般赋值就如上所示，和其他编程语言变量赋值大体类似吧，<u>但是要特别注意变量和值之间的等号是相连的，不能用空格隔开</u> 。变量的符号一般就是字母数字，可以加下划线。这样声明的变量为局部变量，也就是本shell中适用。如果要创建全局变量需要使用export命令。</p>
 <p>一般使用这个变量就是在前面加上 <code>$</code> 符号，如果你需要用变量的字符和其他字符组合成一个新的字符，那么需要用花括号将变量名包围起来。即这样的形式 <code>${i}what</code> 。一般来说使用变量都推荐使用 <code>${}</code> 这样的形式。</p>
 <h3 id="_3">应用：修改终端前缀</h3>
-<div class="highlight"><pre><span></span><code>export PS1="=&gt;"
-</code></pre></div>
+<div class="highlight"><pre><span></span>export PS1="=&gt;"
+</pre></div>
 <p>利用export命令就可以将这个变量变为全局变量（这里所谓的全局变量主要指子shell继承了父shell的变量。），这样所有的shell脚本都可以通用。</p>
 <p>如果你将以上代码放入你家目录的 <code>.bashrc</code> 文件里面，每次终端启动都会自动加载这个文件的。这样你后面开启的那些终端前缀都会变成<code>=&gt;</code> 这样的形式。</p>
 <p>这样可以节省点屏幕空间。你可以用pwd命令查看一下，其他一切都没有影响的。</p>
 <p>这个PS1就对应的终端的一级前缀符号，PS2对应的是进一步输入时候的提示符号。你可以换成这样的形式：</p>
-<div class="highlight"><pre><span></span><code>export PS2="&gt;"
-</code></pre></div>
+<div class="highlight"><pre><span></span>export PS2="&gt;"
+</pre></div>
 <h2 id="echo">echo命令</h2>
 <p>echo命令前面接触很多了，这里不赘述了。echo命令就是用于查看某个变量的值或者直接输出一行字符串。</p>
 <h2 id="unset">unset命令</h2>
 <p>取消bash某个变量的赋值。</p>
 <h2 id="read">read命令</h2>
 <p>请求用户输入某个变量的值</p>
-<div class="highlight"><pre><span></span><code>read name ; echo '你输入的是：'${name}
-</code></pre></div>
+<div class="highlight"><pre><span></span>read name ; echo '你输入的是：'${name}
+</pre></div>
 <h2 id="bash">bash里面的特殊符号</h2>
 <p>上面的分号bash和其他编程语言都大体类似，就是表示一行的结束。但bash还有很多其他的特殊符号，下面讲一下，这些特殊符号有的时候看到了搜索都不太好搜索。 更多信息请参阅 <a href="http://stackoverflow.com/questions/5163144/what-are-the-special-dollar-sign-shell-variable">这个网页</a> 。</p>
 <ul>
@@ -194,46 +194,46 @@ echo $i
 </ul>
 <h2 id="if">if条件判断</h2>
 <p>if条件语句格式是：</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span>  <span class="o">[</span> <span class="nb">test</span> expression <span class="o">]</span>
+<div class="highlight"><pre><span></span><span class="k">if</span>  <span class="o">[</span> <span class="nb">test</span> expression <span class="o">]</span>
 <span class="k">then</span>    <span class="k">do</span> what
 <span class="k">fi</span>
-</code></pre></div>
+</pre></div>
 <p>对于短小的shell命令行，可以写成这样的一行格式，其中分号表示换行。</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="o">[</span> <span class="nb">test</span> expression <span class="o">]</span><span class="p">;</span> <span class="k">then</span> <span class="k">do</span> what <span class="p">;</span> <span class="k">fi</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span> <span class="nb">test</span> expression <span class="o">]</span><span class="p">;</span> <span class="k">then</span> <span class="k">do</span> what <span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <p>还值得提醒一下的是：条件判断语句（就是上面的test expression）要和那个方括号[]有一个空格表示分开，（上古神器都有一些怪僻，淡定就好）。</p>
 <h3 id="_4">应用：确认某个文件夹是不是存在</h3>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="o">[</span>  !  -d  workspace  <span class="o">]</span><span class="p">;</span>  <span class="k">then</span> mkdir workspace   <span class="p">;</span> <span class="k">fi</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span>  !  -d  workspace  <span class="o">]</span><span class="p">;</span>  <span class="k">then</span> mkdir workspace   <span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <p><code>-d</code> 表示检测某个文件夹是不是存在，<code>!</code> 符号在这里进行逻辑否操作。也就是这里如果workspace不存在，那么新建workspace文件夹。</p>
 <h2 id="for">for循环</h2>
 <p>本小节参考了 <a href="http://www.cyberciti.biz/faq/bash-for-loop/">bash for loop</a> 这篇文章，其关于bash编程的循环部分讲的很详细。</p>
 <p>for循环语句格式如下：</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span>  var in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span>
+<div class="highlight"><pre><span></span><span class="k">for</span>  var in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span>
     <span class="k">do</span> cmd1
          cmd2
 <span class="k">done</span>
-</code></pre></div>
+</pre></div>
 <p>同样，你也可以将其写成一行的样子：</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> var in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="p">;</span> <span class="k">do</span> cmd1 <span class="p">;</span> cmd2 <span class="p">;</span> <span class="k">done</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">for</span> var in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="p">;</span> <span class="k">do</span> cmd1 <span class="p">;</span> cmd2 <span class="p">;</span> <span class="k">done</span>
+</pre></div>
 <p>​    </p>
 <p>其中加分号的地方为多行格式下必须换行的地方。</p>
 <h3 id="_5">应用：小数点递加输出流</h3>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> animate in <span class="k">$(</span>seq <span class="m">4</span>.0 <span class="m">0</span>.1 <span class="m">8</span>.0<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  <span class="nb">echo</span> <span class="si">${</span><span class="nv">animate</span><span class="si">}</span> <span class="p">;</span> <span class="k">done</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">for</span> animate in <span class="k">$(</span>seq <span class="m">4</span>.0 <span class="m">0</span>.1 <span class="m">8</span>.0<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  <span class="nb">echo</span> <span class="si">${</span><span class="nv">animate</span><span class="si">}</span> <span class="p">;</span> <span class="k">done</span>
+</pre></div>
 <p>关于seq命令我简单说下，请通过 <code>--help</code> 来查阅具体信息：</p>
-<div class="highlight"><pre><span></span><code>用法：seq [选项]... 尾数
+<div class="highlight"><pre><span></span>用法：seq [选项]... 尾数
     或：seq [选项]... 首数 尾数
     或：seq [选项]... 首数 增量 尾数
-</code></pre></div>
+</pre></div>
 <h3 id="_6">应用：批量创建文件</h3>
 <p>在文件夹里面输入如下命令：</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span><span class="p">;</span> i&lt;<span class="o">=</span><span class="m">10</span><span class="p">;</span> i++ <span class="o">))</span><span class="p">;</span> <span class="k">do</span>  touch file<span class="nv">$i</span>.txt<span class="p">;</span> <span class="k">done</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span><span class="p">;</span> i&lt;<span class="o">=</span><span class="m">10</span><span class="p">;</span> i++ <span class="o">))</span><span class="p">;</span> <span class="k">do</span>  touch file<span class="nv">$i</span>.txt<span class="p">;</span> <span class="k">done</span>
+</pre></div>
 <h3 id="_7">应用：批量缩小图片大小</h3>
 <p>这是一个多行脚本，用于批量缩小图片的大小。</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="o">[</span>  !  -d  smallsize  <span class="o">]</span><span class="p">;</span>  <span class="k">then</span> mkdir smallsize   <span class="p">;</span> <span class="k">fi</span>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span>  !  -d  smallsize  <span class="o">]</span><span class="p">;</span>  <span class="k">then</span> mkdir smallsize   <span class="p">;</span> <span class="k">fi</span>
     <span class="nb">cd</span> smallsize
 
     <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span>
@@ -242,15 +242,15 @@ echo $i
                 <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span>i+1
                 <span class="nb">echo</span> <span class="nv">$it</span> is smallsized
             <span class="k">done</span>
-</code></pre></div>
+</pre></div>
 <h3 id="_8">应用：批量重命名文件</h3>
-<div class="highlight"><pre><span></span><code><span class="nb">let</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="k">for</span> f in <span class="k">$(</span>ls *.jpg<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  mv -vi <span class="si">${</span><span class="nv">f</span><span class="si">}</span> <span class="m">0000</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span>.jpg <span class="o">&amp;&amp;</span> <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span>i+1<span class="p">;</span> <span class="k">done</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="nb">let</span> <span class="nv">i</span><span class="o">=</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="k">for</span> f in <span class="k">$(</span>ls *.jpg<span class="k">)</span><span class="p">;</span> <span class="k">do</span>  mv -vi <span class="si">${</span><span class="nv">f</span><span class="si">}</span> <span class="m">0000</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span>.jpg <span class="o">&amp;&amp;</span> <span class="nb">let</span> <span class="nv">i</span><span class="o">=</span>i+1<span class="p">;</span> <span class="k">done</span>
+</pre></div>
 <h2 id="_9">调用子命令返回值</h2>
 <p>在前面几个例子中，已经出现多次这个形式了： <code>$(cmd)</code> ，其将执行子shell命令，并将返回结果作为字符串值。</p>
 <h2 id="array">array</h2>
 <p>shell编程最好不要过多涉及复杂的编程的内容，那将是很痛苦的，但是在某些情况下你可能需要了解array这个概念。下面来演示这样一个例子，其需求就是在一个自动备份程序之上再加上自动删除逻辑。</p>
-<div class="highlight"><pre><span></span><code><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date +%F<span class="k">)</span>
+<div class="highlight"><pre><span></span><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date +%F<span class="k">)</span>
 <span class="nv">DAYS</span><span class="o">=</span><span class="m">30</span>
 
 <span class="c1">## here is the autodump code, and the output filename is whatdump_${DATE}</span>
@@ -263,37 +263,37 @@ ALLOWED<span class="o">[</span><span class="m">0</span><span class="o">]=</span>
 
 <span class="c1">### use the python script , it is really hard to write it on bash</span>
 python ~/thepython/scripts/whatdump_autoremove.py <span class="si">${</span><span class="nv">ALLOWED</span><span class="p">[@]</span><span class="si">}</span>
-</code></pre></div>
+</pre></div>
 <p>这个程序整个逻辑就是创建一个名字叫做 <code>whatdump_DATE</code> 的备份文件（你可以通过crontab来控制好每天运行一次），然后我们希望目标文件只保留最近三十天的文件。因为这个逻辑较为复杂，本来我是打算直接将 <code>DATE</code> 参数传递给python脚本来做接下来的工作的，但是在了解到date命令强大的人类友好的日期时间表达功能（请参考 <a href="http://unix.stackexchange.com/questions/24626/quickly-calculate-date-differences">这个问题</a>），我决定将整个允许存在的文件名都传递进python脚本中去。</p>
 <p>有兴趣的可以了解下date命令-d选项的灵活表达支持，比如 <code>date -d "now -3days"</code> 就是现在之前三天的日期时间，而 <code>date -d "+3weeks"</code> 就是现在三周之后的日期时间。用兴趣的可以继续了解下，这个date命令的-d选项真的好强大。</p>
 <p>好了下面详细讲一下这里array涉及到的语法。</p>
 <h3 id="_10">赋值和引用</h3>
-<div class="highlight"><pre><span></span><code><span class="o">=</span>&gt;array<span class="o">[</span><span class="m">0</span><span class="o">]=</span><span class="s2">"hello"</span>
+<div class="highlight"><pre><span></span><span class="o">=</span>&gt;array<span class="o">[</span><span class="m">0</span><span class="o">]=</span><span class="s2">"hello"</span>
 <span class="o">=</span>&gt;array<span class="o">[</span><span class="m">1</span><span class="o">]=</span><span class="s2">"world!"</span>
 <span class="o">=</span>&gt;echo <span class="si">${</span><span class="nv">array</span><span class="p">[0]</span><span class="si">}</span> <span class="si">${</span><span class="nv">array</span><span class="p">[1]</span><span class="si">}</span>
 hello world!
-</code></pre></div>
+</pre></div>
 <p>这种表达和我们常见的那种数组概念相近，记得索引从0开始这个惯例即可。或者如下一起赋值:</p>
-<div class="highlight"><pre><span></span><code><span class="o">=</span>&gt;array2<span class="o">=(</span><span class="s2">"hello"</span> <span class="s2">"python"</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><span class="o">=</span>&gt;array2<span class="o">=(</span><span class="s2">"hello"</span> <span class="s2">"python"</span><span class="o">)</span>
 <span class="o">=</span>&gt;echo <span class="si">${</span><span class="nv">array2</span><span class="p">[@]</span><span class="si">}</span>
 hello python
-</code></pre></div>
+</pre></div>
 <p>上面的 <code>${arrayname[@]}</code> 这种表达方式就是引用所有的array，然后还有 <code>${#arrayname[@]}</code> 这种表达是返回这个array的长度。</p>
-<div class="highlight"><pre><span></span><code>=&gt;echo ${#array2[@]}
+<div class="highlight"><pre><span></span>=&gt;echo ${#array2[@]}
 2
-</code></pre></div>
+</pre></div>
 <p>然后最后这句:</p>
-<div class="highlight"><pre><span></span><code>python ~/thepython/scripts/whatdump_autoremove.py ${ALLOWED[@]}
-</code></pre></div>
+<div class="highlight"><pre><span></span>python ~/thepython/scripts/whatdump_autoremove.py ${ALLOWED[@]}
+</pre></div>
 <p>就是将收集到的所有允许的文件名array传递进python脚本中去了。在python脚本中一个粗糙的做法就是如下这样引用</p>
-<div class="highlight"><pre><span></span><code>def main(args,path=""):
+<div class="highlight"><pre><span></span>def main(args,path=""):
     print args
 
 main(sys.argv[1:])
-</code></pre></div>
+</pre></div>
 <p>这样所有的这些array就传递进args里面去了，读者有兴趣可以试一下，这个args在python中就是一个列表对象了。到python里面了更复杂的逻辑我们都可以很快写出来了，我就不说了。</p>
 <p>大概类似下面所示，注意这里的pathlib在python3.4之后才会有，之前需要用pip安装之。</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -321,17 +321,17 @@ main(sys.argv[1:])
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">"~/autodump"</span><span class="p">))</span>
 
     <span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-</code></pre></div>
+</pre></div>
 <h2 id="date">date命令</h2>
 <p>之所以把date命令放在一章是因为date命令如果单独作为一个命令来使用，打印显示日期其实意义不是很大。但是在bash脚本中，在管道中，date命令却变得非常有用了。读者可以用 <code>--help</code> 查看一下帮助信息，这个命令比我们预想的还要复杂的多，而且这里的那些输出格式参数控制语法，就是到了其他编程语言中也是有用的（比如python的time模块中的strftime函数）。</p>
 <h3 id="date_1">date返回日期字符</h3>
 <p>date命令返回某个特定格式的日期在某些shell脚本中很有用，如下所示就是一个简单的例子：</p>
-<div class="highlight"><pre><span></span><code>date=$(date +"%F_%R");echo $date
-</code></pre></div>
+<div class="highlight"><pre><span></span>date=$(date +"%F_%R");echo $date
+</pre></div>
 <p>date命令前面已谈到一点，更多信息请参看 <a href="http://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/">这篇文章</a>  。这里就不赘述了。</p>
 <h2 id="xargs">xargs多行转一行</h2>
-<div class="highlight"><pre><span></span><code>sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)
-</code></pre></div>
+<div class="highlight"><pre><span></span>sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)
+</pre></div>
 <p>这是一个批量删除空文件夹的命令，假设现在空文件夹数目很多。首先 <code>ls -U</code> 单纯列出来，然后管道导向 <code>head</code> 只打印最开始的几行，然后管道导向 <code>xargs</code> 命令，这样多行转成一行，就可以作为 rmdir 的参数了。</p>
 
             

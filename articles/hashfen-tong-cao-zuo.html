@@ -124,7 +124,7 @@
             
 <h2 id="_1">简介</h2>
 <p>hashlib的md5算法作为实践级别的算法有一个很大的特点那就是输出的位数长度是固定的，这样很方面进行下一步的输出再分桶操作：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">random</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">add</span>
@@ -138,9 +138,9 @@
 
 <span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">hashkey</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hashkey</span><span class="p">])</span> <span class="o">%</span> <span class="n">n</span>
-</code></pre></div>
+</pre></div>
 <p>各个位数相加参考了 <a href="http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Map/hash.html">这个网站</a> ，但具体各个位数相加是否保证了分桶的均匀性，老实说我是不大确切的，如下做了一个简单的测试：</p>
-<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">random_string_generator</span><span class="p">():</span>
@@ -161,7 +161,7 @@
     <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 <p>初步看来随机生成的各种各样的字符串最终分桶基本上是均匀的。虽然我知道md5算法是能够保证每个位数上的随机，但进行ord处理得到数字，相加再取模，是否也是保证均匀性的，我只能说这是猜的，需要严格的数学证明。</p>
 
             

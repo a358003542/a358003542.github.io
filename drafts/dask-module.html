@@ -157,7 +157,7 @@
 <p>dask的安装就python模块来说不是难点所在，这一块难点主要在大数据环境的搭建上。如果你们大数据工作组已经将环境搭建好了，那么利用dask-yarn还是很容易进行dask的分布式任务的分发工作的。</p>
 <h2 id="dask-yarn">dask-yarn</h2>
 <p>dask连接yarn集群</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">dask_yarn</span> <span class="kn">import</span> <span class="n">YarnCluster</span>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_yarn</span> <span class="kn">import</span> <span class="n">YarnCluster</span>
 <span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="c1"># Create a cluster where each worker has two cores and eight GiB of memory</span>
@@ -173,7 +173,7 @@
 
 <span class="c1"># Connect to the cluster</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 <p>基本的连接过程如上所示，你需要安装 <code>dask-yarn</code> 模块，然后连接的时候参数</p>
 <ul>
 <li>environment 你的分布式应用程序的python环境包，你可以激活虚拟环境下运行 <code>venv-pack</code> 命令来打包之。</li>
@@ -186,16 +186,16 @@
 </ul>
 <h3 id="worker">实际调整worker资源</h3>
 <p>最开始是没有实际开启worker资源的。</p>
-<div class="highlight"><pre><span></span><code>cluster.scale()
-</code></pre></div>
+<div class="highlight"><pre><span></span>cluster.scale()
+</pre></div>
 <p>然后可以跟个数字，其会自动决定是 <code>scale_up</code> 还是 <code>scale_down</code> 。</p>
 <h3 id="_2">关闭应用释放资源</h3>
 <p>似乎cluster的关闭动作会申请自动释放你在hadoop集群上申请的资源，但任何非正常推荐都可能导致申请的应用资源仍占在哪里的。更保险起见是确保异常之后总能够执行:</p>
-<div class="highlight"><pre><span></span><code>cluster.shutdown()
-</code></pre></div>
+<div class="highlight"><pre><span></span>cluster.shutdown()
+</pre></div>
 <h3 id="_3">强制关闭某个应用</h3>
-<div class="highlight"><pre><span></span><code> dask-yarn kill application_1538148161343_0051
-</code></pre></div>
+<div class="highlight"><pre><span></span> dask-yarn kill application_1538148161343_0051
+</pre></div>
 <h2 id="dataframe">dataframe最佳实践</h2>
 <ol>
 <li>如果你的机器内存够用，那么应该直接使用pandas。</li>
@@ -205,8 +205,8 @@
 <li>上面提到的 <code>set_index</code> 是很昂贵的操作，你需要确认这有必要，此外不要频繁这样设置索引操作，最好后面再persist 一下。</li>
 <li>聪明的persist 推荐采用如下写法来节省占用内存：</li>
 </ol>
-<div class="highlight"><pre><span></span><code>df = client.persist(df)  # replace your old lazy DataFrame
-</code></pre></div>
+<div class="highlight"><pre><span></span>df = client.persist(df)  # replace your old lazy DataFrame
+</pre></div>
 <ol>
 <li>设置合理的分区数 分区数太大太小都不好 </li>
 <li>数据存为apache parquet文件格式</li>
@@ -221,10 +221,10 @@
 <h2 id="dask_1">dask单机版</h2>
 <p>dask单机版在熟悉dask命令和基本调试代码上还是很有用的，不需要做任何配置就是dask单机版。</p>
 <p>按照官方文档，单机版也分为单机调度或分布式调度两种，官方文档推荐如下采用分布式调度，说有更好的诊断功能等。</p>
-<div class="highlight"><pre><span></span><code>from dask.distributed import Client, LocalCluster
+<div class="highlight"><pre><span></span>from dask.distributed import Client, LocalCluster
 cluster = LocalCluster()
 client = Client(cluster)
-</code></pre></div>
+</pre></div>
 <p>似乎现在只能在linux上运行了。</p>
 <p>单机版的线程调度中还是有所区别的：</p>
 <ul>

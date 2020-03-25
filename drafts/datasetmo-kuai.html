@@ -126,7 +126,7 @@
 <p>数据库类型现在越来越丰富了，其中sql数据库和nosql数据库的选择是大家争论的焦点。这里面大家都有一个大前提，那就是项目已经发展到中后期了，模型各方面已经很成熟了，然后在这种情况，去选择sql数据库和nosql数据库。然而在项目发展早期甚至中期，即使后面证明该项目数据非常适合sql数据库，项目早期也是不推荐马上就上sql数据库的，因为那个时候项目代码还在频繁变动，项目模型还没有稳定。这也是我不喜欢django的一点，其预先假设了用户应该使用sql数据库。甚至有些项目早期连数据库都不应该上，而推荐采用临时的文件存储方案。</p>
 <p>这里再说一句题外话，假设项目到了中后期，如何决定最终是选用sql数据库还是nosql数据库呢，这个问题说白了就是“是选择关系型数据库呢还是非关系型数据库呢”？于是答案就非常的简单的，扪心自问关于你的研究对象的那些数据，是否存在着one to many ，many to many等等映射关系，如果有，那么在这些关系层面上，推荐使用sql数据库。于是这里就有两种极端情况，不推荐使用sql数据库。一是这类关系非常少，毕竟sql数据库给代码带来的复杂度是高于nosql数据库的，那么不推荐使用关系型数据库；还有一类情况这类关系非常多，各个实体间的映射关系非常杂乱，或者说你的研究对象之间的关系本身就是你的项目重点研究关注点。那么这类情况下一般是不推荐使用sql数据库，比如知识图谱项目，关于各个实体间的关系是一个重点研究关注点，那么这些关系是不可能稳定下来的，关于知识图谱项目数据库就肯定不应该选择sql数据库，至于是不是一定要选择图数据库那就另当别论了，有的时候常规nosql数据库就能够很好的应对了，尤其是有的项目，关于各个实体间的关系还不一定按照传统图数据库设想的那样，那使用图数据库就可能不合适了。【注意我在上面的讨论中并没有提到人们常常提及的一个观点，那就是关于研究对象的模型属性经常变动这一点，实际上sql数据库加上一个json字段就能很好地应付了，所以这并不是选择sql数据库还是nosql数据库的关注点。】</p>
 <p>好了，回到正题，首先我们对项目中后期是可能使用sql数据库还是nosql数据库有个预演，如果你觉得应该是sql数据库，但就算如此项目早期也是不推荐立马就上sql数据库的，而dataset模块就是为了解决项目早期阶段模型经常变动，但是你的项目可能将来还是会回归到sql数据库上这个需求的。我们来看一下基本的代码例子：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">dataset</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dataset</span>
 
 <span class="n">db</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">'sqlite:///test.db'</span><span class="p">)</span>
 
@@ -135,7 +135,7 @@
 <span class="n">table</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'Jane Doe'</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">34</span><span class="p">,</span> <span class="n">gender</span><span class="o">=</span><span class="s1">'female'</span><span class="p">))</span>
 
 <span class="n">john</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'John Doe'</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 <p>上面段代码执行了之后会自动创建一个 <code>test.db</code> 的sqlite数据库，而且sometable这个表格也自动创建好了，而且这个表格的字段属性 name age gender 也自动更新了，实在方便。</p>
 <p>其连接是基于sqlalchemy的，所以主流sql数据库都是支持的。</p>
 

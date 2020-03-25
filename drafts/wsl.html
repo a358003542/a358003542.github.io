@@ -114,8 +114,8 @@
             <p>WSL 在windows10里面是个新概念，大体可以看做mingw或者cygwin的替代吧。随着windows对WSL开发更新，发现这个东西在某些时候是可以解决某些程序在linux下能跑在windows下不能跑的问题。</p>
 <h2 id="wsl">WSL配置</h2>
 <p>首先需要用管理员方式运行powershell，然后运行：</p>
-<div class="highlight"><pre><span></span><code>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-</code></pre></div>
+<div class="highlight"><pre><span></span>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+</pre></div>
 
 
 <p>然后重启系统。这个必须做，否则wsl会提示错误。</p>
@@ -125,31 +125,31 @@
 <h2 id="ssh">ssh连接</h2>
 <p><strong>NOTICE：</strong> 本小节可选项，可以不看。</p>
 <p>主要就是修改 <code>/etc/ssh/sshd_config</code> 的一些配置，首先推荐把端口号改为 2222 或者什么的，因为windows系统现在外面可能还有个ssh服务会占用22端口，然后：</p>
-<div class="highlight"><pre><span></span><code>UsePrivilegeSeparation no #因为wsl没有实现chroot
+<div class="highlight"><pre><span></span>UsePrivilegeSeparation no #因为wsl没有实现chroot
 PasswordAuthentication yes
 ListenAddress 127.0.0.1      # 安全考虑
-</code></pre></div>
+</pre></div>
 
 
 <p>然后会提示什么文件找不到错误，如下：</p>
-<div class="highlight"><pre><span></span><code>sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+<div class="highlight"><pre><span></span>sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 sudo ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
 sudo ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
-</code></pre></div>
+</pre></div>
 
 
 <p>在重启ssh服务，应该问题不大了：</p>
-<div class="highlight"><pre><span></span><code>sudo service ssh --full-restart
-</code></pre></div>
+<div class="highlight"><pre><span></span>sudo service ssh --full-restart
+</pre></div>
 
 
 <p><strong>NOTICE:</strong> 如果你把ubuntu关闭了，那么ssh也就连不上了，网上有些解决方案说制作一个开机脚本后台启动的，觉得太麻烦了，就这个任务不愿意这么折腾，开发的时候注意打开ssh服务就是了。</p>
 <h2 id="_1">额外的安装软件包</h2>
 <p>gcc g++ make cmake gdb这些软件包是需要在 WSL 里面安装的，推荐直接如下一并安装了：</p>
-<div class="highlight"><pre><span></span><code>sudo apt update
+<div class="highlight"><pre><span></span>sudo apt update
 sudo apt upgrade
 sudo apt install build-esstial
-</code></pre></div>
+</pre></div>
 
 
 <p>这样应该c语言的开发环境就搭建起来了，WSL 还是给人一种怪怪的感觉，并不是很好用，不过也算是一种尝试吧。</p>

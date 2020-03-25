@@ -132,11 +132,11 @@
 <p>初次接触 <a href="https://github.com/google/python-fire">fire模块</a> 就不自觉的和 <a href="https://github.com/pallets/click">click模块</a> 进行对比，老实说我一开始还真不太相信这是google团队的作品，google团队的产品会这么简洁，不过毕竟后面写着 ： <code>This is not an official Google product.</code></p>
 <p>首先说下fire模块的优点，这个初步了解一下优点是很明显的： 可以让你少写点代码。作为一个程序员最大的愿望是什么： 少写点代码就能把事办成了。当然继续往下说，fire模块可以让你的代码更简洁，现在真的一个python脚本就是一个命令行工具了，一句废话都没有了，包括函数类里面的文档定义都是有用的。就作为一般最简单的命令行需求，我是推荐fire模块的。</p>
 <p>但是fire模块目前github上 commit很少，版本号也才 0.1.2，可能模块还有很多不稳定或者bug都是可能的，如果读者在项目需求上只是一两个python脚本需要做成命令行工具，我还是推荐click模块。如果读者有大量的python脚本转成命令行工具的需求，这在目前数据处理工作越来越多的大环境（实际上我怀疑这也是他们开发fire模块的初衷），那么使用fire模块无疑是能省点力气的，毕竟当初人们觉得click模块方便那也是只是相对于写一个命令行工具而言，现在情况确实有所不同了。</p>
-<div class="highlight"><pre><span></span><code>pip install fire
-</code></pre></div>
+<div class="highlight"><pre><span></span>pip install fire
+</pre></div>
 <p>官方文档已经说的很详细了，本身使用是很简单的，下面我随便说说吧。</p>
 <h2 id="_2">第一个例子</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">fire</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fire</span>
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="k">return</span> <span class="s1">'hello </span><span class="si">{name}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
@@ -146,32 +146,32 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
-</code></pre></div>
+</pre></div>
 <h3 id="_3">查看帮助信息</h3>
 <p>你需要在前面加上一个分隔符 <code>--</code> 然后再跟上 <code>--help</code> 或者 <code>-h</code> 才会显示帮助信息。</p>
-<div class="highlight"><pre><span></span><code>Usage:       test.py
+<div class="highlight"><pre><span></span>Usage:       test.py
              test.py fire
              test.py hello
              test.py main
-</code></pre></div>
+</pre></div>
 <p>我们看到 main 函数 fire 模块 hello 都暴漏出来了，这不太好。可以稍微改造一下，把文件名改为 hello.py</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">fire</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fire</span>
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="k">return</span> <span class="s1">'hello </span><span class="si">{name}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">fire</span><span class="o">.</span><span class="n">Fire</span><span class="p">(</span><span class="n">hello</span><span class="p">)</span>
-</code></pre></div>
+</pre></div>
 <p>这样：</p>
-<div class="highlight"><pre><span></span><code>PS C:\Users\a3580\Desktop&gt; python .\hello.py -- --help
+<div class="highlight"><pre><span></span>PS C:\Users\a3580\Desktop&gt; python .\hello.py -- --help
 
 Usage:       hello.py NAME
              hello.py --name NAME
-</code></pre></div>
+</pre></div>
 <p>这种写法的好处就是控制只显示你想要的几个函数，而且输出少了很多乱七八糟的东西。如果你想写多个命令，可以这样：</p>
 <h3 id="_4">多个命令</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">fire</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fire</span>
 
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="k">return</span> <span class="s1">'hello </span><span class="si">{name}</span><span class="s1">.'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
@@ -185,8 +185,8 @@ Usage:       hello.py NAME
         <span class="s1">'hello'</span><span class="p">:</span> <span class="n">hello</span><span class="p">,</span> 
         <span class="s1">'bang'</span><span class="p">:</span> <span class="n">bang</span>
     <span class="p">})</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>PS C:\Users\a3580\Desktop&gt; python .\hello.py -- --help
+</pre></div>
+<div class="highlight"><pre><span></span>PS C:\Users\a3580\Desktop&gt; python .\hello.py -- --help
 Type:        dict
 String form: {'hello': &lt;function hello at 0x000001ED71FB2E18&gt;, 'bang': &lt;function bang at 0x000001ED740A5620&gt;}
 Length:      2
@@ -194,10 +194,10 @@ Length:      2
 Usage:       hello.py
              hello.py hello
              hello.py bang
-</code></pre></div>
+</pre></div>
 <p>也许这样会更好一点，免得烂七八杂的东西混进来了。</p>
 <p>不过本着尽量少些代码的追求，多个命令这样写也不错啊：</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    打印hello</span>
 <span class="sd">    """</span>
@@ -212,11 +212,11 @@ Usage:       hello.py
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">fire</span>
     <span class="n">fire</span><span class="o">.</span><span class="n">Fire</span><span class="p">()</span>
-</code></pre></div>
+</pre></div>
 <p>总之fire模块会把你定义的函数或者类（包括类里面的属性或者函数或者类）都暴露出来。</p>
 <h2 id="_5">挂载类</h2>
 <p>fire模块挂载类不需要实例化，似乎是fire自动实例化了，然后你还可以指定实例化的参数：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Hello</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Hello</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">punctuation</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">punctuation</span> <span class="o">=</span> <span class="n">punctuation</span>
     <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -236,10 +236,10 @@ Usage:       hello.py
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">fire</span>
     <span class="n">fire</span><span class="o">.</span><span class="n">Fire</span><span class="p">(</span><span class="n">Hello</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>PS C:\Users\a3580\Desktop&gt; python .\hello.py hello world --punctuation=!
+</pre></div>
+<div class="highlight"><pre><span></span>PS C:\Users\a3580\Desktop&gt; python .\hello.py hello world --punctuation=!
 hello world!
-</code></pre></div>
+</pre></div>
 <p>总的感觉fire模块在开发前期可以让程序员写命令行工具省点心，专心在代码的编写上，后期有时间和精力觉得还是用click代码来实现更友好的命令行界面等。</p>
 
             
