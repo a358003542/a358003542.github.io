@@ -23,7 +23,7 @@
 <meta property="og:description" content="类 在python中一切皆对象。前面学的那些操作对象都是python程序语言自己内部定义的对象（Object），而接下来介绍的类的语法除了更好的理解之前的那些对象之外，再就是可以创造自己的操作对象。一般面向对象(OOP)编程的基本概念这里不重复说明了，如有不明请读者自己随便搜索一篇网页阅读下即可。 python中类的结构 python中的类就好像树叶，所有的类就构成了一棵树，而python中超类，子类，实例的重载或继承关系等就是由一种搜索机制实现的： python首先搜索self有没有这个属性或者方法，如果没有，就向上搜索。比如说实例l1没有，就向上搜索C1，C1没有就向上搜索C2或C3等。 实例继承了创造他的类的属性，创造他的类上面可能还有更上层的超类，类似的概念还有子类，表示这个 类在树形层次中比较低。 well，简单来说类的结构和搜索机制就是这样的，很好地模拟了真实世界知识的树形层次结构。 上面那副图实际编写的代码如下： class C2: ... class C3: ... class C1(C2,C3): ... l1=C1() l2=C1() 其中class语句是创造类，而C1继承自C2和C3，这是多重继承，从左到右是内部的搜索顺序（会影响重载）。l1和l2是根据类C1创造的两个实例。 对于初次接触类这个概念的读者并不指望他们马上就弄懂类这个概念 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-03-24T09:28:13.999088+08:00" />
+<meta property="og:article:published_time" content="2020-03-28T16:05:05.694296+08:00" />
 <meta name="twitter:title" content="python语言学习教程二进阶篇 ">
 <meta name="twitter:description" content="类 在python中一切皆对象。前面学的那些操作对象都是python程序语言自己内部定义的对象（Object），而接下来介绍的类的语法除了更好的理解之前的那些对象之外，再就是可以创造自己的操作对象。一般面向对象(OOP)编程的基本概念这里不重复说明了，如有不明请读者自己随便搜索一篇网页阅读下即可。 python中类的结构 python中的类就好像树叶，所有的类就构成了一棵树，而python中超类，子类，实例的重载或继承关系等就是由一种搜索机制实现的： python首先搜索self有没有这个属性或者方法，如果没有，就向上搜索。比如说实例l1没有，就向上搜索C1，C1没有就向上搜索C2或C3等。 实例继承了创造他的类的属性，创造他的类上面可能还有更上层的超类，类似的概念还有子类，表示这个 类在树形层次中比较低。 well，简单来说类的结构和搜索机制就是这样的，很好地模拟了真实世界知识的树形层次结构。 上面那副图实际编写的代码如下： class C2: ... class C3: ... class C1(C2,C3): ... l1=C1() l2=C1() 其中class语句是创造类，而C1继承自C2和C3，这是多重继承，从左到右是内部的搜索顺序（会影响重载）。l1和l2是根据类C1创造的两个实例。 对于初次接触类这个概念的读者并不指望他们马上就弄懂类这个概念 …">
 
@@ -165,34 +165,37 @@
 <li><a href="#_21">自定义装饰器</a></li>
 <li><a href="#_22">多个装饰器</a></li>
 <li><a href="#_23">装饰器带上参数</a></li>
-<li><a href="#_24">装饰器和装饰器的衍生装饰器</a></li>
-<li><a href="#_25">静态方法装饰器</a></li>
-<li><a href="#_26">类方法装饰器</a></li>
-<li><a href="#_27">属性饰器</a></li>
-<li><a href="#_28">函数装饰器</a></li>
-<li><a href="#_29">类作为装饰器</a></li>
+<li><a href="#_24">一般装饰器写法</a><ul>
+<li><a href="#_25">无参数装饰器版本</a></li>
+<li><a href="#_26">带参数装饰器版本</a></li>
 </ul>
 </li>
-<li><a href="#_30">多重继承的顺序问题</a><ul>
-<li><a href="#_31">菱形难题</a></li>
+<li><a href="#_27">静态方法装饰器</a></li>
+<li><a href="#_28">类方法装饰器</a></li>
+<li><a href="#_29">属性装饰器</a></li>
+<li><a href="#_30">类作为装饰器</a></li>
+</ul>
+</li>
+<li><a href="#_31">多重继承的顺序问题</a><ul>
+<li><a href="#_32">菱形难题</a></li>
 <li><a href="#super">super如何面对菱形难题</a></li>
 </ul>
 </li>
-<li><a href="#_32">描述器</a></li>
-<li><a href="#_33">缓存属性</a></li>
+<li><a href="#_33">描述器</a></li>
+<li><a href="#_34">缓存属性</a></li>
 <li><a href="#metaclass">什么是metaclass</a><ul>
-<li><a href="#_34">定义一个元类</a></li>
-<li><a href="#_35">使用一个元类</a></li>
+<li><a href="#_35">定义一个元类</a></li>
+<li><a href="#_36">使用一个元类</a></li>
 </ul>
 </li>
-<li><a href="#_36">进程和线程</a><ul>
+<li><a href="#_37">进程和线程</a><ul>
 <li><a href="#fork">进程fork</a></li>
-<li><a href="#_37">子进程和父进程分开</a></li>
-<li><a href="#_38">线程入门</a></li>
-<li><a href="#_39">后台线程</a></li>
-<li><a href="#_40">多线程: 一个定时器</a></li>
-<li><a href="#_41">多线程下载大文件</a></li>
-<li><a href="#_42">线程锁</a></li>
+<li><a href="#_38">子进程和父进程分开</a></li>
+<li><a href="#_39">线程入门</a></li>
+<li><a href="#_40">后台线程</a></li>
+<li><a href="#_41">多线程: 一个定时器</a></li>
+<li><a href="#_42">多线程下载大文件</a></li>
+<li><a href="#_43">线程锁</a></li>
 </ul>
 </li>
 </ul>
@@ -1009,7 +1012,7 @@ print(new_x1,new_x2)
 <p>当然对于多属性数据问题一般还是推荐使用类来处理，不过某些情况下可能不需要使用类，就这样简单处理之。</p>
 <p>值得一提的是这种数据存储形式和sql存储是一致的，而且不知道你们注意到没有，这似乎实现了矩阵的转置功能。</p>
 <h1 id="_20">装饰器</h1>
-<p>装饰器的作用机制就是对接下来的函数（类class声明其实也类似于函数声明，所以后面会提到类装饰器的概念）进行进一步的封装，比如：</p>
+<p>装饰器的作用机制就是对接下来的函数进行进一步的封装，比如：</p>
 <div class="highlight"><pre><span></span>    @staticmethod
     def what():
         pass
@@ -1029,8 +1032,7 @@ def print3(c):
 
 print3('c')  # print1(print3)('c')
 </pre></div>
-<p>比如上面的print1函数就做成了一个装饰器函数，后面的print3函数可以理解为
-<code>print3=print1(print3)</code> 。</p>
+<p>比如上面的print1函数就做成了一个装饰器函数，后面的print3函数可以理解为 <code>print3=print1(print3)</code> 。——在这里理解的关键在于理解python中函数名字是无关紧要的，关键是函数对象。比如这里右边的print3是<code>def print3</code> 时生成的那个函数对象，然后这个函数对象送给print1进行了处理并封装为一个新的函数对象，再把这个函数对象赋值给了变量print3。</p>
 <h2 id="_22">多个装饰器</h2>
 <div class="highlight"><pre><span></span>def print1(f):
     print('1',f)
@@ -1045,11 +1047,11 @@ def print2(f):
 def print4(c):
     print(c)
 
-print4('c')  # print2(print1(print4))(c)
+print4('c')
 </pre></div>
-<p>类似上面的多个装饰器就可以简单理解为: print4 = print2(print1(print4))</p>
+<p>多个装饰器的装饰顺序是从下往上的，上面的例子原print4函数对象先经过print1处理，然后再经过print2的处理，最后这个函数对象赋值给了变量print4。</p>
 <h2 id="_23">装饰器带上参数</h2>
-<p>在前面的例子中，我们就可以简单将装饰器函数理解为一个接受函数对象返回返回函数对象的函数，这很直观和简单。实际上装饰器也是可以带上自己的参数的，这需要通过什么函数的闭包结构才能完成，如下面的例子所示:</p>
+<p>在前面的例子中，我们就可以简单将装饰器函数理解为一个接受函数对象返回返回函数对象的函数，这很直观和简单。实际上装饰器也是可以带上自己的参数的，这需要通过函数的闭包结构【也就是函数里面定义函数的结构，这样内部函数是可以使用外部函数的那些参数和变量的】才能完成，如下面的例子所示:</p>
 <div class="highlight"><pre><span></span>def print1(f):
     print('1',f)
     return f
@@ -1065,42 +1067,59 @@ def print2(b):
 def print4(c):
     print(c)
 
-print4('c')  # print2(print1(print4))('b')(c)
+print4('c')
 </pre></div>
-<p>所谓闭包结构简单来说就是函数里面套函数的结构。前面在介绍nolocal关键词的时候说道，如果函数里面的嵌套函数的某个变量加上声明关键词nolocal，那么（如果嵌套函数内没有定义该本地变量），则该变量名是对应嵌套函数外面的自由变量的（自由变量在函数生存期具有记忆能力）。</p>
-<p>上面例子可以理解为<code>print2(print1(print4))('b')(c)</code>
-这样一个过程。首先执行print1(print4)，然后返回print4，这很直观。然后表达式变为<code>print2(print4)('b')(c)</code>，然后print2返回test，同时消费掉一个参数，即获得自由变量
-<code>b='b'</code> ，这样表达式变为 <code>test(print4)(c)</code> ，然后表达式继续规约为
-<code>print4(c)</code> 。</p>
-<h2 id="_24">装饰器和装饰器的衍生装饰器</h2>
-<p>写一个装饰器现在很已经很简单通用了，有如下写法：</p>
+<h2 id="_24">一般装饰器写法</h2>
+<p>本小节参考了 <a href="https://stackoverflow.com/questions/10294014/python-decorator-best-practice-using-a-class-vs-a-function">这个网页</a> 。一般书写一个装饰器函数有如下通用写法：</p>
+<h3 id="_25">无参数装饰器版本</h3>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="k">def</span> <span class="nf">test_decorator</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_decorator</span>
-    <span class="k">return</span> <span class="n">decorator</span>
+
+<span class="k">def</span> <span class="nf">mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wraper_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># do something</span>
+
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wraper_func</span>
+
+<span class="nd">@mydecorator</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    this is test function</span>
+<span class="sd">    """</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 </pre></div>
-<p>有的时候处于编程便捷的考虑，需要某些参数作为默认值另外再单独开出一个装饰器：</p>
-<div class="highlight"><pre><span></span><span class="n">bbb_decorator</span> <span class="o">=</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'bbb'</span><span class="p">)</span>
+<p>这里使用了 functools 模块的 wraps装饰器，其接受你要装饰的函数作为参数。如果不这样的话，你在原test函数中定义的说明文字将丢失，按照 <code>test=mydecorator(test)</code> ，实际上test变量接受的函数对象是 <code>wraper_func</code> ，不信你可以查看 <code>test.__name__</code> 其是等于 <code>wraper_func</code> 的。而如上使用wraps装饰器，你在原test函数中定义的名字和文档都将得到保留。</p>
+<h3 id="_26">带参数装饰器版本</h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">mydecorator</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wraper_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">'i know you pass to decorator parameters:'</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">)</span>
+            <span class="c1"># do something</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wraper_func</span>
+    <span class="k">return</span> <span class="n">_mydecorator</span>
+
+<span class="nd">@mydecorator</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    this is test function</span>
+<span class="sd">    """</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 </pre></div>
-<p>这是可行的，然后还有种写法，实际上是一样的：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">aaa_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">test_decorator</span><span class="p">(</span><span class="s1">'aaa'</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-</pre></div>
-<p>理解装饰器关键是理解：</p>
-<div class="highlight"><pre><span></span><span class="nd">@aaa_decorator</span>
-<span class="k">def</span> <span class="nf">hello2</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
-</pre></div>
-<p>装饰器不仅仅是函数作为第一个函数这么简单，更进行了函数的命名重定义。</p>
-<div class="highlight"><pre><span></span>hello2 = aaa_decorator(hello2)
-</pre></div>
-<p>而可以传参数的装饰器其首先消化掉参数，然后decorator，也就是实际装饰函数的是内部的那个decorator函数，而 <code>wraps</code> 只是为了保留原函数头doc的优化。</p>
-<h2 id="_25">静态方法装饰器</h2>
+<h2 id="_27">静态方法装饰器</h2>
 <div class="highlight"><pre><span></span>class Test:
 #    @staticmethod
     def hello():
@@ -1130,9 +1149,8 @@ Test.hello()
 <div class="highlight"><pre><span></span>QtGui.QFileDialog.getOpenFileName(......)
 </pre></div>
 <p>就是一个静态方法，可以通过直接调用这个方法来弹出询问打开文件的窗口，并不需要先实例化一个对象，然后通过self.what等类似的形式来调用。</p>
-<h2 id="_26">类方法装饰器</h2>
-<p>还有一个装饰器有时也会用到， <code>@classmethod</code>
-，叫什么类方法装饰器。其和前面的静态方法一样也可以不新建实例，而直接通过类来调用。其和静态方法的区别就是静态方法在调用的时候没有任何默认的第一参数，而类方法在调用的时候默认第一参数就是调用的那个类。</p>
+<h2 id="_28">类方法装饰器</h2>
+<p>还有一个装饰器有时也会用到， <code>@classmethod</code>，叫什么类方法装饰器。其和前面的静态方法一样也可以不新建实例，而直接通过类来调用。其和静态方法的区别就是静态方法在调用的时候没有任何默认的第一参数，而类方法在调用的时候默认第一参数就是调用的那个类。</p>
 <div class="highlight"><pre><span></span>class Test:
     @classmethod
     def hello(cls):
@@ -1144,7 +1162,7 @@ from class: &lt;class '__main__.Test'&gt; saying hello
 </pre></div>
 <p>关于classmethod装饰器实际上东西就这么多，然后就是传进去的第一个参数cls看你有什么使用需要了，比如
 <code>cls(...)</code> 将根据这个类来生成一个实例。</p>
-<h2 id="_27">属性饰器</h2>
+<h2 id="_29">属性装饰器</h2>
 <p>其他编程语言的开发者可能会在类里定义一些针对某些属性的get和set之类的方法，这并不是Pythonic的风格，对于某些特定名字的属性，一般利用属性装饰器来构建，如下所示：</p>
 <div class="highlight"><pre><span></span>class Apple():
     def __init__(self):
@@ -1191,70 +1209,8 @@ print(apple.color)
 apple.color = 'yellow'
 print(apple.color)
 </pre></div>
-<h2 id="_28">函数装饰器</h2>
-<p>本小节参考了 <a href="https://stackoverflow.com/questions/10294014/python-decorator-best-practice-using-a-class-vs-a-function">这个网页</a>。</p>
-<p>前面简单介绍了python的装饰器的概念，然后已经接触了带参数的函数装饰器的概念，之前的例子是为了直白，下面再写个例子表示函数的这种通用形式：</p>
-<div class="highlight"><pre><span></span>def mydecorator(arg1, arg2):
-    def _mydecorator(func):
-        print('i know you pass to decorator parameters:', arg1, arg2)
-
-        return func
-    return _mydecorator
-</pre></div>
-<div class="highlight"><pre><span></span>@mydecorator('a', 'b')
-def test(*args, **kwargs):
-    print(args, kwargs)
-</pre></div>
-<div class="highlight"><pre><span></span>test('test', a=1)
-
-('i know you pass to decorator parameters:', 'a', 'b')
-(('test',), {'a': 1})
-</pre></div>
-<p>上面的这种函数装饰器写法是在理解了装饰器的具体原理之后写出来的这种形式，和网上的这种写法有所区别，其更加简洁明了一点，不过还是推荐和大家使用一致的风格写法吧：</p>
-<div class="highlight"><pre><span></span>def mydecorator(arg1, arg2):
-    def _mydecorator(func):
-        def wraper_func(*args, **kwargs):
-            print('i know you pass to decorator parameters:', arg1, arg2)
-
-            return func(*args, **kwargs)
-        return wraper_func
-    return _mydecorator
-</pre></div>
-<div class="highlight"><pre><span></span>@mydecorator('a', 'b')
-def test(*args, **kwargs):
-    print(args, kwargs)
-</pre></div>
-<div class="highlight"><pre><span></span>test('test', a=1)
-</pre></div>
-<p>具体运行效果都是一致的，然后我们看到这里用到了函数套函数的结构，从而将装饰器上的一些参数都变为自由变量了，理解这一点是关键。</p>
-<p>更进一步的做法是利用functools模块的 <code>wraps</code> 函数来装饰最终实际执行的那个
-<code>wraper_func</code> 函数。</p>
-<div class="highlight"><pre><span></span>from functools import wraps
-</pre></div>
-<div class="highlight"><pre><span></span>def mydecorator(arg1, arg2):
-    def _mydecorator(func):
-        @wraps(func)
-        def wraper_func(*args, **kwargs):
-            print('i know you pass to decorator parameters:', arg1, arg2)
-
-            return func(*args, **kwargs)
-        return wraper_func
-    return _mydecorator
-</pre></div>
-<div class="highlight"><pre><span></span>@mydecorator('a', 'b')
-def test(*args, **kwargs):
-    """
-    this is test function
-    """
-    print(args, kwargs)
-</pre></div>
-<div class="highlight"><pre><span></span>test('test', a=1)
-print(test.__doc__)
-</pre></div>
-<p>这样做的好处就是目标函数的说明文档还保留着，目标函数的名字也保留着，目标函数的动作也保留着，只是经过装饰器之后需要经过一些额外的程序流程操作。</p>
-<h2 id="_29">类作为装饰器</h2>
-<p>类作为装饰器就是利用类的 <code>__call__</code>
-内置方法，我把这段代码粘贴在下面了，有时可能看别人的源码有用吧，但装饰器这部分就到此为止吧，没必要弄得这么复杂了。</p>
+<h2 id="_30">类作为装饰器</h2>
+<p>类作为装饰器就是利用类的 <code>__call__</code>内置方法，我把这段代码粘贴在下面了，有时可能看别人的源码有用吧，但装饰器这部分就到此为止吧，没必要弄得这么复杂了。</p>
 <div class="highlight"><pre><span></span>class MyDecorator(object):
     """Decorator example mixing class and function definitions."""
     def __init__(self, func, param1, param2):
@@ -1286,7 +1242,7 @@ class C:
 <div class="highlight"><pre><span></span>C = decorator(C)
 </pre></div>
 <p>所以函数装饰器相当于函数对象创建过程的深度定制DIY，而类装饰器就相当于类对象创建过程的深度DIY。</p>
-<h1 id="_30">多重继承的顺序问题</h1>
+<h1 id="_31">多重继承的顺序问题</h1>
 <p>我们来看下面这个例子：</p>
 <div class="highlight"><pre><span></span>class B1():x='B1'
 class B2():x='B2'
@@ -1304,7 +1260,7 @@ print(test.x)
 <p>然后我们再把B的x赋值语句换成pass，这时的结果是<em>'B1'</em>，也没什么好惊讶的。然后类似的一致操作下去，我们会发现python的值的查找顺序在这里是：D，B，B1，B2，B3，A，A1，A2。</p>
 <p>于是我们可以总结道：恩，类的多重继承就是深度优先法则，先把子类或者子类的子类都查找完，确认没有值之后再继续从左到右的查找。</p>
 <p>一般情况来说这么理解是没有问题的，但是在编程界多重继承中有个有名的问题------菱形难题。</p>
-<h2 id="_31">菱形难题</h2>
+<h2 id="_32">菱形难题</h2>
 <p>参考资料：<a href="http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">维基百科菱形难题</a></p>
 <p><img alt="菱形难题" src="https://a358003542.github.io/images/python/ling-xing-nan-ti.png"/></p>
 <p>菱形难题即在如上的类的继承中，如果C和A都有同名属性x，那么D会调用谁的呢？读者测试下面的例子：</p>
@@ -1377,7 +1333,7 @@ fun3
 </pre></div>
 <p>其中A类定义的fun函数在写的函数上通常有个self参数，而<em>super()</em>这种调用形式在意义上表示其的父类，同时默认第一个参数就是self。使用super()在类的编写中引用本类的父类的属性和方法是很便捷的，
 。比如上面的例子中fun3能被调用是因为多重继承的机制在这里，所以它会逐个找父类。然后c.d会出错，因为这里初始化是用的A类的构造函数。</p>
-<h1 id="_32">描述器</h1>
+<h1 id="_33">描述器</h1>
 <p>本小节参考了<a href="http://pyzh.readthedocs.io/en/latest/Descriptor-HOW-TO-Guide.html">这个网页</a> 。</p>
 <p>上面谈及的属性装饰器，其实际上是调用的property函数，</p>
 <div class="highlight"><pre><span></span>property(fget, fset, fdel, descrition)
@@ -1426,7 +1382,7 @@ fun3
     def deleter(self, fdel):
         return type(self)(self.fget, self.fset, fdel, self.__doc__)
 </pre></div>
-<h1 id="_33">缓存属性</h1>
+<h1 id="_34">缓存属性</h1>
 <p>下面这个例子灵感来自python官方装饰器 <code>@property</code>
 的源码，稍作修改使得某个对象的属性具有记忆特性。</p>
 <div class="highlight"><pre><span></span>import time
@@ -1494,18 +1450,18 @@ import logging
 <p>这样就创造了一个类了，然后之前我们提到： 类还要调用自身的 <code>__new__</code> ，
 <code>__call__</code> ，这样就创造出一个实例来了。</p>
 <p>之前提到type的type也是type，type大体可以看作python中类型的最底层的原子结构吧。元类创造类，然后是类创造实例。</p>
-<h2 id="_34">定义一个元类</h2>
+<h2 id="_35">定义一个元类</h2>
 <div class="highlight"><pre><span></span>class Meta(type):
     def __new__(meta, classname, supers, classdict):
         # do something
         return type.__new__(meta, classname, supers, classdict)
 </pre></div>
-<h2 id="_35">使用一个元类</h2>
+<h2 id="_36">使用一个元类</h2>
 <div class="highlight"><pre><span></span>class Test(Super, metaclass=Meta):
     pass
 </pre></div>
 <p>元类理解起来并不难，关键是如何把握在合适的时候合适的使用。</p>
-<h1 id="_36">进程和线程</h1>
+<h1 id="_37">进程和线程</h1>
 <p>进程的定义是: 一个正在执行的程序实例。每个进程都有一个唯一的进程ID，也就是所谓的 <strong>PID</strong> 。使用<code>ps</code>
 命令的第一个列就是每个进程的PID属性。在python中你可以使用<code>os.getpid()</code>来查看当前进程的PID。</p>
 <p>以前只有一个CPU的机器上，多任务操作系统实际上一次也只能运行一个进程，操作系统是通过不断切换各个进程给你一种多任务似乎同时在运行多个程序的感觉的。多CPU机器上是真的可以同时运行多个进程。</p>
@@ -1527,7 +1483,7 @@ print('after fork')
 <p>对于这个程序简单的理解就是，本py文件编译成字节码进入内存经过某些成为一个程序实例了（其中还包含其他一些信息），然后程序具体运行的时候会通过os.fork来调用系统的fork函数，然后复制本程序实例（以本程序实例目前已经所处的状态），因为print('before
 fork')已经执行了，所以子进程就不会执行这一行代码了，而是继续os.fork()下面的代码继续执行。此时就相当于有两个程序在运行了，至于后面的打印顺序那是说不准的。</p>
 <p>关于操作系统具体如何fork的我们可以暂时不考虑，这两个程序实例里面的变量和运行环境基本上是一模一样的，除了运行的状态有所不同之外。fork可以做出一种程序多任务处理方案吧，不过os模块的fork方法目前只支持unix环境。</p>
-<h2 id="_37">子进程和父进程分开</h2>
+<h2 id="_38">子进程和父进程分开</h2>
 <p>请看下面的代码:</p>
 <div class="highlight"><pre><span></span>import os, time
 
@@ -1555,7 +1511,7 @@ after fork
 </pre></div>
 <p>我们看到在父进程那一边，pid是本父进程的子进程PID，而在子进程那一边，os.fork()返回的是0。可以利用这点将父进程的操作和子进程的操作分开。具体上面的代码if
 pid 那一块是父进程的，else那一块是子进程的。</p>
-<h2 id="_38">线程入门</h2>
+<h2 id="_39">线程入门</h2>
 <p>线程的内部实施细节其实比进程要更加复杂，一般通俗的说法就是线程是轻量级进程，这里不深入讨论具体线程的细节。</p>
 <p>python操作线程的主要模块是<strong>threading</strong>模块，简单的使用就是新建一个线程对象(Thread)，然后调用<strong>start</strong>方法来启动它，具体线程要做些什么由本线程对象的<strong>run</strong>确定，你可以重定义它，如果是默认的就是调用本线程Thread类新建是输入的<strong>target</strong>参数，这个target参数具体指向某个函数。下面是一个简单的例子:</p>
 <div class="highlight"><pre><span></span>import random, threading
@@ -1625,7 +1581,7 @@ print(result)
 </pre></div>
 <p>来确保各个线程都执行完了，如之前的形式并不能达到多任务并行处理的效果。</p>
 <p>上面的例子对线程的执行顺序没有特殊要求，如果有的话推荐使用python的queue模块，这里就略过了。</p>
-<h2 id="_39">后台线程</h2>
+<h2 id="_40">后台线程</h2>
 <p>下面的函数实现了一个后台警报线程，不会阻塞主程序。</p>
 <div class="highlight"><pre><span></span>def beep(a,b):
     '''make a sound , 
@@ -1649,7 +1605,7 @@ print(result)
 </pre></div>
 <p>如上所示，原beep函数调用系统的play命令制造一个声音，其中b是声音持续的时间，所以其是阻塞的。我们将其作为一个线程调用之后，然后其就没有阻塞主程序了。这里的
 <code>daemon</code> 的意思是让这个线程成为一个后台线程，请参看 <a href="http://stackoverflow.com/questions/190010/daemon-threads-explanation">这个网页</a> ，其说道后台线程可以不用管了，后面会随着主程序自动关闭。</p>
-<h2 id="_40">多线程: 一个定时器</h2>
+<h2 id="_41">多线程: 一个定时器</h2>
 <p>这个例子主要参考了<a href="https://mail.python.org/pipermail/tutor/2004-November/033333.html">这个网页</a>。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">threading</span>
@@ -1690,7 +1646,7 @@ print(result)
 <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 <p>具体还是很简单的，这里之所以使用线程就是为了timer.sleep函数不冻结主程序。</p>
-<h2 id="_41">多线程下载大文件</h2>
+<h2 id="_42">多线程下载大文件</h2>
 <p>本小节参考了 <a href="http://stackoverflow.com/questions/13973188/requests-with-multiple-connections">这个网页</a> 和 <a href="http://stackoverflow.com/questions/16694907/how-to-download-large-file-in-python-with-requests-py">这个网页</a> 。</p>
 <p>下面的 <code>get_content_tofile</code>
 函数在目标内容大小大于1M的时候将启动多线程下载方法。其中
@@ -1801,7 +1757,7 @@ print(result)
                     <span class="nb">print</span><span class="p">(</span><span class="s1">'end...'</span><span class="p">)</span>
                     <span class="k">break</span>
 </pre></div>
-<h2 id="_42">线程锁</h2>
+<h2 id="_43">线程锁</h2>
 <p>python有两种类型线程锁 <code>Lock</code> 和 <code>RLock</code> ，其都是通过 <code>acquire</code> 来获取锁和 <code>release</code> 来释放锁。当一个线程试着访问某个unlocked的锁，<code>acquire</code> 将立即返回；如果访问的是locked的锁，那么该线程将阻塞，直到一个 <code>release</code> 释放了该锁。</p>
 <p>RLock和Lock的区别是RLock可以被相同的线程acquire多次，RLock人们也称之为递归锁，如果你的某个（递归）函数在某个线程中多次访问资源，而这时被允许的，那么你应该使用RLock。</p>
 <p>RLock常和with语句一起使用：</p>
@@ -1817,7 +1773,7 @@ with lock:
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-03-24T09:28:13.999088+08:00">2020年 3月 24日 </time>
+            <time pubdate="pubdate" datetime="2020-03-28T16:05:05.694296+08:00">2020年 3月 28日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#python_language-ref">python_language</a>

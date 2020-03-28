@@ -23,7 +23,7 @@
 <meta property="og:description" content="引入模块 import语句 import语句的一般使用方法之前已有接触，比如 import math ，然后要使用math模块里面的函数或者类等需要使用这样的带点的变量名结构：math.pi。 此外import语句还有一个常见的缩写名使用技巧，比如import numpy as np，那么后面就可以这样写了， np.array，而不是numpy.array。 from语句 from语句的使用有以下两种情况： from this import this from what import * 第一种形式是点名只导入某个变量，第二种形式是都导入进来。我想读者肯定知道这点，使用第二种导入形式的时候要小心变量名覆盖问题，这个自己心里有数即可。 reload函数 reload函数可以重新载入某个模块，reload函数的优点就是不需要重新启动应用程序，更加合理的动态重载一些模块。reload只能用于python编写的模块，在python3中，reload函数被移到imp模块里面去了，因此首先需要import imp才能使用了。比如说： from imp import reload reload(somemodule) time模块 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-03-18T23:55:13.651520+08:00" />
+<meta property="og:article:published_time" content="2020-03-28T16:30:14.836122+08:00" />
 <meta name="twitter:title" content="python语言学习教程三模块篇 ">
 <meta name="twitter:description" content="引入模块 import语句 import语句的一般使用方法之前已有接触，比如 import math ，然后要使用math模块里面的函数或者类等需要使用这样的带点的变量名结构：math.pi。 此外import语句还有一个常见的缩写名使用技巧，比如import numpy as np，那么后面就可以这样写了， np.array，而不是numpy.array。 from语句 from语句的使用有以下两种情况： from this import this from what import * 第一种形式是点名只导入某个变量，第二种形式是都导入进来。我想读者肯定知道这点，使用第二种导入形式的时候要小心变量名覆盖问题，这个自己心里有数即可。 reload函数 reload函数可以重新载入某个模块，reload函数的优点就是不需要重新启动应用程序，更加合理的动态重载一些模块。reload只能用于python编写的模块，在python3中，reload函数被移到imp模块里面去了，因此首先需要import imp才能使用了。比如说： from imp import reload reload(somemodule) time模块 …">
 
@@ -270,7 +270,6 @@
 </li>
 </ul>
 </li>
-<li><a href="#abc">abc模块</a></li>
 <li><a href="#argparse">argparse模块</a><ul>
 <li><a href="#_26">简单添加一个参数</a></li>
 <li><a href="#_27">添加参数的其他选项设置</a><ul>
@@ -284,22 +283,13 @@
 </li>
 </ul>
 </li>
-<li><a href="#ast">ast模块</a><ul>
-<li><a href="#literal95eval">literal_eval函数</a></li>
-</ul>
-</li>
-<li><a href="#collections">collections模块</a><ul>
-<li><a href="#namedtuple">namedtuple函数</a></li>
-<li><a href="#counter">Counter计数类</a></li>
-<li><a href="#ordereddict">OrderedDict对象</a></li>
-</ul>
-</li>
 <li><a href="#configparser">configparser模块</a><ul>
 <li><a href="#configparser_1">新建一个configparser对象</a></li>
 <li><a href="#config">读取某个config文件</a></li>
 <li><a href="#configparser_2">如同字典一般操作configparser对象</a></li>
 <li><a href="#write">调用write方法写入</a></li>
 <li><a href="#_29">不默认更改大小写</a></li>
+<li><a href="#configparse">configparse处理特殊字符</a></li>
 </ul>
 </li>
 <li><a href="#csv">csv模块</a><ul>
@@ -1496,28 +1486,6 @@ if __name__ == '__main__':
 <div class="highlight"><pre><span></span>re.search(r'((?:.|\n)*)',text2)
 </pre></div>
 <p>然后默认 <code>.</code> 是不会匹配换行符号的，如果要引入换行符则要如上所示加上。</p>
-<h2 id="abc">abc模块</h2>
-<p>abc模块帮助你实现抽象基类，有点类似于java中抽象类的概念。</p>
-<p>具体实现如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span> 
-
-<span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    一般图</span>
-<span class="sd">    """</span>
-    <span class="n">DIRECTED</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        :return:</span>
-<span class="sd">        """</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement nodes methods"</span><span class="p">)</span>
-</pre></div>
-<p>抽象类不可实例化，实例化将会报错。继承于它的类，如果如上定义了抽象方法，那么继承它的类必须定义好对应方法的实现，否则将会报错。</p>
-<p>抽象类里面也可以定义不是抽象方法的其他实际动作的方法。</p>
-<p>抽象类里面还可以定义抽象属性。</p>
 <h2 id="argparse">argparse模块</h2>
 <p>下面简要介绍了python3的官方文档argparse模块的用法，用于快速制作一个可以刷参数的python脚本。</p>
 <p>首先看下面这个简单的情况:</p>
@@ -1764,58 +1732,6 @@ Namespace(foo=True)
     <span class="n">hello</span><span class="p">()</span>
 </pre></div>
 <p>这里的ctx和param到click模块那边再细讲吧，我们看到整个过程比argparse美观多了。</p>
-<h2 id="ast">ast模块</h2>
-<p>更多信息请参看 <a href="https://docs.python.org/3.4/library/ast.html">官方文档</a> 。</p>
-<h3 id="literal95eval">literal_eval函数</h3>
-<p><code>literal_eval</code>函数是一个非常有用的函数，其可用于将某个短小的python字符串转化成python
-object。如下所示:</p>
-<div class="highlight"><pre><span></span>import ast
-def str2pyobj(val):
-    '''str to python obj or not changed'''
-    try:
-        val = ast.literal_eval(val)
-    except Exception:###
-        pass
-    return val
-</pre></div>
-<p>支持的python object有: strings, bytes, numbers, tuples, lists, dicts,
-sets, booleans, and None.</p>
-<p>所以一般的字符串如 \"1\" \"3.14\" \"[1,2,3]\" 将其分别转化成为integer
-float
-和list是小菜一碟。当然最好建立异常捕捉，如果转化失败，则原样返回字符串即可。</p>
-<h2 id="collections">collections模块</h2>
-<p>更多内容请参见<a href="https://docs.python.org/3/library/collections.html">官方文档</a>。</p>
-<h3 id="namedtuple">namedtuple函数</h3>
-<p>collections模块里面的namedtuple函数将会产生一个有名字的数组的类（有名数组），通过这个类可以新建类似的实例。比如：</p>
-<div class="highlight"><pre><span></span>from collections import namedtuple
-
-Point3d=namedtuple('Point3d',['x','y','z'])
-p1=Point3d(0,1,2)
-print(p1)
-print(p1[0],p1.z)
-
-Point3d(x=0, y=1, z=2)
-0 2
-</pre></div>
-<h3 id="counter">Counter计数类</h3>
-<p>可以进行简单的输入数据统计频数计算。</p>
-<h3 id="ordereddict">OrderedDict对象</h3>
-<p>python中的字典对象默认各个key是没有顺序的，OrderdDict对象的概念就是在字典概念的基础上让各个key有顺序。</p>
-<p>一个例子如下所示（来自官方文档）。简单的理解就是一个字典对象记住了各个key的插入顺序。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; d = {'banana': 3, 'apple':4, 'pear': 1, 'orange': 2}
-
-&gt;&gt;&gt; # dictionary sorted by key
-&gt;&gt;&gt; OrderedDict(sorted(d.items(), key=lambda t: t[0]))
-OrderedDict([('apple', 4), ('banana', 3), ('orange', 2), ('pear', 1)])
-
-&gt;&gt;&gt; # dictionary sorted by value
-&gt;&gt;&gt; OrderedDict(sorted(d.items(), key=lambda t: t[1]))
-OrderedDict([('pear', 1), ('orange', 2), ('banana', 3), ('apple', 4)])
-
-&gt;&gt;&gt; # dictionary sorted by length of the key string
-&gt;&gt;&gt; OrderedDict(sorted(d.items(), key=lambda t: len(t[0])))
-OrderedDict([('pear', 1), ('apple', 4), ('orange', 2), ('banana', 3)])
-</pre></div>
 <h2 id="configparser">configparser模块</h2>
 <p>简单的配置文件管理就用python的内置模块configparser。python2对应的模块名字叫 ConfigParser 。</p>
 <p>python3之后configparser的使用更加简单了，具体就分为如下几步:</p>
@@ -1847,6 +1763,8 @@ name改成小写，我不太喜欢这种风格，因为将configparser刷成字�
 <div class="highlight"><pre><span></span>self.cfg = configparser.ConfigParser()
 self.cfg.optionxform = str## not auto make it lowercase
 </pre></div>
+<h3 id="configparse">configparse处理特殊字符</h3>
+<p>configparse对于某些特殊字符可能会报错，参考了 <a href="https://stackoverflow.com/questions/14340366/configparser-and-string-with">这个问题</a> ，推荐使用 <code>RawConfigParser</code> ，这样就可以解决问题。</p>
 <h2 id="csv">csv模块</h2>
 <p>csv模块的使用主要是 <code>reader</code> 和 <code>writer</code> 两个函数，此外还提供了 <code>DictReader</code> 和 <code>DictWriter</code> 两个基于 reader和 writer的两个辅助类。reader和writer是接受的文件对象，具体使用参见官方的样例：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">csv</span>
@@ -2037,7 +1955,7 @@ self.cfg.optionxform = str## not auto make it lowercase
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-03-18T23:55:13.651520+08:00">2020年 3月 18日 </time>
+            <time pubdate="pubdate" datetime="2020-03-28T16:30:14.836122+08:00">2020年 3月 28日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#python_language-ref">python_language</a>

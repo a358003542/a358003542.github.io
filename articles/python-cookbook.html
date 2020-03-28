@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本文列出笔者学习和实践python中接触到的各个小技巧，小知识点，在这里汇总并整理之。 核心内置 利用int函数进行进位转换 int函数用于强制类型转换的时候，可以将一个类数值字符串变成integer，但这个函数还隐藏了一个强大的功能，那就是其还有第二个可选参数，进位制。 &gt;&gt;&gt; int(&#39;a&#39;, base=16) 10 &gt;&gt;&gt; int(&#39;0xa&#39;, base=16) 10 上面的效果就是将一个十六进制的字符按照十六进制输出一个十进制的数值。有相同需求的地方别用eval了。 assert语句 assert语句简单的理解就是 assert True ，正常刷过去，而 assert False 将抛出AssertionError 。 assert语句实际上是非常重要的一个语句，程序员在编码的时候需要形成一种防御型编码风格，注意这不是所谓的编码规范，而是重要性更高一等级的编码风格，是一种思维方式。 那么什么是防御型编码风格，简言之就是你在编码的时候，你对于你即将面对的各个数据类型的预期。比如说 is_even 函数是一个判断输入的整数是否是偶数的函数，那么你预期输入的数值就是一个整数，这个时候你就可以加上assert isinstance(x, int …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-03-24T08:40:32.781745+08:00" />
+<meta property="og:article:published_time" content="2020-03-28T16:34:50.266898+08:00" />
 <meta name="twitter:title" content="python语言学习之cookbook ">
 <meta name="twitter:description" content="前言 本文列出笔者学习和实践python中接触到的各个小技巧，小知识点，在这里汇总并整理之。 核心内置 利用int函数进行进位转换 int函数用于强制类型转换的时候，可以将一个类数值字符串变成integer，但这个函数还隐藏了一个强大的功能，那就是其还有第二个可选参数，进位制。 &gt;&gt;&gt; int(&#39;a&#39;, base=16) 10 &gt;&gt;&gt; int(&#39;0xa&#39;, base=16) 10 上面的效果就是将一个十六进制的字符按照十六进制输出一个十进制的数值。有相同需求的地方别用eval了。 assert语句 assert语句简单的理解就是 assert True ，正常刷过去，而 assert False 将抛出AssertionError 。 assert语句实际上是非常重要的一个语句，程序员在编码的时候需要形成一种防御型编码风格，注意这不是所谓的编码规范，而是重要性更高一等级的编码风格，是一种思维方式。 那么什么是防御型编码风格，简言之就是你在编码的时候，你对于你即将面对的各个数据类型的预期。比如说 is_even 函数是一个判断输入的整数是否是偶数的函数，那么你预期输入的数值就是一个整数，这个时候你就可以加上assert isinstance(x, int …">
 
@@ -158,16 +158,20 @@
 </li>
 <li><a href="#_18">有用的内置模块</a><ul>
 <li><a href="#flatten">可迭代对象flatten操作</a></li>
+<li><a href="#abc">利用abc模块来实现抽象基类</a></li>
 <li><a href="#loggingpprint">在logging中使用pprint</a></li>
-<li><a href="#product">product函数</a></li>
-<li><a href="#deque">deque结构</a></li>
+<li><a href="#astliteral_eveleval">利用ast模块的literal_evel函数来更安全的eval</a></li>
+<li><a href="#itertoolsproduct">利用itertools模块的product函数来遍历组合</a></li>
+<li><a href="#collectionsdeque">利用collections模块的deque数据结构</a></li>
 <li><a href="#_19">查找多个最大最小元素的情况</a></li>
-<li><a href="#ordereddict">OrderedDict类</a></li>
+<li><a href="#collectionsorderdict">利用collections模块的Orderdict类</a></li>
 </ul>
 </li>
 <li><a href="#counter">Counter类</a><ul>
+<li><a href="#collectionsnamedtuple">利用collections模块的namedtuple</a></li>
+<li><a href="#dataclass">构建一个dataclass类</a></li>
 <li><a href="#configparse">configparse处理特殊字符</a></li>
-<li><a href="#chainmap">ChainMap</a></li>
+<li><a href="#collectionschainmap">利用collections模块的ChainMap定义搜索过程</a></li>
 <li><a href="#typingnamedtuple">typing.NamedTuple</a></li>
 <li><a href="#queuepriorityqueue">queue.PriorityQueue</a></li>
 <li><a href="#queuequeue">queue.Queue</a></li>
@@ -422,6 +426,28 @@ print(list(itertools.chain.from_iterable(a_list)))
 print(list(itertools.chain(*a_list)))
 # Output: [1, 2, 3, 4, 5, 6]
 </pre></div>
+<h3 id="abc">利用abc模块来实现抽象基类</h3>
+<p>abc模块帮助你实现抽象基类，有点类似于java中抽象类的概念。</p>
+<p>具体实现如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span> 
+
+<span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    一般图</span>
+<span class="sd">    """</span>
+    <span class="n">DIRECTED</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        :return:</span>
+<span class="sd">        """</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement nodes methods"</span><span class="p">)</span>
+</pre></div>
+<p>抽象类不可实例化，实例化将会报错。继承于它的类，如果如上定义了抽象方法，那么继承它的类必须定义好对应方法的实现，否则将会报错。</p>
+<p>抽象类里面也可以定义不是抽象方法的其他实际动作的方法。</p>
+<p>抽象类里面还可以定义抽象属性。</p>
 <h3 id="loggingpprint">在logging中使用pprint</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/11093236/use-logging-print-the-output-of-pprint">这个网页</a> 。</p>
 <p>有的时候logging的输出我们希望调用pprint从而输出打印更加美观些，可以调用pformat函数来达到这个效果：</p>
@@ -429,7 +455,24 @@ print(list(itertools.chain(*a_list)))
 <span class="n">ds</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'hello'</span><span class="p">:</span> <span class="s1">'there'</span><span class="p">}]</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pformat</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
 </pre></div>
-<h3 id="product">product函数</h3>
+<h3 id="astliteral_eveleval">利用ast模块的literal_evel函数来更安全的eval</h3>
+<p><code>literal_eval</code>函数是一个非常有用的函数，其可用于将某个短小的python字符串转化成python
+object。如下所示:</p>
+<div class="highlight"><pre><span></span>import ast
+def str2pyobj(val):
+    '''str to python obj or not changed'''
+    try:
+        val = ast.literal_eval(val)
+    except Exception:###
+        pass
+    return val
+</pre></div>
+<p>支持的python object有: strings, bytes, numbers, tuples, lists, dicts,
+sets, booleans, and None.</p>
+<p>所以一般的字符串如 \"1\" \"3.14\" \"[1,2,3]\" 将其分别转化成为integer
+float
+和list是小菜一碟。当然最好建立异常捕捉，如果转化失败，则原样返回字符串即可。</p>
+<h3 id="itertoolsproduct">利用itertools模块的product函数来遍历组合</h3>
 <p>product函数在 <code>itertools</code> 模块里面，按照官方文档的说明是product(A, B)返回值等价于((x,y) for x in A for y in B)，也就是各种可能的组合情况（类似于笛卡尔积的概念）:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; list(product(['a','b'],['c']))
 [('a', 'c'), ('b', 'c')]
@@ -442,7 +485,7 @@ print(list(itertools.chain(*a_list)))
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; list(product(['True','False'],['True','False'],['True','False']))
 [('True', 'True', 'True'), ('True', 'True', 'False'), ('True', 'False', 'True'), ('True', 'False', 'False'), ('False', 'True', 'True'), ('False', 'True', 'False'), ('False', 'False', 'True'), ('False', 'False', 'False')]
 </pre></div>
-<h3 id="deque">deque结构</h3>
+<h3 id="collectionsdeque">利用collections模块的deque数据结构</h3>
 <p>本小节主要参考了 <a href="http://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p03_keep_last_n_items.html">这个网页</a> 。</p>
 <p>我想读者可能已经接触过queue结构了吧，queue结构是一端进data，然后另一端出data，这样形成了先进先出的数据流。而deque结构两端都可以进两端都可以出，这看上有点古怪，如果你只使用一端的话，那么其好像一个堆栈结构，是先进后出的；而如果一端只是进，另一端只是出，其又好像一个queue结构。那么其有什么优势呢？deque结构最大的优势，也就是我们需要使用它的原因是: 其两端插入元素和删除元素的时间复杂度是O(1)，是一个常数级，而列表开头插入或删除元素的时间复杂度是O(N)，所以如果我们需要一个类似列表的数据存储结构，而这个数据结构中，开头的几个元素和末尾的几个元素都比较重要，经常被访问，那么就应该使用deque结构。</p>
 <p>上面的网页介绍了这么一个函数，用来返回一个文件最后的几行:</p>
@@ -462,7 +505,7 @@ heapq.heapify(lst)
 heapq.nlargest(3,lst)
 heapq.nsmallest(3,lst)
 </pre></div>
-<h3 id="ordereddict">OrderedDict类</h3>
+<h3 id="collectionsorderdict">利用collections模块的Orderdict类</h3>
 <p>字典一般没有排序的需求吧，就是有也可以输出的时候再排序，再说OrderedDict和一般字典比较起来存储开销大了一倍，能不用就不用吧。不过在某些情况下，用这个类确实能带来一些便利。我第一次遇到这种情况大体是在bilibili的api对接那里，其计算密钥需要将所有参数排序然后urlencode为字符串然后再基于这个字符串进行一些计算。</p>
 <div class="highlight"><pre><span></span>    params = OrderedDict(sorted(params.items(), key=lambda t: t[0]))
     string = urlencode(params)
@@ -507,9 +550,37 @@ heapq.nsmallest(3,lst)
     &gt;&gt;&gt;
 </pre></div>
 <p>这个数据结构最为人们数值的统计频数了，通过调用 <code>most_common(n)</code> 方法，n是排行榜的前n名。</p>
+<h3 id="collectionsnamedtuple">利用collections模块的namedtuple</h3>
+<p>collections模块里面的namedtuple函数将会产生一个有名字的数组的类（有名数组），通过这个类可以新建类似的实例。比如：</p>
+<div class="highlight"><pre><span></span>from collections import namedtuple
+
+Point3d=namedtuple('Point3d',['x','y','z'])
+p1=Point3d(0,1,2)
+print(p1)
+print(p1[0],p1.z)
+
+Point3d(x=0, y=1, z=2)
+0 2
+</pre></div>
+<h3 id="dataclass">构建一个dataclass类</h3>
+<p>python3.7新加入的dataclass类是一个很有用的特性，对于代码中的某些函数之间彼此传输的特定数据，可以如下构建一个dataclass类：</p>
+<div class="highlight"><pre><span></span>@dataclass
+class InventoryItem:
+    '''Class for keeping track of an item in inventory.'''
+    name: str
+    unit_price: float
+    quantity_on_hand: int = 0
+</pre></div>
+<p>其大致效果等于：</p>
+<div class="highlight"><pre><span></span>def __init__(self, name: str, unit_price: float, quantity_on_hand: int=0):
+    self.name = name
+    self.unit_price = unit_price
+    self.quantity_on_hand = quantity_on_hand
+</pre></div>
+<p>编写这样的dataclass类主要是让你的项目代码数据定义更加清晰化。</p>
 <h3 id="configparse">configparse处理特殊字符</h3>
 <p>configparse对于某些特殊字符可能会报错，参考了 <a href="https://stackoverflow.com/questions/14340366/configparser-and-string-with">这个问题</a> ，推荐使用 <code>RawConfigParser</code> ，这样就可以解决问题。</p>
-<h3 id="chainmap">ChainMap</h3>
+<h3 id="collectionschainmap">利用collections模块的ChainMap定义搜索过程</h3>
 <p>将多个字典组合成为一个map字典，想到的一个应用就是配置字典流，利用ChainMap定义搜索路径流，先搜索到的配置优先取用。</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">ChainMap</span>
 <span class="n">d1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s1">'b'</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
@@ -667,7 +738,7 @@ test.hello()
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-03-24T08:40:32.781745+08:00">2020年 3月 24日 </time>
+            <time pubdate="pubdate" datetime="2020-03-28T16:34:50.266898+08:00">2020年 3月 28日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#python_language-ref">python_language</a>
