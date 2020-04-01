@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 这里列出一些个人日常操作遇到的案例，可以参考学习，也可以触类旁通的学习下SQL的高级知识。 根据某些条件删除某个表格的重复行 DELETE FROM news T1 USING news T2 WHERE T1.id &lt; T2.id -- delete the older versions AND T1.url = T2.url; -- add more columns if needed 上面这句话的意思是删除本news表格中url重复的行，删除的是那些id小的行（T1.id&lt; T2.id） 这里delete语句使用using说简单点就是后面的where子句可以使用该表格，类似于select的from；说复杂点如果是本表格的话，那么就是自连接self-join。 对于join的简单理解就是 (a,b) * (a, b) =&gt; a a , a b …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="sql, database, SQL, " />
+
+<meta property="og:title" content="sql数据库学习之cookbook "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/sqlshu-ju-ku-xue-xi-zhi-cookbook.html" />
+<meta property="og:description" content="前言 这里列出一些个人日常操作遇到的案例，可以参考学习，也可以触类旁通的学习下SQL的高级知识。 根据某些条件删除某个表格的重复行 DELETE FROM news T1 USING news T2 WHERE T1.id &lt; T2.id -- delete the older versions AND T1.url = T2.url; -- add more columns if needed 上面这句话的意思是删除本news表格中url重复的行，删除的是那些id小的行（T1.id&lt; T2.id） 这里delete语句使用using说简单点就是后面的where子句可以使用该表格，类似于select的from；说复杂点如果是本表格的话，那么就是自连接self-join。 对于join的简单理解就是 (a,b) * (a, b) =&gt; a a , a b …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-04-01T15:22:01.282257+08:00" />
+<meta name="twitter:title" content="sql数据库学习之cookbook ">
+<meta name="twitter:description" content="前言 这里列出一些个人日常操作遇到的案例，可以参考学习，也可以触类旁通的学习下SQL的高级知识。 根据某些条件删除某个表格的重复行 DELETE FROM news T1 USING news T2 WHERE T1.id &lt; T2.id -- delete the older versions AND T1.url = T2.url; -- add more columns if needed 上面这句话的意思是删除本news表格中url重复的行，删除的是那些id小的行（T1.id&lt; T2.id） 这里delete语句使用using说简单点就是后面的where子句可以使用该表格，类似于select的from；说复杂点如果是本表格的话，那么就是自连接self-join。 对于join的简单理解就是 (a,b) * (a, b) =&gt; a a , a b …">
+
+
+    <title>sql数据库学习之cookbook  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/sqlshu-ju-ku-xue-xi-zhi-cookbook.html"> sql数据库学习之cookbook  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">根据某些条件删除某个表格的重复行</a></li>
+<li><a href="#_3">根据表格的某个字段值更新本表格</a></li>
+<li><a href="#_4">快速检查某一行是否存在</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">前言</h2>
+<p>这里列出一些个人日常操作遇到的案例，可以参考学习，也可以触类旁通的学习下SQL的高级知识。</p>
+<h2 id="_2">根据某些条件删除某个表格的重复行</h2>
+<div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">news</span> <span class="n">T1</span>
+   <span class="k">USING</span>  <span class="n">news</span> <span class="n">T2</span>
+ <span class="k">WHERE</span>  <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span> <span class="c1">-- delete the older versions</span>
+   <span class="k">AND</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span><span class="p">;</span> <span class="c1">-- add more columns if needed</span>
+</pre></div>
+<p>上面这句话的意思是删除本news表格中url重复的行，删除的是那些id小的行（T1.id&lt; T2.id）</p>
+<p>这里delete语句使用using说简单点就是后面的where子句可以使用该表格，类似于select的from；说复杂点如果是本表格的话，那么就是自连接self-join。</p>
+<p>对于join的简单理解就是 (a,b) * (a, b) =&gt; a a , a b , b a , b b 这样的SQL表格笛卡尔乘积组合然后再基于后面where给定的条件进行过滤。这里的 delete ... using ... 参考 <a href="https://www.postgresql.org/docs/9.5/sql-delete.html">postgresql的文档</a> 使用自己的表格名字就是self-join，而本表格和本表格的inner join组合后面的过滤进行过滤，下面举个例子可能会更加清晰一点：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>url</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>a</td>
+</tr>
+<tr>
+<td>2</td>
+<td>b</td>
+</tr>
+<tr>
+<td>3</td>
+<td>a</td>
+</tr>
+</tbody>
+</table>
+<p>如果self-join后形成了这样的组合：</p>
+<div class="highlight"><pre><span></span>1 a --- 1 a
+1 a --- 2 b
+1 a --- 3 a
+2 b --- 1 a
+2 b --- 2 b
+2 b --- 3 a
+3 a --- 1 a
+3 a --- 2 b
+3 a --- 3 a
+</pre></div>
+<p>然后再过滤，首先是url相等的行 </p>
+<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">newtable</span> <span class="n">T1</span>  
+<span class="k">inner</span> <span class="k">join</span> <span class="n">newtable</span> <span class="n">T2</span>
+<span class="k">on</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span>
+</pre></div>
+<div class="highlight"><pre><span></span>1 a --- 1 a
+1 a --- 3 a
+2 b --- 2 b
+3 a --- 1 a
+3 a --- 3 a
+</pre></div>
+<p>其次是 id小一点的</p>
+<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">newtable</span> <span class="n">T1</span>  
+<span class="k">inner</span> <span class="k">join</span> <span class="n">newtable</span> <span class="n">T2</span>
+<span class="k">on</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span>
+<span class="k">where</span> <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span>
+</pre></div>
+<div class="highlight"><pre><span></span>1 a --- 3 a
+</pre></div>
+<p>最后得到的T1 的 1 a 这一行，然后执行delete操作将其删掉。</p>
+<p>这里我们看到self-join的情况要非常注意重复行的过滤，比如如果上面是 T1.id &lt;= T2.id 那么就会将整个表格给删掉。</p>
+<h2 id="_3">根据表格的某个字段值更新本表格</h2>
+<div class="highlight"><pre><span></span><span class="k">update</span> <span class="n">news</span> 
+<span class="k">set</span> <span class="n">insert_time</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">pub_time</span>
+<span class="k">from</span> <span class="n">news</span> <span class="n">t2</span>
+<span class="k">where</span> <span class="n">news</span><span class="p">.</span><span class="n">html</span> <span class="o">=</span> <span class="s1">''</span> <span class="k">and</span> <span class="n">news</span><span class="p">.</span><span class="n">insert_time</span> <span class="o">&gt;=</span> <span class="s1">'2019-11-19'</span> <span class="k">and</span> <span class="n">news</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> 
+</pre></div>
+<p>同样参考postgresql的官方文档，这里update...from... 也类似于 select 里面的from_list table，如果是本表格自身的话那么就是 self join。</p>
+<p>这样self join之后后面你的update操作是可以引用这个表格的值的。</p>
+<h2 id="_4">快速检查某一行是否存在</h2>
+<p>参考了 <a href="https://stackoverflow.com/questions/7471625/fastest-check-if-row-exists-in-postgresql">这个网页</a> ，如下所示：</p>
+<div class="highlight"><pre><span></span>select exists(select 1 from contact where id=12)
+</pre></div>
+<p>这里值得一提的是，用python的SQL数据库通用的DB2接口，也就是pymysql或者psycopg2查询得到的直接是python的bool对象，True或者False，因为上面使用exists函数。</p>
+
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-04-01T15:22:01.282257+08:00">2020年 4月 1日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#sql-ref">SQL</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#database-ref">database
+                    <span>2</span>
+</a></li>
+                <li><a href="https://a358003542.github.io/tags.html#sql-ref">sql
+                    <span>1</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>
