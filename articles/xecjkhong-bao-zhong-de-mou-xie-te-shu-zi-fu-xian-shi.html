@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="在排版pdf的时候希望显示周易六十四卦䷀等这些字符，大概找了好久才发现DejaVu Sans字体里面有周易六十四卦的这些字符，本来打算直接用常规的调字体的方式来显示这个字符，却发现并没有效果，估计可能是这个区块的字符被划分到CJK字符那边了，然后归xeCJK这个宏包处理了 用xeCJK提供的 \CJKfontspec 命令确实可以起到效果，但是考虑到六十四个卦六十四的字符，不管是单独写命令还是分别用newunicodechar封装等都不是很好的解决方案，况且newunicodechar和xeCJK宏包之间也似乎有协调问题。 在仔细阅读xeCJK宏包文档之后确认下面的解决方案就是最好的： 首先通过xeCJK宏包提供的 xeCJKDeclareSubCJKBlock 来定义一个字符区块： \xeCJKDeclareSubCJKBlock{LIUSHISIGUA}{ &#34;4DC0 -&gt; &#34;4DFF} 然后你在设置CJK主要字体的时候可以单独指定这一个字符区块里面的字符归哪个字体处理： \setCJKmainfont[LIUSHISIGUA=DejaVu Sans]{Source Han Serif CN} 这样你在tex文档里面正常复制粘贴䷀这样的字符就能够正常显示了。
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", others, " />
+
+<meta property="og:title" content="xeCJK宏包中的某些特殊字符显示 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/xecjkhong-bao-zhong-de-mou-xie-te-shu-zi-fu-xian-shi.html" />
+<meta property="og:description" content="在排版pdf的时候希望显示周易六十四卦䷀等这些字符，大概找了好久才发现DejaVu Sans字体里面有周易六十四卦的这些字符，本来打算直接用常规的调字体的方式来显示这个字符，却发现并没有效果，估计可能是这个区块的字符被划分到CJK字符那边了，然后归xeCJK这个宏包处理了 用xeCJK提供的 \CJKfontspec 命令确实可以起到效果，但是考虑到六十四个卦六十四的字符，不管是单独写命令还是分别用newunicodechar封装等都不是很好的解决方案，况且newunicodechar和xeCJK宏包之间也似乎有协调问题。 在仔细阅读xeCJK宏包文档之后确认下面的解决方案就是最好的： 首先通过xeCJK宏包提供的 xeCJKDeclareSubCJKBlock 来定义一个字符区块： \xeCJKDeclareSubCJKBlock{LIUSHISIGUA}{ &#34;4DC0 -&gt; &#34;4DFF} 然后你在设置CJK主要字体的时候可以单独指定这一个字符区块里面的字符归哪个字体处理： \setCJKmainfont[LIUSHISIGUA=DejaVu Sans]{Source Han Serif CN} 这样你在tex文档里面正常复制粘贴䷀这样的字符就能够正常显示了。" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-04-11T20:34:01.520411+08:00" />
+<meta name="twitter:title" content="xeCJK宏包中的某些特殊字符显示 ">
+<meta name="twitter:description" content="在排版pdf的时候希望显示周易六十四卦䷀等这些字符，大概找了好久才发现DejaVu Sans字体里面有周易六十四卦的这些字符，本来打算直接用常规的调字体的方式来显示这个字符，却发现并没有效果，估计可能是这个区块的字符被划分到CJK字符那边了，然后归xeCJK这个宏包处理了 用xeCJK提供的 \CJKfontspec 命令确实可以起到效果，但是考虑到六十四个卦六十四的字符，不管是单独写命令还是分别用newunicodechar封装等都不是很好的解决方案，况且newunicodechar和xeCJK宏包之间也似乎有协调问题。 在仔细阅读xeCJK宏包文档之后确认下面的解决方案就是最好的： 首先通过xeCJK宏包提供的 xeCJKDeclareSubCJKBlock 来定义一个字符区块： \xeCJKDeclareSubCJKBlock{LIUSHISIGUA}{ &#34;4DC0 -&gt; &#34;4DFF} 然后你在设置CJK主要字体的时候可以单独指定这一个字符区块里面的字符归哪个字体处理： \setCJKmainfont[LIUSHISIGUA=DejaVu Sans]{Source Han Serif CN} 这样你在tex文档里面正常复制粘贴䷀这样的字符就能够正常显示了。">
+
+
+    <title>xeCJK宏包中的某些特殊字符显示  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/xecjkhong-bao-zhong-de-mou-xie-te-shu-zi-fu-xian-shi.html"> xeCJK宏包中的某些特殊字符显示  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+        <div class="col-md-8 col-md-offset-2 article-content">
+
+            <p>在排版pdf的时候希望显示周易六十四卦䷀等这些字符，大概找了好久才发现DejaVu Sans字体里面有周易六十四卦的这些字符，本来打算直接用常规的调字体的方式来显示这个字符，却发现并没有效果，估计可能是这个区块的字符被划分到CJK字符那边了，然后归xeCJK这个宏包处理了</p>
+<p>用xeCJK提供的 <code>\CJKfontspec</code> 命令确实可以起到效果，但是考虑到六十四个卦六十四的字符，不管是单独写命令还是分别用newunicodechar封装等都不是很好的解决方案，况且newunicodechar和xeCJK宏包之间也似乎有协调问题。</p>
+<p>在仔细阅读xeCJK宏包文档之后确认下面的解决方案就是最好的：</p>
+<p>首先通过xeCJK宏包提供的 <code>xeCJKDeclareSubCJKBlock</code> 来定义一个字符区块：</p>
+<div class="highlight"><pre><span></span><span class="k">\xeCJKDeclareSubCJKBlock</span><span class="nb">{</span>LIUSHISIGUA<span class="nb">}{</span> &quot;4DC0 -&gt; &quot;4DFF<span class="nb">}</span>
+</pre></div>
+
+
+<p>然后你在设置CJK主要字体的时候可以单独指定这一个字符区块里面的字符归哪个字体处理：</p>
+<div class="highlight"><pre><span></span><span class="k">\setCJKmainfont</span><span class="na">[LIUSHISIGUA=DejaVu Sans]</span><span class="nb">{</span>Source Han Serif CN<span class="nb">}</span>
+</pre></div>
+
+
+<p>这样你在tex文档里面正常复制粘贴䷀这样的字符就能够正常显示了。</p>
+
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-04-11T20:34:01.520411+08:00">2020年 4月 11日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>
