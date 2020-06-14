@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-06-07T17:25:18.815287+08:00" />
+<meta property="og:article:published_time" content="2020-06-14T19:23:45.003057+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -123,7 +123,15 @@
 <li><a href="#_4">声明变量</a></li>
 <li><a href="#_5">定义函数</a></li>
 <li><a href="#cpp_1">CPP数据类型</a></li>
-<li><a href="#_6">参考资料</a></li>
+<li><a href="#cpp_2">CPP程序逻辑</a></li>
+<li><a href="#cpp_3">CPP函数</a></li>
+<li><a href="#cpp_4">CPP类</a></li>
+<li><a href="#_6">附录</a><ul>
+<li><a href="#cin">cin详解</a></li>
+<li><a href="#cout_1">cout详解</a></li>
+</ul>
+</li>
+<li><a href="#_7">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -362,6 +370,7 @@ int main(void) {
 
 <span class="p">}</span>
 </pre></div>
+<hr/>
 <p>long totals[500] = {0};  //初始化一个500个元素的数组，索引为0的元素设值为0，其他元素自动设值为0。</p>
 <p>你也可以如下：</p>
 <p>long totals[500] = {} ; // 这样所有元素都自动设值为0。</p>
@@ -379,7 +388,302 @@ cout &lt;&lt; str1 + str2;
 <p>你还可以用加法来进行字符串拼接，终于，类似python的那些基本字符串操作在C语言那边还要让人头疼好久这里终于顺畅一些了。</p>
 <div class="highlight"><pre><span></span>cout &lt;&lt; str1.size(); // 返回3
 </pre></div>
-<h2 id="_6">参考资料</h2>
+<p>请求行输入因为历史原因 cin.getline(charstr, max_size) 更接近于我们在C语言中熟知的那种概念，而友元函数 getline(cin, string) 反而更接近C++风格，因为cin是C++里面的概念，所以人们会预期cin的类方法会对接string接口，但这只是历史要兼容的原因罢了，并没什么特别的理由要弄得这样反常规。</p>
+<p>C++里面的结构就基本的东西来说和C语言里面的讨论是没有太大区别的，C++里面的结构体当然也可以将string类作为成员对象。特别要强调的是C语言里面字符串数组实际上并没有所谓的字符串这个基本内存存储单元，因为字符串不定长，所以字符串数组实际下面存放的是指针，但是结构数组不同，C语言的结构体是如此基本，它就可以看做一个基本的内存存储单元，所以结构数组下面就是一个一个结构体而不是指向结构体的指针。因此结构体数组的引用语句是 <code>struct_array[0].name</code> 。</p>
+<p>C++里面的Union和enum枚举和C语言里面的讨论也没有太大区别。</p>
+<p>C++里面的指针还有相关内存管理malloc之类的等等和C语言里面的讨论也没有太大区别，不过需要注意的是C++编程一定程度上弱化了指针的概念，很多地方C++编程不一定要使用指针的，然后内存管理也不推荐使用malloc函数而是推荐使用new和delete运算符。</p>
+<p>对于C++的基本类型和结构可以如下使用new来声明一个内存块，然后用给定的指针名来指向它，引用它和使用它。</p>
+<div class="highlight"><pre><span></span>typeName * pointer_name = new typeName;
+
+int * pn = new int;
+*pn = 1;
+cout &lt;&lt; *pn;
+</pre></div>
+<p>这个东西只能通过该指针来使用，参考资料1说这个东西更确切来说应该叫做数据对象，变量也是数据对象。不管怎么说，就是指内存里的那个东西。</p>
+<p>delete运算符只能用于那些也就是上面讨论的new出来的指针。具体如下所示：</p>
+<div class="highlight"><pre><span></span>int * pn = new int;
+delete pn;
+</pre></div>
+<p>使用new来创建数组和结构和其他又有所不同，以数组为例，常规声明数组叫做静态联编（static binding），即在编译阶段已经为该数组申请分配好内存了；而通过new来创建的数组只在后面运行阶段才可能创建，也就是运行阶段如果没使用这个数组也不会创建，这称为动态联编（dynamic binding）。这种数组叫做动态数组。</p>
+<p>下面例子演示了其为何叫做动态数组，我们可以运行时用户指定该数组大小，然后运行时给定值：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input the array length: "</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="kt">int</span><span class="o">*</span> <span class="n">parray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">parray</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">parray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">parray</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p><strong>注意new出来的动态数组 delete 运算符语句加上了 [] 。</strong></p>
+<p>具体指针的使用C语言里面的东西了，这里可以回顾提醒一下， <code>arr[1]</code> 和 <code>*(arr+1)</code> 是一个意思， <code>arr[0]</code> 和 <code>*arr</code> 是一个意思。</p>
+<p>关于指针和数组这块东西很多的，但因为都是C语言里面的知识点，我这里就略过讨论了，如果读者自觉在这块还有所欠缺，请在C语言教材对应的部分补习之。</p>
+<p>也可以使用new一个动态的字符串，或者说动态字符数组，但这完全没有必要。因为string类内部也就是这样做的，你没必要去重复造轮子了，直接使用string类就是了。</p>
+<p>使用new出来的结构参照前面的讨论，类似的叫做动态结构。这里的动态结构倒不是说结构的定义动态，结构体的定义还是要做的。</p>
+<p>C语言里面就存储类型有自动存储和静态存储，简单来说自动存储变量的存活是程序自动管理的，而静态存储变量在整个程序运行期都是存活的。这一块C++和C语言是一致的，不同的是C++因为上面讨论的new运算符而提出了一个新的存储类型，叫做动态存储。具体new和delete运算符管理的内存池和静态变量和自动变量的内存池是分开的，其叫做自由存储空间或堆。如果new出来的动态存储变量没有delete，这叫做内存泄漏，内存泄露一般只是本程序那些内存没法用了，然后严重点本程序运行的内存被耗尽了，因为没有内存程序崩溃了。参考资料说这种严重的泄漏甚至导致操作系统或其他应用程序崩溃。</p>
+<p>类似string类，C++用vector类来实现动态数组，类似上面的string类的讨论，如果你要自己利用new和delete来实现某种动态数组的效果，那么不要重复造轮子了，请用vector类，vector类内部就是这样做的。下面将上面动态数组的例子写成vector版本：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input the array length: "</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>vector类还有很多其他用法，但在这里不是重点。我们看到vector初始化不需要指定长度参数了，其通过push_back方法来新增元素。</p>
+<p>vector类因为是动态数组，所以效率有点低，C++又实现了一个新的类array类，其内部存储和原来的数组存储风格一致，所以效率等价，然后因为是类，所有多了一些便捷的操作方法。这些方法后面有时间再慢慢了解。</p>
+<hr/>
+<p>编写一个C++程序，如下述输出示例所示的那样请求并显示信息：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/programming/cpp_xiti_c4_1.png"/></p>
+<p>注意，该程序应该接受的名字包含多个单词。另外，程序将向下调整成绩，即向下调一个字母。</p>
+<p>xiti_c4_1.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="n">string</span> <span class="n">first_name</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">last_name</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">grade</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"What is your first name? "</span><span class="p">;</span>
+    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">first_name</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"What is your last name? "</span><span class="p">;</span>
+
+    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">last_name</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"What letter grade do you deserve? "</span><span class="p">;</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">grade</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"What is your age? "</span><span class="p">;</span>
+
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">age</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Name: "</span> <span class="o">&lt;&lt;</span> <span class="n">last_name</span> <span class="o">&lt;&lt;</span> <span class="s">", "</span> <span class="o">&lt;&lt;</span> <span class="n">first_name</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Grade: "</span><span class="p">;</span> 
+    <span class="n">cout</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">grade</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Age: "</span> <span class="o">&lt;&lt;</span> <span class="n">age</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>编写一个程序，它要求用户首先输入其名，然后输入其姓；然后程序使用一个逗号和空格将姓和名组合起来，并存储和显示组合结果。请使用char数组和头文件cstring中的函数。下面是该程序运行时的情形：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/programming/cpp_xiti_c4_2.png"/></p>
+<p>xiti_c4_3.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">char</span> <span class="n">first_name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">last_name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">40</span><span class="p">];</span>
+
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"What is your first name? "</span><span class="p">;</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"What is your last name? "</span><span class="p">;</span>
+
+    <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">last_name</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">last_name</span><span class="p">);</span>
+    <span class="n">strcat_s</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">", "</span><span class="p">);</span>
+    <span class="n">strcat_s</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">first_name</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Here's the information in a single string: "</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>结构CandyBar包含3个成员。第一个成员存储了糖块的品牌；第二个成员存储糖块的重量（可以有小数）；第三个成员存储了糖块的卡路里含量（整数）。请编写一个程序，声明这个结构，创建一个名为snack的CandyBar变量，并将其成员分别初始化为“Mocha Munch”、2.3和350。初始化应在声明snack时进行。最后，程序显示snack变量的内容。</p>
+<p>xiti_c4_5.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">CandyBar</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">weight</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">calories</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">CandyBar</span> <span class="n">snack</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"Mocha Munch"</span><span class="p">,</span>
+        <span class="mf">2.3</span><span class="p">,</span>
+        <span class="mi">350</span>
+    <span class="p">};</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"CandyBar "</span> <span class="o">&lt;&lt;</span> <span class="n">snack</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" weight: "</span> <span class="o">&lt;&lt;</span> <span class="n">snack</span><span class="p">.</span><span class="n">weight</span> <span class="o">&lt;&lt;</span>
+        <span class="s">" and calories: "</span> <span class="o">&lt;&lt;</span> <span class="n">snack</span><span class="p">.</span><span class="n">calories</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>结构CandyBar包含3个成员，如上面讨论的。请编写一个程序，创建一个包含3个元素的CandyBar数组【使用new来动态分配数组，而不是声明一个包含3个元素的CandyBar数组】，并将它们初始化为所选择的值，然后显示每个结构的内容。</p>
+<p>xiti_c4_6.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">CandyBar</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">weight</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">calories</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="n">CandyBar</span><span class="o">*</span> <span class="n">psnack</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CandyBar</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+    <span class="n">psnack</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span> <span class="o">=</span> <span class="s">"aaa"</span><span class="p">;</span>
+    <span class="n">psnack</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">weight</span> <span class="o">=</span> <span class="mf">2.3</span><span class="p">;</span>
+    <span class="n">psnack</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">calories</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+    <span class="n">psnack</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"bbb"</span><span class="p">,</span>
+        <span class="mf">2.5</span><span class="p">,</span>
+        <span class="mi">6</span>
+    <span class="p">};</span>
+
+    <span class="n">psnack</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"ccc"</span><span class="p">,</span>
+        <span class="mf">2.6</span><span class="p">,</span>
+        <span class="mi">7</span>
+    <span class="p">};</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"CandyBar "</span> <span class="o">&lt;&lt;</span> <span class="n">psnack</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" weight: "</span> <span class="o">&lt;&lt;</span> <span class="n">psnack</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span> <span class="o">&lt;&lt;</span>
+            <span class="s">" and calories: "</span> <span class="o">&lt;&lt;</span> <span class="n">psnack</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">calories</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">psnack</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>William Wingate从事比萨饼分析服务。对于每个披萨饼，他都需要记录下列信息：</p>
+<p>披萨饼公司的名称，可以有多个单词组成。
+披萨饼的直径。
+披萨饼的重量。
+请设计一个能够存储这些信息的结构【请使用new来为结构分配内存，请使用vector来实现动态数组】，并编写一个使用这种结构变量的程序。程序将请求用户输入上述信息，然后显示这些信息。请使用cin（或它的方法）和cout。</p>
+<p>xiti_c4_7.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">Pizza</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">diameter</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">weight</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input the array length: "</span><span class="p">;</span>
+    <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">Pizza</span> <span class="o">*&gt;</span> <span class="n">vec</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Pizza</span><span class="o">*</span> <span class="n">ppizza</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Pizza</span><span class="p">;</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Please input your pizza name: "</span><span class="p">;</span>
+
+        <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">ppizza</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Please input your pizza diameter: "</span><span class="p">;</span>
+        <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ppizza</span><span class="o">-&gt;</span><span class="n">diameter</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Please input your pizza weight: "</span><span class="p">;</span>
+        <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ppizza</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"-----------------"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+        <span class="n">vec</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ppizza</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"CandyBar "</span> <span class="o">&lt;&lt;</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" weight: "</span> <span class="o">&lt;&lt;</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">diameter</span> <span class="o">&lt;&lt;</span>
+            <span class="s">" and calories: "</span> <span class="o">&lt;&lt;</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">weight</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">delete</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h2 id="cpp_2">CPP程序逻辑</h2>
+<p>这块C++和C语言内容基本上没什么区别，所以大多略过了，然后主要做一些习题也算是对前面学到的东西的再应用。</p>
+<h2 id="cpp_3">CPP函数</h2>
+<p>我估计这块应该C++和C语言差异也不会太大，主要做一些习题练习下。</p>
+<h2 id="cpp_4">CPP类</h2>
+<h2 id="_6">附录</h2>
+<h3 id="cin">cin详解</h3>
+<ul>
+<li><code>cin &gt;&gt;</code> 遇到Enter Space Tab 即结束，适合char，无空格的string和单个值的int float之类的输入。需要注意的是经过个人实践换行符还是在缓冲区的，为了把这个缓冲区消掉获得更好的输入体验，一般采用这种表达方式：<code>(cin &gt;&gt; what).get()</code> ，这是因为 <code>cin &gt;&gt; what</code> 会返回cin对象，然后继续调用下面的 get 方法来消掉最后的换行符。</li>
+<li><code>cin.get</code>  和 <code>cin.getline</code>  都可以用于字符数组的行输入，不同的是 get方法不会丢弃缓冲区的换行结束符，此外cin.get还有一个重载变体，<code>cin.get(char &amp;ch)</code> ，用于读取第一个字符，假设缓冲区下一个字符是换行符，然后在遇到 <code>cin.get()</code>  则将把那个换行符读取下来。</li>
+<li>getline函数 ，和cin.getline的区别就是 <code>getline(cin, string)</code> getline会读入到C++的string类，而不是C风格的字符数组。</li>
+</ul>
+<h3 id="cout_1">cout详解</h3>
+<ul>
+<li><code>cout &lt;&lt;</code> 一般使用</li>
+<li><code>cout.put(char &amp;ch)</code>  输出一个字符，如果输入的整型也会正常显示该字符。</li>
+</ul>
+<h2 id="_7">参考资料</h2>
 <ol>
 <li>C++ Primer Plus 第六版中文版</li>
 </ol>
@@ -391,7 +695,7 @@ cout &lt;&lt; str1 + str2;
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-06-07T17:25:18.815287+08:00">2020年 6月 7日 </time>
+            <time pubdate="pubdate" datetime="2020-06-14T19:23:45.003057+08:00">2020年 6月 14日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
