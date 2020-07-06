@@ -23,7 +23,7 @@
 <meta property="og:description" content="WARNING 警告，本文档已经归档，年久失修，可能内容已过于陈旧，放在这里权做读者参考。【2020】 ceph集群架构 本文主要基于ceph14.2.9版本。 ceph是一种分布式存储解决方案，可以融合多台计算机的存储资源于一个ceph存储集群中，并提供块设备存储、对象存储和文件系统服务。ceph提供了优良的性能，可靠性和可扩展性。可靠性就是ceph存储系统会尽可能地保证数据不会丢失，可扩展性包括系统规模和存储容量的可扩展。此外ceph在运维上还提供了自动化运维特性，包括数据自动replication；自动re-balancing；自动failure detection和自动failure recoery。 ceph最早源于Sage Weil在加州大学攻读博士期间的一篇论文——《Ceph: A Scalable Object-Based Storage System》。这篇论文基本上包含了ceph早期系统的全部知识了，其后Sage Weil又发表了下面三篇论文，来进一步说明ceph的三个核心关键点。 RADOS: A scalable, reliable storage service for petabyte-scale storage clusters CRUSH: Controlled, Scalable …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-04T00:00:00+08:00" />
+<meta property="og:article:published_time" content="2020-07-06T00:00:00+08:00" />
 <meta name="twitter:title" content="ceph集群架构 ">
 <meta name="twitter:description" content="WARNING 警告，本文档已经归档，年久失修，可能内容已过于陈旧，放在这里权做读者参考。【2020】 ceph集群架构 本文主要基于ceph14.2.9版本。 ceph是一种分布式存储解决方案，可以融合多台计算机的存储资源于一个ceph存储集群中，并提供块设备存储、对象存储和文件系统服务。ceph提供了优良的性能，可靠性和可扩展性。可靠性就是ceph存储系统会尽可能地保证数据不会丢失，可扩展性包括系统规模和存储容量的可扩展。此外ceph在运维上还提供了自动化运维特性，包括数据自动replication；自动re-balancing；自动failure detection和自动failure recoery。 ceph最早源于Sage Weil在加州大学攻读博士期间的一篇论文——《Ceph: A Scalable Object-Based Storage System》。这篇论文基本上包含了ceph早期系统的全部知识了，其后Sage Weil又发表了下面三篇论文，来进一步说明ceph的三个核心关键点。 RADOS: A scalable, reliable storage service for petabyte-scale storage clusters CRUSH: Controlled, Scalable …">
 
@@ -119,16 +119,15 @@
 <li><a href="#pg">pg的状态</a></li>
 <li><a href="#_1">数据条带化</a></li>
 <li><a href="#_2">用户管理和密钥</a></li>
-<li><a href="#_3"></a></li>
 </ul>
 </li>
 <li><a href="#ceph_1">ceph的局限性</a></li>
-<li><a href="#_4">术语解释</a><ul>
-<li><a href="#_5">公网和集群内网</a></li>
+<li><a href="#_3">术语解释</a><ul>
+<li><a href="#_4">公网和集群内网</a></li>
 <li><a href="#cephx">cephx认证系统</a></li>
 </ul>
 </li>
-<li><a href="#_6">参考资料</a></li>
+<li><a href="#_5">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -192,10 +191,10 @@
 <li>把那个object id hash一下</li>
 <li>hash得到的值针对本pool的pg数量取模【这也是为什么pool的pg数量推荐是2的指数的原因，这样这里计算会快一点】从而获得pg的id</li>
 <li>根据pool的名字查下cluster map得到该pool 的 id</li>
-<li>然后得到如下值： <pool_id>.<pg_id></pg_id></pool_id></li>
+<li>然后得到如下值： <code>&lt;pool_id&gt;.&lt;pg_id&gt;</code></li>
 </ol>
 <p>读者如果感兴趣的话可以运行 ceph pg dump 来看一下，你会看到类似的上面的  <code>&lt;pool_id&gt;.&lt;pg_id&gt;</code> 表达，然后对于某个pg来说，你会看到ACTING_SET UP_SET这个字段，这是pg里面很重要的一个概念，下面引入ceph的关于数据可靠性的处理。</p>
-<p>ceph引入pg这个中间概念，默认的副本数是2，意思就是该ceph集群下一个pg下面会映射2个osd，在这两个osd上针对目标数据读写默认是对行动组的第一个osd进行读写，而后面的副本osd下面简称副osd会后台自动形成目标数据的副本。</p>
+<p>ceph引入pg这个中间层概念，默认的副本数是2，意思就是该ceph集群下一个pg下面会映射2个osd，在这两个osd上针对目标数据读写默认是对行动组的第一个osd进行读写，而后面的副本osd下面简称副osd会后台自动形成目标数据的副本。</p>
 <p>上面提到的CRUSH算法最先找到的是目标pg，然后再根据pg找到主osd，然后在主osd上找目标ceph object的数据。找到主osd之后client就会和osd直接进行对话，这也是ceph高度可扩展性的一个方面，查询读写压力直接分散在各个不同的主机上，这是一个优点，后面我会分析这也造成了ceph的某个局限性。</p>
 <p>pg作为ceph系统提出的一个工程学上的中间层，其作用不仅仅局限在副本上，下面结合pg的状态来进一步理解之。</p>
 <h3 id="pg">pg的状态</h3>
@@ -215,11 +214,10 @@
 <p><strong>具体这些参数你需要在ceph集群还没有数据的时候就测试并配置好，后面就不可以调配了。</strong></p>
 <h3 id="_2">用户管理和密钥</h3>
 <p>后面有时间我会补上细讲之，这里简略地讨论下cephx是一种什么安全加密手段。简单来说两个主机都拥有某个密钥，请求方用这个密钥发出请求，monitor用这个密钥进行解密得到内容，权限获得认可，则monitor发放回话ticket，然后client就可以直接用这个ticket来和目标osd或者mds进行回话了。</p>
-<h3 id="_3"></h3>
 <h2 id="ceph_1">ceph的局限性</h2>
 <p>因为ceph的设计，造成了这样一个局限性，那就是如果某个osd读写速度过慢，那么这个过慢的osd将成为整个ceph集群性能的短桶效应所在。同时我们应该看到随着ceph集群的扩大，不可避免总会冒出那么一两个磁盘工作不正常读写过慢。现在的问题是这样将会影响整个ceph集群的性能。</p>
 <p>我提出一个优化改进建议是，能不能pg上对行动组的各个osd针对读写性能提出某种打分策略，某些读写性能太差的将打低分，一定时间的低分主osd将自动下降为副osd，而某个副osd性能太差的话将自动被踢出行动组，并告警之。</p>
-<h2 id="_4">术语解释</h2>
+<h2 id="_3">术语解释</h2>
 <ul>
 <li>rados lspools ： 列出pool情况</li>
 <li>ceph osd tree : 列出osd的情况</li>
@@ -231,14 +229,14 @@
 <li>集群名字 Cluster Name 每个ceph集群都有自己的名字，默认是 ceph </li>
 <li>监视器名字 Monitor Name 每个集群里面的各个监视器</li>
 </ul>
-<h3 id="_5">公网和集群内网</h3>
+<h3 id="_4">公网和集群内网</h3>
 <p>ceph默认你只有一个网络，也就是public network，不过推荐的设置是有两个网卡（这将会带来性能极大的提升），一个网卡： public network， 一个网卡： cluster network。cluster network最好不能连外网，这样会更加安全点。而且cluster网卡最好速度很快，这样各个osd之间通信传输数据才会高效，10Gbps是推荐。</p>
 <p>cluster network主要是给osds通信用，所以ceph的其他组件其实还是都依赖于public network的。</p>
 <h3 id="cephx">cephx认证系统</h3>
 <p>ceph用cephx认证系统来认证用户和守护进程。</p>
 <p>Cephx 用共享密钥来认证，即客户端和监视器集群各自都有客户端密钥的副本。这样的认证协议使参与双方不用展现密钥就能相互认证，就是说集群确信用户拥有密钥、而且用户相信集群有密钥的副本。</p>
 <p>要使用 cephx ，管理员必须先设置好用户。在下面的图解里， client.admin 用户从命令行调用来生成一个用户及其密钥， Ceph 的认证子系统生成了用户名和密钥、副本存到监视器然后把此用户的密钥回传给 client.admin 用户，也就是说客户端和监视器共享着相同的密钥。</p>
-<h2 id="_6">参考资料</h2>
+<h2 id="_5">参考资料</h2>
 <ol>
 <li><a href="https://tobegit3hub1.gitbooks.io/ceph_from_scratch/content/index.html">ceph from scratch</a></li>
 <li><a href="http://www.csdn.net/article/2014-04-01/2819090-ceph-swift-on-openstack">ceph浅析上</a></li>
@@ -253,7 +251,7 @@
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-04T00:00:00+08:00">2020年 7月 4日 </time>
+            <time pubdate="pubdate" datetime="2020-07-06T00:00:00+08:00">2020年 7月 6日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>

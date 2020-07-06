@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-06-21T19:14:50.732574+08:00" />
+<meta property="og:article:published_time" content="2020-07-06T18:31:54.495862+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -124,16 +124,23 @@
 <li><a href="#_5">定义函数</a></li>
 </ul>
 </li>
-<li><a href="#cpp_1">CPP数据类型</a></li>
-<li><a href="#cpp_2">CPP程序逻辑</a></li>
-<li><a href="#cpp_3">CPP函数</a></li>
-<li><a href="#cpp_4">CPP类</a></li>
-<li><a href="#_6">附录</a><ul>
+<li><a href="#_6">数据类型</a></li>
+<li><a href="#_7">程序逻辑</a></li>
+<li><a href="#_8">函数</a><ul>
+<li><a href="#_9">数组作为函数的参数</a></li>
+<li><a href="#c">C风格字符串作为函数的参数</a></li>
+<li><a href="#_10">结构体作为函数的参数</a></li>
+<li><a href="#_11">函数作为函数的参数</a></li>
+</ul>
+</li>
+<li><a href="#_12">内存模型和名称空间</a></li>
+<li><a href="#_13">类</a></li>
+<li><a href="#_14">附录</a><ul>
 <li><a href="#cin">cin详解</a></li>
 <li><a href="#cout_1">cout详解</a></li>
 </ul>
 </li>
-<li><a href="#_7">参考资料</a></li>
+<li><a href="#_15">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -242,7 +249,7 @@ int main(void) {
 <span class="p">}</span>
 </pre></div>
 <p>就cpp和c语言的函数定义和函数原型声明这块来说区别不是太大。熟悉C语言的这块简单温习下就好。</p>
-<h2 id="cpp_1">CPP数据类型</h2>
+<h2 id="_6">数据类型</h2>
 <p>整型有：short，int，long 和 long long 。一般没有有说服力的理由就应使用int。</p>
 <p>char类型：char类型一般用于存储一个字节大小的字符，但也用于存储比short更小的整型。</p>
 <p>bool类型：true or false</p>
@@ -676,7 +683,7 @@ delete pn;
 <span class="p">}</span>
 </pre></div>
 <p><strong>注解：</strong> 本例主要演示了vector的用法。</p>
-<h2 id="cpp_2">CPP程序逻辑</h2>
+<h2 id="_7">程序逻辑</h2>
 <p>这块C++和C语言内容基本上没什么区别，所以大多略过了，然后主要做一些习题也算是对前面学到的东西的再应用。</p>
 <p>C++的for语句多了一个新的下面这种形式，这个要了解下：</p>
 <div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">x</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}){</span>
@@ -940,10 +947,769 @@ delete pn;
 <span class="p">}</span>
 </pre></div>
 <p><strong>注解：</strong> <code>cin.clear()</code> 是让cin在遇到错误输入之后可以继续开始接受输入。后面的while语句是清空缓存区那一行错误输入。</p>
-<h2 id="cpp_3">CPP函数</h2>
+<p>下面这个例子演示了如何写入文件：</p>
+<p>outfile.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">char</span> <span class="n">automobile</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+
+    <span class="kt">int</span> <span class="n">year</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">a_price</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">d_price</span><span class="p">;</span>
+
+    <span class="n">ofstream</span> <span class="n">outFile</span><span class="p">;</span>
+    <span class="n">outFile</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s">"carinfo.txt"</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter the make and modle of automobile: "</span><span class="p">;</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">automobile</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter the model year: "</span><span class="p">;</span>
+
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">year</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter the original asking price: "</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a_price</span><span class="p">;</span>
+
+    <span class="n">d_price</span> <span class="o">=</span> <span class="mf">0.913</span> <span class="o">*</span> <span class="n">a_price</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">fixed</span><span class="p">;</span> <span class="c1">// </span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">//</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">ios_base</span><span class="o">::</span><span class="n">showpoint</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Make and modle: "</span> <span class="o">&lt;&lt;</span> <span class="n">automobile</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Year: "</span> <span class="o">&lt;&lt;</span> <span class="n">year</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Was asking $"</span> <span class="o">&lt;&lt;</span> <span class="n">a_price</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Now asking $"</span> <span class="o">&lt;&lt;</span> <span class="n">d_price</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+
+    <span class="n">outFile</span> <span class="o">&lt;&lt;</span> <span class="n">fixed</span><span class="p">;</span>
+    <span class="n">outFile</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">outFile</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">ios_base</span><span class="o">::</span><span class="n">showpoint</span><span class="p">);</span>
+    <span class="n">outFile</span> <span class="o">&lt;&lt;</span> <span class="s">"Make and modle: "</span> <span class="o">&lt;&lt;</span> <span class="n">automobile</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">outFile</span> <span class="o">&lt;&lt;</span> <span class="s">"Year: "</span> <span class="o">&lt;&lt;</span> <span class="n">year</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">outFile</span> <span class="o">&lt;&lt;</span> <span class="s">"Was asking $"</span> <span class="o">&lt;&lt;</span> <span class="n">a_price</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">outFile</span> <span class="o">&lt;&lt;</span> <span class="s">"Now asking $"</span> <span class="o">&lt;&lt;</span> <span class="n">d_price</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">outFile</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>具体在新建一个ofstream对象之后，通过open方法将输出流和目标文件联系起来，然后剩下来的动作和使用cout没有区别，最后记得把文件输出流调用close方法关闭。</p>
+<div class="highlight"><pre><span></span>ofstream outFile;
+outFile.open("carinfo.txt");
+
+....
+
+outFile.close();
+</pre></div>
+<ul>
+<li>precision方法  控制输出流浮点数的精度</li>
+<li><code>setf(ios_base::showpoint)</code> 显示浮点数小数点后面的零</li>
+</ul>
+<p>1．编写一个程序，读取键盘输入，直到遇到@符号为止，并回显输入（数字除外），同时将大写字符转换为小写，将小写字符转换为大写（别忘了cctype函数系列）。</p>
+<p>xiti_c6_1.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cctype&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main26</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'@'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">isdigit</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">isupper</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">cout</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">tolower</span><span class="p">(</span><span class="n">ch</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">islower</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">cout</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">toupper</span><span class="p">(</span><span class="n">ch</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>3．编写一个菜单驱动程序的雏形。该程序显示一个提供4个选项的菜单——每个选项用一个字母标记。如果用户使用有效选项之外的字母进行响应，程序将提示用户输入一个有效的字母，直到用户这样做为止。然后，该程序使用一条switch语句，根据用户的选择执行一个简单操作。该程序的运行情况如下：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2020/xiti_c6_3.png"/></p>
+<p>xiti_c6_3.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">help</span><span class="p">();</span>
+
+<span class="kt">void</span> <span class="nf">help</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"c) carnivore              p) pianist</span><span class="se">\n</span><span class="s">"</span> <span class="o">&lt;&lt;</span>
+        <span class="s">"t) tree                   g) game</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Please enter one of the following choices:</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="n">help</span><span class="p">();</span>
+
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+
+    <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+    <span class="kt">bool</span> <span class="n">quit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">quit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="sc">'c'</span><span class="o">:</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"A maple is a carnivore"</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">'p'</span><span class="o">:</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"A maple is a pianist"</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">'t'</span><span class="o">:</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"A maple is a tree"</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">'g'</span><span class="o">:</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"A maple is a game"</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Please enter a c, p, t, or g: "</span><span class="p">;</span>
+            <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">quit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>5．在Neutronia王国，货币单位是tvarp，收入所得税的计算方式如下：</p>
+<p>5000 tvarps：不收税</p>
+<p>5001～15000 tvarps：10%</p>
+<p>15001～35000 tvarps：15%</p>
+<p>35000 tvarps以上：20%</p>
+<p>例如，收入为38000 tvarps时，所得税为5000 0.00 + 10000 0.10 + 20000 0.15 + 3000 0.20，即4600 tvarps。请编写一个程序，使用循环来要求用户输入收入，并报告所得税。当用户输入负数或非数字时，循环将结束。</p>
+<p>xiti_c6_5.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">calc_tax</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">calc_tax</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">tax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">35000</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tax</span> <span class="o">+=</span> <span class="p">(</span><span class="n">temp</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">);</span>
+        <span class="n">x</span> <span class="o">-=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">15000</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tax</span> <span class="o">+=</span> <span class="p">(</span><span class="n">temp</span> <span class="o">*</span> <span class="mf">0.15</span><span class="p">);</span>
+        <span class="n">x</span> <span class="o">-=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">5000</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tax</span> <span class="o">+=</span> <span class="p">(</span><span class="n">temp</span> <span class="o">*</span> <span class="mf">0.10</span><span class="p">);</span>
+        <span class="n">x</span> <span class="o">-=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">tax</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">tvarps</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tvarps</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"your income tax is "</span> <span class="o">&lt;&lt;</span> <span class="n">calc_tax</span><span class="p">(</span><span class="n">tvarps</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">" tvarps.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input how many tvarps of your income: "</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tvarps</span><span class="p">);</span>
+
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>8．编写一个程序，它打开一个文件文件，逐个字符地读取该文件，直到到达文件末尾，然后指出该文件中包含多少个字符。</p>
+<p>xiti_c6_8.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="n">string</span> <span class="n">filename</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Please input the filename you want to open: "</span><span class="p">;</span>
+
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">filename</span><span class="p">;</span>
+
+    <span class="n">ifstream</span> <span class="n">inFile</span><span class="p">;</span>
+
+    <span class="n">inFile</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+    <span class="c1">// check the file is open</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">inFile</span><span class="p">.</span><span class="n">is_open</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Could not open the file "</span> <span class="o">&lt;&lt;</span> <span class="n">filename</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">inFile</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"This file contains "</span> <span class="o">&lt;&lt;</span> <span class="n">count</span> <span class="o">&lt;&lt;</span> <span class="s">" characters.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="n">inFile</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h2 id="_8">函数</h2>
 <p>我估计这块应该C++和C语言差异也不会太大，主要做一些习题练习下。</p>
-<h2 id="cpp_4">CPP类</h2>
-<h2 id="_6">附录</h2>
+<h3 id="_9">数组作为函数的参数</h3>
+<p>数组作为函数的参数实际传递的是该数组的首地址，但C++还需要知道这个数组内元素的类型，所以你在函数原型声明的时候应该类似这样进行声明： <code>int sum_arr(int * arr, int n)</code> ，或者 <code>int sum_arr(int arr[], int n)</code> ，这两种写法在函数原型声明上是没有区别的，告诉C++编译器该数组内的元素类型就完成任务了。如果函数不应该修改数组里面的内容，那么应该在声明前面加上 <code>const</code> 关键字。</p>
+<p>可以通过下面这个例子来加深对数组作为函数的参数的理解：</p>
+<p>arrfun.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">Max</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">fill_array</span><span class="p">(</span><span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">show_array</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">revalue</span><span class="p">(</span><span class="kt">double</span> <span class="n">r</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">sum_array</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">ar_begin</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">ar_end</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">double</span> <span class="n">properties</span><span class="p">[</span><span class="n">Max</span><span class="p">];</span>
+
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">fill_array</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">Max</span><span class="p">);</span>
+
+    <span class="n">show_array</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter revaluation factor: "</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">factor</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">factor</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Bad input; Please enter a number: "</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">revalue</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+        <span class="n">show_array</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+
+        <span class="kt">double</span> <span class="n">total</span><span class="p">;</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">sum_array</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">properties</span> <span class="o">+</span> <span class="n">size</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"array total sum = "</span> <span class="o">&lt;&lt;</span> <span class="n">total</span> <span class="o">&lt;&lt;</span> <span class="s">" .</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">double</span> <span class="nf">sum_array</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">ar_begin</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">ar_end</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">pt</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">pt</span> <span class="o">=</span> <span class="n">ar_begin</span><span class="p">;</span> <span class="n">pt</span> <span class="o">!=</span> <span class="n">ar_end</span><span class="p">;</span> <span class="n">pt</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="o">*</span><span class="n">pt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">total</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">fill_array</span><span class="p">(</span><span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="kt">double</span> <span class="n">temp</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter value #"</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">": "</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cin</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Bad input; input process terminated.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+        <span class="n">ar</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+
+<span class="kt">void</span> <span class="nf">show_array</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Property #"</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">": $"</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ar</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">revalue</span><span class="p">(</span><span class="kt">double</span> <span class="n">r</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ar</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>这个例子演示了基本的数组作为函数参数的使用方法，演示了const的使用，还演示了第二种数组作为函数参数的写法，具体请看sum_array函数，其接受的是数组的首地址和末地址，你可以通过 <code>sum_array(properties, properties + size);</code> 这种写法来传入数组的长度，或者随意计算数组前面几个元素的和都是可以的。</p>
+<h3 id="c">C风格字符串作为函数的参数</h3>
+<p>本质上C风格字符串属于字符数组，只是里面有个<code>\0</code>来标记字符串的结尾。具体使用参考上面的数组的讨论。</p>
+<h3 id="_10">结构体作为函数的参数</h3>
+<p>结构体其实更加简单，其使用基本上可以看作某种额外的基本数据类型，你可以传值，也可以传指针，只是如果结构体比较大的话，还是推荐传指针。</p>
+<p>关于C++新增的类的概念，比如string类，array类等，这些作为函数的参数大体可以参考结构体的使用，也就是可以看作某种额外的基本数据类型。关于类的使用后面会有更详细的讨论了。</p>
+<h3 id="_11">函数作为函数的参数</h3>
+<p>函数名就是函数的地址，你可以直接将函数名作为参数传递进去，不过麻烦在这个函数指针的类型声明上：</p>
+<div class="highlight"><pre><span></span>void estimate(int repeat, double(*pf)(int));
+</pre></div>
+<p>声明的这个pf就是指针那个目标函数的指针，只是因为声明的时候要带上指向函数的类型声明，有的时候语句会很长。</p>
+<p>可以利用typedef进行简化：</p>
+<div class="highlight"><pre><span></span>typedef double(*test_func_type)(int);
+</pre></div>
+<p>具体请看下面的样例来加深理解：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="nf">double</span><span class="p">(</span><span class="o">*</span><span class="n">test_func_type</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">estimate</span><span class="p">(</span><span class="kt">int</span> <span class="p">,</span> <span class="n">test_func_type</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">test_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span>
+
+
+<span class="kt">double</span> <span class="nf">test_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mf">3.14</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="s">" * 3.14 = "</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">estimate</span><span class="p">(</span><span class="kt">int</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">test_func_type</span> <span class="n">pf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">repeat</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">pf</span><span class="p">)(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">estimate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_func</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>1．编写一个程序，不断要求用户输入两个数，直到其中的一个为0。对于每两个数，程序将使用一个函数来计算它们的调和平均数，并将结果返回给main( )，而后者将报告结果。调和平均数指的是倒数平均值的倒数，计算公式如下：</p>
+<p>调和平均数=2.0 * x * y / (x + y)</p>
+<p>xiti_c7_1.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cctype&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">double</span> <span class="nf">calc_harmonic_mean</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">);</span>
+
+<span class="kt">double</span> <span class="nf">calc_harmonic_mean</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">result</span><span class="p">;</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">f1</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">f2</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">result</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input two number:"</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">f1</span> <span class="o">&gt;&gt;</span> <span class="n">f2</span><span class="p">))</span> <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">input_line_right</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+
+            <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">isblank</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Bad input!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+                    <span class="n">input_line_right</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">input_line_right</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">f1</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">f2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+                <span class="n">result</span> <span class="o">=</span> <span class="n">calc_harmonic_mean</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">);</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">f1</span> <span class="o">&lt;&lt;</span> <span class="s">" and "</span> <span class="o">&lt;&lt;</span> <span class="n">f2</span> <span class="o">&lt;&lt;</span> <span class="s">" harmonic mean is: "</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Bad input!"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>3．下面是一个结构声明：</p>
+<div class="highlight"><pre><span></span>struct box{
+    char maker[40];
+    float height;
+    float width;
+    float length;
+    float volume;
+};
+</pre></div>
+<p>a．编写一个函数，按值传递box结构，并显示每个成员的值。</p>
+<p>b．编写一个函数，传递box结构的地址，并将volume成员设置为其他三维长度的乘积。</p>
+<p>c．编写一个使用这两个函数的简单程序。</p>
+<p>xiti_c7_3.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">box</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">maker</span><span class="p">[</span><span class="mi">40</span><span class="p">];</span>
+    <span class="kt">float</span> <span class="n">height</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">width</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">length</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">volume</span><span class="p">;</span>
+<span class="p">}</span><span class="n">Box</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">show_box</span><span class="p">(</span><span class="n">Box</span> <span class="n">box1</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">calc_box_volume</span><span class="p">(</span><span class="n">Box</span><span class="o">*</span> <span class="n">pbox</span><span class="p">);</span>
+
+
+
+<span class="kt">void</span> <span class="nf">show_box</span><span class="p">(</span><span class="n">Box</span> <span class="n">box1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> 
+        <span class="s">"box: "</span> <span class="o">&lt;&lt;</span> <span class="n">box1</span><span class="p">.</span><span class="n">maker</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span>
+        <span class="s">"height: "</span> <span class="o">&lt;&lt;</span> <span class="n">box1</span><span class="p">.</span><span class="n">height</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span>
+        <span class="s">"width: "</span> <span class="o">&lt;&lt;</span> <span class="n">box1</span><span class="p">.</span><span class="n">width</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span>
+        <span class="s">"length: "</span> <span class="o">&lt;&lt;</span> <span class="n">box1</span><span class="p">.</span><span class="n">length</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> <span class="o">&lt;&lt;</span>
+        <span class="s">"volume: "</span> <span class="o">&lt;&lt;</span> <span class="n">box1</span><span class="p">.</span><span class="n">volume</span>
+        <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">calc_box_volume</span><span class="p">(</span><span class="n">Box</span><span class="o">*</span> <span class="n">pbox</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">pbox</span><span class="o">-&gt;</span><span class="n">volume</span> <span class="o">=</span> <span class="n">pbox</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">*</span> <span class="n">pbox</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">*</span> <span class="n">pbox</span><span class="o">-&gt;</span><span class="n">length</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">//int main33() {</span>
+
+    <span class="n">Box</span> <span class="n">box1</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"box1"</span><span class="p">,</span>
+        <span class="mf">2.5</span><span class="p">,</span>
+        <span class="mf">3.6</span><span class="p">,</span>
+        <span class="mi">7</span><span class="p">,</span>
+        <span class="mi">0</span>
+    <span class="p">};</span>
+
+    <span class="n">show_box</span><span class="p">(</span><span class="n">box1</span><span class="p">);</span>
+
+    <span class="n">calc_box_volume</span><span class="p">(</span><span class="o">&amp;</span><span class="n">box1</span><span class="p">);</span>
+
+    <span class="n">show_box</span><span class="p">(</span><span class="n">box1</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>5．定义一个递归函数，接受一个整数参数，并返回该参数的阶乘。前面讲过，3的阶乘写作3!，等于<code>3*2!</code>，依此类推；而0!被定义为1。通用的计算公式是，如果n大于零，则<code>n!=n*（n−1）!</code>。在程序中对该函数进行测试，程序使用循环让用户输入不同的值，程序将报告这些值的阶乘。</p>
+<p>xiti_c7_5.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+
+
+<span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">factorial</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//int main34() {</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input one integer number:"</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">))</span> <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">input_line_right</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+
+            <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">isblank</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Bad input!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+                    <span class="n">input_line_right</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">input_line_right</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+                <span class="n">result</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="s">" factorial is: "</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Bad input!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>9．这个练习让您编写处理数组和结构的函数。下面是程序的框架，请提供其中描述的函数，以完成该程序。</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">SLEN</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">student</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">fullname</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">hobby</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">ooplevel</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// getinfo has two arguments: a pointer to the first argument of</span>
+<span class="c1">// an array of student structures and an int representing the</span>
+<span class="c1">// number of elements of the array. the function solicits and</span>
+<span class="c1">// stores data about students. It terminates input upon filling </span>
+<span class="c1">// the array or upon encountering a blank line for the student </span>
+<span class="c1">// name. the function returns the actual number of array elements </span>
+<span class="c1">// filled.</span>
+<span class="kt">int</span> <span class="nf">getinfo</span><span class="p">(</span><span class="n">student</span> <span class="n">pa</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+
+<span class="c1">// display1 takes a student structure as an argument</span>
+<span class="c1">// and display its contents.</span>
+<span class="kt">void</span> <span class="nf">display1</span><span class="p">(</span><span class="n">student</span> <span class="n">st</span><span class="p">);</span>
+
+<span class="c1">// display2 takes the address of students structure as an </span>
+<span class="c1">// argument and display the structure's cntents.</span>
+<span class="kt">void</span> <span class="nf">display2</span><span class="p">(</span><span class="k">const</span> <span class="n">student</span><span class="o">*</span> <span class="n">ps</span><span class="p">);</span>
+
+<span class="c1">// display3 takes the address of the first element of an array</span>
+<span class="c1">// of student structures and the number of array elements as </span>
+<span class="c1">// arguments and displays the contents of the structures</span>
+<span class="kt">void</span> <span class="nf">display3</span><span class="p">(</span><span class="k">const</span> <span class="n">student</span> <span class="n">pa</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">//int main35() {</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter class size: "</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">class_size</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">class_size</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+
+    <span class="n">student</span><span class="o">*</span> <span class="n">ptr_stu</span> <span class="o">=</span> <span class="k">new</span> <span class="n">student</span><span class="p">[</span><span class="n">class_size</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">entered</span> <span class="o">=</span> <span class="n">getinfo</span><span class="p">(</span><span class="n">ptr_stu</span><span class="p">,</span> <span class="n">class_size</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">entered</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">display1</span><span class="p">(</span><span class="n">ptr_stu</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">display2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ptr_stu</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">display3</span><span class="p">(</span><span class="n">ptr_stu</span><span class="p">,</span> <span class="n">entered</span><span class="p">);</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">ptr_stu</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Done</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>xiti_c7_9.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">SLEN</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">student</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">fullname</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">hobby</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">ooplevel</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">getinfo</span><span class="p">(</span><span class="n">student</span> <span class="n">pa</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">display1</span><span class="p">(</span><span class="n">student</span> <span class="n">st</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">display2</span><span class="p">(</span><span class="k">const</span> <span class="n">student</span><span class="o">*</span> <span class="n">ps</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">display3</span><span class="p">(</span><span class="k">const</span> <span class="n">student</span> <span class="n">pa</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">getinfo</span><span class="p">(</span><span class="n">student</span> <span class="n">pa</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">entered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input student fullname: "</span><span class="p">;</span>
+        <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fullname</span><span class="p">,</span> <span class="n">SLEN</span><span class="p">);</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input student hobby: "</span><span class="p">;</span>
+        <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">hobby</span><span class="p">,</span> <span class="n">SLEN</span><span class="p">);</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input student ooplevel: "</span><span class="p">;</span>
+        <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ooplevel</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="n">entered</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">entered</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">display1</span><span class="p">(</span><span class="n">student</span> <span class="n">st</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"student "</span> <span class="o">&lt;&lt;</span> <span class="n">st</span><span class="p">.</span><span class="n">fullname</span> <span class="o">&lt;&lt;</span>
+        <span class="s">" hobby: "</span> <span class="o">&lt;&lt;</span> <span class="n">st</span><span class="p">.</span><span class="n">hobby</span> <span class="o">&lt;&lt;</span>
+        <span class="s">" ooplevel: "</span> <span class="o">&lt;&lt;</span> <span class="n">st</span><span class="p">.</span><span class="n">ooplevel</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">display2</span><span class="p">(</span><span class="k">const</span> <span class="n">student</span><span class="o">*</span> <span class="n">ps</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"student "</span> <span class="o">&lt;&lt;</span> <span class="n">ps</span><span class="o">-&gt;</span><span class="n">fullname</span> <span class="o">&lt;&lt;</span>
+        <span class="s">" hobby: "</span> <span class="o">&lt;&lt;</span> <span class="n">ps</span><span class="o">-&gt;</span><span class="n">hobby</span> <span class="o">&lt;&lt;</span>
+        <span class="s">" ooplevel: "</span> <span class="o">&lt;&lt;</span> <span class="n">ps</span><span class="o">-&gt;</span><span class="n">ooplevel</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">display3</span><span class="p">(</span><span class="k">const</span> <span class="n">student</span> <span class="n">pa</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">display1</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">//int main35() {</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter class size: "</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">class_size</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">class_size</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">'\n'</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+
+    <span class="n">student</span><span class="o">*</span> <span class="n">ptr_stu</span> <span class="o">=</span> <span class="k">new</span> <span class="n">student</span><span class="p">[</span><span class="n">class_size</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">entered</span> <span class="o">=</span> <span class="n">getinfo</span><span class="p">(</span><span class="n">ptr_stu</span><span class="p">,</span> <span class="n">class_size</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">entered</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">display1</span><span class="p">(</span><span class="n">ptr_stu</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">display2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ptr_stu</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">display3</span><span class="p">(</span><span class="n">ptr_stu</span><span class="p">,</span> <span class="n">entered</span><span class="p">);</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">ptr_stu</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Done</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>10．设计一个名为calculate( )的函数，它接受两个double值和一个指向函数的指针，而被指向的函数接受两个double参数，并返回一个double值。calculate( )函数的类型也是double，并返回被指向的函数使用calculate( )的两个double参数计算得到的值。例如，假设add( )函数的定义如下：</p>
+<div class="highlight"><pre><span></span>double add(double x, double y){
+    return x + y;
+}
+</pre></div>
+<p>则下述代码中的函数调用将导致calculate( )把2.5和10.4传递给add( )函数，并返回add( )的返回值（12.9）：</p>
+<div class="highlight"><pre><span></span>double q = calculate(2.5, 10.4, add)
+</pre></div>
+<p>请编写一个程序，它调用上述两个函数和至少另一个与add( )类似的函数。该程序使用循环来让用户成对地输入数字。对于每对数字，程序都使用calculate( )来调用add( )和至少一个其他的函数。如果读者爱冒险，可以尝试创建一个指针数组，其中的指针指向add( )样式的函数，并编写一个循环，使用这些指针连续让calculate( )调用这些函数。提示：下面是声明这种指针数组的方式，其中包含三个指针：</p>
+<div class="highlight"><pre><span></span>double (*pf[3])(double, double);
+</pre></div>
+<p>可以采用数组初始化语法，并将函数名作为地址来初始化这样的数组。</p>
+<p>xiti_c7_10.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="nf">double</span> <span class="p">(</span><span class="o">*</span><span class="n">func_call</span><span class="p">)(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">);</span>
+
+<span class="kt">double</span> <span class="nf">addition</span><span class="p">(</span><span class="kt">double</span> <span class="p">,</span> <span class="kt">double</span> <span class="p">);</span>
+<span class="kt">double</span> <span class="nf">subtraction</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">multiplication</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">);</span>
+
+<span class="kt">double</span> <span class="nf">calculate</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="n">func_call</span> <span class="n">func</span><span class="p">);</span>
+
+<span class="kt">double</span> <span class="nf">calculate</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="n">func_call</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">func</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">addition</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"running addition...</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">subtraction</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"running subtraction...</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">multiplication</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"running multiplication...</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="p">(</span><span class="o">*</span><span class="n">pf</span><span class="p">[</span><span class="mi">3</span><span class="p">])(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">);</span>
+
+    <span class="n">pf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">addition</span><span class="p">;</span>
+    <span class="n">pf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">subtraction</span><span class="p">;</span>
+    <span class="n">pf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">multiplication</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">})</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">q</span> <span class="o">=</span> <span class="n">calculate</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">10.4</span><span class="p">,</span> <span class="n">pf</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"result: "</span> <span class="o">&lt;&lt;</span> <span class="n">q</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h2 id="_12">内存模型和名称空间</h2>
+<h2 id="_13">类</h2>
+<h2 id="_14">附录</h2>
 <h3 id="cin">cin详解</h3>
 <ul>
 <li><code>cin &gt;&gt;</code> 遇到Enter Space Tab 即结束，适合char，无空格的string和单个值的int float之类的输入。需要注意的是经过个人实践换行符还是在缓冲区的，为了把这个缓冲区消掉获得更好的输入体验，一般采用这种表达方式：<code>(cin &gt;&gt; what).get()</code> ，这是因为 <code>cin &gt;&gt; what</code> 会返回cin对象，然后继续调用下面的 get 方法来消掉最后的换行符。</li>
@@ -955,7 +1721,7 @@ delete pn;
 <li><code>cout &lt;&lt;</code> 一般使用</li>
 <li><code>cout.put(char &amp;ch)</code>  输出一个字符，如果输入的整型也会正常显示该字符。</li>
 </ul>
-<h2 id="_7">参考资料</h2>
+<h2 id="_15">参考资料</h2>
 <ol>
 <li>C++ Primer Plus 第六版中文版</li>
 </ol>
@@ -967,7 +1733,7 @@ delete pn;
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-06-21T19:14:50.732574+08:00">2020年 6月 21日 </time>
+            <time pubdate="pubdate" datetime="2020-07-06T18:31:54.495862+08:00">2020年 7月 6日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
