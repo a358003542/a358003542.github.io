@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-08T23:02:36.406630+08:00" />
+<meta property="og:article:published_time" content="2020-07-11T16:06:31.099061+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -1856,7 +1856,112 @@ void swap(T &amp;, T &amp;);
 </pre></div>
 <p>因为是指明要用char指针，所以才这样实现，如果用string的话会简单很多。</p>
 <p>5．编写模板函数max5( )，它将一个包含5个T类型元素的数组作为参数，并返回数组中最大的元素（由于长度固定，因此可以在循环中使用硬编码，而不必通过参数来传递）。在一个程序中使用该函数，将T替换为一个包含5个int值的数组和一个包含5个dowble值的数组，以测试该函数。</p>
+<p>xiti_c8_5.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">max5</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[]);</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">max5</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="n">max</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">arr1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">45</span><span class="p">,</span><span class="mi">54</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span> <span class="p">};</span>
+    <span class="kt">int</span> <span class="n">max1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">max1</span> <span class="o">=</span> <span class="n">max5</span><span class="p">(</span><span class="n">arr1</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">max1</span> <span class="o">==</span> <span class="mi">54</span><span class="p">);</span>
+
+
+    <span class="kt">double</span> <span class="n">arr2</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mf">5.58</span><span class="p">,</span><span class="mf">6.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">3.14</span><span class="p">,</span><span class="mf">1.25</span> <span class="p">};</span>
+    <span class="kt">double</span> <span class="n">max2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">max2</span> <span class="o">=</span> <span class="n">max5</span><span class="p">(</span><span class="n">arr2</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">max2</span> <span class="o">==</span> <span class="mf">6.5</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>这题还是很简单的，就是基本的模板函数用法，我们继续看下面这题。</p>
 <p>6．编写模板函数maxn( )，它将由一个T类型元素组成的数组和一个表示数组元素数目的整数作为参数，并返回数组中最大的元素。在程序对它进行测试，该程序使用一个包含6个int元素的数组和一个包含4个double元素的数组来调用该函数。程序还包含一个具体化，它将char指针数组和数组中的指针数量作为参数，并返回最长的字符串的地址。如果有多个这样的字符串，则返回其中第一个字符串的地址。使用由5个字符串指针组成的数组来测试该具体化。</p>
+<p>xiti_c8_6.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">maxn</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+
+<span class="k">template</span> <span class="o">&lt;&gt;</span> <span class="kt">char</span><span class="o">*</span> <span class="n">maxn</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">maxn</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="n">max</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;&gt;</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">maxn</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">max</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">max</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//int main40() {</span>
+
+    <span class="kt">int</span> <span class="n">arr1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span><span class="mi">54</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span> <span class="p">};</span>
+    <span class="kt">int</span> <span class="n">max1</span><span class="p">;</span>
+    <span class="n">max1</span> <span class="o">=</span> <span class="n">maxn</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span><span class="mi">6</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">max1</span> <span class="o">==</span> <span class="mi">54</span><span class="p">);</span>
+
+
+    <span class="kt">double</span> <span class="n">arr2</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mf">5.58</span><span class="p">,</span><span class="mf">6.5</span><span class="p">,</span><span class="mf">3.14</span><span class="p">,</span><span class="mf">1.25</span> <span class="p">};</span>
+    <span class="kt">double</span> <span class="n">max2</span><span class="p">;</span>
+    <span class="n">max2</span> <span class="o">=</span> <span class="n">maxn</span><span class="p">(</span><span class="n">arr2</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">max2</span> <span class="o">==</span> <span class="mf">6.5</span><span class="p">);</span>
+
+    <span class="kt">char</span> <span class="n">s1</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abc"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">s2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abc def"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">s3</span><span class="p">[]</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">s4</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"hello world."</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">s5</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"a"</span><span class="p">;</span>
+
+    <span class="kt">char</span><span class="o">*</span> <span class="n">arr3</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">s3</span><span class="p">,</span><span class="n">s4</span><span class="p">,</span><span class="n">s5</span> <span class="p">};</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">max3</span><span class="p">;</span>
+    <span class="n">max3</span> <span class="o">=</span> <span class="n">maxn</span><span class="p">(</span><span class="n">arr3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">max3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">12</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>函数模板的显示具体化具体函数部分编写和常规函数相比就是多了 <code>template &lt;&gt;</code> 这个东西，然后注意原型声明上有这样的顺序：</p>
+<ol>
+<li>一般常规函数</li>
+<li>模板函数</li>
+<li>模板函数具体化</li>
+</ol>
+<p>然后具体重载顺序C++98给定的顺序是一般常规函数最优先，模板函数具体化优先于模板函数。</p>
 <h2 id="_18">内存模型和名称空间</h2>
 <h2 id="_19">类</h2>
 <h2 id="_20">附录</h2>
@@ -1883,7 +1988,7 @@ void swap(T &amp;, T &amp;);
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-08T23:02:36.406630+08:00">2020年 7月 8日 </time>
+            <time pubdate="pubdate" datetime="2020-07-11T16:06:31.099061+08:00">2020年 7月 11日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
