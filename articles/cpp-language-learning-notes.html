@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-12T18:48:28.178233+08:00" />
+<meta property="og:article:published_time" content="2020-07-16T22:04:12.127758+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -2012,6 +2012,256 @@ void swap(T &amp;, T &amp;);
 </pre></div>
 <p>using编译这时引入叫做引入了局部名称空间，说的再直白点就是这里引入的Jill名称空间里面的变量都在main函数里面，是main函数里面的局部变量。你在main函数里面说我要使用fetch则就是对应的 <code>Jill::fetch</code> ，但全部变量或者说全部名称空间的那个fetch还是可以访问的，具体要采用这样的形式： <code>::fetch</code> 。</p>
 <p>一般是推荐使用using声明，using编译只是为了方便。名称空间只是方便大型项目的管理工作的，一般小项目小程序用using编译是没什么问题的。</p>
+<p>命名空间可以如下嵌套：</p>
+<div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">abc</span><span class="p">{</span>
+    <span class="k">namespace</span> <span class="n">def</span><span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>上面<code>int i</code> 的引用完整表达是： <code>abc::def::i</code>  。</p>
+<p>未命名的命名空间：</p>
+<div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ice</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>未命名的命名空间有点像外面的全局变量一样可以<code>::ice</code> 来引用，但区别在于其不能使用using语句，也就是这里面的变量只是本文件可见的。</p>
+<p>命令空间的样例程序请参看 test_namesp.cpp 和 namesp.h 和namesp.cpp这三个文件。</p>
+<p>1．下面是一个头文件：</p>
+<div class="highlight"><pre><span></span><span class="c1">//golf.h</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">Len</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">golf</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">fullname</span><span class="p">[</span><span class="n">Len</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">handicap</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// non-interactive version:</span>
+<span class="c1">// function sets golf structure to provided name, handicap </span>
+<span class="c1">// using values passed as arguments to the function</span>
+<span class="kt">void</span> <span class="nf">setgolf</span><span class="p">(</span><span class="n">golf</span> <span class="o">&amp;</span> <span class="n">g</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hc</span><span class="p">);</span>
+
+<span class="c1">// interactive version:</span>
+<span class="c1">// function solicits name and handicap from user</span>
+<span class="c1">// and sets the members of g to the values entered</span>
+<span class="c1">// returns 1 if name is entered, 0 if name is empty string</span>
+<span class="kt">int</span> <span class="nf">setgolf</span><span class="p">(</span><span class="n">golf</span> <span class="o">&amp;</span> <span class="n">g</span><span class="p">);</span>
+
+<span class="c1">// function resets handicap to new value</span>
+<span class="kt">void</span> <span class="nf">handicap</span><span class="p">(</span><span class="n">golf</span> <span class="o">&amp;</span> <span class="n">g</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hc</span><span class="p">);</span>
+
+<span class="c1">// function displays contents of golf structure</span>
+<span class="kt">void</span> <span class="nf">showgolf</span><span class="p">(</span><span class="k">const</span> <span class="n">golf</span> <span class="o">&amp;</span> <span class="n">g</span><span class="p">);</span>
+</pre></div>
+<p>注意到setgolf( )被重载，可以这样使用其第一个版本：</p>
+<div class="highlight"><pre><span></span>golf ann;
+setgolf(ann, "Ann Birdfree", 24);
+</pre></div>
+<p>上述函数调用提供了存储在ann结构中的信息。可以这样使用其第二个版本：</p>
+<div class="highlight"><pre><span></span>golf ann;
+setgolf(ann);
+</pre></div>
+<p>上述函数将提示用户输入姓名和等级，并将它们存储在andy结构中。这个函数可以（但是不一定必须）在内部使用第一个版本。</p>
+<p>根据这个头文件，创建一个多文件程序。其中的一个文件名为golf.cpp，它提供了与头文件中的原型匹配的函数定义；另一个文件应包含main( )，并演示原型化函数的所有特性。例如，包含一个让用户输入的循环，并使用输入的数据来填充一个由golf结构组成的数组，数组被填满或用户将高尔夫选手的姓名设置为空字符串时，循环将结束。main( )函数只使用头文件中原型化的函数来访问golf结构。</p>
+<p>golf.h大体类似上面定义的。</p>
+<p>golf.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"golf.h"</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span> <span class="nf">setgolf</span><span class="p">(</span><span class="n">golf</span><span class="o">&amp;</span> <span class="n">g</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+    <span class="n">g</span><span class="p">.</span><span class="n">handicap</span> <span class="o">=</span> <span class="n">hc</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">setgolf</span><span class="p">(</span><span class="n">golf</span><span class="o">&amp;</span> <span class="n">g</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input name: "</span><span class="p">;</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">Len</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">fullname</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input handicap: "</span><span class="p">;</span>
+    <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">.</span><span class="n">handicap</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">handicap</span><span class="p">(</span><span class="n">golf</span><span class="o">&amp;</span> <span class="n">g</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">g</span><span class="p">.</span><span class="n">handicap</span> <span class="o">=</span> <span class="n">hc</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">showgolf</span><span class="p">(</span><span class="k">const</span> <span class="n">golf</span><span class="o">&amp;</span> <span class="n">g</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">fullname</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">g</span><span class="p">.</span><span class="n">fullname</span> <span class="o">&lt;&lt;</span> <span class="s">"'s handicap is: "</span> <span class="o">&lt;&lt;</span> <span class="n">g</span><span class="p">.</span><span class="n">handicap</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>xiti_c9_1.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"golf.h"</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">ARR_MAX</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="n">golf</span> <span class="n">golf_arr</span><span class="p">[</span><span class="n">ARR_MAX</span><span class="p">];</span>
+
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ARR_MAX</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">setgolf</span><span class="p">(</span><span class="n">golf_arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"bob sam"</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">setgolf</span><span class="p">(</span><span class="n">golf_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+
+        <span class="n">showgolf</span><span class="p">(</span><span class="n">golf_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"test handicap function....</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">showgolf</span><span class="p">(</span><span class="n">golf_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">handicap</span><span class="p">(</span><span class="n">golf_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">18</span><span class="p">);</span>
+    <span class="n">showgolf</span><span class="p">(</span><span class="n">golf_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本习题主要是要求读者掌握多文件C++的编写过程。</p>
+<p>4．请基于下面这个名称空间编写一个由3个文件组成的程序：</p>
+<div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">SALES</span><span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">QUARTERS</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">Sales</span><span class="p">{</span>
+        <span class="kt">double</span> <span class="n">sales</span><span class="p">[</span><span class="n">QUARTERS</span><span class="p">];</span>
+        <span class="kt">double</span> <span class="n">average</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">max</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">min</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="c1">// copies the lesser of 4 or n items from the array ar</span>
+    <span class="c1">// to the sales member of s and computes and stores the </span>
+    <span class="c1">// average, maximum, and minimum values of the entered items;</span>
+    <span class="c1">// remaining elements of sales, if any, set to 0;</span>
+    <span class="kt">void</span> <span class="nf">setSales</span><span class="p">(</span><span class="n">Sale</span> <span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+    <span class="c1">// gathers sales for 4 quarters interactively, stores them </span>
+    <span class="c1">// in the sales member of s and computes and stores the</span>
+    <span class="c1">// average, maximum, and minimum values.</span>
+    <span class="kt">void</span> <span class="nf">setSales</span><span class="p">(</span><span class="n">Sale</span> <span class="o">&amp;</span> <span class="n">s</span><span class="p">);</span>
+    <span class="c1">// display all information in structure s</span>
+    <span class="kt">void</span> <span class="nf">showSales</span><span class="p">(</span><span class="k">const</span> <span class="n">Sales</span> <span class="o">&amp;</span> <span class="n">s</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>第一个文件是一个头文件，其中包含名称空间；第二个文件是一个源代码文件，它对这个名称空间进行扩展，以提供这三个函数的定义；第三个文件声明两个Sales对象，并使用setSales( )的交互式版本为一个结构提供值，然后使用setSales( )的非交互式版本为另一个结构提供值。另外它还使用showSales( )来显示这两个结构的内容。</p>
+<p>sales.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"sales.h"</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">SALES</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="n">calcSales</span><span class="p">(</span><span class="n">Sales</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">max</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="kt">double</span> <span class="n">min</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">average</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">min</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">max</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">average</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span>
+
+        <span class="n">s</span><span class="p">.</span><span class="n">average</span> <span class="o">=</span> <span class="n">average</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">max</span> <span class="o">=</span> <span class="n">max</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">min</span> <span class="o">=</span> <span class="n">min</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="kt">void</span> <span class="n">setSales</span><span class="p">(</span><span class="n">Sales</span> <span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">ar</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ar</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">n</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">calcSales</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">setSales</span><span class="p">(</span><span class="n">Sales</span> <span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input QUARTERS "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>  <span class="o">&lt;&lt;</span> <span class="s">" sales: "</span><span class="p">;</span>
+            <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">]).</span><span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">calcSales</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">showSales</span><span class="p">(</span><span class="k">const</span> <span class="n">Sales</span> <span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"QUARTERS "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">" sales: "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"average: "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">average</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"maximum: "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">max</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"minimum: "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">min</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>xiti_c9_4.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"sales.h"</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="kt">double</span> <span class="n">ar</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mf">1.0</span><span class="p">,</span><span class="mf">3.2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">5.6</span> <span class="p">};</span>
+
+    <span class="k">using</span> <span class="n">SALES</span><span class="o">::</span><span class="n">Sales</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">SALES</span><span class="o">::</span><span class="n">setSales</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">SALES</span><span class="o">::</span><span class="n">showSales</span><span class="p">;</span>
+
+    <span class="n">Sales</span> <span class="n">s</span><span class="p">;</span>
+
+    <span class="n">setSales</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+
+    <span class="n">showSales</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+
+    <span class="n">Sales</span> <span class="n">s2</span><span class="p">;</span>
+    <span class="n">setSales</span><span class="p">(</span><span class="n">s2</span><span class="p">);</span>
+
+    <span class="n">showSales</span><span class="p">(</span><span class="n">s2</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本习题主要要求读者掌握名称空间的用法。</p>
 <h2 id="_21">类</h2>
 <h2 id="_22">附录</h2>
 <h3 id="cin">cin详解</h3>
@@ -2037,7 +2287,7 @@ void swap(T &amp;, T &amp;);
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-12T18:48:28.178233+08:00">2020年 7月 12日 </time>
+            <time pubdate="pubdate" datetime="2020-07-16T22:04:12.127758+08:00">2020年 7月 16日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
