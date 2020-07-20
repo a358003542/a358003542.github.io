@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-19T18:49:55.172105+08:00" />
+<meta property="og:article:published_time" content="2020-07-20T16:47:41.451685+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -2447,7 +2447,134 @@ setgolf(ann);
 <span class="p">}</span>
 </pre></div>
 <p>3．重做前面<code>xiti_c9_1</code> 编程，但要用正确的golf类声明替换那里的代码。用带合适参数的构造函数替换 <code>setgolf（golf &amp;, const char *, int）</code>，以提供初始值。保留 <code>setgolf( )</code> 的交互版本，但要用构造函数来实现它（例如，setgolf( )的代码应该获得数据，将数据传递给构造函数来创建一个临时对象，并将其赋给调用对象，即 <code>*this</code> ）。</p>
-<p>4．重做前面的 <code>xiti_c9_4</code>  编程，但将Sales结构及相关的函数转换为一个类及其方法。用构造函数替换<code>setSales（sales &amp;，double [ ]，int）</code>函数。用构造函数实现 <code>setSales（Sales &amp;）</code>方法的交互版本。将类保留在名称空间SALES中。</p>
+<p>在golf.h那里新增Golf类的声明：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Golf</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">Len</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">fullname</span><span class="p">[</span><span class="n">Len</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">handicap</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Golf</span><span class="p">();</span>
+    <span class="n">Golf</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hc</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">showgolf</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">set_handicap</span><span class="p">(</span><span class="kt">int</span> <span class="n">hc</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+<p>在Golf.cpp那里新增Golf类的定义：</p>
+<div class="highlight"><pre><span></span><span class="n">Golf</span><span class="o">::</span><span class="n">Golf</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input name: "</span><span class="p">;</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">fullname</span><span class="p">,</span> <span class="n">Len</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">fullname</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"please input handicap: "</span><span class="p">;</span>
+        <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">handicap</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">Golf</span><span class="o">::</span><span class="n">Golf</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">hc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">fullname</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">handicap</span> <span class="o">=</span> <span class="n">hc</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Golf</span><span class="o">::</span><span class="n">showgolf</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">fullname</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">fullname</span> <span class="o">&lt;&lt;</span> <span class="s">"'s handicap is: "</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">handicap</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Golf</span><span class="o">::</span><span class="n">set_handicap</span><span class="p">(</span><span class="kt">int</span> <span class="n">hc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">handicap</span> <span class="o">=</span> <span class="n">hc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>xiti_c10_3.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"golf.h"</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Golf</span> <span class="n">golf1</span> <span class="o">=</span> <span class="n">Golf</span><span class="p">(</span><span class="s">"bob sam"</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="n">golf1</span><span class="p">.</span><span class="n">showgolf</span><span class="p">();</span>
+
+    <span class="n">Golf</span> <span class="n">golf2</span> <span class="o">=</span> <span class="n">Golf</span><span class="p">();</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"test handicap function....</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">golf2</span><span class="p">.</span><span class="n">showgolf</span><span class="p">();</span>
+    <span class="n">golf2</span><span class="p">.</span><span class="n">set_handicap</span><span class="p">(</span><span class="mi">18</span><span class="p">);</span>
+    <span class="n">golf2</span><span class="p">.</span><span class="n">showgolf</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本例也算是对结构体和类之间转换的一种思考，结构内的访问属性默认是public，而类里面的变量默认访问属性是private。C++程序员该使用类就会使用类，而结构体只是某种纯粹的数据表达。</p>
+<p>6．下面是一个类的声明：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Move</span><span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">y</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Move</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// set x,y to a,b</span>
+    <span class="kt">void</span> <span class="nf">showmove</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">//show current x,y values</span>
+    <span class="n">Move</span> <span class="nf">add</span><span class="p">(</span><span class="k">const</span> <span class="n">Move</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span> 
+    <span class="c1">// this function adds x of m to x of invoking object to get new x,</span>
+    <span class="c1">// add y of m to y of invoking object to get new y, create a new</span>
+    <span class="c1">// move object initialized to new x,y values and returns it.</span>
+    <span class="kt">void</span> <span class="nf">reset</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">//reset x,y to a,b</span>
+<span class="p">};</span>
+</pre></div>
+<p>请编写该类的成员函数定义和具体测试该类的程序。</p>
+<p>move.cpp内容如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"move.h"</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+
+<span class="n">Move</span><span class="o">::</span><span class="n">Move</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Move</span><span class="o">::</span><span class="n">showmove</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"&lt;Move x="</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">" y="</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">"&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Move</span> <span class="n">Move</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="k">const</span> <span class="n">Move</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">new_x</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">+</span> <span class="n">m</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">new_y</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">+</span> <span class="n">m</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nf">Move</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Move</span><span class="o">::</span><span class="n">reset</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>xiti_c10_6.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"move.h"</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//int main48() {</span>
+
+    <span class="n">Move</span> <span class="n">m1</span> <span class="o">=</span> <span class="n">Move</span><span class="p">();</span>
+    <span class="n">m1</span><span class="p">.</span><span class="n">showmove</span><span class="p">();</span>
+
+    <span class="n">Move</span> <span class="n">m2</span> <span class="o">=</span> <span class="n">Move</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="n">Move</span> <span class="n">m3</span> <span class="o">=</span> <span class="n">Move</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">);</span>
+    <span class="n">Move</span> <span class="n">m4</span> <span class="o">=</span> <span class="n">m3</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">m2</span><span class="p">);</span>
+    <span class="n">m4</span><span class="p">.</span><span class="n">showmove</span><span class="p">();</span>
+
+    <span class="n">m4</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="mf">9.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">m4</span><span class="p">.</span><span class="n">showmove</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <p>8．可以将简单列表描述成下面这样：</p>
 <ul>
 <li>可存储0或多个某种类型的列表；</li>
@@ -2460,10 +2587,116 @@ setgolf(ann);
 <p>可以看到，这个列表确实很简单，例如，它不允许插入或删除数据项。</p>
 <p>请设计一个List类来表示这种抽象类型。您应提供头文件list.h和实现文件list.cpp，前者包含类定义，后者包含类方法的实现。您还应创建一个简短的程序来使用这个类。</p>
 <p>该列表的规范很简单，这主要旨在简化这个编程练习。可以选择使用数组或链表来实现该列表，但公有接口不应依赖于所做的选择。也就是说，公有接口不应有数组索引、节点指针等。应使用通用概念来表达创建列表、在列表中添加数据项等操作。对于访问数据项以及执行操作，通常应使用将函数指针作为参数的函数来处理：</p>
-<div class="highlight"><pre><span></span>void visit(void (*pf)(Item &amp;));
+<div class="highlight"><pre><span></span>void visit(Item (*pf)(Item &amp;));
 </pre></div>
 <p>其中，pf指向一个将Item引用作为参数的函数（不是成员函数），Item是列表中数据项的类型。visit( )函数将该函数用于列表中的每个数据项。</p>
+<p>list.h 内容如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#ifndef LIST_H_</span>
+<span class="cp">#define LIST_H_</span>
+
+<span class="cp">#define ItemType double</span>
+<span class="k">typedef</span> <span class="nf">ItemType</span><span class="p">(</span><span class="o">*</span><span class="n">func_type</span><span class="p">)(</span><span class="n">ItemType</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">List</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">enum</span> <span class="p">{</span> <span class="n">MAX</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">};</span>
+    <span class="n">ItemType</span> <span class="n">items</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">List</span><span class="p">();</span> <span class="c1">// default empty list</span>
+    <span class="kt">bool</span> <span class="nf">is_full</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="nf">is_empty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">show_list</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">append</span><span class="p">(</span><span class="n">ItemType</span> <span class="n">item</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">visit</span><span class="p">(</span><span class="n">func_type</span> <span class="n">pf</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+<span class="cp">#endif </span><span class="c1">// !LIST_H_</span>
+</pre></div>
+<p>list.cpp </p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"list.h"</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+
+<span class="n">List</span><span class="o">::</span><span class="n">List</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">List</span><span class="o">::</span><span class="n">is_full</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">MAX</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">List</span><span class="o">::</span><span class="n">is_empty</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">List</span><span class="o">::</span><span class="n">show_list</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"["</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">", "</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">List</span><span class="o">::</span><span class="n">append</span><span class="p">(</span><span class="n">ItemType</span> <span class="n">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_full</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">items</span><span class="p">[</span><span class="n">num</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"list is full."</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">List</span><span class="o">::</span><span class="n">visit</span><span class="p">(</span><span class="n">func_type</span> <span class="n">pf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">pf</span><span class="p">)(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>xiti_c10_8.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"list.h"</span><span class="cp"></span>
+
+
+<span class="n">ItemType</span> <span class="nf">multiply2</span><span class="p">(</span><span class="n">ItemType</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">item</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">List</span> <span class="n">list1</span> <span class="o">=</span> <span class="n">List</span><span class="p">();</span>
+
+    <span class="n">list1</span><span class="p">.</span><span class="n">show_list</span><span class="p">();</span>
+
+    <span class="n">list1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+    <span class="n">list1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+
+    <span class="n">list1</span><span class="p">.</span><span class="n">show_list</span><span class="p">();</span>
+
+    <span class="n">list1</span><span class="p">.</span><span class="n">visit</span><span class="p">(</span><span class="n">multiply2</span><span class="p">);</span>
+
+    <span class="n">list1</span><span class="p">.</span><span class="n">show_list</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本例只要求实现一个简单的列表，其中函数作为参数部分也算是一个温习。</p>
 <h3 id="_26">运算符重载</h3>
+<p>类相应的运算符重载在python那边是在类里面重新定义 <code>__add__</code> 之类的方法，而在C++这边是重新定义 <code>operator+</code> 之类的这样的成员函数，然后就重载了对应的运算符操作。具体这块细节后面有时间再慢慢熟悉，本文也是接触到什么运算符就提到相关知识点，不会面面俱到的，在这块学习上是没必要要求面面俱到的。</p>
 <h2 id="_27">附录</h2>
 <h3 id="cin">cin详解</h3>
 <ul>
@@ -2488,7 +2721,7 @@ setgolf(ann);
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-19T18:49:55.172105+08:00">2020年 7月 19日 </time>
+            <time pubdate="pubdate" datetime="2020-07-20T16:47:41.451685+08:00">2020年 7月 20日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
