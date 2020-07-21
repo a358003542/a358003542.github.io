@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 本文档记录关于tensorflow模块学习中的一些东西。 tensorflow是通用的数据流计算图框架，一般我们都会写上一个简单的hello world例子来简单了解一下目标框架： h = tf.constant(&#39;hello&#39;) w = tf.constant(&#39; world.&#39;) hw = h + w with tf.Session() as s: res = s.run(hw) print(res) tf.constant 表示一个常量，简单理解就相当于一个不断输出某个数值的节点。hw将两个常量相加，相当于连接两个节点执行了相加操作。tensorflow有个计算图的概念，在这个计算图中，具体计算只有在session回话实际 run 的时候才会执行： with tf.Session() as sess: do something 神经网络结构 神经元中的数据，或者是输入的，或者是常数，其后神经元的数据则是在数据流动中生成出来的 …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", others, " />
+
+<meta property="og:title" content="tensorflow模块 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/tensorflowmo-kuai.html" />
+<meta property="og:description" content="前言 本文档记录关于tensorflow模块学习中的一些东西。 tensorflow是通用的数据流计算图框架，一般我们都会写上一个简单的hello world例子来简单了解一下目标框架： h = tf.constant(&#39;hello&#39;) w = tf.constant(&#39; world.&#39;) hw = h + w with tf.Session() as s: res = s.run(hw) print(res) tf.constant 表示一个常量，简单理解就相当于一个不断输出某个数值的节点。hw将两个常量相加，相当于连接两个节点执行了相加操作。tensorflow有个计算图的概念，在这个计算图中，具体计算只有在session回话实际 run 的时候才会执行： with tf.Session() as sess: do something 神经网络结构 神经元中的数据，或者是输入的，或者是常数，其后神经元的数据则是在数据流动中生成出来的 …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-07-21T08:35:55.431677+08:00" />
+<meta name="twitter:title" content="tensorflow模块 ">
+<meta name="twitter:description" content="前言 本文档记录关于tensorflow模块学习中的一些东西。 tensorflow是通用的数据流计算图框架，一般我们都会写上一个简单的hello world例子来简单了解一下目标框架： h = tf.constant(&#39;hello&#39;) w = tf.constant(&#39; world.&#39;) hw = h + w with tf.Session() as s: res = s.run(hw) print(res) tf.constant 表示一个常量，简单理解就相当于一个不断输出某个数值的节点。hw将两个常量相加，相当于连接两个节点执行了相加操作。tensorflow有个计算图的概念，在这个计算图中，具体计算只有在session回话实际 run 的时候才会执行： with tf.Session() as sess: do something 神经网络结构 神经元中的数据，或者是输入的，或者是常数，其后神经元的数据则是在数据流动中生成出来的 …">
+
+
+    <title>tensorflow模块  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/tensorflowmo-kuai.html"> tensorflow模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a><ul>
+<li><a href="#_2">神经网络结构</a></li>
+<li><a href="#_3">变量</a></li>
+<li><a href="#placeholder">placeholder</a></li>
+<li><a href="#_4">初始所有变量</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">前言</h2>
+<p>本文档记录关于tensorflow模块学习中的一些东西。</p>
+<p>tensorflow是通用的数据流计算图框架，一般我们都会写上一个简单的hello world例子来简单了解一下目标框架：</p>
+<div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">' world.'</span><span class="p">)</span>
+
+<span class="n">hw</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">w</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">hw</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</pre></div>
+<p><code>tf.constant</code> 表示一个常量，简单理解就相当于一个不断输出某个数值的节点。hw将两个常量相加，相当于连接两个节点执行了相加操作。tensorflow有个计算图的概念，在这个计算图中，具体计算只有在session回话实际 <code>run</code> 的时候才会执行：</p>
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">do</span> <span class="n">something</span>
+</pre></div>
+<h3 id="_2">神经网络结构</h3>
+<ol>
+<li>神经元中的数据，或者是输入的，或者是常数，其后神经元的数据则是在数据流动中生成出来的。</li>
+<li>神经元的连接用权重矩阵表示，某个节点神经元中的数据值 = 前输入层 * 权重矩阵，用数学公式表达可能更好：</li>
+</ol>
+<p>$$
+data = 
+</p>
+<div class="math">\begin{bmatrix}
+x1 &amp; x2 &amp; x3
+\end{bmatrix}</div>
+<div class="math">\begin{bmatrix}
+w1\\ 
+w2\\ 
+w3
+\end{bmatrix}</div>
+<p>
+$$</p>
+<p>第二个神经元的权重在第二列展开，</p>
+<ol>
+<li>一层一层之间的连接用矩阵乘法表示，即</li>
+</ol>
+<div class="highlight"><pre><span></span>a = tf.matmul(x, w1)
+y = tf.matmul(a, w2)
+</pre></div>
+<p>前一层的输出就是后一层的第一个输入参数。</p>
+<h3 id="_3">变量</h3>
+<p>用 <code>tf.Variable</code> 来定义一个变量，变量相当于一个节点其内数据值是变动的。我们可以用 <code>tf.assign</code> 来手动给某个变量赋值。</p>
+<h3 id="placeholder">placeholder</h3>
+<p><code>tf.placeholder</code> 占位节点，和常量相比这个节点暂时还没有数据，是等后面在session 启动之后将通过<code>feed_dict</code> 把数据塞进去。通常外面的数据流输入就输入到placeholder哪里。</p>
+<p><code>tf.placeholder(dtype, [None, dim])</code> 这里None的意思是不确定要输入多少个数据，后面的dim指定具体输入数据的个数。</p>
+<h3 id="_4">初始所有变量</h3>
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">init_op</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init_op</span><span class="p">)</span>
+</pre></div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '/theme/js/mathjax/MathJax.js';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-07-21T08:35:55.431677+08:00">2020年 7月 21日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>

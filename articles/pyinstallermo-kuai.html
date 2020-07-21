@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="简介 所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。 推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip 安装即可。 然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。 NOTICE: 注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。 具体使用很简单： pyinstaller you_entry_point.py 如果一切顺利，到 dist 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。 首先你不能依靠自动生成的 .spec 文件了，接下来讨论了很多定制都是基于对这个 .spec 文件的修改。修改好了之后要如下运行了： pyinstaller you_entry_point.spec 比如将exe下来的一个参数选项调为 console=False，这样生成的exe执行的时候就不会弹出另外那个cmd窗口了。 添加额外的文件 spec文件下配置 datas 这个列表值： datas=[ (&#39;src/README.txt&#39; …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", others, " />
+
+<meta property="og:title" content="pyinstaller模块 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/pyinstallermo-kuai.html" />
+<meta property="og:description" content="简介 所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。 推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip 安装即可。 然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。 NOTICE: 注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。 具体使用很简单： pyinstaller you_entry_point.py 如果一切顺利，到 dist 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。 首先你不能依靠自动生成的 .spec 文件了，接下来讨论了很多定制都是基于对这个 .spec 文件的修改。修改好了之后要如下运行了： pyinstaller you_entry_point.spec 比如将exe下来的一个参数选项调为 console=False，这样生成的exe执行的时候就不会弹出另外那个cmd窗口了。 添加额外的文件 spec文件下配置 datas 这个列表值： datas=[ (&#39;src/README.txt&#39; …" />
+<meta property="og:site_name" content="wanze的博文" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-07-21T08:30:50.742139+08:00" />
+<meta name="twitter:title" content="pyinstaller模块 ">
+<meta name="twitter:description" content="简介 所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。 推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip 安装即可。 然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。 NOTICE: 注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。 具体使用很简单： pyinstaller you_entry_point.py 如果一切顺利，到 dist 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。 首先你不能依靠自动生成的 .spec 文件了，接下来讨论了很多定制都是基于对这个 .spec 文件的修改。修改好了之后要如下运行了： pyinstaller you_entry_point.spec 比如将exe下来的一个参数选项调为 console=False，这样生成的exe执行的时候就不会弹出另外那个cmd窗口了。 添加额外的文件 spec文件下配置 datas 这个列表值： datas=[ (&#39;src/README.txt&#39; …">
+
+
+    <title>pyinstaller模块  · wanze的博文
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/pyinstallermo-kuai.html"> pyinstaller模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a><ul>
+<li><a href="#_2">添加额外的文件</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">简介</h2>
+<p>所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。</p>
+<p>推荐使用pyinstaller。 pyinstaller的官网在 <a href="http://www.pyinstaller.org/">这里</a> 。安装就是用pip 安装即可。</p>
+<p>然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。</p>
+<p><strong>NOTICE:</strong>  注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。</p>
+<p>具体使用很简单：</p>
+<div class="highlight"><pre><span></span>pyinstaller you_entry_point.py
+</pre></div>
+<p>如果一切顺利，到 <code>dist</code> 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。</p>
+<p>首先你不能依靠自动生成的 <code>.spec</code> 文件了，接下来讨论了很多定制都是基于对这个 <code>.spec</code> 文件的修改。修改好了之后要如下运行了：</p>
+<div class="highlight"><pre><span></span>pyinstaller you_entry_point.spec
+</pre></div>
+<p>比如将exe下来的一个参数选项调为 <code>console=False</code>，这样生成的exe执行的时候就不会弹出另外那个cmd窗口了。</p>
+<h3 id="_2">添加额外的文件</h3>
+<p>spec文件下配置 <code>datas</code> 这个列表值：</p>
+<div class="highlight"><pre><span></span>datas=[ ('src/README.txt', '.') ],
+</pre></div>
+<p>大概意思是把那里的那个文件copy到目标dist文件夹的那里。</p>
+
+            
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-07-21T08:30:50.742139+08:00">2020年 7月 21日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#others-ref">others</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+    
+
+
+</body>
+</html>
