@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-20T16:47:41.451685+08:00" />
+<meta property="og:article:published_time" content="2020-07-21T20:01:18.978971+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -154,14 +154,16 @@
 <li><a href="#const">const成员函数</a></li>
 <li><a href="#_25">类内定义的数组长度是常量的情况</a></li>
 <li><a href="#_26">运算符重载</a></li>
+<li><a href="#_27">友元函数</a></li>
+<li><a href="#_28">类的类型转换</a></li>
 </ul>
 </li>
-<li><a href="#_27">附录</a><ul>
+<li><a href="#_29">附录</a><ul>
 <li><a href="#cin">cin详解</a></li>
 <li><a href="#cout_1">cout详解</a></li>
 </ul>
 </li>
-<li><a href="#_28">参考资料</a></li>
+<li><a href="#_30">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -2697,7 +2699,411 @@ setgolf(ann);
 <p>本例只要求实现一个简单的列表，其中函数作为参数部分也算是一个温习。</p>
 <h3 id="_26">运算符重载</h3>
 <p>类相应的运算符重载在python那边是在类里面重新定义 <code>__add__</code> 之类的方法，而在C++这边是重新定义 <code>operator+</code> 之类的这样的成员函数，然后就重载了对应的运算符操作。具体这块细节后面有时间再慢慢熟悉，本文也是接触到什么运算符就提到相关知识点，不会面面俱到的，在这块学习上是没必要要求面面俱到的。</p>
-<h2 id="_27">附录</h2>
+<p>请看下面的例子：</p>
+<p>mytime.h</p>
+<div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#ifndef MYTIME_H_</span>
+<span class="cp">#define MYTIME_H_</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">class</span> <span class="nc">MyTime</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">hours</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">minutes</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">MyTime</span><span class="p">();</span>
+    <span class="n">MyTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">AddMin</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">AddHr</span><span class="p">(</span><span class="kt">int</span> <span class="n">h</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">Reset</span><span class="p">(</span><span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">MyTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyTime</span> <span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">MyTime</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">MyTime</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">mult</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">friend</span> <span class="n">MyTime</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">m</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span> <span class="p">};</span>
+    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">Show</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cp">#endif </span><span class="c1">// !MYTIME_H_</span>
+</pre></div>
+<p>mytime.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"mytime.h"</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+
+<span class="n">MyTime</span><span class="o">::</span><span class="n">MyTime</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">hours</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">minutes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="n">MyTime</span><span class="o">::</span><span class="n">MyTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">hours</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span>
+    <span class="n">minutes</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">MyTime</span><span class="o">::</span><span class="n">AddMin</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">minutes</span> <span class="o">+=</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">hours</span> <span class="o">+=</span> <span class="n">minutes</span> <span class="o">/</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="n">minutes</span> <span class="o">%=</span> <span class="mi">60</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">MyTime</span><span class="o">::</span><span class="n">AddHr</span><span class="p">(</span><span class="kt">int</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">hours</span> <span class="o">+=</span> <span class="n">h</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">MyTime</span><span class="o">::</span><span class="n">Reset</span><span class="p">(</span><span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">hours</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span>
+    <span class="n">minutes</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">MyTime</span> <span class="n">MyTime</span><span class="o">::</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyTime</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="n">sum</span><span class="p">.</span><span class="n">minutes</span> <span class="o">=</span> <span class="n">minutes</span> <span class="o">+</span> <span class="n">t</span><span class="p">.</span><span class="n">minutes</span><span class="p">;</span>
+    <span class="n">sum</span><span class="p">.</span><span class="n">hours</span> <span class="o">=</span> <span class="n">hours</span> <span class="o">+</span> <span class="n">t</span><span class="p">.</span><span class="n">hours</span> <span class="o">+</span> <span class="n">sum</span><span class="p">.</span><span class="n">minutes</span> <span class="o">/</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="n">sum</span><span class="p">.</span><span class="n">minutes</span> <span class="o">%=</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">MyTime</span> <span class="n">MyTime</span><span class="o">::</span><span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyTime</span> <span class="n">diff</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">tot1</span><span class="p">,</span> <span class="n">tot2</span><span class="p">;</span>
+    <span class="n">tot1</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">minutes</span> <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">t</span><span class="p">.</span><span class="n">hours</span><span class="p">;</span>
+    <span class="n">tot2</span> <span class="o">=</span> <span class="n">minutes</span> <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">hours</span><span class="p">;</span>
+    <span class="n">diff</span><span class="p">.</span><span class="n">minutes</span> <span class="o">=</span> <span class="p">(</span><span class="n">tot2</span> <span class="o">-</span> <span class="n">tot1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="n">diff</span><span class="p">.</span><span class="n">hours</span> <span class="o">=</span> <span class="p">(</span><span class="n">tot2</span> <span class="o">-</span> <span class="n">tot1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">diff</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">MyTime</span> <span class="n">MyTime</span><span class="o">::</span><span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">mult</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyTime</span> <span class="n">result</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">total</span> <span class="o">=</span> <span class="n">hours</span> <span class="o">*</span> <span class="n">mult</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">minutes</span> <span class="o">*</span> <span class="n">mult</span><span class="p">;</span>
+
+    <span class="n">result</span><span class="p">.</span><span class="n">minutes</span> <span class="o">=</span> <span class="n">total</span> <span class="o">%</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="n">result</span><span class="p">.</span><span class="n">hours</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">hours</span> <span class="o">&lt;&lt;</span> <span class="s">" hours, "</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">minutes</span> <span class="o">&lt;&lt;</span> <span class="s">" minutes"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">MyTime</span><span class="o">::</span><span class="n">Show</span><span class="p">()</span><span class="k">const</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hours</span> <span class="o">&lt;&lt;</span> <span class="s">" hours, "</span> <span class="o">&lt;&lt;</span> <span class="n">minutes</span> <span class="o">&lt;&lt;</span> <span class="s">" minutes"</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>test_mytime.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"mytime.h"</span><span class="cp"></span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//int main50(){</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">MyTime</span> <span class="n">planning</span><span class="p">;</span>
+    <span class="n">MyTime</span> <span class="n">coding</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">35</span><span class="p">);</span>
+    <span class="n">MyTime</span> <span class="n">fixing</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">55</span><span class="p">);</span>
+    <span class="n">MyTime</span> <span class="n">total</span><span class="p">;</span>
+    <span class="n">MyTime</span> <span class="n">diff</span><span class="p">;</span>
+    <span class="n">MyTime</span> <span class="n">adjusted</span><span class="p">;</span>
+    <span class="n">MyTime</span> <span class="n">adjusted2</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"planning time = "</span><span class="p">;</span>
+    <span class="n">planning</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coding time = "</span><span class="p">;</span>
+    <span class="n">coding</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"fixing time = "</span><span class="p">;</span>
+    <span class="n">fixing</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">total</span> <span class="o">=</span> <span class="n">coding</span> <span class="o">+</span> <span class="n">fixing</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coding + fixing = "</span><span class="p">;</span>
+    <span class="n">total</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">coding</span> <span class="o">-</span> <span class="n">fixing</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coding - fixing = "</span><span class="p">;</span>
+    <span class="n">diff</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">adjusted</span> <span class="o">=</span> <span class="n">coding</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"coding * 1.5 = "</span><span class="p">;</span>
+    <span class="n">adjusted</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">adjusted2</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">coding</span> <span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"1.5 * coding = "</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">adjusted2</span> <span class="o">&lt;&lt;</span>  <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>这个例子演示了重载目标MyTime类的加法减法和乘法，然后具体时间刻度计算了解下即可。倒是这里面代码中的这一行：</p>
+<div class="highlight"><pre><span></span><span class="n">MyTime</span> <span class="n">sum</span><span class="p">;</span>
+<span class="n">sum</span><span class="p">.</span><span class="n">minutes</span> <span class="o">=</span> <span class="n">minutes</span> <span class="o">+</span> <span class="n">t</span><span class="p">.</span><span class="n">minutes</span><span class="p">;</span>
+</pre></div>
+<p>让我困惑，然后我认识到之前对于 <code>private</code> 个人理解是有所偏差的。如果是类的成员函数，调用自身私有变量，在同一个类的作用域中，可以直接调用这是可以理解的。而这里是另外新建了一个MyTime对象可以直接调用私有变量这是我没有想到的。如果是其他类的对象，当然是不能直接调用私有变量的，否则这个私有变量设定就没有意义了，这里显然是本类的对象，在本类的成员函数定义里面，是可以直接调用私有变量的。</p>
+<h3 id="_27">友元函数</h3>
+<p>在上面的例子中，对象乘以1.5这样的操作直接重载 <code>operator*</code> 即可，但是如果是 <code>1.5 * coding</code> 这样的形式，这个时候需要重载一般意义上的乘法，但如果只是一般重载乘法传过来的该类对象的私有变量是不可以直接访问的，而这个时候就需要使用友元函数，具体声明形式如下：</p>
+<div class="highlight"><pre><span></span><span class="k">friend</span> <span class="n">MyTime</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">m</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">);</span>
+</pre></div>
+<p>其实际上并不是类的成员函数，但也是写在类的声明里面的，前面要加上 <code>friend</code> 关键字，然后其对于MyTime也就是本类的访问权限和成员函数是一样的。上面完整的形式是：</p>
+<div class="highlight"><pre><span></span><span class="k">friend</span> <span class="n">MyTime</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">m</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span> <span class="p">};</span>
+</pre></div>
+<p>也就是一个内联函数，再利用原有的 <code>operator*</code> 即可。</p>
+<p>同样类似的下面还重载了 <code>&lt;&lt;</code> 运算符，好让该对象支持cout直接输出：</p>
+<div class="highlight"><pre><span></span><span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">);</span>
+</pre></div>
+<p>具体实现：</p>
+<div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyTime</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">hours</span> <span class="o">&lt;&lt;</span> <span class="s">" hours, "</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">minutes</span> <span class="o">&lt;&lt;</span> <span class="s">" minutes"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>注意返回了原<code>ostream</code> 对象，为的是支持 <code>cout &lt;&lt; a &lt;&lt; b</code> 这样的形式。</p>
+<p>下面继续下一个例子，模拟物理上的矢量运算：</p>
+<p>vector.h</p>
+<div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#ifndef VECTOR_H_</span>
+<span class="cp">#define VECTOR_H_</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">VECTOR</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">Vector</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">enum</span> <span class="n">Mode</span><span class="p">{</span><span class="n">RECT</span><span class="p">,</span> <span class="n">POL</span><span class="p">};</span>
+        <span class="c1">// RECT rectangular mode POL polar mode</span>
+
+    <span class="k">private</span><span class="o">:</span>
+        <span class="kt">double</span> <span class="n">x</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">y</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">mag</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">ang</span><span class="p">;</span> <span class="c1">// unit is radian</span>
+        <span class="n">Mode</span> <span class="n">mode</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">set_mag</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="nf">set_ang</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="nf">set_x</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="nf">set_y</span><span class="p">();</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">Vector</span><span class="p">();</span>
+        <span class="n">Vector</span><span class="p">(</span><span class="kt">double</span> <span class="n">n1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">n2</span><span class="p">,</span> <span class="n">Mode</span> <span class="n">form</span> <span class="o">=</span> <span class="n">RECT</span><span class="p">);</span>
+        <span class="kt">void</span> <span class="nf">reset</span><span class="p">(</span><span class="kt">double</span> <span class="n">n1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">n2</span><span class="p">,</span> <span class="n">Mode</span> <span class="n">form</span> <span class="o">=</span> <span class="n">RECT</span><span class="p">);</span>
+        <span class="o">~</span><span class="n">Vector</span><span class="p">();</span>
+        <span class="kt">double</span> <span class="nf">xval</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="p">;</span> <span class="p">};</span>
+        <span class="kt">double</span> <span class="nf">yval</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">y</span><span class="p">;</span> <span class="p">};</span>
+        <span class="kt">double</span> <span class="nf">magval</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">mag</span><span class="p">;</span> <span class="p">};</span>
+        <span class="kt">double</span> <span class="nf">angval</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ang</span><span class="p">;</span> <span class="p">};</span>
+        <span class="kt">void</span> <span class="nf">polar_mode</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="nf">rect_mode</span><span class="p">();</span>
+
+        <span class="c1">//operator overloading</span>
+        <span class="n">Vector</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">Vector</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">Vector</span> <span class="k">operator</span><span class="o">-</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+        <span class="n">Vector</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">n</span><span class="p">)</span><span class="k">const</span><span class="p">;</span>
+
+        <span class="c1">//friends</span>
+        <span class="k">friend</span> <span class="n">Vector</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">);</span>
+        <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cp">#endif </span><span class="c1">// !VECTOR_H_</span>
+</pre></div>
+<p>vector.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"vector.h"</span><span class="cp"></span>
+
+
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">sqrt</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">sin</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cos</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">atan</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">atan2</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+
+
+<span class="k">namespace</span> <span class="n">VECTOR</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">Rad_to_deg</span> <span class="o">=</span> <span class="mi">45</span><span class="o">/</span><span class="n">atan</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">set_mag</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">set_ang</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ang</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">ang</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">set_x</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">ang</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">set_y</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">ang</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Vector</span><span class="o">::</span><span class="n">Vector</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mag</span> <span class="o">=</span> <span class="n">ang</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">RECT</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Vector</span><span class="o">::</span><span class="n">Vector</span><span class="p">(</span><span class="kt">double</span> <span class="n">n1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">n2</span><span class="p">,</span> <span class="n">Mode</span> <span class="n">form</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">form</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="n">RECT</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+            <span class="n">set_mag</span><span class="p">();</span>
+            <span class="n">set_ang</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">form</span> <span class="o">==</span> <span class="n">POL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+            <span class="n">ang</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">/</span> <span class="n">Rad_to_deg</span><span class="p">;</span> <span class="c1">// input n2 is degree</span>
+            <span class="n">set_x</span><span class="p">();</span>
+            <span class="n">set_y</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Incorrect 3rd argument to Vector() -- "</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"vector set to 0</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mag</span> <span class="o">=</span> <span class="n">ang</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">RECT</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">reset</span><span class="p">(</span><span class="kt">double</span> <span class="n">n1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">n2</span><span class="p">,</span> <span class="n">Mode</span> <span class="n">form</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">form</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="n">RECT</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+            <span class="n">set_mag</span><span class="p">();</span>
+            <span class="n">set_ang</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">form</span> <span class="o">==</span> <span class="n">POL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+            <span class="n">ang</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">/</span> <span class="n">Rad_to_deg</span><span class="p">;</span>
+            <span class="n">set_x</span><span class="p">();</span>
+            <span class="n">set_y</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Incorrect 3rd argument to Vector() -- "</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"vector set to 0</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mag</span> <span class="o">=</span> <span class="n">ang</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">RECT</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Vector</span><span class="o">::~</span><span class="n">Vector</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="p">}</span>
+
+
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">polar_mode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">POL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Vector</span><span class="o">::</span><span class="n">rect_mode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">RECT</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Vector</span> <span class="n">Vector</span><span class="o">::</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span><span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">Vector</span> <span class="n">Vector</span><span class="o">::</span><span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span><span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Vector</span> <span class="n">Vector</span><span class="o">::</span><span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">n</span><span class="p">)</span><span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">*</span> <span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Vector</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="kt">double</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Vector</span> <span class="n">Vector</span><span class="o">::</span><span class="k">operator</span><span class="o">-</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">Vector</span><span class="o">::</span><span class="n">RECT</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"(x,y) = ("</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">", "</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">")"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">Vector</span><span class="o">::</span><span class="n">POL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"(m,a) = ("</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">mag</span> <span class="o">&lt;&lt;</span> <span class="s">", "</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">.</span><span class="n">ang</span> <span class="o">*</span> <span class="n">Rad_to_deg</span> <span class="o">&lt;&lt;</span> <span class="s">")"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"Vector object mode is invalid."</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+<p>test_vector.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"vector.h"</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//int main51(){</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">VECTOR</span><span class="o">::</span><span class="n">Vector</span><span class="p">;</span>
+
+    <span class="n">Vector</span> <span class="n">v1</span><span class="p">;</span>
+    <span class="n">Vector</span> <span class="n">v2</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="n">Vector</span> <span class="n">v3</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+
+    <span class="n">Vector</span> <span class="n">v4</span><span class="p">;</span>
+    <span class="n">Vector</span> <span class="n">v5</span><span class="p">;</span>
+    <span class="n">Vector</span> <span class="n">v6</span><span class="p">;</span>
+    <span class="n">Vector</span> <span class="n">v7</span><span class="p">;</span>
+    <span class="n">Vector</span> <span class="n">v8</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v1 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">v4</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">+</span> <span class="n">v3</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v4 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v4</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">v4</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v4 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v4</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">v5</span> <span class="o">=</span> <span class="o">-</span><span class="n">v4</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v5 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v5</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">v6</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">VECTOR</span><span class="o">::</span><span class="n">Vector</span><span class="o">::</span><span class="n">POL</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v6 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v6</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">v6</span><span class="p">.</span><span class="n">rect_mode</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v6 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v6</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">v7</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v5</span> <span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v7 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v7</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">v8</span> <span class="o">=</span> <span class="n">v7</span> <span class="o">-</span> <span class="n">v6</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"v8 = "</span> <span class="o">&lt;&lt;</span> <span class="n">v8</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li>弧度的换算是根据  <span class="math">\(atan(1) = \frac{\pi}{4}\)</span> ，从而得到常见的换算公式1弧度等于 <span class="math">\(\frac{180}{\pi}\)</span> 。</li>
+<li>ang默认单位是radian</li>
+<li>构造函数和reset方法都好理解，然后坐标为极坐标是第二个参数输入角度单位是度。</li>
+<li>对于加减乘运算的重载，其写法很优雅地利用了构造函数，从而根据构造函数默认的xy坐标很方便进行一些运算并自动计算得到极坐标的相关数据。</li>
+<li>cout的输出方法并不是很难理解，倒是这个 <code>if (v.mode == Vector::RECT) {</code> 不可以直接使用RECT值得引起我们的注意，这是一个友元函数，其和该类的成员函数具有相同的访问权限，但只是访问权限，这里是作用域问题。这是因为： <strong>友元函数不在类作用域中</strong>。之所以没有加上 VECTOR是因为该友元函数在namespace VECTOR里面，但是不可以直接使用 RECT。</li>
+</ol>
+<p>参考资料的随机漫步那个例子就不列出来，这不是这里讨论的重点。</p>
+<h3 id="_28">类的类型转换</h3>
+<h2 id="_29">附录</h2>
 <h3 id="cin">cin详解</h3>
 <ul>
 <li><code>cin &gt;&gt;</code> 遇到Enter Space Tab 即结束，适合char，无空格的string和单个值的int float之类的输入。需要注意的是经过个人实践换行符还是在缓冲区的，为了把这个缓冲区消掉获得更好的输入体验，一般采用这种表达方式：<code>(cin &gt;&gt; what).get()</code> ，这是因为 <code>cin &gt;&gt; what</code> 会返回cin对象，然后继续调用下面的 get 方法来消掉最后的换行符。</li>
@@ -2709,10 +3115,65 @@ setgolf(ann);
 <li><code>cout &lt;&lt;</code> 一般使用</li>
 <li><code>cout.put(char &amp;ch)</code>  输出一个字符，如果输入的整型也会正常显示该字符。</li>
 </ul>
-<h2 id="_28">参考资料</h2>
+<h2 id="_30">参考资料</h2>
 <ol>
 <li>C++ Primer Plus 第六版中文版</li>
 </ol>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '/theme/js/mathjax/MathJax.js';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
 
             
             <hr/>
@@ -2721,7 +3182,7 @@ setgolf(ann);
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-20T16:47:41.451685+08:00">2020年 7月 20日 </time>
+            <time pubdate="pubdate" datetime="2020-07-21T20:01:18.978971+08:00">2020年 7月 21日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
