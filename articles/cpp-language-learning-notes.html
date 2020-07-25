@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-23T20:22:59.354024+08:00" />
+<meta property="og:article:published_time" content="2020-07-25T22:06:12.603668+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -161,14 +161,15 @@
 </ul>
 </li>
 <li><a href="#_31">类和动态内存分配</a></li>
+<li><a href="#_32">类继承</a></li>
 </ul>
 </li>
-<li><a href="#_32">附录</a><ul>
+<li><a href="#_33">附录</a><ul>
 <li><a href="#cin">cin详解</a></li>
 <li><a href="#cout_1">cout详解</a></li>
 </ul>
 </li>
-<li><a href="#_33">参考资料</a></li>
+<li><a href="#_34">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -3780,7 +3781,119 @@ setgolf(ann);
 <span class="p">}</span>
 </pre></div>
 <h3 id="_31">类和动态内存分配</h3>
-<h2 id="_32">附录</h2>
+<p>本小节主要分析讨论了官方内置的string类是如何实现不定长度字符串功能支持的，前面在介绍动态内存分配new和delete的时候提到过其内部就是利用的new和delete来实现了内部字符数组长度的可定制，但具体到实现层面，里面还有很多细节和问题需要讨论。</p>
+<p>首先看一下参考资料1列出的StringBad这个带有一些bug的实现版本，该版本写法很直观，我想没有学习本小节的内容的读者一开始应该都会写出这样的最初实现版本：</p>
+<p>stringbad.h</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#ifndef STRINGBAD_H_</span>
+<span class="cp">#define STRINGBAD_H_</span>
+
+<span class="k">class</span> <span class="nc">StringBad</span><span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">StringBad</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+    <span class="n">StringBad</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">StringBad</span><span class="p">();</span>
+    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">StringBad</span> <span class="o">&amp;</span> <span class="n">st</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>stringbad.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"stringbad.h"</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+
+
+<span class="n">StringBad</span><span class="o">::</span><span class="n">StringBad</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">){</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="n">str</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">strcpy</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">s</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">StringBad</span><span class="o">::</span><span class="n">StringBad</span><span class="p">(){</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">str</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">StringBad</span><span class="o">::~</span><span class="n">StringBad</span><span class="p">(){</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">str</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">StringBad</span> <span class="o">&amp;</span> <span class="n">st</span><span class="p">){</span>
+    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">st</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">os</span>
+<span class="p">}</span>
+</pre></div>
+<p>StringBad类里面只保留了字符数组的指针，具体字符数组是存储在动态数组里面的。上面的实现有以下两大缺陷，一是没有正确应对复制构造函数的情况；二是没有正确应对赋值运算符的情况。</p>
+<p>首先我们来分析第一个情况，参考资料callme2为什么会出现bug。因为callme2函数采用的是将类对象按值传递的形式，那么将调用该类的复制构造函数来完成这个动作，具体到这里可以理解为默认执行了 <code>StringBad sb = StringBad(headline2)</code> 。</p>
+<p>因为上面的类实现并没有定义这个复制构造函数，那么将调用类的默认复制构造函数，具体就是非静态私有成员的值赋值，大概执行类似下面的语句：</p>
+<div class="highlight"><pre><span></span><span class="n">StringBad</span> <span class="n">sb</span><span class="p">;</span>
+<span class="n">sb</span><span class="p">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">headline</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+<span class="n">sb</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">headline</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+</pre></div>
+<p>除了函数的按值传递情况外，下面的语句也是明确的在调用复制构造函数：</p>
+<div class="highlight"><pre><span></span><span class="n">StringBad</span> <span class="nf">ditto</span><span class="p">(</span><span class="n">motto</span><span class="p">);</span>
+<span class="n">StringBad</span> <span class="n">metto</span> <span class="o">=</span> <span class="n">motto</span><span class="p">;</span>
+<span class="n">StringBad</span> <span class="n">also</span> <span class="o">=</span> <span class="n">StringBad</span><span class="p">(</span><span class="n">motto</span><span class="p">);</span>
+<span class="n">StringBad</span> <span class="o">*</span> <span class="n">pstringBad</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBad</span><span class="p">(</span><span class="n">motto</span><span class="p">);</span>
+</pre></div>
+<p>这其中 <code>StringBad metto = motto;</code> 可能在具体实现上会有点差异，如果写成下面这种形式：</p>
+<div class="highlight"><pre><span></span>StringBad metto;
+metto = motto;
+</pre></div>
+<p>那么肯定上一句是调用默认的构造函数，第二句是调用的赋值运算符。但如果写成一句：<code>StringBad metto = motto;</code> 则有的可能就是只调用了复制构造函数，有的可能是先用复制构造函数创建一个临时对象，然后又再调用了赋值运算符。</p>
+<p>继续到具体这个例子的讨论上，callme2按值传递内部形参sb，出了函数就将调用sb的析构函数，又因为sb的str指针就是headline2的str指针，所以sb的析构函数将会把该字符数组在动态内存里面的内容删除掉，从而造成了后面显示headline2的bug。</p>
+<p>定义一个显式的复制构造函数可以解决这个问题【这种深究类里面成员的指针拷贝问题的叫做深度复制】：</p>
+<div class="highlight"><pre><span></span><span class="n">StringBad</span><span class="o">::</span><span class="n">StringBad</span><span class="p">(</span><span class="k">const</span> <span class="n">StringBad</span> <span class="o">&amp;</span> <span class="n">st</span><span class="p">){</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+    <span class="n">str</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">strcpy</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">st</span><span class="p">.</span><span class="n">str</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>上面例子的第二个bug是没有正确应对赋值运算符的情况，也就是这种情况：</p>
+<div class="highlight"><pre><span></span>StringBad metto;
+metto = motto;
+</pre></div>
+<p>同样类也有默认的 <code>operator=</code> 成员函数，其行为和复制构造函数类似，也是对类的非静态成员逐个复制。要解决这个问题，重载赋值运算符<code>=</code> 即可：</p>
+<div class="highlight"><pre><span></span><span class="n">StringBad</span> <span class="o">&amp;</span> <span class="n">StringBad</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">StringBad</span> <span class="o">&amp;</span> <span class="n">st</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">st</span><span class="p">){</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">str</span><span class="p">;</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="n">str</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+    <span class="n">str</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">strcpy</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">st</span><span class="p">.</span><span class="n">str</span><span class="p">);</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>上面的代码可能读者会对 <code>this == &amp;st</code> 有点困惑，这里一定要记住引用变量从定义的时候就绑定了某个变量，后面提到它实际上就是提到那个变量，后面不要去谈论引用变量的地址或者引用变量存储的值之类的概念，比如上面的st，你问st的值是多少，它的值就是引用的StringBad那个对象，<code>&amp;st</code>  ，st的取址是多少，st的地址就是StringBad那个对象的取地址操作。</p>
+<p>还有其他一下便捷的方法和运算符重载好让该类更好用，但在这里不是讨论的重点了，除了上面的赋值运算符还需要支持 <code>metto = "abc"</code> 这种形式，具体就是重载赋值运算符：</p>
+<div class="highlight"><pre><span></span><span class="n">StringBad</span> <span class="o">&amp;</span> <span class="n">StringBad</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">){</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">str</span><span class="p">;</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="n">str</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">strcpy</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>下面是参考资料1的一个例子，队列模拟，请读者详细阅读理解之，后面我会跟上一些觉得需要说明的知识点。关于队列的知识点这里预先假设读者已经知道了。</p>
+<p>queue.h</p>
+<div class="highlight"><pre><span></span>
+</pre></div>
+<p>1．对于下面的类声明：</p>
+<div class="highlight"><pre><span></span>
+</pre></div>
+<p>给这个类提供实现，并编写一个使用所有成员函数的小程序。</p>
+<p>4．请参看下面的Stack类的头文件：</p>
+<p>正如私有成员表明的，这个类使用动态分配的数组来保存栈项。请重新编写方法，以适应这种新的表示法，并编写一个程序来演示所有的方法，包括复制构造函数和赋值运算符。</p>
+<p>5．Heather银行进行的研究表明，ATM客户不希望排队时间不超过1分钟。使用本小节上面提到的对于队列的模拟，找出要使平均等候时间为1分钟，每小时到达的客户数应为多少（试验时间不短于100小时）？</p>
+<h3 id="_32">类继承</h3>
+<h2 id="_33">附录</h2>
 <h3 id="cin">cin详解</h3>
 <ul>
 <li><code>cin &gt;&gt;</code> 遇到Enter Space Tab 即结束，适合char，无空格的string和单个值的int float之类的输入。需要注意的是经过个人实践换行符还是在缓冲区的，为了把这个缓冲区消掉获得更好的输入体验，一般采用这种表达方式：<code>(cin &gt;&gt; what).get()</code> ，这是因为 <code>cin &gt;&gt; what</code> 会返回cin对象，然后继续调用下面的 get 方法来消掉最后的换行符。</li>
@@ -3792,7 +3905,7 @@ setgolf(ann);
 <li><code>cout &lt;&lt;</code> 一般使用</li>
 <li><code>cout.put(char &amp;ch)</code>  输出一个字符，如果输入的整型也会正常显示该字符。</li>
 </ul>
-<h2 id="_33">参考资料</h2>
+<h2 id="_34">参考资料</h2>
 <ol>
 <li>C++ Primer Plus 第六版中文版</li>
 </ol>
@@ -3859,7 +3972,7 @@ setgolf(ann);
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-23T20:22:59.354024+08:00">2020年 7月 23日 </time>
+            <time pubdate="pubdate" datetime="2020-07-25T22:06:12.603668+08:00">2020年 7月 25日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
