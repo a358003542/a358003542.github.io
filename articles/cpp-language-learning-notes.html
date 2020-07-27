@@ -23,7 +23,7 @@
 <meta property="og:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …" />
 <meta property="og:site_name" content="wanze的博文" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-07-26T18:25:53.166376+08:00" />
+<meta property="og:article:published_time" content="2020-07-27T19:22:37.973880+08:00" />
 <meta name="twitter:title" content="CPP语言学习笔记 ">
 <meta name="twitter:description" content="前言 本教程参考 这个github样例项目 阅读更方便。 本文假定读者已经学会C语言了，如果没有请先学习C语言，这不冲突的。读者可以参看笔者写的 C语言学习笔记一文 。 CPP语言开发环境 CPP语言开发环境还是推荐使用visual studio。 hello world #include &lt;iostream&gt; int main(void) { using namespace std; cout &lt;&lt; &#34;hello world!&#34;; cout &lt;&lt; endl; return 0; } 头文件的扩展名 cpp新的风格头文件是没有扩展名的，比如 iostream 就是 iostream ，并没有.h或者.hpp之类的，这样可以使用 namespace std 。旧的风格大体类似于C语言带上 .h 后缀。 命名空间 这个算是和C语言很大的一个不同点了，命名空间这个概念对于熟悉编程的人来说并不是一个默认的概念了，大体类似于python的模块名，一些其他编程语言也有类似的概念。比如 …">
 
@@ -3957,8 +3957,7 @@ metto = motto;
     <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">!=</span><span class="nb">NULL</span><span class="p">){</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">front</span><span class="p">;</span>
         <span class="n">front</span> <span class="o">=</span> <span class="n">front</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-        <span class="k">delete</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="p">}</span>
+        <span class="k">delete</span> <span class="n">temp</span>
 <span class="p">}</span>
 
 <span class="kt">bool</span> <span class="n">Queue</span><span class="o">::</span><span class="n">isempty</span><span class="p">()</span><span class="k">const</span> <span class="p">{</span>
@@ -4114,14 +4113,366 @@ metto = motto;
 <p>这个例子最重要的是跟上作者如何试着用编程来模拟现实世界问题的思路，具体编程上的细节问题前面都已经说过了。下面我会多说一点。</p>
 <p>这里的cycle下面的循环语句相当于这个世界的心跳，每分钟会执行下面的动作。第一个是来看是否有新顾客，如果有新顾客会如何；第二个if和第三个if是看最前面的那个顾客业务处理完了没，通过<code>wait_time</code> 来衡量，其小于0就认为该顾客业务处理完了。</p>
 <p>首先来看新顾客的模拟，<code>(std::rand() * x / RAND_MAX &lt; 1)</code>  代码的这里会比较难懂一点，我们知道 rand会生成从0到最大整数的随机整数，所以 <code>std::rand() * x / RAND_MAX</code> 会生成0到x之间的随机整数，而x的含义是每个顾客平均几分钟。我们假设一条时间线，那么在这条时间线上平均x分钟画一条刻度，该刻度意思就是来了一个新顾客。因为随机数0到x概率分布均匀，所以可以认为上面运算公式得到bool为真的概率为1/x 。或者说该概率公式运行x个必然会得到一个刻度，而这和最开始定义的该时间线每x分钟画一个刻度表示来一个新用户是一致的，简单来说这个随机数函数返回true意思是一个新顾客来了。</p>
-<p>新顾客来了会记录自身到达的时间，然后分配给一个1-3的业务处理时间属性。然后我们继续往下看，队列开始挤出最开头的那个顾客，意思是那个顾客开始处理自己的业务了，获取该顾客的业务处理时间，后面是一些统计信息处理。下一分钟会判断该顾客业务处理完了没有，没完则等待时间减去一，完了也就是等待时间wait_time&lt;=0了那么继续处理下一个顾客。【这个模拟顾客业务处理时间和心跳时间还可以细一点，不过这不是重点。】在后面是一些统计数据的计算，都是简单。</p>
+<p>新顾客来了会记录自身到达的时间，然后分配给一个1-3的业务处理时间属性。然后我们继续往下看，队列开始挤出最开头的那个顾客，意思是那个顾客开始处理自己的业务了，获取该顾客的业务处理时间，后面是一些统计信息处理。下一分钟会判断该顾客业务处理完了没有，没完则等待时间减去一，完了也就是等待时间wait_time&lt;=0了那么继续处理下一个顾客。【这个模拟顾客业务处理时间和心跳时间还可以细一点，不过这不是重点。】在后面是一些统计数据的计算，都很简单。</p>
 <p>1．对于下面的类声明：</p>
-<div class="highlight"><pre><span></span>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cow</span><span class="p">{</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">hobby</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">weight</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Cow</span><span class="p">();</span>
+    <span class="n">Cow</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">nm</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">ho</span><span class="p">,</span> <span class="kt">double</span> <span class="n">wt</span><span class="p">);</span>
+    <span class="n">Cow</span><span class="p">(</span><span class="k">const</span> <span class="n">Cow</span> <span class="o">&amp;</span> <span class="n">c</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">Cow</span><span class="p">();</span>
+    <span class="n">Cow</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Cow</span> <span class="o">&amp;</span> <span class="n">c</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">ShowCow</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
 </pre></div>
 <p>给这个类提供实现，并编写一个使用所有成员函数的小程序。</p>
+<p>xiti_c12_1.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Cow</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">hobby</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">weight</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Cow</span><span class="p">();</span>
+    <span class="n">Cow</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">nm</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ho</span><span class="p">,</span> <span class="kt">double</span> <span class="n">wt</span><span class="p">);</span>
+    <span class="n">Cow</span><span class="p">(</span><span class="k">const</span> <span class="n">Cow</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">Cow</span><span class="p">();</span>
+    <span class="n">Cow</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Cow</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">ShowCow</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Cow</span><span class="o">::</span><span class="n">Cow</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="n">hobby</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">hobby</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Cow</span><span class="o">::</span><span class="n">Cow</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">nm</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ho</span><span class="p">,</span> <span class="kt">double</span> <span class="n">wt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">nm</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">ho</span><span class="p">);</span>
+    <span class="n">hobby</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">hobby</span><span class="p">,</span> <span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ho</span><span class="p">);</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">wt</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Cow</span><span class="o">::</span><span class="n">Cow</span><span class="p">(</span><span class="k">const</span> <span class="n">Cow</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">hobby</span><span class="p">);</span>
+    <span class="n">hobby</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">hobby</span><span class="p">,</span> <span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="p">.</span><span class="n">hobby</span><span class="p">);</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">weight</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Cow</span><span class="o">::~</span><span class="n">Cow</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">hobby</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Cow</span><span class="o">&amp;</span> <span class="n">Cow</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Cow</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">hobby</span><span class="p">);</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">hobby</span><span class="p">;</span>
+    <span class="n">hobby</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">hobby</span><span class="p">,</span> <span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="p">.</span><span class="n">hobby</span><span class="p">);</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">weight</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Cow</span><span class="o">::</span><span class="n">ShowCow</span><span class="p">()</span><span class="k">const</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Cow "</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" hobby is"</span> <span class="o">&lt;&lt;</span> <span class="n">hobby</span> <span class="o">&lt;&lt;</span> <span class="s">" and it's weight is "</span> <span class="o">&lt;&lt;</span> <span class="n">weight</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">Cow</span> <span class="n">cow1</span><span class="p">;</span>
+    <span class="n">Cow</span> <span class="n">cow2</span> <span class="o">=</span> <span class="n">Cow</span><span class="p">(</span><span class="s">"sucy"</span><span class="p">,</span> <span class="s">"reading"</span><span class="p">,</span> <span class="mf">18.9</span><span class="p">);</span>
+
+    <span class="n">cow1</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+    <span class="n">cow2</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+
+    <span class="n">cow1</span> <span class="o">=</span> <span class="n">cow2</span><span class="p">;</span>
+    <span class="n">cow1</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+    <span class="n">cow2</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+
+    <span class="n">Cow</span> <span class="n">cow3</span> <span class="o">=</span> <span class="n">cow2</span><span class="p">;</span>
+    <span class="n">cow1</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+    <span class="n">cow2</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+    <span class="n">cow3</span><span class="p">.</span><span class="n">ShowCow</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本例也在告诉我们这样一个事实，那就是类里面如果有某个成员是指针变量，那么通常是要通过动态内存分配来重新实现复制构造函数和赋值运算符和析构函数的。 赋值运算和复制构造函数的区别在于赋值运算该类对象已经初始化了，也就是已经分配动态内存了，再次赋值需要将原来分配的内存里面的值释放掉。</p>
 <p>4．请参看下面的Stack类的头文件：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Stack</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">enum</span> <span class="p">{</span> <span class="n">MAX</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">};</span>
+    <span class="n">Item</span> <span class="o">*</span> <span class="n">pitems</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">top</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Stack</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">);</span>
+    <span class="n">Stack</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack</span><span class="o">&amp;</span> <span class="n">st</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">Stack</span><span class="p">();</span>
+
+    <span class="kt">bool</span> <span class="nf">isempty</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="nf">isfull</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">Item</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="nf">pop</span><span class="p">(</span><span class="n">Item</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">);</span>
+    <span class="n">Stack</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack</span><span class="o">&amp;</span> <span class="n">st</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
 <p>正如私有成员表明的，这个类使用动态分配的数组来保存栈项。请重新编写方法，以适应这种新的表示法，并编写一个程序来演示所有的方法，包括复制构造函数和赋值运算符。</p>
+<p>xiti_c12_4.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cctype&gt;</span><span class="cp"></span>
+
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Stack2</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">enum</span> <span class="p">{</span> <span class="n">MAX</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">};</span>
+    <span class="n">Item</span> <span class="o">*</span> <span class="n">pitems</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">top</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Stack2</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">);</span>
+    <span class="n">Stack2</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">st</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">Stack2</span><span class="p">();</span>
+
+    <span class="kt">bool</span> <span class="nf">isempty</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="nf">isfull</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">Item</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="nf">pop</span><span class="p">(</span><span class="n">Item</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">);</span>
+    <span class="n">Stack2</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">st</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+<span class="n">Stack2</span><span class="o">::</span><span class="n">Stack2</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">pitems</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Item</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"Stack2 size: "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span> 
+        <span class="o">&lt;&lt;</span> <span class="s">"Stack2 top: "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">"Stack values "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">": "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">pitems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Stack2</span><span class="o">::</span><span class="n">Stack2</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">st</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">;</span>
+
+    <span class="n">pitems</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Item</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pitems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">pitems</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">Stack2</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack2</span><span class="o">&amp;</span> <span class="n">st</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">st</span><span class="p">)</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">;</span>
+
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">pitems</span><span class="p">;</span>
+    <span class="n">pitems</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Item</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">st</span><span class="p">.</span><span class="n">top</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pitems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">pitems</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Stack2</span><span class="o">::~</span><span class="n">Stack2</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">pitems</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Stack2</span><span class="o">::</span><span class="n">isempty</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">top</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Stack2</span><span class="o">::</span><span class="n">isfull</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">top</span> <span class="o">==</span> <span class="n">size</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Stack2</span><span class="o">::</span><span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">Item</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pitems</span><span class="p">[</span><span class="n">top</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Stack2</span><span class="o">::</span><span class="n">pop</span><span class="p">(</span><span class="n">Item</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">top</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">pitems</span><span class="p">[</span><span class="o">--</span><span class="n">top</span><span class="p">];</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+    <span class="n">Stack2</span> <span class="nf">st1</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">Stack2</span> <span class="n">st2</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">st1</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"st1-----------</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">st1</span><span class="p">;</span>
+
+    <span class="n">st2</span> <span class="o">=</span> <span class="n">st1</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"st2------------</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">st2</span><span class="p">;</span>
+
+    <span class="n">st2</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+    <span class="n">st2</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">st2</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"st2-------------</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">st2</span><span class="p">;</span>
+
+    <span class="n">Stack2</span> <span class="n">st3</span> <span class="o">=</span> <span class="n">st2</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"st3-------------</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">st3</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本例子是在之前Stack类的基础上继续讨论的，唯一的改动就是之前的items是一个固定长度的数组，现在变成动态内存分配的了。</p>
+<p>这里top是堆栈的顶端索引，当top等于0表示该堆栈没有元素，当top=1表示该堆栈有1个元素，但你要取值是取index=0的值。然后top++的含义是返回top之后再执行自增操作；而++top的含义是先自增再返回top的值。</p>
 <p>5．Heather银行进行的研究表明，ATM客户不希望排队时间不超过1分钟。使用本小节上面提到的对于队列的模拟，找出要使平均等候时间为1分钟，每小时到达的客户数应为多少（试验时间不短于100小时）？</p>
+<p>xiti_c12_5.cpp</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdlib&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;ctime&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"queue.h"</span><span class="cp"></span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MIN_PER_HR</span> <span class="o">=</span> <span class="mi">60</span><span class="p">;</span>
+
+<span class="k">extern</span> <span class="kt">bool</span> <span class="nf">newcustomer</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">);</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">srand</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Case Study: Bank of Heather Automatic Teller</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter maximum size of queue: "</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">qs</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">qs</span><span class="p">;</span>
+    <span class="n">Queue</span> <span class="n">line</span><span class="p">(</span><span class="n">qs</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Enter the number of simulation hours: "</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">hours</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">hours</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">cyclelimit</span> <span class="o">=</span> <span class="n">MIN_PER_HR</span> <span class="o">*</span> <span class="n">hours</span><span class="p">;</span>
+
+    <span class="c1">//cout &lt;&lt; "Enter the average number of customers per hour: ";</span>
+    <span class="c1">//double perhour;</span>
+    <span class="c1">//cin &gt;&gt; perhour;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">double</span> <span class="n">perhour</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">perhour</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">perhour</span><span class="o">=</span><span class="n">perhour</span><span class="o">+</span><span class="mf">0.1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">min_per_cust</span><span class="p">;</span>
+        <span class="n">min_per_cust</span> <span class="o">=</span> <span class="n">MIN_PER_HR</span> <span class="o">/</span> <span class="n">perhour</span><span class="p">;</span>
+
+        <span class="n">Item</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="n">turnaways</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="n">customers</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="n">served</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="n">sum_line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">wait_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="n">line_wait</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cycle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cycle</span> <span class="o">&lt;</span> <span class="n">cyclelimit</span><span class="p">;</span> <span class="n">cycle</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">newcustomer</span><span class="p">(</span><span class="n">min_per_cust</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">isfull</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">turnaways</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">customers</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">temp</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">cycle</span><span class="p">);</span>
+                    <span class="n">line</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">wait_time</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">line</span><span class="p">.</span><span class="n">isempty</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">line</span><span class="p">.</span><span class="n">dequeue</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+                <span class="n">wait_time</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">ptime</span><span class="p">();</span>
+                <span class="n">line_wait</span> <span class="o">+=</span> <span class="n">cycle</span> <span class="o">-</span> <span class="n">temp</span><span class="p">.</span><span class="n">when</span><span class="p">();</span>
+                <span class="n">served</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">wait_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">wait_time</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">sum_line</span> <span class="o">+=</span> <span class="n">line</span><span class="p">.</span><span class="n">queuecount</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">customers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"customers accepted: "</span> <span class="o">&lt;&lt;</span> <span class="n">customers</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"customers served: "</span> <span class="o">&lt;&lt;</span> <span class="n">served</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"          turnaways: "</span> <span class="o">&lt;&lt;</span> <span class="n">turnaways</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"average queue size: "</span><span class="p">;</span>
+            <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">ios_base</span><span class="o">::</span><span class="n">fixed</span><span class="p">,</span> <span class="n">ios_base</span><span class="o">::</span><span class="n">floatfield</span><span class="p">);</span>
+
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">sum_line</span> <span class="o">/</span> <span class="n">cyclelimit</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"average wait time: "</span>
+                <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">line_wait</span> <span class="o">/</span> <span class="n">served</span> <span class="o">&lt;&lt;</span> <span class="s">"minutes</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"No customers!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">line_wait</span> <span class="o">/</span> <span class="n">served</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"average wait time is larger than 1 minutes</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the largest perhour parameter is: "</span> <span class="o">&lt;&lt;</span> <span class="n">perhour</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Done!</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>本习题在之前讨论的基础上稍作修改，主要还是对前面讨论的ATM排队问题理解透彻即可。</p>
 <h3 id="_33">类继承</h3>
 <h2 id="_34">附录</h2>
 <h3 id="cin">cin详解</h3>
@@ -4202,7 +4553,7 @@ metto = motto;
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-07-26T18:25:53.166376+08:00">2020年 7月 26日 </time>
+            <time pubdate="pubdate" datetime="2020-07-27T19:22:37.973880+08:00">2020年 7月 27日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#cpp_language-ref">cpp_language</a>
