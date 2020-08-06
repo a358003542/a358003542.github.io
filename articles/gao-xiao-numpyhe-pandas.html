@@ -138,26 +138,26 @@
 <h2 id="numpy">高效numpy</h2>
 <h3 id="numpypandas">numpy总的来说比pandas快</h3>
 <p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
-<div class="highlight"><pre><span></span><code>np.dot(df['a'],x)
-</code></pre></div>
+<div class="highlight"><pre><span></span>np.dot(df['a'],x)
+</pre></div>
 <p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
 <h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
 <p>比如下面的程序：</p>
-<div class="highlight"><pre><span></span><code>import numpy as np
+<div class="highlight"><pre><span></span>import numpy as np
 x = np.random.rand(1,1000)
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>%%timeit 
+</pre></div>
+<div class="highlight"><pre><span></span>%%timeit 
 
 res = np.vstack([x for i in range(10000)])
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>50.7 ms ± 1.5 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>%%timeit 
+</pre></div>
+<div class="highlight"><pre><span></span>50.7 ms ± 1.5 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</pre></div>
+<div class="highlight"><pre><span></span>%%timeit 
 
 res = np.concatenate([x for i in range(10000)], axis=0)
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>41.1 ms ± 697 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
-</code></pre></div>
+</pre></div>
+<div class="highlight"><pre><span></span>41.1 ms ± 697 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</pre></div>
 <h3 id="numpycopyview">避免numpy的copy操作而多用view</h3>
 <p><a href="https://ipython-books.github.io/45-understanding-the-internals-of-numpy-to-avoid-unnecessary-array-copying/">https://ipython-books.github.io/45-understanding-the-internals-of-numpy-to-avoid-unnecessary-array-copying/</a></p>
 <h2 id="pandas">高效Pandas</h2>
@@ -165,8 +165,8 @@ res = np.concatenate([x for i in range(10000)], axis=0)
 <h3 id="dfconcatappend">多个相似结构的df合并推荐使用concat而不是append</h3>
 <p>pandas的dataframe任何长度改变操作都会引发copy操作，最好是先将数据合并成一个或者多个dataframe再concat【不推荐append，而一行行append显然就更加不推荐了】。</p>
 <p>通常有很多类似数据源，比如多个csv文件等，需要将这些相似结构的df进行合并操作。这里推荐如下使用concat来做，而不是append：</p>
-<div class="highlight"><pre><span></span><code><span class="n">topk_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">topk_df</span><span class="p">,</span> <span class="n">local_topk</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">topk_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">topk_df</span><span class="p">,</span> <span class="n">local_topk</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
 <h3 id="pandasnlargest">使用pandas的nlargest而不是排序之后取前几个</h3>
 <p>你如果需要找最大的几个值，那么推荐使用Dataframe的nlargest方法，这个方法经过优化了的，简单来说就是使用了快速排序的前半部分，这样会更高效。</p>
 <h3 id="_1">不要用逐个索引操作风格</h3>
@@ -174,20 +174,20 @@ res = np.concatenate([x for i in range(10000)], axis=0)
 <h3 id="_2">向量操作风格最高效</h3>
 <p>这个优化建议主要参看了 <a href="https://engineering.upside.com/a-beginners-guide-to-optimizing-pandas-code-for-speed-c09ef2c6a4d6">这篇文章</a> ，我们也可以多学习下这篇文章的分析问题测速的思路。</p>
 <p>对pandas的某个列的所有值进行操作，如下的逐个索引风格：</p>
-<div class="highlight"><pre><span></span><code>    for i in range(0, len(df)):
+<div class="highlight"><pre><span></span>    for i in range(0, len(df)):
         d = haversine(40.671, -73.985, df.iloc[i]['latitude'], df.iloc[i]['longitude'])
         distance_list.append(d)
-</code></pre></div>
+</pre></div>
 <p>这很慢，这样的代码不应该出现。 <code>iterrows</code> 写法如下：</p>
-<div class="highlight"><pre><span></span><code>    <span class="n">haversine_series</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight"><pre><span></span>    <span class="n">haversine_series</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="n">haversine_series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">haversine</span><span class="p">(</span><span class="mf">40.671</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.985</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s1">'latitude'</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">'longitude'</span><span class="p">]))</span>
-</code></pre></div>
+</pre></div>
 <p>比上面的逐个索引稍微好点，但也不应该使用。如下apply写法稍微好点，但也尽量不使用：</p>
-<div class="highlight"><pre><span></span><code>df['distance'] = df.apply(lambda row: haversine(40.671, -73.985, row['latitude'], row['longitude']), axis=1)
-</code></pre></div>
+<div class="highlight"><pre><span></span>df['distance'] = df.apply(lambda row: haversine(40.671, -73.985, row['latitude'], row['longitude']), axis=1)
+</pre></div>
 <p>pandas 最高效的操作风格是向量式操作，这需要你在定义函数的时候就习惯numpy的那种ndarray向量操作风格，上面的函数就是支持的：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Define a basic Haversine distance formula</span>
 <span class="k">def</span> <span class="nf">haversine</span><span class="p">(</span><span class="n">lat1</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">lat2</span><span class="p">,</span> <span class="n">lon2</span><span class="p">):</span>
@@ -199,14 +199,14 @@ res = np.concatenate([x for i in range(10000)], axis=0)
     <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> 
     <span class="n">total_miles</span> <span class="o">=</span> <span class="n">MILES</span> <span class="o">*</span> <span class="n">c</span>
     <span class="k">return</span> <span class="n">total_miles</span>
-</code></pre></div>
+</pre></div>
 <p>这种写法需要我们对numpy的一些东西，尤其是向量操作很熟悉，这样我们直接把pandas的Series对象传递过去即可。</p>
 <p>这种向量式写法及时和之前优化了的apply写法，也快了56倍。</p>
-<div class="highlight"><pre><span></span><code>df['distance'] = haversine(40.671, -73.985, df['latitude'], df['longitude'])
-</code></pre></div>
+<div class="highlight"><pre><span></span>df['distance'] = haversine(40.671, -73.985, df['latitude'], df['longitude'])
+</pre></div>
 <p>而如果我们直接使用numpy的ndarray对象，速度还将继续提升4倍：</p>
-<div class="highlight"><pre><span></span><code>df['distance'] = haversine(40.671, -73.985, df['latitude'].values, df['longitude'].values)
-</code></pre></div>
+<div class="highlight"><pre><span></span>df['distance'] = haversine(40.671, -73.985, df['latitude'].values, df['longitude'].values)
+</pre></div>
 
             <section>
 <div class="panel-group" id="accordion2">

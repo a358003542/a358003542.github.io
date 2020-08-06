@@ -254,24 +254,24 @@
 <p>目前系统一般用的是Bourne Shell（bash shell）。本文提到shell即指bash shell，还有其他的shell这里就不讨论了</p>
 <h2 id="path">PATH变量</h2>
 <p>上面我们输入ls命令，shell是通过 <code>PATH</code> 这个变量来搜索相关命令的具体文件所在的。读者可以如下来查看这个变量：</p>
-<div class="highlight"><pre><span></span><code>echo $PATH
-</code></pre></div>
+<div class="highlight"><pre><span></span>echo $PATH
+</pre></div>
 <p>比如你安装了某个软件，但是通过shell却发现找不到，那么将那个软件的可执行文件目录加入到系统的 <code>PATH</code> 环境下就可以找到了。一般用如下语法：</p>
-<div class="highlight"><pre><span></span><code>PATH = $PATH:/where/your/bin
-</code></pre></div>
+<div class="highlight"><pre><span></span>PATH = $PATH:/where/your/bin
+</pre></div>
 <h2 id="_2">管道</h2>
 <p>简单了解了shell之后，下面简单地说明下管道和重定向这两个重要的概念，因为后面即使对于最简单的一行bash命令也可能会涉及到这两个概念。</p>
 <p>所谓管道最简单的理解就是第一个shell命令的输出流流向了另外一个shell命令中作为输入。比如说你的火狐浏览器卡住了（随便举个例子，没别的意思。。），你需要看一下它的pid然后kill掉，那么可以如下查看：</p>
-<div class="highlight"><pre><span></span><code>ps aux | grep firefox
-</code></pre></div>
+<div class="highlight"><pre><span></span>ps aux | grep firefox
+</pre></div>
 <p>这个 <code>|</code> 就是所谓的管道概念，这里首先是 <code>ps aux</code> 命令，然后输出送入到 <code>grep</code> 命令中去，抓取具体包含firefox字符的匹配行。</p>
 <h2 id="_3">重定向</h2>
 <p>kernel处理的每一个进程都默认都0，1，2这样三个文件说明符。其中0表示标准输入，1表示标准输出，2表示标准错误输出。所谓的标准输出一般指输出到当前的终端，而所谓的标准错误输出也是输出到当前的终端。</p>
 <p>当文件说明符被分配给其他非终端，就叫做I/O重定向。Shell通过关闭标准输出，并把标准文件说明符 1（终端）分配给其他某个文件，来把输出重新定向给该文件； 通过文件说明符0，来把标准输入重新定向；通过文件说明符2来重定向标准错误输出。</p>
 <p><code>&gt;</code> 就表示这样的重定向操作。 <code>&gt;&gt;</code> 表示文件追加操作，也就是相当于文件操作的 <code>a</code> 操作。</p>
 <p>最简单的重定向应用就是：</p>
-<div class="highlight"><pre><span></span><code>cat  *.txt  &gt;  test.txt
-</code></pre></div>
+<div class="highlight"><pre><span></span>cat  *.txt  &gt;  test.txt
+</pre></div>
 <p>其将本目录下glob抓取到的所有txt文件都合并成一个字符串流，然后重定向送入到test.txt文件中去。</p>
 <p><code>cat  *.txt</code> 这个命令并没有什么神奇之处，神奇的是Linux终端对于文件glob操作对于 <code>*</code> （任意数目的任意字符）和 <code>?</code> （一个任意字符）的支持。具体你可以用  <code>echo  *.txt</code> 命令来查看一下。</p>
 <h2 id="_4">再学几个命令</h2>
@@ -285,7 +285,7 @@
 <li>tail 打印文件后几行内容，同样可通过 <code>-n</code> 来指定具体打印多少行。然后tail还有一个用法， 加上 <code>-f</code> 选项来跟踪打印文件后面附加的内容。</li>
 <li>uname 这个命令输入之后简单的返回"Linux"字符串，似乎用处不大。不过通过查看uname命令的帮助信息我们得知这个命令能够返回关于你目前电脑的操作系统，硬件架构，内核版本号等等重要信息。比如：</li>
 </ul>
-<div class="highlight"><pre><span></span><code>=&gt;uname -s #内核名字
+<div class="highlight"><pre><span></span>=&gt;uname -s #内核名字
 Linux
 =&gt;uname -n #主机名字
 wanze-ubuntu
@@ -297,7 +297,7 @@ i686
 i686
 =&gt;uname -o #操作系统名字
 GNU/Linux
-</code></pre></div>
+</pre></div>
 <ul>
 <li>whoami whoami返回当前登录用户的名字，等价于<code>id -un</code> 。</li>
 </ul>
@@ -323,7 +323,7 @@ GNU/Linux
 </ul>
 <h3 id="stat">stat命令</h3>
 <p>stat 命令可以用来具体查看文件的一些信息。</p>
-<div class="highlight"><pre><span></span><code>[root@host ~]# stat /etc
+<div class="highlight"><pre><span></span>[root@host ~]# stat /etc
   File: `/etc'
   Size: 4096        Blocks: 8          IO Block: 4096   directory
 Device: 802h/2050d  Inode: 37          Links: 76
@@ -331,10 +331,10 @@ Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
 Access: 2017-09-05 01:35:41.983000000 -0400
 Modify: 2017-09-21 15:10:57.103000000 -0400
 Change: 2017-09-21 15:10:57.103000000 -0400
-</code></pre></div>
+</pre></div>
 <p>上面这些信息除了 Inode 也就是具体的inode号（可以看作电脑认识的文件名）之外，所有这些信息都是存放在Inode table 里面的。大体有：文件大小，文件类型，权限，所有者id，所有群id，access time（上一次打开时间），modify time（上一次修改时间）， change time（上一次这些inode信息比如读写权限之类的更改时间）。</p>
 <p>下面这个是普通文件的例子，然后Links一般是1，而我们看到上面的目录文件Links不是1，其含义是有多少硬连接（hard link）指向它，一般来说是 2+n个，这里的n是该目录下面的子目录数目，而Linux下每个新建的文件夹都预先包含了 <code>.</code> 和 <code>..</code> 这两个子文件夹，其具体用途读者应该猜到了，就是做相对路径用的（参考了 <a href="https://unix.stackexchange.com/questions/101515/why-does-a-new-directory-have-a-hard-link-count-of-2-before-anything-is-added-to">这个网页</a>）。然后后面讨论硬连接的时候会讨论到不能硬连接文件夹，就是硬连接文件夹会破坏Linux的层级文件系统。</p>
-<div class="highlight"><pre><span></span><code>[root@host ~]# stat /etc/passwd
+<div class="highlight"><pre><span></span>[root@host ~]# stat /etc/passwd
   File: `/etc/passwd'
   Size: 986         Blocks: 8          IO Block: 4096   regular file
 Device: 802h/2050d  Inode: 17775       Links: 1
@@ -342,9 +342,9 @@ Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
 Access: 2017-09-21 11:23:26.112000000 -0400
 Modify: 2017-09-21 11:23:26.112000000 -0400
 Change: 2017-09-21 11:23:26.113000000 -0400
-</code></pre></div>
+</pre></div>
 <p>下面是块设备文件，然后其是一个文件系统，具体大小查看需要加上 <code>-f</code> 选项。</p>
-<div class="highlight"><pre><span></span><code>[root@host ~]# stat /dev/sda
+<div class="highlight"><pre><span></span>[root@host ~]# stat /dev/sda
   File: `/dev/sda'
   Size: 0           Blocks: 0          IO Block: 4096   block special file
 Device: 6h/6d   Inode: 9005        Links: 1     Device type: 8,0
@@ -352,35 +352,35 @@ Access: (0660/brw-rw----)  Uid: (    0/    root)   Gid: (    6/    disk)
 Access: 2017-09-05 01:36:41.869000000 -0400
 Modify: 2017-09-05 01:36:41.869000000 -0400
 Change: 2017-09-05 01:36:41.869000000 -0400
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>[root@host ~]# stat -f /dev/sda
+</pre></div>
+<div class="highlight"><pre><span></span>[root@host ~]# stat -f /dev/sda
   File: "/dev/sda"
     ID: 0        Namelen: 255     Type: tmpfs
 Block size: 4096       Fundamental block size: 4096
 Blocks: Total: 61502      Free: 61465      Available: 61465
 Inodes: Total: 61502      Free: 60924
-</code></pre></div>
+</pre></div>
 <h3 id="ls">ls命令</h3>
 <p>ls命令最常用的两个选项是 <code>-a</code> 和 <code>-l</code> ，一个是要显示隐藏文件（Linux系统中文件名以 <code>.</code> 开头的是隐藏文件），一个是显示更多更多的信息。</p>
 <p>然后 <code>-i</code> 选项显示文件的Inode号。</p>
 <p>Linux系统最精彩的部分就是管道重定向等概念将各个小的程序小的工具揉合成为一个协作的整体，下面先举个简单的例子看下：</p>
-<div class="highlight"><pre><span></span><code>ls *.txt
-</code></pre></div>
+<div class="highlight"><pre><span></span>ls *.txt
+</pre></div>
 <p>将会把一个文件夹里面的所有后缀是txt的文件名字符流扫描出来，这个字符流包含目标文件的文件名然后通过管道来进一步操作。</p>
 <p>ls的 <code>--sort</code> 选项用来排序，似乎很有用，可以了解一下，但也可以通过管道传递给sort命令来进一步排序操作。如下所示：</p>
-<div class="highlight"><pre><span></span><code>ls *.txt <span class="p">|</span> sort
-</code></pre></div>
+<div class="highlight"><pre><span></span>ls *.txt <span class="p">|</span> sort
+</pre></div>
 <p>ls这里抓取的文件字符流可以方便作为后面的操作，如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> i in <span class="k">$(</span>ls *.txt <span class="p">|</span> sort<span class="k">)</span> <span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span> <span class="p">;</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">for</span> i in <span class="k">$(</span>ls *.txt <span class="p">|</span> sort<span class="k">)</span> <span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span> <span class="p">;</span>
+</pre></div>
 <p>​    </p>
 <p>这段代码里面的 <code>$i</code> 就是对应的一个个文件字符流。</p>
 <h4 id="-l">-l选项详解</h4>
 <p>先看下面这个例子：</p>
-<div class="highlight"><pre><span></span><code>-rw-rw-r--  1 wanze wanze    41034  8月 27 15:19 wisesystem.xoj
+<div class="highlight"><pre><span></span>-rw-rw-r--  1 wanze wanze    41034  8月 27 15:19 wisesystem.xoj
 drwxrwxr-x  4 wanze wanze     4096  5月 28 18:50 yEd
 lrwxrwxrwx  1 wanze wanze       22  9月 11 18:37 到 git 的链接 -&gt; /home/wanze/桌面/git
-</code></pre></div>
+</pre></div>
 <p>这里最重要的是先把第一栏看懂，文件所有者和文件所有群后面再讨论。</p>
 <p>第一栏文件属性我们可以看到开头 <code>d</code> 表示这个文件是目录文件，开始 <code>-</code> 表示这个文件是普通文件，开头 <code>l</code> 表示这个文件是链接文件（后面讨论的软连接和这个相关）。然后后面三个是rwx表示这个文件的所有者对这个文件可读可写可执行，如果要控制其不可执行，那么就要将其属性改为rw-，具体文件权限控制更详细的讨论在后面。</p>
 <p>第二栏是有多少hard links连接，这个上面提到过。</p>
@@ -390,28 +390,28 @@ lrwxrwxrwx  1 wanze wanze       22  9月 11 18:37 到 git 的链接 -&gt; /home/
 <p>首先系统会根据 <code>/etc/passwd</code> 来找里面有没有你的用户名，如果有，则把UID和GID取出来，然后对应的shell和家目录也一并设置了。</p>
 <p>然后根据UID和 <code>/etc/shadow</code> 文件里面的内容来核对密码。密码核对成功，那么就成功登入shell了。</p>
 <p><code>/etc/passwd</code> 内容大体如下所示：</p>
-<div class="highlight"><pre><span></span><code>root:x:0:0:root:/root:/bin/bash
+<div class="highlight"><pre><span></span>root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/bin:/sbin/nologin
-</code></pre></div>
+</pre></div>
 <p>其具体含义是：</p>
-<div class="highlight"><pre><span></span><code>name:x:UID:GID:说明信息:home目录:which shell
-</code></pre></div>
+<div class="highlight"><pre><span></span>name:x:UID:GID:说明信息:home目录:which shell
+</pre></div>
 <p>shell有个特别的值： <code>/sbin/nologin</code> 表示无法登录。</p>
 <p>继续接着上面的来，系统可以根据 <code>/etc/passwd</code> 获得的当前登录用户的GID来查看 <code>/etc/group</code> 来获得该用户的所属群组的一些信息。</p>
-<div class="highlight"><pre><span></span><code>root:x:0:
+<div class="highlight"><pre><span></span>root:x:0:
 bin:x:1:bin,daemon
-</code></pre></div>
+</pre></div>
 <p>其一行的含义是：</p>
-<div class="highlight"><pre><span></span><code>name:x:GID:群组所含的用户，用逗号隔开
-</code></pre></div>
+<div class="highlight"><pre><span></span>name:x:GID:群组所含的用户，用逗号隔开
+</pre></div>
 <h3 id="useraddusermod">useradd和usermod命令</h3>
 <p>useradd和usermod这两个命令很多选项是类似的，简单创建一个新用户就可以</p>
-<div class="highlight"><pre><span></span><code>useradd new_user_name 
-</code></pre></div>
+<div class="highlight"><pre><span></span>useradd new_user_name 
+</pre></div>
 <p>还有很多选项设置在useradd的时候可以设置，也可以后面用 <code>usermod</code> 命令来设置。</p>
 <p>其中 <code>-d</code> 用于设置新用户的家文件夹。然后还有个 <code>-m</code> 选项只能和 <code>-d</code> 选项一起使用如下所示：</p>
-<div class="highlight"><pre><span></span><code>usermod user_name -md /newhome/newpath
-</code></pre></div>
+<div class="highlight"><pre><span></span>usermod user_name -md /newhome/newpath
+</pre></div>
 <p>这是把某个用户的原家目录移到新的位置（请参看 <a href="https://stackoverflow.com/questions/20797819/command-to-change-the-default-home-directory-of-a-user">这个网页</a> ）。</p>
 <h3 id="userdel">userdel命令</h3>
 <p>userdel用于删除某个用户的数据，就是 <code>/etc/passwd</code> <code>/etc/shadow</code> 还有群组等相关数据。如果加上 <code>-r</code> 选项，将会把该用户的家目录也一并删除了。</p>
@@ -419,35 +419,35 @@ bin:x:1:bin,daemon
 <p>类似的有groupadd和groupmod，还有groupdel命令。</p>
 <h3 id="susudo">su命令和sudo命令</h3>
 <p>su命令用于切换身份，最常用的一个选项是 <code>-c</code> ，用于以某个用户的身份执行一次命令。</p>
-<div class="highlight"><pre><span></span><code>su root -c "ls /root"
-</code></pre></div>
+<div class="highlight"><pre><span></span>su root -c "ls /root"
+</pre></div>
 <p>su命令需要新切换用户的密码，而sudo命令只需要自己的密码即可，不知道root用户的密码也没关系。Linux系统是通过 <code>/etc/sudoers</code> 这个文件来管理sudoer的权限的，用户不是sudoer，其是不能运行sudo命令的。</p>
-<div class="highlight"><pre><span></span><code>sudo -u root  ls /root
-</code></pre></div>
+<div class="highlight"><pre><span></span>sudo -u root  ls /root
+</pre></div>
 <p>上面的 <code>-u</code> 指定用户，默认是root用户，所以上面的 <code>-u root</code> 一般是不写出来的。</p>
 <h3 id="sudoer">让某个用户是sudoer</h3>
 <p>首先运行 <code>visudo</code> 命令，然后跳到文件最后，找到下面这一行：</p>
-<div class="highlight"><pre><span></span><code>## Allows people in group wheel to run all commands
+<div class="highlight"><pre><span></span>## Allows people in group wheel to run all commands
 # %wheel ALL=(ALL)       ALL    
-</code></pre></div>
+</pre></div>
 <p>将第二行 <code>#</code> 去掉，然后将目标用户加入到wheel群组中去：</p>
-<div class="highlight"><pre><span></span><code>usermod -aG wheel user_name
-</code></pre></div>
+<div class="highlight"><pre><span></span>usermod -aG wheel user_name
+</pre></div>
 <p>这样目标用户就可以执行sudo命令了。</p>
 <p><strong>NOTICE</strong>： 按照上面的做我不知道为什么没有成功，那么直接把你想要的用户名加上去把，大体如下：</p>
-<div class="highlight"><pre><span></span><code>user_name ALL=(ALL)  ALL
-</code></pre></div>
+<div class="highlight"><pre><span></span>user_name ALL=(ALL)  ALL
+</pre></div>
 <h3 id="chownchgrp">chown和chgrp命令</h3>
 <p>前面讲到了Linux系统中所有的文件都有这两个属性：文件的所有者是谁，所有群是谁。如果当前登录用户（或者说进程执行用户）是某个文件的所有者，那么再来看这个文件权限的前三位rwx写的是什么，如果是可读则可读，如果可写那么可写。可见权限管理第一步是先管理好文件的所有者和所有群。</p>
-<div class="highlight"><pre><span></span><code>chown  user_name filename  # 改变文件所有者
+<div class="highlight"><pre><span></span>chown  user_name filename  # 改变文件所有者
 chgrp   group_name filename  # 改变文件所有群
-</code></pre></div>
+</pre></div>
 <p>这两个命令都可以接受 <code>-R</code> 选项来递归修改该目录和目录下所谓文件的文件属性。</p>
 <h3 id="chmod">chmod命令</h3>
 <p>chmod命令改变文件的权限。用法是：</p>
-<div class="highlight"><pre><span></span><code>chmod  a+x filename
+<div class="highlight"><pre><span></span>chmod  a+x filename
 chmod 755 filename
-</code></pre></div>
+</pre></div>
 <p>该命令可以接受 <code>-R</code> 选项来递归修改该目录和目录下所谓文件的文件属性。</p>
 <p>权限有两种表示方法：</p>
 <ul>
@@ -467,15 +467,15 @@ chmod 755 filename
 <p>硬连接（hard link）前面已经有所谈论了，然后当时提到一个普通文件的Links一般是1，而这里讨论的创建硬连接就是创建一个新的文件名指向同一个inode节点，这就是所谓的硬连接。硬连接不能跨文件系统，不能连接目录。</p>
 <p>软连接也叫符号连接，软连接就相当于新建一个快捷方式文件。由于硬连接有其局限，比如不能连接目录，所以实践中常用的是软连接。软连接就是创建了一个链接文件。</p>
 <p>ln命令默认创建硬链接，加入 <code>-s</code> 参数是创建符号连接。</p>
-<div class="highlight"><pre><span></span><code>ln -s 源文件 目标文件
-</code></pre></div>
+<div class="highlight"><pre><span></span>ln -s 源文件 目标文件
+</pre></div>
 <p>​    </p>
 <h2 id="tar">tar命令</h2>
 <p>打包解压文件一般使用tar命令，其同时支持gzip和bzip2这两种格式。</p>
 <p>首先是常见的打包和解压：</p>
-<div class="highlight"><pre><span></span><code>tar -cf archive.tar foo bar  
+<div class="highlight"><pre><span></span>tar -cf archive.tar foo bar  
 tar -xf archive.tar      
-</code></pre></div>
+</pre></div>
 <p>这里 <code>-c</code> 的意思是创建打包文件，<code>-f</code> 选项指定文件名，就是后面跟着的那个 archive.tar 文件名，然后后面跟着你想打包进压缩文件的具体的文件或者文件夹名。</p>
 <p>然后解压文件就是带上 <code>-x</code> 选项，你经常看到认为带上一个 <code>-v</code> 选项是linux命令中常见的verbose模式，就是显示更多的打印信息。</p>
 <p>然后tar命令还支持其他格式的打包和解压，比如gzip格式，就要带上 <code>-z</code> 选项，文件名一般是 <code>.tar.gz</code> ，然后记住不管是打包还是解压都要带上这个选项。</p>
@@ -486,33 +486,33 @@ tar -xf archive.tar
 <li><code>--strip-components</code> 选项： 上面的 <code>-C</code> 选项单独使用有一个问题，那就是比如你想解压一个压缩包，其原来的文件夹目录是 what2.2/what ，那么假设你指定要解压到 /root 的test文件夹下面，其在test文件夹下面还会创建 what2.2文件夹然后再是里面的内容。而这个 <code>--strip-components</code> 和 <code>-C</code> 结合有一个很有用的用法，那就是 <u>重命名输出文件夹</u>  ，这个选项的用处就是将输出的文件夹路径名剔除掉几个：</li>
 </ul>
 <p>比如下面这个，其原来文件夹路径名expython开头，然后定制输出到test文件夹，然后剔除所有文件文件路径名第一个，也就是expython/，这样就实现了重命名输出文件夹的功能 （参考了 <a href="http://www.cnblogs.com/bootoo/p/4678849.html">这个网页</a> ）。</p>
-<div class="highlight"><pre><span></span><code>tar -zxvf expython-0.2.2.tar.gz  -C ./test  --strip-components 1
-</code></pre></div>
+<div class="highlight"><pre><span></span>tar -zxvf expython-0.2.2.tar.gz  -C ./test  --strip-components 1
+</pre></div>
 <h2 id="ps">ps命令</h2>
 <p>ps是查看系统正在运行的进程的命令，用法就是：</p>
-<div class="highlight"><pre><span></span><code>ps [option]
-</code></pre></div>
+<div class="highlight"><pre><span></span>ps [option]
+</pre></div>
 <p>有的时候某个进程卡住了，一般运行 <code>ps aux</code> 来查看那个进程的进程号（PID），然后kill（kill命令，杀死某个进程。）就行了。</p>
 <h2 id="ssh">ssh登录</h2>
 <p>SSH协议用于计算机之间的加密远程登录。本小节主要参考了 <a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">阮一峰的ssh remote login 一文</a>  。</p>
 <p>ssh登录在各个操作系统都有一些便捷的工具，推荐读者先了解一下那些工具，下面主要讨论一些基本的ssh命令用法和一些基本的概念。</p>
 <p>ssh登录命令格式如下:</p>
-<div class="highlight"><pre><span></span><code>ssh username@host
-</code></pre></div>
+<div class="highlight"><pre><span></span>ssh username@host
+</pre></div>
 <p>其中ssh默认的端口号是22，你可以通过 <code>-p</code> 来指定其他端口号。这里的username是远程计算机的用户名，这里的host是远程计算机的ip地址。</p>
 <p>默认情况下ssh登录远程终端是需要输入远程计算机的密码的，你也可以通过一种将自己的公钥上传到远程计算机的方法来实现不用输入密码来登录之。首先你需要生成自己的公钥:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -t rsa
-</code></pre></div>
+<div class="highlight"><pre><span></span>ssh-keygen -t rsa
+</pre></div>
 <p>具体生成的公钥文件文件在 <code>$HOME/.ssh</code> 那里（在windows系统下也是当前登录用户的家目录下），其为 <code>id_rsa.pub</code> ，还有一个 <code>id_rsa</code> 是什么私钥文件。然后将公钥文件上传上去即可:</p>
-<div class="highlight"><pre><span></span><code>ssh-copy-id username@host
-</code></pre></div>
+<div class="highlight"><pre><span></span>ssh-copy-id username@host
+</pre></div>
 <p>如果你懒得记这个什么 <code>ssh-copy-id</code> 这个命令，把<code>id_rsa.pub</code> 也就是你的公钥文件的内容，复制粘贴到远程计算机的（你想登录的登录用户）登录用户的家目录下的 <code>.ssh</code> （没有新建）文件夹下的 <code>authorized_keys</code> 这个文件后面（没有新建）。</p>
 <p>这样你就可以免密码ssh登录了，然后Github走ssh通道的免密码方式，也是类似的要把你的计算机的公钥文件内容设置上去。</p>
 <h3 id="ssh_1">ssh连接进行某个长时间的任务</h3>
 <p>ssh连接远程主机，然后要执行某个长时间的命令任务，如果你有一段时间没去管那个终端窗口了，ssh连接就可能会自动中断，终端之后远程的相关进程也会被kill掉。这是会返回什么 <code>Broken pipe</code> 错误。</p>
 <p>一个简单的解决方案是在远程主机上执行某个命令，然后这个命令前面加上 <code>nohup</code> 这个命令，类似下面这种格式:</p>
-<div class="highlight"><pre><span></span><code>nohup thecommand
-</code></pre></div>
+<div class="highlight"><pre><span></span>nohup thecommand
+</pre></div>
 <p>更好地解决方案是使用 <strong>screen</strong> 这个小工具，然后在远程通过screen命令来开启一个执行某个shell命令的全屏窗口（这样其就不会被自动关闭了），哪怕你本地的那个终端窗口关闭了，远程主机相关进程还是会在那里运行的。screen命令常见的用法有:</p>
 <h3 id="screen">screen命令</h3>
 <ul>
@@ -526,7 +526,7 @@ tar -xf archive.tar
 </ul>
 <h2 id="_8">设置后台服务</h2>
 <p>下面将写一个后台服务脚本，让其成为Linux系统的一个后台服务。本小节参考了 <a href="http://unix.stackexchange.com/questions/236084/how-do-i-create-a-service-for-a-shell-script-so-i-can-start-and-stop-it-like-a-d">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 
 <span class="c1">### BEGIN INIT INFO</span>
 <span class="c1"># Provides:          shadowsocks</span>
@@ -591,7 +591,7 @@ status<span class="o">(){</span>
 <span class="k">esac</span>
 
 <span class="nb">exit</span> <span class="nv">$RETVAL</span>
-</code></pre></div>
+</pre></div>
 <p>然后上面的服务脚本要放入 <code>/etc/init.d</code> 里面去。</p>
 <p>这个时候就可以通过 <code>service what start+ 来调用服务脚本了。 要让服务脚本开机自启动，推荐用</code>chkconfig+ 命令来做。</p>
 <ul>
@@ -617,13 +617,13 @@ status<span class="o">(){</span>
   ​</li>
 </ul>
 <p>似乎较常用的级别设置是 35</p>
-<div class="highlight"><pre><span></span><code>chkconfig --level 35 what on
-</code></pre></div>
+<div class="highlight"><pre><span></span>chkconfig --level 35 what on
+</pre></div>
 <h2 id="_9">网络配置</h2>
 <h3 id="ip">IP地址</h3>
 <p>IP地址是由32位二进制组成，表示为十进制最小 0.0.0.0 最大 255.255.255.255 。具体是由NetID和后面的HostID组成，所谓同一网域意思就是NetID相同。</p>
 <p>IP地址的分类：</p>
-<div class="highlight"><pre><span></span><code>以二進位說明 Network 第一個數字的定義：
+<div class="highlight"><pre><span></span>以二進位說明 Network 第一個數字的定義：
 Class A : 0xxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; NetI_D 的開頭是 0
           |--net--|---------host------------|
 Class B : 10xxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; NetI_D 的開頭是 10
@@ -639,7 +639,7 @@ Class B : 128.xx.xx.xx ~ 191.xx.xx.xx
 Class C : 192.xx.xx.xx ~ 223.xx.xx.xx
 Class D : 224.xx.xx.xx ~ 239.xx.xx.xx
 Class E : 240.xx.xx.xx ~ 255.xx.xx.xx
-</code></pre></div>
+</pre></div>
 <p>一般系统只有ABC三个等级。</p>
 <p>IP只有两种IP， 一种是 公网IP ，另一个是 私网IP 。</p>
 <p>私网IP在三个等级之下范围如下所示：</p>
@@ -675,41 +675,41 @@ Class E : 240.xx.xx.xx ~ 255.xx.xx.xx
 <li>动态路由生成
   ​</li>
 </ul>
-<div class="highlight"><pre><span></span><code>route add -net 192.168.5.0  netmask 255.255.255.0 dev etho03
-</code></pre></div>
+<div class="highlight"><pre><span></span>route add -net 192.168.5.0  netmask 255.255.255.0 dev etho03
+</pre></div>
 <h3 id="_12">网卡界面设置</h3>
 <p>在 <code>/etc/sysconfig/network-scripts/ifcfg-XXX</code> 那里的配置是：</p>
-<div class="highlight"><pre><span></span><code>DEVICE=網卡的代號
+<div class="highlight"><pre><span></span>DEVICE=網卡的代號
 BOOTPROTO=是否使用 
 dhcpHWADDR=是否加入網卡卡號(MAC)
 IPADDR=就是IP位址
 NETMASK=子網路遮罩啦
 ONBOOT=要不要預設啟動此介面
 GATEWAY=就是通訊閘啦 
-</code></pre></div>
+</pre></div>
 <p>DEVICE：這個設定值後面接的裝置代號需要與檔名 (ifcfg-eth0) 那個裝置代號相同才行！否則可能會造成一些裝置名稱找不到的困擾。
 BOOTPROTO：啟動該網路介面時，使用何種協定？ 如果是手動給予 IP 的環境，請輸入 static 或 none ，如果是自動取得 IP 的時候， 請輸入 dhcp (不要寫錯字，因為這是最重要的關鍵字！)
 GATEWAY：代表的是『整個主機系統的 default gateway』， 所以，設定這個項目時，請特別留意！不要有重複設定的情況發生喔！也就是當你有 ifcfg-eth0, ifcfg-eth1.... 等多個檔案，只要在其中一個檔案設定 GATEWAY 即可</p>
 <p>在 <code>/etc/resolv.conf</code> 那里设置DNS规则：</p>
-<div class="highlight"><pre><span></span><code>nameserver DNS的IP  
-</code></pre></div>
+<div class="highlight"><pre><span></span>nameserver DNS的IP  
+</pre></div>
 <p>在 <code>/etc/hosts</code> 那里设置： </p>
-<div class="highlight"><pre><span></span><code>私有IP 主機名稱 別名
-</code></pre></div>
+<div class="highlight"><pre><span></span>私有IP 主機名稱 別名
+</pre></div>
 <p>在 <code>/etc/sysconfig/network</code> 那里设置：</p>
-<div class="highlight"><pre><span></span><code>NETWORKING=要不要有網路  
+<div class="highlight"><pre><span></span>NETWORKING=要不要有網路  
 NETWORKING_IPV6=支援IPv6否？
 HOSTNAME=你的主機名 
-</code></pre></div>
+</pre></div>
 <p>在 <code>/etc/services</code> 那里记录記錄架構在 TCP/IP 上面的總總協定，包括 http, ftp, ssh, telnet 等等服務所定義的 port number ，都是這個檔案所規劃出來的。如果你想要自訂一個新的協定與 port 的對應，就得要改這個檔案了；</p>
 <p>在 <code>/etc/protocols</code> 那里定义出 IP 封包协定的相关资料，包括 ICMP/TCP/UDP 這方面的封包协议的定义等。</p>
 <h3 id="_13">重启网络</h3>
-<div class="highlight"><pre><span></span><code>/etc/init.d/network restart
-</code></pre></div>
+<div class="highlight"><pre><span></span>/etc/init.d/network restart
+</pre></div>
 <p>這個 script 最重要！因為可以一口氣重新啟動整個網路的參數！ 他會主動的去讀取所有的網路設定檔，所以可以很快的恢復系統預設的參數值。</p>
 <h3 id="ifconfig">ifconfig命令</h3>
 <p>ifconfig命令主要用来查看当前的网络配置信息，这些信息含义如下：</p>
-<div class="highlight"><pre><span></span><code>- eth0：就是網路卡的代號，也有 lo 這個 loopback ；
+<div class="highlight"><pre><span></span>- eth0：就是網路卡的代號，也有 lo 這個 loopback ；
 - HWaddr：就是網路卡的硬體位址，俗稱的 MAC 是也；
 - inet addr：IPv4 的 IP 位址，後續的 Bcast, Mask 分別代表的是 Broadcast 與 netmask 喔！
 - inet6 addr：是 IPv6 的版本的 IP ，我們沒有使用，所以略過；
@@ -719,11 +719,11 @@ HOSTNAME=你的主機名
 - collisions：代表封包碰撞的情況，如果發生太多次， 表示你的網路狀況不太好；
 - txqueuelen：代表用來傳輸資料的緩衝區的儲存長度；
 - RX bytes, TX bytes：總接收、傳送的位元組總量
-</code></pre></div>
+</pre></div>
 <h3 id="ifupifdown">ifup和ifdown命令</h3>
-<div class="highlight"><pre><span></span><code>ifup {interface}
+<div class="highlight"><pre><span></span>ifup {interface}
 ifdown {interface}
-</code></pre></div>
+</pre></div>
 <p>启用或关闭某个网络界面。这两个命令实际去修改前面提到的 <code>/etc/sysconfig/network-scripts/</code> 里面对应的网卡界面配置文件。</p>
 <h3 id="_14">修改主机名</h3>
 <p>centos7新加入了一个命令可以很方便的修改主机名，那就是 <code>hostnamectl</code> ，主机名有几个类似：</p>
@@ -732,40 +732,40 @@ ifdown {interface}
 <li>瞬态主机名 transient</li>
 <li>灵活主机名 pretty</li>
 </ul>
-<div class="highlight"><pre><span></span><code>hostnamectl status
+<div class="highlight"><pre><span></span>hostnamectl status
 hostnamectl set-hostname &lt;hostname&gt;
-</code></pre></div>
+</pre></div>
 <p>上面的第二个命令将设置所有的主机名，如果要指定具体的一个进行设置则要加上选项：  <code>--pretty</code>, <code>--static</code>, 和 <code>--transient</code> 。</p>
 <h2 id="df">df命令</h2>
 <p>Linux系统中一切都是文件，包括硬盘光盘之类的。其中某个硬盘必须挂载到系统中的某个目录下才可以使用，比如 <code>/</code> 之所以可以使用是自动挂载了的。而如果你的计算机额外加上了某个硬盘，那么可能会没有自动挂载，这样是不可以使用。你需要使用挂载操作。</p>
 <p>在执行挂载操作之前，可先用df命令来看一下当前计算机的磁盘挂载情况。</p>
-<div class="highlight"><pre><span></span><code>[root@host ~]# df
+<div class="highlight"><pre><span></span>[root@host ~]# df
 Filesystem     1K-blocks    Used Available Use% Mounted on
 /dev/sda2        9952216 2879484   6547532  31% /
 tmpfs             258184       0    258184   0% /dev/shm
 /dev/sda1         289293  141262    132671  52% /boot
-</code></pre></div>
+</pre></div>
 <p>Filesystem是目标文件系统，然后1K-blocks列出目标文件系统的大小，单位是KB，后面Used是已经使用了多少，Available是还有多少可用的。Use%是使用百分比，Mounted on是目标文件系统的挂载点。</p>
 <h2 id="blkid">blkid命令</h2>
 <p>blkid命令可以列出目标文件系统的 UUID 号，还有文件系统类型。这方便后面mount命令调用。</p>
-<div class="highlight"><pre><span></span><code>[root@host /]# blkid /dev/sda1
+<div class="highlight"><pre><span></span>[root@host /]# blkid /dev/sda1
 /dev/sda1: UUID="ec5c9ab8-b71e-46e6-aac9-5ccc757a02d2" TYPE="ext3" 
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>[root@host /]# blkid
+</pre></div>
+<div class="highlight"><pre><span></span>[root@host /]# blkid
 /dev/sda1: UUID="ec5c9ab8-b71e-46e6-aac9-5ccc757a02d2" TYPE="ext3" 
 /dev/sda2: LABEL="ROOTPART" UUID="971ffe7e-0c71-40c1-97a9-bdb6b167d4b7" TYPE="ext4" 
-</code></pre></div>
+</pre></div>
 <h2 id="mount">mount命令</h2>
 <p>mount命令是具体来挂载某个文件系统的，注意挂载点，也就是对应的挂载目录最好是个空文件夹，否则原空文件里面的内容在挂载后将不可访问了。</p>
-<div class="highlight"><pre><span></span><code>mount -l    # 列出当前计算机的挂载情况
+<div class="highlight"><pre><span></span>mount -l    # 列出当前计算机的挂载情况
 mount -t 文件系统类型 UUID="***" 挂载点 # 具体进行挂载操作
 mount -t 文件系统类型 文件系统名  挂载点
-</code></pre></div>
+</pre></div>
 <h2 id="_15">开机自动挂载</h2>
 <p>进行开机自动挂载设置就是修改 <code>/etc/fstab</code> 这个文件。</p>
-<div class="highlight"><pre><span></span><code>UUID=971ffe7e-0c71-40c1-97a9-bdb6b167d4b7 /                       ext4    defaults,discard,noatime        1 1
+<div class="highlight"><pre><span></span>UUID=971ffe7e-0c71-40c1-97a9-bdb6b167d4b7 /                       ext4    defaults,discard,noatime        1 1
 UUID=ec5c9ab8-b71e-46e6-aac9-5ccc757a02d2 /boot                   ext3    defaults        1 2
-</code></pre></div>
+</pre></div>
 <p>对照前面的例子，我们可以知道 /dev/sda1 是挂载 /boot 的。前面三项意思很清晰，那个UUID号改为目标文件系统名如 /dev/sda1 也是可以的。</p>
 <p>下面重点讲下第四列，第五列和第六列：</p>
 <ul>
@@ -792,49 +792,49 @@ UUID=ec5c9ab8-b71e-46e6-aac9-5ccc757a02d2 /boot                   ext3    defaul
 </ul>
 <h2 id="unmount">unmount命令</h2>
 <p>卸载命令</p>
-<div class="highlight"><pre><span></span><code>unmount  目标文件系统名或者挂载点
-</code></pre></div>
+<div class="highlight"><pre><span></span>unmount  目标文件系统名或者挂载点
+</pre></div>
 <h2 id="lsof">lsof命令</h2>
 <p>我最先接触lsof命令是如下需求：查看端口号是不是被谁占用了，如果你希望释放该端口号，则kill掉该进程即可。</p>
-<div class="highlight"><pre><span></span><code>lsof -i :1080
-</code></pre></div>
+<div class="highlight"><pre><span></span>lsof -i :1080
+</pre></div>
 <p>lsof 命令倒不是专门为了查看端口号而设置的，其完整名字为list open files，也就是列出系统当前打开的文件的意思。由于在linux系统中， 一切皆文件 ，所以通过查看打开的文件信息能够获得很多有用的当前系统运行情况的信息。</p>
 <p>这个命令具体使用方法很多，请读者参看 <a href="http://www.ha97.com/1029.html">这个网页</a> 和 <a href="http://www.oschina.net/question/12_145479">这个网页</a> 。</p>
 <h2 id="telnet">telnet命令</h2>
 <p>telnet命令来查看某个TCP端口是否可以正常访问。</p>
-<div class="highlight"><pre><span></span><code>telnet ip地址 port端口
-</code></pre></div>
+<div class="highlight"><pre><span></span>telnet ip地址 port端口
+</pre></div>
 <h2 id="nmap">nmap命令</h2>
 <p>扫描目标主机的端口号，参考了 <a href="http://blog.jobbole.com/54595/">这个网页</a>。</p>
 <p>最常见的应用需求就是查看目标主机那些端口号打开了：</p>
-<div class="highlight"><pre><span></span><code>nmap ip地址
-</code></pre></div>
+<div class="highlight"><pre><span></span>nmap ip地址
+</pre></div>
 <h2 id="curl">curl命令</h2>
 <p>最基本的用法就是</p>
-<div class="highlight"><pre><span></span><code>curl the_url
-</code></pre></div>
+<div class="highlight"><pre><span></span>curl the_url
+</pre></div>
 <p>你可以看作一个简单版的web browser吧，其内选项很多，从HTTP的method方法选择，到user-agent甚至cookie的设定等等都可以。</p>
 <p>查看更多信息读者可以参考 <a href="http://www.ruanyifeng.com/blog/2011/09/curl.html">这个网页</a> 。</p>
 <h3 id="ip_1">查看本机的外网ip</h3>
-<div class="highlight"><pre><span></span><code>curl ifconfig.sh
-</code></pre></div>
+<div class="highlight"><pre><span></span>curl ifconfig.sh
+</pre></div>
 <p>还有 httpbin这个网站也是可以的：</p>
-<div class="highlight"><pre><span></span><code>curl httpbin.org/ip
-</code></pre></div>
+<div class="highlight"><pre><span></span>curl httpbin.org/ip
+</pre></div>
 <h2 id="rpm">离线安装rpm包</h2>
 <p>推荐安装 <code>yum-utils</code> 这个软件包：</p>
-<div class="highlight"><pre><span></span><code>yum install yum-utils
-</code></pre></div>
+<div class="highlight"><pre><span></span>yum install yum-utils
+</pre></div>
 <p>然后利用其提供的 yumdownloader 命令来下载对应的rpm包。</p>
 <h3 id="_16">下载相关依赖完全实现本地安装</h3>
 <p>在安装某些rpm包的时候，可能还是需要某些依赖，要某从 <a href="http://dl.fedoraproject.org/pub/epel/7/x86_64/">fedoraproject</a> 下载对应的epel安装包，或者干脆用yum 安装 <code>epel-realse</code> ，然后你还需要安装上面提及的 <code>yum-utils</code> ，然后运行：</p>
-<div class="highlight"><pre><span></span><code>yum install --downloadonly --downloaddir=. what.rpm ...
-</code></pre></div>
+<div class="highlight"><pre><span></span>yum install --downloadonly --downloaddir=. what.rpm ...
+</pre></div>
 <p>这样将自动下载并补齐这些rpm包还确实的依赖，然后你可以用上面的完全本地安装语句实现完全的面网络安装这些rpm包了。</p>
 <h3 id="_17">完全本地安装</h3>
 <p>完全免网络从本地安装某些rpm包，自动解决其相互依赖问题。</p>
-<div class="highlight"><pre><span></span><code>yum localinstall -C --disablerepo=*  what.rpm ...
-</code></pre></div>
+<div class="highlight"><pre><span></span>yum localinstall -C --disablerepo=*  what.rpm ...
+</pre></div>
 <h2 id="centos6centos7">centos6和centos7的区别</h2>
 <p>本小节参考了 <a href="http://www.cnblogs.com/HondaHsu/p/6118111.html">这篇文章</a> 和 <a href="https://oracleblog.org/study-note/%E4%B8%80%E4%BA%9Bcentos-6%E5%92%8Ccentos-7%E7%9A%84%E5%8C%BA%E5%88%AB/">这篇文章</a> 。</p>
 <ul>
@@ -849,15 +849,15 @@ UUID=ec5c9ab8-b71e-46e6-aac9-5ccc757a02d2 /boot                   ext3    defaul
 <li>修改地区推荐使用 localectl 命令。</li>
 <li>服务管理推荐用 systemctl 命令，不过之前的service命令也还是可以用的。然后之前的chkconfig也推荐用systemctl命令。</li>
 </ul>
-<div class="highlight"><pre><span></span><code>systemctl restart/start/stop service_name
+<div class="highlight"><pre><span></span>systemctl restart/start/stop service_name
 
 systemctl enable/disable  service_name
-</code></pre></div>
+</pre></div>
 <ul>
 <li>强制终止进程，之前是 \verb+kill -9 PID+ ，现在推荐使用：</li>
 </ul>
-<div class="highlight"><pre><span></span><code>systemctl kill --singal=9 PID
-</code></pre></div>
+<div class="highlight"><pre><span></span>systemctl kill --singal=9 PID
+</pre></div>
 <ul>
 <li>ifconfig命令需要单独安装了（net-tools），现在推荐使用ip命令。</li>
 </ul>
@@ -891,8 +891,8 @@ systemctl enable/disable  service_name
 </ul>
 <h3 id="_19">共享文件夹设置</h3>
 <p>安装增强功能之后，在virtualbox那里设置好共享文件夹之后，记得进入客机系统，还需要如下加载文件夹：</p>
-<div class="highlight"><pre><span></span><code>sudo mount -t vboxsf  share  /home/wanze/share
-</code></pre></div>
+<div class="highlight"><pre><span></span>sudo mount -t vboxsf  share  /home/wanze/share
+</pre></div>
 <p>上面的 share 名字是你在virtualbox那边设置的名字，然后具体挂载的文件夹请在客机系统那里新建一个。</p>
 <h2 id="_20">找不到什么的错误</h2>
 <p>本章节加上了一些内容，都是我遇到了说什么，No Such file等等之类的报错，一般是某些软件包依赖出了问题。下面的讨论有时是Ubuntu系统（debian系），有时是Centos（RPM系），具体看到那个包的名字，我想读者就能获得一些灵感的。</p>
@@ -901,15 +901,15 @@ systemctl enable/disable  service_name
 <p>报错：
     fatal error: ffi.h: No such file or directory</p>
 <p>解决方案：</p>
-<div class="highlight"><pre><span></span><code>sudo apt-get install libffi-dev
-</code></pre></div>
+<div class="highlight"><pre><span></span>sudo apt-get install libffi-dev
+</pre></div>
 <h3 id="opensslvh">opensslv.h</h3>
 <p>报错：</p>
-<div class="highlight"><pre><span></span><code>fatal error: openssl/opensslv.h: 没有那个文件或目录
-</code></pre></div>
+<div class="highlight"><pre><span></span>fatal error: openssl/opensslv.h: 没有那个文件或目录
+</pre></div>
 <p>解决方案：</p>
-<div class="highlight"><pre><span></span><code>sudo apt install libssl-dev
-</code></pre></div>
+<div class="highlight"><pre><span></span>sudo apt install libssl-dev
+</pre></div>
 <h2 id="_21">参考资料</h2>
 <ol>
 <li>

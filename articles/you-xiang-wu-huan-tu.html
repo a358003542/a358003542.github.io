@@ -131,7 +131,7 @@
 <p>聪明的朋友肯定想到了我们的宇宙时间是不可逆的，也就是说如果用模型来表示宇宙所有的信息数据变动流结构的话，那么一定是有向无环图。</p>
 <h2 id="python">python实现</h2>
 <p>在 <a href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/digraph.py">algorithms项目的这里</a> 有有向图的实现代码，实际存储就是一个字典值，然后再加上了一些辅助方法，其中 key 就是节点的值，value是一个列表，存放着本节点到其他节点的流向地。整个实现过程还是很好理解的，在jieba分词中：</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">get_DAG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sentence</span><span class="p">):</span>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">get_DAG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sentence</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_initialized</span><span class="p">()</span>
         <span class="n">DAG</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
@@ -148,11 +148,11 @@
                 <span class="n">tmplist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="n">DAG</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmplist</span>
         <span class="k">return</span> <span class="n">DAG</span>
-</code></pre></div>
+</pre></div>
 <p>其大体也是类似这样的实现。</p>
 <p>也就是在实际操作中，并没有对无环条件进行判断，这多少有点出乎我的意料之外。图论里面关于这个已经有算法了，我们也没什么好想的，就是图论的拓扑排序方法来判断一个有向图是否是无环的。</p>
 <p>wiki上有伪代码，我们可以下看一下：</p>
-<div class="highlight"><pre><span></span><code>L ← Empty list that will contain the sorted elements
+<div class="highlight"><pre><span></span>L ← Empty list that will contain the sorted elements
 S ← Set of all nodes with no incoming edge
 while S is non-empty do
     remove a node n from S
@@ -165,12 +165,12 @@ if graph has edges then
     return error (graph has at least one cycle)
 else 
     return L (a topologically sorted order)
-</code></pre></div>
+</pre></div>
 <p>这个算法叫做 Kahn 算法，具体思路就是请读者假想目标研究有向图里面有一个闭环，那么这个闭环里面的所有节点都有有进入箭头的，也就是其不可能在set S，其在算法中只可能在 m 中被选中，而且闭环中的节点一定不会出现在n中，这样上面的算法再怎么运算，if语句对于闭环中的m来说都不会成立。</p>
 <p>然后假设某几个节点都有入口，那么顺藤摸瓜，逐个删除是可以把这些节点都放到S里面去的。</p>
 <p>我心里还有一个担心，也就是上面的算法的终止问题，主要是闭环那边。初步的判断是闭环内的节点m不会进入S，其他节点慢慢会被放入L。OK，让我们开始写代码，然后再实际看一下吧。</p>
 <p>下面的代码除了参考了上面提及的 algorithm 项目之外， 还参看了 <a href="https://www.geeksforgeeks.org/topological-sorting-indegree-based-solution/">这个网页</a> ，然后进行了深度优化。</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
@@ -365,7 +365,7 @@ else
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">top_order</span>
-</code></pre></div>
+</pre></div>
 
             <section>
 <div class="panel-group" id="accordion2">

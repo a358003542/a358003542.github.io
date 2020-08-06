@@ -143,11 +143,11 @@
 <p>正如前面说到的，日志文件在那里，配置文件在那里加载啊等等都是可以定制的，摸清楚配置语法才是王道。</p>
 <h2 id="_1">挂个简单的静态网站</h2>
 <p>首先httpd.conf 那里我们写上了 <code>LISTEN 80</code> 了，这样apache将会监听80端口。你的域名指向你的远程服务器ip就可以了。然后一般我们在httpd.conf 后面写上这么一句： </p>
-<div class="highlight"><pre><span></span><code>Include conf.d/*.conf
-</code></pre></div>
+<div class="highlight"><pre><span></span>Include conf.d/*.conf
+</pre></div>
 <p>也就是conf.d文件夹下的所有配置自动加载进来。这个conf.d文件夹和conf文件夹是平行关系。然后conf.d里面我们主要就是定义 <code>VirtualHost</code> 。</p>
 <p>上个完整的例子吧：</p>
-<div class="highlight"><pre><span></span><code>&lt;VirtualHost *:80&gt;
+<div class="highlight"><pre><span></span>&lt;VirtualHost *:80&gt;
     ServerName www.cdwanze.work
     DocumentRoot /home/wanze/venv/html
     DirectoryIndex index.html   
@@ -163,49 +163,49 @@
     &lt;/Directory&gt;
 
 &lt;/VirtualHost&gt;
-</code></pre></div>
+</pre></div>
 <ul>
 <li>ServerName： apache监听80端口的信号将经过这个ServerName进一步进行分发，比如请求域名是 api.cdwanze.work，那个这个情况将不会被上面例子的VirtualHost处理。</li>
 <li>DocumentRoot ： 服务的静态网站的那些内容所在的文件夹。重要级别五颗星。</li>
 <li>DirectoryIndex ： 某些文件夹请求比如 /a/b ，如果这个文件夹下有index.html文件，那么将显示这个文件的内容。</li>
 <li>Directory： 文件夹权限管理，重要级别五颗星，不写就会出现没有权限访问错误。</li>
 </ul>
-<div class="highlight"><pre><span></span><code>403 Forbidden You don't have permission to access / on this server
-</code></pre></div>
+<div class="highlight"><pre><span></span>403 Forbidden You don't have permission to access / on this server
+</pre></div>
 <p>apache2.4版本使用语法是 <code>Require all granted</code> ，对应的原2.2的配置是：</p>
-<div class="highlight"><pre><span></span><code>Order allow,deny
+<div class="highlight"><pre><span></span>Order allow,deny
 
 Allow from all
-</code></pre></div>
+</pre></div>
 <p>有考究癖的可以了解下2.2这种写法的意思： </p>
 <p>Order allow,deny —— 先写allow规则，再写deny规则
 Allow from all —— 所有都可以访问
 Deny from all —— 所有都拒绝</p>
 <p>2.2的这个配置</p>
-<div class="highlight"><pre><span></span><code>Order deny,allow
+<div class="highlight"><pre><span></span>Order deny,allow
 Deny from all
-</code></pre></div>
+</pre></div>
 <p>等同于2.4的：</p>
-<div class="highlight"><pre><span></span><code>Require all denied
+<div class="highlight"><pre><span></span>Require all denied
 \end{Verbatim}
-</code></pre></div>
+</pre></div>
 <p>然后2.2的这个：</p>
-<div class="highlight"><pre><span></span><code>Order Deny,Allow
+<div class="highlight"><pre><span></span>Order Deny,Allow
 Deny from all
 Allow from example.org
-</code></pre></div>
+</pre></div>
 <p>意思是所有都拒绝，只允许 example.org的访问。</p>
 <p>等同于2.4：</p>
-<div class="highlight"><pre><span></span><code>Require host example.org
-</code></pre></div>
+<div class="highlight"><pre><span></span>Require host example.org
+</pre></div>
 <p>我们看到2.4的Require语句更简洁了，比如下面的这个：</p>
-<div class="highlight"><pre><span></span><code>Require all granted
+<div class="highlight"><pre><span></span>Require all granted
 Require not ip 10.252.46.165
-</code></pre></div>
+</pre></div>
 <p>所有都允许，除了谁谁禁止访问。</p>
 <h2 id="wsgi">挂个wsgi站点</h2>
 <p>上例子吧：</p>
-<div class="highlight"><pre><span></span><code>&lt;IfModule !wsgi_module&gt;
+<div class="highlight"><pre><span></span>&lt;IfModule !wsgi_module&gt;
     LoadModule wsgi_module modules/mod_wsgi.so
 &lt;/IfModule&gt;
 
@@ -240,7 +240,7 @@ WSGIPythonPath "/home/wanze/venv/webapp"
     &lt;/Directory&gt;
 
 &lt;/VirtualHost&gt;
-</code></pre></div>
+</pre></div>
 <ul>
 <li>
 <p>首先是检测wsgi模块加载了没有，没有把它加载上。</p>

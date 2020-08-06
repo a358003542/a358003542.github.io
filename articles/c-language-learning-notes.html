@@ -216,55 +216,55 @@
 <p>如果不想使用visual studio的话，老实说初学者的话真的不推荐立刻入手visual studio，那么首先需要从mingw官网下载mingw，其提供了gcc的windows移植版。</p>
 <p>本来打算这一块后面再讨论的，但是关于gcc 编译 链接等等各方面知识，因为经常出现各种问题，最后还是越积累越多了。现在假设读者已经安装mingw，并且已经设置好 <code>PATH</code> 系统变量了。也就是读者在cmd或者powershell里面输入gcc是有正常反应了。</p>
 <p>如果只是一个简单的helloworld程序一般来说稍微熟悉下gcc就能正常出结果了：</p>
-<div class="highlight"><pre><span></span><code>gcc helloword.c -o helloworld
-</code></pre></div>
+<div class="highlight"><pre><span></span>gcc helloword.c -o helloworld
+</pre></div>
 <p>但是本文后面的讨论会提到个人编写自己的头文件 <code>myhead.h</code> 和 <code>myhead.c</code> ，具体这块后面会讨论，而现在我们的最简单的程序如下：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">print_name2</span><span class="p">();</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>然后我们要正常用gcc编译总是报错找不到 <code>print_name2</code> 这个函数。现在 <code>myhead.h</code> <code>myhead.c</code> 都在当前文件夹下的，也就是按照道理gcc编译器include是没出问题了，报错也说了是ld那边链接出了问题。</p>
 <p>我们知道一个C程序从源码首先要编译为机器码，其次是将机器码文件链接成为可执行文件。简单来说就是一个C程序要经过编译和链接两个过程才能成为一个可执行文件。之前visual studio不知道做了一些什么调配，它会自动把 <code>myhead.c</code> 给编译进去，但是gcc是不行的。于是我们这样：</p>
-<div class="highlight"><pre><span></span><code>gcc helloword.c myhead.c -o helloworld
-</code></pre></div>
+<div class="highlight"><pre><span></span>gcc helloword.c myhead.c -o helloworld
+</pre></div>
 <p>可以编译成功，但是这样太丑陋了。为什么官方内置的 stdio之类的include一个头文件就可以，它的c文件不需要编译吗？于是我们了解到一般操作系统里面的那些内置库的c源文件都已经编译成库了，有的是静态库，有的是动态库，这个在这里的讨论中不是重点。下面以静态库举例，具体过程就是：</p>
-<div class="highlight"><pre><span></span><code> ar rcs libmyhead.a myhead.o
-</code></pre></div>
+<div class="highlight"><pre><span></span> ar rcs libmyhead.a myhead.o
+</pre></div>
 <p>ar命令后面有时间再了解，其可以简单理解为一个打包程序，你之前将一些c源码文件编译成了o机器码文件，然后ar命令将这些o机器码文件打包成为一个静态库文件。这个静态库文件的名字 <code>libwhat.a</code> 之前的 <code>lib</code> 和之后的 <code>.a</code> 都是固定的 ，等下你链接的时候要使用这个静态文件就要在gcc上加上选项：<code>-l myhead</code> 。实际上gcc本来就支持多种来源混合输入：</p>
-<div class="highlight"><pre><span></span><code>gcc helloword.c myhead.o -o helloworld
-</code></pre></div>
+<div class="highlight"><pre><span></span>gcc helloword.c myhead.o -o helloworld
+</pre></div>
 <p>然后现在我们的gcc编译命令是：</p>
-<div class="highlight"><pre><span></span><code>gcc helloword.c -o helloworld -L . -l myhead
-</code></pre></div>
+<div class="highlight"><pre><span></span>gcc helloword.c -o helloworld -L . -l myhead
+</pre></div>
 <p>注意这里的选项都写在后面的，之前这个问题我纠结了好久，后来才发现这些选项写在前面gcc刷参数不会得到正确结果。anyway，继续讨论。注意这里的 <code>-L .</code> 这是告诉gcc新加入的库的搜索路径，这个哪怕是当前工作路径也是不会管的。</p>
 <p>所以stdio.h之所以能够正确工作，就是因为它的那个库本来就是默认的搜索路径上的，然后<code>-l</code> 库加载行为已经也是默认会自动去加载的，它们应该是动态库。</p>
 <p>我又做了一些修改，模仿mingw的文件夹结构，将自己定义的头文件放入 <code>include</code> 文件夹下，将生成的静态文件放入 <code>lib</code> 文件夹下，然后编译命令成了【<code>-I</code> 选项是告诉gcc额外的include搜索路径。】：</p>
-<div class="highlight"><pre><span></span><code> gcc hello.c -o hello -I include -L lib -l myhead
-</code></pre></div>
+<div class="highlight"><pre><span></span> gcc hello.c -o hello -I include -L lib -l myhead
+</pre></div>
 <p>继续到code编辑器那里，我们希望实现一种效果，随便写一个 <code>helloworld.c</code> 文件，然后就可以正常编译运行。默认的那个 <a href="https://github.com/microsoft/vscode-cpptools">cpp插件</a> 经过调配是可以执行编译动作的，具体更多细节请参看该插件的官方文档部分，但个人推荐 <a href="https://github.com/formulahendry/vscode-code-runner.git">code runner</a> 这个插件，说到底我们只是希望能够将上面那一行命令更快捷的生成执行罢了，默认的那个cpp插件有点麻烦了。具体到c大概做了如下修改：</p>
-<div class="highlight"><pre><span></span><code>    "code-runner.executorMap": {
+<div class="highlight"><pre><span></span>    "code-runner.executorMap": {
         ......
         "c": "cd $dir &amp;&amp; gcc $fileName -o $fileNameWithoutExt -I include -L lib -l myhead &amp;&amp; $dir$fileNameWithoutExt"
     },
-</code></pre></div>
+</pre></div>
 <p>然后右键就可以看到run code这个菜单项。</p>
 <p>现在让我们总结一下，我们会编写很多c源码文件和h头文件，其中源码里面各个h头文件include进去的，实际上编译阶段头文件include进去具体指示把那个头文件找到，基本上做的事情就是把内容copy进来，实际的编译动作很少的，因为头文件里面就是和预处理相关的或者声明之类的。然后我们需要将预期程序中应该包含进来的c源码文件经过 <code>gcc -c</code> 编译成o文件，只是说这个动作有很多库之前早就做了。</p>
 <p>然后下一步就是链接，就是将你收集整理的所有o文件用ld链接起来，前面提及的那些库也许gcc不管了，但这个时候必须链接进来了，如果链接进来那程序里面预期的那部分内容就会缺失了。</p>
 <p>在将这段叙述完之后我改主意了，我突然觉得任何要学习C语言的都应该先将这个过程详细了解清楚。</p>
 <h2 id="helloworld">helloworld</h2>
 <p>最简单最简单的版本：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
   <span class="n">printf</span><span class="p">(</span><span class="s">"hello world.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>就是定义了一个函数，这个函数名比较特殊，叫做 <code>main</code> ，是默认程序的入口函数名。然后利用printf函数打印了一个字符串，而这个printf函数需要你引入stdio这个包。</p>
 <p>下面这个版本稍微做了一些修改：相比较一般的helloworld程序多了个system函数，主要是让屏幕暂停一下，否则屏幕会一闪而过，我们会看不清具体打印了什么字。</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
@@ -272,72 +272,72 @@
     <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>按照C11的标准推荐main函数采用这样的写法：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <h2 id="_2">头文件</h2>
 <p>C语言从源码到可执行程序 在各个操作系统平台上具体细节各有不同，但总会分为编译阶段【将C语言代码转成汇编语言代码】和 链接阶段【将汇编语言代码汇总】，现在我们关注编译阶段即可。</p>
 <p>编译阶段也就是C语言编译器处理你写的C语言源码的过程，在这个过程中，C语言编译器会进行很多工作，一般推荐将这些和C语言编译器相关的工作代码汇总写入头文件中。</p>
 <p>我们看到的 <code>#</code> 开头的命令都是C语言编译器的预处理过程相关的命令，比如 <code>#include</code> 。</p>
 <h3 id="_3">定义宏</h3>
 <p><code>#define</code> 命令定义了一个宏，其实就是一个简单的C语言编译器预处理阶段的文本替换操作，比如：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#define PI 3.14</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#define PI 3.14</span>
+</pre></div>
 <p>这里需要提醒一点的是，这个PI并不是后面C语言中讨论的常量或者变量，它就是一个文本替换操作，比如：</p>
-<div class="highlight"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">"The PI is %f </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">PI</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">printf</span><span class="p">(</span><span class="s">"The PI is %f </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">PI</span><span class="p">);</span>
+</pre></div>
 <p>实际上源码经过预处理之后是：</p>
-<div class="highlight"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">"The PI is %f </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">printf</span><span class="p">(</span><span class="s">"The PI is %f </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">);</span>
+</pre></div>
 <p>这点和python这类动态语言有很大不同。</p>
 <h3 id="_4">编写自己的头文件</h3>
 <p>首先我们新建一个 <code>myhead.h</code> 头文件，里面的内容就是： </p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
 
 <span class="cp">#define PI 3.14</span>
-</code></pre></div>
+</pre></div>
 <p>上面两个包反正后面应该经常遇到，这里先一并包含进来了。</p>
 <p>然后我们的主程序 <code>main.c</code> 就是：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"The PI is %f </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">PI</span><span class="p">);</span>
     <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>读者一定注意到 <code>#include</code> 后面写法上有点差异，简单来说尖括号包围的主要是标准库或者系统标准目录里面能够找到的；而双引号包围的先从当前目录寻找，找不到再在标准系统目录下找，具体各个操作系统标准目录定义这里略过讨论了。</p>
 <h2 id="_5">自己定义函数</h2>
 <p>helloworld程序里面包含了很多信息，至少对于刚接触C语言的读者来说是的。看完helloworld程序，读者就应该知道C语言函数的写法了：</p>
-<div class="highlight"><pre><span></span><code><span class="n">return_type</span> <span class="nf">function_name</span><span class="p">(</span><span class="n">function_parameters</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><span class="n">return_type</span> <span class="nf">function_name</span><span class="p">(</span><span class="n">function_parameters</span><span class="p">){</span>
     <span class="c1">// this is a comment.</span>
     <span class="cm">/* this is also a comment.*/</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>具体更多的细节后面再慢慢讨论，其实C语言是一个很简单的语言。</p>
 <p>C90新增了函数原型的概念，比如：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>的函数原型是：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+</pre></div>
 <p>函数原型也叫做函数声明，告诉编译器正在使用某个函数，所以函数声明语句一般放在头文件中。</p>
 <h3 id="_6">头文件里面加入函数原型</h3>
 <p>继续之前的描述，我们在 <code>myhead.h</code> 文件里面加上：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+</pre></div>
 <p>然后我们新建一个 <code>myhead.c</code> 文件，加入函数定义：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p><code>main.c</code> 里面直接使用你定义的add函数即可。</p>
 <h2 id="_7">基本数据类型</h2>
 <table>
@@ -382,19 +382,19 @@
 </tbody>
 </table>
 <p>C语言的char单字符型是用单引号表示的：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="sc">'a'</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="sc">'a'</span><span class="p">;</span>
+</pre></div>
 <p>C99新增了_Bool也就是布尔型，其实际上也是一种整数型，0表示false；1表示true。</p>
 <h3 id="_8">自动类型转换</h3>
 <p>C语言遇到不同数据类型运算，会发生自动类型转换的情况有 char -&gt; int  int -&gt; double ，当然也包括 char -&gt; double 。</p>
 <h3 id="_9">强制类型转换</h3>
-<div class="highlight"><pre><span></span><code>(int)(3.14)
-</code></pre></div>
+<div class="highlight"><pre><span></span>(int)(3.14)
+</pre></div>
 <p>强制类型转换不影响原变量，是运算时的截取操作，不是四舍五入。</p>
 <h2 id="_10">计算最大公约数</h2>
 <h3 id="_11">除法和求余数</h3>
 <p>下面主要演示下除法和求余数，其他加法减法乘法还是很直白的。</p>
-<div class="highlight"><pre><span></span><code>    float x = 12.2;
+<div class="highlight"><pre><span></span>    float x = 12.2;
     float y = 2;
 
     float z = x / y;
@@ -404,7 +404,7 @@
     int w = 13 % 2;
     // 求余数
     printf("w is: %d.\n", w);
-</code></pre></div>
+</pre></div>
 <p>取余数： <code>a % b</code> 和  <code>b % a</code> 总是返回 a和b这两个数中的最小或者更小的数，其中假设a比b大，那么 <code>a % b</code> 相当于 a - b 多次得到一个正数， 而 <code>b % a</code> 则直接返回 最小的 b。</p>
 <h3 id="_12">欧几里得算法</h3>
 <p>本小节主要参考了维基百科的 欧几里得算法，这里程序不是很复杂，关键是理解算法思想。欧几里得算法最核心的思想是：</p>
@@ -412,7 +412,7 @@
 <p>两个数的最大公约数等于相对较小的那个数和两个数的差的最大公约数。</p>
 </blockquote>
 <p>简要证明如下：</p>
-<div class="highlight"><pre><span></span><code>a = mk
+<div class="highlight"><pre><span></span>a = mk
 b = nk
 a和b的最大公约数是k，所以m和n互质
 于是有：
@@ -426,16 +426,16 @@ m = n+ ix = i(x + y)
 我们得 m 与 n 是可以同时被i整除的，这和之前的m和n互质假设违背，
 于是我们得到 m-n 和 n是互质的，于是进一步得到:
 a-b 和 b的最大公约数也是 k。
-</code></pre></div>
+</pre></div>
 <p>以上过程可以记作：</p>
-<div class="highlight"><pre><span></span><code>gcd(a, b) = gcd(b, (a-b))
-</code></pre></div>
+<div class="highlight"><pre><span></span>gcd(a, b) = gcd(b, (a-b))
+</pre></div>
 <p>因为 b是小的， a-b 也是小的，整个过程会逐步让这两个数越来越小。</p>
 <p>举例： </p>
-<div class="highlight"><pre><span></span><code>36 ~ 9 =&gt;  27 ~9 =&gt;  18 ~ 9 =&gt;  9~9 =&gt;  0
-</code></pre></div>
+<div class="highlight"><pre><span></span>36 ~ 9 =&gt;  27 ~9 =&gt;  18 ~ 9 =&gt;  9~9 =&gt;  0
+</pre></div>
 <p>下面用递归的写法可能是最直观的写法了，基本上就是上面定义的程序实现：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">gcd</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">gcd</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
     <span class="p">}</span>
@@ -443,10 +443,10 @@ a-b 和 b的最大公约数也是 k。
         <span class="k">return</span> <span class="n">gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>其中<code>a % b</code> 取余保证了其实最小或者更小的那个数，这是没有问题的。</p>
 <p>另外辗转相除法，网上实现也已经有了：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">gcd2</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">gcd2</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">t</span><span class="p">;</span> <span class="c1">// 只是一个临时变量,记录最小值</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// b最小值成为零了返回a</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">;</span> <span class="c1">// t记录取余后的最小值</span>
@@ -455,18 +455,18 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">};</span>
     <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <h2 id="_13">基础知识继续</h2>
 <p>加减乘除就不说了，虽然各个语言各有不同，简单了解下即可。</p>
 <h3 id="sizeof">sizeof函数</h3>
-<div class="highlight"><pre><span></span><code>sizeof(int)
-</code></pre></div>
+<div class="highlight"><pre><span></span>sizeof(int)
+</pre></div>
 <p>返回目标对象的bytes大小，具体返回的是 <code>size_t</code> 类型，实际上就是 <code>unsigned int</code> 类型：</p>
-<div class="highlight"><pre><span></span><code><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="kt">size_t</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="kt">size_t</span><span class="p">;</span>
+</pre></div>
 <h3 id="_14">使用布尔值</h3>
 <p>推荐使用stdbool包，其让bool称为_Bool的别名，此外你还可以使用true和false。不要再使用0和1来表示布尔值了。</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">is_input_integer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">is_input_integer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">input_len</span><span class="p">;</span>
     <span class="kt">char</span> <span class="n">input</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
     <span class="kt">bool</span> <span class="n">input_is_good</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
@@ -486,8 +486,8 @@ a-b 和 b的最大公约数也是 k。
 
     <span class="k">return</span> <span class="n">input_is_good</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">bool</span> <span class="n">res</span><span class="p">;</span>
@@ -500,15 +500,15 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">}</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <h3 id="fabs">fabs函数</h3>
 <p>fabs函数在 <code>math.h</code> 库里面，其接受一个浮点数，返回该浮点数的绝对值。</p>
 <h3 id="for">规范for循环语句</h3>
 <p>python语言因为引入可迭代对象的概念使得for循环语句非常的简单，其他常规语言的for语句一般都建议在写法上遵循如下规范：</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">obj_length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">obj_length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
 
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <ol>
 <li>对目标对象的索引计数按照规范都是从0开始</li>
 <li>终止判断是小于目标对象的索引长度</li>
@@ -516,9 +516,9 @@ a-b 和 b的最大公约数也是 k。
 <p>按照这种标准写法，将形成一个对目标对象从索引0到最后一位的循环。</p>
 <h3 id="getcharputchar">getchar函数和putchar函数</h3>
 <p>这两个函数来自 <code>stdio.h</code> 库，一个是接受一个字符；一个是打印一个字符，相当于scanf和printf针对字符的精简mini版本。</p>
-<div class="highlight"><pre><span></span><code><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
 <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
-</code></pre></div>
+</pre></div>
 <h3 id="ctypesh">ctypes.h库</h3>
 <p>ctypes.h 库提供了一些关于单个字符测试的函数：</p>
 <ul>
@@ -539,7 +539,7 @@ a-b 和 b的最大公约数也是 k。
 </ul>
 <h2 id="_15">字符串数据类型</h2>
 <p>字符串确切来说是一个字符型数组，以 <code>'\0'</code> 结束，比如 "sam" 实际存储的值如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">print_name</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">print_name</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
     <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'s'</span><span class="p">;</span>
     <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'a'</span><span class="p">;</span>
@@ -548,31 +548,31 @@ a-b 和 b的最大公约数也是 k。
 
     <span class="n">printf</span><span class="p">(</span><span class="s">"name is %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>C语言数组初始化是支持这样的形式写法的：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">print_name2</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">print_name2</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'s'</span><span class="p">,</span><span class="sc">'a'</span><span class="p">,</span><span class="sc">'m'</span><span class="p">,</span><span class="sc">'\0'</span><span class="p">};</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"name is %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>然后C语言的数组在初始化的时候是支持自动计算数组大小的，所以上面的代码还可以简化为：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">print_name3</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">print_name3</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">name</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="sc">'s'</span><span class="p">,</span><span class="sc">'a'</span><span class="p">,</span><span class="sc">'m'</span><span class="p">,</span><span class="sc">'\0'</span> <span class="p">};</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"name is %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>然后我们之前看到的双引号括起来的内容叫做 <em>字符串常量</em> 或叫做 <em>字符串字面量</em> ，其进入编译器会自动加上 <code>\0</code> 字符。字符串常量用法如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">print_name4</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">print_name4</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">name</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"sam"</span><span class="p">;</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"name is %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>编译器在遇到字符串常量之后会将其存入内存，只存一次，存储在静态存储区。程序在遇到上面代码，会新建一个name数组，然后才实际将静态存储区里面的字符串常量数据拷贝过来。然后C语言还有一种利用指针的表示方法：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">print_name5</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">print_name5</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"sam"</span><span class="p">;</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"name is %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>这个时候是将字符串常量的地址拷贝给指针，也就是内存里面并没有两个拷贝。</p>
 <p>从上面的分析看的出来数组就是数组，指针就是指针，这并没有什么好纠结的，不过似乎大家总喜欢讨论数组名是不是指针，虽然在使用上似乎有一些相似，最简单的回答就是不是，数组名里面存放的地址是固定的，而指针里面存放的地址是可以随意变动的。没什么好纠结。</p>
 <p>关于两种表达的选择，参考资料1给出的建议就是如果你的字符串需要修改操作，那么应该使用数组表达方式。</p>
@@ -600,19 +600,19 @@ a-b 和 b的最大公约数也是 k。
 </ul>
 <h3 id="scanf">scanf函数</h3>
 <p>在visual studio里面使用scanf会抛出错误：</p>
-<div class="highlight"><pre><span></span><code><span class="n">C4996</span>   <span class="err">'</span><span class="n">scanf</span><span class="err">'</span><span class="o">:</span> <span class="n">This</span> <span class="n">function</span> <span class="n">or</span> <span class="n">variable</span> <span class="n">may</span> <span class="n">be</span> <span class="n">unsafe</span><span class="p">.</span> <span class="n">Consider</span> <span class="n">using</span> <span class="n">scanf_s</span> <span class="n">instead</span><span class="p">.</span> <span class="n">To</span> <span class="n">disable</span> <span class="n">deprecation</span><span class="p">,</span> <span class="n">use</span> <span class="n">_CRT_SECURE_NO_WARNINGS</span><span class="p">.</span> <span class="n">See</span> <span class="n">online</span> <span class="n">help</span> <span class="k">for</span> <span class="n">details</span><span class="p">.</span> 
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">C4996</span>   <span class="err">'</span><span class="n">scanf</span><span class="err">'</span><span class="o">:</span> <span class="n">This</span> <span class="n">function</span> <span class="n">or</span> <span class="n">variable</span> <span class="n">may</span> <span class="n">be</span> <span class="n">unsafe</span><span class="p">.</span> <span class="n">Consider</span> <span class="n">using</span> <span class="n">scanf_s</span> <span class="n">instead</span><span class="p">.</span> <span class="n">To</span> <span class="n">disable</span> <span class="n">deprecation</span><span class="p">,</span> <span class="n">use</span> <span class="n">_CRT_SECURE_NO_WARNINGS</span><span class="p">.</span> <span class="n">See</span> <span class="n">online</span> <span class="n">help</span> <span class="k">for</span> <span class="n">details</span><span class="p">.</span> 
+</pre></div>
 <p>需要在 <code>myhead.h</code> 里面加上一行 ：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#define _CRT_SECURE_NO_WARNINGS</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#define _CRT_SECURE_NO_WARNINGS</span>
+</pre></div>
 <p>scanf函数的使用就两条：</p>
 <ol>
 <li>读取基本变量类型的值，变量名前面要加上 <code>&amp;</code></li>
 <li>读取字符串到字符数组，不要使用 <code>&amp;</code> ，直接使用数组名即可。</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">40</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">40</span><span class="p">];</span>
 <span class="n">scanf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
-</code></pre></div>
+</pre></div>
 <p>scanf函数可以接受多个输入，以空白为分隔，直到读取到指定的数目为止。不过 <code>%c</code> 会把空白也作为字符读取进来。</p>
 <h4 id="_17">转换说明</h4>
 <ul>
@@ -632,22 +632,22 @@ a-b 和 b的最大公约数也是 k。
 </ul>
 <h2 id="_19">指针</h2>
 <p>指针是一个存储内存地址的变量。int类型存储的是整数，pointer类型存储的内存地址。指针声明如下：</p>
-<div class="highlight"><pre><span></span><code>int * p;
-</code></pre></div>
+<div class="highlight"><pre><span></span>int * p;
+</pre></div>
 <p>*表示该变量是个指针，int表示该指针指向的地址上的值是一个int值。</p>
 <h3 id="_20">相关运算符</h3>
 <p><code>&amp;</code> 运算符是用于获得某个变量的内存地址； <code>*</code> 运算符用于根据某个内存地址或者指针名来获得该指针指向地址上的值。</p>
 <h3 id="swap">swap函数</h3>
 <p>swap函数接受两个变量的值，然后交换这两个变量的值，这个函数在C语言里面的实现必须要用到指针。</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">swap_int</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">p1</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">swap_int</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">p1</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// swap two int value</span>
     <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
     <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
     <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -656,18 +656,18 @@ a-b 和 b的最大公约数也是 k。
     <span class="n">printf</span><span class="p">(</span><span class="s">"%d %d"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>如果函数只是处理值那么是不应该使用指针参数的，只有在目标函数需要实际改变外围调用环境中的变量的值，则可以采用这种指针参数的形式。</p>
 <p>C Primer Plus的这段说的非常的好：</p>
 <blockquote>
 <p>普通变量把值作为基本量，把地址作为通过 <code>&amp;</code> 运算符获得的派生量；而指针把地址作为基本量，把值作为 <code>*</code> 运算符获得的派生量。</p>
 </blockquote>
 <p>现在我们假设p1指针指向变量x，那么： </p>
-<div class="highlight"><pre><span></span><code>x = 1;
-</code></pre></div>
+<div class="highlight"><pre><span></span>x = 1;
+</pre></div>
 <p>和 </p>
-<div class="highlight"><pre><span></span><code>*p1 = 1;
-</code></pre></div>
+<div class="highlight"><pre><span></span>*p1 = 1;
+</pre></div>
 <p>可以看做等价的，所以当我们说某个指针指向某个变量，其暗含的意思即 <code>*p</code> 这个名字是 <code>x</code> 另外一个别名。</p>
 <h2 id="_21">数组</h2>
 <h3 id="_22">多维数组</h3>
@@ -679,7 +679,7 @@ a-b 和 b的最大公约数也是 k。
         {1,2}
     };</code></p>
 <p>本来打算编写一个简单的函数先打印二维数组，然后竟发现还不是很方便。首先一维数组的情况怎么的都行，数组名你就可以看做一个指针：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">print_int_array</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">print_int_array</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
     <span class="p">}</span>
@@ -692,11 +692,11 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>二维数组就不存在这种数组名和指针的无缝转换了，你必须建立一种二维指针数组，这个过程引入了太多的复杂度，实在不是一个明智的选项；而且就算是这样你在建立函数的时候，二维数组的列数也必须写死。同时我又了解到 <code>变长数组</code> 的概念，但是这个 变长数组 visual studio 现在是不支持的，而且似乎也没有支持的计划，而且这个特性最新的C语言标准也是打算废弃的意思了。</p>
 <p>此外我在 <a href="https://solarianprogrammer.com/2019/03/27/c-programming-passing-multi-dimensional-array-to-function/">这个网页</a> 了解到一种通过 malloc 函数 自动分配二维指针数组内存的方法，当然其内在本质还是依靠二维指针数组这个过于复杂的东西，个人不喜欢，尤其这种玩法还引入了 <code>int ** p</code> 这种东西，C语言的指针已经让大家很厌倦了，你还弄两个指针，显然这种玩法过于复杂现在不应该推荐了。</p>
 <p>但还有一个解决方案，而这个方案利用的C语言的struct结构，个人觉得是优美的解决方案【也许你觉得里面的一维表达很丑，但实际上计算机内存里面存储的就是这种一维表达结构】。如果采取这种方案那么就应该抛弃C语言里面 <code>x[3][2]</code> 这样的表达，而回归一维数组的本源，然后继而可以扩展一些支持方法来进一步表达分组分行等内部属性。</p>
-<div class="highlight"><pre><span></span><code><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">rows</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">cols</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
@@ -719,8 +719,8 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">}</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"]</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">Matrix2D</span> <span class="n">x</span> <span class="o">=</span> <span class="p">{</span>
@@ -733,7 +733,7 @@ a-b 和 b的最大公约数也是 k。
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>结构体在函数中是可以直接传递地址过去的，因为数组名就是数组的首元素地址，一维数组直接传递数组名作为对象的指向指针也是没问题的。这里我们可以把结构体看做一种内部长度不一的一维数组形式，这样就可以理解为什么这样做是可行的。然后结构体的指针引用内部对象采用的是 <code>m-&gt;cols</code> 这样的写法。二维数组之所以不行是因为计算机只知道你传递过去的首元素地址和内部数据类型，但是具体几行几列这些信息是丢失了的。</p>
 <h3 id="flexible-array-member-in-structure">Flexible array member in structure</h3>
 <p>本小节参看了 <a href="https://www.geeksforgeeks.org/flexible-array-members-structure-c/">这篇文章</a> 。上面结构体里面 <code>int data[0]</code> 是C99引入的新特性，叫做Flexible array member，其在一个结构体里面，而且其必须是结构体的最后一个成员。结构体除了lexible array member之外还必须有其他成员。</p>
@@ -749,23 +749,23 @@ a-b 和 b的最大公约数也是 k。
 <p>总之 <code>arr[1]</code> 和 <code>*(arr+1)</code> 是一个意思， <code>arr[0]</code> 和 <code>*arr</code> 是一个意思，知道这个就行了。</p>
 <h3 id="_24">计算数组的长度</h3>
 <p>C语言里面涉及到数组的操作需要传递一个额外的长度参数，我们可以利用如下宏来将第二个参数的计算工作丢给程序。</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#define SIZEOF(ARRAY) (sizeof(ARRAY)/sizeof(*ARRAY))</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#define SIZEOF(ARRAY) (sizeof(ARRAY)/sizeof(*ARRAY))</span>
+</pre></div>
 <p>上面是一个带参数的宏，如下：</p>
-<div class="highlight"><pre><span></span><code><span class="n">res</span> <span class="o">=</span> <span class="n">sum_int_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">y</span><span class="p">));</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">sum_int_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">SIZEOF</span><span class="p">(</span><span class="n">y</span><span class="p">));</span>
+</pre></div>
 <p>将替换为：</p>
-<div class="highlight"><pre><span></span><code><span class="n">res</span> <span class="o">=</span> <span class="n">sum_int_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">y</span><span class="p">)));</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">sum_int_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">y</span><span class="p">)));</span>
+</pre></div>
 <p>这是没有问题的，不过如果上面的y改为结构体里面的数组似乎就不行了，这个和sizeof函数有关。不过就上面 <code>Matrix2D</code> 问题不大，<code>rows*cols</code>即可。</p>
 <h3 id="const">const来保护数组中的数据</h3>
 <p>因为数组在函数中传递的是指针，所以对于数组的修改动作就是修改原数组，如果你没有另外新建一个数组副本的话。但有的时候你需要保护某个数组里面的数据不被修改，那么可以通过修饰符 <code>const</code> 来做到这点。</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">sum_int_array</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">sum_int_array</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
+</pre></div>
 <h2 id="_25">字符串操作</h2>
 <h3 id="puts-gets_s">puts和 gets_s函数</h3>
 <p>scanf在处理字符串的时候遇到空格就会停止，而gets函数可用于读取一整行的字符串输入，但现在不应该再使用gets函数了，因为如果用户输入行的字符串【这通常是未知的】超过了你在程序中声明的要存储的目的地的声明长度，就会导致缓冲区溢出错误。gets_s函数相当于安全版本的gets函数，下面是一个简单的演示例子：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#define LINE_MAX_LENGTH 100</span>
+<div class="highlight"><pre><span></span><span class="cp">#define LINE_MAX_LENGTH 100</span>
 
 <span class="kt">int</span> <span class="nf">echo_line</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">words</span><span class="p">[</span><span class="n">LINE_MAX_LENGTH</span><span class="p">];</span>
@@ -774,9 +774,9 @@ a-b 和 b的最大公约数也是 k。
     <span class="n">puts</span><span class="p">(</span><span class="n">words</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>参考资料1 谈到行输入过长问题，利用fgets函数实现了一个函数，但是fgets更多的是针对文件io的读取操作，在这里就谈论的行输入问题有点大材小用了，最好是利用getchar函数来实现一个函数：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">empty_string</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">st</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">empty_string</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">st</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// make target string fill with \0</span>
     <span class="c1">// size is the target string char array length</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
@@ -811,8 +811,8 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">st</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">words</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
@@ -822,7 +822,7 @@ a-b 和 b的最大公约数也是 k。
     <span class="n">puts</span><span class="p">(</span><span class="n">words</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>上面num的含义是字符不包括 <code>\n</code> 的长度，从用户的角度理解可以看做允许的可见字符数。</p>
 <h3 id="strcat">strcat函数</h3>
 <p>接受两个字符串参数，将后一个字符串附加到前一个字符串上，返回前一个字符串的指针，注意附加动作不要超过前一个字符串的容纳空间了。</p>
@@ -832,7 +832,7 @@ a-b 和 b的最大公约数也是 k。
 <p>接受两个字符串参数，将后一个字符串的内容拷贝到前一个字符串上，注意执行拷贝动作的时候内容不要超过前一个字符串的容纳空间了。</p>
 <h3 id="_26">字符串排序</h3>
 <p>现在我们实现一个 strsort函数，其接受一个字符串数组参数和该数组的长度，内部动作将会把这个字符串数组进行排序。</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">swap_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">p_1</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p_2</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">swap_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">p_1</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p_2</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// swap two pointer value</span>
     <span class="kt">int</span><span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_1</span><span class="p">;</span>
     <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_2</span><span class="p">;</span>
@@ -853,8 +853,8 @@ a-b 和 b的最大公约数也是 k。
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span> <span class="n">st</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abcf"</span><span class="p">;</span>
@@ -871,26 +871,26 @@ a-b 和 b的最大公约数也是 k。
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>这里strcmp函数如果返回大于0的值意思是第一个字符串按照机器排序【并不是按照字母顺序排序】在后一个字符串前面。这只是一个临时排序方案，但在这里不是重点。上面的排序算法叫做选择排序，基本上就是一轮轮找序列最前面的值，将其放置在前面。</p>
 <p>这里特别需要值得一提的一点就是 <code>char * strings[]</code> 严格的叫法应该叫做字符串指针数组，实际上在C语言里面并没有所谓的字符串数组的说法，因为字符串长度不一是不可能在C语言形成数组。所谓这个字符串指针数组实际上存储的一系列指针，也正是因为如此，上面试着实现了一种通用的交换两个指针的值得swap_pointer 函数。上面的空指针操作值得特别说明一下。</p>
 <p><strong>上面的例子如果直接用swap_int也是可以的，但那显然是不规范的，只是恰好int型可以存储指针罢了。然后直接写 <code>strings[i]</code> 也是可以的，那也是不规范的，只是打印字符串正常显示，但感到奇怪的是字符串也就是字符数组的指针指向是可以修改的，所以 <code>char * st</code> 和 <code>char st[]</code> 还真的没啥区别，不过程序员还是要自我约束下，就上面的例子来说从逻辑清晰的角度出发，必然是要传递指向字符串指针的地址进去的。</strong> </p>
 <h3 id="_27">空指针</h3>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="kt">int</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</pre></div>
 <p>上面这一行是声明了一个指针，具体值是0【需要注意的是这里的0不是本指针在内存里面实际存储的位置，那是程序另外分配的】。</p>
 <p>C语言在编写函数的时候可以如同上面这样声明 <code>void *</code> void类型指针：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="n">swap_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">p_1</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p_2</span><span class="p">)</span> 
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">swap_pointer</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">p_1</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p_2</span><span class="p">)</span> 
+</pre></div>
 <p>其可以接受随便指向什么类型的指针。但是在函数里面，接下来你需要针对这个空类型指针进行强制类型转换，否则无法使用：</p>
-<div class="highlight"><pre><span></span><code>    <span class="kt">int</span><span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_1</span><span class="p">;</span>
+<div class="highlight"><pre><span></span>    <span class="kt">int</span><span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_1</span><span class="p">;</span>
     <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">p_2</span><span class="p">;</span>
-</code></pre></div>
+</pre></div>
 <p>就上面这个 swap_pointer 函数例子来说，<code>int *</code> 是随便选的，因为这里的操作都是针对指针实际存储的值，而不是指针映射的值。</p>
 <h3 id="_28">进制转换例子</h3>
 <p>把字符串转成数字推荐使用 <code>stdlib.h</code> 的 <code>strtol</code> 函数【转成long类型】，或者 <code>strtoul</code> 函数【转成unsigned long类型】，或者 <code>strtod</code> 函数【转成double类型】。这些函数相比原 <code>atoi</code> 等函数更加的安全，而且该函数还可以指定进制位数。</p>
 <p>这个例子引入一个问题，那就是函数如何返回字符串。C语言就字符串操作来说，如同上面strsort函数演示的，结果字符串指针可以传递进来，如下所示，这种方案是最简单的，也是最好的方案。</p>
-<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="nf">number_radix_conversion</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">number</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">int</span> <span class="n">input_radix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">output_radix</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">number_radix_conversion</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">number</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">result</span><span class="p">,</span> <span class="kt">int</span> <span class="n">input_radix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">output_radix</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span><span class="o">*</span> <span class="n">end</span><span class="p">;</span>
     <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">value</span><span class="p">;</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">strtoul</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">end</span><span class="p">,</span> <span class="n">input_radix</span><span class="p">);</span>
@@ -909,10 +909,10 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>当然还有另外一种实现方法，那就是我们在函数内部新定义结果字符串，但是这就带来一个问题，那就是函数内部块声明的字符串定义，出了函数就是不可以访问了的，哪怕你返回该字符串的指针，因为C语言默认变量叫做自动变量，其访问权限是大家熟悉的编程语言的那种块作用域，而伴随着这种块作用域随之而来的是在内存管理上，该变量是被自动分配和释放的，简言之，就是大家熟悉的那种局部变量的概念。具体到这里函数内部声明的字符串，出了函数该字符串在内存里面也已经被清洗掉了，哪怕你有指针也只是在访问一个内存里面的莫名数据罢了。</p>
 <p>下面我们看上面函数的第二个版本：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">char</span> <span class="o">*</span> <span class="nf">number_radix_conversion</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">number</span><span class="p">,</span> <span class="kt">int</span> <span class="n">input_radix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">output_radix</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">char</span> <span class="o">*</span> <span class="nf">number_radix_conversion</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">number</span><span class="p">,</span> <span class="kt">int</span> <span class="n">input_radix</span><span class="p">,</span> <span class="kt">int</span> <span class="n">output_radix</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">char</span><span class="o">*</span> <span class="n">end</span><span class="p">;</span>
     <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">value</span><span class="p">;</span>
     <span class="k">static</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
@@ -932,60 +932,60 @@ a-b 和 b的最大公约数也是 k。
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>上面这个函数版本就真的实现了返回字符串，这个字符串是在函数内部声明的，之所以出了函数该字符串在内存里面没被清洗掉，是因为加上了 <code>static</code> 关键词，从而该result变量成了所谓的 <em>静态变量</em> 。静态变量在程序运行时内在内存里面是一直被保留而存在着的。</p>
 <p>除了这个静态变量，C语言甚至可以跳出变量声明传统语法，直接指定内存我要多少空间。这个对内存的控制由浅到深是C语言的威力所在也是一把双刃剑，只有你真的明白了你在做什么，而且是除了这么做没有更好的方法，那么才可以这么做，如果默认的自动变量就能完成工作，是不应该纯粹为了炫技而编写那种代码的。</p>
 <h3 id="_29">文件作用域</h3>
 <p>继续上面的讨论，就函数内部声明的局部变量来说【C语言严格的说法是块作用域，也就是只要你写上一个花括号的块，里面声明一个变量，该变量的作用域都只局限在这个块里面，但就讨论简单，下面就简单说为函数内部声明的局部变量。】，作为程序员对于这些变量的访问域和规则都是很熟悉的了。这一块各个编程语言差别不大。</p>
 <p>但是因为C语言的链接过程上的差异，比如下面这两个变量声明：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">giants</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">giants</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
 <span class="k">static</span> <span class="kt">int</span> <span class="n">dodgers</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
     <span class="p">...</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>这两个变量都是文件作用域，不过 <code>giants</code> 是所有其他文件都是可以访问的，这个可以简单称作全局变量。而 <code>dodgers</code> 也是文件作用域的静态变量，其还有一个专业称呼叫做内部链接，因为其只可以被该文件的其他函数访问，也就是文件内部私有的。</p>
 <p>还有一点值得一提，那就是上面的 <code>dodgers</code> 在其他文件里面如果如下声明：</p>
-<div class="highlight"><pre><span></span><code><span class="k">extern</span> <span class="kt">int</span> <span class="n">dodgers</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">extern</span> <span class="kt">int</span> <span class="n">dodgers</span><span class="p">;</span>
+</pre></div>
 <p>则该变量又成了外部链接的变量了， <code>extern</code> 声明是告诉编译器这个变量在其他地方声明的，所以在程序链接的过程中就会有相应的处理。总之这样 <code>dodgers</code> 在该文件中也是可以访问的了。</p>
 <p>上面提到的全局变量情况其他文件是可以直接使用的，但是一般的做法是推荐加上 <code>extern</code> 关键词，来增加程序的清晰性。</p>
 <h3 id="_30">寄存器变量</h3>
-<div class="highlight"><pre><span></span><code><span class="k">register</span> <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="k">register</span> <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+</pre></div>
 <p>这里的寄存器变量声明是告诉C编译器这个变量会频繁用到，最好把它放入寄存器里面，仅仅只是加速用的，其他变量属性等同于 <code>int c</code> 。</p>
 <h3 id="mallocfree">malloc和free</h3>
 <p>malloc函数可以直接手工声明一个内存空间，要记得free该内存空间。这个本文暂时略过了，同样，只有在那种确实不得不使用malloc函数的情况才使用。</p>
 <h2 id="_31">命令行参数</h2>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[]){</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[]){</span>
 
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>编写的程序如上编写接受命令行参数，argc是接受的参数个数，argv是参数字符串指针数组，其中argv[0] 为程序的名字，后面就是一些参数了。这种命令行参数的写法最好是对接大家都熟悉的通用接口， <a href="https://github.com/alex85k/wingetopt">这个Github项目</a> 给出了一个实现版本。我做了一些简化。</p>
 <p>即使简化之后就getopt里面的逻辑还是挺多的，但是还是需要使用这个和大家一致的刷参数的接口。</p>
 <p>初看这个项目代码有些基本知识补充，比如头文件部分：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#ifdef what</span>
+<div class="highlight"><pre><span></span><span class="cp">#ifdef what</span>
 <span class="p">...</span>
 <span class="cp">#else</span>
 <span class="p">...</span>
 <span class="cp">#endif</span>
-</code></pre></div>
+</pre></div>
 <p>这是C语言预处理的条件编译语句。</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#ifndef _WINGETOPT_H_</span>
+<div class="highlight"><pre><span></span><span class="cp">#ifndef _WINGETOPT_H_</span>
 <span class="cp">#define _WINGETOPT_H_</span>
 <span class="p">...</span>
 <span class="cp">#endif</span>
-</code></pre></div>
+</pre></div>
 <p>这是一种常用的让本宏包只加载一次的手段。</p>
-<div class="highlight"><pre><span></span><code><span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
 <span class="p">...</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>这个声明是让C++以C的风格来处理这些声明。</p>
 <h3 id="_32">统计文件字数程序</h3>
 <p>下面我们使用这个getopt刷参数函数来编写一个简单的模仿linux系统那边的wc命令行工具，主要提供三个参数选项： <code>-c</code> 打印字符数和 <code>-l</code> 打印行数和 <code>-w</code> 打印词数，然后必须通过 <code>-f</code> 指定输入文件。</p>
 <p>下面这个例子也附带介绍了一下C语言里面文件是如何操作的，然后还有很多其他文件操作函数，比如 <code>fprintf</code> 函数还有之前提到过的 <code>fgets</code> 和 <code>fputs</code> 函数等等，这些简单了解一下即可。</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">"wingetopt.h"</span><span class="cp"></span>
 
 
@@ -1082,62 +1082,62 @@ a-b 和 b的最大公约数也是 k。
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <h2 id="_33">结构体</h2>
 <h3 id="_34">结构体的基本使用</h3>
 <p>结构体首先需要声明才能使用：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">book</span><span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">book</span><span class="p">{</span>
     <span class="kt">char</span> <span class="n">title</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
     <span class="kt">char</span> <span class="n">author</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
 <span class="p">};</span>
-</code></pre></div>
+</pre></div>
 <p>这样声明之后，后面使用 <code>struct book</code> 就可以类似 <code>int</code> 一样声明相应的变量了：</p>
-<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
 <span class="k">struct</span> <span class="n">book</span> <span class="n">y</span><span class="p">;</span>
-</code></pre></div>
+</pre></div>
 <p>结构体的变量的初始化如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">book</span> <span class="n">library</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">book</span> <span class="n">library</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">"this is a title"</span><span class="p">,</span>
     <span class="s">"author"</span><span class="p">,</span>
 <span class="p">};</span>
-</code></pre></div>
+</pre></div>
 <p>此外C99和C11还提供了如下初始化语法：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">book</span> <span class="n">library</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">book</span> <span class="n">library</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">"this is a title"</span><span class="p">,</span>
     <span class="p">.</span><span class="n">author</span> <span class="o">=</span> <span class="s">"author"</span><span class="p">,</span>
 <span class="p">};</span>
-</code></pre></div>
+</pre></div>
 <p>访问结构体的成员变量采用 <code>.</code> 运算符：</p>
-<div class="highlight"><pre><span></span><code>library.title
+<div class="highlight"><pre><span></span>library.title
 library.author
-</code></pre></div>
+</pre></div>
 <p>在函数参数上你可以直接传递结构体或者传递结构体指针，传递结构体指针的时候你可以采用如下语法来访问结构体成员变量：</p>
-<div class="highlight"><pre><span></span><code>library-&gt;title
+<div class="highlight"><pre><span></span>library-&gt;title
 library-&gt;author
-</code></pre></div>
+</pre></div>
 <h3 id="typedef">typedef</h3>
 <p>typedef 为某一类型声明一个别名，比如：</p>
-<div class="highlight"><pre><span></span><code><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">BYTE</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">BYTE</span><span class="p">;</span>
 <span class="n">BYTE</span> <span class="n">x</span><span class="p">;</span>
-</code></pre></div>
+</pre></div>
 <p>typedef结合之前你定义的结构体类型会很好用：</p>
-<div class="highlight"><pre><span></span><code><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">rows</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">cols</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">data</span><span class="p">[];</span>
 <span class="p">}</span> <span class="n">Matrix2D</span><span class="p">;</span>
 
 <span class="n">Matrix2D</span> <span class="n">x</span><span class="p">;</span>
-</code></pre></div>
+</pre></div>
 <h3 id="_35">链表</h3>
 <p>现在来实现LISP语言中常见的链表数据结构，本小节主要参考了 <strong>参考资料4</strong> 。就基本的结构定义写法还是很清晰的：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">node</span><span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">node</span><span class="p">{</span>
     <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
     <span class="k">struct</span> <span class="n">node</span> <span class="o">*</span> <span class="n">next</span><span class="p">;</span>
 <span class="p">};</span>
-</code></pre></div>
+</pre></div>
 <p>在上面的基础上，参考资料4做了一些灵活性拓展，个人做了一些修改于是有了下面的<code>list.h</code> 文件：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#ifndef LIST_H_</span>
+<div class="highlight"><pre><span></span><span class="cp">#ifndef LIST_H_</span>
 <span class="cp">#define LIST_H_</span>
 <span class="cp">#include</span> <span class="cpf">&lt;stdbool.h&gt;</span><span class="cp"></span>
 
@@ -1170,9 +1170,9 @@ library-&gt;author
 <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">list_length</span><span class="p">(</span><span class="n">List</span> <span class="n">list</span><span class="p">);</span>
 
 <span class="cp">#endif</span>
-</code></pre></div>
+</pre></div>
 <p>待参数的 <code>#define</code> 宏之前在介绍 <code>SIZEOF</code> 的时候提到了。然后 <code>list.c</code> 文件如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"list.h"</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"list.h"</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 
 
@@ -1257,9 +1257,9 @@ library-&gt;author
         <span class="o">*</span><span class="n">plist</span> <span class="o">=</span> <span class="n">psave</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>然后有运行文件：</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"myhead.h"</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">"list.h"</span><span class="cp"></span>
 
 
@@ -1282,17 +1282,17 @@ library-&gt;author
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</pre></div>
 <p>上面还有一些基本的链表操作动作函数没有实现，后续有时间补上。然后我们看到一旦你定义了一个你自己的数据结构，一般来说针对该数据结构的排序查找相关动作都要另外配套函数跟上。这就是面向对象编程风格的优点也是缺点。优点就是这些基础配套函数写好之后后面操作按照相应接口会很简单，缺点就是每引入一个新的对象或者数据结构，就会带来一系列的代码量和工作量，同时提升了整个项目的复杂度。</p>
 <h2 id="_36">其他</h2>
 <h3 id="enum">enum</h3>
 <h3 id="union">union</h3>
 <p>联合 一种数据类型，其能在同一内存空间中存储不同的数据类型，比如：</p>
-<div class="highlight"><pre><span></span><code>union hold {
+<div class="highlight"><pre><span></span>union hold {
     int digit;
     double bigfl;
 }
-</code></pre></div>
+</pre></div>
 <p>这个联合数据类型可以存储一个int类型或者一个double数据类型。具体分配内存空间是按照占用空间最大的数据类型来的。</p>
 <h3 id="_37">更复杂的声明</h3>
 <h3 id="_38">指向函数的指针</h3>

@@ -158,26 +158,26 @@
             
 <p>ansible是一个自动化运维工具，当我们学习到后面之后，就会发现只写一个简单的web app是不够的，常常远程计算机那边的环境需要很多配置，比如后台脚本的执行啊，nginx配置来服务静态文件啊等等。而每个任务都手工用 <code>ssh</code> 端来操作的将是非常低效率的了，尤其到后面各个任务繁多，环境需要重复部署的时候。ansible就是解决这一问题的。</p>
 <p>第一个例子：假设你现在可以免密钥登录某一个远程服务器了，然后你在 <code>/etc/ansible/hosts</code> 这个文件里面把你的服务器名字加进去，然后执行:</p>
-<div class="highlight"><pre><span></span><code>ansible all -m ping
-</code></pre></div>
+<div class="highlight"><pre><span></span>ansible all -m ping
+</pre></div>
 <p>如果一切正常的话其将返回 SUCESS 信息，证明现在你已经通过ansible正常连通你的远程服务器了。</p>
 <h2 id="hosts">hosts文件配置</h2>
 <p>这里讨论的 <code>/etc/ansible/hosts</code> 这个文件是所谓的默认 inventory 文件，除了这个默认inventory配置文件之外，还可以写很多其他的配置文件的。而这些配置文件内容大体如下:</p>
-<div class="highlight"><pre><span></span><code>[webservers]
+<div class="highlight"><pre><span></span>[webservers]
 foo.example.com
  bar.example.com
-</code></pre></div>
+</pre></div>
 <p>[webservers] 这个字段定义的是所谓的主机组的概念，之前我们随便写上去的那个主机没属于任何主机组，然后一个主机组似乎还可以属于另外一个主机组等，这个有点复杂了。似乎主机组里面的主机可以怎么统一管理，这个后面再说。</p>
 <h3 id="_1">主机变量设置</h3>
 <p>组的变量情况请看文档下面，主机变量大体就是后面写上一些值就是了，因为这些变量在定义后playbooks也是可以使用的，而playbooks无疑是后面的重头戏，所以这还是值得提一下的。</p>
-<div class="highlight"><pre><span></span><code>[atlanta]
+<div class="highlight"><pre><span></span>[atlanta]
 host1 http_port=80 maxRequestsPerChild=808
 host2 http_port=303 maxRequestsPerChild=909
-</code></pre></div>
+</pre></div>
 <h3 id="_2">主机的其他参数控制</h3>
 <p>应该大多和具体ssh连接的配置有关吧，比如:</p>
-<div class="highlight"><pre><span></span><code>some_host         ansible_ssh_port=2222     ansible_ssh_user=manager
-</code></pre></div>
+<div class="highlight"><pre><span></span>some_host         ansible_ssh_port=2222     ansible_ssh_user=manager
+</pre></div>
 <ul>
 <li><code>ansible_ssh_host</code> 这个一般没啥好设置的，不过可能你的主机名很长，则通过这个设置一下作为具体连接的主机名。而前面写的 <code>some_host</code> 只是作为主机别名。如果你的ansible版本号大于2了，那么推荐使用 <code>ansible_host</code> 。</li>
 <li><code>ansible_ssh_port</code> 端口号，默认不需要配置。如果你的ansible版本号大于2了，那么推荐使用 <code>ansible_port</code> 。</li>
@@ -186,7 +186,7 @@ host2 http_port=303 maxRequestsPerChild=909
 </ul>
 <h2 id="playbooksyaml">playbooks之熟悉yaml</h2>
 <p>当然首先需要简单了解下yaml语法，一个简单例子如下:</p>
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="c1"># 一位职工记录</span>
 <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Example Developer</span>
 <span class="nt">job</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Developer</span>
@@ -201,134 +201,134 @@ host2 http_port=303 maxRequestsPerChild=909
     <span class="nt">ruby</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Elite</span>
     <span class="nt">python</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Elite</span>
     <span class="nt">dotnet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Lame</span>
-</code></pre></div>
+</pre></div>
 <p>yaml文件一开始都要加上这个:  <code>---</code> 。</p>
 <p>注释是 <code>#</code></p>
 <p>然后相同缩进级别 <code>-</code> 开头的表示一个列表，然后其他键值对表示字典，大体就是这样。</p>
 <h2 id="playbook">playbook入门</h2>
 <p>下面是最简单的一个例子，新建这么一个 <code>first.yaml</code> 文件:</p>
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">work</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">name </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ping and pong</span>
         <span class="l l-Scalar l-Scalar-Plain">ping</span> <span class="p p-Indicator">:</span>
-</code></pre></div>
+</pre></div>
 <p>然后执行是:</p>
-<div class="highlight"><pre><span></span><code>ansible-playbook first.yaml
-</code></pre></div>
+<div class="highlight"><pre><span></span>ansible-playbook first.yaml
+</pre></div>
 <p>这里只是简单的ping pong 了一下，这个配置简单的内容就是主机 work ，这个是在之前提到 <code>/etc/ansible/hosts</code> 那个文件里定义的。然后对这个主机执行某个任务 tasks 。这是一个任务列表清单，name 描述了该任务，文字随意。然后执行了 ping 模块。</p>
 <p>这个任务确保nginx重启了一次:</p>
-<div class="highlight"><pre><span></span><code>- name: make sure nginx restarted
+<div class="highlight"><pre><span></span>- name: make sure nginx restarted
   service: name=nginx state=restarted
-</code></pre></div>
+</pre></div>
 <p>这个任务是确保nginx服务是运行着的:</p>
-<div class="highlight"><pre><span></span><code>- name: make sure nginx is running
+<div class="highlight"><pre><span></span>- name: make sure nginx is running
   service: name=nginx state=running
-</code></pre></div>
+</pre></div>
 <h2 id="playbook_1">playbook最佳实践</h2>
 <h3 id="hosts_1">hosts文件</h3>
 <p>在项目的文件夹下新建一个hosts文件，其类似之前讨论的 <code>/etc/ansible/hosts</code> 文件，然后在本地通过如下语法引入：</p>
-<div class="highlight"><pre><span></span><code>ansible-playbook -i hosts site.yml
-</code></pre></div>
+<div class="highlight"><pre><span></span>ansible-playbook -i hosts site.yml
+</pre></div>
 <p>​    </p>
 <h3 id="siteyml">site.yml</h3>
 <p>刷脚本的主入口</p>
 <h3 id="tags">tags单独运行子任务</h3>
 <p>在roles文件夹里面新建一个common文件夹，然后common文件夹里面新建一个tasks文件夹，tasks文件夹里面定义一个main.yml，该文件内容大体如下:</p>
-<div class="highlight"><pre><span></span><code>---
+<div class="highlight"><pre><span></span>---
 
 - name: task的名字
   command: ...
-</code></pre></div>
+</pre></div>
 <p>然后site.yml里面如下定义：</p>
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible 必要参数侦测</span>
   <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
   <span class="nt">remote_user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root</span>
 
   <span class="nt">roles</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">role</span><span class="p">:</span> <span class="nv">common</span><span class="p p-Indicator">,</span><span class="nt"> tags</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">'common'</span><span class="p p-Indicator">]}</span>
-</code></pre></div>
+</pre></div>
 <p>然后只运行某个子任务如下利用tags来完成。</p>
-<div class="highlight"><pre><span></span><code>ansible-playbook -i hosts site.yml --tags=common
-</code></pre></div>
+<div class="highlight"><pre><span></span>ansible-playbook -i hosts site.yml --tags=common
+</pre></div>
 <p>​    </p>
 <h3 id="tags_1">临时加上某个 tags 任务</h3>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create odoo superuser</span>
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create odoo superuser</span>
   <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">su - postgres -c "createuser -s {{ user }}"</span>
   <span class="nt">tags</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">psql_user</span>
-</code></pre></div>
+</pre></div>
 <h3 id="role">role的全局参数</h3>
 <p>全局参数放在 <code>group_vars</code> 文件夹的 all 文件里面，其也是一个简单的yaml文件。</p>
 <h3 id="role_1">role里的局部参数</h3>
 <p>这些参数推荐在site.yml文件对应的role哪里定义，如下所示定义了一个 <code>folder_name</code> 变量 ：</p>
-<div class="highlight"><pre><span></span><code><span class="nt">roles</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">role</span><span class="p">:</span> <span class="nv">update-sdsomweb</span><span class="p p-Indicator">,</span><span class="nt"> folder_name</span><span class="p">:</span> <span class="s">"resource/install_venv"</span><span class="p p-Indicator">,</span><span class="nt"> tags</span><span class="p">:</span>  <span class="p p-Indicator">[</span><span class="s">'update-sdsomweb'</span><span class="p p-Indicator">]}</span>
-</code></pre></div>
+</pre></div>
 <p>我们看到ansible-playbook就最基本的配置编写和使用还是很简单的，关键是具体任务那边要熟悉好一些特定的模块。</p>
 <h2 id="playbook_2">playbook之模块</h2>
 <p>官方模块很多，内容很丰富，这里就不赘述了，请参看官方文档。</p>
 <h2 id="_3">如何实现本地安装</h2>
 <p>在hosts里面添加一行：</p>
-<div class="highlight"><pre><span></span><code>localhost ansible_connection=local
-</code></pre></div>
+<div class="highlight"><pre><span></span>localhost ansible_connection=local
+</pre></div>
 <p>同时需要注意本地安装不需要提供ssh用户名和密码了，然后也不需要上传ssh key了，所以如果你之前有上传操作的应该加上这么一行：</p>
-<div class="highlight"><pre><span></span><code>when: ansible_connection != "local"
-</code></pre></div>
+<div class="highlight"><pre><span></span>when: ansible_connection != "local"
+</pre></div>
 <p>​    </p>
 <h2 id="_4">将压缩包解压包远程机器目标点</h2>
 <p>值得一提是unarchive模块最近才支持 <code>remote_src</code> 模式，所以推荐还是采用本地压缩包源然后解压过去的方式。</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">解压 apr</span> 
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">解压 apr</span> 
   <span class="nt">unarchive</span><span class="p">:</span>
     <span class="nt">src</span><span class="p">:</span> <span class="s">"{{folder_name}}/apr-1.5.2.tar.gz"</span>
     <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/root</span>
-</code></pre></div>
+</pre></div>
 <h2 id="rsync">rsync风格的将某个文件夹复制过去</h2>
 <p>为什么不利用copy模块，因为scp如果文件夹里面结构稍微复杂点就会很慢，这时推荐使用 synchronize 模块：</p>
-<div class="highlight"><pre><span></span><code>- name: 上传源
+<div class="highlight"><pre><span></span>- name: 上传源
   synchronize: src=resource/winstore dest=/root mode=push
-</code></pre></div>
+</pre></div>
 <p>值得一提的是，rsync那边如果远程机器不是免密码ssh连接的话，这时又要输入密码，所以推荐你的playbook一开始就将pub密钥传过去，然后rsync功能需要远程机装了libselinux-python和 rsync 这两个软件包。</p>
-<div class="highlight"><pre><span></span><code>- name: 上传ssh key
+<div class="highlight"><pre><span></span>- name: 上传ssh key
   authorized_key: user=root key="{{ lookup('file', '/home/what/.ssh/id_rsa.pub') }}"
-</code></pre></div>
+</pre></div>
 <p>这里的user是登录远程机器的用户名。</p>
 <h2 id="_5">如何获得远程机器的更多参数信息</h2>
 <p>ansible的 setup 模块能够获得远程机器很多有用的信息，甚至能够知道远程机器运行的虚拟机软件是什么。不过你可能需要一些更多信息，比如远程机器默认的python版本是多少，这个时候我们可以用如下方式来获得：</p>
-<div class="highlight"><pre><span></span><code>- name: get python version
+<div class="highlight"><pre><span></span>- name: get python version
   command: python -c 'import sys;print("{0}.{1}".format(sys.version_info.major,sys.version_info.minor))'
   register: python_version_check
-</code></pre></div>
+</pre></div>
 <p>这里的register注册的是执行上述命令command之后的返回结果，在ansible整个运行时里都是可以用，具体结果你可能还需要通过 <code>python_version_check.stdout</code> 这样的方式获得。</p>
 <h2 id="command-shell">command和 shell的区别</h2>
 <p>command和shell在很多情况下似乎都没有区别，shell严格意义上来讲就类似于你在shell中执行了某个命令，其可以使用bash的一些环境变量等，后面应该没事会优先考虑使用shell模块吧。</p>
 <h2 id="pip">如何在pip的虚拟环境下工作</h2>
 <p>参考了 <a href="http://stackoverflow.com/questions/26402123/ansible-creating-a-virtualenv">这个网页</a> ，如下所示是在目标虚拟环境文件夹下根据requirements.txt文件夹描述来安装那些目标python模块到虚拟环境中。</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install requirements</span>
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Install requirements</span>
   <span class="nt">pip</span><span class="p">:</span> 
     <span class="nt">requirements</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/my_app/requirements.txt</span>
     <span class="nt">virtualenv</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/user/home/venvs/myenv</span>
     <span class="nt">virtualenv_python</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">python3.4</span>
-</code></pre></div>
+</pre></div>
 <h2 id="rpm">如何安装本地的rpm包</h2>
 <p>有兴趣的可以看一下ansible的 <code>yum</code> 模块，不过要实现免网络完全利用本地下载的rpm包来安装的话用这个模块似乎并不是很好用，因为其并不能很好地处理各个模块之间的依赖。推荐就直接调用shell模块，如下所示：</p>
-<div class="highlight"><pre><span></span><code>- name: install rpms
+<div class="highlight"><pre><span></span>- name: install rpms
   shell: yum localinstall -yC --disablerepo=* `ls /path/to/rpms/*.rpm` 
-</code></pre></div>
+</pre></div>
 <p>具体这些rpm包如果是base的，那么推荐用：</p>
-<div class="highlight"><pre><span></span><code>yum install yum-utils
+<div class="highlight"><pre><span></span>yum install yum-utils
 yum install --downloadonly --downloaddir=. the_rpm_name
-</code></pre></div>
+</pre></div>
 <p>来下载之。如果来自epel，那么推荐在 <a href="https://pkgs.org/">pkgs.org</a> 搜名字，在 <a href="http://dl.fedoraproject.org/pub/epel/7/x86_64/">这个网站</a> 下载。</p>
 <h2 id="_6">删除文件或文件夹</h2>
 <p>删除文件或文件夹推荐使用 file 模块而不是调用rm命令，如下所示：</p>
-<div class="highlight"><pre><span></span><code>- name: 确保目标venv文件夹不存在
+<div class="highlight"><pre><span></span>- name: 确保目标venv文件夹不存在
   file: path=/opt/sdsom/venv state=absent
-</code></pre></div>
+</pre></div>
 <h2 id="_7">如何微调配置文件</h2>
 <p>一般配置文件在远程机器上已经有个原样了，只是某几行需要修改一下，这个时候用lineinfile模块来微调这些配置很是适宜的。</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">调配apache的 httpd.conf</span> 
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">调配apache的 httpd.conf</span> 
   <span class="nt">lineinfile</span><span class="p">:</span> 
     <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/apache/conf/httpd.conf</span> 
     <span class="nt">regexp</span><span class="p">:</span> <span class="s">"{{item.regexp}}"</span> 
@@ -339,27 +339,27 @@ yum install --downloadonly --downloaddir=. the_rpm_name
     <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">regexp</span><span class="p">:</span> <span class="s">"^User</span><span class="nv"> </span><span class="s">"</span><span class="p p-Indicator">,</span><span class="nt"> insertafter</span><span class="p">:</span> <span class="s">"^#User</span><span class="nv"> </span><span class="s">"</span><span class="p p-Indicator">,</span><span class="nt">line</span><span class="p">:</span> <span class="s">"User</span><span class="nv"> </span><span class="s">sdsadmin"</span><span class="p p-Indicator">}</span>
     <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">regexp</span><span class="p">:</span> <span class="s">"^Group</span><span class="nv"> </span><span class="s">"</span><span class="p p-Indicator">,</span><span class="nt"> insertafter</span><span class="p">:</span> <span class="s">"^#Group</span><span class="nv"> </span><span class="s">"</span><span class="p p-Indicator">,</span><span class="nt">line</span><span class="p">:</span> <span class="s">"Group</span><span class="nv"> </span><span class="s">sdsadmin"</span><span class="p p-Indicator">}</span>
     <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">regexp</span><span class="p">:</span> <span class="s">"^ServerName</span><span class="nv"> </span><span class="s">"</span><span class="p p-Indicator">,</span><span class="nt"> insertafter</span><span class="p">:</span> <span class="s">"^#ServerName</span><span class="nv"> </span><span class="s">"</span><span class="p p-Indicator">,</span><span class="nt">line</span><span class="p">:</span> <span class="s">"ServerName</span><span class="nv"> </span><span class="s">{{server_name}}"</span><span class="p p-Indicator">}</span>
-</code></pre></div>
+</pre></div>
 <p>上面这个例子的意思就是用 regexp 来匹配目标行， 然后替换为内容 line 。insertafter是如果匹配到那个了，则将line插入到该行的后面。</p>
 <p>下面这个例子是插入一行new line：</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Load config files from the config directory conf.d/*.conf</span>
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Load config files from the config directory conf.d/*.conf</span>
   <span class="nt">lineinfile</span><span class="p">:</span>
     <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/apache/conf/httpd.conf</span>
     <span class="nt">line</span><span class="p">:</span> <span class="s">"{{item.line}}"</span>
   <span class="nt">with_items</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">line</span><span class="p">:</span> <span class="s">"Include</span><span class="nv"> </span><span class="s">conf.d/*.conf"</span><span class="p p-Indicator">}</span>
-</code></pre></div>
+</pre></div>
 <p>此外template模块可以利用本地的模板文件（jinja2模块系统）来生成一个配置文件。</p>
 <h2 id="_8">只在某个版本的操作系统下才执行某个动作</h2>
 <p>用 <code>when</code> 语句来表达，下面的意思是只在远程机器操作系统是CentOS而且版本号是7.2时才执行某个动作（参考了 <a href="https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html">这个网页</a>。</p>
-<div class="highlight"><pre><span></span><code>- name: only for centos7.2 do some tweak
+<div class="highlight"><pre><span></span>- name: only for centos7.2 do some tweak
   command: ...
   when: ansible_distribution == 'CentOS' and ansible_distribution_version.startswith('7.2')
-</code></pre></div>
+</pre></div>
 <p><code>ansible_distribution</code> 还可能是 Ubuntu ，Debian ， Red Hat Enterprise Linux 等。</p>
 <h2 id="register">register的用法</h2>
 <p>比如说我们写上这么一个简单的 test.yml 文件，内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<div class="highlight"><pre><span></span><span class="nn">---</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
 
@@ -371,10 +371,10 @@ yum install --downloadonly --downloaddir=. the_rpm_name
 
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">debug</span>
     <span class="nt">debug</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">msg="{{ test['stdout'] }}"</span>
-</code></pre></div>
+</pre></div>
 <p>然后我们运行：</p>
-<div class="highlight"><pre><span></span><code>ansible-playbook -i "localhost," -c local test.yml
-</code></pre></div>
+<div class="highlight"><pre><span></span>ansible-playbook -i "localhost," -c local test.yml
+</pre></div>
 <p>运行结果就显示之前运行的那个date命令的结果已经注册到ansible的全局变量池里面去了，名字通过register来赋值，然后在后面的jinja2模板系统中都可以调用的。</p>
 <h2 id="with_items">with_items的用法</h2>
 <p>这个具体请参看官方文档的 <a href="http://docs.ansible.com/ansible/playbooks_loops.html">这里</a> 。</p>
@@ -386,25 +386,25 @@ yum install --downloadonly --downloaddir=. the_rpm_name
 <p>如下加上<code>creates</code> 参数来作为这个command是否跳过的判断标准，如果该文件存在则认为command已经执行过了则会跳过。</p>
 <h2 id="local_action">local_action是什么</h2>
 <p><code>local_action</code> 是 <code>delegate_to: 127.0.0.1</code>  的缩写，简单来说就是只在本机或说操作机上执行某个动作。这里顺便提一下 <code>delegate_to</code> 的含义，是指定某个主机执行某个动作，是脱离ansible默认的由inventory输出的那个几个hosts的，也就是这个 <code>delegate_to</code> 的主机可以是默认的那个几个hosts中的一个，也可以是其他主机。</p>
-<div class="highlight"><pre><span></span><code><span class="nt">tasks</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">take out of load balancer pool</span>
   <span class="nt">local_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">command /usr/bin/take_out_of_pool {{ inventory_hostname }}</span>
-</code></pre></div>
+</pre></div>
 <h2 id="handlers">handlers是什么</h2>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">template configuration file</span>
+<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">template configuration file</span>
   <span class="nt">template</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">src=template.j2 dest=/etc/foo.conf</span>
   <span class="nt">notify</span><span class="p">:</span>
      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">restart memcached</span>
      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">restart apache</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="nt">handlers</span><span class="p">:</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="nt">handlers</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restart memcached</span>
       <span class="c1"># The service module was used, but you could use whatever module you wanted</span>
       <span class="nt">service</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">name=memcached state=restarted</span>
     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">restart apache</span>
       <span class="nt">service</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">name=apache state=restarted</span>
-</code></pre></div>
+</pre></div>
 <p>有时你会在playbook的某个role下面看到hanlders这个文件夹，简单来说就是某个任务如果执行了（跳过的不算，只有真正执行也就是changed state返回了），然后将执行notify: 下面定义的一些hanlders任务。</p>
 <h2 id="_10">参考资料</h2>
 <ol>

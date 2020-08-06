@@ -138,18 +138,18 @@
 <p>nodejs是运行在服务端的javascript，其基于Chrome V8引擎，整体架构是事件驱动的非阻塞的。</p>
 <p>npm是nodejs里面的一个包管理工具，大体可以理解为python里面的pip。</p>
 <p>在centos7直接安装npm：</p>
-<div class="highlight"><pre><span></span><code>yum install npm
-</code></pre></div>
+<div class="highlight"><pre><span></span>yum install npm
+</pre></div>
 <p>也会顺便把nodejs也安装了。</p>
 <p>windows下有直接安装的exe程序。</p>
 <h3 id="npm-init">npm init</h3>
 <p>本小节参考了 <a href="http://javascript.ruanyifeng.com/nodejs/npm.html">阮一峰的npm文章</a> 。</p>
 <p>在你想要新建的模块的根目录下运行 <code>npm init</code> ，程序会交互问一些问题，然后创建 <code>package.json</code> 文件。这样你的用户就可以利用这个 <code>package.json</code> 文件然后运行 <code>npm install</code> 命令来安装目标模块了。</p>
-<div class="highlight"><pre><span></span><code>npm install -g module_name
-</code></pre></div>
+<div class="highlight"><pre><span></span>npm install -g module_name
+</pre></div>
 <p>加上全局选项 <code>-g</code> 会安装在系统的 <code>/usr/lib/node_modules</code> 里面（centos7）。</p>
-<div class="highlight"><pre><span></span><code>npm install module_name
-</code></pre></div>
+<div class="highlight"><pre><span></span>npm install module_name
+</pre></div>
 <p>没有加上选项 <code>-g</code> ,node模块就直接安装在当前工作目录的 <code>node_modules</code> 文件夹里面。</p>
 <h3 id="npm-list">npm list</h3>
 <p>列出本地已经安装npm模块。如果加上 <code>-g</code> 那么是列出安装在系统里面的npm模块，以后就不罗嗦这个了。</p>
@@ -160,52 +160,52 @@
 符号 <code>~</code> 是允许小版本内的升级</p>
 <h3 id="npm-publish">npm publish</h3>
 <p>注册模块包，需要在 <code>npmjs.com</code> 上申请个用户名：</p>
-<div class="highlight"><pre><span></span><code>npm adduser
-</code></pre></div>
+<div class="highlight"><pre><span></span>npm adduser
+</pre></div>
 <p>或者以前adduser过了那么：</p>
-<div class="highlight"><pre><span></span><code>npm login
-</code></pre></div>
+<div class="highlight"><pre><span></span>npm login
+</pre></div>
 <p>然后：</p>
-<div class="highlight"><pre><span></span><code>npm publish
-</code></pre></div>
+<div class="highlight"><pre><span></span>npm publish
+</pre></div>
 <p>默认发送公开的模块，npm付费用户可以发布私有模块： <code>"private": false,</code> ，然后在发布的时候加上 <code>--scope</code> 选项和你的scope。</p>
 <h2 id="_1">什么是模块</h2>
 <p>本小节参考了 <a href="https://www.sitepoint.com/understanding-module-exports-exports-node-js/">理解exports这篇文章</a> 。</p>
 <p>前面谈了一些关于模块的东西，那么什么是模块，简单来说一个js文件就是一个模块，和随便写个js文件不同，上面谈论的npm模块都通过npm良好地管理起来了。</p>
 <p>在定义一个模块的时候你可以如下写：</p>
-<div class="highlight"><pre><span></span><code>exports.fun1 = function(){
+<div class="highlight"><pre><span></span>exports.fun1 = function(){
     return 'aaa';
 };
-</code></pre></div>
+</pre></div>
 <p>也可以这样写：</p>
-<div class="highlight"><pre><span></span><code>modules.exports = {
+<div class="highlight"><pre><span></span>modules.exports = {
     fun1 : function(){
         return 'aaa';
     }
 };
-</code></pre></div>
+</pre></div>
 <p>这个exports和 <code>modules.exports</code> 实际是一个东西，其都是一个对象。</p>
 <p>然后在其他文件中使用模块：</p>
-<div class="highlight"><pre><span></span><code>var test = require('./your.js')
-</code></pre></div>
+<div class="highlight"><pre><span></span>var test = require('./your.js')
+</pre></div>
 <p>这个test变量获得的值就是之前模块定义的那个exports对象。所以你可以如下使用了现在 <code>test.fun1</code> 。那个test名字是随便取的，不过最好取模块的名字。</p>
 <h2 id="yarn">yarn</h2>
 <p>yarn简单来说就是更好的npm。具体命令对应如下：</p>
-<div class="highlight"><pre><span></span><code>npm install --save    -&gt;   yarn add
+<div class="highlight"><pre><span></span>npm install --save    -&gt;   yarn add
 npm install --save-dev   -&gt; yarn add --dev
 npm install -g   -&gt; yarn global add 
 npm uninstall   -&gt;  yarn remove
-</code></pre></div>
+</pre></div>
 <p>首先用npm来全局安装一个yarn： </p>
-<div class="highlight"><pre><span></span><code>npm install -g yarn
-</code></pre></div>
+<div class="highlight"><pre><span></span>npm install -g yarn
+</pre></div>
 <p>yarn一样利用 <code>package.json</code> 来管理你的前端包，之前说的自动创建的lock文件，yarn会另外创建一个 <code>yarn.lock</code> 。</p>
 <h3 id="scripts">scripts</h3>
 <p>在 <code>package.json</code> 里面我们可以定义自己的脚本名字，比如下面的 <code>start</code> 命令，我们如果输入 <code>npm start</code> 那么实际运行的是 <code>node .</code> ，同样也可以运行 <code>yarn start</code> 。</p>
-<div class="highlight"><pre><span></span><code>"scripts": {
+<div class="highlight"><pre><span></span>"scripts": {
   "start": "node ."
 }
-</code></pre></div>
+</pre></div>
 
             <section>
 <div class="panel-group" id="accordion2">
