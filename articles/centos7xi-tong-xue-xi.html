@@ -169,10 +169,10 @@
 </ul>
 <h2 id="firewall-cmd">firewall-cmd</h2>
 <p>防火墙策略管理命令： <code>firewall-cmd</code> ， 其中 <code>--list-all</code> 列出开启的端口号等情况， <code>--add-port</code> 来开放某个端口号，比如：</p>
-<div class="highlight"><pre><span></span>firewall-cmd --add-port=80/tcp
-</pre></div>
+<div class="highlight"><pre><span></span><code>firewall-cmd --add-port=80/tcp
+</code></pre></div>
 <p>更多细节请参看 <a href="http://wangchujiang.com/linux-command/c/firewall-cmd.html">这篇文章</a> ，下面就一些常用的用法简要说明之。</p>
-<div class="highlight"><pre><span></span>firewall-cmd --get-active-zones <span class="c1"># 查看活动的区域</span>
+<div class="highlight"><pre><span></span><code>firewall-cmd --get-active-zones <span class="c1"># 查看活动的区域</span>
 firewall-cmd --zone<span class="o">=</span>work --add-interface<span class="o">=</span>eth0 <span class="c1"># 为某个区域指定网卡界面</span>
 <span class="c1"># 默认的zone是public </span>
 firewall-cmd --zone<span class="o">=</span>work --list-ports <span class="c1"># 列出所有开放的端口</span>
@@ -180,7 +180,7 @@ firewall-cmd --zone<span class="o">=</span>work --add-port<span class="o">=</spa
 firewall-cmd --zone<span class="o">=</span>work --add-service<span class="o">=</span>ssh <span class="c1"># 为某个区域开发服务</span>
 <span class="c1"># 类似的还有 --remove-prot  和  --remove-service</span>
 firewall-cmd --get-services <span class="c1"># 列出所有可用服务</span>
-</pre></div>
+</code></pre></div>
 <p><strong>NOTICE:</strong> 上面提及的操作如果不加 <code>--permanent</code> 参数那么只是临时有效，重启firewalld服务就会配置丢失。</p>
 <h2 id="systemd">systemd</h2>
 <p>systemd作为linux的初始化系统已经渐趋主流，其最大的特点就是比原upstart有更快的启动速度。其尽可能启动更少的进程和尽可能更多进程并行启动。总的说来提高并发启动来加速系统启动是好的，不过这也要求systemd脚本编写人员对于系统的启动的各个单元或服务之间的依赖关系有很清楚的认识。</p>
@@ -208,7 +208,7 @@ firewall-cmd --get-services <span class="c1"># 列出所有可用服务</span>
 </ol>
 <p>可以用 <code>systemctl list-units</code> 来列出当前系统正在运行的所有unit。</p>
 <p>下面列出一个systemd的服务脚本例子，一般 <code>Unit</code> 和 <code>Install</code> 配置节都是有的，然后服务脚本特有的是那个 <code>Service</code>  配置节。</p>
-<div class="highlight"><pre><span></span>[Unit]
+<div class="highlight"><pre><span></span><code>[Unit]
 Description=nginx - high performance web server
 Documentation=http://nginx.org/en/docs/
 After=network.target remote-fs.target nss-lookup.target
@@ -224,7 +224,7 @@ PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
-</pre></div>
+</code></pre></div>
 <p>一般配置文件放在 <code>/usr/lib/systemd/system</code> 那里，如果你希望这个配置单元开机启动，则运行 <code>systemctl enable what.service</code> 来让这个配置单元激活开机启动，其将创建一个符号链接到 <code>/etc/systemd/system</code> 那里。反之撤销开机启动是 <code>systemctl disable what.service</code> 。</p>
 <h3 id="unit">Unit配置节</h3>
 <p>Unit - Description 描述文字</p>
@@ -235,9 +235,9 @@ WantedBy=multi-user.target
 <p>Unit - Before 强制单元的先后顺序，这里是指本单元强制在列表中的单元之前，即两个单元都要启动时，后面的单元会延迟到前面的单元启动完毕再启动。</p>
 <h3 id="install">Install 配置节</h3>
 <p>systemctl enable和disable才使用本Install配置节，我们常看到下面选项：</p>
-<div class="highlight"><pre><span></span>[Install]
+<div class="highlight"><pre><span></span><code>[Install]
 WantedBy=multi-user.target
-</pre></div>
+</code></pre></div>
 <p>其相当于在multi-user.target的配置上加上了 <code>Wants=本单元</code> ，这样multi-user.target启动就需要本单元启动，默认linux的启动单元default.target，一般这个default.target就是这个multi-user.target。</p>
 <p>Install  -  WantedBy  </p>
 <h3 id="service">Service配置节</h3>
@@ -250,7 +250,7 @@ WantedBy=multi-user.target
 <p>Service - PrivateTmp 临时空间</p>
 <p>Service - ExecStartPost 启动后动作</p>
 <h3 id="system">system的常规启动流程</h3>
-<div class="highlight"><pre><span></span>                                     cryptsetup-pre.target
+<div class="highlight"><pre><span></span><code>                                     cryptsetup-pre.target
                                                   |
 (various low-level                                v
  API VFS mounts:                 (various cryptsetup devices...)
@@ -303,7 +303,7 @@ emergency.service    |              |              |
         v                          \|/
 emergency.target                    v
                               graphical.target
-</pre></div>
+</code></pre></div>
 <h3 id="mount">Mount单元</h3>
 <p><strong>为了参考查阅方便，下面内容完全复制自 <a href="http://www.jinbuguo.com/systemd/systemd.mount.html">金步国的systemd.mount 中文手册</a> </strong></p>
 <div class="refentry"><a name="systemd.mount"></a><div class="titlepage"></div><div class="refnamediv"><h2>名称</h2><p>systemd.mount — 挂载单元配置</p></div><div class="refsynopsisdiv"><h2>大纲</h2><p><code class="filename"><em class="replaceable"><code>mount</code></em>.mount</code></p></div><div class="refsect1"><a name="id-1.5"></a><h2 id="描述">描述<a class="headerlink" href="#%E6%8F%8F%E8%BF%B0" title="Permalink to this headline">¶</a></h2><p>以
@@ -582,45 +582,45 @@ emergency.target                    v
 <p>Timer单元针对某些服务进程配置定时任务很方便，大体可以实现crontab类似的功能</p>
 <h3 id="_3">服务文件修改之后</h3>
 <p>一般是推荐配置文件外移，服务文件设置好之后就没必要修改了，如果服务文件修改了那么需要：</p>
-<div class="highlight"><pre><span></span>systemctl daemon-reload
-</pre></div>
+<div class="highlight"><pre><span></span><code>systemctl daemon-reload
+</code></pre></div>
 <h3 id="_4">日志管理</h3>
 <p>systemd统一管理所有日志，可用 <code>jourlnalctl</code> 命令来查看之。点名要看某个服务Unit：</p>
-<div class="highlight"><pre><span></span>jourlnalctl --unit=nginx
-</pre></div>
+<div class="highlight"><pre><span></span><code>jourlnalctl --unit=nginx
+</code></pre></div>
 <h3 id="_5">启动服务等等</h3>
 <p>启动服务重启服务暂停服务等等我想大家都很熟悉了吧：</p>
-<div class="highlight"><pre><span></span>systemctl start what.service
+<div class="highlight"><pre><span></span><code>systemctl start what.service
 systemctl stop what.service
 systemctl restart what.service
-</pre></div>
+</code></pre></div>
 <h2 id="centos7dns">centos7配置dns</h2>
 <p>发现centos7配置dns之后重启 network 服务配置就会丢失，需要在</p>
-<div class="highlight"><pre><span></span>/etc/NetworkManager/NetworkManager.conf
-</pre></div>
+<div class="highlight"><pre><span></span><code>/etc/NetworkManager/NetworkManager.conf
+</code></pre></div>
 <p>main哪里加上</p>
-<div class="highlight"><pre><span></span>dns = none
-</pre></div>
+<div class="highlight"><pre><span></span><code>dns = none
+</code></pre></div>
 <p>然后重启</p>
-<div class="highlight"><pre><span></span>systemctl restart NetworkManager.service
-</pre></div>
+<div class="highlight"><pre><span></span><code>systemctl restart NetworkManager.service
+</code></pre></div>
 <p>然后再如同以前一样修改 <code>/etc/resolv.conf</code> 。</p>
 <h2 id="_6">配置语言</h2>
 <h3 id="_7">查看当前操作系统语言</h3>
-<div class="highlight"><pre><span></span>cat /etc/locale.conf 
-</pre></div>
+<div class="highlight"><pre><span></span><code>cat /etc/locale.conf 
+</code></pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span>localectl status
-</pre></div>
+<div class="highlight"><pre><span></span><code>localectl status
+</code></pre></div>
 <h3 id="_8">列出可用语言</h3>
-<div class="highlight"><pre><span></span>locale -a
-</pre></div>
+<div class="highlight"><pre><span></span><code>locale -a
+</code></pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span>localectl list-locales | grep zh
-</pre></div>
+<div class="highlight"><pre><span></span><code>localectl list-locales | grep zh
+</code></pre></div>
 <h3 id="_9">修改操作系统语言</h3>
-<div class="highlight"><pre><span></span>sudo localectl set-locale LANG=zh_CN.utf8
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo localectl set-locale LANG=zh_CN.utf8
+</code></pre></div>
 <h2 id="_10">参考资料</h2>
 <ol>
 <li><a href="http://linux.vbird.org/linux_basic">鸟哥的私房菜</a></li>

@@ -131,7 +131,7 @@
 <h2 id="_1">前言</h2>
 <p>本文档记录关于tensorflow模块学习中的一些东西。</p>
 <p>tensorflow是通用的数据流计算图框架，一般我们都会写上一个简单的hello world例子来简单了解一下目标框架：</p>
-<div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">h</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">)</span>
 <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="s1">' world.'</span><span class="p">)</span>
 
 <span class="n">hw</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">w</span>
@@ -140,11 +140,11 @@
     <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">hw</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p><code>tf.constant</code> 表示一个常量，简单理解就相当于一个不断输出某个数值的节点。hw将两个常量相加，相当于连接两个节点执行了相加操作。tensorflow有个计算图的概念，在这个计算图中，具体计算只有在session回话实际 <code>run</code> 的时候才会执行：</p>
-<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
     <span class="n">do</span> <span class="n">something</span>
-</pre></div>
+</code></pre></div>
 <h3 id="_2">神经网络结构</h3>
 <ol>
 <li>神经元中的数据，或者是输入的，或者是常数，其后神经元的数据则是在数据流动中生成出来的。</li>
@@ -167,9 +167,9 @@ $$</p>
 <ol>
 <li>一层一层之间的连接用矩阵乘法表示，即</li>
 </ol>
-<div class="highlight"><pre><span></span>a = tf.matmul(x, w1)
+<div class="highlight"><pre><span></span><code>a = tf.matmul(x, w1)
 y = tf.matmul(a, w2)
-</pre></div>
+</code></pre></div>
 <p>前一层的输出就是后一层的第一个输入参数。</p>
 <h3 id="_3">变量</h3>
 <p>用 <code>tf.Variable</code> 来定义一个变量，变量相当于一个节点其内数据值是变动的。我们可以用 <code>tf.assign</code> 来手动给某个变量赋值。</p>
@@ -177,10 +177,10 @@ y = tf.matmul(a, w2)
 <p><code>tf.placeholder</code> 占位节点，和常量相比这个节点暂时还没有数据，是等后面在session 启动之后将通过<code>feed_dict</code> 把数据塞进去。通常外面的数据流输入就输入到placeholder哪里。</p>
 <p><code>tf.placeholder(dtype, [None, dim])</code> 这里None的意思是不确定要输入多少个数据，后面的dim指定具体输入数据的个数。</p>
 <h3 id="_4">初始所有变量</h3>
-<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
     <span class="n">init_op</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
     <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init_op</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",

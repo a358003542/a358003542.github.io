@@ -127,8 +127,8 @@
             
 <h2 id="_1">找到性能瓶颈所在</h2>
 <p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
-<div class="highlight"><pre><span></span>python -m cProfile test.py
-</pre></div>
+<div class="highlight"><pre><span></span><code>python -m cProfile test.py
+</code></pre></div>
 <p>或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。</p>
 <p>目前我知道的循环结构提速很明显，然后指定静态类型会提速。</p>
 <p>一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。</p>
@@ -137,7 +137,7 @@
 <h2 id="pyx">pyx文件</h2>
 <p>关于pyx文件的更多请查看cython的官方手册。</p>
 <p>下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来，</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">Extension</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">Extension</span>
 <span class="n">ext1</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="s2">"expython.common"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"expython/common.pyx"</span><span class="p">])</span>
 
 <span class="n">EXTENSIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ext1</span><span class="p">]</span>
@@ -146,7 +146,7 @@
     <span class="n">zip_safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">ext_modules</span><span class="o">=</span><span class="n">EXTENSIONS</span><span class="p">,</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>这里Extension类：</p>
 <ul>
 <li>第一个参数name就是你想让这个目标加速模块（python文件就叫模块，多个带__init__.py的叫包）在总模块中叫什么名字，支持点标记。</li>
@@ -154,7 +154,7 @@
 </ul>
 <h2 id="c">集成原始c代码</h2>
 <p>有的时候你会写一些原始的c代码，那么怎么利用cython集成进来呢。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">Extension</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">Extension</span>
 <span class="kn">from</span> <span class="nn">Cython.Distutils</span> <span class="kn">import</span> <span class="n">build_ext</span>
 
 <span class="n">ext1</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="n">name</span><span class="o">=</span> <span class="s2">"expython.wrapped"</span><span class="p">,</span>
@@ -173,15 +173,15 @@
     <span class="n">cmdclass</span><span class="o">=</span><span class="p">{</span><span class="s2">"build_ext"</span><span class="p">:</span> <span class="n">build_ext</span><span class="p">},</span>
     <span class="n">ext_modules</span><span class="o">=</span><span class="n">EXTENSIONS</span><span class="p">,</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>setup.py 里面的核心代码如上所示，具体有几个文件: cgfun.c cgfun.h wrapped.pyx 的内容如下所示，然后实际引用的时候你可以在 clib的 <code>__init__.py</code> 哪里写上：</p>
-<div class="highlight"><pre><span></span>from expython.wrapped import is_prime, fibonacci, factorial
-</pre></div>
+<div class="highlight"><pre><span></span><code>from expython.wrapped import is_prime, fibonacci, factorial
+</code></pre></div>
 <p>这样你就可以：</p>
-<div class="highlight"><pre><span></span>from expython.clib import is_prime, fibonacci, factorial
-</pre></div>
+<div class="highlight"><pre><span></span><code>from expython.clib import is_prime, fibonacci, factorial
+</code></pre></div>
 <p>cgfun.c 的内容如下：</p>
-<div class="highlight"><pre><span></span>int cgcd(int x, int y) {
+<div class="highlight"><pre><span></span><code>int cgcd(int x, int y) {
     int g = y;
     while (x &gt; 0) {
         g = x;
@@ -204,9 +204,9 @@ long cfib(long n){
     }
     return a;
 }
-</pre></div>
+</code></pre></div>
 <p>cgfun.h 的内容如下：</p>
-<div class="highlight"><pre><span></span>#ifndef __CGFUN_H__
+<div class="highlight"><pre><span></span><code>#ifndef __CGFUN_H__
 #define __CGFUN_H__
 
 int cgcd(int a, int b);
@@ -216,9 +216,9 @@ long cfib(long n);
 
 
 #endif
-</pre></div>
+</code></pre></div>
 <p>wrapped.pyx的内容如下：</p>
-<div class="highlight"><pre><span></span>cimport cython
+<div class="highlight"><pre><span></span><code>cimport cython
 
 
 
@@ -273,7 +273,7 @@ False
         if n % x == 0:
             return False
     return True
-</pre></div>
+</code></pre></div>
 <p>更多高级只是比如集成numpy等等，就需要查看cython官方文档了。</p>
 <h2 id="_2">参考资料</h2>
 <ol>

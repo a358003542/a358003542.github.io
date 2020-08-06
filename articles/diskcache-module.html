@@ -126,20 +126,20 @@
 <p>diskcache很好用，而且速度还挺快的。项目Github地址在 <a href="https://github.com/grantjenks/python-diskcache/">这里</a> 。虽然项目星数不是特别多，但从个人使用体验来说，基本上满足了个人的需求了。比如速度快，和python各个数据类型对接方便，更复杂的数据类型没有试过，也没必要，就一般的python数据类型来说，比如列表，字典，字符串之类的，基本上是无缝对接。然后一般缓存需要的过期时间功能它也是有的，所以基本上是一个不错的模块了。</p>
 <p>具体使用很方便和简单，建议简单看下<a href="http://www.grantjenks.com/docs/diskcache/tutorial.html">官方tutorial</a> 即可，下面也简单说明一下。</p>
 <p>首先是建立一个cache对象：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">diskcache</span> <span class="kn">import</span> <span class="n">Cache</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">diskcache</span> <span class="kn">import</span> <span class="n">Cache</span>
 <span class="n">cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="p">(</span><span class="n">cache_path</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>这个cache对象是线程安全的，上面cache_path就是你想要的缓存存放所在地。</p>
 <p>比如windows一般软件数据放在：</p>
-<div class="highlight"><pre><span></span><span class="n">user_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'~'</span><span class="p">,</span> <span class="s1">'AppData'</span><span class="p">,</span> <span class="s1">'Roaming'</span><span class="p">,</span> <span class="n">APP_NAME</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="n">user_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'~'</span><span class="p">,</span> <span class="s1">'AppData'</span><span class="p">,</span> <span class="s1">'Roaming'</span><span class="p">,</span> <span class="n">APP_NAME</span><span class="p">))</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">user_data_path</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">user_data_path</span><span class="p">)</span>
 
 <span class="n">cache_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">user_data_path</span><span class="p">,</span> <span class="s1">'cache'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>cache对象的使用如下所示：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_cache</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_cache</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    过期时间 10天</span>
 <span class="sd">    :param key:</span>
@@ -150,11 +150,11 @@
 
 <span class="k">def</span> <span class="nf">get_cache</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>虽然推荐使用 <code>cache.close()</code> 方法，但是并不推荐精确到程序元操作级别，get会自动的open cache，但频繁的open开销太大了。一般推荐将这个cache作成更全局的变量，程序结束的时候可以考虑执行 <code>cache.close</code> 方法。如果是单线程单进程操作，甚至不调用close也问题不大。但是如果程序是多线程式的，那么就一定要保证及时的close或者如下使用 with 语句：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; with Cache(cache.directory) as reference:
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; with Cache(cache.directory) as reference:
 ...     reference.set('key', 'value')
-</pre></div>
+</code></pre></div>
 <p>如上所示cache的数据也是可以加上过期时间的，即 <code>expire</code> 参数，单位是秒。</p>
 <p>diskcache还提供了其他功能和类等，就简单的使用介绍就是上面这些了。</p>
 

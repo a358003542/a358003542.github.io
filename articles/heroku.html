@@ -136,56 +136,56 @@
 <p>本文主要面向python的，首先推荐读者参考一下 heroku 官方在github 上的项目，比如说 <a href="https://github.com/heroku/heroku-django-template">这个项目</a> 。其是基于最近的django1.11的，看着这个模板理解一些东西，然后在heroku上设置好自动同github同步就可以了。</p>
 <h2 id="runtimetxt">runtime.txt</h2>
 <p>这个文件用来执行python的版本，里面简单写上即可：</p>
-<div class="highlight"><pre><span></span>python-3.6.3
-</pre></div>
+<div class="highlight"><pre><span></span><code>python-3.6.3
+</code></pre></div>
 <p>这样，远程heroku会帮你确定python运行环境为python-3.6.3。</p>
 <h2 id="requirementstxt">requirements.txt</h2>
 <p>熟悉python开发的人都知道这个文件是什么意思，只是在heroku这里，是必须填写好的一个文件了，其和heroku远程调配好pip的环境有关。</p>
 <h2 id="procfile">Procfile</h2>
 <p>这个文件包含了一些进程类型声明，每个进程类（process type）由一行组成是： </p>
-<div class="highlight"><pre><span></span>&lt;process type&gt;: &lt;command&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>&lt;process type&gt;: &lt;command&gt;
+</code></pre></div>
 <p>比如写着 <code>web</code> 的意思就是启动一个web server。</p>
 <p>还有就是具体执行何命令来启动这个web server了。我们看到gunicron的官方文档写着对django项目如下支持语法：</p>
-<div class="highlight"><pre><span></span>$ gunicorn myproject.wsgi
+<div class="highlight"><pre><span></span><code>$ gunicorn myproject.wsgi
 
 或者明确指定django的settings位置
 $ gunicorn --env DJANGO_SETTINGS_MODULE=myproject.settings myproject.wsgi
-</pre></div>
+</code></pre></div>
 <p>所以我们在教程中看到如下一行：</p>
-<div class="highlight"><pre><span></span>web: gunicorn myproject.wsgi --log-file -
-</pre></div>
+<div class="highlight"><pre><span></span><code>web: gunicorn myproject.wsgi --log-file -
+</code></pre></div>
 <p>上面的 <code>--log-file -</code> 在gunicron那边是把日志输出到默认stdout的意思。</p>
 <h2 id="git">通过git推送你的项目</h2>
 <p>你可以设置github自动同步，这样直接推送到你的github仓库即可。这里讲的是heroku默认的git url。</p>
-<div class="highlight"><pre><span></span>git remote add heroku  https://git.heroku.com/{{heroku_project_name}}.git
-</pre></div>
+<div class="highlight"><pre><span></span><code>git remote add heroku  https://git.heroku.com/{{heroku_project_name}}.git
+</code></pre></div>
 <p><strong>重要提示：添加的这个heroku的remote url直接和后面的heroku 命令行工具相关。</strong> （参阅了<a href="http://subin.logdown.com/posts/1594965">这个网页</a> ） </p>
 <p>那个heroku命令行工具因为在windows下环境有点不好配，所以很多功能都略过了，不过 <code>heroku run</code> 功能是无法回避的，有些工作比如django的数据库初始化要手工输入命令完成： </p>
-<div class="highlight"><pre><span></span>heroku run python manage.py makemigrations
+<div class="highlight"><pre><span></span><code>heroku run python manage.py makemigrations
 heroku run python manage.py migrate
-</pre></div>
+</code></pre></div>
 <h2 id="django">django的静态文件</h2>
 <p>我在heroku的处理日志中看到这样一行：</p>
-<div class="highlight"><pre><span></span>python manage.py collectstatic --noinput
-</pre></div>
+<div class="highlight"><pre><span></span><code>python manage.py collectstatic --noinput
+</code></pre></div>
 <p>说明其自动处理好了django的静态文件问题。</p>
 <h2 id="django_1">django的数据库</h2>
 <p>在官网上管理好项目addon，然后看到 <code>settings</code> 有个 <code>Config Vars</code> 字段，里面定义了一个 <code>DATABASE_URL</code> 值。</p>
 <p>然后 <code>dj-database-url</code> 这个pypi包会自动刷这个 <code>DATABASE_URL</code> 成为django的settings配置，如下配置：</p>
-<div class="highlight"><pre><span></span><span class="c1"># Update database configuration with $DATABASE_URL.</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Update database configuration with $DATABASE_URL.</span>
 <span class="kn">import</span> <span class="nn">dj_database_url</span>
 <span class="n">db_from_env</span> <span class="o">=</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">conn_max_age</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 <span class="n">DATABASES</span><span class="p">[</span><span class="s1">'default'</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_from_env</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2 id="heroku">heroku命令行工具</h2>
 <h3 id="heroku-create">heroku create</h3>
 <p>大体类似于你在官网上操作新建一个app，只是名字是随机的。</p>
 <h2 id="_1">如何加入数据库</h2>
-<div class="highlight"><pre><span></span>heroku  pg:psql --app cheminfo
+<div class="highlight"><pre><span></span><code>heroku  pg:psql --app cheminfo
 
 heroku addons:add heroku-postgresql:dev --app cheminfo
-</pre></div>
+</code></pre></div>
 
             <section>
 <div class="panel-group" id="accordion2">

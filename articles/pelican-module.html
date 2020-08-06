@@ -162,25 +162,25 @@
 <h2 id="_2">项目基本说明</h2>
 <p>python的虚拟环境控制这里就不多说了，下面主要讨论 <code>pelicanconf.py</code> 和 <code>publishconf.py</code> 和 <code>Makefile</code> 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。</p>
 <p>首先说明下 <code>publishconf.py</code> 和 <code>pelicanconf.py</code> 的区别， <code>publishconf.py</code> 文件里面有这样一句话：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pelicanconf</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
+</code></pre></div>
 <p>也就是其将继承所有来自 <code>pelicanconf.py</code> 里面的配置参量，不同的是 <code>publishconf.py</code> 是针对发布到远程服务器上的，而 <code>pelicanconf.py</code> 的配置只是用于本机调试的。</p>
 <p>所以 <code>pelicanconf.py</code> 里面的 <code>SITEURL</code> 变量是空值，而在 <code>publishconf.py</code> 里面是要赋一个具体的值的，该值随你的模板里面的用法不同而不同，具体就是 <code>{{ SITEURL }}</code> 这样的调用。</p>
 <p>然后发布到远程机器还会有其他一些额外的东西，比如 <code>DISQUS_SITENAME</code> 这个值，很多模板会根据这个值来决定是否开启disqus的javascript引用，而DISQUS系统在本机调试的时候是没有意义的，一般会不设置这个值从而自动关闭它。</p>
 <p><code>publishconf.py</code> 也许还有其他一些考虑，这里就略过了，下面将集中将 <code>pelicanconf.py</code> 里面的配置。</p>
 <p>然后我们看到 <code>Makefile</code> 这个文件，这个脚本很好用，下面这些命令是很经常用到的：</p>
-<div class="highlight"><pre><span></span>make html
+<div class="highlight"><pre><span></span><code>make html
 make serve
 make github
 ...
-</pre></div>
+</code></pre></div>
 <p>其中make github会把你的output里面的内容刷到github pages对应的项目上去，其依赖于生成目标 <code>publish</code> ，而make publish和make html的惟一区别就是上面讨论的调用的那个具体的配置文件的不同。</p>
 <h2 id="makefile">不用Makefile</h2>
 <p>如果读者是在windows环境下，那个Makefile是不怎么好用的，说到底其只是提供了一些快捷的命令行支持，我们完全可以另外写一个python脚本来实现这点。</p>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*-coding:utf-8-*-</span>
 
 
@@ -319,60 +319,60 @@ make github
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>在上面 <code>run.py</code> 的基础上，我们可以创建如下两个脚本：</p>
 <h3 id="start_serverbat">start_server.bat</h3>
 <p>此脚本用于本地调试</p>
-<div class="highlight"><pre><span></span>start /b python run.py devserve
-</pre></div>
+<div class="highlight"><pre><span></span><code>start /b python run.py devserve
+</code></pre></div>
 <h3 id="buildbat">build.bat</h3>
 <p>此脚本用于编译输出</p>
-<div class="highlight"><pre><span></span>start /b python run.py build
-</pre></div>
+<div class="highlight"><pre><span></span><code>start /b python run.py build
+</code></pre></div>
 <p>官方quickstart的文档部分内容本文将不会再赘述了，下面主要就一些个人觉得值得一提的地方做出一些说明。</p>
 <h2 id="_3">写文章的时候</h2>
 <h3 id="_4">引用本博客内部文章</h3>
 <p>引用本博客内部文章不需要考虑该文章的slug细节，直接如下引用：</p>
-<div class="highlight"><pre><span></span>{filename}path/to/what.md
-</pre></div>
+<div class="highlight"><pre><span></span><code>{filename}path/to/what.md
+</code></pre></div>
 <p>相对路径支持 <code>..</code> 表达。</p>
 <h3 id="_5">引用静态资源</h3>
 <p>比如在markdown里面引入图片如下所示：</p>
-<div class="highlight"><pre><span></span>![<span class="nt">img</span>](<span class="na">{static}/images/chemistry/Naphthalene.png</span>)
-</pre></div>
+<div class="highlight"><pre><span></span><code>![<span class="nt">img</span>](<span class="na">{static}/images/chemistry/Naphthalene.png</span>)
+</code></pre></div>
 <p><code>{static}</code> 后面就是具体要引用的文件路径。具体就是content文件夹下面的images文件夹，这个文件夹默认是要copy到output输出文件夹根目录哪里去的。</p>
 <h3 id="faviconico">网站加入favicon.ico</h3>
 <p>这里参考了 <a href="http://stackoverflow.com/questions/31270373/how-to-add-a-favicon-to-a-pelican-blog">这个网页</a> ，你需要如下配置，其会将extra文件夹下面的favicon.ico文件copy到output文件夹下面。</p>
-<div class="highlight"><pre><span></span>EXTRA_PATH_METADATA = {
+<div class="highlight"><pre><span></span><code>EXTRA_PATH_METADATA = {
     'extra/favicon.ico': {'path': 'favicon.ico'}
 }
-</pre></div>
+</code></pre></div>
 <h2 id="_6">常用的配置参考</h2>
 <h3 id="category">Category参数控制</h3>
 <p>你可以配置：</p>
-<div class="highlight"><pre><span></span>DEFAULT_CATEGORY = 'others'
-</pre></div>
+<div class="highlight"><pre><span></span><code>DEFAULT_CATEGORY = 'others'
+</code></pre></div>
 <p>来决定你的pelican项目的默认Category参数值。</p>
 <p>如果你配置了：</p>
-<div class="highlight"><pre><span></span>USE_FOLDER_AS_CATEGORY = True
-</pre></div>
+<div class="highlight"><pre><span></span><code>USE_FOLDER_AS_CATEGORY = True
+</code></pre></div>
 <p>则 <code>Category</code> 这个参数可以省略，pelican会根据文章所在的上一级文件夹的名字来决定这个文章的Category。</p>
 <p>当然随着你的文件夹里面结构变得复杂，你可能对这个默认的Category处理方法不再满意了，那么就将这个设置关闭吧：</p>
-<div class="highlight"><pre><span></span>USE_FOLDER_AS_CATEGORY = False
-</pre></div>
+<div class="highlight"><pre><span></span><code>USE_FOLDER_AS_CATEGORY = False
+</code></pre></div>
 <p>然后直接在目标文章的头参数那里配置</p>
-<div class="highlight"><pre><span></span>Category: what
-</pre></div>
+<div class="highlight"><pre><span></span><code>Category: what
+</code></pre></div>
 <h3 id="_7">静态资源管理</h3>
 <p>images和pdfs和data和extra文件夹其实名字都是随意的，只是一般这样写罢了，pdfs里面放pdf，images里面放图片等。这几个文件夹都是所谓的静态资源文件夹，等下生成output文件夹的时候，里面的内容都放送入到output文件夹里面去。你需要如下设置：</p>
-<div class="highlight"><pre><span></span>STATIC_PATHS = ['images',
+<div class="highlight"><pre><span></span><code>STATIC_PATHS = ['images',
                 'pdfs',
                 'data',
                 'extra',]
-</pre></div>
+</code></pre></div>
 <p>然后html文件需要额外说一下，原网页的body里面的内容都会完整传过去，但是原html网页head部分里面除了必要的meta标签和title标签之外，其他多余的内容是传不过去的。那么css或者js的设置怎么弄呢，这个请参看后面的相关讨论，到时候设置好相关的meta标签即可。</p>
 <h3 id="output">output输出控制</h3>
-<div class="highlight"><pre><span></span>ARTICLE_URL = '{category}/{slug}.html'
+<div class="highlight"><pre><span></span><code>ARTICLE_URL = '{category}/{slug}.html'
 ARTICLE_SAVE_AS = ARTICLE_URL
 PAGE_URL = '{slug}.html'
 PAGE_SAVE_AS = PAGE_URL
@@ -380,7 +380,7 @@ CATEGORY_URL = '{slug}/index.html'
 CATEGORY_SAVE_AS = CATEGORY_URL
 TAG_URL = 'tag/{slug}.html'
 TAG_SAVE_AS = TAG_URL
-</pre></div>
+</code></pre></div>
 <ul>
 <li><code>ARTICLE_URL</code> 定义了文章的URL显示，其中slug你可以在文件头属性那边自定义。</li>
 <li><code>ARTICLE_SAVE_AS</code> 定义了该文件在output文件夹那边如何的存储路径</li>
@@ -390,18 +390,18 @@ TAG_SAVE_AS = TAG_URL
 <h2 id="theme">theme相关</h2>
 <h3 id="theme_1">使用theme</h3>
 <p>没必要将pelican推荐的那些theme都下载下来，找一个你喜欢的theme，将你复制到你的pelican项目根目录下，然后配置 <code>your_theme_name</code> 等于你复制来的主题的文件夹名字：</p>
-<div class="highlight"><pre><span></span>THEME = 'your_theme_name'
-</pre></div>
+<div class="highlight"><pre><span></span><code>THEME = 'your_theme_name'
+</code></pre></div>
 <p>theme内部static文件夹下的内容会copy到output文件夹下，比如 <code>static/css</code> 到 <code>theme/css</code> 。</p>
 <p>然后templates文件夹里面都是一些jinja2模板文件，后面讨论的theme相关主要就是关于这些jinja2模板的定制知识。</p>
 <h2 id="markdown">Markdown相关</h2>
 <p>首先需要通过：</p>
-<div class="highlight"><pre><span></span>pip install markdown
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install markdown
+</code></pre></div>
 <p>来获得pelican 对于 markdown的支持。该模块的官方文档在 <a href="https://python-markdown.github.io/">这里</a> 。就基本的使用是不需要太深入了解这个模块的，不过后面稍微有点定制需求，还有一些插件等，都是和这个模块的一些功能关联在一起的。</p>
 <p>首先我们来看最常用的两个功能，一个语法高亮功能，一个是自动目录生成功能。</p>
 <p>pelican相关的MARKDOWN配置原始参数如下：</p>
-<div class="highlight"><pre><span></span>MARKDOWN = {
+<div class="highlight"><pre><span></span><code>MARKDOWN = {
     'extension_configs': {
         'markdown.extensions.codehilite': {'css_class': 'highlight'},
         'markdown.extensions.extra': {},
@@ -409,13 +409,13 @@ TAG_SAVE_AS = TAG_URL
     },
     'output_format': 'html5',
 }
-</pre></div>
+</code></pre></div>
 <p>这些参数实际上就是传递给上面提到的 <code>markdown</code> 模块，pelican并没有管这块的。然后这里所谓的 extension_config 可以在其官方文档的 <a href="https://python-markdown.github.io/extensions/">这里</a> 获得信息，其中有很多官方插件，随着markdown模块的安装一并就安装进来了。</p>
 <h3 id="codehilite">codehilite</h3>
 <p>这个插件提供了一种代码块语法高亮方案，不过其对于代码块要求采用如下格式：</p>
-<div class="highlight"><pre><span></span>#!/usr/bin/python
+<div class="highlight"><pre><span></span><code>#!/usr/bin/python
 # Code goes here ...
-</pre></div>
+</code></pre></div>
 <p>还有其他几种格式这里就不赘述了，后面提到的 <code>fenced_code</code> 插件实际上是站在 CodeHilite 之上的，支持了我们常见了gfm代码块的表达。这两个插件都依赖 <code>pygments</code> 模块。</p>
 <ul>
 <li>css_class 配置最外面那个div区块的class名字</li>
@@ -426,34 +426,34 @@ TAG_SAVE_AS = TAG_URL
 <p>如上描述。</p>
 <h3 id="toc">toc</h3>
 <p>你在markdown 文档里面写上：</p>
-<div class="highlight"><pre><span></span>[TOC]
-</pre></div>
+<div class="highlight"><pre><span></span><code>[TOC]
+</code></pre></div>
 <p>其会自动将其转成：</p>
-<div class="highlight"><pre><span></span>&lt;div class="toc"&gt;
+<div class="highlight"><pre><span></span><code>&lt;div class="toc"&gt;
 .....
 &lt;/div&gt;
-</pre></div>
+</code></pre></div>
 <p>这里顺便就提到 <code>extract_toc</code> plugin 了，该插件利用 <code>beautifulsoup4</code> 模块刷上面的toc div，将你在pelican模板中遇到的 <code>article</code> 这个变量，加入了 <code>article.toc</code> 这个属性，具体内容就是上面提及的自动生成的toc内容。</p>
 <p>出于好奇我们可以看一下extract_toc 的相关代码：</p>
-<div class="highlight"><pre><span></span>    <span class="k">if</span> <span class="n">toc</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code>    <span class="k">if</span> <span class="n">toc</span><span class="p">:</span>
         <span class="n">toc</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
         <span class="n">content</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
         <span class="n">content</span><span class="o">.</span><span class="n">toc</span> <span class="o">=</span> <span class="n">toc</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">toc</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'&lt;html&gt;'</span><span class="p">):</span>
             <span class="n">content</span><span class="o">.</span><span class="n">toc</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">toc</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="o">-</span><span class="mi">14</span><span class="p">]</span>
-</pre></div>
+</code></pre></div>
 <p>我们看到 <code>toc.extract()</code> 也就是将之前 toc 插件生成的目录删去了，然后将toc赋值给了content，这个content对应的就是 <code>article</code> 【当然在pelican的page就是对应的page】。</p>
 <p>因此在pelican里，你可以查看一下你的theme，如果toc显示正常的话，应该有类似如下jinja2代码：</p>
-<div class="highlight"><pre><span></span>    {% if article.toc %}
+<div class="highlight"><pre><span></span><code>    {% if article.toc %}
     &lt;div class="col-md-2 table-of-content"&gt;
         &lt;nav&gt;
         ....
         {{ article.toc }}
         &lt;/nav&gt;
     &lt;/div&gt;
-</pre></div>
+</code></pre></div>
 <p>按照上面的讨论现在MARKDOWN 这个变量是：</p>
-<div class="highlight"><pre><span></span>MARKDOWN = {
+<div class="highlight"><pre><span></span><code>MARKDOWN = {
     'extension_configs': {
         'markdown.extensions.codehilite': {'css_class': 'highlight',
                                            'guess_lang': False},
@@ -464,23 +464,23 @@ TAG_SAVE_AS = TAG_URL
     },
     'output_format': 'html5',
 }
-</pre></div>
+</code></pre></div>
 <h2 id="plugin">plugin相关</h2>
 <h3 id="plugin_1">plugin的安装</h3>
 <p>通过如下配置来安装plugin，具体文件夹的操作就是在你的pelican项目根目录下有个 <code>myplugins</code> 文件夹，里面就是你编写的plugin或者将其他作者写的plugin copy到这里。</p>
-<div class="highlight"><pre><span></span>PLUGIN_PATHS = ['myplugins']
+<div class="highlight"><pre><span></span><code>PLUGIN_PATHS = ['myplugins']
 PLUGINS = ['pelican_javascript', 'extract_toc', 'pelican_ipynb', 'tipue_search',
            'render_math']
-</pre></div>
+</code></pre></div>
 <h3 id="pelican_javascript-plugin">pelican_javascript plugin</h3>
 <p>项目的 <a href="https://github.com/mortada/pelican_javascript">github地址在这里</a> 。</p>
 <p>js和css也是静态资源，但和上面的处理有有所不同，前面也提及了html源文件如果在head部分有css引用语句，都是会丢失的。你需要如下加上这样的meta标签语句：</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"javascripts"</span> <span class="na">content</span><span class="o">=</span><span class="s">"周易之摇卦.js"</span> <span class="p">/&gt;</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"javascripts"</span> <span class="na">content</span><span class="o">=</span><span class="s">"周易之摇卦.js"</span> <span class="p">/&gt;</span>
+</code></pre></div>
 <p>然后你还需要安装pelican-plugins里面的 <code>pelican_javascript</code> 如下所示：</p>
-<div class="highlight"><pre><span></span>PLUGIN_PATHS = ['pelican-plugins']
+<div class="highlight"><pre><span></span><code>PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
-</pre></div>
+</code></pre></div>
 <h2 id="_8">其他配置参考</h2>
 <p>前面关于 <code>pelicanconf.py</code> 文件里面的配置已经提到很多了，这里再就一些配置做出说明。</p>
 
@@ -537,7 +537,7 @@ PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
                     <span>1</span>
 </a></li>
                 <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>14</span>
+                    <span>13</span>
 </a></li>
             </ul>
 

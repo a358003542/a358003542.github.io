@@ -133,7 +133,7 @@
 <p>以相等查找为例，f(x)函数即f(x)=x，也就是输入什么同样输出的是什么。如果x=target，则我们说目标x复合条件f(x)=target，则该x就是我们要找的目标结果x。</p>
 <p>如果我们定义 <code>f(x)=x*x</code>，则意思是我们要找某个x符合条件 <code>x*x=target</code> ，这就是求平方根的过程。</p>
 <p>程序主体 <code>binary_search</code> 函数大体是这样的，主要参考了 <a href="https://github.com/keon/algorithms">algorithms模块</a> <code>binary_search.py</code> 文件，然后稍作修改。</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
     <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 
@@ -150,13 +150,13 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">'nearly'</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span>
-</pre></div>
+</code></pre></div>
 <p>首先我们来看最简单的查找匹配操作，即:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span>
-</pre></div>
+</code></pre></div>
 <p>然后我们有:</p>
-<div class="highlight"><pre><span></span>seq = list('abcdefg')
+<div class="highlight"><pre><span></span><code>seq = list('abcdefg')
 res = binary_search(f,seq,'e')
 print(res)
 
@@ -166,13 +166,13 @@ print(res)
 exactly
 e
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>然后我们要求平方根，也就是某个 <code>x*x=target</code> 的过程，把之前定义的函数简单改一下即可:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span>
-</pre></div>
+</code></pre></div>
 <p>然后我们利用numpy的 <code>arange</code> 函数来生成一个可能结果集。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; np.arange(0,10,0.1)
 array([ 0. ,  0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9,  1. ,
         1.1,  1.2,  1.3,  1.4,  1.5,  1.6,  1.7,  1.8,  1.9,  2. ,  2.1,
@@ -185,9 +185,9 @@ array([ 0. ,  0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9,  1. ,
         8.8,  8.9,  9. ,  9.1,  9.2,  9.3,  9.4,  9.5,  9.6,  9.7,  9.8,
         9.9])
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>然后我们有:</p>
-<div class="highlight"><pre><span></span>import numpy as np
+<div class="highlight"><pre><span></span><code>import numpy as np
 seq = np.arange(0,10,0.000001)
 res = binary_search(f,seq,2)
 print(res)
@@ -195,28 +195,28 @@ print(res)
 
 nearly
 1.414214
-</pre></div>
+</code></pre></div>
 <p>在这里讲个题外话，提到可能结果集的时候，我就想到将多个函数参数作为(a,b,c)这种形式，可是这种多元函数问题，怎么排序，怎么比较大小，怎么确定增减性？所以只好回滚到最原始的穷举过程，这里讲的意思是计算思想很核心的一个思想就是穷举思想，然后二分查找方法是在某些条件符合的情况下的加速穷举过程。</p>
 <p>比如说孙子算经里面的:</p>
 <blockquote>
 <p>今有雉兔同笼，上有三十五头，下有九十四足，问雉兔各几何？</p>
 </blockquote>
 <p>穷举的基本函数是:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">iter_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">iter_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">item</span>
-</pre></div>
+</code></pre></div>
 <p>很简单的一个函数，很简单的逻辑，但实际上这种先迭代某个对象，然后找到某个对象复合某个条件，则返回某个对象的过程在程序模式里面是非常常见的。</p>
 <p>然后我们根据笛卡尔积生成可能结果集:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from itertools import product
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from itertools import product
 &gt;&gt;&gt; seq = list(product(range(35),range(35)))
 &gt;&gt;&gt; seq
 [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), ..............
 .............
-</pre></div>
+</code></pre></div>
 <p>然后我们可以很直观的将问题化为两个满足条件来对可能结果集进行过滤操作:</p>
-<div class="highlight"><pre><span></span>def f(d):
+<div class="highlight"><pre><span></span><code>def f(d):
     x = d[0]
     y = d[1]
     head = x + y
@@ -228,19 +228,19 @@ def g(d):
 
     foot = 2*x + 4*y
     return foot
-</pre></div>
+</code></pre></div>
 <p>然后我们有:</p>
-<div class="highlight"><pre><span></span>res = list(product(range(35),range(35)))
+<div class="highlight"><pre><span></span><code>res = list(product(range(35),range(35)))
 res = iter_search(f,res,35)
 res = iter_search(g,res,94)
 print(list(res))
 
 [(23, 12)]
-</pre></div>
+</code></pre></div>
 <p>很简单的一些函数，但是整个过程是我很感兴趣的一种风格。</p>
 <h2 id="bisect">bisect模块</h2>
 <p>bisect模块提供了二分查找的支持，比如bisect_left函数：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bisect_left</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">bisect_left</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">"""Return the index where to insert item x in list a, assuming a is sorted.</span>
 <span class="sd">    The return value i is such that all e in a[:i] have e &lt; x, and all e in</span>
 <span class="sd">    a[i:] have e &gt;= x.  So if x already appears in the list, a.insert(x) will</span>
@@ -258,9 +258,9 @@ print(list(res))
         <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
     <span class="k">return</span> <span class="n">lo</span>
-</pre></div>
+</code></pre></div>
 <p>其底层有c加速，然后其返回的是一个索引值，根据这个索引值，如果你执行 <code>a.insert(x)</code> ，那么将把目标值插入到目标位置，如果x已经在a中存在，则插入的是最左边的位置。于是我们有：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    seq已排序，二分查找    </span>
 <span class="sd">    返回的是已经找到的索引值或者没有找到返回-1</span>
@@ -270,7 +270,7 @@ print(list(res))
 <span class="sd">    """</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">bisect_left</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">pos</span> <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>仔细体会python官方的源码，他写的版本比上面的版本要稍微好一点，代码更精炼，上面的版本可以根据它来改造，最后效果都差不多的。</p>
 
             <section>

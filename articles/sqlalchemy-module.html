@@ -219,12 +219,12 @@
 </ul>
 <h3 id="_2">安装</h3>
 <p>sqlalchemy的安装简单用pip命令安装之即可:</p>
-<div class="highlight"><pre><span></span>pip install sqlalchemy
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install sqlalchemy
+</code></pre></div>
 <h3 id="_3">引用惯例</h3>
 <p>在后面都默认有如下引用:</p>
-<div class="highlight"><pre><span></span>from sqlalchemy import *
-</pre></div>
+<div class="highlight"><pre><span></span><code>from sqlalchemy import *
+</code></pre></div>
 <p>后面将不会再提及，也就是凡是 <code>from sqlalchemy import what</code> 的所有语句也都归于如上一条引用。实践中并不推荐这种的全局引用。</p>
 <h2 id="_4">简介</h2>
 <p>通过sqlalchemy连接具体的某个数据库，前面有一些准备工作要做，参考 <a href="http://www.aosabook.org/en/sqlalchemy.html">sqlalchemy architecture</a> 一文的描述:</p>
@@ -235,24 +235,24 @@
 <p>创建一个 <code>Engine</code> 对象实际上对应的就是和数据库的连接操作。具体是通过 <code>create_engine</code> 函数创建的Engine对象，其一开始并没有实际连接数据库，只有具体要求某个操作的时候才会去连接。</p>
 <h4 id="sqlite3">连接sqlite3</h4>
 <p>连接sqlite3 in-memory</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite://')
-</pre></div>
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite://')
+</code></pre></div>
 <p>但是推荐采用如下写法:</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite:///:memory:')
-</pre></div>
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite:///:memory:')
+</code></pre></div>
 <p>这样后面谈及的sqlalchmy_utils的 <code>database_exists</code> 函数也能正常工作。</p>
 <p>连接sqlite3 on-disk</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite:///sqlite3_learning_example.db')
-</pre></div>
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite:///sqlite3_learning_example.db')
+</code></pre></div>
 <p>上面的db文件是创建在命令行当前工作目录下的，也就是相对路径表达。此外还可以如下写上绝对路径表达:</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite:////absolute/path/to/foo.db')
-</pre></div>
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite:////absolute/path/to/foo.db')
+</code></pre></div>
 <p>在三个斜杠线的基础上还需要加上一个斜杠线。作为这种形式的通用表达，前面必定有两个斜杠线，然后第二个斜杠线和第三个斜杠线之间是登录信息的描述，因为sqlite3没有这些信息，所以空了，如下所示:</p>
-<div class="highlight"><pre><span></span>dialect://username:password@host:port/database
-</pre></div>
+<div class="highlight"><pre><span></span><code>dialect://username:password@host:port/database
+</code></pre></div>
 <p>或者某个方言系统再加上某个驱动:</p>
-<div class="highlight"><pre><span></span>dialect+driver://username:password@host:port/database
-</pre></div>
+<div class="highlight"><pre><span></span><code>dialect+driver://username:password@host:port/database
+</code></pre></div>
 <p>这里的方言可以有:</p>
 <ul>
 <li><strong>sqlite:</strong> 默认的driver的官方的 <strong>sqlite3</strong> 模块，这个应该不需要改动。</li>
@@ -267,40 +267,40 @@
 <li><strong>mssql:</strong> 默认的driver是 <strong>pyodbc</strong> 。</li>
 </ul>
 <h4 id="mysql">连接mysql</h4>
-<div class="highlight"><pre><span></span>engine = create_engine('mysql+pymysql://localhost/mysql_db')
-</pre></div>
+<div class="highlight"><pre><span></span><code>engine = create_engine('mysql+pymysql://localhost/mysql_db')
+</code></pre></div>
 <p>确保你安装了pymysql:</p>
-<div class="highlight"><pre><span></span>pip install pymysql
-</pre></div>
+<div class="highlight"><pre><span></span><code>pip install pymysql
+</code></pre></div>
 <h4 id="postgresql">连接postgresql</h4>
-<div class="highlight"><pre><span></span>engine = create_engine('postgres://rick:foo@localhost:5432/pg_db')
-</pre></div>
+<div class="highlight"><pre><span></span><code>engine = create_engine('postgres://rick:foo@localhost:5432/pg_db')
+</code></pre></div>
 <h3 id="metadata">MetaData对象</h3>
 <p>MetaData对象你可以看作比Table层更高一级的抽象，里面存放着Table对象的一些metadata描述信息。一个简单的理解是将一个MetaData对象看作sqlalchemy内部的database概念。</p>
 <h4 id="unbound-metadata">创建一个unbound MetaData对象</h4>
 <p>通过 <code>MetaData()</code> 默认创建的就是一个unbound MetaData对象。</p>
-<div class="highlight"><pre><span></span>metadata = MetaData()
-</pre></div>
+<div class="highlight"><pre><span></span><code>metadata = MetaData()
+</code></pre></div>
 <h4 id="bindengine">bind一个Engine对象</h4>
 <p>你可以如下将一个unbound MetaData对象具体 <code>bind</code> 一个Engine对象。</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite://')
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite://')
 metadata = MetaData()
 metadata.bind = engine
-</pre></div>
+</code></pre></div>
 <p>或者在上面创建的时候就指定:</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite://')
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite://')
 metadata = MetaData(engine)
-</pre></div>
+</code></pre></div>
 <p>或者你还可以直接engine的URL表达来后台自动创建一个engine，于是有:</p>
-<div class="highlight"><pre><span></span>metadata = MetaData('sqlite://')
-</pre></div>
+<div class="highlight"><pre><span></span><code>metadata = MetaData('sqlite://')
+</code></pre></div>
 <p>对于初学者用的最多的还是 <code>BoundMetaData</code> ，通过上面谈及的方法创建了一个 <code>BoundMetaData</code> 对象之后，某个Table对象关联了该 <code>BoundMetaData</code> 对象，然后该Table对象就可以直接通过:</p>
-<div class="highlight"><pre><span></span>table.create()
-</pre></div>
+<div class="highlight"><pre><span></span><code>table.create()
+</code></pre></div>
 <p>来创建自身了。</p>
 <h4 id="_5">测试数据库是否存在</h4>
 <p>这里关于 <code>sqlalchemy_utils</code> 的想法来自 <a href="http://stackoverflow.com/questions/6506578/how-to-create-a-new-database-using-sqlalchemy">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span>
 
 
@@ -314,13 +314,13 @@ metadata = MetaData(engine)
     <span class="k">return</span> <span class="n">metadata</span>
 
 <span class="n">metadata</span> <span class="o">=</span> <span class="n">init_sqlalchemy</span><span class="p">(</span><span class="s1">'sqlite:///test.db'</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>这里的 <code>sqlalchemy_utils</code> 需要额外安装，在这里主要是利用其 <code>database_exists</code> 函数来检测某个数据库是否存在，然后如果不存在的话则用 <code>create_database</code> 函数创建之。</p>
 <p>上面的 <code>init_sqlalchemy</code> 函数最重要的一个参数就是那个 <code>dburl</code> ，具体其细节前面已有所叙述，正是照它来创建的Engine，并基于这个Engine对象来创建的MetaData对象，一般将这个MetaData对象bind之前的那个engine，然后返回该metadata即可，后面主要需要使用这个metadata。</p>
 <p>然后后面实际操作就以创建一个Table对象开始了，其他database的操作，建议如同上面处理的一样，都提到顶层用sqlalchemy_utils模块来处理之。类似的还有 <strong>drop_database</strong> : 删除database，参数如create_database也是某个Engine对象的url。</p>
 <h3 id="table">创建一个Table对象</h3>
 <p>下面是一个完整的例子，最后创建了一个Table表格。这里的 <code>db</code> 也就是前面谈及的MetaData对象，我们看到在创建Table对象的时候第一个参数是具体创建的SQL表格的名字，第二个就是该表格bind的某个MetaData对象，也可以简单理解为该表格对象存入该MetaData对象代表的database中。然后后面调用 <code>db.create_all()</code> ，所有这些bind到该db上的表格都将创建。你还可以用 <code>users.create()</code> 来单独创建某个表格。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span>
 
 
@@ -343,24 +343,24 @@ metadata = MetaData(engine)
 <span class="p">)</span>
 
 <span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <h3 id="table_1">利用已存在的Table</h3>
 <p>如果某个数据库的某个Table已经存在了，那么你就没有必要如上去创建一个Table对象了，只需要如下做就可以获得该Table对象了:</p>
-<div class="highlight"><pre><span></span>users = Table('users',db,autoload=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>users = Table('users',db,autoload=True)
+</code></pre></div>
 <p>具体就是将 <code>autoload</code> 设置为True即可。这里的db就是所谓的metadata，然后这里必须是bind了的metadata对象，若还未bind，则还需要加上autoload_with参数。</p>
 <h3 id="_6">实际在数据库中创建表格</h3>
 <p>具体可以整个metadata对象，调用 <code>create_all</code> 方法来创建所有表格（其也有 <code>checkfirst</code> 参数。）:</p>
-<div class="highlight"><pre><span></span>db.create_all()
-</pre></div>
+<div class="highlight"><pre><span></span><code>db.create_all()
+</code></pre></div>
 <p>或者该Table对象具体调用 <code>create</code> 方法来自我创建之。在应用推荐加上 <code>checkfirst=True</code> 设置，这样就算数据库中该表格已经存在也不会报错。如下所示:</p>
-<div class="highlight"><pre><span></span>users.create(checkfirst=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>users.create(checkfirst=True)
+</code></pre></div>
 <p>类似的还有如下用法用于安装删除某个表格，即使该表格不存在也不会报错:</p>
-<div class="highlight"><pre><span></span>users.drop(checkfirst=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>users.drop(checkfirst=True)
+</code></pre></div>
 <p>这里代码改成了这个样子了:</p>
-<div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="n">users</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s1">'users'</span><span class="p">,</span><span class="n">db</span><span class="p">,</span><span class="n">autoload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">NoSuchTableError</span><span class="p">:</span>
     <span class="n">users</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s1">'users'</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span>
@@ -369,7 +369,7 @@ metadata = MetaData(engine)
     <span class="n">Column</span><span class="p">(</span><span class="s1">'age'</span><span class="p">,</span> <span class="n">Integer</span><span class="p">),</span>
     <span class="n">Column</span><span class="p">(</span><span class="s1">'password'</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>注意这个 <code>NoSuchTableError</code> ，如果通过 <code>autoload=True</code> 来获取该Table对象而其在数据库中并不存在，则将抛出这个异常。</p>
 <h3 id="_7">列的属性设置</h3>
 <p>创建表格对象后面一系列的参数就是具体各个列Column对象，其第一个参数是具体列的名字，然后第二个参数该列所存储的值的类型，后面还可以跟其他一些可选项作为属性的进一步修饰。具体如下所示:</p>
@@ -676,90 +676,90 @@ metadata = MetaData(engine)
 <h3 id="json">JSON支持</h3>
 <p>这个现在特别值得提一下，现在主流数据库已经都开始支持JSON数据了。sqlalchemy有JSON这个字段类型了，然后postgresql很早就支持了，mysql版本 &gt; 5.7.5 也是支持的了，现在估计大多已经超过这个版本了。</p>
 <p>很是好用，强烈推荐读者去了解下：</p>
-<div class="highlight"><pre><span></span>json_data_field = Column(JSON)
-</pre></div>
+<div class="highlight"><pre><span></span><code>json_data_field = Column(JSON)
+</code></pre></div>
 <h3 id="insert">insert语句</h3>
 <p>上面谈及的Table对象调用 <code>insert</code> 方法即可产生一个临时表达语句对象（大概类似的东西，这个词是我杜撰的。），比如在执行 <code>i = users.insert()</code> 之后:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; type(i)
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; type(i)
 &lt;class 'sqlalchemy.sql.dml.Insert'&gt;
 &gt;&gt;&gt; str(i)
 'INSERT INTO users (user_id, name, age, password) VALUES (?, ?, ?, ?)'
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>这个i临时表达语句对象有 <code>execute</code> 方法，其可以接受一些参数，比如如下所示:</p>
-<div class="highlight"><pre><span></span>i = users.insert()
+<div class="highlight"><pre><span></span><code>i = users.insert()
 i.execute(name='Mary', age=30, password='secret')
-</pre></div>
+</code></pre></div>
 <p>这个语句执行之后，该数据就被插入进数据库了。你还可以用execute方法来插入多个值，如下所示:</p>
-<div class="highlight"><pre><span></span>i.execute({'name': 'John', 'age': 42},
+<div class="highlight"><pre><span></span><code>i.execute({'name': 'John', 'age': 42},
           {'name': 'Susan', 'age': 57},
           {'name': 'Carl', 'age': 33})
-</pre></div>
+</code></pre></div>
 <p>然后如果我们需要使用 <code>insert ignore</code> 这样的语句，则需要这样处理:</p>
-<div class="highlight"><pre><span></span>i = users.insert().prefix_with('or ignore')
+<div class="highlight"><pre><span></span><code>i = users.insert().prefix_with('or ignore')
 'INSERT or ignore INTO users (user_id, name, age, password) VALUES (?, ?, ?, ?)'
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>上面的例子是sqlite的情况，mysql那边则需要写成 <code>.prefix_with('ignore')</code> 这样的形式。</p>
 <p>然后额外值得一提的是: 要真正做到重复刷，primary_key，也就是这里的 <code>user_id</code> 需要具体指定为多少，因为这里的ignore的逻辑就是基于主键列不重复的。</p>
 <h3 id="delete">delete语句</h3>
 <p>delete语句的使用也类似上面insert语句所谈及的，除了根据SQL delete语句的实际情况，其为第一个可选参数为where过滤字句，如下所示:</p>
-<div class="highlight"><pre><span></span>d = users.delete(users.c.password == None)
+<div class="highlight"><pre><span></span><code>d = users.delete(users.c.password == None)
 &gt;&gt;&gt; str(d)
 'DELETE FROM users WHERE users.password IS NULL'
-</pre></div>
+</code></pre></div>
 <p>我们注意到上面 <code>users.c.password</code> 的用法，这里的细节后面再讨论，大体意思就是users这个表格的password这一列其值等于None（对应NULL），然后python中的 <code>is None</code> 这种写法试了一下并不行。</p>
 <p>上面的delete语句是将users表格中password为空的行都删除，然后如果在构建delete语句时，不填任何where语句，则是表格所有记录都将被删除。</p>
-<div class="highlight"><pre><span></span>d = users.delete()
-</pre></div>
+<div class="highlight"><pre><span></span><code>d = users.delete()
+</code></pre></div>
 <h3 id="update">update语句</h3>
 <p>然后是update语句，下面来更新那几个user的password。 <code>update</code> 语句的参数设置如下:</p>
-<div class="highlight"><pre><span></span>update(whereclause=None, values=None, inline=False, **kwargs)
-</pre></div>
+<div class="highlight"><pre><span></span><code>update(whereclause=None, values=None, inline=False, **kwargs)
+</code></pre></div>
 <p>我们可以看到其第一个可选参数和delete一样是 <code>whereclause</code> where过滤字句，然后第二个values要跟一个字典值，用来表示具体设置的某些值。下面演示逐步构建update语句的风格，这种风格同样适用于 <code>insert</code> , <code>update</code> , <code>select</code> 语句的构建。</p>
-<div class="highlight"><pre><span></span>u1 = users.update()
+<div class="highlight"><pre><span></span><code>u1 = users.update()
 u2 = u1.where(users.c.name == 'John').values(password='123456')
 &gt;&gt;&gt; str(u1)
 'UPDATE users SET user_id=?, name=?, age=?, password=?'
 &gt;&gt;&gt; str(u2)
 'UPDATE users SET password=? WHERE users.name = ?'
-</pre></div>
+</code></pre></div>
 <p>这里str显示参数并没有给打进去，我们 <code>u2.execute()</code> 执行的话就会看到实际效果了。</p>
 <h3 id="select">select语句</h3>
 <p>select语句和前面谈论的 <code>insert</code> 等语句的构建过程类似，只是因为SQL中select语句情况较为复杂，然后select语句还需要考虑具体查询的返回值问题，所以东西很多。</p>
 <p>首先我们看下面这个函数:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_squery</span><span class="p">(</span><span class="n">squery</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">show_squery</span><span class="p">(</span><span class="n">squery</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">squery</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>select语句执行之后的返回结果叫做什么 <code>ResultProxy</code> 对象，其可以直接用for语句来迭代。不带任何参数的select语句返回Table的所有行:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(users.select())
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(users.select())
 (1, 'Mary', 30, 'secret')
 (2, 'John', 42, '123456')
 (3, 'Susan', 57, None)
 (4, 'Carl', 33, None)
-</pre></div>
+</code></pre></div>
 <p>或者:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(users.select(users.c.name=='John'))
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(users.select(users.c.name=='John'))
 (2, 'John', 42, '123456')
-</pre></div>
+</code></pre></div>
 <p>这是 <code>and_</code> 或 <code>&amp;</code> 的用法:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(users.select(and_(users.c.age &lt; 40 , users.c.name != 'Mary')))
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(users.select(and_(users.c.age &lt; 40 , users.c.name != 'Mary')))
 (4, 'Carl', 33, None)
 
 &gt;&gt;&gt; show_squery(users.select((users.c.age &lt; 40) &amp; (users.c.name != 'Mary')))
 (4, 'Carl', 33, None)
-</pre></div>
+</code></pre></div>
 <p>类似的还有 <code>or_</code> 或 <code>|</code> 做逻辑或的意思 ; 或者 <code>not_</code> 或 "~" 做逻辑非的意思。</p>
 <p>此外还有 <code>startswith</code> , <code>like</code> , <code>endswith</code></p>
-<div class="highlight"><pre><span></span>users.select(users.c.name.startswith('M'))
-</pre></div>
+<div class="highlight"><pre><span></span><code>users.select(users.c.name.startswith('M'))
+</code></pre></div>
 <p>还有 <code>between</code> , <code>in_</code> :</p>
-<div class="highlight"><pre><span></span>users.select(users.c.age.between(30,39))
+<div class="highlight"><pre><span></span><code>users.select(users.c.age.between(30,39))
 
 users.select(users.c.name.in_('Mary', 'Susan'))
-</pre></div>
+</code></pre></div>
 <h3 id="resultproxy">ResultProxy对象</h3>
 <p>select语句执行后返回的ResultProxy对象除了可以直接迭代外还有如下这些方法。</p>
 <ul>
@@ -781,7 +781,7 @@ users.select(users.c.name.in_('Mary', 'Susan'))
 </ul>
 <h3 id="rowproxy">RowProxy对象</h3>
 <p>对ResultProxy对象进行迭代，或者fetchone，fetchmany，fetchall方法，就可以获得RowProxy对象，其对应的就是数据库的一行记录。该对象api操作很是灵活，具体你可以像操作一个字典来操作它，也可以类似操作namedtuple般的来操作它，还可以如同列表一般用这样 <code>[0]</code> 的索引方法提取某一列，如下所示:</p>
-<div class="highlight"><pre><span></span>s = users.select()
+<div class="highlight"><pre><span></span><code>s = users.select()
 rs = s.execute()
 row = rs.fetchone()
 
@@ -791,10 +791,10 @@ row = rs.fetchone()
 'Mary'
 &gt;&gt;&gt; row['password']
 'secret'
-</pre></div>
+</code></pre></div>
 <h2 id="_9">多表连接</h2>
 <p>现在代码情况如下所示:</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">sqlalchemy</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span>
 
@@ -861,10 +861,10 @@ row = rs.fetchone()
     <span class="p">{</span><span class="s1">'address'</span><span class="p">:</span> <span class="s1">'john@example.org'</span><span class="p">,</span> <span class="s1">'user_id'</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
     <span class="p">{</span><span class="s1">'address'</span><span class="p">:</span> <span class="s1">'carl@nospam.net'</span><span class="p">,</span> <span class="s1">'user_id'</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
 <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3 id="_10">交叉连接或笛卡尔积</h3>
 <p>下面是交叉连接的情况:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(select([users,emails]))
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(select([users,emails]))
 2015-10-28 20:27:21,721 INFO sqlalchemy.engine.base.Engine SELECT users.id, users.name, users.age, users.password, emails.id, emails.address, emails.user_id 
 FROM users, emails
 2015-10-28 20:27:21,721 INFO sqlalchemy.engine.base.Engine ()
@@ -884,10 +884,10 @@ FROM users, emails
 (4, 'Carl', 33, None, 2, 'john@nowhere.net', 2)
 (4, 'Carl', 33, None, 3, 'john@example.org', 2)
 (4, 'Carl', 33, None, 4, 'carl@nospam.net', 4)
-</pre></div>
+</code></pre></div>
 <h3 id="_11">内连接</h3>
 <p>下面是内连接的情况:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(select([users,emails],users.c.id == emails.c.user_id))
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(select([users,emails],users.c.id == emails.c.user_id))
 2015-10-28 20:39:09,173 INFO sqlalchemy.engine.base.Engine SELECT users.id, users.name, users.age, users.password, emails.id, emails.address, emails.user_id 
 FROM users, emails 
 WHERE users.id = emails.user_id
@@ -896,9 +896,9 @@ WHERE users.id = emails.user_id
 (2, 'John', 42, '123456', 2, 'john@nowhere.net', 2)
 (2, 'John', 42, '123456', 3, 'john@example.org', 2)
 (4, 'Carl', 33, None, 4, 'carl@nospam.net', 4)
-</pre></div>
+</code></pre></div>
 <p>sqlalchemy还有一种更智能的内连接用法:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(join(users, emails).select())
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(join(users, emails).select())
 2015-10-28 20:40:17,502 INFO sqlalchemy.engine.base.Engine SELECT users.id, users.name, users.age, users.password, emails.id, emails.address, emails.user_id 
 FROM users JOIN emails ON users.id = emails.user_id
 2015-10-28 20:40:17,502 INFO sqlalchemy.engine.base.Engine ()
@@ -906,10 +906,10 @@ FROM users JOIN emails ON users.id = emails.user_id
 (2, 'John', 42, '123456', 2, 'john@nowhere.net', 2)
 (2, 'John', 42, '123456', 3, 'john@example.org', 2)
 (4, 'Carl', 33, None, 4, 'carl@nospam.net', 4)
-</pre></div>
+</code></pre></div>
 <h3 id="_12">外连接</h3>
 <p>外连接如下所示，和写入顺序有关。具体是第一个连接第二个，满足过滤条件的则data收进来，没有的则用NULL填充。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; show_squery(outerjoin(users, emails).select())
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; show_squery(outerjoin(users, emails).select())
 2015-10-28 20:41:16,610 INFO sqlalchemy.engine.base.Engine SELECT users.id, users.name, users.age, users.password, emails.id, emails.address, emails.user_id 
 FROM users LEFT OUTER JOIN emails ON users.id = emails.user_id
 2015-10-28 20:41:16,610 INFO sqlalchemy.engine.base.Engine ()
@@ -927,11 +927,11 @@ FROM emails LEFT OUTER JOIN users ON users.id = emails.user_id
 (2, 'john@nowhere.net', 2, 2, 'John', 42, '123456')
 (3, 'john@example.org', 2, 2, 'John', 42, '123456')
 (4, 'carl@nospam.net', 4, 4, 'Carl', 33, None)
-</pre></div>
+</code></pre></div>
 <h2 id="orm_1">ORM风格</h2>
 <p>sqlalchemy模块的面向对象封装部分改动较大，参考资料1和2里面的内容很多都过时了，没办法只好看嚼官方文档了。</p>
 <p>首先我们看到下面这段代码:</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">sqlalchemy</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
@@ -958,46 +958,46 @@ FROM emails LEFT OUTER JOIN users ON users.id = emails.user_id
         <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">'&lt;User </span><span class="si">{}</span><span class="s1">&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>我们调用 <code>User</code> 类的 <code>__table__</code> ，其实质就是前面no-orm风格提及的Table对象。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; User.__table__
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; User.__table__
 Table('users', MetaData(bind=Engine(sqlite:///:memory:)), Column('id', Integer(), table=&lt;users&gt;, primary_key=True, nullable=False), Column('name', String(), table=&lt;users&gt;), Column('fullname', String(), table=&lt;users&gt;), Column('password', String(), table=&lt;users&gt;), schema=None)
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>ORM层是通过Session对象来和数据库进行会话的:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
 <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>下面先将如何通过session进行数据库的CRUD（CREATE RETRIEVE UPDATE DELETE）操作分别说明一下:</p>
 <h3 id="orm_2">通过orm层创建数据库</h3>
 <p>或者引入orm对象之后，调用其 <code>__table__</code> Table对象，然后像之前的调用 <code>create</code> 方法即可。</p>
-<div class="highlight"><pre><span></span>UserInfo.__table__.create(bind =engine) 
-</pre></div>
+<div class="highlight"><pre><span></span><code>UserInfo.__table__.create(bind =engine) 
+</code></pre></div>
 <p><strong>Warning:</strong> 单表这样创建必须没有外键关系，有则会失败。</p>
 <p>或者如官方教程推荐的：</p>
-<div class="highlight"><pre><span></span>Base.metadata.create_all(engine)
-</pre></div>
+<div class="highlight"><pre><span></span><code>Base.metadata.create_all(engine)
+</code></pre></div>
 <h3 id="_13">增加记录</h3>
 <p>如下来给某个表格增加一条记录:</p>
-<div class="highlight"><pre><span></span>admin = User('admin','administor','admin')
+<div class="highlight"><pre><span></span><code>admin = User('admin','administor','admin')
 session.add(admin) # 此外还有 add_all 方法可以一次性添加多个orm对象
 session.commit()
-</pre></div>
+</code></pre></div>
 <p>当session <code>add</code> 了某一条记录，这种更改称之为on-fly更改，后面谈及的其他基于python对象的操作从而对具体某个记录的某个属性的更改也是如此，都是on-fly模式。也就是只有在执行了 <code>session.commit()</code> 之后，所有的更改才会实际刷入数据库，而之前的更改虽然没有实际刷入数据库，但后面代码的查询等等操作都是基于这种改动之后新的（可以看作以某种形式的基于内存的）数据库的。</p>
 <p>如果你了解SQL的transaction的概念，就清楚SQL数据库的实现通过transaction来实现数据提交的安全保障——如果一次transaction提交失败，那么将会rollback回滚之，从而保证SQL数据库不会mess up。session有 <code>rollback</code> 方法可以主动回滚，这样on-fly的没有commit的所有transaction都会被丢弃。当session <code>commit</code> 之后，这次的transaction成功提交了就完成了，下次又是另外一个新的transaction。</p>
 <h3 id="_14">查询记录</h3>
 <p>同之前谈及的no-orm风格中提到的select语句查询不同，orm风格的查询语句更加的精简了，但仍然没有脱离select语句查询的本质，熟悉SQL的select语句能够帮助我们更好地学习下面的查询语句。</p>
 <p>查询的起步是:</p>
-<div class="highlight"><pre><span></span>session.query(User)
-</pre></div>
+<div class="highlight"><pre><span></span><code>session.query(User)
+</code></pre></div>
 <p>其返回的是orm子模块里面的Query对象。User是具体要查询的某个类（对应某个表格）。简单的理解是将这个 <code>query</code> 方法看作select操作的 <code>select * from User</code> 。 这个Query对象是个可迭代对象，迭代过程中上面返回的就是 User 对象。</p>
 <p>若写成这样的形式:</p>
-<div class="highlight"><pre><span></span>session.query(User.name, User.fullname)
-</pre></div>
+<div class="highlight"><pre><span></span><code>session.query(User.name, User.fullname)
+</code></pre></div>
 <p>则大致对应的是 <code>select name,fullname from User</code> 。</p>
 <p>具体如下所示:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; for i in session.query(User):
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; for i in session.query(User):
 ...  print(i)
 ... 
 &lt;User admin&gt;
@@ -1009,13 +1009,13 @@ session.commit()
 ... 
 admin administor
 guest guest
-</pre></div>
+</code></pre></div>
 <p>在学习SQL的select语句的时候我们学到在 <code>select what from what</code> 语句之后还可以跟上where字句，order by字句等等。sqlalchemy的orm封装同样支持这样的额外操作，具体就是在上面的query语句的基础上进一步操作。经过这些额外的操作返回的同样还是Query对象，也就是你可以写上 <code>session.query(User).filter_by(what).filter(what).order_by(what)</code> 。这样看上去有点长的语句，只要你熟悉SQL语句，并知道在做些什么，那么是完全没有问题的。</p>
 <h4 id="_15">过滤排序等操作</h4>
 <ul>
 <li><strong>filter方法:</strong> filter方法对应select语句的where字句。下面是官方文档的一些例子，复制到这里看看熟悉一下即可，大多是什么含义一般都是清楚的:</li>
 </ul>
-<div class="highlight"><pre><span></span>    query.filter(User.name == 'ed')
+<div class="highlight"><pre><span></span><code>    query.filter(User.name == 'ed')
     query.filter(User.name != 'ed')
     query.filter(User.name.like('%ed%'))
     query.filter(User.name.in_(['ed', 'wendy', 'jack']))
@@ -1024,17 +1024,17 @@ guest guest
     query.filter(User.name != None)
     query.filter(and_(User.name == 'ed', User.fullname == 'Ed Jones'))
     query.filter(or_(User.name == 'ed', User.name == 'wendy'))
-</pre></div>
+</code></pre></div>
 <ul>
 <li><strong>filter_by方法:</strong> filter_by方法类似filter方法，除了如上面的User.name要写成name，也就是直接引用表格的列名。</li>
 </ul>
-<div class="highlight"><pre><span></span>query.filter_by(name = 'ed')
-</pre></div>
+<div class="highlight"><pre><span></span><code>query.filter_by(name = 'ed')
+</code></pre></div>
 <ul>
 <li><strong>order_by方法:</strong> 对应select语句的order by字句。</li>
 </ul>
-<div class="highlight"><pre><span></span>    order_by(User.id)[1:3]
-</pre></div>
+<div class="highlight"><pre><span></span><code>    order_by(User.id)[1:3]
+</code></pre></div>
 <p>然后上面还揭示了 Query 对象很重要的一个特性，其支持python的切片操作。</p>
 <h4 id="_16">返回结果</h4>
 <p>Query对象还可以通过下面这些方法还获得返回结果:</p>
@@ -1054,33 +1054,33 @@ guest guest
 <li><strong>count():</strong> 返回命中记录数。</li>
 </ul>
 <h3 id="_17">更多的查询例子</h3>
-<div class="highlight"><pre><span></span>session.query(Game).filter(Game.release_date &gt;= '1999-01-01')
-</pre></div>
+<div class="highlight"><pre><span></span><code>session.query(Game).filter(Game.release_date &gt;= '1999-01-01')
+</code></pre></div>
 <h4 id="text">text函数</h4>
 <p>text函数用于支持 <code>filter</code> 和 <code>order_by</code> 方法支持原生的SQL语句表达。大致如下所示，了解下即可:</p>
-<div class="highlight"><pre><span></span>from sqlalchemy import text
+<div class="highlight"><pre><span></span><code>from sqlalchemy import text
 session.query(User).filter(text("id&lt;224")).order_by(text("id"))
-</pre></div>
+</code></pre></div>
 <h3 id="_18">更改记录</h3>
 <p>更改记录经过ORM封装之后变得很简单了，就是查询之后获得对应的python对象，然后直接修改即可。</p>
-<div class="highlight"><pre><span></span>game = session.query(Game).get(1)
+<div class="highlight"><pre><span></span><code>game = session.query(Game).get(1)
 game.name = 'Super Mario Brothers'
 session.commit()
-</pre></div>
+</code></pre></div>
 <h3 id="_19">删除记录</h3>
-<div class="highlight"><pre><span></span>session.delete(jack)
-</pre></div>
+<div class="highlight"><pre><span></span><code>session.delete(jack)
+</code></pre></div>
 <h3 id="_20">批量修改或删除</h3>
-<div class="highlight"><pre><span></span>session.query(Game).filter_by(category="RPG").update({"category": "ARPG"})
+<div class="highlight"><pre><span></span><code>session.query(Game).filter_by(category="RPG").update({"category": "ARPG"})
 session.query(Game).filter_by(category="ARPG").delete()
-</pre></div>
+</code></pre></div>
 <h2 id="orm_3">ORM层的关系</h2>
 <p>SQL表格有四种关系，one-to-one, one-to-many, many-to-one, many-to-many，它们实际上都是基于SQL的外键约束和join查询。其中one-to-many和many-to-one是最需要了解清楚的关系模型，在这之上many-to-many，三个SQL表格搭建起来的关系模型也就很好理解了。推荐读者阅读 <a href="http://code.tutsplus.com/articles/sql-for-beginners-part-3-database-relationships--net-8561">这篇文章</a> 来更好地理解SQL表格的这四种关系模型。因为one-to-one实际上是one-to-many的特殊情形，而many-to-one实际上是one-to-many模型的反向，所以我们首先需要重点了解one-to-many模型。</p>
 <h3 id="one-to-many">one-to-many模型</h3>
 <p>sqlalchemy的orm层对one-to-many关系进行了高度封装，使得你不需要考虑SQL的join连接语法细节，只需要声明好外键约束和关系约束（可以看作sqlalchemy新加入了关系约束），然后就可以神奇的使用SQL表格one-to-many的全部特性了。</p>
 <p>首先让我们用ORM层的join方法来暂时SQL表格的这些relationship的建立细节，然后再来具体讨论更实用的ORM层的relationship建立的写法。</p>
 <p>这是示例代码:</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">sqlalchemy</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
@@ -1139,38 +1139,38 @@ session.query(Game).filter_by(category="ARPG").delete()
     <span class="n">Email</span><span class="p">(</span><span class="s1">'carl@nospam.net'</span><span class="p">,</span><span class="mi">4</span><span class="p">)])</span>
 
 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>然后用sqliteman观察数据库情况如下:</p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/users_table.png" title="users_table"/></p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/emails_table.png" title="emails_talbe"/></p>
 <p><code>session.query(User,Email)</code> 返回的是笛卡尔积的形式:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; session.query(User,Email).all()
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; session.query(User,Email).all()
 [(&lt;User admin&gt;, &lt;Email mary@example.com&gt;), (&lt;User admin&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User admin&gt;, &lt;Email john@example.org&gt;), (&lt;User admin&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User Mary&gt;, &lt;Email mary@example.com&gt;), (&lt;User Mary&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User Mary&gt;, &lt;Email john@example.org&gt;), (&lt;User Mary&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User John&gt;, &lt;Email mary@example.com&gt;), (&lt;User John&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User John&gt;, &lt;Email john@example.org&gt;), (&lt;User John&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User Susan&gt;, &lt;Email mary@example.com&gt;), (&lt;User Susan&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User Susan&gt;, &lt;Email john@example.org&gt;), (&lt;User Susan&gt;, &lt;Email carl@nospam.net&gt;), (&lt;User Carl&gt;, &lt;Email mary@example.com&gt;), (&lt;User Carl&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User Carl&gt;, &lt;Email john@example.org&gt;), (&lt;User Carl&gt;, &lt;Email carl@nospam.net&gt;)]
-</pre></div>
+</code></pre></div>
 <p>然后调用Query对象的 <strong>join</strong> 方法执行了内连接:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; session.query(User,Email).join(Email).all()
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; session.query(User,Email).join(Email).all()
 [(&lt;User Mary&gt;, &lt;Email mary@example.com&gt;), (&lt;User John&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User John&gt;, &lt;Email john@example.org&gt;), (&lt;User Susan&gt;, &lt;Email carl@nospam.net&gt;)]
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>从这里我们就可以看出一点one-to-many的影子了，注意John对应了两个Email对象。</p>
 <p>然后我们稍加过滤条件:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; session.query(User,Email).join(Email).filter(User.name == 'John').all()
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; session.query(User,Email).join(Email).filter(User.name == 'John').all()
 [(&lt;User John&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User John&gt;, &lt;Email john@example.org&gt;)]
-</pre></div>
+</code></pre></div>
 <p>或者更明确的查询email:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; session.query(User,Email.email).join(Email).filter(User.name == 'John').all()
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; session.query(User,Email.email).join(Email).filter(User.name == 'John').all()
 [(&lt;User John&gt;, 'john@nowhere.net'), (&lt;User John&gt;, 'john@example.org')]
-</pre></div>
+</code></pre></div>
 <p>此外还有这种形式:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; session.query(Email,User).join(User).all()
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; session.query(Email,User).join(User).all()
 [(&lt;Email mary@example.com&gt;, &lt;User Mary&gt;), (&lt;Email john@nowhere.net&gt;, &lt;User John&gt;), (&lt;Email john@example.org&gt;, &lt;User John&gt;), (&lt;Email carl@nospam.net&gt;, &lt;User Susan&gt;)]
 
 &gt;&gt;&gt; session.query(Email,User).join(User).filter(User.name == 'John').all()
 [(&lt;Email john@nowhere.net&gt;, &lt;User John&gt;), (&lt;Email john@example.org&gt;, &lt;User John&gt;)]
-</pre></div>
+</code></pre></div>
 <p>由于内连接虽然输出一行具体输出内容根据你的 <code>select what</code> 不同而不同，但具体行数和对于内容的描述上实际上就是一回事。上面是另外一种内连接顺序。然后我们利用这个反向查询某个邮箱的User也是可以的，这就是many-to-one数据模型了。</p>
 <p>此外Query对象当然还有 <strong>outerjoin</strong> 方法，因为这里是要描述各关系模型，就略过了。下面介绍ORM层更实用的关系定义方法:</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">sqlalchemy</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span>
@@ -1232,28 +1232,28 @@ session.query(Game).filter_by(category="ARPG").delete()
 
 <span class="n">john</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'John'</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
 <span class="n">e1</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Email</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Email</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="s1">'john@example.org'</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>然后我们就可以这样使用了:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; john.email
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; john.email
 [&lt;Email john@nowhere.net&gt;, &lt;Email john@example.org&gt;]
 &gt;&gt;&gt; e1.user
 &lt;User John&gt;
-</pre></div>
+</code></pre></div>
 <p>这确实很好用，而这里具体的模型就是one（user）对应many（email）的one-to-many模型。</p>
 <p>下面重点介绍一下 <strong>relationship</strong> 这一行具体干了些什么:</p>
-<div class="highlight"><pre><span></span>email = relationship("Email",backref=backref('user'))
-</pre></div>
+<div class="highlight"><pre><span></span><code>email = relationship("Email",backref=backref('user'))
+</code></pre></div>
 <ol>
 <li>给User email属性，如上你可以这样 <code>john.email</code> 这样调用了。</li>
 <li>指定Email对应（many）端（可以理解为这里针对Email执行了内连接操作，当然sqlalchemy具体如何处理的内部细节我还不清楚，但应该差不多就是这个过程。），这样的话具体User.email的值就通过某种机制大概如下所示</li>
 </ol>
-<div class="highlight"><pre><span></span>    &gt;&gt;&gt; session.query(User,Email).join(Email).filter(User.name == 'John').all()
+<div class="highlight"><pre><span></span><code>    &gt;&gt;&gt; session.query(User,Email).join(Email).filter(User.name == 'John').all()
     &gt;&gt;&gt; [(&lt;User John&gt;, &lt;Email john@nowhere.net&gt;), (&lt;User John&gt;, &lt;Email john@example.org&gt;)]
-</pre></div>
+</code></pre></div>
 <p>这样获得了User John所回应的几个Email对象。具体过程不清楚，但用上面这样的语句来理解应该已经八九不离十了。</p>
 <h3 id="one-to-one">one-to-one模型</h3>
 <p>one-to-one模型就是one-to-many模型的特例，所以这里先讲了，和上面比较起来区别很小的。</p>
-<div class="highlight"><pre><span></span>class User(Base):
+<div class="highlight"><pre><span></span><code>class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer,primary_key=True)
@@ -1279,7 +1279,7 @@ class Email(Base):
         self.user_id = user_id
     def __repr__(self):
         return '&lt;Email {}&gt;'.format(self.email)
-</pre></div>
+</code></pre></div>
 <p>就加上了 <code>uselist=False)</code> 这一句，这样将直接返回某个Email对象。</p>
 <h3 id="many-to-one">many-to-one模型</h3>
 <p>many-to-one模型实际上和one-to-many模型就是一回事，而且如果我们如同上面的把 <code>backref</code> 设置好，针对多个Email对象实际上就可以直接找到某个User对象了，所以为了简单起见，我们可以就直接用one-to-many模型来理解之。</p>
@@ -1287,7 +1287,7 @@ class Email(Base):
 <p>many-to-many模型有点复杂和难于理解，这是因为其还要求有一个额外的Table来管理原两个表格之间的元素的映射关系，幸好sqlalchemy官方文档专门有一小节对这个做出了一些说明。其描述的一个应用场景就是一篇博文有多个标签，然后一个标签有多篇博文（我们可以简单构建出这样一个功能，单击一个标签按钮，然后弹出所有有这些标签的文章出来）。一个博文有多个标签这很简单，一个one-to-many模型就解决了，大概就是 <code>blog.tags</code> ，就弹出一个list，里面装着一些标签对象。所以关键性的问题是如何实现出 <code>tag.blogs</code> ，就弹出一个list，里面装着一些博文对象。而在 <a href="http://code.tutsplus.com/articles/sql-for-beginners-part-3-database-relationships--net-8561">这篇文章</a> 的这幅图片中:</p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/many_to_many.png" title='"many-to-many模型'/></p>
 <p>于是现在的情况变成这样的了，blog one-to-many，但to many的是一个中间表格，而tag one-to-many，这个many也是一个中间表格。我们知道所谓的many一方存储着外键约束值，所以这个中间表格就两列，左列外键引用blog，右列外键引用tag，具体每一个映射关系都要写一条记录上去。不管怎么说，看下面这个例子吧:</p>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">sqlalchemy</span>
@@ -1357,13 +1357,13 @@ class Email(Base):
 <span class="n">session</span><span class="o">.</span><span class="n">add_all</span><span class="p">([</span><span class="n">blog1</span><span class="p">,</span><span class="n">blog2</span><span class="p">,</span><span class="n">tag1</span><span class="p">,</span><span class="n">tag2</span><span class="p">,</span><span class="n">tag3</span><span class="p">,</span><span class="n">tag4</span><span class="p">])</span>
 
 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>然后生成的表格如下所示:</p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/tags_table.png" title="tags_table"/></p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/blogs_table.png" title="blogs_table"/></p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/blog_tags_table.png" title="blog_tags_table"/></p>
 <p>然后执行结果如下:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; blog1
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; blog1
 &lt;BLog learning mysql&gt;
 &gt;&gt;&gt; blog1.tags
 [&lt;Tag sql&gt;, &lt;Tag mysql&gt;]
@@ -1377,27 +1377,27 @@ class Email(Base):
 [&lt;BLog learning sqlalchemy&gt;]
 &gt;&gt;&gt; tag2.blogs
 [&lt;BLog learning mysql&gt;, &lt;BLog learning sqlalchemy&gt;]
-</pre></div>
+</code></pre></div>
 <p>这里的关键就是建立这样一个中间表格:</p>
-<div class="highlight"><pre><span></span>blog_tags = Table('blog_tags',Base.metadata,
+<div class="highlight"><pre><span></span><code>blog_tags = Table('blog_tags',Base.metadata,
     Column('blog_id',Integer,ForeignKey('blogs.id')),
     Column('tag_id',Integer,ForeignKey('tags.id')))
-</pre></div>
+</code></pre></div>
 <p>然后建立一个这样的relationship:</p>
-<div class="highlight"><pre><span></span>tags = relationship("Tag",secondary=blog_tags,backref=backref('blogs'))
-</pre></div>
+<div class="highlight"><pre><span></span><code>tags = relationship("Tag",secondary=blog_tags,backref=backref('blogs'))
+</code></pre></div>
 <p>其中 <strong>secondary</strong> 参数指定你新建的那个中间表格，然后这个中间表格任何数据都不需要你操心了，只需要如上直接对 <code>blog1.tags</code> 这个属性（应该是一个列表）操作就行了。</p>
 <p>具体利用ORM层来实现很简单，但我不敢想像sqlalchemy底层到底做了多少工作，不得不承认，这真是sqlalchemy Great的地方。然后值得一提的地方是原来的两个表格都没有外键约束了，可以说这个关系连接的工作完全抽象成为一个表格了。</p>
 <p>总之，类似one-to-many一样，在one那里管理某个many方的表格，然后回引backref让many方那个对象也可以使用某个属性，然后定义一个中间表格就行了。many-to-many数据模型还是很有用的。</p>
 <h4 id="_21">删除动作</h4>
 <p>manytomany前面的例子已经说明了如何append一个元素，如果要删除一个元素，调用remove方法即可：</p>
-<div class="highlight"><pre><span></span>blog.tags.remove(the_tag_object)
-</pre></div>
+<div class="highlight"><pre><span></span><code>blog.tags.remove(the_tag_object)
+</code></pre></div>
 <h2 id="_22">高级议题</h2>
 <h3 id="cascade">cascade</h3>
 <p>定义基于关系的删除行为</p>
-<div class="highlight"><pre><span></span>items = relationship("Item", cascade="all, delete-orphan")
-</pre></div>
+<div class="highlight"><pre><span></span><code>items = relationship("Item", cascade="all, delete-orphan")
+</code></pre></div>
 <p>默认值是 save-update  merge</p>
 <ul>
 <li>save-update</li>
@@ -1419,13 +1419,13 @@ class Email(Base):
 <p>增加delete 的删除行为，不仅子对象将被删除，而且子对象也将执行Session delete标记，也就是后面的子子对象也将删除如何和delete一起配合使用的话。</p>
 <h3 id="_23">自我引用表达树状结构</h3>
 <p>用一个SQL表格就可以表达出这样的树状层级结构的（这在很大程度上弥补了python语言对于这样的树状结构的应付能力不足）:</p>
-<div class="highlight"><pre><span></span>root --+---&gt; child1
+<div class="highlight"><pre><span></span><code>root --+---&gt; child1
        +---&gt; child2 --+--&gt; subchild1
        |              +--&gt; subchild2
        +---&gt; child3
-</pre></div>
+</code></pre></div>
 <p>具体写法如下所示:</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'folders'</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1434,22 +1434,22 @@ class Email(Base):
     <span class="n">parent_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">'folders.id'</span><span class="p">))</span>
     <span class="n">children</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s2">"Folder"</span><span class="p">,</span>
         <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s1">'parent'</span><span class="p">,</span><span class="n">remote_side</span><span class="o">=</span><span class="p">[</span><span class="nb">id</span><span class="p">]))</span>
-</pre></div>
+</code></pre></div>
 <p>具体就是认为 <code>parent_id</code> 是NULL的认为是最高级节点，然后每一个子节点都需要描述自己的 <code>parent_id</code> 是谁。这里的children是引用的自己，大体类似 <code>one-to-many</code> 的写法，也就是一个节点有多个子节点，这个前面将过来。唯一的区别就是设置 <code>remote_side=[id]</code> ，似乎这种写法也是可以的 <code>remote_side=id</code> ，意思是parent_id是本地local端的，然后id列是remote端的。更多信息请参看 <a href="http://docs.sqlalchemy.org/en/latest/orm/self_referential.html">官方文档的这里</a> 。</p>
 <h3 id="orm_4">面向ORM的内省机制</h3>
 <p>如果原数据库表格已经存在，在前面提及可以如下:</p>
-<div class="highlight"><pre><span></span>users = Table('users',db,autoload=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>users = Table('users',db,autoload=True)
+</code></pre></div>
 <p>来自动内省某个表格，而在面向ORM写法中，也是可以的。具体请参看 <a href="http://docs.sqlalchemy.org/en/latest/orm/extensions/automap.html">官方文档的这里</a> 。其中最核心的代码是:</p>
-<div class="highlight"><pre><span></span>engine = create_engine('sqlite:///session.db')
+<div class="highlight"><pre><span></span><code>engine = create_engine('sqlite:///session.db')
 from sqlalchemy.ext.automap import automap_base
 AutoBase = automap_base(bind = engine)
 
 class OldTable(AutoBase):
     __tablename__ = NewTable.__tablename__
-</pre></div>
+</code></pre></div>
 <p>但是具体schema并不是可以任意改动的，一般是继续扩展SQL数据库，然后搭建各种关系，实在有改动schema的必要，推荐采用migrate机制。下面是我写的一个简单的migrate脚本:</p>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
@@ -1508,16 +1508,16 @@ class OldTable(AutoBase):
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">migrate_database</span><span class="p">(</span><span class="n">User</span><span class="p">,</span><span class="n">old_engine</span><span class="p">,</span><span class="n">new_engine</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>但是如果有多个表格加上关系之后情况变得更复杂了，上面的脚本</p>
-<div class="highlight"><pre><span></span>AutoBase.prepare(fromdb, reflect=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>AutoBase.prepare(fromdb, reflect=True)
+</code></pre></div>
 <p>就是建立内省的模型和关系的，所以如果多个表格的话，这句话应该再放到后面些。然后后面添加新的数据因为sqlalchemy有自动处理相关关系对象的功能，这里倒问题不大，但也可能会有问题。也有其他一些模块是专门处理这个迁移数据库的问题的，但也绝不是一件轻松的事。总之SQL表格尽量设计好和可扩展性好，将自己的太多精力花在这上面是很浪费的。</p>
 <h3 id="orm_5">面向ORM的数据继承机制</h3>
 <p>有时间补上。</p>
 <h3 id="_24">额外的属性支持</h3>
 <p>所谓的额外的属性并不是基于SQL表格的某一列的属性，而是在ORM之上建立起来的额外的属性，其一般是基于SQL表格的某一列或某些列的，是ORM封装之上提供的更加便利的属性接口。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">EmailAddress</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">EmailAddress</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'email_address'</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1537,10 +1537,10 @@ class OldTable(AutoBase):
 <span class="sd">        value @example.com."""</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="o">=</span> <span class="n">email</span> <span class="o">+</span> <span class="s2">"@example.com"</span>
-</pre></div>
+</code></pre></div>
 <h3 id="_25">某一列的额外的别名</h3>
 <p>这里所谓的某一列额外的别名指并没有创建额外的列，而是在ORM层针对某一列可以用额外的别名来做类似的操作。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">synonym_for</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">synonym_for</span>
 
 <span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'my_table'</span>
@@ -1552,9 +1552,9 @@ class OldTable(AutoBase):
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">"Status: "</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span>
-</pre></div>
+</code></pre></div>
 <p>其等于:</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">'my_table'</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1565,52 +1565,52 @@ class OldTable(AutoBase):
         <span class="k">return</span> <span class="s2">"Status: "</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span>
 
     <span class="n">job_status</span> <span class="o">=</span> <span class="n">synonym</span><span class="p">(</span><span class="s2">"status"</span><span class="p">,</span> <span class="n">descriptor</span><span class="o">=</span><span class="n">job_status</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>也就是具体该列在ORM层可以通过 <code>status</code> 或者 <code>job_status</code> 来操作。具体参考 <a href="http://docs.sqlalchemy.org/en/latest/orm/mapped_attributes.html">这里</a> 。</p>
 <h3 id="_26">多列组合唯一性约束</h3>
 <p>请参看 <a href="http://stackoverflow.com/questions/10059345/sqlalchemy-unique-across-multiple-columns">这个网页</a> 。</p>
 <p>如果是ORM层，则是:</p>
-<div class="highlight"><pre><span></span>class Location(Base):
+<div class="highlight"><pre><span></span><code>class Location(Base):
     __tablename__ = 'locations'
     id = Column(Integer, primary_key = True)
     customer_id = Column(Integer, ForeignKey('customers.customer_id'), nullable=False)
     location_code = Column(Unicode(10), nullable=False)
     __table_args__ = (UniqueConstraint('customer_id', 'location_code', name='_customer_location_uc'),
                      )
-</pre></div>
+</code></pre></div>
 <p>上面flask_sqlalchemy的话可以使用 <code>db.UniqueConstraint</code> 。 比如:</p>
-<div class="highlight"><pre><span></span>__table_args__ = (
+<div class="highlight"><pre><span></span><code>__table_args__ = (
     db.UniqueConstraint("main_directory", "sub_directory","filename",
         "filext"),
     )
-</pre></div>
+</code></pre></div>
 <p>如果是Core层，则是:</p>
-<div class="highlight"><pre><span></span>mytable = Table('mytable', meta,
+<div class="highlight"><pre><span></span><code>mytable = Table('mytable', meta,
     # ...
     Column('customer_id', Integer, ForeignKey('customers.customer_id')),
     Column('location_code', Unicode(10)),
 
     UniqueConstraint('customer_id', 'location_code', name='uix_1')
     )
-</pre></div>
+</code></pre></div>
 <h3 id="orm_6">ORM层的内省</h3>
 <p>Table层直接利用已经存在的数据库表格就是 <code>reflect</code> 的概念，因为ORM层多了很多额外的东西，其中最关键的是 relationship 的概念，而sqlalchemy的Automap这一章主要就是解决ORM层内省这个问题的。更详细的讨论请参看 <a href="http://docs.sqlalchemy.org/en/rel_1_0/orm/extensions/automap.html">官方文档</a> 。</p>
 <p>最基本的应用就是 建立一个 <code>automap_base</code> 对象: </p>
-<div class="highlight"><pre><span></span>from sqlalchemy.ext.automap import automap_base
+<div class="highlight"><pre><span></span><code>from sqlalchemy.ext.automap import automap_base
 
 Base = automap_base()
-</pre></div>
+</code></pre></div>
 <p>然后运行其 <code>prepare</code> 方法进行内省:</p>
-<div class="highlight"><pre><span></span>Base.prepare(engine, reflect=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>Base.prepare(engine, reflect=True)
+</code></pre></div>
 <p>然后对应的sqlalchemy ORM层的那些类就可以如下获得了:</p>
-<div class="highlight"><pre><span></span>User = Base.classes.user
+<div class="highlight"><pre><span></span><code>User = Base.classes.user
 #或 Base.classes.get('user')
-</pre></div>
+</code></pre></div>
 <p>对于一般的属性引用，这是没有问题的。就是relationship可能还是有问题，那么我们可以预先定义一些属性，在 <code>prepare</code> 之前，那么预先定义的那些东西也将覆盖后面的自动reflect那部分定义，这可以起到矫正的作用。然后预先定义的那个类就是后面要使用的类了，就不要用 <code>Base.classes.what</code> 这种风格再获取了。</p>
 <h3 id="_27">分表策略</h3>
 <p>当某个表格数据量过大的时候，那么就需要建立分表策略，具体是根据某个值取模来确定表名，先看例子吧，本例子参考了 <a href="https://www.cnblogs.com/carlo/p/4630943.html">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NovelChapter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">NovelChapter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">_mapper</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
@@ -1631,18 +1631,18 @@ Base = automap_base()
             <span class="n">NovelChapter</span><span class="o">.</span><span class="n">_mapper</span><span class="p">[</span><span class="n">class_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelClass</span>
 
         <span class="k">return</span> <span class="n">ModelClass</span>
-</pre></div>
+</code></pre></div>
 <p>上面提供了 <code>.model</code> 方法，核心就是利用type函数来生成一个类，也就是人们说的元类编程，具体参数如下：</p>
-<div class="highlight"><pre><span></span>class = type(classname, superclasses, attributedict)
-</pre></div>
+<div class="highlight"><pre><span></span><code>class = type(classname, superclasses, attributedict)
+</code></pre></div>
 <p>至于 <code>_mapper</code> 不过是本对象的一个类对象的缓存罢了，免得重复创建。</p>
 <p>本例子中最关键的是 <code>__tablename__</code> 的差异化定制。</p>
 <h2 id="_28">附录</h2>
 <h3 id="datetime">datetime数据类型</h3>
 <p>sqlalchemy中DateTime 数据类型的默认值可以跟着 datetime.datetime.utcnow
 如下所示:</p>
-<div class="highlight"><pre><span></span>    created_date = Column(DateTime, default=datetime.datetime.utcnow)
-</pre></div>
+<div class="highlight"><pre><span></span><code>    created_date = Column(DateTime, default=datetime.datetime.utcnow)
+</code></pre></div>
 <p><a href="http://stackoverflow.com/questions/13370317/sqlalchemy-default-datetime">参考网页</a></p>
 <h2 id="_29">如何测试</h2>
 <p><a href="http://alextechrants.blogspot.fi/2013/08/unit-testing-sqlalchemy-apps.html">参考网页</a></p>

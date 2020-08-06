@@ -147,11 +147,11 @@
 <p>关于python的二叉树实现主要参考了 <a href="http://www.laurentluce.com/posts/binary-search-tree-library-in-python/">参考资料2</a> ，其中有个伙计的评论说为什么不合并为一个类，这个提议实际上非常的好。这样的话具体的data，也就是节点里面存储的数据，是什么都是可以的，这个根据实际需要来设计，然后我们在下面比较data的大小采用 <code>hash(object)</code> 也就是调用 <code>__hash__</code> 方法，同时判断时候相等采用 <code>==</code> ，也就是调用 <code>__eq__</code> 方法。</p>
 <h3 id="_2">基本结构和插入查找操作</h3>
 <p>值得一提的是key的比较大小判断采用的是 <code>hash(data)</code> 这种形式，就作为键的唯一id的一种方法，这是没有问题的。然后data不可以为sequence。然后需要强调的是这里的比较大小，并不具有某种实际意义。比如:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; hash(11)&gt; hash("22")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; hash(11)&gt; hash("22")
 True
-</pre></div>
+</code></pre></div>
 <p>一般具有实际含义的某种比较大小，我们必须确保比较对象是属于同一个类，或者更抽象的讨论，属于同一个概念或同一个聚合类等。</p>
-<div class="highlight"><pre><span></span><span class="c1">### ref http://www.laurentluce.com/posts/binary-search-tree-library-in-python/</span>
+<div class="highlight"><pre><span></span><code><span class="c1">### ref http://www.laurentluce.com/posts/binary-search-tree-library-in-python/</span>
 <span class="k">class</span> <span class="nc">BSTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">'''use hash(data) ,but notice the data can not be sequence'''</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -191,10 +191,10 @@ True
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
-</pre></div>
+</code></pre></div>
 <h2 id="_3">绘制图形</h2>
 <p>因为我对这个很感兴趣，就把这个先弄了。其中很大程度上依赖一种遍历树的机制。</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">introspection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">introspection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">'''walk a round,and get myself information'''</span>
     <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span>
@@ -206,10 +206,10 @@ True
             <span class="n">node</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
             <span class="k">yield</span> <span class="n">node</span>
             <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span>
-</pre></div>
+</code></pre></div>
 <p>这个函数看的参考资料的，稍微做了一些改动，返回的不是data，而是node对象，方便后续很多函数的支持调用。这种堆然后这种遍历老实说一开始我估计是想不出来的，看跟着程序走一下发现确实遍历树了，很是巧妙。</p>
 <p>然后绘图函数如下所示:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_ymove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_ymove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get_ymove</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
@@ -251,12 +251,12 @@ True
         <span class="n">last_y</span> <span class="o">=</span> <span class="n">node_point_y</span>
 
     <span class="n">image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>利用pillow的一个很粗糙的绘图过程，因为我对这块还不熟悉，这其中如何绘图的细节和优化还很值得商榷。</p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/binary_search_tree_drawing.png"/></p>
 <h2 id="_4">删除操作</h2>
 <p>删除操作可能稍微复杂点，</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">children_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">children_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""Return the number of children</span>
 
 <span class="sd">    @returns number of children: 0, 1, 2</span>
@@ -317,9 +317,9 @@ True
                 <span class="n">parent</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">successor</span><span class="o">.</span><span class="n">right</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">parent</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">successor</span><span class="o">.</span><span class="n">right</span>
-</pre></div>
+</code></pre></div>
 <h2 id="_5">比较二叉树</h2>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compare_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compare_trees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
     <span class="sd">"""Compare 2 trees</span>
 
 <span class="sd">    @param node tree to compare</span>
@@ -343,7 +343,7 @@ True
     <span class="k">else</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">compare_trees</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
-</pre></div>
+</code></pre></div>
 <h2 id="_6">本小节参考资料</h2>
 <ol>
 <li><a href="https://github.com/qiwsir/algorithm/blob/master/binary_tree.md"><a href="https://github.com/qiwsir/algorithm/blob/master/binary_tree.md">https://github.com/qiwsir/algorithm/blob/master/binary_tree.md</a></a></li>

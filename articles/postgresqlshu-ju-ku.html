@@ -156,14 +156,14 @@
             
 <h2 id="_1">安装和配置</h2>
 <p>在ubuntu下可以这样简单安装之：</p>
-<div class="highlight"><pre><span></span>sudo  apt-get install postgresql
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo  apt-get install postgresql
+</code></pre></div>
 <p>centos下如下安装：</p>
-<div class="highlight"><pre><span></span>sudo yum install postgresql-server postgresql-contrib
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo yum install postgresql-server postgresql-contrib
+</code></pre></div>
 <p>centos下继续运行以下命令：</p>
-<div class="highlight"><pre><span></span>sudo postgresql-setup initdb
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo postgresql-setup initdb
+</code></pre></div>
 <p>这样安装之后，你需要牢记一点的是，新安装的PostgreSQL数据库还只有 <strong>postgres</strong> 这个用户有新建role（或说用户）和新建数据库的权限。你需要通过 postgres 这个用户来执行 <code>createuser</code> 或 <code>createdb</code> 命令。这里我们先不急着学习SQL语句，因为postgresql里面关于用户群组权限的设置稍微有点复杂，而要使用postgresql，这一块是必须有个基本的了解的。</p>
 <h2 id="_2">用户群组权限管理</h2>
 <p>postgresql处理我们通常所谓的登录用户或者其他用户概念的术语是Rules，后面都称之为用户（rules），可以理解为为这个用户确立的一系列访问修改数据库的规则。然后rules是可以包含其他rules的，这个包含其他rules的rules我们通常称之为群组（group rules），然后群组也可以包含群组，但一般都推荐简单分为用户（rules）和群组用户（group rules）这两类。然后用户如果有登录权限的话则可以称之为登录用户（login rules），群组用户也可以赋予登录权限，但出于简单的考虑没谁这么做。所以现在rules简单的划分就分为这三类:</p>
@@ -175,24 +175,24 @@
 <p>此外postgresql还提供 <strong>superuser</strong> 超级用户这一类型，其默认不能登录，但对于数据库几乎拥有所有的权限——比如创建数据库，创建用户，对于数据库的查增删改等。实际上superuser也可以加上 <code>login</code> 属性，但非常不推荐这么做，最好是不使用超级用户，而是对于具体的用户具体的数据库权限进行分配。</p>
 <p>默认创建的postgres这个用户是可以连接的，而且我们看到其至少对postgres这个数据库具有所有权限，但是我还不太确定其是不是superuser，因为其可能对其他数据库并没有权限，这个后面再谈。</p>
 <h3 id="postgres">修改postgres的密码</h3>
-<div class="highlight"><pre><span></span>sudo -u postgres psql postgres
+<div class="highlight"><pre><span></span><code>sudo -u postgres psql postgres
 
 postgres=# \password postgres
 Enter new password: 
 Enter it again:
-</pre></div>
+</code></pre></div>
 <p>这里需要强调一点的是这里通过psql来进行连接（postgres）然后输入 <code>\password</code> 修改postgres的密码是具体通过 TCP/IP 方式连接postgresql数据库的密码，不是系统passwd管理的那个密码。</p>
 <h3 id="postgres_1">postgres这个用户</h3>
 <p>postgres这个用户的一些信息如下所示:</p>
-<div class="highlight"><pre><span></span>postgres:x:121:131:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
-</pre></div>
+<div class="highlight"><pre><span></span><code>postgres:x:121:131:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+</code></pre></div>
 <p>然后还有新建的postgres这个群组:</p>
-<div class="highlight"><pre><span></span>postgres:x:131:
-</pre></div>
+<div class="highlight"><pre><span></span><code>postgres:x:131:
+</code></pre></div>
 <p>这里的121是uid，131是gid，然后后面 <code>/var/lib/postgresql</code> 这个文件夹就是postgres该用户的主文件夹，你的关于postgresql的一些配置和数据都放在这里面的。你可能会遇到保存 <code>.psql_history</code> 这个文件的权限问题，参看 <a href="http://dba.stackexchange.com/questions/68705/could-not-save-history-to-file-var-lib-postgresql-psql-history-no-such-file">这个网页</a> ，这个时候需要确认该文件夹的所有用户和所有群组都是postgres。</p>
 <h3 id="_3">查看当前有多少用户</h3>
 <p>按照 <a href="http://stackoverflow.com/questions/32151288/how-is-there-a-pg-roles-table-in-postgres-before-a-database-is-created">这篇网页</a> 的介绍， <code>pg_roles</code> 是一个view视图，其只是一个对 <code>pg_authid</code> 的简单可读的视图封装，如下面所示，两者目前来说没有差异，然后我们看到postgres其是为superuser，也是login user。</p>
-<div class="highlight"><pre><span></span>select rolname,rolsuper,rolcreaterole,rolcreatedb,rolcanlogin from pg_roles;
+<div class="highlight"><pre><span></span><code>select rolname,rolsuper,rolcreaterole,rolcreatedb,rolcanlogin from pg_roles;
  rolname  | rolsuper | rolcreaterole | rolcreatedb | rolcanlogin 
 ----------+----------+---------------+-------------+-------------
  postgres | t        | t             | t           | t
@@ -204,58 +204,58 @@ select rolname,rolsuper,rolcreaterole,rolcreatedb,rolcanlogin from pg_authid;
 ----------+----------+---------------+-------------+-------------
  postgres | t        | t             | t           | t
  wanze    | t        | t             | t           | t
-</pre></div>
+</code></pre></div>
 <h3 id="_4">新建用户</h3>
 <p>新建一个用户:</p>
-<div class="highlight"><pre><span></span>create role the_name;
-</pre></div>
+<div class="highlight"><pre><span></span><code>create role the_name;
+</code></pre></div>
 <p>但最起码要有登录login权限吧:</p>
-<div class="highlight"><pre><span></span>create role the_name login;
-</pre></div>
+<div class="highlight"><pre><span></span><code>create role the_name login;
+</code></pre></div>
 <p>在使用postgresql时，如果某个用户不存在，那么PostgreSQL将会报错: </p>
-<div class="highlight"><pre><span></span>createdb: could not connect to database template1: FATAL:  role "wanze" does not exist
-</pre></div>
+<div class="highlight"><pre><span></span><code>createdb: could not connect to database template1: FATAL:  role "wanze" does not exist
+</code></pre></div>
 <h3 id="_5">删除用户</h3>
-<div class="highlight"><pre><span></span>drop role the_name;
-</pre></div>
+<div class="highlight"><pre><span></span><code>drop role the_name;
+</code></pre></div>
 <p>或者该用户名不存在也不会报错的写法:</p>
-<div class="highlight"><pre><span></span>drop role if exists the_name;
-</pre></div>
+<div class="highlight"><pre><span></span><code>drop role if exists the_name;
+</code></pre></div>
 <h3 id="_6">改变用户的权限</h3>
 <p>如下所示就改变一个用户的权限了。</p>
-<div class="highlight"><pre><span></span>alter role the_name createdb;
-</pre></div>
+<div class="highlight"><pre><span></span><code>alter role the_name createdb;
+</code></pre></div>
 <p>参照手册，后面的关键词有:</p>
-<div class="highlight"><pre><span></span>SUPERUSER | NOSUPERUSER
+<div class="highlight"><pre><span></span><code>SUPERUSER | NOSUPERUSER
 CREATEDB | NOCREATEDB
 CREATEROLE | NOCREATEROLE
 CREATEUSER | NOCREATEUSER
 INHERIT | NOINHERIT
 LOGIN | NOLOGIN
 REPLICATION | NOREPLICATION
-</pre></div>
+</code></pre></div>
 <h3 id="_7">改变用户密码</h3>
 <p>在新建用户的时候，我们可以如下:</p>
-<div class="highlight"><pre><span></span>create role the_name password "the_password";
-</pre></div>
+<div class="highlight"><pre><span></span><code>create role the_name password "the_password";
+</code></pre></div>
 <p>后面也可以通过 <code>alter role</code> 来:</p>
-<div class="highlight"><pre><span></span>alter role the_name password "the_password";
-</pre></div>
+<div class="highlight"><pre><span></span><code>alter role the_name password "the_password";
+</code></pre></div>
 <h3 id="_8">新建一个群组</h3>
-<div class="highlight"><pre><span></span>CREATE ROLE royalty INHERIT;
-</pre></div>
+<div class="highlight"><pre><span></span><code>CREATE ROLE royalty INHERIT;
+</code></pre></div>
 <p>给群组用户增加登录用户</p>
-<div class="highlight"><pre><span></span>GRANT royalty TO leo;
+<div class="highlight"><pre><span></span><code>GRANT royalty TO leo;
 GRANT royalty TO regina;
-</pre></div>
+</code></pre></div>
 <h3 id="pg_hbaconf">pg_hba.conf</h3>
 <p>很多连接问题就是因为这个文件没有配置好，下面详细研究这个文件之。</p>
-<div class="highlight"><pre><span></span>#
+<div class="highlight"><pre><span></span><code>#
 # local      DATABASE  USER  METHOD  [OPTIONS]
 # host       DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
 # hostssl    DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
 # hostnossl  DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
-</pre></div>
+</code></pre></div>
 <ul>
 <li>
 <p>local 是指本地连接</p>
@@ -295,26 +295,26 @@ GRANT royalty TO regina;
 </ul>
 <h2 id="_9">数据库操作基础</h2>
 <h3 id="_10">创建数据库</h3>
-<div class="highlight"><pre><span></span>CREATE DATABASE mydb;
-</pre></div>
+<div class="highlight"><pre><span></span><code>CREATE DATABASE mydb;
+</code></pre></div>
 <p>有 CREATEDB 权限的用户可以新建数据库。</p>
 <p>然后创建一个数据库，并指定这个数据库的owner。</p>
-<div class="highlight"><pre><span></span>CREATE DATABASE mydb WITH owner = mydb_admin;
-</pre></div>
+<div class="highlight"><pre><span></span><code>CREATE DATABASE mydb WITH owner = mydb_admin;
+</code></pre></div>
 <p>然后以mydb_admin登录开始进行数据库的其他操作。</p>
 <h3 id="_11">备份和还原</h3>
 <p>两个backup方法  pg_dump 和 pg_dumpall
 用pg_restore 来还原，</p>
 <h3 id="_12">改变某个数据库的所有者</h3>
 <p>首先你需要以postgres的身份连接postgres数据库，因为你要进行更改某个数据库的所有者，就必须是目前该数据库的所有者。</p>
-<div class="highlight"><pre><span></span>wanze@wanze-ubuntu:~$ sudo -u postgres psql postgres
+<div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu:~$ sudo -u postgres psql postgres
 psql (9.3.8)
 Type "help" for help.
 
 postgres=# ALTER DATABASE mydb OWNER TO learner;
 ALTER DATABASE
 postgres=# \q
-</pre></div>
+</code></pre></div>
 <p>这里ALTER DATABASE语句里面 mydb 是具体你要更改的数据库名字，然后后面的learner是具体更改为的所有者名字。</p>
 <p>类似上面谈及的，还有 <strong>dropdb</strong> 用于删除数据库， <strong>dropuser</strong> 用于删除用户。</p>
 <p>CREATE TABLE语句我们都熟悉了，不过具体到数据类型上，还需要详细讨论一番。</p>
@@ -326,34 +326,34 @@ char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
 <h2 id="cookbook">Cookbook</h2>
 <h3 id="unique">修改某列为unique</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/469471/how-do-i-alter-a-postgresql-table-and-make-a-column-unique">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">the_table</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="k">UNIQUE</span> <span class="p">(</span><span class="n">thecolumn</span><span class="p">);</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">the_table</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="k">UNIQUE</span> <span class="p">(</span><span class="n">thecolumn</span><span class="p">);</span>
+</code></pre></div>
 <h3 id="_13">删除基于某列重复值的重复行</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/6583916/delete-duplicate-records-in-postgresql">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">dupes</span> <span class="n">T1</span>
+<div class="highlight"><pre><span></span><code><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">dupes</span> <span class="n">T1</span>
     <span class="k">USING</span>   <span class="n">dupes</span> <span class="n">T2</span>
 <span class="k">WHERE</span>   <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span>  <span class="c1">-- delete the older versions</span>
     <span class="k">AND</span> <span class="n">T1</span><span class="p">.</span><span class="k">key</span>  <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="k">key</span><span class="p">;</span>  <span class="c1">-- add more columns if needed</span>
-</pre></div>
+</code></pre></div>
 <p>USING语句有点古怪，具体要参看postgresql的delete一章，里面就介绍了如下语法：</p>
-<div class="highlight"><pre><span></span>DELETE FROM [ ONLY ] table_name [ * ] [ [ AS ] alias ]
+<div class="highlight"><pre><span></span><code>DELETE FROM [ ONLY ] table_name [ * ] [ [ AS ] alias ]
     [ USING using_list ]
     [ WHERE condition | WHERE CURRENT OF cursor_name ]
     [ RETURNING * | output_expression [ [ AS ] output_name ] [, ...] ]
-</pre></div>
-<div class="highlight"><pre><span></span>using_list
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>using_list
 A list of table expressions, allowing columns from other tables to appear in the WHERE condition. This is similar to the list of tables that can be specified in the FROM Clause of a SELECT statement; for example, an alias for the table name can be specified. Do not repeat the target table in the using_list, unless you wish to set up a self-join.
-</pre></div>
-<div class="highlight"><pre><span></span>DELETE FROM films USING producers
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>DELETE FROM films USING producers
   WHERE producer_id = producers.id AND producers.name = 'foo';
-</pre></div>
+</code></pre></div>
 <p>这个using和select里面的using有点区别，这里的using更像是引用了某个表，让其可以在后面的where语句中使用。</p>
 <h3 id="postgresqltimestamptz">理解postgresql的timestamptz字段类型</h3>
 <p>首先数据库里面都应该是存放UTC时间，只是说以前使用timestamp的时候是属于程序上的强制性规范要求，这样避免各种纠结时区问题。而现在postgresql的timestamp字段对外说是支持时区的，但其实它内部存放的还是UTC时间，只是它帮你进行了一些自动转换。</p>
 <p>如果你是以isoformat格式存放进入timestamptz字段，或者以isoformat格式查询时间，程序员都是不用操心时区的问题的，因为isoformat里面已经有时区信息了。为了你的程序各方面表现良好，推荐你程序运行时的服务器时区设置好。然后如果你数据库服务器时区设置好在查看时间上会有更好的本地体验。</p>
 <h2 id="_14">附录</h2>
 <h3 id="_15">配置文件在那里</h3>
-<div class="highlight"><pre><span></span>sudo -u postgres psql postgres
+<div class="highlight"><pre><span></span><code>sudo -u postgres psql postgres
 
 psql&gt; SELECT name,setting FROM pg_settings WHERE category = 'File Locations';
        name        |                 setting                  
@@ -364,14 +364,14 @@ psql&gt; SELECT name,setting FROM pg_settings WHERE category = 'File Locations';
  hba_file          | /etc/postgresql/9.3/main/pg_hba.conf
  ident_file        | /etc/postgresql/9.3/main/pg_ident.conf
 (5 rows)
-</pre></div>
+</code></pre></div>
 <h3 id="postgresql_1">重启postgresql服务</h3>
 <p>在linux下可以运行如下命令行来达到目的:</p>
-<div class="highlight"><pre><span></span>sudo service postgresql restart
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo service postgresql restart
+</code></pre></div>
 <p>或者</p>
-<div class="highlight"><pre><span></span>sudo service postgresql reload
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo service postgresql reload
+</code></pre></div>
 <h2 id="_16">参考资料</h2>
 <ol>
 <li>PostgreSQL官方参考文档</li>

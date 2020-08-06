@@ -123,21 +123,21 @@
 <li><a href="#_6">类的方法</a></li>
 <li><a href="#_7">类的继承</a></li>
 <li><a href="#_8">类的内置方法</a></li>
-<li><a href="#9595init9595">__init__方法</a></li>
+<li><a href="#__init__">__init__方法</a></li>
 <li><a href="#self">self意味着什么</a></li>
 <li><a href="#_9">类的操作第二版</a></li>
 <li><a href="#_10">类的操作第三版</a></li>
 <li><a href="#_11">构造函数的继承和重载</a></li>
-<li><a href="#9595str9595">__str__函数的继承和重载</a></li>
+<li><a href="#__str__">__str__函数的继承和重载</a></li>
 </ul>
 </li>
 <li><a href="#_12">类的高级知识</a><ul>
-<li><a href="#9595dict9595">__dict__</a></li>
-<li><a href="#9595getitem9595">__getitem__</a></li>
+<li><a href="#__dict__">__dict__</a></li>
+<li><a href="#__getitem__">__getitem__</a></li>
 <li><a href="#_13">数学运算符号重载</a></li>
 <li><a href="#_14">逻辑运算</a></li>
 <li><a href="#bool">bool函数</a></li>
-<li><a href="#9595eq9595">__eq__</a></li>
+<li><a href="#__eq__">__eq__</a></li>
 <li><a href="#_15">比较判断操作</a></li>
 <li><a href="#in">in语句</a></li>
 <li><a href="#_16">类之间的相等判断</a></li>
@@ -145,11 +145,11 @@
 <li><a href="#lenwhat">len(what)</a></li>
 <li><a href="#copydeepcopy">copy方法和deepcopy方法</a></li>
 <li><a href="#with">with语句支持</a></li>
-<li><a href="#9595call9595">__call__</a></li>
+<li><a href="#__call__">__call__</a></li>
 <li><a href="#__repr__-__str__">__repr__ 和 __str__ 的区别</a></li>
-<li><a href="#9595new9595">__new__</a></li>
-<li><a href="#9595del9595">__del__</a></li>
-<li><a href="#9595getattr9595">__getattr__</a></li>
+<li><a href="#__new__">__new__</a></li>
+<li><a href="#__del__">__del__</a></li>
+<li><a href="#__getattr__">__getattr__</a></li>
 </ul>
 </li>
 <li><a href="#_18">迭代器和生成器</a><ul>
@@ -215,27 +215,27 @@
 类在树形层次中比较低。</p>
 <p>well，简单来说类的结构和搜索机制就是这样的，很好地模拟了真实世界知识的树形层次结构。</p>
 <p>上面那副图实际编写的代码如下：</p>
-<div class="highlight"><pre><span></span>class C2: ...
+<div class="highlight"><pre><span></span><code>class C2: ...
 class C3: ...
 class C1(C2,C3): ...
 l1=C1()
 l2=C1()
-</pre></div>
+</code></pre></div>
 <p>其中class语句是创造类，而C1继承自C2和C3，这是多重继承，从左到右是内部的搜索顺序（会影响重载）。l1和l2是根据类C1创造的两个实例。</p>
 <p>对于初次接触类这个概念的读者并不指望他们马上就弄懂类这个概念，这个概念倒并一定要涉及很多哲学的纯思考的东西，也可以看作一种编程经验或技术的总结。多接触也许对类的学习更重要，而不是纯哲学抽象概念的讨论，毕竟类这个东西创造出来就是为了更好地描述现实世界的。</p>
 <p>最后别人编写的很多模块就是一堆类，你就是要根据这些类来根据自己的情况情况编写自己的子类，为了更好地利用前人的成果，或者你的成果更好地让别人快速使用和上手，那么你需要好好掌握类这个工具。</p>
 <h2 id="_2">类的最基础知识</h2>
 <h2 id="_3">类的创建</h2>
-<div class="highlight"><pre><span></span>class MyClass:
+<div class="highlight"><pre><span></span><code>class MyClass:
     something
-</pre></div>
+</code></pre></div>
 <p>类的创建语法如上所示，然后你需要想一个好一点的类名。类名规范的写法是首字母大写，这样好和其他变量有所区分。</p>
 <h2 id="_4">根据类创建实例</h2>
 <p>按照如下语句格式就根据MyClass类创建了一个实例myclass001。</p>
-<div class="highlight"><pre><span></span>myclass001=MyClass()
-</pre></div>
+<div class="highlight"><pre><span></span><code>myclass001=MyClass()
+</code></pre></div>
 <h2 id="_5">类的属性</h2>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; class MyClass:
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; class MyClass:
 ...  name='myclass'
 ... 
 &gt;&gt;&gt; myclass001=MyClass()
@@ -248,12 +248,12 @@ l2=C1()
 'myclass001'
 &gt;&gt;&gt; MyClass.name
 'myclass'
-</pre></div>
+</code></pre></div>
 <p>如上代码所示，我们首先创建了一个类，这个类加上了一个name属性，然后创建了一个实例myclass001，然后这个实例和这个类都有了name属性。然后我们通过实例加上点加上name的这种格式引用了这个实例的name属性，并将其值做了修改。</p>
 <p>这个例子简单演示了类的创建，属性添加，实例创建，多态等核心概念。后面类的继承等概念都和这些大同小异了。</p>
 <h2 id="_6">类的方法</h2>
 <p>类的方法就是类似上面类的属性一样加上def语句来定义一个函数，只是函数在类里面我们一般称之为方法。这里演示一个例子，读者看一下就明白了。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; class MyClass:
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; class MyClass:
 ...  name='myclass'
 ...  def double(self):
 ...   self.name=self.name*2
@@ -266,12 +266,12 @@ l2=C1()
 myclassmyclass
 &gt;&gt;&gt; myclass001.name
 'myclassmyclass'
-</pre></div>
+</code></pre></div>
 <p>这里需要说明的是在类的定义结构里面，self代表着类自身（更多self意义细节请参看<a href="#sec:self含义">12.4.2</a>{reference-type="ref"
 reference="sec:self含义"}），self.name代表着对自身name属性的引用。然后实例在调用自身的这个方法时用的是myclass001.double()这样的结构，这里double函数实际上接受的第一个参数就是自身，也就是myclass001，而不是无参数函数。所以类里面的方法有一个参数self。</p>
 <h2 id="_7">类的继承</h2>
 <p>实例虽然说是根据类创建出来的，但实际上实例和类也是一种继承关系，实例继承自类，而类和类的继承关系也与之类似，只是语法稍有不同。下面我们来看这个例子：</p>
-<div class="highlight"><pre><span></span>class Hero():
+<div class="highlight"><pre><span></span><code>class Hero():
     def addlevel(self):
         self.level=self.level+1
         self.hp=self.hp+self.addhp
@@ -292,12 +292,12 @@ for i in range(6):
 级别: 4 生命值： 743
 级别: 5 生命值： 839
 级别: 6 生命值： 935
-</pre></div>
+</code></pre></div>
 <p><img alt="img" src="https://a358003542.github.io/images/python/lei-de-ji-cheng-shi-li.png"/></p>
 <p>这里就简单的两个类，盖伦Garen类是继承自Hero类的，实例garen001是继承自Garen类的，这样garen001也有了addlevel方法，就是将自己的level属性加一，同时hp生命值也加上一定的值，整个过程还是很直观的。</p>
 <h2 id="_8">类的内置方法</h2>
 <p>如果构建一个类，就只是简单的加上pass语句，什么都不做，python还是会为这个类自动创建一些属性或者方法。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; class TestClass:
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; class TestClass:
 ...  pass
 ... 
 &gt;&gt;&gt; dir(TestClass)
@@ -308,12 +308,12 @@ for i in range(6):
    '__reduce_ex__', '__repr__', '__setattr__', 
    '__sizeof__', '__str__', '__subclasshook__',
     '__weakref__']
-</pre></div>
+</code></pre></div>
 <p>这些变量名字前后都加上双下划线是给python这个语言的设计者用的，一般开发者还是不要这样命名变量。</p>
 <p>这些内置方法用户同样也是可以重定义他们从来覆盖掉原来的定义，其中特别值得一讲的就是<code>__init__</code>方法或者称之为构造函数。</p>
-<h2 id="9595init9595">__init__方法</h2>
+<h2 id="__init__">__init__方法</h2>
 <p><code>__init__</code>方法对应的就是该类创建实例的时候的构造函数。比如：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; class Point:
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; class Point:
 ...  def __init__(self,x,y):
 ...   self.x=x
 ...   self.y=y
@@ -323,13 +323,13 @@ for i in range(6):
 5
 &gt;&gt;&gt; point001.y
 4
-</pre></div>
+</code></pre></div>
 <p>这个例子重载了<code>__init__</code>函数，然后让他接受三个参数，self是等下要创建的实例，x，还有y通过下面的语句给这个待创建的实例的属性x和y赋了值。</p>
 <h2 id="self">self意味着什么</h2>
 <p>self在类中是一个很重要的概念，当类的结构层次较简单时还容易看出来，
 当类的层次结构很复杂之后，你可能会弄糊涂。。比如你现在通过调用某个实例的某个方法，这个方法可能是一个远在天边的某个类给出的定义，就算如此，那个定义里面的self还是指调用这个方法的那个实例，这一点要牢记于心。</p>
 <p>比如下面这个例子：</p>
-<div class="highlight"><pre><span></span>class Test():
+<div class="highlight"><pre><span></span><code>class Test():
     x = 5
     def __init__(self):
         self.x = 10
@@ -340,11 +340,11 @@ test = Test()
 10
 &gt;&gt;&gt; Test.x
 5
-</pre></div>
+</code></pre></div>
 <p>其中self.x就是对应的创建的实例的属性x，而前面定义的x则是类Test的属性x。</p>
 <h2 id="_9">类的操作第二版</h2>
 <p>现在我们可以写出和之前那个版本相比更加专业的类的使用版本了。</p>
-<div class="highlight"><pre><span></span>class Hero():
+<div class="highlight"><pre><span></span><code>class Hero():
     def addlevel(self):
         self.level=self.level+1
         self.hp=self.hp+self.addhp
@@ -369,10 +369,10 @@ print('盖伦的技能有：',"".join([x + '  ' for x in garen001.skill]))
 级别: 5 生命值： 839
 级别: 6 生命值： 935
 盖伦的技能有： 不屈  致命打击  勇气  审判  德玛西亚正义
-</pre></div>
+</code></pre></div>
 <p>似乎专业的做法类里面多放点方法，最好不要放属性，不太清楚是什么。但确实这样写给人感觉更干净点，方法是方法，如果没有调用代码就放在那里我们不用管它，后面用了构造函数我们就去查看相关类的构造方法，这样很省精力。</p>
 <h2 id="_10">类的操作第三版</h2>
-<div class="highlight"><pre><span></span>class Unit():
+<div class="highlight"><pre><span></span><code>class Unit():
     def __init__(self,hp,atk,color):
         self.hp=hp
         self.atk=atk
@@ -422,18 +422,18 @@ if __name__ == '__main__':
 级别：5,生命值：839，攻击力：70.0，        颜色：red
 级别：6,生命值：935，攻击力：73.5，        颜色：red
 盖伦的技能有： 不屈  致命打击  勇气  审判  德玛西亚正义
-</pre></div>
+</code></pre></div>
 <p>现在就这个例子相对于第二版所作的改动，也就是核心知识点说明之。其中函数参量列表中这样表述<code>color='blue'</code>表示blue是color变量的备选值，也就是color成了可选参量了。</p>
 <h2 id="_11">构造函数的继承和重载</h2>
 <p>上面例子很核心的一个概念就是<code>__init__</code>构造函数的继承和重载。比如我们看到garen001实例的创建，其中就引用了Hero的构造函数，特别强调的是，比如这里 <code>Hero.__init__(self,1,455,56,color)</code> 就是调用了Hero类的构造函数，这个时候需要把self写上，因为self就是最终创建的实例garen001，而不是Hero，而且调用Hero类的构造函数就必须按照它的参量列表形式来。这个概念需要弄清楚！</p>
 <p>理解了这一点，在类的继承关系中的构造函数的继承和重载就好看了。比如这里Hero类的构造函数又是继承自Unit类的构造函数，Hero类额外有一个参量level接下来也要开辟存储空间配置好。</p>
-<h2 id="9595str9595">__str__函数的继承和重载</h2>
+<h2 id="__str__">__str__函数的继承和重载</h2>
 <p>第二个修改是这里重定义了一些类的<code>__str__</code>函数，通过重新定义它可以改变默认print某个类对象是的输出。默认只是一段什么什么类并无具体内容信息。具体就是return一段你想要的字符串样式即可。</p>
 <h1 id="_12">类的高级知识</h1>
 <p>首先说下python2和python3的兼容性，如果读者在python2.7环境下，那么推荐定义class的时候都如下跟上object：</p>
-<div class="highlight"><pre><span></span>class Test(object):
+<div class="highlight"><pre><span></span><code>class Test(object):
     pass
-</pre></div>
+</code></pre></div>
 <p>本章节围绕着下面这些内容逐步展开，从而逐步实现对python类的各个行为的深度定制。</p>
 <ol>
 <li>
@@ -458,10 +458,10 @@ if __name__ == '__main__':
 <p>类对象创建时行为定制------metaclass</p>
 </li>
 </ol>
-<h2 id="9595dict9595">__dict__</h2>
+<h2 id="__dict__">__dict__</h2>
 <p>参考了 <a href="http://www.cnblogs.com/vamei/archive/2012/12/11/2772448.html">这个网页</a> 。</p>
 <p>首先读者记住class是个类似于def一样的语句，其也管理一个名字空间，然后区块里面的语句逐步执行。然后我们看下面这个例子：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">A</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
@@ -472,8 +472,8 @@ if __name__ == '__main__':
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">1</span>
-</pre></div>
-<div class="highlight"><pre><span></span>class B(A):
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>class B(A):
 
     def __init__(self):
         self.d = 5
@@ -494,14 +494,14 @@ b = B()
 =&gt; mappingproxy({'__module__': 'builtins', '__init__': &lt;function B.__init__ at 0x7f13586057b8&gt;, 'b': 2, 'fun3': &lt;function B.fun3 at 0x7f1358605840&gt;, '__doc__': None})
    A.__dict__
 =&gt; mappingproxy({'__module__': 'builtins', '__init__': &lt;function A.__init__ at 0x7f1358605620&gt;, 'fun2': &lt;function A.fun2 at 0x7f13586056a8&gt;, 'x': &lt;property object at 0x7f1358604188&gt;, '__dict__': &lt;attribute '__dict__' of 'A' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'A' objects&gt;, '__doc__': None})
-</pre></div>
+</code></pre></div>
 <p>这个例子很有些东西，首先 <code>b.__class__</code> 是查看实例b的类型，大体输出接近于 <code>type(b)</code> ，然后我们看到类B的类型是type。后面在将metaclass会讲到这个，目前记住实例是根据类创建的，而类是根据元类也就是这个type创建的。</p>
 <p>然后我们看到不管是实例b还是类B或者类A都记忆了一些自己的属性，至于继承来的属性是不需要重复记忆了。</p>
 <p>然后类的 <code>__dict__</code>是 mappingproxy对象，其是只读的，也就是只有实例b的 <code>__dict__</code> 是 dict类型，是可以读写的（参考了<a href="http://pyzh.readthedocs.io/en/latest/python-questions-on-stackoverflow.html#dict">这篇文章</a>）。</p>
 <p>最后通过 <code>@property</code> 装饰器修饰的函数，我们会得到一个 property object，这个后面会谈到，这个特定的属性访问行为是可定制的，通过描述符对象。</p>
-<h2 id="9595getitem9595">__getitem__</h2>
+<h2 id="__getitem__">__getitem__</h2>
 <p><code>__getitem__(self, key)</code> 方法定义了实例的这种形式 <code>Class['key']</code>的行为。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Test</span><span class="p">():</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">'i accpeted: </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
@@ -512,7 +512,7 @@ b = B()
 <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
 <span class="n">i</span> <span class="n">accpeted</span><span class="p">:</span> <span class="n">a</span>
 <span class="o">=&gt;</span> <span class="mi">1</span>
-</pre></div>
+</code></pre></div>
 <p>类初步测试不支持这种 Test['x'] 的写法。 然后 <code>__setitem__(self, key, value)</code> 方法 对应 <code>t['x']=3</code> 这样的赋值形式；还有 <code>__delitem(self, key)__</code> 方法对应这样的运算符号表示： <code>del t['x']</code>。</p>
 <h2 id="_13">数学运算符号重载</h2>
 <p>一般应用层面很少有需求去重载这些数学运算符号操作吧。这里稍微了解下即可。</p>
@@ -580,9 +580,9 @@ b = B()
 <h2 id="_14">逻辑运算</h2>
 <h2 id="bool">bool函数</h2>
 <p>bool(X) <code>__bool__(self)</code></p>
-<h2 id="9595eq9595">__eq__</h2>
+<h2 id="__eq__">__eq__</h2>
 <p><code>__eq__</code>方法定义了两个对象之间A == B的行为。 比如下面：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">==</span><span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
@@ -590,9 +590,9 @@ b = B()
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-</pre></div>
+</code></pre></div>
 <p>定义了这样的<code>__eq__</code>方法之后，我们运行==语句，如果两个对象之间内置字典键和值都是一样的，那么就返回True。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; test=GClass()
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; test=GClass()
 &gt;&gt;&gt; test.a=1
 &gt;&gt;&gt; test2=GClass()
 &gt;&gt;&gt; test2.a=1
@@ -600,7 +600,7 @@ b = B()
 True
 &gt;&gt;&gt; test is test2
 False
-</pre></div>
+</code></pre></div>
 <p>如果我们不重定义<code>__eq__</code>方法，似乎test和test2会从原始的object类继承<code>__eq__</code>方法，然后它们比较返回的是False，我想可能是这两个实例内部某些值的差异吧，但应该不是基于id。</p>
 <h2 id="_15">比较判断操作</h2>
 <p>类似上面的==比较操作，还有如下比较判断操作和对应的内置方法可以重定义。</p>
@@ -623,27 +623,27 @@ False
 </ul>
 <h2 id="in">in语句</h2>
 <p>如下所示：</p>
-<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">__in__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">__in__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span>
-</pre></div>
+</code></pre></div>
 <p>提供了<code>what in X</code> 语句的支持，上面的例子是基于类其内字典的内容而做出的判断。</p>
 <h2 id="_16">类之间的相等判断</h2>
 <p><a href="http://www.informit.com/articles/article.aspx?p=453682">参考网站</a>。</p>
 <p>这里先总结下is语句和==判断和isinstance和id还有type函数，然后再提及python类的内置方法<code>__eq__</code>。</p>
 <p>python是一个彻头彻尾的面向对象的语言，python内部一切数据都是对象，对象就有类型type的区别。比如内置的那样对象类型：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; type('abc')
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; type('abc')
 &lt;class 'str'&gt;
 &gt;&gt;&gt; type(123)
 &lt;class 'int'&gt;
 &gt;&gt;&gt; type([1,2,3])
 &lt;class 'list'&gt;
-</pre></div>
+</code></pre></div>
 <p>对象除了有type类型之外，还有id属性，id就是这个对象具体在内存中的存储位置。</p>
 <p>当我们说lst=[1,2,3]的时候，程序具体在内存中创建的对象是[1,2,3]，而lst这个变量名不过是一个引用。然后我们看下面的例子：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; x=[1,2,3]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x=[1,2,3]
 &gt;&gt;&gt; y=[1,2,3]
 &gt;&gt;&gt; type(x)
 &lt;class 'list'&gt;
@@ -657,15 +657,15 @@ False
 True
 &gt;&gt;&gt; x is y
 False
-</pre></div>
+</code></pre></div>
 <p>type函数返回对象的类型，id函数返回对象具体在内存中的存储位置，而==判断只是确保值相等，is语句返回True则更加严格，需要对象在内存上（即id相等）完全是同一个东西。</p>
 <p>对象之间的类型比较可以用如下语句来进行比较：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; x=10
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x=10
 &gt;&gt;&gt; type(x) == int
 True
 &gt;&gt;&gt; type(x) == type(0)
 True
-</pre></div>
+</code></pre></div>
 <p>不过不是特别好用，比如假设fun是你自己定义的一个函数，用type(fun) ==
 function就会出错，然后type比较还要小心NoneType和其他空列表类型不同，而且type比较并没有将类的继承考虑进去。</p>
 <p>一般推荐isinstance函数来进行类型比较，请参考<a href="http://stackoverflow.com/questions/1549801/differences-between-isinstance-and-type-in-python">这个网站</a>的说明。推荐使用types模块的特定名字来判断类型，具体如下：</p>
@@ -702,18 +702,18 @@ function就会出错，然后type比较还要小心NoneType和其他空列表类
 <dd>
 <p>定义的函数类型，此外还有<strong>types.LambdaType</strong>。</p>
 <p>值得一提的是print等内置函数不是FunctionType而是BuiltinFunctionType。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; import types
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; import types
 &gt;&gt;&gt; isinstance(print,types.FunctionType)
 False
 &gt;&gt;&gt; isinstance(print,types.BuiltinFunctionType)
 True
-</pre></div>
+</code></pre></div>
 </dd>
 </dl>
 <p>更多内容请参见<a href="https://docs.python.org/3.4/library/types.html">types模块的官方文档</a>。</p>
 <h2 id="_17">强制类型变换</h2>
 <p>所包含的内置方法有：</p>
-<div class="highlight"><pre><span></span>__int__(self)   返回整型
+<div class="highlight"><pre><span></span><code>__int__(self)   返回整型
 __long__(self)  长整型
 __float__(self)  浮点型
 __complex__(self)  复数型
@@ -721,7 +721,7 @@ __str__(self)  字符型
 __oct__(self)  八进制
 __hex__(self) 十六进制
 __index__(self) 切片操作
-</pre></div>
+</code></pre></div>
 <h2 id="lenwhat"><code>len(what)</code></h2>
 <p><code>len(what)</code> 由<code>__len__(self)</code>提供支持。</p>
 <h2 id="copydeepcopy">copy方法和deepcopy方法</h2>
@@ -730,22 +730,22 @@ __index__(self) 切片操作
 <p>这里就要提一下python的copy模块了，一般很少有人去专门针对某个类单独编写 <code>__deepcopy__</code> 方法，可能会有某些特殊的情况吧，其他很多情况使用 <code>copy.deepcopy(what)</code> 是够用的。</p>
 <h2 id="with">with语句支持</h2>
 <p>按照PEP343的说法：</p>
-<div class="highlight"><pre><span></span>with VAR = EXPR: 
+<div class="highlight"><pre><span></span><code>with VAR = EXPR: 
     BLOCK
 
 with EXPR as VAR:
     BLOCK
-</pre></div>
+</code></pre></div>
 <p>实际上就是：</p>
-<div class="highlight"><pre><span></span>VAR = EXPR
+<div class="highlight"><pre><span></span><code>VAR = EXPR
 VAR.__enter__()
 try:
     BLOCK
 finally:
     VAR.__exit__()
-</pre></div>
+</code></pre></div>
 <p>比如我们执行 <code>with open(...) as f</code> 的这类语句，最终离开就应该调用了文件对象的 <code>__exit__</code> 方法：</p>
-<div class="highlight"><pre><span></span>with open(...) as f:
+<div class="highlight"><pre><span></span><code>with open(...) as f:
     BLOCK
 
 f = open(...)
@@ -754,9 +754,9 @@ try:
     BLOCK
 finally:
     f.__exit__()
-</pre></div>
+</code></pre></div>
 <p>此外在<code>contextlib</code> 那里还提供了一个<strong>contextmanager</strong> 装饰器，写法有点差异，但要实现的效果大致是类似的。下面是一个演示例子：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Mylock</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Mylock</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">acquire_lock</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span>
@@ -778,10 +778,10 @@ finally:
 
 <span class="k">with</span> <span class="n">get_lock</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="k">as</span> <span class="n">lock</span><span class="p">:</span>
     <span class="c1"># do something</span>
-</pre></div>
-<h2 id="9595call9595">__call__</h2>
+</code></pre></div>
+<h2 id="__call__">__call__</h2>
 <p>请看下面的例子：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Position</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Position</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
@@ -798,13 +798,13 @@ finally:
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
 <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> 
-</pre></div>
+</code></pre></div>
 <p>有了<code>__call__(self,args)</code>方法，你的实例就好像函数一样可以被调用了。</p>
 <h2 id="__repr__-__str__"><code>__repr__</code> 和 <code>__str__</code> 的区别</h2>
 <p>简单来说就是 repr(what) 调用的是 <code>__repr__</code> 方法，str(what) 调用的是 <code>__str__</code> 方法。然后再简单实验了一下，和print函数和字符串format相关的使用的是 <code>__str__</code> 方法，如果你在python的REPL环境下，简单的输入该变量回显使用的是 <code>__repr__</code> 方法。如果你不实现<code>__str__</code> 方法，print函数或者字符串format相关的使用会调用 <code>__repr__</code> 方法，至于 <code>__repr__</code> 方法就算你不实现所有python对象都有默认的 <code>__repr__</code> 方法的。</p>
-<h2 id="9595new9595">__new__</h2>
+<h2 id="__new__">__new__</h2>
 <p>一个类创造出一个实例出来首先是调用 <code>__new__</code> 方法，然后才是调用<code>__init__</code>方法。其一个应用就是所谓的单例模式，也就是一个类只能创造一个实例，请参看 <a href="https://segmentfault.com/a/1190000008141049">这篇文章</a> 。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="p">:</span>
@@ -822,11 +822,11 @@ finally:
 <span class="kc">True</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">id</span><span class="p">(</span><span class="n">one</span><span class="p">),</span> <span class="nb">id</span><span class="p">(</span><span class="n">two</span><span class="p">)</span>
 <span class="p">(</span><span class="mi">4303862608</span><span class="p">,</span> <span class="mi">4303862608</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>这里还有一个点，为什么 <code>_instance</code> 在两个类初始化过程中指向同一个对象。因为 <code>_instance</code> 是属于类的，而实例是基于类的 <code>__new__</code> 和 <code>__init__</code> 方法生成出来的，所以假设你是python程序，那个类（class其实和def一样的一种东西）为什么不在内存里编译好了就可以了，后面都引用这个类就行了。那么这个内存编译好了的类里面的 <code>_instance</code> 变量当然也封装好了。理解这个过程有助于我们进一步理解类变量的作用范围。</p>
-<h2 id="9595del9595">__del__</h2>
+<h2 id="__del__">__del__</h2>
 <p>当对象内存存储被回收时，python最后将执行一个内置方法<code>__del__</code>。有的时候你定义的需要管理一些额外的资源，定制这个函数可以确保python程序关闭时目标资源已经自动关闭回收。</p>
-<h2 id="9595getattr9595">__getattr__</h2>
+<h2 id="__getattr__">__getattr__</h2>
 <p>如果某个属性不在对象的 <code>__dict__</code> 里面，然后python会调用<code>__getattr__(self,name)</code> 方法（参考了
 <a href="http://www.cnblogs.com/vamei/archive/2012/12/11/2772448.html">这篇文章</a>）。如果没定义这个方法那么将抛出 AttributeError 。</p>
 <p>然后还有 <code>__setattr__(self,name,value)</code> 和 <code>__delattr__(self,name)</code>，这两个方法不管原属性在不在都会对其进行操作，谨慎使用！</p>
@@ -834,10 +834,10 @@ finally:
 <p>首先推荐 <a href="https://foofish.net/iterators-vs-generators.html">这篇文章</a>，对本小节概念的理清帮助很大。下面我们慢慢来说。</p>
 <p><img alt="迭代器和生成器的关系" src="http://img2.foofish.net/relationships.png"/></p>
 <p>首先Iterable叫做可迭代对象，Iterator叫做迭代器。在collections里面有这两个类，可以做出判断：</p>
-<div class="highlight"><pre><span></span>from collections import Iterable,Iterator
+<div class="highlight"><pre><span></span><code>from collections import Iterable,Iterator
 isinstance(obj, Iterable)
 isinstance(obj, Iterator)
-</pre></div>
+</code></pre></div>
 <p>然后我们再来看官方文档的词语解释：</p>
 <blockquote>
 <p>iterable -- 可迭代对象</p>
@@ -847,15 +847,15 @@ isinstance(obj, Iterator)
 <p>用来表示一连串数据流的对象。重复调用迭代器的 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#iterator.__next__"><code>__next__()</code></a> 方法（或将其传给内置函数 <a href="https://docs.python.org/zh-cn/3/library/functions.html#next"><code>next()</code></a>）将逐个返回流中的项。当没有数据可用时则将引发 <a href="https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration"><code>StopIteration</code></a> 异常。到这时迭代器对象中的数据项已耗尽，继续调用其 <code>__next__()</code> 方法只会再次引发 <a href="https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration"><code>StopIteration</code></a> 异常。迭代器必须具有 <a href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__"><code>__iter__()</code></a> 方法用来返回该迭代器对象自身，因此迭代器必定也是可迭代对象，可被用于其他可迭代对象适用的大部分场合。一个显著的例外是那些会多次重复访问迭代项的代码。容器对象（例如 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#list"><code>list</code></a>）在你每次向其传入 <a href="https://docs.python.org/zh-cn/3/library/functions.html#iter"><code>iter()</code></a> 函数或是在 <a href="https://docs.python.org/zh-cn/3/reference/compound_stmts.html#for"><code>for</code></a> 循环中使用它时都会产生一个新的迭代器。如果在此情况下你尝试用迭代器则会返回在之前迭代过程中被耗尽的同一迭代器对象，使其看起来就像是一个空容器。</p>
 </blockquote>
 <p>生成器函数区别一般函数是使用了yield语句返回，具体这块和python的异步相关，后面再说。然后还有生成器表达式：</p>
-<div class="highlight"><pre><span></span>test1 = (i+1 for i in range(5))
+<div class="highlight"><pre><span></span><code>test1 = (i+1 for i in range(5))
 isinstance(test1, Iterator)
 &gt;&gt;&gt; True
 isinstance(test1, Iterable)
 &gt;&gt;&gt; True
-</pre></div>
+</code></pre></div>
 <p>其都是生成器，生成器是某种简化版的迭代器，迭代器一定是可迭代对象。而某个可迭代对象经过 iter 函数处理就成了 迭代器了。就一般而言简单理解，认为某个对象具有 <code>__iter__</code> 方法，那么它就是一个可迭代对象，如果某个对象具有 <code>__next__</code> 方法，那么它就是一个迭代器。</p>
 <p>常见的for遍历的过程如下所示：</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">iter</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 <span class="o">...</span>    <span class="k">try</span><span class="p">:</span>
@@ -867,13 +867,13 @@ isinstance(test1, Iterable)
 <span class="mi">1</span>
 <span class="mi">2</span>
 <span class="mi">3</span>
-</pre></div>
+</code></pre></div>
 <p>iter函数是调用目标对象的 <code>__iter__</code> 方法（决定了该对象是可迭代对象的方法），就一般而言的简单情况是，<code>__iter__</code> 方法返回的目标对象自身，因为目标对象自身已经定义了 <code>__next__</code> 方法。</p>
 <p>而就迭代器来说，其迭代过程就是调用自身的 <code>__next__</code> 方法来获取下一个值，遇到 <code>StopIteration</code> 异常停止获取。</p>
 <p>上面提到的for语句，还有map zip 之类的函数是将这个过程自动做了的。包括iter函数处理和捕获终止异常。</p>
 <p>比如文件对象本身就是可迭代的，调用<code>__next__</code>方法就返回文件中下一行的内容，到达文件尾也就是迭代越界了返回：<strong>StopIteration</strong>异常。</p>
 <p>next函数比如next(f)等价于<code>f.__next__()</code> 。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; for line in open('removeduplicate.py'):
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; for line in open('removeduplicate.py'):
 ...  print(line,end='')
 ... 
 #!/usr/bin/env python3
@@ -883,11 +883,11 @@ isinstance(test1, Iterable)
 &gt;&gt;&gt; f=open('removeduplicate.py')
 &gt;&gt;&gt; next(f)
 '#!/usr/bin/env python3\n'
-</pre></div>
+</code></pre></div>
 <p>所以你可以通过定义类的 <code>__next__</code> 方法来获得这个类对于next函数时的反应。</p>
 <p>序列（列表，元组，字典，ranges对象）等是可迭代对象，不是迭代器。其经过iter函数处理就成了迭代器了。</p>
 <p>除了上面提及的常规操作，通过 <code>__iter__</code> 返回自身，然后通过构建 <code>__next__</code> 方法来定制迭代器行为外：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -897,15 +897,15 @@ isinstance(test1, Iterable)
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
-</pre></div>
-<div class="highlight"><pre><span></span>isinstance(t, Iterator)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>isinstance(t, Iterator)
 &gt;&gt;&gt; True
 list(t)
 &gt;&gt;&gt; [1, 2]
-</pre></div>
+</code></pre></div>
 <p>你也可以直接通过定义 <code>__iter__</code>方法返回一个生成器对象（generator object），这因为生成器总是迭代器。</p>
 <p>下面这个例子通过重新定义字典类的<code>__iter__</code>方法来获得一个新类，这个类用iter函数处理之后的迭代器返回的是经过排序的字典的键。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SortedDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SortedDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">dict</span><span class="o">=</span><span class="p">{}):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
 
@@ -919,15 +919,15 @@ list(t)
 <span class="n">dict02</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">dict02</span><span class="p">[</span><span class="s1">'d'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">dict02</span><span class="p">[</span><span class="s1">'c'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
-<div class="highlight"><pre><span></span>for i in dict02:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>for i in dict02:
     print(i)
-</pre></div>
-<div class="highlight"><pre><span></span>a
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>a
 b
 c
 d
-</pre></div>
+</code></pre></div>
 <p>但是要注意上面的例子，只在for语句直接迭代目标对象时才会调用 <code>__iter__</code> 方法的。</p>
 <h2 id="python_1">深入理解python的迭代操作</h2>
 <p>在python中一般复杂的代码运算效率就会低一点，如果完成类似的工作但你可以用更简单的语句那么运算效率就会高一点。当然这只是python的一个设计理念，并不尽然，但确实很有意思。</p>
@@ -942,39 +942,39 @@ d
 <p>按照之前的迭代模式的描述，虽然使用常见的列表解析格式(for语句)就可以完成对某个集合中各个元素的操作或者过滤，不过python中还有另外两个函数来实现类似的功能，map对应对集合中各个元素进行某个函数操作（可以接受lambda函式），而filter则实现如上所述的过滤功能。然后值得一提的是python3之后map函数和filter函数返回都是一个可迭代对象而不是列表，和range函数等其他可迭代对象一样可用于列表解析结构。</p>
 <h2 id="map">map函数</h2>
 <p>这里列出一些例子：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; map(abs, [-2,-1,0,1,2])
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; map(abs, [-2,-1,0,1,2])
 &lt;map object at 0xb707dccc&gt;
 &gt;&gt;&gt; [x for x in map(abs, [-2,-1,0,1,2])]
 [2, 1, 0, 1, 2]
 &gt;&gt;&gt; [x for x in map(lambda x : x+2, [-2,-1,0,1,2])]
 [0, 1, 2, 3, 4]
-</pre></div>
+</code></pre></div>
 <p>map函数还可以接受两个可迭代对象的协作参数模式，这个学过lisp语言的会觉得很眼熟，不过这里按照我们的理解也是很便捷的。具体就是第一个可迭代对象取出一个元素作为map的函数的第一个参数，然后第二个可迭代对象取出第二个参数，然后经过函数运算，得到一个结果，这个结果如果不列表解析的话就是一个map对象（可迭代对象），然后展开以此类推。值得一提的是两个可迭代对象的<em>深度由最短的那个决定</em>，请看下面的例子：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1,2])]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1,2])]
 [-4, -2, 0, 2, 4]
 &gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1])]
 [-4, -2, 0, 2]
-</pre></div>
+</code></pre></div>
 <h2 id="filter">filter函数</h2>
 <p>同样和上面的谈及的类似，filter函数过滤一个可迭代对象然后产生一个可迭代对象。类似的功能可以用列表解析的后的if语句来实现。前面谈到map函数的时候提及一般还是优先使用列表解析模式，但filter函数这里有点不同，因为列表解析后面跟个if可能有时会让人困惑，这时推荐还是用filter函数来进行可迭代对象的过滤操作。</p>
 <p>filter函数的基本逻辑是只有 <code>return True</code>（用lambda表达式就是这个表达式的值为真) 的时候元素才被收集起来，或者说是过滤出来。</p>
 <p>请参看下面的例子来理解：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; [x for x in filter(lambda x:x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; [x for x in filter(lambda x:x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
 [1, 3, 5, 9, 155, -25]
 &gt;&gt;&gt; [x for x in filter(lambda x:not x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
 [2, 10, -20]
-</pre></div>
+</code></pre></div>
 <p>当然你也可以传统的编写函数：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; def even(n):
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; def even(n):
 ...    if n % 2 ==0:
 ...         return True
 
 &gt;&gt;&gt; [x for x in filter(even,[1,2,3,5,9,10,155,-25])]
 [2, 10]
-</pre></div>
+</code></pre></div>
 <h2 id="zip">zip函数</h2>
 <p>这里就顺便把zip函数也一起提了，zip函数同样返回一个可迭代对象，它接受任意数目的可迭代对象，然后逐个取出可迭代对象元素构成一个元组成为自己的一个元素。和map函数类似<em>迭代深度由最短的那个可迭代对象决定</em>。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; zip(['a','b','c'],[1,2,3,4])
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; zip(['a','b','c'],[1,2,3,4])
 &lt;zip object at 0xb7055e6c&gt;
 &gt;&gt;&gt; [x for x in zip(['a','b','c'],[1,2,3,4])]
 [('a', 1), ('b', 2), ('c', 3)]
@@ -982,10 +982,10 @@ d
 [('a', 1), ('b', 2), ('c', 3)]
 &gt;&gt;&gt; dict(zip(['a','b','c'],[1,2,3,4]))
 {'c': 3, 'b': 2, 'a': 1}
-</pre></div>
+</code></pre></div>
 <h2 id="_19">字典到列表</h2>
 <p>这个例子似乎使用价值不大，只是说明zip函数接受任意数目参数的情况。y.items()解包之后是4个参数传递给zip函数，而zip函数的封装逻辑就是如果有人问我，我就把你们这些迭代对象每个取出一个元素，然后用元组包装之后返回。</p>
-<div class="highlight"><pre><span></span>x1 = ['a','b','c','e']
+<div class="highlight"><pre><span></span><code>x1 = ['a','b','c','e']
 x2 = [1,2,3,4]
 y = dict(zip(x1,x2))
 print('列表到字典：',y)
@@ -994,9 +994,9 @@ print(new_x1,new_x2)
 
 列表到字典： {'b': 2, 'c': 3, 'a': 1, 'e': 4}
 ('b', 'c', 'a', 'e') (2, 3, 1, 4)
-</pre></div>
+</code></pre></div>
 <p>这个例子如果到更加复杂的情况，我们可以跳过字典形式，来个数据映射对：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; x1 = ['a','b','c','e']
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x1 = ['a','b','c','e']
 &gt;&gt;&gt; x2 = ['red','yellow','red','blue']
 &gt;&gt;&gt; x3 = [1,2,3,4]
 &gt;&gt;&gt; list(zip(x1,x2,x3))
@@ -1008,21 +1008,21 @@ print(new_x1,new_x2)
 ('red', 'yellow', 'red', 'blue')
 &gt;&gt;&gt; new_x3
 (1, 2, 3, 4)
-</pre></div>
+</code></pre></div>
 <p>当然对于多属性数据问题一般还是推荐使用类来处理，不过某些情况下可能不需要使用类，就这样简单处理之。</p>
 <p>值得一提的是这种数据存储形式和sql存储是一致的，而且不知道你们注意到没有，这似乎实现了矩阵的转置功能。</p>
 <h1 id="_20">装饰器</h1>
 <p>装饰器的作用机制就是对接下来的函数进行进一步的封装，比如：</p>
-<div class="highlight"><pre><span></span>    @staticmethod
+<div class="highlight"><pre><span></span><code>    @staticmethod
     def what():
         pass
 
     # 其就等价于在类声明语句里写上了这样一句。   
     what = staticmethod(what)
-</pre></div>
+</code></pre></div>
 <p>可见装饰器并不是一个什么神秘的难懂的概念，同样你可以定义自己的函数，这个函数处理某个函数对象，并对其进行某种封装。</p>
 <h2 id="_21">自定义装饰器</h2>
-<div class="highlight"><pre><span></span>def print1(f):
+<div class="highlight"><pre><span></span><code>def print1(f):
     print('1',f)
     return f
 
@@ -1031,10 +1031,10 @@ def print3(c):
     print(c)
 
 print3('c')  # print1(print3)('c')
-</pre></div>
+</code></pre></div>
 <p>比如上面的print1函数就做成了一个装饰器函数，后面的print3函数可以理解为 <code>print3=print1(print3)</code> 。——在这里理解的关键在于理解python中函数名字是无关紧要的，关键是函数对象。比如这里右边的print3是<code>def print3</code> 时生成的那个函数对象，然后这个函数对象送给print1进行了处理并封装为一个新的函数对象，再把这个函数对象赋值给了变量print3。</p>
 <h2 id="_22">多个装饰器</h2>
-<div class="highlight"><pre><span></span>def print1(f):
+<div class="highlight"><pre><span></span><code>def print1(f):
     print('1',f)
     return f
 
@@ -1048,11 +1048,11 @@ def print4(c):
     print(c)
 
 print4('c')
-</pre></div>
+</code></pre></div>
 <p>多个装饰器的装饰顺序是从下往上的，上面的例子原print4函数对象先经过print1处理，然后再经过print2的处理，最后这个函数对象赋值给了变量print4。</p>
 <h2 id="_23">装饰器带上参数</h2>
 <p>在前面的例子中，我们就可以简单将装饰器函数理解为一个接受函数对象返回返回函数对象的函数，这很直观和简单。实际上装饰器也是可以带上自己的参数的，这需要通过函数的闭包结构【也就是函数里面定义函数的结构，这样内部函数是可以使用外部函数的那些参数和变量的】才能完成，如下面的例子所示:</p>
-<div class="highlight"><pre><span></span>def print1(f):
+<div class="highlight"><pre><span></span><code>def print1(f):
     print('1',f)
     return f
 
@@ -1068,11 +1068,11 @@ def print4(c):
     print(c)
 
 print4('c')
-</pre></div>
+</code></pre></div>
 <h2 id="_24">一般装饰器写法</h2>
 <p>本小节参考了 <a href="https://stackoverflow.com/questions/10294014/python-decorator-best-practice-using-a-class-vs-a-function">这个网页</a> 。一般书写一个装饰器函数有如下通用写法：</p>
 <h3 id="_25">无参数装饰器版本</h3>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 <span class="k">def</span> <span class="nf">mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
@@ -1092,10 +1092,10 @@ print4('c')
 
 <span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>这里使用了 functools 模块的 wraps装饰器，其接受你要装饰的函数作为参数。如果不这样的话，你在原test函数中定义的说明文字将丢失，按照 <code>test=mydecorator(test)</code> ，实际上test变量接受的函数对象是 <code>wraper_func</code> ，不信你可以查看 <code>test.__name__</code> 其是等于 <code>wraper_func</code> 的。而如上使用wraps装饰器，你在原test函数中定义的名字和文档都将得到保留。</p>
 <h3 id="_26">带参数装饰器版本</h3>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 <span class="k">def</span> <span class="nf">mydecorator</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">_mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -1118,40 +1118,40 @@ print4('c')
 
 <span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2 id="_27">静态方法装饰器</h2>
-<div class="highlight"><pre><span></span>class Test:
+<div class="highlight"><pre><span></span><code>class Test:
 #    @staticmethod
     def hello():
         print('aaa')
 
 test=Test()
 test.hello()
-</pre></div>
+</code></pre></div>
 <p>在上面的例子中，我们希望创造一个函数，这个函数和self实例没有关系（这里指这个函数将不接受self这个默认参数了）。如上所示，hello函数只是希望简单打印一小段字符，如<em>上面这样的代码是错误</em>的，如果我们在这个函数上面加上 <code>@staticmethod</code> ，那么上面这段代码就不会报错了，</p>
-<div class="highlight"><pre><span></span>class Test:
+<div class="highlight"><pre><span></span><code>class Test:
     @staticmethod
     def hello():
         print('aaa')
 
 test=Test()
 test.hello()
-</pre></div>
+</code></pre></div>
 <p>这样在类里面定义出来的函数叫做这个类的静态方法，静态方法同样可以继承等等，而静态方法通常使用最大的特色就是不需要建立实例，即可以直接从类来调用，如下所示：</p>
-<div class="highlight"><pre><span></span>class Test:
+<div class="highlight"><pre><span></span><code>class Test:
     @staticmethod
     def hello():
         print('aaa')
 
 Test.hello()
-</pre></div>
+</code></pre></div>
 <p>静态方法的使用比如pyqt中的</p>
-<div class="highlight"><pre><span></span>QtGui.QFileDialog.getOpenFileName(......)
-</pre></div>
+<div class="highlight"><pre><span></span><code>QtGui.QFileDialog.getOpenFileName(......)
+</code></pre></div>
 <p>就是一个静态方法，可以通过直接调用这个方法来弹出询问打开文件的窗口，并不需要先实例化一个对象，然后通过self.what等类似的形式来调用。</p>
 <h2 id="_28">类方法装饰器</h2>
 <p>还有一个装饰器有时也会用到， <code>@classmethod</code>，叫什么类方法装饰器。其和前面的静态方法一样也可以不新建实例，而直接通过类来调用。其和静态方法的区别就是静态方法在调用的时候没有任何默认的第一参数，而类方法在调用的时候默认第一参数就是调用的那个类。</p>
-<div class="highlight"><pre><span></span>class Test:
+<div class="highlight"><pre><span></span><code>class Test:
     @classmethod
     def hello(cls):
         print('from class:', cls, 'saying hello')
@@ -1159,12 +1159,12 @@ Test.hello()
 Test.hello()
 
 from class: &lt;class '__main__.Test'&gt; saying hello
-</pre></div>
+</code></pre></div>
 <p>关于classmethod装饰器实际上东西就这么多，然后就是传进去的第一个参数cls看你有什么使用需要了，比如
 <code>cls(...)</code> 将根据这个类来生成一个实例。</p>
 <h2 id="_29">属性装饰器</h2>
 <p>其他编程语言的开发者可能会在类里定义一些针对某些属性的get和set之类的方法，这并不是Pythonic的风格，对于某些特定名字的属性，一般利用属性装饰器来构建，如下所示：</p>
-<div class="highlight"><pre><span></span>class Apple():
+<div class="highlight"><pre><span></span><code>class Apple():
     def __init__(self):
         self._color = 'red'
 
@@ -1173,16 +1173,16 @@ from class: &lt;class '__main__.Test'&gt; saying hello
         return self._color
 
 apple = Apple()
-</pre></div>
+</code></pre></div>
 <p>这样将给这个类定义个属性，具体调用这个属性就用这样的点号引用即可，然后实际执行的就是
 <code>@property</code> 装饰的那个函数。 现在这个color属性只可读，不可更改。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; apple.color
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; apple.color
 'red'
 &gt;&gt;&gt; apple.color = 'yellow'
 Traceback (most recent call last):
   File "&lt;stdin&gt;", line 1, in &lt;module&gt;
 AttributeError: can't set attribute
-</pre></div>
+</code></pre></div>
 <p>请参看
 <a href="http://stackoverflow.com/questions/17330160/how-does-the-property-decorator-work">这个网页</a>
 ，这里讲到了 <code>@color.setter</code>
@@ -1191,7 +1191,7 @@ AttributeError: can't set attribute
 装饰某个函数之后，来通过这个函数来删除某个属性。这里deleter的使用可能较少，一般
 <code>@property</code> 就能满足大部分需求了，有的觉得需要修改某个属性则定义setter。</p>
 <p>一个简单的setter例子如下所示：</p>
-<div class="highlight"><pre><span></span>class Apple():
+<div class="highlight"><pre><span></span><code>class Apple():
     def __init__(self):
         self._color = 'red'
 
@@ -1208,10 +1208,10 @@ apple = Apple()
 print(apple.color)
 apple.color = 'yellow'
 print(apple.color)
-</pre></div>
+</code></pre></div>
 <h2 id="_30">类作为装饰器</h2>
 <p>类作为装饰器就是利用类的 <code>__call__</code>内置方法，我把这段代码粘贴在下面了，有时可能看别人的源码有用吧，但装饰器这部分就到此为止吧，没必要弄得这么复杂了。</p>
-<div class="highlight"><pre><span></span>class MyDecorator(object):
+<div class="highlight"><pre><span></span><code>class MyDecorator(object):
     """Decorator example mixing class and function definitions."""
     def __init__(self, func, param1, param2):
         self.func = func
@@ -1228,23 +1228,23 @@ def my_dec_factory(param1, param2):
     def decorator(func):
          return MyDecorator(func, param1, param2)
     return decorator
-</pre></div>
+</code></pre></div>
 <p>前面讲到class声明语句和def语句很类似，def语句是利用缩进区块内的代码（简单理解就是执行编译了一遍，当然应该还有其他处理）构建出一个函数对象，然后将这个函数对象和某个名字绑定起来。class语句也是利用缩进区块内的代码构建出一个类对象，然后将这个类对象和某个名字绑定起来。</p>
 <p>那么类装饰器，也就是类上面挂个装饰器，如下所示是什么意思呢：</p>
-<div class="highlight"><pre><span></span>def decorator(C):
+<div class="highlight"><pre><span></span><code>def decorator(C):
     return ProcessedC
 
 @decorator    
 class C:
     ....
-</pre></div>
+</code></pre></div>
 <p>这样我们得到的C是：</p>
-<div class="highlight"><pre><span></span>C = decorator(C)
-</pre></div>
+<div class="highlight"><pre><span></span><code>C = decorator(C)
+</code></pre></div>
 <p>所以函数装饰器相当于函数对象创建过程的深度定制DIY，而类装饰器就相当于类对象创建过程的深度DIY。</p>
 <h1 id="_31">多重继承的顺序问题</h1>
 <p>我们来看下面这个例子：</p>
-<div class="highlight"><pre><span></span>class B1():x='B1'
+<div class="highlight"><pre><span></span><code>class B1():x='B1'
 class B2():x='B2'
 class B3():x='B3'
 class B(B1,B2,B3):x='B'
@@ -1254,7 +1254,7 @@ class A(A1,A2):x='A'
 class D(B,A):x='D'
 test=D()
 print(test.x)
-</pre></div>
+</code></pre></div>
 <p><img alt="多重继承示意图" src="https://a358003542.github.io/images/python/duo-chong-ji-cheng.png"/></p>
 <p>你可以测试一下上面这个例子，首先当然结果是D自己的x被先查找，然后返回<em>'D'</em>，如果你把类D的x定义语句换成pass，结果就是<em>'B'</em>。这说明这里程序的逻辑是如果test实例找不到x，那么再找D，D找不到再接下来找D继承自的父类，首先是B，到目前为止，没什么新鲜事发生。</p>
 <p>然后我们再把B的x赋值语句换成pass，这时的结果是<em>'B1'</em>，也没什么好惊讶的。然后类似的一致操作下去，我们会发现python的值的查找顺序在这里是：D，B，B1，B2，B3，A，A1，A2。</p>
@@ -1264,7 +1264,7 @@ print(test.x)
 <p>参考资料：<a href="http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">维基百科菱形难题</a></p>
 <p><img alt="菱形难题" src="https://a358003542.github.io/images/python/ling-xing-nan-ti.png"/></p>
 <p>菱形难题即在如上的类的继承中，如果C和A都有同名属性x，那么D会调用谁的呢？读者测试下面的例子：</p>
-<div class="highlight"><pre><span></span>class E():x='E'
+<div class="highlight"><pre><span></span><code>class E():x='E'
 class F():x='F'
 class G():x='G'
 class A(F,G):x='A'
@@ -1272,11 +1272,11 @@ class B(E,F):x='B'
 class D(B,A):pass
 test=D()
 print(test.x)
-</pre></div>
+</code></pre></div>
 <p>此时运行结果到DBE都没有什么出奇的，
 接下来要某是DBEF[^15]，要某是DBEA，这里程序的结果是<em>'A'</em>。这里的情况确实比较纠结，如果没有这个F作为菱形难题的交叉点，似前面的层次分明，那么简单的理解为深度优先即可，这里python3的选择是<em>'A'</em>，不清楚为什么要这么选择。</p>
 <p>我们再来看这个例子：</p>
-<div class="highlight"><pre><span></span>class E():x='E'
+<div class="highlight"><pre><span></span><code>class E():x='E'
 class F():x='F'
 class G():x='G'
 class A(F,G):x='A'
@@ -1284,20 +1284,20 @@ class B(F,E):pass
 class D(B,A):pass
 test=D()
 print(test.x)
-</pre></div>
+</code></pre></div>
 <p>此时结果是<em>'A'</em>，连E都被跳过去了，变成了彻底的横向优先原则。</p>
 <p>程序出现菱形难题之后，情况变得不可琢磨了。上面的三个情况</p>
-<div class="highlight"><pre><span></span>D(B(B1 B2 B3) A(A1 A2)) → D B B1 B2 B3 A A1 A2
+<div class="highlight"><pre><span></span><code>D(B(B1 B2 B3) A(A1 A2)) → D B B1 B2 B3 A A1 A2
 
 D(B(E F) A(F G)) → D B E A F G
 
 D(B(F E) A(F G)) → D B A F E G
-</pre></div>
+</code></pre></div>
 <p>就是这样的，总之这是很冷门的领域了。。简单的理解就是深度搜索，类似flatten函数处理过，然后如果遇到某个子元在下一个平行级别的子元中也含有，那么本子元会被略过，做个记号，分叉跳过去跑到A那里，执行完那个子元之后，又会重新调到之前的操作点上。python怎么弄这么古怪的逻辑。。</p>
 <h2 id="super">super如何面对菱形难题</h2>
 <p>第一种情况是如果是单继承的类的系统，super()这种形式就直接表示父类的意思。然后用super().什么什么的来引用父类的某个变量或方法。</p>
 <p>第二种情况是多重继承的，搜索顺序和多重继承的搜索顺序相同，也就是从左到右。请注意调试下面的例子，如果调用c.d就会返回错误，说明调用的是类A的构造函数。</p>
-<div class="highlight"><pre><span></span>class A():
+<div class="highlight"><pre><span></span><code>class A():
     def __init__(self,a):
         self.a=a
 
@@ -1330,14 +1330,14 @@ fun what
 fun3
 2
 3 2
-</pre></div>
+</code></pre></div>
 <p>其中A类定义的fun函数在写的函数上通常有个self参数，而<em>super()</em>这种调用形式在意义上表示其的父类，同时默认第一个参数就是self。使用super()在类的编写中引用本类的父类的属性和方法是很便捷的，
 。比如上面的例子中fun3能被调用是因为多重继承的机制在这里，所以它会逐个找父类。然后c.d会出错，因为这里初始化是用的A类的构造函数。</p>
 <h1 id="_33">描述器</h1>
 <p>本小节参考了<a href="http://pyzh.readthedocs.io/en/latest/Descriptor-HOW-TO-Guide.html">这个网页</a> 。</p>
 <p>上面谈及的属性装饰器，其实际上是调用的property函数，</p>
-<div class="highlight"><pre><span></span>property(fget, fset, fdel, descrition)
-</pre></div>
+<div class="highlight"><pre><span></span><code>property(fget, fset, fdel, descrition)
+</code></pre></div>
 <p>而这个函数返回的是一个描述器对象（Desriptor）。那么什么是一个描述器对象呢，简单来说这个对象里面定义了三个方法（最基本的是必须把
 <code>__get__</code>方法定义了）。</p>
 <p>现在让我们把思路再理一下，首先是某个instance.a这个表达，python将视图从
@@ -1347,7 +1347,7 @@ fun3
 方法，如果找不到那么就会报错。</p>
 <p>在上面找属性的过程中，查找描述器的行为是很靠前的。如果找到的属性是一个描述器，那么python会根据这个描述器对象来决定如何提取这个属性，如何修改这个属性等的行为。</p>
 <p>然后理解property这个函数返回的是一个怎样的描述器，看下面的python代码等价实现是最直观的了：</p>
-<div class="highlight"><pre><span></span>class Property(object):
+<div class="highlight"><pre><span></span><code>class Property(object):
     "Emulate PyProperty_Type() in Objects/descrobject.c"
 
     def __init__(self, fget=None, fset=None, fdel=None, doc=None):
@@ -1381,14 +1381,14 @@ fun3
 
     def deleter(self, fdel):
         return type(self)(self.fget, self.fset, fdel, self.__doc__)
-</pre></div>
+</code></pre></div>
 <h1 id="_34">缓存属性</h1>
 <p>下面这个例子灵感来自python官方装饰器 <code>@property</code>
 的源码，稍作修改使得某个对象的属性具有记忆特性。</p>
-<div class="highlight"><pre><span></span>import time
+<div class="highlight"><pre><span></span><code>import time
 import logging
-</pre></div>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">memorized_property</span><span class="p">(</span><span class="nb">property</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">memorized_property</span><span class="p">(</span><span class="nb">property</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">memorized_property</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1417,8 +1417,8 @@ import logging
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">"can't delete attribute"</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
@@ -1440,26 +1440,26 @@ import logging
     <span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h1 id="metaclass">什么是metaclass</h1>
 <p>所有类都是由元类（type类）创建的，其对应的语句如下：</p>
-<div class="highlight"><pre><span></span>class = type(classname, superclasses, attributedict)
-</pre></div>
+<div class="highlight"><pre><span></span><code>class = type(classname, superclasses, attributedict)
+</code></pre></div>
 <p>type实际调用的是自身的 <code>__call__</code> 方法，这个方法将运行type的两个方法：
 <code>__new__</code> ， <code>__call__</code> 。</p>
 <p>这样就创造了一个类了，然后之前我们提到： 类还要调用自身的 <code>__new__</code> ，
 <code>__call__</code> ，这样就创造出一个实例来了。</p>
 <p>之前提到type的type也是type，type大体可以看作python中类型的最底层的原子结构吧。元类创造类，然后是类创造实例。</p>
 <h2 id="_35">定义一个元类</h2>
-<div class="highlight"><pre><span></span>class Meta(type):
+<div class="highlight"><pre><span></span><code>class Meta(type):
     def __new__(meta, classname, supers, classdict):
         # do something
         return type.__new__(meta, classname, supers, classdict)
-</pre></div>
+</code></pre></div>
 <h2 id="_36">使用一个元类</h2>
-<div class="highlight"><pre><span></span>class Test(Super, metaclass=Meta):
+<div class="highlight"><pre><span></span><code>class Test(Super, metaclass=Meta):
     pass
-</pre></div>
+</code></pre></div>
 <p>元类理解起来并不难，关键是如何把握在合适的时候合适的使用。</p>
 <h1 id="_37">进程和线程</h1>
 <p>进程的定义是: 一个正在执行的程序实例。每个进程都有一个唯一的进程ID，也就是所谓的 <strong>PID</strong> 。使用<code>ps</code>
@@ -1469,7 +1469,7 @@ import logging
 <p>进程fork简单来说就类似于git某个项目的fork，进行了一些基本代码信息和其他配置以及其他相关信息的复制或注册。这就相当于在当前代码环境下，你有两个分别单独运行的程序实例了。</p>
 <p>下面是一个非常简单的小例子，你可以把os.fork()语句移到print('before
 fork')之前来看看变化。</p>
-<div class="highlight"><pre><span></span>import os, time
+<div class="highlight"><pre><span></span><code>import os, time
 
 print('before fork ')
 os.fork()
@@ -1479,13 +1479,13 @@ print('say hello from', os.getpid())
 time.sleep(1)
 
 print('after fork')
-</pre></div>
+</code></pre></div>
 <p>对于这个程序简单的理解就是，本py文件编译成字节码进入内存经过某些成为一个程序实例了（其中还包含其他一些信息），然后程序具体运行的时候会通过os.fork来调用系统的fork函数，然后复制本程序实例（以本程序实例目前已经所处的状态），因为print('before
 fork')已经执行了，所以子进程就不会执行这一行代码了，而是继续os.fork()下面的代码继续执行。此时就相当于有两个程序在运行了，至于后面的打印顺序那是说不准的。</p>
 <p>关于操作系统具体如何fork的我们可以暂时不考虑，这两个程序实例里面的变量和运行环境基本上是一模一样的，除了运行的状态有所不同之外。fork可以做出一种程序多任务处理方案吧，不过os模块的fork方法目前只支持unix环境。</p>
 <h2 id="_38">子进程和父进程分开</h2>
 <p>请看下面的代码:</p>
-<div class="highlight"><pre><span></span>import os, time
+<div class="highlight"><pre><span></span><code>import os, time
 
 print('before fork ')
 pid = os.fork()
@@ -1499,22 +1499,22 @@ else:
 time.sleep(1)
 
 print('after fork')
-</pre></div>
+</code></pre></div>
 <p>其运行结果大致如下:</p>
-<div class="highlight"><pre><span></span>before fork 
+<div class="highlight"><pre><span></span><code>before fork 
 13762
 say hello from parent 13761
 0
 say hello from child 13762
 after fork
 after fork
-</pre></div>
+</code></pre></div>
 <p>我们看到在父进程那一边，pid是本父进程的子进程PID，而在子进程那一边，os.fork()返回的是0。可以利用这点将父进程的操作和子进程的操作分开。具体上面的代码if
 pid 那一块是父进程的，else那一块是子进程的。</p>
 <h2 id="_39">线程入门</h2>
 <p>线程的内部实施细节其实比进程要更加复杂，一般通俗的说法就是线程是轻量级进程，这里不深入讨论具体线程的细节。</p>
 <p>python操作线程的主要模块是<strong>threading</strong>模块，简单的使用就是新建一个线程对象(Thread)，然后调用<strong>start</strong>方法来启动它，具体线程要做些什么由本线程对象的<strong>run</strong>确定，你可以重定义它，如果是默认的就是调用本线程Thread类新建是输入的<strong>target</strong>参数，这个target参数具体指向某个函数。下面是一个简单的例子:</p>
-<div class="highlight"><pre><span></span>import random, threading
+<div class="highlight"><pre><span></span><code>import random, threading
 
 result = []
 
@@ -1539,12 +1539,12 @@ thread: 5
 thread: 6
 thread: 7
 22972371
-</pre></div>
+</code></pre></div>
 <p><em>注意:</em> 控制参数后面那个逗号必须加上。</p>
 <p>我不太喜欢这种风格，因为线程对接的那个函数实际上并不能return
 什么值，而且其保存的值也依赖于前面的定义，并不能称之为真正意义上的函数（一个定义很好的函数必须复用特性很强）。所以线程还是如下类的风格编写。下面代码参考了
 <a href="http://www.ibm.com/developerworks/aix/library/au-threadingpython/index.html">这个网页</a>。</p>
-<div class="highlight"><pre><span></span>import random, threading
+<div class="highlight"><pre><span></span><code>import random, threading
 
 threads = []
 
@@ -1573,17 +1573,17 @@ print(result)
 
 05649040
 &gt;&gt;&gt;
-</pre></div>
+</code></pre></div>
 <p>上面调用线程对象的 <strong>join</strong>
 方法是确保该线程执行完了，其也可能返回异常。上面的做法不太标准，更标准的做法是单独写一行t.join代码:</p>
-<div class="highlight"><pre><span></span>for t in threads:
+<div class="highlight"><pre><span></span><code>for t in threads:
     t.join()
-</pre></div>
+</code></pre></div>
 <p>来确保各个线程都执行完了，如之前的形式并不能达到多任务并行处理的效果。</p>
 <p>上面的例子对线程的执行顺序没有特殊要求，如果有的话推荐使用python的queue模块，这里就略过了。</p>
 <h2 id="_40">后台线程</h2>
 <p>下面的函数实现了一个后台警报线程，不会阻塞主程序。</p>
-<div class="highlight"><pre><span></span>def beep(a,b):
+<div class="highlight"><pre><span></span><code>def beep(a,b):
     '''make a sound , 
     ref: http://stackoverflow.com/questions/16573051/
         python-sound-alarm-when-code-finishes
@@ -1602,12 +1602,12 @@ print(result)
     thread = Thread(target=_beep,args=(a,b))
     thread.daemon = True
     thread.start()
-</pre></div>
+</code></pre></div>
 <p>如上所示，原beep函数调用系统的play命令制造一个声音，其中b是声音持续的时间，所以其是阻塞的。我们将其作为一个线程调用之后，然后其就没有阻塞主程序了。这里的
 <code>daemon</code> 的意思是让这个线程成为一个后台线程，请参看 <a href="http://stackoverflow.com/questions/190010/daemon-threads-explanation">这个网页</a> ，其说道后台线程可以不用管了，后面会随着主程序自动关闭。</p>
 <h2 id="_41">多线程: 一个定时器</h2>
 <p>这个例子主要参考了<a href="https://mail.python.org/pipermail/tutor/2004-November/033333.html">这个网页</a>。</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="k">class</span> <span class="nc">Timer</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
@@ -1644,7 +1644,7 @@ print(result)
 
 <span class="n">timer</span> <span class="o">=</span> <span class="n">CountDownTimer</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">hello</span><span class="p">)</span>
 <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>具体还是很简单的，这里之所以使用线程就是为了timer.sleep函数不冻结主程序。</p>
 <h2 id="_42">多线程下载大文件</h2>
 <p>本小节参考了 <a href="http://stackoverflow.com/questions/13973188/requests-with-multiple-connections">这个网页</a> 和 <a href="http://stackoverflow.com/questions/16694907/how-to-download-large-file-in-python-with-requests-py">这个网页</a> 。</p>
@@ -1661,7 +1661,7 @@ print(result)
 1024)，即和python中的一样，不包括1024位。</p>
 <p>然后还有一个小信息是，HTTP协议返回的头文件中的<strong>content-range</strong>属性，如果你请求Range越界了，那么将不会有这个属性。那么begin没有越界，end越界的请求如何呢？HTTP协议处理得很好，这种跨界情况都只返回最后那点content内容。</p>
 <p>最后写文件那里降低内存消耗，使用了下面的语句来强制文件流写入文件中，好释放内存，否则你的下载程序内存使用率是剧增的。</p>
-<div class="highlight"><pre><span></span><span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
 
 <span class="kn">import</span> <span class="nn">re</span>
@@ -1756,15 +1756,15 @@ print(result)
                 <span class="k">else</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">'end...'</span><span class="p">)</span>
                     <span class="k">break</span>
-</pre></div>
+</code></pre></div>
 <h2 id="_43">线程锁</h2>
 <p>python有两种类型线程锁 <code>Lock</code> 和 <code>RLock</code> ，其都是通过 <code>acquire</code> 来获取锁和 <code>release</code> 来释放锁。当一个线程试着访问某个unlocked的锁，<code>acquire</code> 将立即返回；如果访问的是locked的锁，那么该线程将阻塞，直到一个 <code>release</code> 释放了该锁。</p>
 <p>RLock和Lock的区别是RLock可以被相同的线程acquire多次，RLock人们也称之为递归锁，如果你的某个（递归）函数在某个线程中多次访问资源，而这时被允许的，那么你应该使用RLock。</p>
 <p>RLock常和with语句一起使用：</p>
-<div class="highlight"><pre><span></span>lock = threading.RLock()
+<div class="highlight"><pre><span></span><code>lock = threading.RLock()
 with lock:
     do something...
-</pre></div>
+</code></pre></div>
 
             <section>
 <div class="panel-group" id="accordion2">
@@ -1813,7 +1813,7 @@ with lock:
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>14</span>
+                    <span>13</span>
 </a></li>
             </ul>
 
