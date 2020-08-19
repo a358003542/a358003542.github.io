@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 本来之前是将lxml模块归于爬虫那块的，但现在是算作python第三方好伙伴，一个通用模块了。当然lxml模块目前应该主要应用领域还是在爬虫那块，然后就作为实际功能是类似于beautifulsoup专注于xml或者html等结构文档的分析工作。但如下的讨论，我也看到了lxml模块更加通用的应用的可能性。 你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。这样lxml模块开始受到我的重视了，因为lxml对xpath语句有着很好的支持。 from lxml import etree selector = etree.HTML(html) html_e = selector.xpath(&#39;//title&#39;) 此外lxml还可以很方便的去构建一个xml或者lxml文本： from lxml import etree root = etree.Element(&#39;root&#39;) child_1 = etree.SubElement(root, &#39;child_1&#39;) child_1.set(&#39;a&#39;, &#39;1&#39;) child_1.text = &#39;this is a text …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="python, python_companion, " />
+
+<meta property="og:title" content="lxml模块 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/lxml-module.html" />
+<meta property="og:description" content="前言 本来之前是将lxml模块归于爬虫那块的，但现在是算作python第三方好伙伴，一个通用模块了。当然lxml模块目前应该主要应用领域还是在爬虫那块，然后就作为实际功能是类似于beautifulsoup专注于xml或者html等结构文档的分析工作。但如下的讨论，我也看到了lxml模块更加通用的应用的可能性。 你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。这样lxml模块开始受到我的重视了，因为lxml对xpath语句有着很好的支持。 from lxml import etree selector = etree.HTML(html) html_e = selector.xpath(&#39;//title&#39;) 此外lxml还可以很方便的去构建一个xml或者lxml文本： from lxml import etree root = etree.Element(&#39;root&#39;) child_1 = etree.SubElement(root, &#39;child_1&#39;) child_1.set(&#39;a&#39;, &#39;1&#39;) child_1.text = &#39;this is a text …" />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-08-19T06:32:18.724302+08:00" />
+<meta name="twitter:title" content="lxml模块 ">
+<meta name="twitter:description" content="前言 本来之前是将lxml模块归于爬虫那块的，但现在是算作python第三方好伙伴，一个通用模块了。当然lxml模块目前应该主要应用领域还是在爬虫那块，然后就作为实际功能是类似于beautifulsoup专注于xml或者html等结构文档的分析工作。但如下的讨论，我也看到了lxml模块更加通用的应用的可能性。 你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。这样lxml模块开始受到我的重视了，因为lxml对xpath语句有着很好的支持。 from lxml import etree selector = etree.HTML(html) html_e = selector.xpath(&#39;//title&#39;) 此外lxml还可以很方便的去构建一个xml或者lxml文本： from lxml import etree root = etree.Element(&#39;root&#39;) child_1 = etree.SubElement(root, &#39;child_1&#39;) child_1.set(&#39;a&#39;, &#39;1&#39;) child_1.text = &#39;this is a text …">
+
+
+    <title>lxml模块  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/lxml-module.html"> lxml模块  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+        <div class="col-md-8 col-md-offset-2 article-content">
+
+            <h2 id="_1">前言</h2>
+<p>本来之前是将lxml模块归于爬虫那块的，但现在是算作python第三方好伙伴，一个通用模块了。当然lxml模块目前应该主要应用领域还是在爬虫那块，然后就作为实际功能是类似于beautifulsoup专注于xml或者html等结构文档的分析工作。但如下的讨论，我也看到了lxml模块更加通用的应用的可能性。</p>
+<p>你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。这样lxml模块开始受到我的重视了，因为lxml对xpath语句有着很好的支持。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">html_e</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//title&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>此外lxml还可以很方便的去构建一个xml或者lxml文本：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">)</span>
+<span class="n">child_1</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;child_1&#39;</span><span class="p">)</span>
+<span class="n">child_1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">child_1</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;this is a text&#39;</span>
+<span class="n">child_2</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;child_2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+
+
+<p>实际上xml几乎是可以表达任何结构信息的，从简单的html到复杂的语法树。而基于xpath我们可以实现对于非常复杂的结构信息的精准信息搜索定位等操作。</p>
+<p>关于xml谁是element谁是属性并没有特别的标准了，很可能实际上完全是两个相同的结构信息会有不同的xml结构表达，这方面各个具体实现领域有不同的考量，但在实践上还是有很多参考指导建议的，这个感兴趣的可以看下<a href="https://www.ibm.com/developerworks/library/x-eleatt/">这个网页</a> 。</p>
+<p>lxml类似于beautifulsoup也提供了find和find_all方法，但还是推荐读者使用xpath方法，实际上据说lxml里面的find和find_all方法也是基于lxml的xpath方法的，推荐读者多多使用xpath方法，熟悉xpath语法。</p>
+<p>xpath方法一般会返回一个列表，不过如果你xpath语句使用 <code>string</code> 包装了的话，就会返回一个字符串，这个要注意下。</p>
+<p>关于具体的使用下面有时间慢慢写上一些。</p>
+<h2 id="xpath">如何按照xpath删除元素</h2>
+<p>参考了 <a href="https://stackoverflow.com/questions/7981840/how-to-remove-an-element-in-lxml">这个网页</a> 。</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">remove_tag_by_xpath</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">xpath</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">bad</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">):</span>
+        <span class="n">bad</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tree</span>
+</pre></div>
+
+
+<h2 id="xpath_1">xpath简明教程</h2>
+<p>下面主要通过各个例子简要介绍xpath语法之，参考了 <a href="http://www.ruanyifeng.com/blog/2009/07/xpath_path_expressions.html">阮一峰的这篇文章</a> 和菜鸟教程的xpath教程。</p>
+<p><strong><a href="https://devhints.io/xpath">xpath参考手册提供了更多的使用样例</a></strong></p>
+<p>基本东西简单了解下即可，然后多看例子吧。</p>
+<div class="highlight"><pre><span></span>/what   基本路径表达，下个节点
+//what  基本路径表达，任意位置的下个节点
+</pre></div>
+
+
+<p>这里 <code>/</code> 表示在下个节点中匹配， <code>//</code> 下个或所有子节点匹配。 </p>
+<div class="highlight"><pre><span></span>//div[@id=&#39;what&#39;]   根据id定位
+//div[@id=&#39;what&#39;]/a[1] 根据id定位后找下面的第一个a标签
+//div[@id=&#39;what&#39;]/a[*] 根据id定位后找下面的所有a标签
+</pre></div>
+
+
+<p>这里 <code>*</code> 表示所有的意思。</p>
+<div class="highlight"><pre><span></span>//div[@name]   找具有name属性的div标签
+
+//div[@name=&#39;what&#39;] 找name属性等于what的div标签 
+
+//*[contains(@class,&#39;what&#39;)] 找某个标签class属性有 what NOTICE: 这里的意思是有，多个class属性也是可以匹配的 class=&quot;what what_what&quot;
+//div[@class=&#39;what&#39;] 那个目标标签的class属性就是what，也就是匹配的是 class=&quot;what&quot;
+
+//*[@id=&quot;list&quot;]//dd[*]/a[@href and @title] 找id=list的标签下面的所有dd标签下面的a标签，a标签必须有href和title属性。
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>//title[@*]  选择title，随意属性，但title标签必须有属性
+</pre></div>
+
+
+<h3 id="title">选择title</h3>
+<div class="highlight"><pre><span></span>//title
+</pre></div>
+
+
+<p>这是选择到了文档中任意位置的 title 标签， <code>/</code> 开头的话会选择根节点，这不太好用。</p>
+<h3 id="title_1">选择title包含的文本</h3>
+<div class="highlight"><pre><span></span>//title/text()
+</pre></div>
+
+
+<h3 id>按照id选择</h3>
+<div class="highlight"><pre><span></span>//div[@id=&#39;post-date&#39;]/text()
+</pre></div>
+
+
+<p>上面例子的意思是选择一个div标签，其有id属性 <code>post-date</code> ，如果div改为 <code>*</code> 则为随便什么标签名字。</p>
+<h3 id="_2">继续往下选</h3>
+<div class="highlight"><pre><span></span>//*[@id=&#39;js_profile_qrcode&#39;]/div/p[1]/span/text()
+</pre></div>
+
+
+<h3 id="_3">选择目标标签的属性</h3>
+<div class="highlight"><pre><span></span>////*[@id=&#39;js_profile_qrcode&#39;]//a/@href
+</pre></div>
+
+
+<h3 id="string">string</h3>
+<p>对于选择的节点（注意如果返回的是节点集 nodeset将只取第一个），将所有的节点（也就是包括子节点）的文本抽取出来并合并。</p>
+<div class="highlight"><pre><span></span>string(//div[@class=&quot;lemma-summary&quot;])
+</pre></div>
+
+
+<p>如果你想提取本element节点下所有的问题：</p>
+<div class="highlight"><pre><span></span>e.xpath(&#39;string(.)&#39;)
+</pre></div>
+
+
+<p>这里 <code>.</code> 的意思是选取当前节点，而 <code>..</code> 是选取当前节点的父节点。</p>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/lxml-module.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/lxml-module.html';
+    var disqus_url = 'https://a358003542.github.io/articles/lxml-module.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-08-19T06:32:18.724302+08:00">2020年 8月 19日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#python_companion-ref">python_companion</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#python-ref">python
+                    <span>18</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>
