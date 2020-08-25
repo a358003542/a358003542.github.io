@@ -68,39 +68,62 @@ function yaogua() {
             biangua.push(1);
         }
     }
-    console.log('zhuagua is ' + zhugua);
+    console.log('zhugua is ' + zhugua);
     console.log('biangua is ' + biangua);
 
     $.getJSON("/data/yaogua.json", laterProcess);
 
     function laterProcess(data) {
-        var target = get_target(data, zhugua)
-        console.log('found target: ' + target)
+        var zhugua_target = get_target(data, zhugua)
+        console.log('found zhugua: ' + zhugua_target)
+
+        var biangua_target = get_target(data, biangua)
+        console.log('found biangua: ' + biangua_target)
 
         var yuanwen = $("#yuanwen");
         console.log(yuanwen)
-        yuanwen[0].innerHTML = "<h3>" + target.symbol + target.name + "</h3>" + "<dl><dt>经</dt><dd>" + target.jing + "</dd><dt>彖</dt><dd>" + target.tuan + "</dd><dt>象</dt><dd>" + target.xiang + "</dd></dl>";
+        yuanwen[0].innerHTML = "<h3>" + zhugua_target.symbol + zhugua_target.name + "</h3>" + "<dl><dt>经</dt><dd>" + zhugua_target.jing + "</dd><dt>彖</dt><dd>" + zhugua_target.tuan + "</dd><dt>象</dt><dd>" + zhugua_target.xiang + "</dd></dl>";
 
-        // biangua
-        var target = get_target(data, biangua)
-        console.log('found biangua: ' + target)
-
-        var yuanwen = $("#biangua-yuanwen");
-        console.log(yuanwen)
-        yuanwen[0].innerHTML = "<h3>" + target.symbol + target.name + "</h3>" + "<dl><dt>经</dt><dd>" + target.jing + "</dd><dt>彖</dt><dd>" + target.tuan + "</dd><dt>象</dt><dd>" + target.xiang + "</dd></dl>";
+        var biangua_yuanwen = $("#biangua-yuanwen");
+        console.log(biangua_yuanwen)
+        biangua_yuanwen[0].innerHTML = "<h3>" + biangua_target.symbol + biangua_target.name + "</h3>" + "<dl><dt>经</dt><dd>" + biangua_target.jing + "</dd><dt>彖</dt><dd>" + biangua_target.tuan + "</dd><dt>象</dt><dd>" + biangua_target.xiang + "</dd></dl>";
+    
+        // store history
+        var yaogua_history;
+        if ("yaogua_history" in localStorage) {
+            yaogua_history = JSON.parse(localStorage.yaogua_history);
+        } else {
+            yaogua_history = [];
+        }
+    
+        const MAX_LENTH = 8;
+        var len = yaogua_history.push([new Date(), zhugua_target.name, biangua_target.name]);
+        while (len > MAX_LENTH) {
+            yaogua_history.shift();
+            len = yaogua_history.length;
+        }
+    
+        localStorage.yaogua_history = JSON.stringify(yaogua_history);
+    
     }
+
 }
 
+function check_history(){
+    var yaogua_history;
+    if ("yaogua_history" in localStorage) {
+        yaogua_history = JSON.parse(localStorage.yaogua_history);
+    } else {
+        yaogua_history = [];
+    }
 
+    var table_html = '<table class="table"><thead><tr><td>预测时间</td><td>主卦</td><td>变卦</td></tr></thead><tbody>'
 
-/*
-☰（乾 qián ㄑㄧㄢˊ）
-☱（兑 duì ㄉㄨㄟˋ）
-☲（离 lí ㄌㄧˊ）
-☳（震 zhèn ㄓㄣˋ）
-☴（巽 xùn ㄒㄩㄣˋ）
-☵（坎 kǎn ㄎㄢˇ）
-☶（艮 gèn ㄍㄣˋ）
-☷（坤 kūn ㄎㄨㄣ）
-*/
+    for (let item of yaogua_history.reverse()){
+        var time_str = moment(item[0]).format("YYYY-MM-DD HH:mm:ss");
+        table_html += `<tr><th>${time_str}</th><th>${item[1]}</th><th>${item[2]}</th></tr>` ;
+    }
+    table_html += '</tbody></table>'
 
+    $('#history').html(table_html);
+}
