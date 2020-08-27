@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="简介 所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。 推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip安装即可。 然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。 NOTICE: 注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。 具体使用很简单： pyinstaller you_entry_point.py 当然该脚本文件不一定在当前目录下，你也可以如下来指定目标脚本文件： pyinstaller yaogua\gui.py 如果一切顺利，到 dist 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。 首先你不能依靠自动生成的 .spec 文件了，接下来讨论了很多定制都是基于对这个 .spec 文件的修改。修改好了之后你后面要运行pyinstaller需要如下运行了： pyinstaller you_entry_point.spec 环境配置和使用建议 你的python项目推荐使用虚拟环境，只安装必要的python依赖。然后python系统最好没有安装pyside2之类的模块，免得有干扰。然后你的pyinstaller安装在虚拟环境里面，一切命令执行也在虚拟环境里面 …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", python, " />
+
+<meta property="og:title" content="pyinstaller "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/pyinstaller.html" />
+<meta property="og:description" content="简介 所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。 推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip安装即可。 然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。 NOTICE: 注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。 具体使用很简单： pyinstaller you_entry_point.py 当然该脚本文件不一定在当前目录下，你也可以如下来指定目标脚本文件： pyinstaller yaogua\gui.py 如果一切顺利，到 dist 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。 首先你不能依靠自动生成的 .spec 文件了，接下来讨论了很多定制都是基于对这个 .spec 文件的修改。修改好了之后你后面要运行pyinstaller需要如下运行了： pyinstaller you_entry_point.spec 环境配置和使用建议 你的python项目推荐使用虚拟环境，只安装必要的python依赖。然后python系统最好没有安装pyside2之类的模块，免得有干扰。然后你的pyinstaller安装在虚拟环境里面，一切命令执行也在虚拟环境里面 …" />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-08-27T00:00:00+08:00" />
+<meta name="twitter:title" content="pyinstaller ">
+<meta name="twitter:description" content="简介 所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。 推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip安装即可。 然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。 NOTICE: 注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。 具体使用很简单： pyinstaller you_entry_point.py 当然该脚本文件不一定在当前目录下，你也可以如下来指定目标脚本文件： pyinstaller yaogua\gui.py 如果一切顺利，到 dist 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。 首先你不能依靠自动生成的 .spec 文件了，接下来讨论了很多定制都是基于对这个 .spec 文件的修改。修改好了之后你后面要运行pyinstaller需要如下运行了： pyinstaller you_entry_point.spec 环境配置和使用建议 你的python项目推荐使用虚拟环境，只安装必要的python依赖。然后python系统最好没有安装pyside2之类的模块，免得有干扰。然后你的pyinstaller安装在虚拟环境里面，一切命令执行也在虚拟环境里面 …">
+
+
+    <title>pyinstaller  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/pyinstaller.html"> pyinstaller  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a></li>
+<li><a href="#_2">环境配置和使用建议</a></li>
+<li><a href="#cmd">不弹出那个cmd窗口</a></li>
+<li><a href="#exe">修改输出exe名字</a></li>
+<li><a href="#python">检查python包依赖情况</a></li>
+<li><a href="#_3">添加额外的文件</a></li>
+<li><a href="#python_1">python包里面的数据文件</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">简介</h2>
+<p>所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。</p>
+<p>推荐使用pyinstaller。 pyinstaller的官网在 <a href="http://www.pyinstaller.org/">这里</a> 。安装就是用pip安装即可。</p>
+<p>然后推荐在你的项目根目录下创建一个简单的启动脚本，一方面方便平时测试，一方面作为pyinstaller的程序入口。</p>
+<p><strong>NOTICE:</strong>  注意该脚本的名字不要和你的程序的模块名字相同，之前我安装后闪退就是因为这个脚本名字没取好。</p>
+<p>具体使用很简单：</p>
+<div class="highlight"><pre><span></span>pyinstaller you_entry_point.py
+</pre></div>
+<p>当然该脚本文件不一定在当前目录下，你也可以如下来指定目标脚本文件：</p>
+<div class="highlight"><pre><span></span>pyinstaller yaogua\gui.py
+</pre></div>
+<p>如果一切顺利，到 <code>dist</code> 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。</p>
+<p>首先你不能依靠自动生成的 <code>.spec</code> 文件了，接下来讨论了很多定制都是基于对这个 <code>.spec</code> 文件的修改。修改好了之后你后面要运行pyinstaller需要如下运行了：</p>
+<div class="highlight"><pre><span></span>pyinstaller you_entry_point.spec
+</pre></div>
+<h2 id="_2">环境配置和使用建议</h2>
+<p>你的python项目推荐使用虚拟环境，只安装必要的python依赖。然后python系统最好没有安装pyside2之类的模块，免得有干扰。然后你的pyinstaller安装在虚拟环境里面，一切命令执行也在虚拟环境里面。</p>
+<p>这既有可能避免某些pyinstaller的bug和问题，也会减少你的安装包大小。</p>
+<h2 id="cmd">不弹出那个cmd窗口</h2>
+<p>在 <code>exe=EXE</code> 那里修改 <code>console</code> 字段为 <code>False</code> ，这样生成的exe在执行时将不会再弹出那个cmd窗口了。</p>
+<h2 id="exe">修改输出exe名字</h2>
+<p>在<code>exe=EXE</code> 那里修改 <code>name</code> 字段来修改目标输出exe的名字。</p>
+<h2 id="python">检查python包依赖情况</h2>
+<p>一般pyinstaller输出之后很多时候出问题是python包依赖没有正确检测到，通过查看<code>build/{name}/xref-{name}.html</code> 这个文件来确认python包依赖是否都加载进去了，没有则修改<code>a = Analysis</code> 下的 <code>hiddenimports</code> 字段，将缺失的模块名加入进去。</p>
+<h2 id="_3">添加额外的文件</h2>
+<p>spec文件下配置 <code>datas</code> 这个列表值：</p>
+<div class="highlight"><pre><span></span>datas=[ ('src/README.txt', '.') ],
+</pre></div>
+<p>大概意思是把那里的那个文件copy到目标dist文件夹的那里。</p>
+<h2 id="python_1">python包里面的数据文件</h2>
+<p>推荐都规范为使用 <code>pkg_resources</code> 来管理：</p>
+<div class="highlight"><pre><span></span>from pkg_resources import resource_filename
+</pre></div>
+<p>但是这样你的数据文件exe程序还是不能使用的，你需要按照上面做的添加额外的文件，来把各个文件添加进去，比如：</p>
+<div class="highlight"><pre><span></span>             datas=[('yaogua/html_resource','yaogua/html_resource'),
+             ('yaogua/yaogua.json','yaogua')],
+</pre></div>
+<p>上面是把yaogua模块的html_resource下的所有文件内容都复制到dist文件夹下的对应软件名的yaogua的html_resource那里，这样使用 <code>resource_filename</code> 引用路径仍是可行的可用的。</p>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/pyinstaller.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/pyinstaller.html';
+    var disqus_url = 'https://a358003542.github.io/articles/pyinstaller.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-08-27T00:00:00+08:00">2020年 8月 27日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#python-ref">python</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="简介 nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。 首先你需要下载 nsis基本程序，推荐到 这里 下载 。 然后推荐下载 HM NIS Edit 这个简单的程序，这个程序可以向导式生成一个nsi脚本文件。具体nsi文件的编写倒不一定要在哪里编写。 NOTICE HM NIS Edit 这个软件界面不推荐选择中文，输出的文件编码会是GBK的，这和现在通用的UTF8编码很不兼容了。 利用HM NIS Edit填写一些信息，这个具体倒是很直观，没什么好说的。生成的脚本到另外的编辑器上一般还要做一些进一步的修改。这个脚本刷文件夹所有的文件变动还是很方便的。 一些基本信息 下面是定义软件名，软件版本号和软件出版人这些基本信息。 !define PRODUCT_NAME &#34;yaogua&#34; !define PRODUCT_VERSION &#34;0.1.1&#34; !define PRODUCT_PUBLISHER &#34;wanze&#34; 界面语言选择 之前如下这样设置是可行的： !insertmacro MUI_LANGUAGE &#34;SimpChinese&#34; 繁体中文是 TradChinese …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", software, " />
+
+<meta property="og:title" content="用nsis制作安装程序 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/nsis.html" />
+<meta property="og:description" content="简介 nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。 首先你需要下载 nsis基本程序，推荐到 这里 下载 。 然后推荐下载 HM NIS Edit 这个简单的程序，这个程序可以向导式生成一个nsi脚本文件。具体nsi文件的编写倒不一定要在哪里编写。 NOTICE HM NIS Edit 这个软件界面不推荐选择中文，输出的文件编码会是GBK的，这和现在通用的UTF8编码很不兼容了。 利用HM NIS Edit填写一些信息，这个具体倒是很直观，没什么好说的。生成的脚本到另外的编辑器上一般还要做一些进一步的修改。这个脚本刷文件夹所有的文件变动还是很方便的。 一些基本信息 下面是定义软件名，软件版本号和软件出版人这些基本信息。 !define PRODUCT_NAME &#34;yaogua&#34; !define PRODUCT_VERSION &#34;0.1.1&#34; !define PRODUCT_PUBLISHER &#34;wanze&#34; 界面语言选择 之前如下这样设置是可行的： !insertmacro MUI_LANGUAGE &#34;SimpChinese&#34; 繁体中文是 TradChinese …" />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-08-27T00:00:00+08:00" />
+<meta name="twitter:title" content="用nsis制作安装程序 ">
+<meta name="twitter:description" content="简介 nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。 首先你需要下载 nsis基本程序，推荐到 这里 下载 。 然后推荐下载 HM NIS Edit 这个简单的程序，这个程序可以向导式生成一个nsi脚本文件。具体nsi文件的编写倒不一定要在哪里编写。 NOTICE HM NIS Edit 这个软件界面不推荐选择中文，输出的文件编码会是GBK的，这和现在通用的UTF8编码很不兼容了。 利用HM NIS Edit填写一些信息，这个具体倒是很直观，没什么好说的。生成的脚本到另外的编辑器上一般还要做一些进一步的修改。这个脚本刷文件夹所有的文件变动还是很方便的。 一些基本信息 下面是定义软件名，软件版本号和软件出版人这些基本信息。 !define PRODUCT_NAME &#34;yaogua&#34; !define PRODUCT_VERSION &#34;0.1.1&#34; !define PRODUCT_PUBLISHER &#34;wanze&#34; 界面语言选择 之前如下这样设置是可行的： !insertmacro MUI_LANGUAGE &#34;SimpChinese&#34; 繁体中文是 TradChinese …">
+
+
+    <title>用nsis制作安装程序  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/nsis.html"> 用nsis制作安装程序  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">简介</a></li>
+<li><a href="#_2">一些基本信息</a></li>
+<li><a href="#_3">界面语言选择</a></li>
+<li><a href="#_4">快捷方式加图标</a></li>
+<li><a href="#product_dir_regkey">PRODUCT_DIR_REGKEY</a></li>
+<li><a href="#outfile">OutFile</a></li>
+<li><a href="#_5">设置安装图标和删除图标</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">简介</h2>
+<p>nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。</p>
+<p>首先你需要下载 nsis基本程序，推荐到 <a href="https://nsis.sourceforge.io/Main_Page">这里</a> 下载 。</p>
+<p>然后推荐下载 <a href="http://hmne.sourceforge.net/">HM NIS Edit</a> 这个简单的程序，这个程序可以向导式生成一个nsi脚本文件。具体nsi文件的编写倒不一定要在哪里编写。</p>
+<p><strong>NOTICE</strong> HM NIS Edit 这个软件界面不推荐选择中文，输出的文件编码会是GBK的，这和现在通用的UTF8编码很不兼容了。</p>
+<p>利用HM NIS Edit填写一些信息，这个具体倒是很直观，没什么好说的。生成的脚本到另外的编辑器上一般还要做一些进一步的修改。这个脚本刷文件夹所有的文件变动还是很方便的。</p>
+<h2 id="_2">一些基本信息</h2>
+<p>下面是定义软件名，软件版本号和软件出版人这些基本信息。</p>
+<div class="highlight"><pre><span></span>!define PRODUCT_NAME "yaogua"
+!define PRODUCT_VERSION "0.1.1"
+!define PRODUCT_PUBLISHER "wanze"
+</pre></div>
+<h2 id="_3">界面语言选择</h2>
+<p>之前如下这样设置是可行的：</p>
+<div class="highlight"><pre><span></span>!insertmacro MUI_LANGUAGE "SimpChinese"
+</pre></div>
+<p>繁体中文是 <code>TradChinese</code> 。</p>
+<p>但是最近我将我的win10系统全局设置为UTF8编码之后，其安装界面成乱码了。可能nsis的中文编码默认不是utf8的。稳妥起见还是选择英语吧，这肯定不会出现恼人的乱码问题：</p>
+<div class="highlight"><pre><span></span>; Language files
+!insertmacro MUI_LANGUAGE "English"
+</pre></div>
+<h2 id="_4">快捷方式加图标</h2>
+<p>用上面提到的工具自动生成的nsi脚本，默认的快捷方式向导是没有加上图标的，你可以如下加上图标：</p>
+<div class="highlight"><pre><span></span>  CreateShortCut "$SMPROGRAMS\timer\timer.lnk" "$INSTDIR\timer.exe" "" "$INSTDIR\myapp.ico"
+</pre></div>
+<p>第三个参数是可选的，命令行参数，没啥好填的。最后一个参数就是设置图标的，具体图标注意要填在文件复制到目的地操作之后，填写的值也是复制的目的地那边的哪里。</p>
+<h2 id="product_dir_regkey"><code>PRODUCT_DIR_REGKEY</code></h2>
+<p>这个应该是向windows系统注册本软件的安装目录：</p>
+<div class="highlight"><pre><span></span>!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\yaogua"
+</pre></div>
+<p>默认的输出似乎有时exe会指错。</p>
+<h2 id="outfile">OutFile</h2>
+<p>OutFile会控制你的输出exe的名字。</p>
+<div class="highlight"><pre><span></span>Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+OutFile "yaogua_Setup.exe"
+InstallDir "$PROGRAMFILES\yaogua"
+InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+</pre></div>
+<h2 id="_5">设置安装图标和删除图标</h2>
+<div class="highlight"><pre><span></span>!define MUI_ICON "app.ico"
+!define MUI_UNICON "app.ico"
+</pre></div>
+<p>这个应该是那个安装程序和那个删除程序 <code>uninst.exe</code> 的图标，前面提到的 <code>CreateShortCut</code> 是一些快捷方式的图标，比如桌面快捷方式。</p>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/nsis.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/nsis.html';
+    var disqus_url = 'https://a358003542.github.io/articles/nsis.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-08-27T00:00:00+08:00">2020年 8月 27日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#software-ref">software</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>
