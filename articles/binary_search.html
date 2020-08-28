@@ -10,7 +10,7 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …
+              content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 二分查找的基本思想就是对于一个已经排序了的列表，如果要查找某个元素的话，则将目标列表二分为两段，目标元素和分割点的元素进行大小比较，如果目标元素比分割点的元素小，则说明列表中那个要找的元素假设存在的话那么其应该在较小的那个区段，如果较大的话则在较大的那个区段，然后逐步这样递归来缩小查找区间，直到找到目标元素具体在列表的那个位置，或者发现不在列表中。 最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是看作一种更普遍的计算思想。本文先试着从更抽象的角度来讨论二分查找。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x …
 "/>
 
         <meta property="og:type" content="article"/>
@@ -20,12 +20,12 @@
 
 <meta property="og:title" content="二分查找 "/>
 <meta property="og:url" content="https://a358003542.github.io/articles/binary_search.html" />
-<meta property="og:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …" />
+<meta property="og:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 二分查找的基本思想就是对于一个已经排序了的列表，如果要查找某个元素的话，则将目标列表二分为两段，目标元素和分割点的元素进行大小比较，如果目标元素比分割点的元素小，则说明列表中那个要找的元素假设存在的话那么其应该在较小的那个区段，如果较大的话则在较大的那个区段，然后逐步这样递归来缩小查找区间，直到找到目标元素具体在列表的那个位置，或者发现不在列表中。 最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是看作一种更普遍的计算思想。本文先试着从更抽象的角度来讨论二分查找。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x …" />
 <meta property="og:site_name" content="万泽的博客" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2019-08-27T00:00:00+08:00" />
+<meta property="og:article:published_time" content="2019-08-28T00:00:00+08:00" />
 <meta name="twitter:title" content="二分查找 ">
-<meta name="twitter:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系 …">
+<meta name="twitter:description" content="二分查找 二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 这个网页 ，其认为python的 index 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 bisect 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。 二分查找的基本思想就是对于一个已经排序了的列表，如果要查找某个元素的话，则将目标列表二分为两段，目标元素和分割点的元素进行大小比较，如果目标元素比分割点的元素小，则说明列表中那个要找的元素假设存在的话那么其应该在较小的那个区段，如果较大的话则在较大的那个区段，然后逐步这样递归来缩小查找区间，直到找到目标元素具体在列表的那个位置，或者发现不在列表中。 最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。 这使得我认识到，二分查找思想的应用可不限于查找，而是看作一种更普遍的计算思想。本文先试着从更抽象的角度来讨论二分查找。 抽象的二分查找思想讨论 现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x …">
 
 
     <title>二分查找  · 万泽的博客
@@ -117,6 +117,7 @@
 <li><a href="#_1">二分查找</a></li>
 <li><a href="#_2">抽象的二分查找思想讨论</a></li>
 <li><a href="#bisect">bisect模块</a></li>
+<li><a href="#iter_search">iter_search</a></li>
 </ul>
 </div>
         </nav>
@@ -126,46 +127,57 @@
             
 <h2 id="_1">二分查找</h2>
 <p>二分查找以前也接触过吧，当时不怎么重视，认为就是一种快速查找方法了，参看 <a href="https://github.com/qiwsir/algorithm/blob/master/bin_search.md">这个网页</a> ，其认为python的 <code>index</code> 方法并不是使用的二分查找，所以对大规模查询会很吃力。考虑到python一般的sequence对象都没有预排序，所以这种说法可信度还是很高的。然后利用python的 <code>bisect</code> 模块，我们可以构建出一种预排序的支持更快查询的接口，其内部就是使用的二分查找。</p>
-<p>关于二分查找的原理我就不啰嗦了，这里我想说的是，最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。</p>
-<p>这使得我认识到，二分查找思想的应用可不限于查找，而是更普遍，可以看作一种有关计算机的最核心的最底层的那种计算思想的东西。所以本小节关于二分查找主要分为两个内容，一是关于查找部分，主要集中讨论了python bisect模块；一是以一种更加抽象的思维来描述二分查找思想。</p>
+<p>二分查找的基本思想就是对于一个已经排序了的列表，如果要查找某个元素的话，则将目标列表二分为两段，目标元素和分割点的元素进行大小比较，如果目标元素比分割点的元素小，则说明列表中那个要找的元素假设存在的话那么其应该在较小的那个区段，如果较大的话则在较大的那个区段，然后逐步这样递归来缩小查找区间，直到找到目标元素具体在列表的那个位置，或者发现不在列表中。</p>
+<p>最近在看MIT的那个视频，其中第三课讲到了利用二分查找的思想来求解平方根的问题，这个对我启发很大。尤其是那一句: 任何计算机问题如果找不到好的方法，实际上都可以穷举而得，而穷举的过程，我们不需要一个个都试一下，我们只需要将这些可能的结果集排序之后，进行二分查找来快速缩小可能的结果集，那么我们就可以逐步更快地趋近理想结果了。</p>
+<p>这使得我认识到，二分查找思想的应用可不限于查找，而是看作一种更普遍的计算思想。本文先试着从更抽象的角度来讨论二分查找。</p>
 <h2 id="_2">抽象的二分查找思想讨论</h2>
 <p>现在我们将可能的结果集认为是某个函数f(x)的输入参数，然后我们有目标参数target，令f(x)=target的时候我们说我们就找到了目标结果x，或者说目标x符合函数f(x)=target这个关系。然后假设我们的考察对象f(x)在目标结果集内存在简单的增减关系，即目标集合可以由此排序，那么我们就可以开展二分查找来找到目标结果x了。</p>
-<p>以相等查找为例，f(x)函数即f(x)=x，也就是输入什么同样输出的是什么。如果x=target，则我们说目标x复合条件f(x)=target，则该x就是我们要找的目标结果x。</p>
+<p>以相等查找为例，f(x)函数即f(x)=x，也就是输入什么同样输出的是什么。如果x=target，则我们说目标x符合条件f(x)=target，则该x就是我们要找的目标结果x。</p>
 <p>如果我们定义 <code>f(x)=x*x</code>，则意思是我们要找某个x符合条件 <code>x*x=target</code> ，这就是求平方根的过程。</p>
-<p>程序主体 <code>binary_search</code> 函数大体是这样的，主要参考了 <a href="https://github.com/keon/algorithms">algorithms模块</a> <code>binary_search.py</code> 文件，然后稍作修改。</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">seq</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search_func</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">round_n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">approx</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    use binary search to solve f(x) = target problem, if the function is a</span>
+<span class="sd">    monotonic function.</span>
+
+<span class="sd">    seq  list or tuple</span>
+<span class="sd">    target found target in which case is the f(x) = target</span>
+<span class="sd">    func the monotonic function</span>
+<span class="sd">    round_n accurate to how many decimal point</span>
+<span class="sd">    approx the approx mode</span>
+<span class="sd">    if approx=True found target or some nearly target, return it's index</span>
+<span class="sd">    if approx=False  found target index otherwise return -1</span>
+<span class="sd">    """</span>
     <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">approx</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">round_n</span><span class="p">)</span>
 
-    <span class="k">while</span> <span class="n">high</span> <span class="o">&gt;=</span> <span class="n">low</span><span class="p">:</span>
-        <span class="n">mid</span> <span class="o">=</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">low</span><span class="p">,</span><span class="n">high</span><span class="p">,</span><span class="n">mid</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span> <span class="c1">##higher area</span>
+    <span class="k">while</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">high</span> <span class="o">+</span> <span class="n">low</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+        <span class="n">guess</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">approx</span><span class="p">:</span>
+            <span class="n">guess</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">guess</span><span class="p">,</span> <span class="n">round_n</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">guess</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>  <span class="c1"># equal target the target also placed in big region.</span>
             <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">f</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">:</span><span class="c1">##lower area</span>
-            <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'exactly'</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'nearly'</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span>
-</pre></div>
-<p>首先我们来看最简单的查找匹配操作，即:</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">x</span>
-</pre></div>
-<p>然后我们有:</p>
-<div class="highlight"><pre><span></span>seq = list('abcdefg')
-res = binary_search(f,seq,'e')
-print(res)
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># target in low region</span>
+            <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span>
 
-0 6 3
-4 6 5
-4 4 4
-exactly
-e
-&gt;&gt;&gt;
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">'binary_search_func run </span><span class="si">{0}</span><span class="s1"> times'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">approx</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">low</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">low</span> <span class="k">if</span> <span class="p">(</span><span class="n">low</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+<p>首先我们来看最简单的查找匹配操作：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_binary_search_func2</span><span class="p">():</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="s1">'abcdefg'</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">binary_search_func</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span> <span class="n">approx</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'e'</span>
 </pre></div>
 <p>然后我们要求平方根，也就是某个 <code>x*x=target</code> 的过程，把之前定义的函数简单改一下即可:</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -187,16 +199,51 @@ array([ 0. ,  0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9,  1. ,
 &gt;&gt;&gt;
 </pre></div>
 <p>然后我们有:</p>
-<div class="highlight"><pre><span></span>import numpy as np
-seq = np.arange(0,10,0.000001)
-res = binary_search(f,seq,2)
-print(res)
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_binary_search_func</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="n">round_n</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="n">round_n</span><span class="p">))</span>
 
+    <span class="n">mid</span> <span class="o">=</span> <span class="n">binary_search_func</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">round_n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                             <span class="n">approx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-nearly
-1.414214
+    <span class="k">assert</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span> <span class="o">==</span> <span class="mf">1.414214</span>
 </pre></div>
-<p>在这里讲个题外话，提到可能结果集的时候，我就想到将多个函数参数作为(a,b,c)这种形式，可是这种多元函数问题，怎么排序，怎么比较大小，怎么确定增减性？所以只好回滚到最原始的穷举过程，这里讲的意思是计算思想很核心的一个思想就是穷举思想，然后二分查找方法是在某些条件符合的情况下的加速穷举过程。</p>
+<h2 id="bisect">bisect模块</h2>
+<p>bisect模块提供了二分查找的支持，比如bisect_left函数：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bisect_left</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">"""Return the index where to insert item x in list a, assuming a is sorted.</span>
+<span class="sd">    The return value i is such that all e in a[:i] have e &lt; x, and all e in</span>
+<span class="sd">    a[i:] have e &gt;= x.  So if x already appears in the list, a.insert(x) will</span>
+<span class="sd">    insert just before the leftmost x already there.</span>
+<span class="sd">    Optional args lo (default 0) and hi (default len(a)) bound the</span>
+<span class="sd">    slice of a to be searched.</span>
+<span class="sd">    """</span>
+
+    <span class="k">if</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'lo must be non-negative'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span><span class="o">+</span><span class="n">hi</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="k">return</span> <span class="n">lo</span>
+</pre></div>
+<p>其底层有c加速，然后其返回的是一个索引值，根据这个索引值，如果你执行 <code>a.insert(x)</code> ，那么将把目标值插入到目标位置，如果x已经在a中存在，则插入的是最左边的位置。于是我们有：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    use the bisect_left.</span>
+<span class="sd">    """</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">bisect_left</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="c1"># pos == len(seq) means the target is bigger than all the elements of seq</span>
+    <span class="c1"># other pos value is a valid index in seq</span>
+    <span class="c1"># So if x already appears in the list, a.insert(x) will</span>
+    <span class="c1"># insert just before the leftmost x already there.</span>
+    <span class="k">return</span> <span class="n">pos</span> <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+<h2 id="iter_search">iter_search</h2>
+<p>在这里讲个题外话，提到可能结果集的时候，我就想到将多个函数参数作为(a,b,c)这种形式，可是这种多元函数问题，怎么排序，怎么比较大小，怎么确定增减性？所以只好回滚到最原始的穷举过程。</p>
 <p>比如说孙子算经里面的:</p>
 <blockquote>
 <p>今有雉兔同笼，上有三十五头，下有九十四足，问雉兔各几何？</p>
@@ -237,41 +284,6 @@ print(list(res))
 
 [(23, 12)]
 </pre></div>
-<p>很简单的一些函数，但是整个过程是我很感兴趣的一种风格。</p>
-<h2 id="bisect">bisect模块</h2>
-<p>bisect模块提供了二分查找的支持，比如bisect_left函数：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bisect_left</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">"""Return the index where to insert item x in list a, assuming a is sorted.</span>
-<span class="sd">    The return value i is such that all e in a[:i] have e &lt; x, and all e in</span>
-<span class="sd">    a[i:] have e &gt;= x.  So if x already appears in the list, a.insert(x) will</span>
-<span class="sd">    insert just before the leftmost x already there.</span>
-<span class="sd">    Optional args lo (default 0) and hi (default len(a)) bound the</span>
-<span class="sd">    slice of a to be searched.</span>
-<span class="sd">    """</span>
-
-    <span class="k">if</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'lo must be non-negative'</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">hi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="k">while</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">:</span>
-        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span><span class="o">+</span><span class="n">hi</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
-        <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">:</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
-    <span class="k">return</span> <span class="n">lo</span>
-</pre></div>
-<p>其底层有c加速，然后其返回的是一个索引值，根据这个索引值，如果你执行 <code>a.insert(x)</code> ，那么将把目标值插入到目标位置，如果x已经在a中存在，则插入的是最左边的位置。于是我们有：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    seq已排序，二分查找    </span>
-<span class="sd">    返回的是已经找到的索引值或者没有找到返回-1</span>
-<span class="sd">    :param seq:</span>
-<span class="sd">    :param target:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    """</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">bisect_left</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">pos</span> <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-<p>仔细体会python官方的源码，他写的版本比上面的版本要稍微好一点，代码更精炼，上面的版本可以根据它来改造，最后效果都差不多的。</p>
 
             <section>
 <div class="panel-group" id="accordion2">
@@ -313,7 +325,7 @@ print(list(res))
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2019-08-27T00:00:00+08:00">2019年 8月 27日 </time>
+            <time pubdate="pubdate" datetime="2019-08-28T00:00:00+08:00">2019年 8月 28日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm</a>
