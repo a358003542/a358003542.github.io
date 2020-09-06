@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="安装系统 centos7的安装目前最大的难点在硬盘分区上，加上最新的uefi启动方式，还是有些新的问题需要讨论的。 记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照《鸟哥的私房菜》里的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了——分出3-4Gswap分区意思一下就可以了。 各个硬件在linux下的名字 这个需要了解下，参考 鸟哥的私房菜第二章 ， 硬盘或者USB模拟的硬盘 ： /dev/sd[a-p] CDROM或者DVDROM : /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1] 打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15] 鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标) 分区推荐 按照鸟哥的私房菜推荐 …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="centos7, linux, " />
+
+<meta property="og:title" content="centos7系统学习 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/centos7.html" />
+<meta property="og:description" content="安装系统 centos7的安装目前最大的难点在硬盘分区上，加上最新的uefi启动方式，还是有些新的问题需要讨论的。 记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照《鸟哥的私房菜》里的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了——分出3-4Gswap分区意思一下就可以了。 各个硬件在linux下的名字 这个需要了解下，参考 鸟哥的私房菜第二章 ， 硬盘或者USB模拟的硬盘 ： /dev/sd[a-p] CDROM或者DVDROM : /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1] 打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15] 鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标) 分区推荐 按照鸟哥的私房菜推荐 …" />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2019-09-06T00:00:00+08:00" />
+<meta name="twitter:title" content="centos7系统学习 ">
+<meta name="twitter:description" content="安装系统 centos7的安装目前最大的难点在硬盘分区上，加上最新的uefi启动方式，还是有些新的问题需要讨论的。 记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照《鸟哥的私房菜》里的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了——分出3-4Gswap分区意思一下就可以了。 各个硬件在linux下的名字 这个需要了解下，参考 鸟哥的私房菜第二章 ， 硬盘或者USB模拟的硬盘 ： /dev/sd[a-p] CDROM或者DVDROM : /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1] 打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15] 鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标) 分区推荐 按照鸟哥的私房菜推荐 …">
+
+
+    <title>centos7系统学习  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/centos7.html"> centos7系统学习  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">安装系统</a><ul>
+<li><a href="#linux">各个硬件在linux下的名字</a></li>
+<li><a href="#_2">分区推荐</a></li>
+</ul>
+</li>
+<li><a href="#firewall-cmd">firewall-cmd</a></li>
+<li><a href="#systemd">systemd</a><ul>
+<li><a href="#unit">Unit配置节</a></li>
+<li><a href="#install">Install 配置节</a></li>
+<li><a href="#service">Service配置节</a></li>
+<li><a href="#system">system的常规启动流程</a></li>
+<li><a href="#mount">Mount单元</a></li>
+<li><a href="#timer">Timer单元</a></li>
+<li><a href="#_3">服务文件修改之后</a></li>
+<li><a href="#_4">日志管理</a></li>
+<li><a href="#_5">启动服务等等</a></li>
+</ul>
+</li>
+<li><a href="#centos7dns">centos7配置dns</a></li>
+<li><a href="#_6">配置语言</a><ul>
+<li><a href="#_7">查看当前操作系统语言</a></li>
+<li><a href="#_8">列出可用语言</a></li>
+<li><a href="#_9">修改操作系统语言</a></li>
+</ul>
+</li>
+<li><a href="#_10">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">安装系统</h2>
+<p>centos7的安装目前最大的难点在硬盘分区上，加上最新的uefi启动方式，还是有些新的问题需要讨论的。</p>
+<p>记得以前早起折腾ubuntu系统时，最大的一个影响就是需要给linux系统安装预先分出一个swap分区，大约是内存的两倍，当时还不太懂这个有什么，按照《鸟哥的私房菜》里的描述， 服务器一般内存都十几G-64G的内存，就不能按照这个公式来了——分出3-4Gswap分区意思一下就可以了。</p>
+<h3 id="linux">各个硬件在linux下的名字</h3>
+<p>这个需要了解下，参考 <a href="http://linux.vbird.org/linux_basic/0130designlinux.php">鸟哥的私房菜第二章</a> ，</p>
+<ul>
+<li>硬盘或者USB模拟的硬盘 ：   /dev/sd[a-p]</li>
+<li>CDROM或者DVDROM :  /dev/scd[0-1] , /dev/cdrom（当前cdrom） , /dev/sr[0-1]</li>
+<li>打印机 ： /dev/lp[0-2] , /dev/usb/lp[0-15]</li>
+<li>鼠标 ： /dev/input/mouse[0-15] , /dev/mouse (当前鼠标)</li>
+</ul>
+<h3 id="_2">分区推荐</h3>
+<p>按照鸟哥的私房菜推荐，不是随便玩玩，而是作为工作服务器，那么推荐还是如下多分几个区：</p>
+<ul>
+<li>/boot</li>
+<li>/</li>
+<li>/home</li>
+<li>/var</li>
+<li>swap</li>
+</ul>
+<h2 id="firewall-cmd">firewall-cmd</h2>
+<p>防火墙策略管理命令： <code>firewall-cmd</code> ， 其中 <code>--list-all</code> 列出开启的端口号等情况， <code>--add-port</code> 来开放某个端口号，比如：</p>
+<div class="highlight"><pre><span></span>firewall-cmd --add-port=80/tcp
+</pre></div>
+<p>更多细节请参看 <a href="http://wangchujiang.com/linux-command/c/firewall-cmd.html">这篇文章</a> ，下面就一些常用的用法简要说明之。</p>
+<div class="highlight"><pre><span></span>firewall-cmd --get-active-zones <span class="c1"># 查看活动的区域</span>
+firewall-cmd --zone<span class="o">=</span>work --add-interface<span class="o">=</span>eth0 <span class="c1"># 为某个区域指定网卡界面</span>
+<span class="c1"># 默认的zone是public </span>
+firewall-cmd --zone<span class="o">=</span>work --list-ports <span class="c1"># 列出所有开放的端口</span>
+firewall-cmd --zone<span class="o">=</span>work --add-port<span class="o">=</span><span class="m">8080</span>/tcp <span class="c1"># 为某个区域开发端口</span>
+firewall-cmd --zone<span class="o">=</span>work --add-service<span class="o">=</span>ssh <span class="c1"># 为某个区域开发服务</span>
+<span class="c1"># 类似的还有 --remove-prot  和  --remove-service</span>
+firewall-cmd --get-services <span class="c1"># 列出所有可用服务</span>
+</pre></div>
+<p><strong>NOTICE:</strong> 上面提及的操作如果不加 <code>--permanent</code> 参数那么只是临时有效，重启firewalld服务就会配置丢失。</p>
+<h2 id="systemd">systemd</h2>
+<p>systemd作为linux的初始化系统已经渐趋主流，其最大的特点就是比原upstart有更快的启动速度。其尽可能启动更少的进程和尽可能更多进程并行启动。总的说来提高并发启动来加速系统启动是好的，不过这也要求systemd脚本编写人员对于系统的启动的各个单元或服务之间的依赖关系有很清楚的认识。</p>
+<p>关于systemd的参考手册强烈推荐 <a href="http://www.jinbuguo.com/systemd/systemd.exec.html">金步国翻译的systemd中文手册</a> 。</p>
+<p>systemd服务通过 <code>systemctl</code> 命令来管理的，实际上systemd是如此的基本，因为它已经取代inid成为了pid为1的进程，也就是后面的很多进程都是通过它来启动的，你甚至还可以通过systemctl来重启电脑，你就知道systemd服务是多么的底层了：</p>
+<ul>
+<li>systemctl reboot</li>
+<li>systemctl poweroff</li>
+</ul>
+<p>system的systemd服务脚本放在 <code>/usr/lib/systemd/system</code> 哪里，用户的systemd服务脚本是放在 <code>/usr/lib/systemd/user</code> 哪里。或者你也可以放在 <code>/etc/systemd/system</code> 或者 <code>/etc/systemd/user</code> 哪里。</p>
+<p>也就是说现在linux系统初始化进程systemd之后，后续基本上所有的服务进程都是由systemd来管理的，这些不同的系统资源在systemd这边都叫做单元Unit。一种分为12种单元：</p>
+<ol>
+<li>Service 最常用的单元类型，表示一个后台服务进程。</li>
+<li>Target  需要注意的是并没有 <code>[Target]</code> 这样的配置选项，其作用就是将一些依赖汇成一组单元，给这一组单元取一个名字，从而方便这组单元和其他启动单元的依赖关系。</li>
+<li>Device 硬件设备</li>
+<li>Mount 文件系统的挂载点</li>
+<li>Automount 自动挂载点，当该自动挂载点被访问时，systemd将执行定义的挂载行为</li>
+<li>Path 文件或路径</li>
+<li>Scope 不是由systemd启动的外部进程</li>
+<li>Slice 进程组</li>
+<li>Snapshot systemd快照</li>
+<li>Socket 套接字</li>
+<li>Swap swap文件</li>
+<li>Timer 定时器</li>
+</ol>
+<p>可以用 <code>systemctl list-units</code> 来列出当前系统正在运行的所有unit。</p>
+<p>下面列出一个systemd的服务脚本例子，一般 <code>Unit</code> 和 <code>Install</code> 配置节都是有的，然后服务脚本特有的是那个 <code>Service</code>  配置节。</p>
+<div class="highlight"><pre><span></span>[Unit]
+Description=nginx - high performance web server
+Documentation=http://nginx.org/en/docs/
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/usr/local/nginx/logs/nginx.pid
+ExecStartPre=/usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
+ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+</pre></div>
+<p>一般配置文件放在 <code>/usr/lib/systemd/system</code> 那里，如果你希望这个配置单元开机启动，则运行 <code>systemctl enable what.service</code> 来让这个配置单元激活开机启动，其将创建一个符号链接到 <code>/etc/systemd/system</code> 那里。反之撤销开机启动是 <code>systemctl disable what.service</code> 。</p>
+<h3 id="unit">Unit配置节</h3>
+<p>Unit - Description 描述文字</p>
+<p>Unit - Documentation 本单元的文档</p>
+<p>Unit - Requires 设置本单元的依赖关系。列出的单元若启动失败，而且After中也列出了该单元，则本单元不会启动。此外这些依赖单元显式停止，本单元也会停止。</p>
+<p>Unit - Wants 也是设置本单元的依赖关系，相当于Requires的弱化版本，依赖单元只是尽可能启动，单元不存在或无法启动不影响本单元的启动。</p>
+<p>Unit - After 强制单元的先后顺序，这里是指本单元强制在列表中的单元之后。</p>
+<p>Unit - Before 强制单元的先后顺序，这里是指本单元强制在列表中的单元之前，即两个单元都要启动时，后面的单元会延迟到前面的单元启动完毕再启动。</p>
+<h3 id="install">Install 配置节</h3>
+<p>systemctl enable和disable才使用本Install配置节，我们常看到下面选项：</p>
+<div class="highlight"><pre><span></span>[Install]
+WantedBy=multi-user.target
+</pre></div>
+<p>其相当于在multi-user.target的配置上加上了 <code>Wants=本单元</code> ，这样multi-user.target启动就需要本单元启动，默认linux的启动单元default.target，一般这个default.target就是这个multi-user.target。</p>
+<p>Install  -  WantedBy  </p>
+<h3 id="service">Service配置节</h3>
+<p>Service - Type 启动类型，simple： 默认值，立即启动该服务； forking：以fork方式启动进程；oneshot：一次性进程；dbus：dbus启动；notify：服务启动完毕，通知systemd，然后继续向下执行。</p>
+<p>Service - PIDFile pid文件路径</p>
+<p>Service - ExecStartPre 启动前动作</p>
+<p>Service - ExecStart 启动动作</p>
+<p>Service - ExecReload reload动作</p>
+<p>Service - ExecStop 停止动作</p>
+<p>Service - PrivateTmp 临时空间</p>
+<p>Service - ExecStartPost 启动后动作</p>
+<h3 id="system">system的常规启动流程</h3>
+<div class="highlight"><pre><span></span>                                     cryptsetup-pre.target
+                                                  |
+(various low-level                                v
+ API VFS mounts:                 (various cryptsetup devices...)
+ mqueue, configfs,                                |    |
+ debugfs, ...)                                    v    |
+ |                                  cryptsetup.target  |
+ |  (various swap                                 |    |    remote-fs-pre.target
+ |   devices...)                                  |    |     |        |
+ |    |                                           |    |     |        v
+ |    v                       local-fs-pre.target |    |     |  (network file systems)
+ |  swap.target                       |           |    v     v                 |
+ |    |                               v           |  remote-cryptsetup.target  |
+ |    |  (various low-level  (various mounts and  |             |              |
+ |    |   services: udevd,    fsck services...)   |             |    remote-fs.target
+ |    |   tmpfiles, random            |           |             |             /
+ |    |   seed, sysctl, ...)          v           |             |            /
+ |    |      |                 local-fs.target    |             |           /
+ |    |      |                        |           |             |          /
+ \____|______|_______________   ______|___________/             |         /
+                             \ /                                |        /
+                              v                                 |       /
+                       sysinit.target                           |      /
+                              |                                 |     /
+       ______________________/|\_____________________           |    /
+      /              |        |      |               \          |   /
+      |              |        |      |               |          |  /
+      v              v        |      v               |          | /
+ (various       (various      |  (various            |          |/
+  timers...)      paths...)   |   sockets...)        |          |
+      |              |        |      |               |          |
+      v              v        |      v               |          |
+timers.target  paths.target   |  sockets.target      |          |
+      |              |        |      |               v          |
+      v              \_______ | _____/         rescue.service   |
+                             \|/                     |          |
+                              v                      v          |
+                          basic.target         rescue.target    |
+                              |                                 |
+                      ________v____________________             |
+                     /              |              \            |
+                     |              |              |            |
+                     v              v              v            |
+                 display-    (various system   (various system  |
+             manager.service     services        services)      |
+                     |         required for        |            |
+                     |        graphical UIs)       v            v
+                     |              |            multi-user.target
+emergency.service    |              |              |
+        |            \_____________ | _____________/
+        v                          \|/
+emergency.target                    v
+                              graphical.target
+</pre></div>
+<h3 id="mount">Mount单元</h3>
+<p><strong>为了参考查阅方便，下面内容完全复制自 <a href="http://www.jinbuguo.com/systemd/systemd.mount.html">金步国的systemd.mount 中文手册</a> </strong></p>
+<div class="refentry"><a name="systemd.mount"></a><div class="titlepage"></div><div class="refnamediv"><h2>名称</h2><p>systemd.mount — 挂载单元配置</p></div><div class="refsynopsisdiv"><h2>大纲</h2><p><code class="filename"><em class="replaceable"><code>mount</code></em>.mount</code></p></div><div class="refsect1"><a name="id-1.5"></a><h2 id="描述">描述<a class="headerlink" href="#%E6%8F%8F%E8%BF%B0" title="Permalink to this headline">¶</a></h2><p>以
+    "<code class="literal">.mount</code>" 为后缀的单元文件，
+    封装了一个由 systemd 管理的文件系统挂载点。</p><p>本手册列出了所有专用于此类单元的
+    配置选项(亦称"配置指令"或"单元属性")。
+    <a href="systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>
+    中描述了通用于所有单元类型的配置选项，
+    它们位于 [Unit] 与
+    [Install] 小节。
+    此类单元专用的配置选项位于 [Mount] 小节。</p><p>其他相关的选项还包括：
+    <a href="systemd.exec.html#"><span class="citerefentry"><span class="refentrytitle">systemd.exec</span>(5)</span></a>
+    中的选项定义了
+    <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a>
+    命令的执行环境；
+    <a href="systemd.kill.html#"><span class="citerefentry"><span class="refentrytitle">systemd.kill</span>(5)</span></a>
+    中的选项定义了进程的结束方式；
+    <a href="systemd.resource-control.html#"><span class="citerefentry"><span class="refentrytitle">systemd.resource-control</span>(5)</span></a>
+    中的选项定义了进程的
+    资源限制。</p><p>注意， <code class="varname">User=</code> 与
+     <code class="varname">Group=</code> 选项对 mount 单元没有意义。
+    systemd 只向
+     <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a>
+    传递 <code class="varname">What=</code> 与 <code class="varname">Where=</code> 的值。
+    在这种调用方式下，
+     <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a>
+    将会忽略 <code class="filename">/etc/fstab</code> 中的所有选项，
+    并且必须以 UID=0 运行。</p><p>mount 单元的名称必须根据其封装的文件系统挂载点路径命名。
+    例如 <code class="filename">/home/lennart</code> 挂载点对应的单元名称必须是 <code class="filename">home-lennart.mount</code> 。
+    有关将路径名转换为单元名的细节，详见
+    <a href="systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a> 手册。
+    注意，mount 单元不能从模版实例化而来，
+    也不能通过创建软连接的方法给同一个 mount 单元赋予多个别名。</p><p>每个 mount 单元都可以附带一个可选的 automount 单元，
+    以实现自动按需挂载或并行挂载。参见
+    <a href="systemd.automount.html#"><span class="citerefentry"><span class="refentrytitle">systemd.automount</span>(5)</span></a> 手册。</p><p>在系统运行时创建的挂载点(独立于单元文件与
+     <code class="filename">/etc/fstab</code> 之外)将同样被 systemd 监控，
+    并且看上去与其他常规的 mount 单元没啥差别。
+    对 <code class="filename">/proc/self/mountinfo</code> 的详细解释参见
+    <a href="http://man7.org/linux/man-pages/man5/proc.5.html"><span class="citerefentry"><span class="refentrytitle">proc</span>(5)</span></a>
+</p><p>注意，某些虚拟文件系统拥有特别的功能，
+    无法通过 mount 单元对其进行修改或禁用。
+    例如：/sys, /proc, /dev, /tmp, sys/fs/cgroup, /dev/mqueue, /proc/sys/fs/binfmt_misc …
+    详见 <a class="ulink" href="https://www.freedesktop.org/wiki/Software/systemd/APIFileSystems" target="_top">API
+    File Systems</a></p></div><div class="refsect1"><a name="id-1.6"></a><h2 id="自动依赖">自动依赖<a class="headerlink" href="#%E8%87%AA%E5%8A%A8%E4%BE%9D%E8%B5%96" title="Permalink to this headline">¶</a></h2><div class="refsect2"><a name="id-1.6.2"></a><h3 id="隐含依赖">隐含依赖<a class="headerlink" href="#%E9%9A%90%E5%90%AB%E4%BE%9D%E8%B5%96" title="Permalink to this headline">¶</a></h3><p>下列依赖关系是自动隐含的：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>如果某个 mount 单元的挂载点在文件系统的层次树中位于另一个 mount 单元的挂载点之下，
+        那么，将会同时在这两个单元中自动添加必要的
+        <code class="varname">Requires=</code>, <code class="varname">Before=</code>, <code class="varname">After=</code> 依赖。</p></li><li class="listitem"><p>基于块设备的文件系统挂载点将自动获得对其所依赖的底层块设备单元的
+        <code class="varname">BindsTo=</code> 与
+         <code class="varname">After=</code>
+        依赖。</p></li><li class="listitem"><p>如果某个挂载点使用了传统的文件系统限额，那么将会自动添加对
+        <code class="filename">systemd-quotacheck.service</code> 与
+        <code class="filename">quotaon.service</code> 的
+        <code class="varname">Wants=</code> 与
+        <code class="varname">Before=</code> 依赖。</p></li><li class="listitem"><p>其他与执行环境以及资源控制有关的
+        隐含依赖关系参见
+        <a href="systemd.exec.html#"><span class="citerefentry"><span class="refentrytitle">systemd.exec</span>(5)</span></a>
+        与
+        <a href="systemd.resource-control.html#"><span class="citerefentry"><span class="refentrytitle">systemd.resource-control</span>(5)</span></a> 手册。
+        </p></li></ul></div></div><div class="refsect2"><a name="id-1.6.3"></a><h3 id="默认依赖">默认依赖<a class="headerlink" href="#%E9%BB%98%E8%AE%A4%E4%BE%9D%E8%B5%96" title="Permalink to this headline">¶</a></h3><p>除非明确设置了 <code class="varname">DefaultDependencies=no</code> ，否则 mount 单元将会自动添加下列依赖关系：</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>所有挂载点(无论网络还是本地)都自动获得 <code class="varname">Before=umount.target</code>
+        与 <code class="varname">Conflicts=umount.target</code> 依赖，以确保在关机前完成卸载。</p></li><li class="listitem"><p>本地文件系统挂载点自动获得
+        <code class="varname">After=local-fs-pre.target</code> 依赖。
+        此外，如果没有设置 <code class="option">nofail</code> 挂载选项，本地文件系统挂载点还将自动获得
+        <code class="varname">Before=<code class="filename">local-fs.target</code></code> 依赖。</p></li><li class="listitem"><p>网络文件系统挂载点自动获得
+        <code class="varname">After=remote-fs-pre.target</code>, <code class="varname">After=network.target</code>,
+        <code class="varname">After=network-online.target</code>, <code class="varname">Wants=network-online.target</code>
+        依赖。
+        此外，如果没有设置 <code class="option">nofail</code> 挂载选项，网络文件系统挂载点还将自动获得
+        <code class="varname">Before=<code class="filename">remote-fs.target</code></code> 依赖。</p></li></ul></div><p>判断文件系统是本地还是网络的依据是文件系统的类型(例如 xfs, ext4 是本地，而 cifs, nfs 则是网络)，
+      但是在某些情况下这种判断是不可靠的(例如对于 iSCSI 这样基于网络的块设备)，
+      为了明确标明对网络的依赖，可以在单元文件中明确使用 <code class="option">_netdev</code> 挂载选项，
+      这样就可以强迫将此 mount 单元视为基于网络的文件系统挂载点。</p></div></div><div class="refsect1"><a name="id-1.7"></a><h2 id="fstab"><code class="filename">fstab</code><a class="headerlink" href="#fstab" title="Permalink to this headline">¶</a></h2><p>mount 单元既可以通过单元文件进行配置，
+    也可以通过 <code class="filename">/etc/fstab</code> 文件(参见
+    <a href="http://man7.org/linux/man-pages/man5/fstab.5.html"><span class="citerefentry"><span class="refentrytitle">fstab</span>(5)</span></a>
+    手册)进行配置。 <code class="filename">/etc/fstab</code>
+    中的挂载点将在每次重新加载 systemd 配置时(包括系统启动时)
+    动态的自动转化为 mount 单元。
+    一般来说，通过 <code class="filename">/etc/fstab</code> 配置挂载点是首选的方法，
+    详见
+    <a href="systemd-fstab-generator.html#"><span class="citerefentry"><span class="refentrytitle">systemd-fstab-generator</span>(8)</span></a>
+    手册。</p><p>如果 <span class="command"><strong>systemd-fstab-generator</strong></span>
+    检测到某个NFS挂载点使用了 <code class="option">bg</code>
+    挂载选项(参见 <a href="http://man7.org/linux/man-pages/man5/nfs.5.html"><span class="citerefentry"><span class="refentrytitle">nfs</span>(5)</span></a> 手册)，
+    那么 <span class="command"><strong>systemd-fstab-generator</strong></span>
+    将会自动把 <code class="option">bg</code> 替换为
+    "<code class="literal">x-systemd.mount-timeout=infinity,retry=10000</code>" ，
+    从而让 systemd 执行在 <code class="option">bg</code> 选项中隐含的任务控制逻辑。
+    根据各种实际场景的不同需求，建议在设置 "<code class="literal">nofail</code>" 的同时，
+    明确设置超时与重试的值，或者利用下面的
+    "<code class="literal">x-systemd.automount</code>" 选项，
+    而不要使用 "<code class="literal">bg</code>" 选项。</p><p>可以在 <code class="filename">/etc/fstab</code> 中使用一些无法被其他程序识别的 systemd 专用挂载选项，
+    以帮助创建与挂载点相关的依赖关系。
+    对于本地文件系统挂载点，
+    systemd 将会自动在 <code class="filename">local-fs.target</code> 中创建指向此挂载点的 <code class="varname">Wants=</code> 或 <code class="option">Requires=</code> 依赖；
+    对于网络文件系统挂载点，
+    systemd 将会自动在 <code class="filename">remote-fs.target</code> 中创建指向此挂载点的 <code class="varname">Wants=</code> 或 <code class="option">Requires=</code> 依赖；
+    至于究竟是 <code class="varname">Wants=</code> 还是 <code class="option">Requires=</code> 依赖，
+    则取决于是否设置了下面的 <code class="option">nofail</code> 选项。</p><div class="variablelist"><dl class="variablelist"><dt id="x-systemd.requires="><span class="term"><code class="option">x-systemd.requires=</code></span><a class="headerlink" href="#x-systemd.requires=" title="Permalink to this term">¶</a></dt><dd><p>设置一个到其他单元(例如 device 或 mount 单元)的 <code class="varname">Requires=</code> 与
+         <code class="varname">After=</code> 依赖，
+        参数必须是以下三者之一：
+        一个单独的单元名称、
+        一个以绝对路径表示的设备节点、
+        一个以绝对路径表示的挂载点。
+        可以多次使用此选项以指定对多个单元的依赖。此选项对于如下两种挂载点特别有用：
+        (1)需要额外辅助设备的，例如将日志存储在其他设备上的日志文件系统
+        (2)需要事先存在其他挂载点的，例如可以融合多个挂载点的叠合文件系统
+        (<a class="ulink" href="http://blog.donghao.org/2013/03/20/overlay-filesystem/" target="_top">Overlay Filesystem</a>)。
+        详见
+        <a href="systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>
+        手册。</p></dd><dt id="x-systemd.before="><span class="term"><code class="option">x-systemd.before=</code>, </span><span class="term"><code class="option">x-systemd.after=</code></span><a class="headerlink" href="#x-systemd.before=" title="Permalink to this term">¶</a></dt><dd><p>设置一个到其他单元(例如 mount 单元)的 <code class="varname">Before=</code>
+        或 <code class="varname">After=</code> 依赖。
+        参数必须是一个单独的单元名称或者一个以绝对路径表示的挂载点。
+        可以多次使用这些选项以指定对多个单元的依赖。
+        这些选项对于同时具备如下特征的挂载点特别有用：
+        挂载点带有 <code class="option">nofail</code> 标记、
+        以异步方式挂载(<code class="option">async</code>)(默认即是异步)、
+        需要在特定单元启动之前或之后才能挂载(例如必须在启动
+         <code class="filename">local-fs.target</code>
+        之前挂载)。
+        关于 <code class="varname">Before=</code> 与 <code class="varname">After=</code> 的解释，详见
+        <a href="systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>
+        手册。</p></dd><dt id="x-systemd.requires-mounts-for="><span class="term"><code class="option">x-systemd.requires-mounts-for=</code></span><a class="headerlink" href="#x-systemd.requires-mounts-for=" title="Permalink to this term">¶</a></dt><dd><p>设置一个到其他挂载点的
+        <code class="varname">RequiresMountsFor=</code> 依赖。
+        参数必须是一个以绝对路径表示的挂载点，
+        可以多次使用此选项以指定对多个挂载点的依赖。
+        详见
+        <a href="systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>
+        手册。</p></dd><dt id="x-systemd.device-bound"><span class="term"><code class="option">x-systemd.device-bound</code></span><a class="headerlink" href="#x-systemd.device-bound" title="Permalink to this term">¶</a></dt><dd><p>将文件系统所在的块设备升级为
+         <code class="varname">BindsTo=</code> 依赖。
+        此选项仅在使用
+        <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a>
+        手动挂载时才有意义，因为此时默认为 <code class="varname">Requires=</code> 依赖。
+        注意，对于 <code class="filename">/etc/fstab</code> 中的条目或 mount 单元来说，
+        已经自动隐含的设置了此选项。
+        </p></dd><dt id="x-systemd.automount"><span class="term"><code class="option">x-systemd.automount</code></span><a class="headerlink" href="#x-systemd.automount" title="Permalink to this term">¶</a></dt><dd><p>同时创建一个对应的 automount 单元，
+        详见
+        <a href="systemd.automount.html#"><span class="citerefentry"><span class="refentrytitle">systemd.automount</span>(5)</span></a>
+        手册。</p></dd><dt id="x-systemd.idle-timeout="><span class="term"><code class="option">x-systemd.idle-timeout=</code></span><a class="headerlink" href="#x-systemd.idle-timeout=" title="Permalink to this term">¶</a></dt><dd><p>设置对应的 automount 单元的最大闲置时长。
+         参见 <code class="varname">TimeoutIdleSec=</code> 选项(参见
+        <a href="systemd.automount.html#"><span class="citerefentry"><span class="refentrytitle">systemd.automount</span>(5)</span></a>
+         手册)。</p></dd><dt id="x-systemd.device-timeout="><span class="term"><code class="option">x-systemd.device-timeout=</code></span><a class="headerlink" href="#x-systemd.device-timeout=" title="Permalink to this term">¶</a></dt><dd><p>设置等候所依赖的设备进入可用状态的最大时长，
+        若超时则放弃挂载。
+        可以使用 
+        "<code class="literal">ms</code>", "<code class="literal">s</code>",
+        "<code class="literal">min</code>", "<code class="literal">h</code>" 这样的时间单位后缀。
+        若省略后缀则表示单位是秒。</p><p>注意，此选项仅可用于 
+        <code class="filename">/etc/fstab</code> 文件，
+        不可用于单元文件中的 <code class="varname">Options=</code>
+        选项。</p></dd><dt id="x-systemd.mount-timeout="><span class="term"><code class="option">x-systemd.mount-timeout=</code></span><a class="headerlink" href="#x-systemd.mount-timeout=" title="Permalink to this term">¶</a></dt><dd><p>设置 <code class="filename">/etc/fstab</code> 中挂载点的超时时长。
+        如果超过指定的时间仍未挂载成功，那么将会放弃该挂载点。
+        若省略后缀则表示单位是秒。
+        可以使用 "<code class="literal">s</code>",
+        "<code class="literal">min</code>", "<code class="literal">h</code>",
+        "<code class="literal">ms</code>" 这样的时间单位后缀。</p><p>注意，此选项仅可用于
+        <code class="filename">/etc/fstab</code> 文件，
+        不可用于单元文件中的 <code class="varname">Options=</code>
+        选项。</p><p>参见下文的 <code class="varname">TimeoutSec=</code> 
+        选项。</p></dd><dt id="x-systemd.makefs"><span class="term"><code class="option">x-systemd.makefs</code></span><a class="headerlink" href="#x-systemd.makefs" title="Permalink to this term">¶</a></dt><dd><p>按指定的文件系统格式化此设备。
+        如果此设备"非空"(已含有签名)，
+        那么将会跳过格式化操作。
+        因此，此选项可以安全的应用于已格式化的设备。</p><p>此选项仅可用于
+        <code class="filename">/etc/fstab</code> 文件，不可用于单元文件中的
+        <code class="varname">Options=</code> 选项。</p><p>参见
+        <a href="systemd-makefs@.service.html#"><span class="citerefentry"><span class="refentrytitle">systemd-makefs@.service</span>(8)</span></a> 手册。
+        </p><p><a href="http://man7.org/linux/man-pages/man8/wipefs.8.html"><span class="citerefentry"><span class="refentrytitle">wipefs</span>(8)</span></a>
+        可以用来擦除块设备上已有的签名，从而允许
+        <code class="option">x-systemd.makefs</code> 强制再次格式化已格式化的设备。</p></dd><dt id="x-systemd.growfs"><span class="term"><code class="option">x-systemd.growfs</code></span><a class="headerlink" href="#x-systemd.growfs" title="Permalink to this term">¶</a></dt><dd><p>将文件系统扩展到占用块设备上的全部空间。
+        如果文件系统已经占满了全部空间，那么将不会执行任何操作。
+        因此，此选项可以安全的应用于已经完成扩展的文件系统。
+        此选项仅支持某些特定的文件系统，
+        详见
+        <a href="systemd-makefs@.service.html#"><span class="citerefentry"><span class="refentrytitle">systemd-makefs@.service</span>(8)</span></a>
+        手册。</p><p>此选项仅可用于
+        <code class="filename">/etc/fstab</code> 文件，不可用于单元文件中的
+        <code class="varname">Options=</code> 选项。</p></dd><dt id="_netdev"><span class="term"><code class="option">_netdev</code></span><a class="headerlink" href="#_netdev" title="Permalink to this term">¶</a></dt><dd><p>通常根据文件系统的类型来判断是否为网络文件系统(例如 xfs, ext4 是本地，而 cifs, nfs 则是网络)，
+        以决定是否必须在网络可用之后才能启动。
+        但是在某些情况下这种判断是不可靠的(例如对于 iSCSI 这样基于网络的块设备)，
+        使用此选项之后就可以强迫将此文件系统标记为网络文件系统。</p><p>网络文件系统所对应的 mount 单元将被安排在 <code class="filename">remote-fs-pre.target</code>
+        与 <code class="filename">remote-fs.target</code> 之间启动(而不是在
+        <code class="filename">local-fs-pre.target</code> 与 <code class="filename">local-fs.target</code> 之间)，
+        并且自动获得 <code class="varname">After=network-online.target</code>, <code class="varname">Wants=network-online.target</code>,
+        <code class="varname">After=network.target</code> 依赖。</p></dd><dt id="noauto"><span class="term"><code class="option">noauto</code>, </span><span class="term"><code class="option">auto</code></span><a class="headerlink" href="#noauto" title="Permalink to this term">¶</a></dt><dd><p><code class="option">noauto</code> 表示不将此挂载点加入到
+        <code class="filename">local-fs.target</code>/<code class="filename">remote-fs.target</code> 的依赖中，
+        也就是不在系统启动时自动挂载(除非为了满足其他单元的依赖而被挂载)。而默认值
+        <code class="option">auto</code> 则表示自动将此挂载点加入到上述目标单元的依赖中(也就是在系统启动时自动挂载)。
+        注意， <code class="option">noauto</code> 选项仅作用于 mount 单元自身，如果使用了 <code class="option">x-systemd.automount</code> 选项，
+        那么对应的 automount 单元仍然会被加入到上述目标单元的依赖中。</p></dd><dt id="nofail"><span class="term"><code class="option">nofail</code></span><a class="headerlink" href="#nofail" title="Permalink to this term">¶</a></dt><dd><p>表示仅在 <code class="filename">local-fs.target</code>/<code class="filename">remote-fs.target</code>
+        中对此挂载点使用 <code class="varname">Wants=</code> 依赖(而不是默认的 <code class="varname">Requires=</code>)，
+        并且在启动顺序上，此 mount 单元也不会排在上述目标单元之前。
+        这就意味着，启动流程既不会等待此挂载点，也不会在乎此挂载点是否挂载成功。</p></dd><dt id="x-initrd.mount"><span class="term"><code class="option">x-initrd.mount</code></span><a class="headerlink" href="#x-initrd.mount" title="Permalink to this term">¶</a></dt><dd><p>要在initramfs中额外挂载的文件系统，
+        参见对 <code class="filename">initrd-fs.target</code>
+        的解释(参见
+        <a href="systemd.special.html#"><span class="citerefentry"><span class="refentrytitle">systemd.special</span>(7)</span></a> 手册)。
+        </p></dd></dl></div><p>如果一个挂载点既被封装到了一个 mount 单元中，
+    又被配置到了 <code class="filename">/etc/fstab</code> 文件中，那么：
+    (1)如果单元文件位于  <code class="filename">/usr</code> 中，
+    那么以 <code class="filename">/etc/fstab</code> 文件为准(无视单元文件)。
+    (2)如果单元文件位于 <code class="filename">/etc</code> 中，
+    那么以单元文件为准(无视 <code class="filename">/etc/fstab</code> 文件)。
+    这意味着对于同一个挂载点来说，
+    <code class="filename">/etc</code> 中的单元文件优先级最高、<code class="filename">/etc/fstab</code> 文件次之、
+    <code class="filename">/usr</code> 中的单元文件优先级最低。</p></div><div class="refsect1"><a name="id-1.8"></a><h2 id="选项">选项<a class="headerlink" href="#%E9%80%89%E9%A1%B9" title="Permalink to this headline">¶</a></h2><p>每个 mount 单元文件都必须包含一个 [Mount] 小节，
+    用于包含该单元封装的挂载点信息。
+    可在 [Mount] 小节中使用的选项，
+    有许多是与其他单元共享的，详见
+    <a href="systemd.exec.html#"><span class="citerefentry"><span class="refentrytitle">systemd.exec</span>(5)</span></a>
+    与
+    <a href="systemd.kill.html#"><span class="citerefentry"><span class="refentrytitle">systemd.kill</span>(5)</span></a>
+    手册。
+    这里只列出仅能用于 [Mount] 小节的选项(亦称"指令"或"属性")：</p><div class="variablelist"><dl class="variablelist"><dt id="What="><span class="term"><code class="varname">What=</code></span><a class="headerlink" href="#What=" title="Permalink to this term">¶</a></dt><dd><p>绝对路径形式表示的被挂载对象：设备节点、LOOP文件、其他资源(例如网络资源)。
+        详见 <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a> 手册。
+        如果是一个设备节点，那么将会自动添加对此设备节点单元的依赖(参见
+        <a href="systemd.device.html#"><span class="citerefentry"><span class="refentrytitle">systemd.device</span>(5)</span></a> 手册)。
+        这是一个必需的设置。注意，因为可以在此选项中使用 "<code class="literal">%</code>" 系列替换标记，
+        所以百分号(%)应该使用 "<code class="literal">%%</code>" 表示。</p></dd><dt id="Where="><span class="term"><code class="varname">Where=</code></span><a class="headerlink" href="#Where=" title="Permalink to this term">¶</a></dt><dd><p>绝对路径形式表示的挂载点目录。
+        注意，不可设为一个软连接(即使它实际指向了一个目录)。
+        如果挂载时此目录不存在，那么将尝试创建它。
+        注意，
+        这里设置的绝对路径必须与单元文件的名称相对应(见上文)。
+        这是一个必需的设置。</p></dd><dt id="Type="><span class="term"><code class="varname">Type=</code></span><a class="headerlink" href="#Type=" title="Permalink to this term">¶</a></dt><dd><p>字符串形式表示的文件系统类型。详见
+        <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a>
+        手册。这是一个可选的设置。</p></dd><dt id="Options="><span class="term"><code class="varname">Options=</code></span><a class="headerlink" href="#Options=" title="Permalink to this term">¶</a></dt><dd><p>一组逗号分隔的挂载选项。详见 <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a> 手册。
+        这是一个可选的设置。注意，因为可以在此选项中使用 "<code class="literal">%</code>" 系列替换标记，
+        所以百分号(%)应该使用 "<code class="literal">%%</code>" 表示。</p></dd><dt id="SloppyOptions="><span class="term"><code class="varname">SloppyOptions=</code></span><a class="headerlink" href="#SloppyOptions=" title="Permalink to this term">¶</a></dt><dd><p>设为 yes 表示
+        允许在 <code class="varname">Options=</code> 中使用文件系统不支持的挂载选项，
+        且不会导致挂载失败(相当于使用了
+        <a class="ulink" href="/man/mount.html" target="_top">mount(8)</a>
+        的 <em class="parameter"><code>-s</code></em> 命令行选项)。
+        默认值 no 表示禁止在 <code class="varname">Options=</code> 中使用
+        文件系统不支持的挂载选项(会导致挂载失败)。</p></dd><dt id="LazyUnmount="><span class="term"><code class="varname">LazyUnmount=</code></span><a class="headerlink" href="#LazyUnmount=" title="Permalink to this term">¶</a></dt><dd><p>设置是否使用延迟卸载。
+        设为 yes 表示立即将文件系统从当前的挂载点分离，
+        但是一直等待到设备不再忙碌的时候，
+        才会清理所有对此文件系统的引用(也就是真正完成卸载)。
+        这相当于使用
+        <a class="ulink" href="/man/umount.html" target="_top">umount(8)</a>
+        的 <em class="parameter"><code>-l</code></em> 选项进行卸载。
+        默认值为 no </p></dd><dt id="ForceUnmount="><span class="term"><code class="varname">ForceUnmount=</code></span><a class="headerlink" href="#ForceUnmount=" title="Permalink to this term">¶</a></dt><dd><p>设置是否使用强制卸载。
+        设为 yes 表示使用强制卸载(仅建议用于 NFS 文件系统)。
+        这相当于使用
+        <a class="ulink" href="/man/umount.html" target="_top">umount(8)</a>
+        的 <em class="parameter"><code>-f</code></em> 选项进行卸载。
+        默认值为 no </p></dd><dt id="DirectoryMode="><span class="term"><code class="varname">DirectoryMode=</code></span><a class="headerlink" href="#DirectoryMode=" title="Permalink to this term">¶</a></dt><dd><p>自动创建挂载点目录(包括必要的上级目录)时，
+        所使用的
+        权限模式(八进制表示法)。
+        默认值是
+         0755</p></dd><dt id="TimeoutSec="><span class="term"><code class="varname">TimeoutSec=</code></span><a class="headerlink" href="#TimeoutSec=" title="Permalink to this term">¶</a></dt><dd><p>最大允许使用多长时间以完成挂载动作。
+        若超时则被视为挂载失败，
+        并且所有当前正在运行的命令都将被以 <code class="constant">SIGTERM</code> 信号终止；
+        若继续等待相同的时长之后命令仍未终止，
+        那么将使用 <code class="constant">SIGKILL</code> 信号强制终止
+        (详见 <a href="systemd.kill.html#"><span class="citerefentry"><span class="refentrytitle">systemd.kill</span>(5)</span></a>
+        中的 <code class="option">KillMode=</code> 选项)。
+        可以使用 "ms", "s", "min", "h" 这样的时间单位后缀。
+        若省略后缀则表示单位是秒。
+        设为零表示永不超时。
+        默认值为 <code class="varname">DefaultTimeoutStartSec=</code> 选项的值(参见
+        <a href="systemd-system.conf.html#"><span class="citerefentry"><span class="refentrytitle">systemd-system.conf</span>(5)</span></a> 手册)。
+        </p></dd></dl></div><p>参见
+    <a href="systemd.exec.html#"><span class="citerefentry"><span class="refentrytitle">systemd.exec</span>(5)</span></a>
+    与
+    <a href="systemd.kill.html#"><span class="citerefentry"><span class="refentrytitle">systemd.kill</span>(5)</span></a>
+    以了解更多设置。</p></div><div class="refsect1"><a name="id-1.9"></a><h2 id="参见">参见<a class="headerlink" href="#%E5%8F%82%E8%A7%81" title="Permalink to this headline">¶</a></h2><p>
+<a href="systemd.html#"><span class="citerefentry"><span class="refentrytitle">systemd</span>(1)</span></a>,
+        <a href="systemctl.html#"><span class="citerefentry"><span class="refentrytitle">systemctl</span>(1)</span></a>,
+        <a href="systemd-system.conf.html#"><span class="citerefentry"><span class="refentrytitle">systemd-system.conf</span>(5)</span></a>,
+        <a href="systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>,
+        <a href="systemd.exec.html#"><span class="citerefentry"><span class="refentrytitle">systemd.exec</span>(5)</span></a>,
+        <a href="systemd.kill.html#"><span class="citerefentry"><span class="refentrytitle">systemd.kill</span>(5)</span></a>,
+        <a href="systemd.resource-control.html#"><span class="citerefentry"><span class="refentrytitle">systemd.resource-control</span>(5)</span></a>,
+        <a href="systemd.service.html#"><span class="citerefentry"><span class="refentrytitle">systemd.service</span>(5)</span></a>,
+        <a href="systemd.device.html#"><span class="citerefentry"><span class="refentrytitle">systemd.device</span>(5)</span></a>,
+        <a href="http://man7.org/linux/man-pages/man5/proc.5.html"><span class="citerefentry"><span class="refentrytitle">proc</span>(5)</span></a>,
+        <a href="http://man7.org/linux/man-pages/man8/mount.8.html"><span class="citerefentry"><span class="refentrytitle">mount</span>(8)</span></a>,
+        <a href="systemd-fstab-generator.html#"><span class="citerefentry"><span class="refentrytitle">systemd-fstab-generator</span>(8)</span></a>,
+        <a href="systemd.directives.html#"><span class="citerefentry"><span class="refentrytitle">systemd.directives</span>(7)</span></a>
+</p></div></div>
+<h3 id="timer">Timer单元</h3>
+<p>Timer单元针对某些服务进程配置定时任务很方便，大体可以实现crontab类似的功能</p>
+<h3 id="_3">服务文件修改之后</h3>
+<p>一般是推荐配置文件外移，服务文件设置好之后就没必要修改了，如果服务文件修改了那么需要：</p>
+<div class="highlight"><pre><span></span>systemctl daemon-reload
+</pre></div>
+<h3 id="_4">日志管理</h3>
+<p>systemd统一管理所有日志，可用 <code>jourlnalctl</code> 命令来查看之。点名要看某个服务Unit：</p>
+<div class="highlight"><pre><span></span>jourlnalctl --unit=nginx
+</pre></div>
+<h3 id="_5">启动服务等等</h3>
+<p>启动服务重启服务暂停服务等等我想大家都很熟悉了吧：</p>
+<div class="highlight"><pre><span></span>systemctl start what.service
+systemctl stop what.service
+systemctl restart what.service
+</pre></div>
+<h2 id="centos7dns">centos7配置dns</h2>
+<p>发现centos7配置dns之后重启 network 服务配置就会丢失，需要在</p>
+<div class="highlight"><pre><span></span>/etc/NetworkManager/NetworkManager.conf
+</pre></div>
+<p>main哪里加上</p>
+<div class="highlight"><pre><span></span>dns = none
+</pre></div>
+<p>然后重启</p>
+<div class="highlight"><pre><span></span>systemctl restart NetworkManager.service
+</pre></div>
+<p>然后再如同以前一样修改 <code>/etc/resolv.conf</code> 。</p>
+<h2 id="_6">配置语言</h2>
+<h3 id="_7">查看当前操作系统语言</h3>
+<div class="highlight"><pre><span></span>cat /etc/locale.conf 
+</pre></div>
+<p>或者</p>
+<div class="highlight"><pre><span></span>localectl status
+</pre></div>
+<h3 id="_8">列出可用语言</h3>
+<div class="highlight"><pre><span></span>locale -a
+</pre></div>
+<p>或者</p>
+<div class="highlight"><pre><span></span>localectl list-locales | grep zh
+</pre></div>
+<h3 id="_9">修改操作系统语言</h3>
+<div class="highlight"><pre><span></span>sudo localectl set-locale LANG=zh_CN.utf8
+</pre></div>
+<h2 id="_10">参考资料</h2>
+<ol>
+<li><a href="http://linux.vbird.org/linux_basic">鸟哥的私房菜</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">systemd入门教程之命令</a></li>
+<li><a href="https://www.xncoding.com/2016/06/07/linux/systemd.html">systemd详解</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html">浅析 Linux 初始化 init 系统-systemd</a></li>
+</ol>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/centos7.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/centos7.html';
+    var disqus_url = 'https://a358003542.github.io/articles/centos7.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2019-09-06T00:00:00+08:00">2019年 9月 6日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#linux-ref">linux</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#centos7-ref">centos7
+                    <span>1</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>

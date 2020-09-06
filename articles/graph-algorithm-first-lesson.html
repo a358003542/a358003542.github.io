@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 我们在解决现实世界中的一些问题的时候，常常很自然地进行一些作图来试着对这些问题进行建模，其中有一些问题的最核心的部分可以精简为如下一种用小圆点和连接这些小圆点的直线来表示出来： 这些小圆点叫做 顶点 ，连接这些顶点的直线或者曲线叫做 边 。 顶点记作Node，边记作edge。然后整个图的所有顶点数目叫做该图的阶，记作Order。 图里面的边可能有方向也可能没方向，一般用带箭头的直线来表示该边有方向。如果边没有方向，那么叫做 无向图，如果线有方向，那么叫做 有向图 。 在有向图里面，有 入度 和 出度 这两个专业术语，其中某个顶点的入度是指进入该顶点的边条数；而某个顶点的出度是指从该顶点出来的边条数。其中入度记作 in-degree ， 出度记作 out-degree。 基本实现 Graph类 class Graph(ABC): &#34;&#34;&#34; general graph class &#34;&#34;&#34; DIRECTED = None @abstractmethod def nodes(self): raise NotImplementedError(&#34;Not Implement …
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="algorithm, algorithm, " />
+
+<meta property="og:title" content="图算法建模初步 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/graph-algorithm-first-lesson.html" />
+<meta property="og:description" content="前言 我们在解决现实世界中的一些问题的时候，常常很自然地进行一些作图来试着对这些问题进行建模，其中有一些问题的最核心的部分可以精简为如下一种用小圆点和连接这些小圆点的直线来表示出来： 这些小圆点叫做 顶点 ，连接这些顶点的直线或者曲线叫做 边 。 顶点记作Node，边记作edge。然后整个图的所有顶点数目叫做该图的阶，记作Order。 图里面的边可能有方向也可能没方向，一般用带箭头的直线来表示该边有方向。如果边没有方向，那么叫做 无向图，如果线有方向，那么叫做 有向图 。 在有向图里面，有 入度 和 出度 这两个专业术语，其中某个顶点的入度是指进入该顶点的边条数；而某个顶点的出度是指从该顶点出来的边条数。其中入度记作 in-degree ， 出度记作 out-degree。 基本实现 Graph类 class Graph(ABC): &#34;&#34;&#34; general graph class &#34;&#34;&#34; DIRECTED = None @abstractmethod def nodes(self): raise NotImplementedError(&#34;Not Implement …" />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2019-09-06T00:00:00+08:00" />
+<meta name="twitter:title" content="图算法建模初步 ">
+<meta name="twitter:description" content="前言 我们在解决现实世界中的一些问题的时候，常常很自然地进行一些作图来试着对这些问题进行建模，其中有一些问题的最核心的部分可以精简为如下一种用小圆点和连接这些小圆点的直线来表示出来： 这些小圆点叫做 顶点 ，连接这些顶点的直线或者曲线叫做 边 。 顶点记作Node，边记作edge。然后整个图的所有顶点数目叫做该图的阶，记作Order。 图里面的边可能有方向也可能没方向，一般用带箭头的直线来表示该边有方向。如果边没有方向，那么叫做 无向图，如果线有方向，那么叫做 有向图 。 在有向图里面，有 入度 和 出度 这两个专业术语，其中某个顶点的入度是指进入该顶点的边条数；而某个顶点的出度是指从该顶点出来的边条数。其中入度记作 in-degree ， 出度记作 out-degree。 基本实现 Graph类 class Graph(ABC): &#34;&#34;&#34; general graph class &#34;&#34;&#34; DIRECTED = None @abstractmethod def nodes(self): raise NotImplementedError(&#34;Not Implement …">
+
+
+    <title>图算法建模初步  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/graph-algorithm-first-lesson.html"> 图算法建模初步  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">基本实现</a><ul>
+<li><a href="#graph">Graph类</a></li>
+<li><a href="#undirectedgraph">UndirectedGraph类</a></li>
+<li><a href="#directedgraph">DirectedGraph类</a></li>
+</ul>
+</li>
+<li><a href="#_3">其他丰富完善</a><ul>
+<li><a href="#_4">增加节点</a></li>
+<li><a href="#_5">增加边</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">前言</h2>
+<p>我们在解决现实世界中的一些问题的时候，常常很自然地进行一些作图来试着对这些问题进行建模，其中有一些问题的最核心的部分可以精简为如下一种用小圆点和连接这些小圆点的直线来表示出来：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2020/directed_acyclic_graph_example.png"/></p>
+<p>这些小圆点叫做 <strong>顶点</strong> ，连接这些顶点的直线或者曲线叫做 <strong>边</strong> 。</p>
+<p>顶点记作Node，边记作edge。然后整个图的所有顶点数目叫做该图的阶，记作Order。</p>
+<p>图里面的边可能有方向也可能没方向，一般用带箭头的直线来表示该边有方向。如果边没有方向，那么叫做 <strong>无向图</strong>，如果线有方向，那么叫做 <strong>有向图</strong> 。</p>
+<p>在有向图里面，有 <strong>入度</strong> 和 <strong>出度</strong> 这两个专业术语，其中某个顶点的入度是指进入该顶点的边条数；而某个顶点的出度是指从该顶点出来的边条数。其中入度记作 in-degree ， 出度记作 out-degree。 </p>
+<h2 id="_2">基本实现</h2>
+<h3 id="graph">Graph类</h3>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    general graph class</span>
+<span class="sd">    """</span>
+    <span class="n">DIRECTED</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement nodes methods"</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement neighbors methods"</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement edges methods"</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">has_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement has_node methods"</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">has_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement has_edge methods"</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement add_node methods"</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not Implement add_edge methods"</span><span class="p">)</span>
+</pre></div>
+<p>图Graph是抽象基类，具体后面某个图要么是有向图要么是无向图，这个后面再讨论。</p>
+<p>这里定义了一些基本的方法，要求后面的图具体实现都应该有这些方法：</p>
+<ul>
+<li>DIRECTED 属性： True说明该图是有向图，False则说明该图是无向图。</li>
+<li>nodes方法：遍历本图的各个顶点</li>
+<li>neighbors方法：返回与某个顶点相邻的顶点</li>
+<li>edges方法：遍历本图的各个边，这个也是一个抽象方法，这样具体边的相似判断可以往后面放。</li>
+<li>has_node方法：本图是否有该顶点，这里顶点是某个唯一标识的字符串</li>
+<li>has_edge方法：本图是否有该边，同样具体edge的存储形式和判断都往后面放。</li>
+<li>add_node方法：增加一个节点</li>
+<li>add_edge方法： 增加一个边</li>
+</ul>
+<h3 id="undirectedgraph">UndirectedGraph类</h3>
+<p>无向图的数据采用这样的形式：</p>
+<div class="highlight"><pre><span></span>    {
+        'a': {'b','z'}
+    }
+</pre></div>
+<p>该字典的keys表示该图的所有顶点，然后后面的值就是具体与该顶点相邻的那些顶点，于是有：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UndirectedGraph</span><span class="p">(</span><span class="n">Graph</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    graph_data structure as:</span>
+<span class="sd">    {</span>
+<span class="sd">        'a': {'b','z'}</span>
+<span class="sd">    }</span>
+<span class="sd">    """</span>
+    <span class="n">DIRECTED</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Initialize a graph.</span>
+<span class="sd">        """</span>
+
+        <span class="k">if</span> <span class="n">graph_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_data</span>
+
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return node list.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return all nodes that are directly accessible from given node.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+</pre></div>
+<p>接下来遍历边一个技巧是使用字典 <code>{a,b}</code> 这样的形式来表示无向图的边，这样边就和连接的两个顶点的顺序无关了。</p>
+<p><strong>NOTICE</strong> 顶点a到顶点a的边字典形式是 <code>{a}</code> ，其长度为1，这需要额外处理一下。</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">_read_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">v</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"wrong edge format"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">_generate_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        represent edge as {a,b}</span>
+<span class="sd">        """</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">neighbour</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">{</span><span class="n">neighbour</span><span class="p">,</span> <span class="n">node</span><span class="p">}</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+                    <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbour</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">edges</span>
+
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return all edges in the graph.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_edges</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">has_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return whether the requested node exists.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span>
+
+    <span class="k">def</span> <span class="nf">has_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return whether an edge exists.</span>
+<span class="sd">        """</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">}</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+</pre></div>
+<p>新增一个顶点和新增一个边后面再讨论，下面来看有向图那边的情况。</p>
+<h3 id="directedgraph">DirectedGraph类</h3>
+<p>有向图的数据存储结构为：</p>
+<div class="highlight"><pre><span></span>     {
+         'a': ['b','z']
+     }
+</pre></div>
+<p>其中该字典的keys是该图的各个顶点，然后后面的值就是具体该顶点指向的那些相邻的顶点。于是有：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DirectedGraph</span><span class="p">(</span><span class="n">Graph</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    graph_data structure as:</span>
+<span class="sd">     {</span>
+<span class="sd">         'a': ['b','z']</span>
+<span class="sd">     }</span>
+<span class="sd">     """</span>
+    <span class="n">DIRECTED</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Initialize a graph.</span>
+<span class="sd">        """</span>
+
+        <span class="k">if</span> <span class="n">graph_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_data</span>
+
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return nodes</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return all nodes that are incident to the given node.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+</pre></div>
+<p>接下来是遍历边的实现，其才用了 <code>(a,b)</code> 这样的形式来表示有向图的边，这样边就和连接的两个顶点的顺序有关了。</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">_generate_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        represent edge as (a,b)</span>
+<span class="sd">        """</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+                    <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">edges</span>
+
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return all edges in the graph.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_edges</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">has_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return whether the requested node exists.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span>
+
+    <span class="k">def</span> <span class="nf">has_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Return whether an edge exists.</span>
+<span class="sd">        """</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+</pre></div>
+<h2 id="_3">其他丰富完善</h2>
+<h3 id="_4">增加节点</h3>
+<p>无向图是：</p>
+<div class="highlight"><pre><span></span>    def add_node(self, node):
+        """
+        Add given node to the graph.
+        """
+        if self.has_node(node):
+            raise AdditionError("Node %s already in graph" % node)
+
+        self.graph_data[node] = set()
+</pre></div>
+<p>有向图是：</p>
+<div class="highlight"><pre><span></span>    def add_node(self, node):
+        """
+        Add given node to the graph.
+        """
+        if self.has_node(node):
+            raise AdditionError("Node {0} already in digraph".format(node))
+
+        self.graph_data[node] = []
+</pre></div>
+<p>这个没啥好说的。</p>
+<h3 id="_5">增加边</h3>
+<p>无向图：</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Add an edge to the graph connecting two nodes.</span>
+<span class="sd">        """</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">AdditionError</span><span class="p">(</span><span class="s2">"Edge (</span><span class="si">{0}</span><span class="s2">, </span><span class="si">{1}</span><span class="s2">) already in graph"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">u</span> <span class="o">!=</span> <span class="n">v</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+</pre></div>
+<p>有向图：</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Add an directed edge to the graph connecting two nodes.</span>
+<span class="sd">        """</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">AdditionError</span><span class="p">(</span><span class="s2">"Edge (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">) already in digraph"</span> <span class="o">%</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+<p>这里我们利用之前已经写好的 <code>has_edge</code> 方法会让程序逻辑更清晰一些。</p>
+<p>无向图因为没有方向，所有从u到v和从v到u需要添加两次。</p>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/graph-algorithm-first-lesson.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/graph-algorithm-first-lesson.html';
+    var disqus_url = 'https://a358003542.github.io/articles/graph-algorithm-first-lesson.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2019-09-06T00:00:00+08:00">2019年 9月 6日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#algorithm-ref">algorithm</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#algorithm-ref">algorithm
+                    <span>11</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>
