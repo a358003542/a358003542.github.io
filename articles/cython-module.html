@@ -13,7 +13,7 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="找到性能瓶颈所在 首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈： python -m cProfile test.py 或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。 目前我知道的循环结构提速很明显，然后指定静态类型会提速。 一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。 参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。 在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。 pyx文件 关于pyx文件的更多请查看cython的官方手册。 下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来， from setuptools import setup, find_packages …
+              content="找到性能瓶颈所在 首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈： python -m cProfile test.py 或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。 目前我知道的循环结构提速很明显，然后指定静态类型会提速。 一般的pyt...
 "/>
 
         <meta property="og:type" content="article"/>
@@ -23,12 +23,12 @@
 
 <meta property="og:title" content="cython模块 "/>
 <meta property="og:url" content="https://a358003542.github.io/articles/cython-module.html" />
-<meta property="og:description" content="找到性能瓶颈所在 首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈： python -m cProfile test.py 或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。 目前我知道的循环结构提速很明显，然后指定静态类型会提速。 一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。 参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。 在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。 pyx文件 关于pyx文件的更多请查看cython的官方手册。 下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来， from setuptools import setup, find_packages …" />
+<meta property="og:description" content="找到性能瓶颈所在 首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈： python -m cProfile test.py 或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。 目前我知道的循环结构提速很明显，然后指定静态类型会提速。 一般的pyt..." />
 <meta property="og:site_name" content="万泽的博客" />
 <meta property="og:article:author" content="wanze" />
 <meta property="og:article:published_time" content="2020-08-19T06:34:22.344757+08:00" />
 <meta name="twitter:title" content="cython模块 ">
-<meta name="twitter:description" content="找到性能瓶颈所在 首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈： python -m cProfile test.py 或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。 目前我知道的循环结构提速很明显，然后指定静态类型会提速。 一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。 参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。 在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。 pyx文件 关于pyx文件的更多请查看cython的官方手册。 下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来， from setuptools import setup, find_packages …">
+<meta name="twitter:description" content="找到性能瓶颈所在 首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈： python -m cProfile test.py 或者使用jupyter notebook 的timeit 功能，或者自己写 time计时。 目前我知道的循环结构提速很明显，然后指定静态类型会提速。 一般的pyt...">
 
 
     <title>cython模块  · 万泽的博客
