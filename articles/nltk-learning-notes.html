@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+    <meta name="google-site-verification" content="r5HyVvY-ZSgf7ctpcpK1aWIaEfKJ0dvAE3E9kW3vXgI" />
+    <script data-ad-client="ca-pub-5644206261254049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如...
+"/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content=", nlp, " />
+
+<meta property="og:title" content="nltk学习笔记 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/nltk-learning-notes.html" />
+<meta property="og:description" content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如..." />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-10-21T16:28:41.094346+08:00" />
+<meta name="twitter:title" content="nltk学习笔记 ">
+<meta name="twitter:description" content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如...">
+
+
+    <title>nltk学习笔记  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/nltk-learning-notes.html"> nltk学习笔记  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+        <div class="col-md-8 col-md-offset-2 article-content">
+
+            <h2 id="_1">前言</h2>
+<p>nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。</p>
+<h2 id="_2">安装和使用</h2>
+<p>nltk作为python模块安装并没有什么好说的，不过你还需要安装<code>nltk_data</code> ，通过运行：</p>
+<div class="highlight"><pre><span></span>import nltk
+nltk.download()
+</pre></div>
+
+
+<p>即可，当然你也可以自己手工配置。其搜索路径是如下配置的：</p>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">):</span>
+    <span class="c1"># Common locations on Windows:</span>
+    <span class="n">path</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;share&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;APPDATA&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\nltk_data&quot;</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;D:\nltk_data&quot;</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;E:\nltk_data&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Common locations on UNIX &amp; OS X:</span>
+    <span class="n">path</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;share&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/share/nltk_data&quot;</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/local/share/nltk_data&quot;</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/lib/nltk_data&quot;</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/local/lib/nltk_data&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>具体里面的内容可以在 <a href="https://github.com/nltk/nltk_data">nltk_data</a> 这个github项目中找到。具体内容在packages下面，其中corpora的内容是不需要zip解压的，其他的一般需要先解压再放好位置。</p>
+<h2 id="_3">语料库管理</h2>
+<p>nltk的语料库管理并不是重点，不过其提供的一些语料库接口是值得学习的，比如说：</p>
+<div class="highlight"><pre><span></span>from nltk.book import gutenberg
+</pre></div>
+
+
+<p>这个gutenberg具体利用的是 <code>PlaintextCorpusReader</code> 这个类。</p>
+<p>可以利用这个类来加载你自己的txt文本，不过中文的话需要自己定义Tokenizer类。一个简单的类如下所示：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.tokenize.api</span> <span class="kn">import</span> <span class="n">TokenizerI</span>
+
+<span class="k">class</span> <span class="nc">JiebaTokenizer</span><span class="p">(</span><span class="n">TokenizerI</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jieba</span><span class="o">.</span><span class="n">lcut</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+
+
+<p>你需要实现tokenize这个方法，切分字符串然后返回的是列表。</p>
+<p>中文分句一个简单实现就是利用正则表达式来切分：</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">RegexpTokenizer</span>
+<span class="kn">from</span> <span class="nn">my_python_module.basic.list</span> <span class="kn">import</span> <span class="n">combine_odd_even</span>
+
+<span class="k">class</span> <span class="nc">ChineseSentenceTokenizer</span><span class="p">(</span><span class="n">RegexpTokenizer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">RegexpTokenizer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;(。|？|！)&quot;</span><span class="p">,</span> <span class="n">gaps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ChineseSentenceTokenizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">combine_odd_even</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</pre></div>
+
+
+<p>上面的combine_odd_even是我自己定义的一个方法，将列表奇偶元素相加，这里不是讨论的重点，略过了。</p>
+<p>然后我们定义 <code>load_corpus</code> 来加载txt语料：</p>
+<div class="highlight"><pre><span></span>def load_corpus(root, word_tokenizer=JiebaTokenizer(),
+                sent_tokenizer=ChineseSentenceTokenizer()):
+    return PlaintextCorpusReader(root, r&quot;(?!\.).*\.txt&quot;,
+                                 word_tokenizer=word_tokenizer,
+                                 sent_tokenizer=sent_tokenizer,
+                                 encoding=&#39;utf8&#39;)
+
+gutenberg = load_corpus(&#39;D:/nlp_data/corpora/gutenberg&#39;)
+</pre></div>
+
+
+<p>这个root指向你的语料库的文件夹即可，下面放着一些txt文本。</p>
+<p>然后如下利用nltk的Text类来加载语料进行分析。</p>
+<div class="highlight"><pre><span></span>laozi = Text(gutenberg.words(&quot;laozi.txt&quot;))
+lunyu = Text(gutenberg.words(&quot;lunyu.txt&quot;))
+</pre></div>
+
+
+<p>后面就对应上官方教材的叙述了。</p>
+<h2 id="ch01">ch01概览</h2>
+<h3 id="concordance">concordance</h3>
+<p>索引词</p>
+<div class="highlight"><pre><span></span>text1.concordance(&quot;monstrous&quot;)
+</pre></div>
+
+
+<h3 id="similar">similar</h3>
+<p>根据上下词环境来找相似词</p>
+<div class="highlight"><pre><span></span>text1.similar(&quot;monstrous&quot;)
+</pre></div>
+
+
+<h3 id="common_contexts">common_contexts</h3>
+<p>两个词之间的共同上下词环境</p>
+<div class="highlight"><pre><span></span> text2.common_contexts([&quot;monstrous&quot;, &quot;very&quot;])
+</pre></div>
+
+
+<h3 id="generater">generater</h3>
+<p>根据上下文来随机生成一些文本。</p>
+<div class="highlight"><pre><span></span>laozi.generate()
+</pre></div>
+
+
+<h3 id="freqdist">FreqDist</h3>
+<p>很有用的一个类，其继承自Counter类，用于记数的一个字典。比如下面统计老子里面最常用的词语。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
+<span class="kn">from</span> <span class="nn">my_python_module.nlp.chinese_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+<span class="kn">from</span> <span class="nn">my_python_module.nlp.utils</span> <span class="kn">import</span> <span class="n">is_empty_string</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">laozi</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_empty_string</span><span class="p">(</span><span class="n">i</span><span class="p">))])</span>
+</pre></div>
+
+
+<p>上面进行了空字符的过滤和停用词的过滤。</p>
+<div class="highlight"><pre><span></span>t.most_common(25)
+[(&#39;天下&#39;, 56), (&#39;不&#39;, 51), (&#39;圣人&#39;, 32), (&#39;道&#39;, 27), (&#39;谓&#39;, 24), (&#39;曰&#39;, 21), (&#39;万物&#39;, 20), (&#39;吾&#39;, 20), (&#39;无&#39;, 18), (&#39;欲&#39;, 14), (&#39;无为&#39;, 13), (&#39;亦&#39;, 10), (&#39;章&#39;, 10), (&#39;人&#39;, 9), (&#39;天地&#39;, 8), (&#39;不争&#39;, 8), (&#39;下&#39;, 8), (&#39;道者&#39;, 8), (&#39;大&#39;, 8), (&#39;夫&#39;, 8), (&#39;无以&#39;, 8), (&#39;贵&#39;, 7), (&#39;不知&#39;, 7), (&#39;知&#39;, 7), (&#39;善人&#39;, 7)]
+</pre></div>
+
+
+<p>Universal Part-of-Speech Tagset</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Meaning</th>
+<th>English Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ADJ</code></td>
+<td>adjective</td>
+<td><em>new, good, high, special, big, local</em></td>
+</tr>
+<tr>
+<td><code>ADP</code></td>
+<td>adposition</td>
+<td><em>on, of, at, with, by, into, under</em></td>
+</tr>
+<tr>
+<td><code>ADV</code></td>
+<td>adverb</td>
+<td><em>really, already, still, early, now</em></td>
+</tr>
+<tr>
+<td><code>CONJ</code></td>
+<td>conjunction</td>
+<td><em>and, or, but, if, while, although</em></td>
+</tr>
+<tr>
+<td><code>DET</code></td>
+<td>determiner, article</td>
+<td><em>the, a, some, most, every, no, which</em></td>
+</tr>
+<tr>
+<td><code>NOUN</code></td>
+<td>noun</td>
+<td><em>year, home, costs, time, Africa</em></td>
+</tr>
+<tr>
+<td><code>NUM</code></td>
+<td>numeral</td>
+<td><em>twenty-four, fourth, 1991, 14:24</em></td>
+</tr>
+<tr>
+<td><code>PRT</code></td>
+<td>particle</td>
+<td><em>at, on, out, over per, that, up, with</em></td>
+</tr>
+<tr>
+<td><code>PRON</code></td>
+<td>pronoun</td>
+<td><em>he, their, her, its, my, I, us</em></td>
+</tr>
+<tr>
+<td><code>VERB</code></td>
+<td>verb</td>
+<td><em>is, say, told, given, playing, would</em></td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>punctuation marks</td>
+<td><em>. , ; !</em></td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>other</td>
+<td><em>ersatz, esprit, dunno, gr8, univeristy</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="nltktokenizeconditionalfreqdist">nltk.tokenize.ConditionalFreqDist()</h3>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/nltk-learning-notes.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/nltk-learning-notes.html';
+    var disqus_url = 'https://a358003542.github.io/articles/nltk-learning-notes.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-10-21T16:28:41.094346+08:00">2020年 10月 21日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#nlp-ref">nlp</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>
