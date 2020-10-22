@@ -26,7 +26,7 @@
 <meta property="og:description" content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如..." />
 <meta property="og:site_name" content="万泽的博客" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-10-21T16:28:41.094346+08:00" />
+<meta property="og:article:published_time" content="2020-10-22T22:04:20.412566+08:00" />
 <meta name="twitter:title" content="nltk学习笔记 ">
 <meta name="twitter:description" content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如...">
 
@@ -190,19 +190,19 @@ nltk.download()
                                  sent_tokenizer=sent_tokenizer,
                                  encoding=&#39;utf8&#39;)
 
-gutenberg = load_corpus(&#39;D:/nlp_data/corpora/gutenberg&#39;)
+zh_gutenberg = load_corpus(&#39;D:/nlp_data/corpora/zh_gutenberg&#39;)
 </pre></div>
 
 
 <p>这个root指向你的语料库的文件夹即可，下面放着一些txt文本。</p>
 <p>然后如下利用nltk的Text类来加载语料进行分析。</p>
-<div class="highlight"><pre><span></span>laozi = Text(gutenberg.words(&quot;laozi.txt&quot;))
-lunyu = Text(gutenberg.words(&quot;lunyu.txt&quot;))
+<div class="highlight"><pre><span></span>laozi = Text(zh_gutenberg.words(&quot;laozi.txt&quot;))
+lunyu = Text(zh_gutenberg.words(&quot;lunyu.txt&quot;))
 </pre></div>
 
 
 <p>后面就对应上官方教材的叙述了。</p>
-<h2 id="ch01">ch01概览</h2>
+<h2 id="_4">概览</h2>
 <h3 id="concordance">concordance</h3>
 <p>索引词</p>
 <div class="highlight"><pre><span></span>text1.concordance(&quot;monstrous&quot;)
@@ -241,6 +241,78 @@ lunyu = Text(gutenberg.words(&quot;lunyu.txt&quot;))
 <p>上面进行了空字符的过滤和停用词的过滤。</p>
 <div class="highlight"><pre><span></span>t.most_common(25)
 [(&#39;天下&#39;, 56), (&#39;不&#39;, 51), (&#39;圣人&#39;, 32), (&#39;道&#39;, 27), (&#39;谓&#39;, 24), (&#39;曰&#39;, 21), (&#39;万物&#39;, 20), (&#39;吾&#39;, 20), (&#39;无&#39;, 18), (&#39;欲&#39;, 14), (&#39;无为&#39;, 13), (&#39;亦&#39;, 10), (&#39;章&#39;, 10), (&#39;人&#39;, 9), (&#39;天地&#39;, 8), (&#39;不争&#39;, 8), (&#39;下&#39;, 8), (&#39;道者&#39;, 8), (&#39;大&#39;, 8), (&#39;夫&#39;, 8), (&#39;无以&#39;, 8), (&#39;贵&#39;, 7), (&#39;不知&#39;, 7), (&#39;知&#39;, 7), (&#39;善人&#39;, 7)]
+</pre></div>
+
+
+<h3 id="bigrams">bigrams</h3>
+<p>自然语言处理研究中的n元语法模型中的二元语法：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; from nltk.util import bigrams
+&gt;&gt;&gt; list(bigrams([1,2,3,4,5]))
+[(1, 2), (2, 3), (3, 4), (4, 5)]
+</pre></div>
+
+
+<h3 id="collocations">collocations</h3>
+<p>原nltk的Text类里面的这个方法只是专门针对英文的，如果重新写一个ChineseText类继承并重载这个方法：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ChineseText</span><span class="p">(</span><span class="n">Text</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">collocation_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return collocations derived from the text, ignoring stopwords.</span>
+
+<span class="sd">            &gt;&gt;&gt; from nltk.book import text4</span>
+<span class="sd">            &gt;&gt;&gt; text4.collocation_list()[:2]</span>
+<span class="sd">            [(&#39;United&#39;, &#39;States&#39;), (&#39;fellow&#39;, &#39;citizens&#39;)]</span>
+
+<span class="sd">        :param num: The maximum number of collocations to return.</span>
+<span class="sd">        :type num: int</span>
+<span class="sd">        :param window_size: The number of tokens spanned by a collocation (default=2)</span>
+<span class="sd">        :type window_size: int</span>
+<span class="sd">        :rtype: list(tuple(str, str))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+                <span class="s2">&quot;_collocations&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num</span> <span class="o">==</span> <span class="n">num</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window_size</span> <span class="o">==</span> <span class="n">window_size</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num</span> <span class="o">=</span> <span class="n">num</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_window_size</span> <span class="o">=</span> <span class="n">window_size</span>
+
+            <span class="kn">from</span> <span class="nn">.chinese_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+
+            <span class="n">finder</span> <span class="o">=</span> <span class="n">BigramCollocationFinder</span><span class="o">.</span><span class="n">from_words</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">,</span>
+                                                        <span class="n">window_size</span><span class="p">)</span>
+            <span class="n">finder</span><span class="o">.</span><span class="n">apply_freq_filter</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">finder</span><span class="o">.</span><span class="n">apply_word_filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span><span class="p">)</span>
+            <span class="c1"># 移除空白字符</span>
+            <span class="kn">from</span> <span class="nn">my_python_module.nlp.utils</span> <span class="kn">import</span> <span class="n">is_empty_string</span>
+            <span class="n">finder</span><span class="o">.</span><span class="n">apply_word_filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="n">is_empty_string</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+
+            <span class="n">bigram_measures</span> <span class="o">=</span> <span class="n">BigramAssocMeasures</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_collocations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">finder</span><span class="o">.</span><span class="n">nbest</span><span class="p">(</span><span class="n">bigram_measures</span><span class="o">.</span><span class="n">likelihood_ratio</span><span class="p">,</span> <span class="n">num</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collocations</span>
+</pre></div>
+
+
+<p>具体修改是原过滤器过滤了词语的长度，这个不适合中文。然后停用词换成了中文停用词词库。然后增加了一个空白字符去除动作。</p>
+<p>具体里面评估二元语法组得分用的是 <code>bigram_measures.likelihood_ratio</code> 这个算法。有兴趣可以研究一下，这里暂时略过了。</p>
+<h3 id="conditionalfreqdist">ConditionalFreqDist</h3>
+<p>其是一个字典套字典结构，第一个字典key是一些条件，具体再引用该条件<code>cfd[condition]</code> 返回的是一个FreqDist对象。更具体来说其用来存储某一条件下的FreqDist分布。</p>
+<div class="highlight"><pre><span></span>from nltk import ConditionalFreqDist
+cfd = ConditionalFreqDist([[&#39;1&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;b&#39;],[&#39;0&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;a&#39;]])
+cfd[&#39;1&#39;]
+FreqDist({&#39;a&#39;: 2, &#39;b&#39;: 1})
+cfd[&#39;0&#39;]
+FreqDist({&#39;a&#39;: 1})
+</pre></div>
+
+
+<h3 id="_5">调用语料库</h3>
+<p>如下调用语料库的原始文本，利用你之前设置好的word_tokenizer分词后的词语列表，利用你之前设置好的sent_tokenizer分句之后的句子列表。</p>
+<div class="highlight"><pre><span></span>zh_gutenberg.raw(&#39;xiyouji_s.txt&#39;)
+zh_gutenberg.words(&#39;xiyouji_s.txt&#39;)
+zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
 </pre></div>
 
 
@@ -358,7 +430,7 @@ lunyu = Text(gutenberg.words(&quot;lunyu.txt&quot;))
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-10-21T16:28:41.094346+08:00">2020年 10月 21日 </time>
+            <time pubdate="pubdate" datetime="2020-10-22T22:04:20.412566+08:00">2020年 10月 22日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#nlp-ref">nlp</a>
