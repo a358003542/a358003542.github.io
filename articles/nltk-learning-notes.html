@@ -25,7 +25,7 @@
 <meta property="og:description" content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如..." />
 <meta property="og:site_name" content="万泽的博客" />
 <meta property="og:article:author" content="wanze" />
-<meta property="og:article:published_time" content="2020-10-22T22:04:20.412566+08:00" />
+<meta property="og:article:published_time" content="2020-11-07T08:54:45.899075+08:00" />
 <meta name="twitter:title" content="nltk学习笔记 ">
 <meta name="twitter:description" content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如...">
 
@@ -201,7 +201,15 @@ lunyu = Text(zh_gutenberg.words(&quot;lunyu.txt&quot;))
 
 
 <p>后面就对应上官方教材的叙述了。</p>
-<h2 id="_4">概览</h2>
+<h3 id="_4">语料库接口</h3>
+<p>如下调用语料库的原始文本，利用你之前设置好的word_tokenizer分词后的词语列表，利用你之前设置好的sent_tokenizer分句之后的句子列表。</p>
+<div class="highlight"><pre><span></span>zh_gutenberg.raw(&#39;xiyouji_s.txt&#39;)
+zh_gutenberg.words(&#39;xiyouji_s.txt&#39;)
+zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
+</pre></div>
+
+
+<h2 id="text">Text接口</h2>
 <h3 id="concordance">concordance</h3>
 <p>索引词</p>
 <div class="highlight"><pre><span></span>text1.concordance(&quot;monstrous&quot;)
@@ -223,31 +231,6 @@ lunyu = Text(zh_gutenberg.words(&quot;lunyu.txt&quot;))
 <h3 id="generater">generater</h3>
 <p>根据上下文来随机生成一些文本。</p>
 <div class="highlight"><pre><span></span>laozi.generate()
-</pre></div>
-
-
-<h3 id="freqdist">FreqDist</h3>
-<p>很有用的一个类，其继承自Counter类，用于记数的一个字典。比如下面统计老子里面最常用的词语。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
-<span class="kn">from</span> <span class="nn">my_python_module.nlp.chinese_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
-<span class="kn">from</span> <span class="nn">my_python_module.nlp.utils</span> <span class="kn">import</span> <span class="n">is_empty_string</span>
-
-<span class="n">t</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">laozi</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_empty_string</span><span class="p">(</span><span class="n">i</span><span class="p">))])</span>
-</pre></div>
-
-
-<p>上面进行了空字符的过滤和停用词的过滤。</p>
-<div class="highlight"><pre><span></span>t.most_common(25)
-[(&#39;天下&#39;, 56), (&#39;不&#39;, 51), (&#39;圣人&#39;, 32), (&#39;道&#39;, 27), (&#39;谓&#39;, 24), (&#39;曰&#39;, 21), (&#39;万物&#39;, 20), (&#39;吾&#39;, 20), (&#39;无&#39;, 18), (&#39;欲&#39;, 14), (&#39;无为&#39;, 13), (&#39;亦&#39;, 10), (&#39;章&#39;, 10), (&#39;人&#39;, 9), (&#39;天地&#39;, 8), (&#39;不争&#39;, 8), (&#39;下&#39;, 8), (&#39;道者&#39;, 8), (&#39;大&#39;, 8), (&#39;夫&#39;, 8), (&#39;无以&#39;, 8), (&#39;贵&#39;, 7), (&#39;不知&#39;, 7), (&#39;知&#39;, 7), (&#39;善人&#39;, 7)]
-</pre></div>
-
-
-<h3 id="bigrams">bigrams</h3>
-<p>自然语言处理研究中的n元语法模型中的二元语法：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from nltk.util import bigrams
-&gt;&gt;&gt; list(bigrams([1,2,3,4,5]))
-[(1, 2), (2, 3), (3, 4), (4, 5)]
 </pre></div>
 
 
@@ -296,7 +279,32 @@ lunyu = Text(zh_gutenberg.words(&quot;lunyu.txt&quot;))
 
 <p>具体修改是原过滤器过滤了词语的长度，这个不适合中文。然后停用词换成了中文停用词词库。然后增加了一个空白字符去除动作。</p>
 <p>具体里面评估二元语法组得分用的是 <code>bigram_measures.likelihood_ratio</code> 这个算法。有兴趣可以研究一下，这里暂时略过了。</p>
-<h3 id="conditionalfreqdist">ConditionalFreqDist</h3>
+<h2 id="freqdist">FreqDist</h2>
+<p>很有用的一个类，其继承自Counter类，用于记数的一个字典。比如下面统计老子里面最常用的词语。</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
+<span class="kn">from</span> <span class="nn">my_python_module.nlp.chinese_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+<span class="kn">from</span> <span class="nn">my_python_module.nlp.utils</span> <span class="kn">import</span> <span class="n">is_empty_string</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">laozi</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_empty_string</span><span class="p">(</span><span class="n">i</span><span class="p">))])</span>
+</pre></div>
+
+
+<p>上面进行了空字符的过滤和停用词的过滤。</p>
+<div class="highlight"><pre><span></span>t.most_common(25)
+[(&#39;天下&#39;, 56), (&#39;不&#39;, 51), (&#39;圣人&#39;, 32), (&#39;道&#39;, 27), (&#39;谓&#39;, 24), (&#39;曰&#39;, 21), (&#39;万物&#39;, 20), (&#39;吾&#39;, 20), (&#39;无&#39;, 18), (&#39;欲&#39;, 14), (&#39;无为&#39;, 13), (&#39;亦&#39;, 10), (&#39;章&#39;, 10), (&#39;人&#39;, 9), (&#39;天地&#39;, 8), (&#39;不争&#39;, 8), (&#39;下&#39;, 8), (&#39;道者&#39;, 8), (&#39;大&#39;, 8), (&#39;夫&#39;, 8), (&#39;无以&#39;, 8), (&#39;贵&#39;, 7), (&#39;不知&#39;, 7), (&#39;知&#39;, 7), (&#39;善人&#39;, 7)]
+</pre></div>
+
+
+<h2 id="bigrams">bigrams</h2>
+<p>自然语言处理研究中的n元语法模型中的二元语法：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; from nltk.util import bigrams
+&gt;&gt;&gt; list(bigrams([1,2,3,4,5]))
+[(1, 2), (2, 3), (3, 4), (4, 5)]
+</pre></div>
+
+
+<h2 id="conditionalfreqdist">ConditionalFreqDist</h2>
 <p>其是一个字典套字典结构，第一个字典key是一些条件，具体再引用该条件<code>cfd[condition]</code> 返回的是一个FreqDist对象。更具体来说其用来存储某一条件下的FreqDist分布。</p>
 <div class="highlight"><pre><span></span>from nltk import ConditionalFreqDist
 cfd = ConditionalFreqDist([[&#39;1&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;b&#39;],[&#39;0&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;a&#39;]])
@@ -307,15 +315,18 @@ FreqDist({&#39;a&#39;: 1})
 </pre></div>
 
 
-<h3 id="_5">调用语料库</h3>
-<p>如下调用语料库的原始文本，利用你之前设置好的word_tokenizer分词后的词语列表，利用你之前设置好的sent_tokenizer分句之后的句子列表。</p>
-<div class="highlight"><pre><span></span>zh_gutenberg.raw(&#39;xiyouji_s.txt&#39;)
-zh_gutenberg.words(&#39;xiyouji_s.txt&#39;)
-zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
+<h2 id="_5">标注</h2>
+<h3 id="str2tuple">str2tuple</h3>
+<p>一般POS（part of speech）标注或者其他标注都可以采用 <code>word/tag</code> 这样的格式，然后可以利用 <code>str2tuple</code> 函数来拆分它们。</p>
+<div class="highlight"><pre><span></span>import nltk
+tagged_token = nltk.tag.str2tuple(&#39;fly/NN&#39;)
+
+tagged_token
+(&#39;fly&#39;, &#39;NN&#39;)
 </pre></div>
 
 
-<p>Universal Part-of-Speech Tagset</p>
+<h3 id="pos">通用POS标注集</h3>
 <table>
 <thead>
 <tr>
@@ -387,7 +398,12 @@ zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
 </tr>
 </tbody>
 </table>
-<h3 id="nltktokenizeconditionalfreqdist">nltk.tokenize.ConditionalFreqDist()</h3>
+<h3 id="index">Index类</h3>
+<p>Index类是一个默认为列表的defaultdict类，可以用来构建多值字典。</p>
+<div class="highlight"><pre><span></span>index = nltk.Index([(&#39;a&#39;,1),(&#39;a&#39;,2),(&#39;b&#39;,3)])
+index
+Index(&lt;class &#39;list&#39;&gt;, {&#39;a&#39;: [1, 2], &#39;b&#39;: [3]})
+</pre></div>
 
             <section>
 <div class="panel-group" id="accordion2">
@@ -429,7 +445,7 @@ zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2020-10-22T22:04:20.412566+08:00">2020年 10月 22日 </time>
+            <time pubdate="pubdate" datetime="2020-11-07T08:54:45.899075+08:00">2020年 11月 7日 </time>
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#nlp-ref">nlp</a>
