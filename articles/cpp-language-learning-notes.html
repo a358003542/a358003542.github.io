@@ -168,18 +168,18 @@
 </ul>
 </li>
 <li><a href="#_33">类继承</a><ul>
-<li><a href="#vitual">vitual</a></li>
+<li><a href="#_34">虚方法</a></li>
 <li><a href="#protected">protected</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_34">附录</a><ul>
+<li><a href="#_35">附录</a><ul>
 <li><a href="#cin">cin详解</a></li>
 <li><a href="#cout_1">cout详解</a></li>
 </ul>
 </li>
-<li><a href="#_35">参考资料</a></li>
+<li><a href="#_36">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -3846,7 +3846,7 @@ setgolf(ann);
 <span class="n">sb</span><span class="p">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">headline</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
 <span class="n">sb</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">headline</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
 </pre></div>
-<p>除了函数的按值传递情况外，下面的语句也是明确的在调用复制构造函数：</p>
+<p>除了<strong>函数的按值传递情况</strong>外，下面的语句也是明确的在调用复制构造函数：</p>
 <div class="highlight"><pre><span></span><span class="n">StringBad</span> <span class="nf">ditto</span><span class="p">(</span><span class="n">motto</span><span class="p">);</span>
 <span class="n">StringBad</span> <span class="n">metto</span> <span class="o">=</span> <span class="n">motto</span><span class="p">;</span>
 <span class="n">StringBad</span> <span class="n">also</span> <span class="o">=</span> <span class="n">StringBad</span><span class="p">(</span><span class="n">motto</span><span class="p">);</span>
@@ -3942,14 +3942,8 @@ metto = motto;
 <div class="highlight"><pre><span></span><span class="n">Queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Queue</span> <span class="o">&amp;</span> <span class="n">q</span><span class="p">)</span><span class="o">:</span><span class="n">qsize</span><span class="p">(</span><span class="mi">0</span><span class="p">){}</span>
 </pre></div>
 <p>这个写法只能用于类的构造函数，即在类的构造函数后面可以跟上冒号，然后后面跟上一些该类成员初始化时候的默认值。具体叫做成员初始化列表。</p>
-<p>上面语句的写法就是该类初始化之后还会执行 <code>qsize = 0</code> 这个动作，为什么不直接写上这个语句呢，因为qsize这个变量如果加上 <code>const</code> 关键词那么是不能再设置了，那么这个时候就必须采用这种成员初始化列表的写法：</p>
-<div class="highlight"><pre><span></span><span class="n">Classy</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-
-<span class="n">Classy</span><span class="o">::</span><span class="n">Classy</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span><span class="o">:</span> <span class="n">mem1</span><span class="p">(</span><span class="n">n</span><span class="p">){</span>
-    <span class="c1">//...</span>
-<span class="p">}</span>
-</pre></div>
-<p>上面还演示了成员初始化列表只在具体定义中写上，声明的时候可以不写。</p>
+<p>上面语句的写法就是该类初始化之后还会执行 <code>qsize = 0</code> 这个动作，为什么不直接写上这个语句呢，因为qsize这个变量如果加上 <code>const</code> 关键词那么是不能再设置了【看类的定义哪里 <code>const int qsize</code>】，那么这个时候就必须采用这种成员初始化列表的写法：</p>
+<p>然后成员初始化列表只在构造函数具体定义时写上，声明的时候可以不写。</p>
 <p>queue.cpp</p>
 <div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;cstdlib&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">"queue.h"</span><span class="cp"></span>
@@ -4481,12 +4475,12 @@ metto = motto;
 </pre></div>
 <p>本习题在之前讨论的基础上稍作修改，主要还是对前面讨论的ATM排队问题理解透彻即可。</p>
 <h3 id="_33">类继承</h3>
-<p>C++类的继承就面向对象编程那些概念上和其他编程语言都是一样的，不过具体实现细节上和区别还是很大的。这其中最大的一个区别是在C++中派生类不可以使用基类的私有变量，而只能使用基类的公有方法，而且派生类的构造函数也必须使用基类的构造函数。也就是创建一个派生类对象，必须首先创建一个基类对象，如下所示：</p>
+<p>C++类的继承就面向对象编程那些概念上和其他编程语言都是一样的，不过具体实现细节上区别还是很大的。这其中最大的一个区别是在<u>C++中派生类不可以使用基类的私有变量，而只能使用基类的公有方法</u>，而且派生类的构造函数也必须使用基类的构造函数。也就是创建一个派生类对象，必须首先创建一个基类对象，如下所示：</p>
 <div class="highlight"><pre><span></span><span class="n">RatedPlayer</span><span class="o">::</span><span class="n">RatedPlayer</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">fn</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">ln</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">ht</span><span class="p">)</span> <span class="o">:</span> <span class="n">TableTennisPlayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">ln</span><span class="p">,</span><span class="n">ht</span><span class="p">){</span>
     <span class="n">rating</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
-<p>按照成员初始化列表的定义，可见派生类是有其基类的定义的，而且其构造函数实现必须基于基类的构造函数。因为这是C++语言实现上的定义，所以你在定义派生类构造函数的时候没有使用上面的成员初始化列表来初始化基类构造函数，那么也将调用默认的基类构造函数。</p>
+<p>按照<strong>成员初始化列表</strong>的定义，可见派生类是有其基类的定义的，而且其构造函数实现必须基于基类的构造函数。因为这是C++语言实现上的定义，所以你在定义派生类构造函数的时候没有使用上面的成员初始化列表来初始化基类构造函数，那么也将调用默认的基类构造函数。</p>
 <p>下面这个演示例子为了方便头文件就不分开了：</p>
 <p>test_inherit.cpp</p>
 <div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
@@ -4569,9 +4563,381 @@ metto = motto;
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
-<h4 id="vitual">vitual</h4>
+<p>上面例子中的这几行代码值得说一下：</p>
+<div class="highlight"><pre><span></span>RatedPlayer::RatedPlayer(unsigned int r, const TableTennisPlayer&amp; tp) : TableTennisPlayer(tp) {
+    rating = r;
+}
+</pre></div>
+<p>TableTennisPlayer接受了一个同类对象，其将自动调用TableTennisPlayer的复制构造函数，上面是没有定义的，这里之所以行得通是因为默认的复制构造函数是可行的。</p>
+<p>继承类的析构函数执行顺序是先执行本类的析构函数，再调用基类的析构函数。</p>
+<p>在继承关系中，继承类可以使用基类指针或引用，不过基类不可以使用派生类指针或引用：</p>
+<div class="highlight"><pre><span></span><span class="n">RatedPlayer</span> <span class="nf">rplayer1</span><span class="p">(</span><span class="mi">1140</span><span class="p">,</span> <span class="s">"Mallory"</span><span class="p">,</span> <span class="s">"Duck"</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+<span class="n">TableTennisPlayer</span> <span class="o">&amp;</span> <span class="n">rt</span> <span class="o">=</span> <span class="n">rplayer1</span><span class="p">;</span>
+<span class="n">TableTennisPlayer</span> <span class="o">*</span> <span class="n">pt</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">rplayer1</span><span class="p">;</span>
+<span class="n">rt</span><span class="p">.</span><span class="n">Name</span><span class="p">();</span>
+<span class="n">pt</span><span class="o">-&gt;</span><span class="n">Name</span><span class="p">();</span>
+</pre></div>
+<p>如果采用上面这种继承类使用基类指针或引用的风格，则<strong>只能调用基类的方法</strong>。</p>
+<h4 id="_34">虚方法</h4>
+<p>在继承关系中，基类和派生类的某个方法有重载行为，如果你看到基类，一般也包括派生类的某个方法声明如下：</p>
+<div class="highlight"><pre><span></span>virtual void Name() const;
+</pre></div>
+<p>那么这个方法叫做<strong>虚方法</strong>。在前面提到了继承类使用基类指针或引用这种写法，在这种写法下，如果对应的方法不是虚方法，那么当调用 <code>rt.Name()</code> 的时候，调用的是 <code>TableTennisPlayer::Name()</code> ，如果对应的方法声明为虚方法了，那么程序会根据指针或引用对应的类型来选择方法，比如前面例子假设 <code>Name()</code> 已经声明为虚方法了，那么调用 <code>rt.Name()</code> 使用的是 <code>RatedPlayer::Name()</code> 。</p>
+<p>所以虚方法是很方便的，一般这种情况基类和派生类对应的方法都声明为虚方法。</p>
+<p>虚方法具体定义实现不需要再加上virtual关键字了。</p>
+<p>下面请读者阅读学习 <code>test_brass.cpp</code> 这个例子：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="c1">// formatting stuff</span>
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">fmtflags</span> <span class="n">format</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">streamsize</span> <span class="n">precis</span><span class="p">;</span>
+<span class="n">format</span> <span class="nf">setFormat</span><span class="p">();</span>
+<span class="kt">void</span> <span class="nf">restore</span><span class="p">(</span><span class="n">format</span> <span class="n">f</span><span class="p">,</span> <span class="n">precis</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">Brass</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">string</span> <span class="n">fullName</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">acctNum</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">balance</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Brass</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span> <span class="o">=</span> <span class="s">"Nullbody"</span><span class="p">,</span> <span class="kt">long</span> <span class="n">an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bal</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">Deposit</span><span class="p">(</span><span class="kt">double</span> <span class="n">amt</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Withdraw</span><span class="p">(</span><span class="kt">double</span> <span class="n">amt</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="nf">Balance</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">ViewAcct</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">Brass</span><span class="p">()</span> <span class="p">{};</span>
+<span class="p">};</span>
+
+
+<span class="n">Brass</span><span class="o">::</span><span class="n">Brass</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="kt">long</span> <span class="n">an</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bal</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fullName</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">acctNum</span> <span class="o">=</span> <span class="n">an</span><span class="p">;</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="n">bal</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Brass</span><span class="o">::</span><span class="n">Deposit</span><span class="p">(</span><span class="kt">double</span> <span class="n">amt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">amt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Negative deposit not allowed; "</span>
+            <span class="o">&lt;&lt;</span> <span class="s">"deposit is cancelled.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">balance</span> <span class="o">+=</span> <span class="n">amt</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Brass</span><span class="o">::</span><span class="n">Withdraw</span><span class="p">(</span><span class="kt">double</span> <span class="n">amt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">format</span> <span class="n">initialState</span> <span class="o">=</span> <span class="n">setFormat</span><span class="p">();</span>
+    <span class="n">precis</span> <span class="n">prec</span> <span class="o">=</span> <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">amt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Withdraw amout must be positive;"</span>
+            <span class="o">&lt;&lt;</span> <span class="s">"withdraw canceled.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">amt</span> <span class="o">&lt;=</span> <span class="n">balance</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">balance</span> <span class="o">-=</span> <span class="n">amt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Withdraw amout of $"</span> <span class="o">&lt;&lt;</span> <span class="n">amt</span> <span class="o">&lt;&lt;</span> <span class="s">"exceeds your balance.</span><span class="se">\n</span><span class="s">"</span>
+            <span class="o">&lt;&lt;</span> <span class="s">"withdraw canceled.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">restore</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="n">prec</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="n">Brass</span><span class="o">::</span><span class="n">Balance</span><span class="p">()</span><span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">balance</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Brass</span><span class="o">::</span><span class="n">ViewAcct</span><span class="p">()</span><span class="k">const</span> <span class="p">{</span>
+    <span class="n">format</span> <span class="n">initialState</span> <span class="o">=</span> <span class="n">setFormat</span><span class="p">();</span>
+    <span class="n">precis</span> <span class="n">prec</span> <span class="o">=</span> <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Client: "</span> <span class="o">&lt;&lt;</span> <span class="n">fullName</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Account Number: "</span> <span class="o">&lt;&lt;</span> <span class="n">acctNum</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Balance: $"</span> <span class="o">&lt;&lt;</span> <span class="n">balance</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">restore</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="n">prec</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">BrassPlus</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Brass</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">double</span> <span class="n">maxLoan</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">rate</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">owesBank</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">BrassPlus</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span> <span class="o">=</span> <span class="s">"Nullbody"</span><span class="p">,</span> <span class="kt">long</span> <span class="n">an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bal</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ml</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="kt">double</span> <span class="n">r</span><span class="o">=</span> <span class="mf">0.11125</span><span class="p">);</span>
+    <span class="n">BrassPlus</span><span class="p">(</span><span class="k">const</span> <span class="n">Brass</span> <span class="o">&amp;</span> <span class="n">ba</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ml</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="kt">double</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.11125</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">ViewAcct</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Withdraw</span><span class="p">(</span><span class="kt">double</span> <span class="n">amt</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">ResetMax</span><span class="p">(</span><span class="kt">double</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span> <span class="n">maxLoan</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span> <span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">ResetRate</span><span class="p">(</span><span class="kt">double</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span> <span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">ResetOwes</span><span class="p">()</span> <span class="p">{</span> <span class="n">owesBank</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="n">BrassPlus</span><span class="o">::</span><span class="n">BrassPlus</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span> <span class="p">,</span> <span class="kt">long</span> <span class="n">an</span> <span class="p">,</span> <span class="kt">double</span> <span class="n">bal</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ml</span><span class="p">,</span> <span class="kt">double</span> <span class="n">r</span><span class="p">)</span> <span class="o">:</span> <span class="n">Brass</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bal</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">maxLoan</span> <span class="o">=</span> <span class="n">ml</span><span class="p">;</span>
+    <span class="n">owesBank</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">BrassPlus</span><span class="o">::</span><span class="n">BrassPlus</span><span class="p">(</span><span class="k">const</span> <span class="n">Brass</span><span class="o">&amp;</span> <span class="n">ba</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ml</span><span class="p">,</span> <span class="kt">double</span> <span class="n">r</span><span class="p">)</span> <span class="o">:</span> <span class="n">Brass</span><span class="p">(</span><span class="n">ba</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">maxLoan</span> <span class="o">=</span> <span class="n">ml</span><span class="p">;</span>
+    <span class="n">owesBank</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">BrassPlus</span><span class="o">::</span><span class="n">ViewAcct</span><span class="p">()</span><span class="k">const</span> <span class="p">{</span>
+    <span class="n">format</span> <span class="n">initialState</span> <span class="o">=</span> <span class="n">setFormat</span><span class="p">();</span>
+    <span class="n">precis</span> <span class="n">prec</span> <span class="o">=</span> <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="n">Brass</span><span class="o">::</span><span class="n">ViewAcct</span><span class="p">();</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Maximum load: $"</span> <span class="o">&lt;&lt;</span> <span class="n">maxLoan</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Owed to bank: $"</span> <span class="o">&lt;&lt;</span> <span class="n">owesBank</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Load Rate: "</span> <span class="o">&lt;&lt;</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">rate</span> <span class="o">&lt;&lt;</span> <span class="s">"%</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="n">restore</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="n">prec</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">BrassPlus</span><span class="o">::</span><span class="n">Withdraw</span><span class="p">(</span><span class="kt">double</span> <span class="n">amt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">format</span> <span class="n">initialState</span> <span class="o">=</span> <span class="n">setFormat</span><span class="p">();</span>
+    <span class="n">precis</span> <span class="n">prec</span> <span class="o">=</span> <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="kt">double</span> <span class="n">bal</span> <span class="o">=</span> <span class="n">Balance</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">amt</span> <span class="o">&lt;=</span> <span class="n">bal</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Brass</span><span class="o">::</span><span class="n">Withdraw</span><span class="p">(</span><span class="n">amt</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">amt</span> <span class="o">&lt;=</span> <span class="n">bal</span> <span class="o">+</span> <span class="n">maxLoan</span> <span class="o">-</span><span class="n">owesBank</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">advance</span> <span class="o">=</span> <span class="n">amt</span> <span class="o">-</span> <span class="n">bal</span><span class="p">;</span>
+        <span class="n">owesBank</span> <span class="o">+=</span> <span class="n">advance</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">rate</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Band advance: $"</span> <span class="o">&lt;&lt;</span> <span class="n">advance</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Finance charge: $"</span> <span class="o">&lt;&lt;</span> <span class="n">advance</span> <span class="o">*</span> <span class="n">rate</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">Deposit</span><span class="p">(</span><span class="n">advance</span><span class="p">);</span>
+        <span class="n">Brass</span><span class="o">::</span><span class="n">Withdraw</span><span class="p">(</span><span class="n">amt</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Credit limit exceeded. Transcation cancelled.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">restore</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span> <span class="n">prec</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">format</span> <span class="n">setFormat</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">fixed</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">floatfield</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">restore</span><span class="p">(</span><span class="n">format</span> <span class="n">f</span><span class="p">,</span> <span class="n">precis</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">setf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">floatfield</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">precision</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="n">Brass</span> <span class="n">Piggy</span><span class="p">(</span><span class="s">"Porcelot Pigg"</span><span class="p">,</span> <span class="mi">381299</span><span class="p">,</span> <span class="mf">4000.0</span><span class="p">);</span>
+    <span class="n">BrassPlus</span> <span class="nf">Hoggy</span><span class="p">(</span><span class="s">"Horatio Hogg"</span><span class="p">,</span> <span class="mi">382288</span><span class="p">,</span> <span class="mf">3000.0</span><span class="p">);</span>
+
+    <span class="n">Piggy</span><span class="p">.</span><span class="n">ViewAcct</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">Hoggy</span><span class="p">.</span><span class="n">ViewAcct</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Depositing $1000 into the Hogg Accout:</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">Hoggy</span><span class="p">.</span><span class="n">Deposit</span><span class="p">(</span><span class="mf">1000.0</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"New balance: "</span> <span class="o">&lt;&lt;</span> <span class="n">Hoggy</span><span class="p">.</span><span class="n">Balance</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Withdrawing $4200 from the Pigg Account"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">Piggy</span><span class="p">.</span><span class="n">Withdraw</span><span class="p">(</span><span class="mf">4200.0</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Pigg account balance: $"</span> <span class="o">&lt;&lt;</span> <span class="n">Piggy</span><span class="p">.</span><span class="n">Balance</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Withdrawing $4200 from the Hoggy Accout:</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">Hoggy</span><span class="p">.</span><span class="n">Withdraw</span><span class="p">(</span><span class="mf">4200.0</span><span class="p">);</span>
+    <span class="n">Hoggy</span><span class="p">.</span><span class="n">ViewAcct</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <h4 id="protected">protected</h4>
-<h2 id="_34">附录</h2>
+<p>protected类似于public和private也是用于控制类成员的访问权限的。protected更类似于private，只有在继承关系中才有区别，区别就是派生类可以访问protected里面的成员，当然不能访问私有成员，这个前面提到过了，而对于外部世界，也就是不是在继承关系中的那些类来说，保护成员跟私有成员一样不可访问。</p>
+<p>习题13.1</p>
+<p>以下面的类声明为基础：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cd</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">char</span> <span class="n">performers</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">label</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">selections</span><span class="p">;</span> <span class="c1">// number of selections</span>
+    <span class="kt">double</span> <span class="n">playtime</span><span class="p">;</span> <span class="c1">// playing time in minutes</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Cd</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">Cd</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">);</span>
+    <span class="n">Cd</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">Cd</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">Report</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">Cd</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+<p>派生出一个Classic类，并添加一组char成员，用于存储指出CD中主要作品的字符串。修改上述声明，使基类的所有函数都是虚的。如果上述定义声明的某个方法并不需要，则请删除它。使用下面的程序测试您的产品：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"classic.h"</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">Bravo</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">disk</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">Bravo</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">disk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">disk</span><span class="p">.</span><span class="n">Report</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Cd</span> <span class="n">c1</span><span class="p">(</span><span class="s">"Beatles"</span><span class="p">,</span><span class="s">"Capitol"</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mf">35.5</span><span class="p">);</span>
+    <span class="n">Classic</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">Classic</span><span class="p">(</span><span class="s">"Piano Sonata in B flat, Fantasia in C"</span><span class="p">,</span> <span class="s">"Alfred Brendel"</span><span class="p">,</span> <span class="s">"Philips"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">57.17</span><span class="p">);</span>
+    <span class="n">Cd</span> <span class="o">*</span> <span class="n">pcd</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">c1</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Using object directly:</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">c1</span><span class="p">.</span><span class="n">Report</span><span class="p">();</span> <span class="c1">// use Cd method</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">c2</span><span class="p">.</span><span class="n">Report</span><span class="p">();</span> <span class="c1">// use Classic method</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Using type cd * pointer to objects: </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">pcd</span><span class="o">-&gt;</span><span class="n">Report</span><span class="p">();</span> <span class="c1">// use Cd method</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">pcd</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">c2</span><span class="p">;</span>
+    <span class="n">pcd</span><span class="o">-&gt;</span><span class="n">Report</span><span class="p">();</span> <span class="c1">// use Classic method</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Calling a function with a Cd reference argument:</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">Bravo</span><span class="p">(</span><span class="n">c1</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">Bravo</span><span class="p">(</span><span class="n">c2</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Testing assignment: </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">Classic</span> <span class="n">copy</span><span class="p">;</span>
+    <span class="n">copy</span> <span class="o">=</span> <span class="n">c2</span><span class="p">;</span>
+    <span class="n">copy</span><span class="p">.</span><span class="n">Report</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>classic.h内容如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+
+<span class="cp">#ifndef CLASSIC_H_</span>
+<span class="cp">#define CLASSIC_H_</span>
+
+<span class="k">class</span> <span class="nc">Cd</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">char</span> <span class="n">performers</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+    <span class="kt">char</span> <span class="n">label</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">selections</span><span class="p">;</span> <span class="c1">// number of selections</span>
+    <span class="kt">double</span> <span class="n">playtime</span><span class="p">;</span> <span class="c1">// playing time in minutes</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Cd</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">);</span>
+    <span class="n">Cd</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">);</span>
+    <span class="n">Cd</span><span class="p">();</span>
+
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Report</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="n">Cd</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">);</span>
+
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">Cd</span><span class="p">()</span> <span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Classic</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Cd</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">char</span> <span class="n">works</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Classic</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wks</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span> <span class="p">);</span>
+    <span class="n">Classic</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wks</span><span class="p">,</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">c</span> <span class="p">);</span>
+    <span class="n">Classic</span><span class="p">();</span>
+
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Report</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">Classic</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Classic</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">);</span>
+
+<span class="p">};</span>
+
+
+<span class="cp">#endif </span>
+</pre></div>
+<p>classic.cpp文件内容如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">"classic.h"</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="n">Cd</span><span class="o">::</span><span class="n">Cd</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">performers</span><span class="p">,</span> <span class="n">s1</span><span class="p">);</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">s2</span><span class="p">);</span>
+    <span class="n">selections</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">playtime</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="n">Cd</span><span class="o">::</span><span class="n">Cd</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">performers</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">performers</span><span class="p">);</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">label</span><span class="p">);</span>
+    <span class="n">selections</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">selections</span><span class="p">;</span>
+    <span class="n">playtime</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">playtime</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Cd</span><span class="o">::</span><span class="n">Cd</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">performers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="n">selections</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">playtime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Cd</span><span class="o">&amp;</span> <span class="n">Cd</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">performers</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">performers</span><span class="p">);</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">label</span><span class="p">);</span>
+    <span class="n">selections</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">selections</span><span class="p">;</span>
+    <span class="n">playtime</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">playtime</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Cd</span><span class="o">::</span><span class="n">Report</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"performers: "</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">performers</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"label: "</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">label</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"selections: "</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">selections</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"playtime: "</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">playtime</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Classic</span><span class="o">::</span><span class="n">Classic</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wks</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="o">:</span> <span class="n">Cd</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">works</span><span class="p">,</span> <span class="n">wks</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">Classic</span><span class="o">::</span><span class="n">Classic</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wks</span><span class="p">,</span> <span class="k">const</span> <span class="n">Cd</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">)</span> <span class="o">:</span> <span class="n">Cd</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">works</span><span class="p">,</span> <span class="n">wks</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">Classic</span><span class="o">::</span><span class="n">Classic</span><span class="p">()</span> <span class="o">:</span> <span class="n">Cd</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">works</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Classic</span><span class="o">&amp;</span> <span class="n">Classic</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Classic</span><span class="o">&amp;</span> <span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Cd</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+    <span class="n">strcpy_s</span><span class="p">(</span><span class="n">works</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">works</span><span class="p">);</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Classic</span><span class="o">::</span><span class="n">Report</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">Cd</span><span class="o">::</span><span class="n">Report</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"works: "</span> <span class="o">&lt;&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">works</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>上面对于赋值只考虑了相同类的赋值。</p>
+<h2 id="_35">附录</h2>
 <h3 id="cin">cin详解</h3>
 <ul>
 <li><code>cin &gt;&gt;</code> 遇到Enter Space Tab 即结束，适合char，无空格的string和单个值的int float之类的输入。需要注意的是经过个人实践换行符还是在缓冲区的，为了把这个缓冲区消掉获得更好的输入体验，一般采用这种表达方式：<code>(cin &gt;&gt; what).get()</code> ，这是因为 <code>cin &gt;&gt; what</code> 会返回cin对象，然后继续调用下面的 get 方法来消掉最后的换行符。</li>
@@ -4583,7 +4949,7 @@ metto = motto;
 <li><code>cout &lt;&lt;</code> 一般使用</li>
 <li><code>cout.put(char &amp;ch)</code>  输出一个字符，如果输入的整型也会正常显示该字符。</li>
 </ul>
-<h2 id="_35">参考资料</h2>
+<h2 id="_36">参考资料</h2>
 <ol>
 <li>C++ Primer Plus 第六版中文版</li>
 </ol>
