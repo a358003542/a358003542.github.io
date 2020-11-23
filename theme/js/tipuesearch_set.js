@@ -35,15 +35,6 @@ var tipuesearch_weight = {'weight': [
 ]};
 
 
-// Stemming
-
-var tipuesearch_stem = {'words': [
-     {'word': 'e-mail', 'stem': 'email'},
-     {'word': 'javascript', 'stem': 'jquery'},
-     {'word': 'javascript', 'stem': 'js'}
-]};
-
-
 // Internal strings
 
 var tipuesearch_string_1 = 'No title';
