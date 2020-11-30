@@ -125,11 +125,20 @@
 <li><a href="#keys">获取对象的keys数组</a></li>
 </ul>
 </li>
+<li><a href="#json">JSON</a></li>
 <li><a href="#_4">函数</a><ul>
 <li><a href="#_5">立即执行的匿名函数</a></li>
 </ul>
 </li>
+<li><a href="#window">window</a><ul>
+<li><a href="#setinterval">setInterval</a></li>
+<li><a href="#settimeout">setTimeout</a></li>
+<li><a href="#location">location</a></li>
+<li><a href="#history">history</a></li>
+</ul>
+</li>
 <li><a href="#document">document</a><ul>
+<li><a href="#getelementbyid">getElementById</a></li>
 <li><a href="#createelement">createElement</a></li>
 <li><a href="#createtextnode">createTextNode</a></li>
 </ul>
@@ -137,21 +146,25 @@
 <li><a href="#element">Element对象</a><ul>
 <li><a href="#queryselector">querySelector</a></li>
 <li><a href="#setattribute">setAttribute</a></li>
+<li><a href="#dataset">dataset</a></li>
+<li><a href="#classlist">classList</a></li>
 </ul>
 </li>
-<li><a href="#node">Node对象</a></li>
+<li><a href="#node">Node对象</a><ul>
+<li><a href="#textcontent">textContent</a></li>
+<li><a href="#parentelement">parentElement</a></li>
+<li><a href="#removechild">removeChild</a></li>
+</ul>
+</li>
 <li><a href="#_6">事件</a><ul>
 <li><a href="#customevent">CustomEvent</a></li>
 <li><a href="#dispatchevent">dispatchEvent</a></li>
 <li><a href="#addeventlistener">addEventListener</a></li>
 <li><a href="#removeeventlistener">removeEventListener</a></li>
+<li><a href="#eventtargeteventcurrenttarget">event.target和event.currentTarget的区别</a></li>
 </ul>
 </li>
-<li><a href="#_7">其他</a><ul>
-<li><a href="#javascriptjson">将JavaScript对象转成JSON字符串</a></li>
-<li><a href="#setinterval">setInterval</a></li>
-</ul>
-</li>
+<li><a href="#_7">其他</a></li>
 <li><a href="#_8">参考资料</a></li>
 </ul>
 </div>
@@ -170,13 +183,42 @@
 <div class="highlight"><pre><span></span>attrs = attrs || {};
 Object.keys(attrs);
 </pre></div>
+<h2 id="json">JSON</h2>
+<p>如下所示，下面也演示了利用 <code>JSON.parse</code> 来将相应的JSON字符串转成JavaScript对象。</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">6</span> <span class="p">});</span>
+<span class="kc">undefined</span>
+<span class="o">&gt;</span> <span class="nx">x</span>
+<span class="s1">'{"x":5,"y":6}'</span>
+<span class="o">&gt;</span> <span class="k">typeof</span> <span class="nx">x</span>
+<span class="s1">'string'</span>
+<span class="o">&gt;</span> <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+<span class="kc">undefined</span>
+<span class="o">&gt;</span> <span class="nx">y</span>
+<span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">6</span> <span class="p">}</span>
+<span class="o">&gt;</span> <span class="k">typeof</span> <span class="nx">y</span>
+<span class="s1">'object'</span>
+</pre></div>
 <h2 id="_4">函数</h2>
 <h3 id="_5">立即执行的匿名函数</h3>
 <p>我们常见到某个js脚本一整段都被这样一种写法包围着：</p>
 <div class="highlight"><pre><span></span>(function($){…})(jQuery)
 </pre></div>
 <p>这是定义了一个匿名函数，其将立即执行，接受了一个jQuery参数，并传递给了匿名函数。</p>
+<p>之所以这种写法很常见是因为这样做可以将整个模块的代码都放在一个匿名函数里面，这样模块里面定义的全局变量就成了函数内的局部变量了，这样不会污染全局变量命名空间。</p>
+<h2 id="window">window</h2>
+<p>window对象里面的属性都是全局变量，可以直接调用的。</p>
+<h3 id="setinterval">setInterval</h3>
+<div class="highlight"><pre><span></span>setInterval(func, 1000)
+</pre></div>
+<p>启动一个计时器，第二个参数是时间间隔，每个那个时间间隔将会执行一次目标函数，默认单位是ms。</p>
+<h3 id="settimeout">setTimeout</h3>
+<p>类似setInterval，启动一次性任务。</p>
+<h3 id="location">location</h3>
+<p>该窗口的Location对象</p>
+<h3 id="history">history</h3>
+<p>该窗口的History对象</p>
 <h2 id="document">document</h2>
+<h3 id="getelementbyid">getElementById</h3>
 <h3 id="createelement">createElement</h3>
 <div class="highlight"><pre><span></span>var e = document.createElement(name);
 </pre></div>
@@ -199,8 +241,21 @@ Object.keys(attrs);
 <p><code>Element</code> 对象可以调用这个 <code>setAttribute</code> 方法来设置标签内的属性值。</p>
 <div class="highlight"><pre><span></span>element.setAttribute(name, value);
 </pre></div>
+<h3 id="dataset">dataset</h3>
+<p>查询到的元素如果div则是更具体的HTMLdivElement等等，其继承自HTMLElement，HTMLElement有一些专门的方法。比如这个dataset，其是可以只读属性，对应html中的<code>data-*</code> 这样的属性值，比如说 <code>data-name</code> 将变成dataset的<code>{'name': 'what'}</code> 。</p>
+<h3 id="classlist">classList</h3>
+<p>类似上面的讨论也是HTMLElement的一个属性，表示class属性数组。</p>
 <h2 id="node">Node对象</h2>
+<h3 id="textcontent">textContent</h3>
 <p>之前提到querySelector查到某个Element之后想要取出其文本内容可以调用 <code>textContent</code> 属性，document和Element都能这样做只是因为它们继承自Node对象，具体textContent这个属性的定义是在Node对象这里。</p>
+<h3 id="parentelement">parentElement</h3>
+<p>返回本节点的父节点</p>
+<div class="highlight"><pre><span></span>parentElement = node.parentElement
+</pre></div>
+<h3 id="removechild">removeChild</h3>
+<p>移除本节点的某个子节点</p>
+<div class="highlight"><pre><span></span>node.removeChild(child);
+</pre></div>
 <h2 id="_6">事件</h2>
 <p>Element对象继承自EventTarget从而获得了这些方法： <code>addEventListener</code> ， <code>removeEventListener</code> 和 <code>dispatchEvent</code> ，这几个方法都是和事件处理相关的。</p>
 <p>熟悉GUI桌面程序的话会对事件有个大致的理解，大体类似于QT里面的信号。</p>
@@ -218,26 +273,12 @@ Object.keys(attrs);
 <p>给某个元素增加一个事件监听</p>
 <h3 id="removeeventlistener">removeEventListener</h3>
 <p>移除某个元素上的事件监听</p>
+<h3 id="eventtargeteventcurrenttarget">event.target和event.currentTarget的区别</h3>
+<p>事件响应到调用函数那边，通过event.target或者event.currentTarget可以引用触发事件的浏览器对象，不过它们是有一点区别的。</p>
+<p>首先说一下事件的冒泡机制，当某个元素触发了某个事件，其会触发本元素上事件响应处理程序，然后该事件会继续冒泡到本元素的父元素之上，再触发父元素的事件响应处理程序。</p>
+<p>event.target是引用那个最开始触发事件的那个目标元素，而event.currentTarget是引用那个实际处理事件的元素。比如说某个div里面有一个button，你给div绑定了事件监听处理函数，然后那个事件监听处理函数里面调用 <code>event.currentTarget</code> 则会指向那个div，而如果你调用 <code>event.target</code> 则会引用最开始触发click事件的那个元素，也就是button。</p>
+<p>在一个目标button里面处理click事件使用event.target或者event.currentTarget是没有区别的。</p>
 <h2 id="_7">其他</h2>
-<h3 id="javascriptjson">将JavaScript对象转成JSON字符串</h3>
-<p>如下所示，下面也演示了利用 <code>JSON.parse</code> 来将相应的JSON字符串转成JavaScript对象。</p>
-<div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">6</span> <span class="p">});</span>
-<span class="kc">undefined</span>
-<span class="o">&gt;</span> <span class="nx">x</span>
-<span class="s1">'{"x":5,"y":6}'</span>
-<span class="o">&gt;</span> <span class="k">typeof</span> <span class="nx">x</span>
-<span class="s1">'string'</span>
-<span class="o">&gt;</span> <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-<span class="kc">undefined</span>
-<span class="o">&gt;</span> <span class="nx">y</span>
-<span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">6</span> <span class="p">}</span>
-<span class="o">&gt;</span> <span class="k">typeof</span> <span class="nx">y</span>
-<span class="s1">'object'</span>
-</pre></div>
-<h3 id="setinterval">setInterval</h3>
-<div class="highlight"><pre><span></span>setInterval(func, 1000)
-</pre></div>
-<p>启动一个计时器，第二个参数是时间间隔，每个那个时间间隔将会执行一次目标函数，默认单位是ms。</p>
 <h2 id="_8">参考资料</h2>
 <ol>
 <li>Javascript权威指南 David Flanagan著.</li>
