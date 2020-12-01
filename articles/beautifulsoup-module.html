@@ -146,7 +146,12 @@
 <li><a href="#_11">移除某个标签</a></li>
 </ul>
 </li>
-<li><a href="#_12">解析部分文档来提升效率</a></li>
+<li><a href="#_12">标签的修改</a><ul>
+<li><a href="#_13">直接修改本标签</a></li>
+<li><a href="#_14">新建一个标签</a></li>
+</ul>
+</li>
+<li><a href="#_15">解析部分文档来提升效率</a></li>
 </ul>
 </div>
         </nav>
@@ -301,7 +306,24 @@ find_previous(name, attrs, string, **kwargs)
 <div class="highlight"><pre><span></span>s = soup.find('sup')
 s.extract()
 </pre></div>
-<h2 id="_12">解析部分文档来提升效率</h2>
+<h2 id="_12">标签的修改</h2>
+<h3 id="_13">直接修改本标签</h3>
+<p>你可以如下直接修改原标签，甚至原标签的tag名字等各个属性都可以修改：</p>
+<div class="highlight"><pre><span></span>tag.name = "blockquote"
+tag['class'] = 'verybold'
+tag['id'] = 1
+</pre></div>
+<h3 id="_14">新建一个标签</h3>
+<p>你可以使用 <code>new_tag</code> 方法来新建一个标签，然后附加到原标签上。</p>
+<div class="highlight"><pre><span></span>soup = BeautifulSoup("&lt;b&gt;&lt;/b&gt;")
+original_tag = soup.b
+
+new_tag = soup.new_tag("a", href="http://www.example.com")
+original_tag.append(new_tag)
+original_tag
+# &lt;b&gt;&lt;a href="http://www.example.com"&gt;&lt;/a&gt;&lt;/b&gt;
+</pre></div>
+<h2 id="_15">解析部分文档来提升效率</h2>
 <p>请看到下面这个函数，其用途是将整个webpage的所有a连接有href属性的链接收集起来。</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_webpage_links</span><span class="p">(</span><span class="n">html</span><span class="p">,</span><span class="n">baseurl</span><span class="p">):</span>
     <span class="sd">''' 刷本网页 a标签 有 href 属性的所有 links</span>
