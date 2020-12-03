@@ -41,7 +41,7 @@ function footnote_popover(){
 
         $('sup',this).remove();
         $(this).attr('data-toggle','popover');
-        $(this).html(`<sup>脚注${footnote_index}</sup>`);
+        $(this).html(`<sup>注${footnote_index}</sup>`);
         $(this).attr('data-trigger','focus');
         $(this).attr('data-content',`${footnote_text}`);
         $(this).attr('role','button');
