@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+    <meta name="google-site-verification" content="r5HyVvY-ZSgf7ctpcpK1aWIaEfKJ0dvAE3E9kW3vXgI" />
+    <script data-ad-client="ca-pub-5644206261254049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 本文讨论的500lines项目的一个简单的持续集成系统文章在这里：(aosabook.org) 。 持续集成系统简称CI system，其作用主要是当有新的代码提交时，确保该提交没有中断任何测试。因此持续集成系统主要工作就是获取新的代码提交，运行测试并报告结果。 一个简单的持续集成系统包..."/>
+
+        <meta property="og:type" content="article"/>
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="500lines, programming, " />
+
+<meta property="og:title" content="500lines项目之一个持续集成系统 "/>
+<meta property="og:url" content="https://a358003542.github.io/articles/500lines-continuous-integration-system.html" />
+<meta property="og:description" content="前言 本文讨论的500lines项目的一个简单的持续集成系统文章在这里：(aosabook.org) 。 持续集成系统简称CI system，其作用主要是当有新的代码提交时，确保该提交没有中断任何测试。因此持续集成系统主要工作就是获取新的代码提交，运行测试并报告结果。 一个简单的持续集成系统包..." />
+<meta property="og:site_name" content="万泽的博客" />
+<meta property="og:article:author" content="wanze" />
+<meta property="og:article:published_time" content="2020-12-07T00:00:00+08:00" />
+<meta name="twitter:title" content="500lines项目之一个持续集成系统 ">
+<meta name="twitter:description" content="前言 本文讨论的500lines项目的一个简单的持续集成系统文章在这里：(aosabook.org) 。 持续集成系统简称CI system，其作用主要是当有新的代码提交时，确保该提交没有中断任何测试。因此持续集成系统主要工作就是获取新的代码提交，运行测试并报告结果。 一个简单的持续集成系统包...">
+
+
+    <title>500lines项目之一个持续集成系统  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li >
+                    <a  href="/archives.html">所有文章</a></li>
+
+                <li ><a href="/categories.html">文章分类</a></li>
+                <li ><a href="/tags.html">文章标签</a></li>
+
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/500lines-continuous-integration-system.html"> 500lines项目之一个持续集成系统  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">观察组件</a></li>
+<li><a href="#_3">任务分发器</a></li>
+<li><a href="#_4">任务运行器</a></li>
+<li><a href="#_5">总结</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">前言</h2>
+<p>本文讨论的500lines项目的一个简单的持续集成系统文章在这里：<a href="http://aosabook.org/en/500L/a-continuous-integration-system.html">(aosabook.org)</a> 。</p>
+<p>持续集成系统简称CI system，其作用主要是当有新的代码提交时，确保该提交没有中断任何测试。因此持续集成系统主要工作就是获取新的代码提交，运行测试并报告结果。</p>
+<p>一个简单的持续集成系统包含三个部分：一个观察组件，一个测试任务分发器和一个测试任务运行器。</p>
+<p>一个理想的持续集成系统应该是能容错的和承压的，如果是单机器单进程运行上面的三个任务则是不能容错和承压的。所以接下来项目在设计上让这三个任务或者说三个组件是分开的三个进程。然后这三个进程之间通信采用套接字形式，也因此现在该持续集成系统具有分布式的特性了。</p>
+<p>这种分布式设计进一步可以引入计算机架构设计上的故障切换机制，即某个机器发生故障了，马上另外一个备用的机器将会顶替其工作。</p>
+<p>我对该项目代码进行了一些修改，具体参见 <a href="https://github.com/a358003542/500lines_ci">a358003542/500lines_ci: 500lines a continuous integration system (github.com)</a> 。项目python代码更新为了python3版本。项目为了更具平台扩展性使用gitpython而不适用sh脚本。</p>
+<h2 id="_2">观察组件</h2>
+<p>观察组件是 <code>repo_observer.py</code> 文件。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="n">run_or_fail</span><span class="p">,</span> <span class="n">communicate</span>
+<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> <span class="n">COMMUNICATE_STATUS</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"repo_observer.log"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">poll</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--dispatcher-server"</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"dispatcher host:port, "</span> \
+                             <span class="s2">"by default it uses localhost:8888"</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">"localhost:8888"</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">"store"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"repo"</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">"REPO"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"path to the repository this will observe"</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">dispatcher_host</span><span class="p">,</span> <span class="n">dispatcher_port</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">update_repo</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">repo</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">communicate</span><span class="p">(</span><span class="n">dispatcher_host</span><span class="p">,</span>
+                                       <span class="nb">int</span><span class="p">(</span><span class="n">dispatcher_port</span><span class="p">),</span>
+                                       <span class="n">COMMUNICATE_STATUS</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">"Could not communicate with dispatcher server: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="n">COMMUNICATE_OK</span><span class="p">:</span>
+                <span class="n">commit</span> <span class="o">=</span> <span class="s2">""</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">commit</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+                <span class="n">response</span> <span class="o">=</span> <span class="n">communicate</span><span class="p">(</span><span class="n">dispatcher_host</span><span class="p">,</span>
+                                       <span class="nb">int</span><span class="p">(</span><span class="n">dispatcher_port</span><span class="p">),</span>
+                                       <span class="sa">f</span><span class="s2">"dispatch:</span><span class="si">{</span><span class="n">commit</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">response</span> <span class="o">!=</span> <span class="n">COMMUNICATE_OK</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Could not dispatch the test: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span>
+                                    <span class="n">response</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"dispatched!"</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Something wrong happened to the dispatcher</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Could not dispatch the test: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span>
+                                <span class="n">response</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">update_repo</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">git</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">git</span>
+
+    <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">reset</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">'HEAD'</span><span class="p">,),</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">'hard'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                <span class="n">info</span><span class="o">=</span><span class="s1">'Could not reset git'</span><span class="p">)</span>
+
+    <span class="c1"># get the most recent commit</span>
+    <span class="n">log_info</span> <span class="o">=</span> <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">'-n1'</span><span class="p">,),</span>
+                           <span class="n">info</span><span class="o">=</span><span class="s2">"Could not call 'git log' on repository"</span><span class="p">)</span>
+
+    <span class="n">last_commit_id</span> <span class="o">=</span> <span class="n">log_info</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">pull</span><span class="p">,</span>
+                <span class="n">info</span><span class="o">=</span><span class="s2">"Could not pull from repository"</span><span class="p">)</span>
+
+    <span class="n">new_log_info</span> <span class="o">=</span> <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">'-n1'</span><span class="p">,),</span>
+                               <span class="n">info</span><span class="o">=</span><span class="s2">"Could not call 'git log' on repository"</span><span class="p">)</span>
+
+    <span class="n">new_commit_id</span> <span class="o">=</span> <span class="n">new_log_info</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">new_commit_id</span> <span class="o">!=</span> <span class="n">last_commit_id</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'found changes.'</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="s1">'wt'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">new_commit_id</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">poll</span><span class="p">()</span>
+</pre></div>
+<p>观察组件通过分析clone的观察仓库的commit_it和更新仓库后的commit_id，如果发现不同，则说明仓库代码有变化，那么将会把最新的commit_id写入一个文件中。</p>
+<p>后面发现了这个文件将会向任务分发器发送一个信号，分发一个新的任务。观察组件套接字信号交流上很简单，此外还有一个状态确认和OK返回。</p>
+<h2 id="_3">任务分发器</h2>
+<p>任务分发器是 <code>dispatcher.py</code> 。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">socketserver</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">communicate</span><span class="p">,</span> <span class="n">COMMUNICATE_PING</span><span class="p">,</span> <span class="n">COMMUNICATE_PONG</span><span class="p">,</span> \
+    <span class="n">COMMUNICATE_STATUS</span><span class="p">,</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> <span class="n">COMMUNICATE_REGISTER</span><span class="p">,</span> \
+    <span class="n">COMMUNICATE_DISPATCH</span><span class="p">,</span> <span class="n">COMMUNICATE_RESULT</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"dispatcher.log"</span><span class="p">)</span>
+
+
+<span class="c1"># Shared dispatcher code</span>
+<span class="k">def</span> <span class="nf">dispatch_tests</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">):</span>
+    <span class="c1"># NOTE: usually we don't run this forever</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"trying to dispatch to runners"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">runner</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">runners</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">communicate</span><span class="p">(</span><span class="n">runner</span><span class="p">[</span><span class="s2">"host"</span><span class="p">],</span>
+                                   <span class="nb">int</span><span class="p">(</span><span class="n">runner</span><span class="p">[</span><span class="s2">"port"</span><span class="p">]),</span>
+                                   <span class="sa">f</span><span class="s2">"runtest:</span><span class="si">{</span><span class="n">commit_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="n">COMMUNICATE_OK</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"adding id </span><span class="si">{</span><span class="n">commit_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">server</span><span class="o">.</span><span class="n">dispatched_commits</span><span class="p">[</span><span class="n">commit_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">runner</span>
+                <span class="k">if</span> <span class="n">commit_id</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">pending_commits</span><span class="p">:</span>
+                    <span class="n">server</span><span class="o">.</span><span class="n">pending_commits</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">commit_id</span><span class="p">)</span>
+                <span class="k">return</span>  <span class="c1"># first response runner</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ThreadingTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
+    <span class="n">runners</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Keeps track of test runner pool</span>
+    <span class="n">dead</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Indicate to other threads that we are no longer running</span>
+    <span class="n">dispatched_commits</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Keeps track of commits we dispatched</span>
+    <span class="n">pending_commits</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Keeps track of commits we have yet to dispatch</span>
+
+
+<span class="k">class</span> <span class="nc">DispatcherHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    The RequestHandler class for our dispatcher.</span>
+<span class="sd">    This will dispatch test runners against the incoming commit</span>
+<span class="sd">    and handle their requests and test results</span>
+<span class="sd">    """</span>
+
+    <span class="n">command_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(\w+)(:.+)*"</span><span class="p">)</span>
+    <span class="n">BUF_SIZE</span> <span class="o">=</span> <span class="mi">1024</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># self.request is the TCP socket connected to the client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BUF_SIZE</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="n">command_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">command_groups</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"Invalid command"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+            <span class="k">return</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="n">command_groups</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="n">COMMUNICATE_STATUS</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"COMMUNICATE_STATUS"</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">COMMUNICATE_OK</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="n">COMMUNICATE_REGISTER</span><span class="p">:</span>
+            <span class="n">address</span> <span class="o">=</span> <span class="n">command_groups</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">":(\w*)"</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+            <span class="n">runner</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"host"</span><span class="p">:</span> <span class="n">host</span><span class="p">,</span> <span class="s2">"port"</span><span class="p">:</span> <span class="n">port</span><span class="p">}</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"COMMUNICATE_REGISTER: runner on </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">runners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">COMMUNICATE_OK</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="n">COMMUNICATE_DISPATCH</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"COMMUNICATE_DISPATCH"</span><span class="p">)</span>
+            <span class="n">commit_id</span> <span class="o">=</span> <span class="n">command_groups</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">runners</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"No runners are registered"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># The coordinator can trust us to dispatch the test</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">COMMUNICATE_OK</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+                <span class="n">dispatch_tests</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="n">COMMUNICATE_RESULT</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"COMMUNICATE_RESULT"</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">command_groups</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)</span>
+            <span class="n">commit_id</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">length_msg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># 3 is the number of ":" in the sent command</span>
+            <span class="n">remaining_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">BUF_SIZE</span> <span class="o">-</span> <span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">commit_id</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">length_msg</span> <span class="o">&gt;</span> <span class="n">remaining_buffer</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span>
+                    <span class="n">length_msg</span> <span class="o">-</span> <span class="n">remaining_buffer</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">dispatched_commits</span><span class="p">[</span><span class="n">commit_id</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"test_results"</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">"test_results"</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"test_results/</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">commit_id</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)[</span><span class="mi">3</span><span class="p">:]</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">COMMUNICATE_OK</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"Invalid command"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+
+<span class="k">def</span> <span class="nf">serve</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--host"</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"dispatcher's host, by default it uses localhost"</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">"localhost"</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">"store"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--port"</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"dispatcher's port, by default it uses 8888"</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="mi">8888</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">"store"</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># Create the server</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">ThreadingTCPServer</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)),</span> <span class="n">DispatcherHandler</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'serving on </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+    <span class="c1"># Create a thread to check the runner pool</span>
+    <span class="k">def</span> <span class="nf">runner_checker</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">manage_commit_lists</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">commit</span><span class="p">,</span> <span class="n">assigned_runner</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">dispatched_commits</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">assigned_runner</span> <span class="o">==</span> <span class="n">runner</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">server</span><span class="o">.</span><span class="n">dispatched_commits</span><span class="p">[</span><span class="n">commit</span><span class="p">]</span>
+                    <span class="c1"># runner is not ok, remove it to pending list</span>
+                    <span class="n">server</span><span class="o">.</span><span class="n">pending_commits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+                    <span class="k">break</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">runners</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">server</span><span class="o">.</span><span class="n">dead</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">runner</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">runners</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">response</span> <span class="o">=</span> <span class="n">communicate</span><span class="p">(</span><span class="n">runner</span><span class="p">[</span><span class="s2">"host"</span><span class="p">],</span>
+                                           <span class="nb">int</span><span class="p">(</span><span class="n">runner</span><span class="p">[</span><span class="s2">"port"</span><span class="p">]),</span>
+                                           <span class="n">COMMUNICATE_PING</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">response</span> <span class="o">!=</span> <span class="n">COMMUNICATE_PONG</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"removing runner </span><span class="si">{</span><span class="n">runner</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                        <span class="n">manage_commit_lists</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">manage_commit_lists</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
+
+    <span class="c1"># this will kick off tests that failed</span>
+    <span class="k">def</span> <span class="nf">redistribute</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">server</span><span class="o">.</span><span class="n">dead</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">pending_commits</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"running redistribute"</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">pending_commits</span><span class="p">)</span>
+                <span class="n">dispatch_tests</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">commit</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="n">runner_heartbeat</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">runner_checker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">server</span><span class="p">,))</span>
+    <span class="n">redistributor</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">redistribute</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">server</span><span class="p">,))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">runner_heartbeat</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">redistributor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="c1"># Activate the server; this will keep running until you</span>
+        <span class="c1"># interrupt the program with Ctrl+C or Cmd+C</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+        <span class="c1"># if any exception occurs, kill the thread</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">dead</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">runner_heartbeat</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="n">redistributor</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">serve</span><span class="p">()</span>
+</pre></div>
+<p>任务分发器在任务上和套接字信号上稍微复杂了一点。后面那两个子线程任务主要就是完成这个工作：任务运行器健康度检查，如果某个任务运行器突然挂掉了，那么将会把之前分配给的任务再发一次。</p>
+<p>核心流程继续之前的dispatch命令来就直接运行<code>dispatch_tests</code> 来实际分发任务了。</p>
+<p>任务分发器在套接字信号上一是STATUS-OK回报，一是任务运行器刚开始需要在任务分发器这边注册的。最后RESULT只是一个后续任务运行之后结果收集机制。</p>
+<h2 id="_4">任务运行器</h2>
+<p>任务运行器是 <code>test_runner.py</code> 这个文件。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">socketserver</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">run_or_fail</span><span class="p">,</span> <span class="n">communicate</span><span class="p">,</span> <span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> \
+    <span class="n">COMMUNICATE_STATUS</span><span class="p">,</span> <span class="n">COMMUNICATE_PING</span><span class="p">,</span> <span class="n">COMMUNICATE_PONG</span><span class="p">,</span> <span class="n">COMMUNICATE_RUNTEST</span><span class="p">,</span> \
+    <span class="n">COMMUNICATE_RESULT</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"test_runner.log"</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ThreadingTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
+    <span class="n">dispatcher_server</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Holds the dispatcher server host/port information</span>
+    <span class="n">last_communication</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Keeps track of last communication from dispatcher</span>
+    <span class="n">busy</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Status flag</span>
+    <span class="n">dead</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Status flag</span>
+
+
+<span class="k">class</span> <span class="nc">TestHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    The RequestHandler class for our server.</span>
+<span class="sd">    """</span>
+
+    <span class="n">command_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(\w+)(:.+)*"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># self.request is the TCP socket connected to the client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">command_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="n">command_groups</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">command</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"Invalid command"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="n">COMMUNICATE_PING</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"COMMUNICATE_PING"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">last_communication</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">COMMUNICATE_PONG</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="n">COMMUNICATE_RUNTEST</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"got runtest command: am I busy? </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">busy</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">busy</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"COMMUNICATE_BUSY"</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"BUSY"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">COMMUNICATE_OK</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"COMMUNICATE_RUNTEST"</span><span class="p">)</span>
+                <span class="n">commit_id</span> <span class="o">=</span> <span class="n">command_groups</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">busy</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">run_tests</span><span class="p">(</span><span class="n">commit_id</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">repo_folder</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">busy</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"Invalid command"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">run_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">,</span> <span class="n">repo_folder</span><span class="p">):</span>
+        <span class="c1"># update git repo</span>
+        <span class="n">test_runner_script</span><span class="p">(</span><span class="n">repo_folder</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"results"</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"results"</span><span class="p">)</span>
+
+        <span class="c1"># run the tests</span>
+        <span class="n">test_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repo_folder</span><span class="p">,</span> <span class="s2">"tests"</span><span class="p">)</span>
+        <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestLoader</span><span class="p">()</span><span class="o">.</span><span class="n">discover</span><span class="p">(</span><span class="n">test_folder</span><span class="p">)</span>
+        <span class="n">result_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"results"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span>
+        <span class="n">unittest</span><span class="o">.</span><span class="n">TextTestRunner</span><span class="p">(</span><span class="n">result_file</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
+        <span class="n">result_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"results"</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">result_file</span><span class="p">:</span>
+            <span class="c1"># give the dispatcher the results</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">result_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">communicate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="p">[</span><span class="s2">"host"</span><span class="p">],</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="p">[</span><span class="s2">"port"</span><span class="p">]),</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">COMMUNICATE_RESULT</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">commit_id</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">serve</span><span class="p">():</span>
+    <span class="n">range_start</span> <span class="o">=</span> <span class="mi">8900</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--host"</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"runner's host, by default it uses localhost"</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">"localhost"</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">"store"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--port"</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"runner's port, by default it uses values &gt;=</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">range_start</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">"store"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--dispatcher-server"</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"dispatcher host:port, by default it uses "</span> \
+                             <span class="s2">"localhost:8888"</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">"localhost:8888"</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">"store"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"repo"</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">"REPO"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">"path to the repository this will observe"</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">runner_host</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">host</span>
+    <span class="n">runner_port</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">:</span>
+        <span class="n">runner_port</span> <span class="o">=</span> <span class="n">range_start</span>
+        <span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">server</span> <span class="o">=</span> <span class="n">ThreadingTCPServer</span><span class="p">((</span><span class="n">runner_host</span><span class="p">,</span> <span class="n">runner_port</span><span class="p">),</span>
+                                            <span class="n">TestHandler</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">runner_port</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EADDRINUSE</span><span class="p">:</span>
+                    <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">runner_port</span> <span class="o">=</span> <span class="n">runner_port</span> <span class="o">+</span> <span class="n">tries</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Could not bind to ports in range </span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">range_start</span><span class="p">,</span> <span class="n">range_start</span> <span class="o">+</span> <span class="n">tries</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">runner_port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">ThreadingTCPServer</span><span class="p">((</span><span class="n">runner_host</span><span class="p">,</span> <span class="n">runner_port</span><span class="p">),</span> <span class="n">TestHandler</span><span class="p">)</span>
+
+    <span class="n">server</span><span class="o">.</span><span class="n">repo_folder</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">repo</span>
+
+    <span class="n">dispatcher_host</span><span class="p">,</span> <span class="n">dispatcher_port</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"host"</span><span class="p">:</span> <span class="n">dispatcher_host</span><span class="p">,</span>
+                                <span class="s2">"port"</span><span class="p">:</span> <span class="n">dispatcher_port</span><span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">communicate</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="p">[</span><span class="s2">"host"</span><span class="p">],</span>
+                           <span class="nb">int</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="p">[</span><span class="s2">"port"</span><span class="p">]),</span>
+                           <span class="s2">"register:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span>
+                           <span class="p">(</span><span class="n">runner_host</span><span class="p">,</span> <span class="n">runner_port</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="o">!=</span> <span class="n">COMMUNICATE_OK</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Can't register with dispatcher!"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># first register runner need init last_communication</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">last_communication</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">dispatcher_checker</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+        <span class="c1"># Checks if the dispatcher went down. If it is down, we will shut down</span>
+        <span class="c1"># if since the dispatcher may not have the same host/port</span>
+        <span class="c1"># when it comes back up.</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">server</span><span class="o">.</span><span class="n">dead</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">server</span><span class="o">.</span><span class="n">last_communication</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">response</span> <span class="o">=</span> <span class="n">communicate</span><span class="p">(</span>
+                        <span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="p">[</span><span class="s2">"host"</span><span class="p">],</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">dispatcher_server</span><span class="p">[</span><span class="s2">"port"</span><span class="p">]),</span>
+                        <span class="n">COMMUNICATE_STATUS</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">response</span> <span class="o">!=</span> <span class="n">COMMUNICATE_OK</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Dispatcher is no longer functional"</span><span class="p">)</span>
+                        <span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+                        <span class="k">return</span>
+                <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Can't communicate with dispatcher: </span><span class="si">{e}</span><span class="s2">"</span><span class="p">)</span>
+                    <span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">dispatcher_checker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">server</span><span class="p">,))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="c1"># Activate the server; this will keep running until you</span>
+        <span class="c1"># interrupt the program with Ctrl-C</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+        <span class="c1"># if any exception occurs, kill the thread</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">dead</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">test_runner_script</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">)</span>
+
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">git</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">git</span>
+
+    <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">clean</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s1">'-d'</span><span class="p">,</span> <span class="s1">'-f'</span><span class="p">,</span> <span class="s1">'-x'</span><span class="p">),</span>
+                <span class="n">info</span><span class="o">=</span><span class="s1">'Could not clean repository'</span><span class="p">)</span>
+    <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">pull</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s1">'Could not call git pull'</span><span class="p">)</span>
+    <span class="n">run_or_fail</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">reset</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">commit_id</span><span class="p">,),</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">'hard'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                <span class="n">info</span><span class="o">=</span><span class="s1">'Could not update to given commit hash'</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">serve</span><span class="p">()</span>
+</pre></div>
+<p>任务运行器一是刚开始需要向任务分发器回报，其次任务分发器那边会不断地询问各个人物运行器的健康度，任务运行器这边需要写好PING-PONG消息机制。</p>
+<p>后面还多一个子线程是一种完善策略，保证任务分发器挂掉了这边任务运行器也会自动结束。</p>
+<p>任务运行首先更新git仓库，然后通过unittest来运行tests文件夹下的测试代码，结果临时保存到了results文件下面。然后继续利用利用搭建好的套接字交流机制来通过result命令将运行后的结果发给任务分发器。</p>
+<h2 id="_5">总结</h2>
+<p>最后运行仍然和原来一样：</p>
+<div class="highlight"><pre><span></span>python dispatcher.py
+python test_runner.py &lt;path/to/test_repo_clone_runner&gt;
+python repo_observer.py --dispatcher-server=localhost:8888 &lt;path/to/repo_clone_obs&gt;
+</pre></div>
+<p>对原仓库进行了文件更改，将会触发dispatch，继而触发任务分发器的runtest命令。</p>
+<p>值得一提的是 <code>dispatched_commits</code> 里面的runner记录是必须在后面result报告完之后才会被删除，如果在这个过程中某个runner挂掉了，那么任务分发器的那个任务仍然是未完成状态，等下你再启动一个新的runner，将会分配任务给这个新的runner。</p>
+<p>这个项目在分布式任务管理上的设计值得学习体会，同时上面的编码会大量涉及到套接字相关网络编程的东西，这些基础知识也需要读者掌握。</p>
+
+            <section>
+<div class="panel-group" id="accordion2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="https://a358003542.github.io/articles/500lines-continuous-integration-system.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'cdwanzes-blog';
+        var disqus_identifier = 'https://a358003542.github.io/articles/500lines-continuous-integration-system.html';
+    var disqus_url = 'https://a358003542.github.io/articles/500lines-continuous-integration-system.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2020-12-07T00:00:00+08:00">2020年 12月 7日 </time>
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#programming-ref">programming</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#500lines-ref">500lines
+                    <span>3</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'cdwanzes-blog';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+
+
+</body>
+</html>
