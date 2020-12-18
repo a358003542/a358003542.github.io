@@ -26,6 +26,7 @@
 <meta property="og:site_name" content="万泽的博客" />
 <meta property="og:article:author" content="wanze" />
 <meta property="og:article:published_time" content="2019-10-18T00:00:00+08:00" />
+<meta property="" content="2020-12-18T00:00:00+08:00" />
 <meta name="twitter:title" content="python语言学习教程一基础篇 ">
 <meta name="twitter:description" content="初识python Python是个成功的脚本语言。它最初由Guido van Rossum开发，在1991年第一次发布。Python由ABC和Haskell语言所启发。Python是一个高级的、通用的、跨平台、解释型的语言。一些人更倾向于称之为动态语言。它很易学，Python是一种简约的语言。...">
 
@@ -602,7 +603,6 @@ print(abs(z))
 <p>这个和数学中复数绝对值的定义完全一致，也就是复数的模：
 <span class="math">\(\left| z \right| =\sqrt { a^{ 2 }+b^{ 2 } }\)</span></p>
 <h4 id="round">round函数</h4>
-<p>简单的理解就是这个函数实现了对数值四舍五入的功能。</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; round(3.1415926)
 3
 &gt;&gt;&gt; round(3.1415926,0)
@@ -614,7 +614,50 @@ print(abs(z))
 &gt;&gt;&gt; round(3.1415926,4)
 3.1416
 </pre></div>
-<p>这里第二个参数接受0或者负数多少有点没意义了，一般使用还是取1或大于1的数吧，意思就是保留几位小数。</p>
+<p>第二个参数接受0或者负数多少有点没意义了，一般使用还是取1或大于1的数吧，意思就是保留几位小数。</p>
+<p>round函数初看起来似乎是实现了数学上的四舍五入取整，但实际上并不确切。比如：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; round(0.5)
+0
+&gt;&gt;&gt; round(1.5)
+2
+&gt;&gt;&gt; round(2.5)
+2
+&gt;&gt;&gt; round(3.5)
+4
+&gt;&gt;&gt; round(4.5)
+4
+&gt;&gt;&gt; round(5.5)
+6
+&gt;&gt;&gt; round(6.5)
+6
+</pre></div>
+<p>round函数返回的是距离该浮点数最近的那个整数，比如：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; 0.1+0.1+0.1 == 0.3
+False
+&gt;&gt;&gt; round(0.1+0.1+0.1,20) == round(0.3,20)
+False
+&gt;&gt;&gt; round(0.1+0.1+0.1,15) == round(0.3,15)
+True
+</pre></div>
+<p>计算机表示浮点数比如0.3都是用二进制来表示的，所以只可能获得一个无限接近于0.3的数值而不是十进制里面的那个确切的0.3。这也就是上面round函数对于1.5或者2.5等中间值没有采用一致策略的原因，因为round函数如上所示设计的目的不是用来实现数学上的四舍五入的，而是用来判断计算机世界里面浮点数直接是否近似相等的。</p>
+<p>具体取整上的round策略有很多种，请参见 <a href="https://realpython.com/python-rounding/">这篇文章</a>。 比如一种近似的四舍五入函数：</p>
+<div class="highlight"><pre><span></span>def round_half_up(n, decimals=0):
+    multiplier = 10 ** decimals
+    return math.floor(n*multiplier + 0.5) / multiplier
+</pre></div>
+<p>但正如前面谈论了，如果你想要实现的那个精确的四舍五入，那么上面这个函数也是有错误的。最好还是采用python的decimal来表达精确的小数。</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; round_half_up(2.5)
+3.0
+&gt;&gt;&gt; round(2.5)
+2
+</pre></div>
+<p>round_half_up这个函数之所以能够部分有效，是因为2.5精度以下的偏差通过0.5的残余精度下的数值得到了修补。但如果：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; round_half_up(2.4999999999999999)
+3.0
+&gt;&gt;&gt; round_half_up(2.499999999999999)
+2.0
+</pre></div>
+<p>所以round_half_up现在在浮点数精度下能够实现大致的四舍五入效果了。</p>
 <h4 id="minmaxsum">min，max和sum函数</h4>
 <p>min，max函数的用法和sum的用法稍微有点差异，简单起见可以认为min，max，sum都接受一个元组或者列表，然后返回这个元组或者列表其中的最小值，最大值或者相加总和。此外min和max还支持 <code>min(1,2,3)</code> 这样的形式，而sum不支持。</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; min((1,6,8,3,4))
@@ -2441,6 +2484,10 @@ else :
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
             <time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
+
+            <h4>最近更新于：</h4>
+            <time datetime="2020-12-18T00:00:00+08:00">2020年 12月 18日 </time>
+
 
             <h4>分类：</h4>
             <a class="category-link" href="https://a358003542.github.io/categories.html#python_language-ref">python_language</a>
