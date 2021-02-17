@@ -16,7 +16,7 @@
               content="前言 本教程将从零开始讲解学习C++语言，首先先学习C语言，再继而学习C++语言。本教程各个知识点讲解由浅入深，习题充足，建议读者边阅读边编写代码实践之，这样效果更好一些。 本教程的代码在 这个github项目 中都找得到。因为visual studio的一整个项目只能有一个main函数，为了..."/>
 
 
-<meta name="keywords" content=", c++, " />
+<meta name="keywords" content=", archived, " />
 
     <title>C++语言教程  · 万泽的博客
 </title>
@@ -157,11 +157,11 @@
 <li><a href="#_25">字符串排序</a></li>
 <li><a href="#_26">空指针</a></li>
 <li><a href="#_27">进制转换例子</a></li>
-<li><a href="#_28">文件作用域</a></li>
-</ul>
-</li>
+<li><a href="#_28">变量的作用域和存储类别</a></li>
 <li><a href="#_29">寄存器变量</a></li>
 <li><a href="#mallocfree">malloc和free</a></li>
+</ul>
+</li>
 <li><a href="#_30">结构体</a><ul>
 <li><a href="#_31">结构体的基本使用</a></li>
 <li><a href="#typedef">typedef</a></li>
@@ -928,26 +928,28 @@ int* p = &amp;x;
 </pre></div>
 <p>上面这个函数版本就真的实现了返回字符串，这个字符串是在函数内部声明的，之所以出了函数该字符串在内存里面没被清洗掉，是因为加上了 <code>static</code> 关键词，从而该result变量成了所谓的 <em>静态变量</em> 。静态变量在程序运行时内在内存里面是一直被保留而存在着的。</p>
 <p>除了这个静态变量，C语言甚至可以跳出变量声明传统语法，直接指定内存我要多少空间。这个对内存的控制由浅到深是C语言的威力所在也是一把双刃剑，只有你真的明白了你在做什么，而且是除了这么做没有更好的方法，那么才可以这么做，如果默认的自动变量就能完成工作，是不应该纯粹为了炫技而编写那种代码的。</p>
-<h3 id="_28">文件作用域</h3>
-<p>继续上面的讨论，就函数内部声明的局部变量来说【C语言严格的说法是块作用域，也就是只要你写上一个花括号的块，里面声明一个变量，该变量的作用域都只局限在这个块里面，但就讨论简单，下面就简单说为函数内部声明的局部变量。】，作为程序员对于这些变量的访问域和规则都是很熟悉的了。这一块各个编程语言差别不大。</p>
-<p>但是因为C语言的链接过程上的差异，比如下面这两个变量声明：</p>
+<h3 id="_28">变量的作用域和存储类别</h3>
+<p>继续上面的讨论，C语言就变量作用域这块属于块作用域和文件作用域。for语句和函数和独立的花括号结构等都是一个区块。在区块内声明的变量可在本区块内直接访问，也就是直接使用该变量名即可。</p>
+<p>但上面函数直接返回对函数内部某个变量的指针这就不属于直接访问了，我们现在假设那个变量还存在的话，那么是可以获得该变量的值的。上面例子的问题在于函数内部定义的某个变量在函数执行完之后就已经释放了，也就是那个变量已经不存在了。这就涉及到C语言里面的变量存储类别的讨论。</p>
+<p>C语言的变量默认存储类别是auto，不作特别声明都是自动变量，该变量的存储管理是交给编译器的，也就是那个函数执行完了这个变量就被自动释放了。而上面声明该变量为static的意思是告诉编译器这个变量是一个静态变量，在程序运行期间请一直保留在内存里面。于是上面的程序就能正常运行了。</p>
+<p>但是因为C语言的链接过程上的差异，会有一个更复杂的情况，比如下面这两个变量声明：</p>
 <div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">giants</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
 <span class="k">static</span> <span class="kt">int</span> <span class="n">dodgers</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
     <span class="p">...</span>
 <span class="p">}</span>
 </pre></div>
-<p>这两个变量都是文件作用域，不过 <code>giants</code> 是所有其他文件都是可以访问的，这个可以简单称作全局变量。而 <code>dodgers</code> 也是文件作用域的静态变量，其还有一个专业称呼叫做内部链接，因为其只可以被该文件的其他函数访问，也就是文件内部私有的。</p>
+<p>这两个变量都是文件作用域，所以giants和dodgers在本文件内都是可以直接访问的。又因为文件作用域不像函数作用域有一个内存释放机制，所以可以看作文件作用域变量都是静态存储的。所以对于C语言的文件作用域变量static意思并不是函数作用域的那个static的意思，标记了该变量是静态存储的，而只是标记了该变量的链接属性。 <code>giants</code> 在链接上是所有其他文件都是可以访问的，这个可以简单称作全局变量；而 <code>dodgers</code> 是只可以被本文件访问的，专业术语叫做内部链接。</p>
 <p>还有一点值得一提，那就是上面的 <code>dodgers</code> 在其他文件里面如果如下声明：</p>
 <div class="highlight"><pre><span></span><span class="k">extern</span> <span class="kt">int</span> <span class="n">dodgers</span><span class="p">;</span>
 </pre></div>
-<p>则该变量又成了外部链接的变量了， <code>extern</code> 声明是告诉编译器这个变量在其他地方声明的，所以在程序链接的过程中就会有相应的处理。总之这样 <code>dodgers</code> 在该文件中也是可以访问的了。</p>
+<p>则该变量又成了外部链接的变量了， <code>extern</code> 声明是告诉编译器这个变量在其他地方声明的，我希望使用它。所以在程序链接的过程中就会有相应的处理。</p>
 <p>上面提到的全局变量情况其他文件是可以直接使用的，但是一般的做法是推荐加上 <code>extern</code> 关键词，来增加程序的清晰性。</p>
-<h2 id="_29">寄存器变量</h2>
+<h3 id="_29">寄存器变量</h3>
 <div class="highlight"><pre><span></span><span class="k">register</span> <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
 </pre></div>
 <p>这里的寄存器变量声明是告诉C编译器这个变量会频繁用到，最好把它放入寄存器里面，仅仅只是加速用的，其他变量属性等同于 <code>int c</code> 。</p>
-<h2 id="mallocfree">malloc和free</h2>
+<h3 id="mallocfree">malloc和free</h3>
 <p>malloc函数可以直接手工声明一个内存空间，要记得free该内存空间。这个本文暂时略过了，同样，只有在那种确实不得不使用malloc函数的情况才使用。</p>
 <h2 id="_30">结构体</h2>
 <h3 id="_31">结构体的基本使用</h3>
@@ -6329,11 +6331,11 @@ Color color = Color::blue;
             <time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-01-18T11:13:32.485622+08:00">2021年 1月 18日 </time>
+            <time datetime="2021-02-17T09:49:57.559542+08:00">2021年 2月 17日 </time>
 
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#c-ref">c++</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>
 
         </div>
         </section>

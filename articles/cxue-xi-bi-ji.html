@@ -13,7 +13,7 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="简介 C# 采用 统一的类型系统。 所有 C# 类型（包括 int 和 double 等基元类型）均继承自一个根 object 类型。 程序结构 C# 中的关键组织结构概念包括程序、命名空间、类型、成员和程序集。 C# 程序由一个或多个源文件组成。 程序声明类型，而类型则包含成员，并被整理到命..."/>
+              content="简介 C# 采用 统一的类型系统。 所有 C# 类型（包括 int 和 double 等基元类型）均继承自一个根 object 类型。 C# 程序运行在.net环境上。 开发环境 安装visual studio 选择安装 .NET桌面开发 helloworld 创建新项目 选择控制台应用(.n..."/>
 
 
 <meta name="keywords" content=", archived, " />
@@ -105,22 +105,41 @@
         <div class="toc">
 <ul>
 <li><a href="#_1">简介</a></li>
-<li><a href="#_2">程序结构</a></li>
-<li><a href="#_3">开发环境</a></li>
+<li><a href="#_2">开发环境</a></li>
 <li><a href="#helloworld">helloworld</a></li>
-<li><a href="#_4">常量和变量</a><ul>
-<li><a href="#_5">强制类型转换</a></li>
+<li><a href="#_3">常量和变量</a><ul>
+<li><a href="#_4">强制类型转换</a></li>
 </ul>
 </li>
-<li><a href="#_6">字符串</a><ul>
-<li><a href="#_7">字符串内插</a></li>
+<li><a href="#_5">数字</a><ul>
+<li><a href="#_6">除法和求余或取模</a></li>
 </ul>
 </li>
-<li><a href="#_8">数字</a><ul>
-<li><a href="#_9">除法和求余或取模</a></li>
-<li><a href="#decimal">decimal类型</a></li>
+<li><a href="#_7">注释</a></li>
+<li><a href="#_8">类型系统</a><ul>
+<li><a href="#value-type">value type</a><ul>
+<li><a href="#_9">简单类型</a></li>
+<li><a href="#_10">枚举类型</a></li>
+<li><a href="#_11">结构体类型</a></li>
+<li><a href="#null">null</a></li>
+<li><a href="#tuple">Tuple</a></li>
 </ul>
 </li>
+<li><a href="#reference-type">reference type</a><ul>
+<li><a href="#class">class</a></li>
+<li><a href="#interface">interface</a></li>
+<li><a href="#array">array</a></li>
+<li><a href="#delegate">delegate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_12">访问权限控制</a></li>
+<li><a href="#_13">字符串内插和常用的字符串方法</a></li>
+<li><a href="#_14">隐式类型声明</a></li>
+<li><a href="#_15">变量的作用域</a></li>
+<li><a href="#_16">编写方法</a></li>
+<li><a href="#_17">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -130,9 +149,8 @@
             
 <h2 id="_1">简介</h2>
 <p>C# 采用 <strong>统一的类型系统</strong>。 所有 C# 类型（包括 <code>int</code> 和 <code>double</code> 等基元类型）均继承自一个根 <code>object</code> 类型。</p>
-<h2 id="_2">程序结构</h2>
-<p>C# 中的关键组织结构概念包括<strong>程序</strong>、<strong>命名空间</strong>、<strong>类型</strong>、<strong>成员</strong>和<strong>程序集</strong>。 C# 程序由一个或多个源文件组成。 程序声明类型，而类型则包含成员，并被整理到命名空间中。 类型示例包括类和接口。 成员示例包括字段、方法、属性和事件。 编译完的 C# 程序实际上会打包到程序集中。 程序集通常具有文件扩展名<code>.exe</code>或<code>.dll</code>，具体取决于它们是否实现<strong>应用程序</strong>或<strong>库</strong>。</p>
-<h2 id="_3">开发环境</h2>
+<p>C# 程序运行在.net环境上。</p>
+<h2 id="_2">开发环境</h2>
 <ol>
 <li>安装visual studio</li>
 <li>选择安装 <code>.NET桌面开发</code></li>
@@ -164,7 +182,7 @@
 <li><code>static void Main...</code> 这是定义一个类的方法，Main方法比较特殊，为本程序的入口方法</li>
 <li><code>Console.WriteLine</code> 调用打印方法 </li>
 </ul>
-<h2 id="_4">常量和变量</h2>
+<h2 id="_3">常量和变量</h2>
 <div class="highlight"><pre><span></span><span class="k">const</span> <span class="kt">double</span> <span class="n">pi</span> <span class="p">=</span> <span class="m">3.14</span><span class="p">;</span>
 </pre></div>
 <p>这是声明了一个常量，常量之后不可修改。</p>
@@ -181,16 +199,56 @@
 <li>int 整型 <code>int x = 1;</code></li>
 <li>double 浮点型 <code>double x = 1.0;</code></li>
 </ul>
-<h3 id="_5">强制类型转换</h3>
+<h3 id="_4">强制类型转换</h3>
 <p>低精度到高精度可以自动转没问题，高精度到低精度需要明确强制类型转换：</p>
 <div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
 <span class="kt">double</span> <span class="n">y</span> <span class="p">=</span> <span class="m">3.0</span><span class="p">;</span>
 <span class="n">x</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">y</span><span class="p">;</span>
 </pre></div>
-<h2 id="_6">字符串</h2>
-<h3 id="_7">字符串内插</h3>
+<h2 id="_5">数字</h2>
+<h3 id="_6">除法和求余或取模</h3>
+<p>如果是浮点型除法【即除法中至少有一个是浮点型数】，那么和我们理解的除法是没有区别的。</p>
+<p>如果是整型间的除法，则除法 <code>/</code> 可以看做求商动作；然后求余或者取模是 <code>%</code> 。</p>
+<div class="highlight"><pre><span></span>5 / 3 = 1
+5 % 3 = 2
+</pre></div>
+<h2 id="_7">注释</h2>
+<p>C#的注释单行是 <code>//</code> ，多行是 <code>/*...*/</code> 。</p>
+<h2 id="_8">类型系统</h2>
+<p>正如前面演示的 <code>int x = 1;</code> ，这个int就是一个类型声明，C#在这个变量类型声明赋值上语法和很多语言是类似的，不过具体类型系统各个语言就不一样了，有时甚至差异很大的。</p>
+<h3 id="value-type">value type</h3>
+<h4 id="_9">简单类型</h4>
+<ul>
+<li>sbyte short int long</li>
+<li>byte ushort unit ulong</li>
+<li>char</li>
+<li>float double </li>
+<li>decimal</li>
+<li>bool</li>
+</ul>
+<h4 id="_10">枚举类型</h4>
+<h4 id="_11">结构体类型</h4>
+<h4 id="null">null</h4>
+<h4 id="tuple">Tuple</h4>
+<h3 id="reference-type">reference type</h3>
+<h4 id="class">class</h4>
+<h4 id="interface">interface</h4>
+<h4 id="array">array</h4>
+<h4 id="delegate">delegate</h4>
+<h2 id="_12">访问权限控制</h2>
+<p>经常看到 <code>public int x = 1;</code> ，这个public就是访问修饰符，控制控制该变量的访问权限的：</p>
+<ul>
+<li>public 访问权限无限制，只有声明public的变量你才能在unity 编辑器上看到。</li>
+<li>private 访问权限限于本类，C#中没有访问权限修饰符的变量声明默认是private。</li>
+<li>protected 访问权限限于本类或本类的子类</li>
+<li>internal 访问权限限于本汇编（exe或dll）</li>
+<li>protected internal</li>
+<li>private internal</li>
+</ul>
+<h2 id="_13">字符串内插和常用的字符串方法</h2>
 <div class="highlight"><pre><span></span><span class="err">$</span><span class="s">"hello {name}"</span><span class="p">;</span>
 </pre></div>
+<p>此外你还可以使用 <code>"abc" + "def"</code> 加法来组合字符串。</p>
 <ul>
 <li>Length 属性 返回字符串长度</li>
 <li>TrimStart 方法 去除字符串前面的空格</li>
@@ -202,37 +260,27 @@
 <li>StartsWith 方法 字符串是否以某个子字符串开始</li>
 <li>EndsWith 方法 字符串是否以某个子字符串结束</li>
 </ul>
-<h2 id="_8">数字</h2>
-<h3 id="_9">除法和求余或取模</h3>
-<p>如果是浮点型除法【即除法中至少有一个是浮点型数】，那么和我们理解的除法是没有区别的。</p>
-<p>如果是整型间的除法，则除法 <code>/</code> 可以看做求商动作；然后求余或者取模是 <code>%</code> 。</p>
-<div class="highlight"><pre><span></span>5 / 3 = 1
-5 % 3 = 2
+<h2 id="_14">隐式类型声明</h2>
+<div class="highlight"><pre><span></span>var x = 1;
 </pre></div>
-<h3 id="decimal">decimal类型</h3>
-<p>decimal可容许最大值是高于int的，然后低于double，但是比double更加的精确。确切来说和钱相关的数值，一分一厘都不容许出错的是一定要用decimal类型的。</p>
-<div class="highlight"><pre><span></span><span class="kt">double</span> <span class="n">x</span> <span class="p">=</span> <span class="m">10000000000000000000</span><span class="p">;</span>
-<span class="n">x</span><span class="p">++;</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="kt">double</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-
-<span class="kt">decimal</span> <span class="n">y</span> <span class="p">=</span> <span class="m">10000000000000000000</span><span class="p">;</span>
-<span class="n">y</span><span class="p">++;</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="kt">decimal</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="kt">int</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-</pre></div>
-<p>下面按照微软官网的教程会介绍下基本程序结构和列表集合。</p>
-<p>OK，speed up。好了，基本的入门和大致的了解就到这里了，开始阅读c#语言规范。按照c#语言规范对c#语言有了一个更加全面的了解之后，后面就是针对更多的细节在应用中慢慢的了解了。</p>
+<p>C#是强类型语言，上面的语句只是说让编译器来决定该变量的类型。</p>
+<h2 id="_15">变量的作用域</h2>
+<p>类似于C++等语言，C#也有变量作用域这个概念，同样的简单表述就是块作用域，具体就是某个花括号块或者方法区块或者类区块，在这些区块类声明的变量，可在本区块内直接访问，区块外则不行。</p>
+<h2 id="_16">编写方法</h2>
+<p>C#有点特殊，因为其一切皆对象的设定，按照程序界的标准术语，那么在C#就没有所谓的编写函数，而只有编写方法这个说法了。</p>
+<h2 id="_17">参考资料</h2>
+<ol>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/">microsoft docs: a tour of csharp</a></li>
+</ol>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-02-14T15:54:22.229789+08:00">2021年 2月 14日 </time>
+            <time pubdate="pubdate" datetime="2021-02-17T10:01:54.754783+08:00">2021年 2月 17日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-02-14T15:54:22.229789+08:00">2021年 2月 14日 </time>
+            <time datetime="2021-02-17T10:01:54.754783+08:00">2021年 2月 17日 </time>
 
 
             <h4>分类：</h4>
