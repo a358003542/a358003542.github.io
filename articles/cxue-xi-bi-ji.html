@@ -146,8 +146,15 @@
 <li><a href="#list">List</a></li>
 <li><a href="#dictionary">Dictionary</a></li>
 <li><a href="#foreach">foreach语句</a></li>
-<li><a href="#class_1">class</a></li>
-<li><a href="#_18">参考资料</a></li>
+<li><a href="#class_1">class</a><ul>
+<li><a href="#this">this</a></li>
+<li><a href="#_18">继承</a></li>
+<li><a href="#virtualoverride">virtual和override</a></li>
+</ul>
+</li>
+<li><a href="#struct">struct</a></li>
+<li><a href="#getset">属性值的get和set写法</a></li>
+<li><a href="#_19">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -225,6 +232,7 @@
 <h2 id="_8">类型系统</h2>
 <p>正如前面演示的 <code>int x = 1;</code> ，这个int就是一个类型声明，C#在这个变量类型声明赋值上语法和很多语言是类似的，不过具体类型系统各个语言就不一样了，有时甚至差异很大的。</p>
 <h3 id="value-type">value type</h3>
+<p>C#有两种变量类型，value type直接存储变量的值，reference type存储的是对目标数据的引用。</p>
 <h4 id="_9">简单类型</h4>
 <ul>
 <li>sbyte short int long</li>
@@ -396,8 +404,88 @@ Color color = Color.blue;
 <span class="p">}</span>
 </pre></div>
 <h2 id="class_1">class</h2>
-<p>C#的class类只允许单继承，也就是最多只能继承自一个父类。</p>
-<h2 id="_18">参考资料</h2>
+<p>C#的class类只允许单继承，也就是最多只能继承自一个父类。一般类的声明和使用和C++类似：</p>
+<div class="highlight"><pre><span></span>public class Character
+{
+    public string name;
+    public int exp = 0;
+
+    public Character(string name)
+    {
+        this.name = name;
+    }
+}
+
+Character hero = new Character("lucy");
+</pre></div>
+<h3 id="this">this</h3>
+<p>this关键词类似于python里面的self，和C++上的this大体含义也是一样的，是一个指向本类实例的指针。同样在本类里面定义的方法下面都默认带入了this这个参数，也就是在各个方法里面直接使用即可。</p>
+<h3 id="_18">继承</h3>
+<p>C#就继承上的概念和写法和C++相比很类似，不过就语法书写层面会更友好一点，比如提供了base关键词对父类的引用，还有概念上简化，只允许有一个父类，此外还有一些C#代码和C++代码上的通用差异。除开这些，我们仍然可以从C#的继承和构造方法编写中看到C++的影子。比如下面的 <code>: base(name)</code> 在C++那边具体叫做成员初始化列表写法，也就是 <code>base(name)</code> 里面的name这个参数是直接来自 <code>Paladin(string name)</code> 接受到的参数name的。</p>
+<div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Paladin</span> <span class="p">:</span> <span class="n">Character</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">Paladin</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">):</span> <span class="k">base</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+<h3 id="virtualoverride">virtual和override</h3>
+<p>C++就多态这个议题从C++11开始也有virtual和override这两个关键词了，不过都不是强制性的，正因为不是强制性的，所以引出很多问题。比如不使用virtual，如果你的子类声明的时候采用的是子类引用变量或者子类指针，那么使用的方法都将是基类的。而引入virtual这个关键词会根据实例的类型来决定使用的方法。override在C++那边更多的是一个规避bug的写法，表明你的子类的这个方法是要重载基类的某个方法，因为有时一不注意，参数类型没对上，重载行为就会无意跳过去。</p>
+<p>在C#这边virtual和override用来描述OOP面向对象编程的多态概念是推荐的标准写法了。</p>
+<p>简单来说就是基类的方法要加上virtual，子类的方法要加上override表明这里有重载行为。</p>
+<div class="highlight"><pre><span></span>    <span class="c1">// base class</span>
+    <span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">printStatusInfo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="n">LogFormat</span><span class="p">(</span><span class="s">"Hero: {0} - {1} EXP"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">exp</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// derived class</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">printStatusInfo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="n">LogFormat</span><span class="p">(</span><span class="s">"Paladin: {0} - take up your weapon: {1}"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">weapon</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+<h2 id="struct">struct</h2>
+<p>C#里面的结构体和C++里面的结构体差异巨大，C++里面的结构体概念和C语言的结构体区别不大，只是一种比数组略灵活点的变量类型，专门用来存储呈现一定结构特征的数据用的。而C#里面struct则更接近于class这个概念，有一些小的使用上的区别，其他都大同小异，其中最大的一个区别是struct是类型是value type，而class的类型是reference type。</p>
+<p>比如下面这个例子，C#里面的struct一样也可以有自己的构造方法：</p>
+<div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">Coordinate</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">Coordinate</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">Coordinate</span> <span class="n">point</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Coordinate</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">20</span><span class="p">);</span>
+</pre></div>
+<p>但需要注意的是<strong>C#的struct不能再定义无参构造方法</strong>，因为它默认已经有了。当然struct没有继承关系。</p>
+<p>完整的struct不能class能的清单如下：</p>
+<ul>
+<li>You can't declare a parameterless constructor. Every structure type already provides an implicit parameterless constructor that produces the <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/default-values">default value</a> of the type.</li>
+<li>You can't initialize an instance field or property at its declaration. However, you can initialize a <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/static">static</a> or <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/const">const</a> field or a static property at its declaration.</li>
+<li>A constructor of a structure type must initialize all instance fields of the type.</li>
+<li>A structure type can't inherit from other class or structure type and it can't be the base of a class. However, a structure type can implement <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/interface">interfaces</a>.</li>
+<li>You can't declare a <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/destructors">finalizer</a> within a structure type.</li>
+</ul>
+<h2 id="getset">属性值的get和set写法</h2>
+<div class="highlight"><pre><span></span>    <span class="k">private</span> <span class="kt">string</span> <span class="n">_name</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span><span class="p">{</span>
+    <span class="k">get</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">_name</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">set</span> <span class="p">{</span>
+        <span class="n">_name</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">}</span>
+</pre></div>
+<h2 id="_19">参考资料</h2>
 <ol>
 <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/">microsoft docs: a tour of csharp</a></li>
 </ol>
@@ -406,10 +494,10 @@ Color color = Color.blue;
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-02-18T11:34:34.686702+08:00">2021年 2月 18日 </time>
+            <time pubdate="pubdate" datetime="2021-03-03T16:02:16.901226+08:00">2021年 3月 3日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-02-18T11:34:34.686702+08:00">2021年 2月 18日 </time>
+            <time datetime="2021-03-03T16:02:16.901226+08:00">2021年 3月 3日 </time>
 
 
             <h4>分类：</h4>

@@ -112,6 +112,24 @@
 <li><a href="#debug">入门Debug</a></li>
 </ul>
 </li>
+<li><a href="#unity">引用Unity对象</a><ul>
+<li><a href="#getcomponet-generic-method">GetComponet generic method</a></li>
+<li><a href="#find">Find方法</a></li>
+<li><a href="#_4">引用脚本类</a></li>
+</ul>
+</li>
+<li><a href="#unity-editor">Unity Editor基本的使用</a></li>
+<li><a href="#gameobject">GameObject</a></li>
+<li><a href="#animation-clip">animation clip</a></li>
+<li><a href="#particle-system">particle system</a></li>
+<li><a href="#_5">移动控制</a></li>
+<li><a href="#updatefixedupdate">Update和FixedUpdate</a></li>
+<li><a href="#transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</a></li>
+<li><a href="#transform">transform的层级树</a></li>
+<li><a href="#_6">碰撞器组件的是否是触发器属性</a></li>
+<li><a href="#physicscheckcapsule">Physics.CheckCapsule</a></li>
+<li><a href="#_7">如何将某个摄像头调到当前视角</a></li>
+<li><a href="#_8">其他</a></li>
 </ul>
 </div>
         </nav>
@@ -149,15 +167,77 @@
 <p>加分项，熟悉下面的LogFormat方法的用法，以后某些情况会很方便的。</p>
 <div class="highlight"><pre><span></span>Debug.LogFormat("{0} + {1} = {2}", 2,3,2+3);
 </pre></div>
+<h2 id="unity">引用Unity对象</h2>
+<h3 id="getcomponet-generic-method">GetComponet generic method</h3>
+<p>GetComponet方法是一个generic method，需要指定查找的组件类型，查找只限于本GameObject的组件。</p>
+<div class="highlight"><pre><span></span>private Transform camTransform;
+camTransform = this.GetComponent&lt;Transform&gt;();
+Debug.Log(camTransform.localPosition);
+</pre></div>
+<h3 id="find">Find方法</h3>
+<p>Find方法可以用于查找不是本GameObject的其他GameObject，具体名字就是Unity面板上显示的那个名字。</p>
+<div class="highlight"><pre><span></span>private GameObject directLight;
+private Transform lightTransorm;
+
+directLight = GameObject.Find("Directional Light");
+lightTransorm = directLight.GetComponent&lt;Transform&gt;();
+Debug.Log(lightTransorm.localPosition);
+</pre></div>
+<h3 id="_4">引用脚本类</h3>
+<p>如果某个脚本类挂载在某个GameObject上，那么如下就可以引用该脚本类：</p>
+<div class="highlight"><pre><span></span>gameManager = GameObject.Find("GameManager").GetComponent&lt;GameBehavior&gt;();
+</pre></div>
+<p>上面代码的意思是有一个 <code>GameBehavior.csharp</code> 文件里面有 <code>GameBehavior</code> 类挂载在GameManager这个GameObject上，那么按照上面的语句就可以引用该脚本类对象了。</p>
+<h2 id="unity-editor">Unity Editor基本的使用</h2>
+<p>关于Unity Editor的基本使用请读者自行熟悉软件界面，然后试着自己慢慢搭建起，比如一个平面作为一个基本的游玩空间，平面由四面墙围起来，然后等等其他立方体等等。移动缩放旋转和复制等等。</p>
+<p>如果对这种类似的软件不太熟悉的话，推荐是找个相关的入门视频看看，如果对这类软件有点熟悉的，可能左看看右点点就大体能够掌握了。</p>
+<h2 id="gameobject">GameObject</h2>
+<p>一个空的GameObject就是一个容器，其可以用于在Unity Editor的世界大纲视图中进行层级管理。一个GameObject下面管理的多个物体，如果将这个GameObject拖动到项目文件夹视图下，则将会创建一个Perfab预制件。预制件Perfab可以重复只用，并且改变基础Perfab属性会影响所有相关场景中的由此Perfab实例化的对象。</p>
+<h2 id="animation-clip">animation clip</h2>
+<p>制作动画片段：</p>
+<ol>
+<li>新建一个Animations文件夹等下放动画片段资源</li>
+<li>选中你想要有动画效果的那个组件，选定window-&gt;Animation-&gt;Animation。</li>
+<li>选择启用关键帧记录模式，然后在每个帧上修改物体组件的某个属性</li>
+</ol>
+<p>动画的开头和结尾常常有卡顿现象，哪怕你设置的旋转动作是0度到360度数值上是无缝对接的，仍然会有卡顿现象，你可以在曲线那里看到数值的变动是有一个切线变化率的，每一个帧都有两个切线，左切线是进入，右切线是离开，从头帧到结尾帧要想不卡顿，左右两个切线斜率必须是相同的，也就是co-linear的。</p>
+<p>对于旋转动作可以将头尾两帧的双切线都改为线性。对应官方文档的 Broken-Linear模式。这样帧与帧之间是线性变化的，也就不存在那个变动斜率问题了。</p>
+<h2 id="particle-system">particle system</h2>
+<p>制作粒子系统：</p>
+<ol>
+<li>右键在世界大纲视图下新建-&gt;效果-&gt;粒子系统</li>
+<li>将粒子系统和你想要有该粒子系统效果的物体组件XYZ值设为一样</li>
+<li>调配你的粒子系统的各个属性</li>
+</ol>
+<h2 id="_5">移动控制</h2>
+<p><code>Input.GetAxis(axis_name)</code> 获取当前控制轴的值，比如Horizontal axis 方向left和 a键为-1，right和d为1。</p>
+<h2 id="updatefixedupdate">Update和FixedUpdate</h2>
+<p>Update是每帧执行，一般键盘输入放在这里。</p>
+<p>FixedUpDATE是每个固定时间段执行，一般物理模拟内容放在这里。</p>
+<h2 id="transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</h2>
+<p>经过试验结论如下，在速度特别快的情况下两个都可能发生避开物理碰撞系统而发生穿模，速度很低的情况下两个也都不会穿模。不过在速度中等的情况下，用Transform的translate方法移动物体仍时不时会避开物理刚体碰撞系统，而在这种情况下刚体的MovePosition就表现要好一下。</p>
+<p>此外FixUpdate的固定时间设定也会很好地防止物体移动速度不可捉摸的突变情况。</p>
+<h2 id="transform">transform的层级树</h2>
+<p>unity的每一个gameObject都有transform这个属性，transform的parent和child概念就是来自你在世界大纲视图上定义的GameObject的层级。</p>
+<p>你可以通过transform的层级数来定位某个gameObject的transform，然后通过 <code>.gameObject</code> 这个属性来获得具体该gameObject对象。</p>
+<h2 id="_6">碰撞器组件的是否是触发器属性</h2>
+<p>默认是否，如果勾选，则该碰撞器不具有物体碰撞功能而只有碰撞事件触发功能，也就是你可以穿模进去了。</p>
+<h2 id="physicscheckcapsule">Physics.CheckCapsule</h2>
+<p>这个可以用来测试玩家角色是否接触地面，具体这个方法参数官方文档读起来也不是很直观，具体来说其定义了这样一个胶囊：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2021/unity_capsule.png"/></p>
+<h2 id="_7">如何将某个摄像头调到当前视角</h2>
+<p>首先在编辑器上调整好开发者视角，然后选中某个摄像头，然后选择 <code>游戏对象-&gt; align with view</code> 。</p>
+<h2 id="_8">其他</h2>
+<p><code>Ctrl+Shift+M</code> 在visual studio 上调出Unity快速方法输入。</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-02-15T10:44:01.779735+08:00">2021年 2月 15日 </time>
+            <time pubdate="pubdate" datetime="2021-03-03T19:49:03.612314+08:00">2021年 3月 3日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-02-15T10:44:01.779735+08:00">2021年 2月 15日 </time>
+            <time datetime="2021-03-03T19:49:03.612314+08:00">2021年 3月 3日 </time>
 
 
             <h4>分类：</h4>
