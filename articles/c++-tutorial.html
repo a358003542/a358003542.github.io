@@ -211,6 +211,7 @@
 </li>
 <li><a href="#_54">类</a><ul>
 <li><a href="#_55">类作用域</a></li>
+<li><a href="#static">static</a></li>
 <li><a href="#_56">构造函数</a></li>
 <li><a href="#_57">析构函数</a></li>
 <li><a href="#this">this指针</a></li>
@@ -3427,6 +3428,43 @@ setgolf(ann);
 </pre></div>
 <h3 id="_55">类作用域</h3>
 <p>类里面定义的变量具体在C++里面作用域又新增一个概念，叫做类作用域，因为类的声明本身包含一个花括号区块，这个倒不是出人意料之外。你可以把类作用域看作另外一个花括号区块来理解其中的变量作用域关系，然后需要特别强调的是类作用域之内的变量是可以直接调用——这里强调的是类的成员函数里面是可以直接使用类里面的各个变量，因为C++的类的成员函数具体定义是在外面的分开的，所以这里强调下。</p>
+<h3 id="static">static</h3>
+<p>在类作用域下static变量和前面谈论的函数作用域下的static变量大体含义是类似的，但因为类class和实例object的关系，需要细讲一下。请看下面这个例子：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+
+<span class="k">class</span> <span class="nc">StopWatch</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">NoOfInstances</span><span class="p">;</span>
+
+    <span class="n">StopWatch</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">NoOfInstances</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">StopWatch</span><span class="o">::</span><span class="n">NoOfInstances</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">StopWatch</span> <span class="n">sw1</span><span class="p">;</span>
+    <span class="n">StopWatch</span> <span class="n">sw2</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">StopWatch</span><span class="o">::</span><span class="n">NoOfInstances</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">StopWatch</span> <span class="n">sw3</span><span class="p">;</span>
+    <span class="n">StopWatch</span> <span class="n">sw4</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="n">StopWatch</span><span class="o">::</span><span class="n">NoOfInstances</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>class定义声明了一个static变量，这个变量是为class和各个实例共有的。其和其他静态变量一样统一管理的，然后就是类里面的静态变量声明和实现是分开的，除非声明的时候加上const关键词则可以直接初始化，否则后面还需要加上这样格式的初始化语句：</p>
+<div class="highlight"><pre><span></span>int StopWatch::NoOfInstances = 0;
+</pre></div>
 <h3 id="_56">构造函数</h3>
 <p>创建Stock对象在面向对象编程有专门的说法叫做创建Stock实例，如下所示：</p>
 <div class="highlight"><pre><span></span><span class="n">Stock</span> <span class="n">sally</span><span class="p">;</span>
@@ -6331,7 +6369,7 @@ Color color = Color::blue;
             <time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-02-17T09:49:57.559542+08:00">2021年 2月 17日 </time>
+            <time datetime="2021-03-12T16:56:30.709315+08:00">2021年 3月 12日 </time>
 
 
             <h4>分类：</h4>
