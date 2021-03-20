@@ -129,7 +129,29 @@
 <li><a href="#_6">碰撞器组件的是否是触发器属性</a></li>
 <li><a href="#physicscheckcapsule">Physics.CheckCapsule</a></li>
 <li><a href="#_7">如何将某个摄像头调到当前视角</a></li>
-<li><a href="#_8">其他</a></li>
+<li><a href="#unity_1">Unity导航系统</a><ul>
+<li><a href="#agent">如何移动一个Agent</a></li>
+<li><a href="#_8">巡逻模式</a></li>
+</ul>
+</li>
+<li><a href="#ontriggerenteroncollisionenter">OnTriggerEnter和OnCollisionEnter的区别</a></li>
+<li><a href="#_9">物理系统优化</a></li>
+<li><a href="#_10">材质</a><ul>
+<li><a href="#albedo">albedo</a></li>
+<li><a href="#metallic">metallic</a></li>
+<li><a href="#smoothness">Smoothness</a></li>
+<li><a href="#tiling">tiling</a></li>
+<li><a href="#offset">offset</a></li>
+</ul>
+</li>
+<li><a href="#_11">地形</a></li>
+<li><a href="#makehuman">Makehuman工具</a></li>
+<li><a href="#cinemachine">cinemachine</a></li>
+<li><a href="#fmod">FMOD音效集成</a></li>
+<li><a href="#_12">其他</a><ul>
+<li><a href="#_13">默认单位</a></li>
+</ul>
+</li>
 </ul>
 </div>
         </nav>
@@ -193,6 +215,7 @@ Debug.Log(lightTransorm.localPosition);
 <p>如果对这种类似的软件不太熟悉的话，推荐是找个相关的入门视频看看，如果对这类软件有点熟悉的，可能左看看右点点就大体能够掌握了。</p>
 <h2 id="gameobject">GameObject</h2>
 <p>一个空的GameObject就是一个容器，其可以用于在Unity Editor的世界大纲视图中进行层级管理。一个GameObject下面管理的多个物体，如果将这个GameObject拖动到项目文件夹视图下，则将会创建一个Perfab预制件。预制件Perfab可以重复只用，并且改变基础Perfab属性会影响所有相关场景中的由此Perfab实例化的对象。</p>
+<p>一个GameObject里的组件如果调用<code>GameObject</code> 属性，比如transform，或者脚本类this，都会指向这个目标容器GameObject。</p>
 <h2 id="animation-clip">animation clip</h2>
 <p>制作动画片段：</p>
 <ol>
@@ -220,24 +243,99 @@ Debug.Log(lightTransorm.localPosition);
 <h2 id="transform">transform的层级树</h2>
 <p>unity的每一个gameObject都有transform这个属性，transform的parent和child概念就是来自你在世界大纲视图上定义的GameObject的层级。</p>
 <p>你可以通过transform的层级数来定位某个gameObject的transform，然后通过 <code>.gameObject</code> 这个属性来获得具体该gameObject对象。</p>
+<p>你可以通过如下语句来迭代某个GameObject下的子节点：</p>
+<div class="highlight"><pre><span></span><span class="k">foreach</span> <span class="p">(</span><span class="n">Transform</span> <span class="n">child</span> <span class="k">in</span> <span class="n">parent</span><span class="p">){</span>
+    <span class="c1">// do something</span>
+<span class="p">}</span>
+</pre></div>
 <h2 id="_6">碰撞器组件的是否是触发器属性</h2>
 <p>默认是否，如果勾选，则该碰撞器不具有物体碰撞功能而只有碰撞事件触发功能，也就是你可以穿模进去了。</p>
 <h2 id="physicscheckcapsule">Physics.CheckCapsule</h2>
 <p>这个可以用来测试玩家角色是否接触地面，具体这个方法参数官方文档读起来也不是很直观，具体来说其定义了这样一个胶囊：</p>
 <p><img alt="img" src="https://a358003542.github.io/images/2021/unity_capsule.png"/></p>
+<p>其中的layer层一般将地形GameObject放入该层。</p>
 <h2 id="_7">如何将某个摄像头调到当前视角</h2>
 <p>首先在编辑器上调整好开发者视角，然后选中某个摄像头，然后选择 <code>游戏对象-&gt; align with view</code> 。</p>
-<h2 id="_8">其他</h2>
+<h2 id="unity_1">Unity导航系统</h2>
+<p>Unity内置了一个路径导航系统，首先你需要将你的地形 GameObject 进行烘焙：</p>
+<ol>
+<li>选择你的地形GameObject，选择Static菜单的Navigation Static</li>
+<li>选择Window-&gt;AI-&gt;导航，选择烘培Bake Tab，然后点击烘培。</li>
+<li>你将会在目标场景地图下面看到新建了一个NavMesh对象。</li>
+</ol>
+<p>导航系统中你想要移动的目标对象需要绑定Nav Mesh Agent组件。</p>
+<p>导航系统中你需要定义一系列的导航路径点，空的GameObject即可。</p>
+<h3 id="agent">如何移动一个Agent</h3>
+<p>实际会很简单，就是设定destination属性即可。</p>
+<div class="highlight"><pre><span></span>agent.destination = transform.position;
+</pre></div>
+<h3 id="_8">巡逻模式</h3>
+<p>一个agent的巡逻模式可以通过如下类似编码来实现：</p>
+<div class="highlight"><pre><span></span>    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">agent</span><span class="p">.</span><span class="n">remainingDistance</span> <span class="p">&lt;</span> <span class="m">0.2f</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">agent</span><span class="p">.</span><span class="n">pathPending</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">MoveToNextPatrolLocaton</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+        <span class="k">private</span> <span class="k">void</span> <span class="nf">MoveToNextPatrolLocaton</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">locations</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">agent</span><span class="p">.</span><span class="n">destination</span> <span class="p">=</span> <span class="n">locations</span><span class="p">[</span><span class="n">locationIndex</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
+
+        <span class="n">locationIndex</span> <span class="p">=</span> <span class="p">(</span><span class="n">locationIndex</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">%</span> <span class="n">locations</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
+    <span class="p">}</span>
+</pre></div>
+<p>上面的 <code>agent.pathPending</code> 的意思是当前路径还没有计算好，取值否表示一定要先等路径计算好然后剩余距离只有多少之后继续移动到下一个导航点。</p>
+<h2 id="ontriggerenteroncollisionenter">OnTriggerEnter和OnCollisionEnter的区别</h2>
+<p>OnTriggerEnter 的触发条件是：</p>
+<ul>
+<li>两个GameObject都有碰撞器组件，其中某个GameObject的碰撞器必须勾选了<code>isTrigger</code> ，并包含刚体组件。但是如果两个碰撞器都勾选了 <code>isTrigger</code> ，也不会触发。</li>
+<li>然后就是两个碰撞器发生碰撞则会触发事件。</li>
+</ul>
+<p>OnCollisionEnter的触发条件较为宽松，两个GameObject的碰撞器或者刚体发生碰撞则会触发。</p>
+<h2 id="_9">物理系统优化</h2>
+<p>如果物理系统表现不太如人意，应该尽可能参照真实物理世界的参数然后再根据自己的需要进行调整。</p>
+<h2 id="_10">材质</h2>
+<h3 id="albedo">albedo</h3>
+<p>反射率，定义了材质的基本颜色，纹理也是放在这里设置的。</p>
+<h3 id="metallic">metallic</h3>
+<p>金属的，定义了材质的金属表现。</p>
+<h3 id="smoothness">Smoothness</h3>
+<p>平滑度，定义了材质的表面光滑性。一般为了看上去更真实不应该设置为0或1而是某个中间值。</p>
+<h3 id="tiling">tiling</h3>
+<p>平铺，定义了纹理在表面平铺重复的次数。</p>
+<h3 id="offset">offset</h3>
+<p>偏移，定义了纹理在表面平铺的偏移量。</p>
+<h2 id="_11">地形</h2>
+<p>地形的搭建应该优先考虑Unity自带的地形功能，可能某些情况下，比如封闭的山洞等地形使用blender建模地形才能实现。</p>
+<p>新建一个地形： GameObject -&gt; 3d object -&gt; terrian 。</p>
+<p>设置-&gt;网络分辨率那里修改地形的大小。 </p>
+<p>TODO : 此处记录下关键词，有些东西在视频下面会更方便讲一点。 unity的terrian tools package ，然后一些操作。定义图层和绘图等。</p>
+<h2 id="makehuman">Makehuman工具</h2>
+<p>Makehuman工具</p>
+<h2 id="cinemachine">cinemachine</h2>
+<p>除了刚开始学习接触下摄像头简单的控制概念，后续正式项目推荐cinemachine package。</p>
+<p>TODO 视频讲解</p>
+<h2 id="fmod">FMOD音效集成</h2>
+<p>TODO 视频讲解简单的FMOD集成音效知识，刚开始随便找点网上的音效进行一些试探性的集成尝试。</p>
+<h2 id="_12">其他</h2>
 <p><code>Ctrl+Shift+M</code> 在visual studio 上调出Unity快速方法输入。</p>
+<h3 id="_13">默认单位</h3>
+<p>Unity术语里面长度用的是 1unit，比如velocity 用的每秒移动的unit。比如1unit等于多少并没有一个准数的，要看你自己那边的建模规范。</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-03-03T19:49:03.612314+08:00">2021年 3月 3日 </time>
+            <time pubdate="pubdate" datetime="2021-03-20T18:08:09.234629+08:00">2021年 3月 20日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-03-03T19:49:03.612314+08:00">2021年 3月 3日 </time>
+            <time datetime="2021-03-20T18:08:09.234629+08:00">2021年 3月 20日 </time>
 
 
             <h4>分类：</h4>
