@@ -137,10 +137,17 @@
 <li><a href="#transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</a></li>
 <li><a href="#ontriggerenteroncollisionenter">OnTriggerEnter和OnCollisionEnter的区别</a></li>
 <li><a href="#headerattribute">HeaderAttribute</a></li>
+<li><a href="#textareaattribute">TextAreaAttribute</a></li>
 <li><a href="#_10">序列化</a></li>
 <li><a href="#serializefield">SerializeField</a></li>
 <li><a href="#scriptableobject">ScriptableObject</a><ul>
 <li><a href="#scriptableobject_1">ScriptableObject的唯一性</a></li>
+<li><a href="#scriptableobject_2">创建一个ScriptableObject对象</a></li>
+</ul>
+</li>
+<li><a href="#unity_1">Unity协程</a><ul>
+<li><a href="#unity_2">嵌套Unity协程</a></li>
+<li><a href="#unity_3">平行Unity协程</a></li>
 </ul>
 </li>
 </ul>
@@ -172,9 +179,11 @@
 <li><a href="#dontdestroyonload">DontDestroyOnLoad</a></li>
 </ul>
 </li>
-<li><a href="#unity_1">基于事件驱动的Unity编程</a></li>
-<li><a href="#_18">其他</a><ul>
-<li><a href="#_19">默认单位</a></li>
+<li><a href="#unity_4">基于事件驱动的Unity编程</a></li>
+<li><a href="#_18">多场景无缝切换</a></li>
+<li><a href="#_19">玩家场景数据记忆</a></li>
+<li><a href="#_20">其他</a><ul>
+<li><a href="#_21">默认单位</a></li>
 </ul>
 </li>
 </ul>
@@ -322,6 +331,10 @@ Debug.Log(lightTransorm.localPosition);
 <p>在编辑器那边新增一个标题头</p>
 <div class="highlight"><pre><span></span>    [Header("Persistent managers Scene")]
 </pre></div>
+<h3 id="textareaattribute">TextAreaAttribute</h3>
+<p>在编辑器那里新增一个可编辑文本区域。</p>
+<div class="highlight"><pre><span></span>    [TextArea] public string description;
+</pre></div>
 <h3 id="_10">序列化</h3>
 <p>序列化是理解Unity Editor如何工作的关键，这当然对你后面更好地使用Unity Editor从而更好地进行游戏开发很重要，但更重要的是Unity Editor可以看作利用Unity技术实现的第一个游戏，因此Unity Editor广泛使用的序列化技术对你的游戏代码开发同样具有参考价值，这点我们后续会看到。</p>
 <p>推荐读者参考阅读 <a href="https://blogs.unity3d.com/2014/06/24/serialization-in-unity/">这篇文章</a> 。</p>
@@ -369,17 +382,96 @@ Debug.Log(lightTransorm.localPosition);
 <p>ScriptableObject继承自UntiyEngine.Object，按照上面序列化一小节的描述，ScriptableObject是可序列化的对象。</p>
 <p>ScriptableObject的作用是充当一个数据容器。Unity的预制件实例化，里面的数据将会产生多个副本，所以对于重复使用的公有数据一般是推荐使用ScriptableObject来存储数据，然后预制件来访问这些数据。</p>
 <h4 id="scriptableobject_1">ScriptableObject的唯一性</h4>
-<p>如果你的ScriptableObject是通过 <code>LoadAssetAsync</code> 加载进来的，那么在引用Asset的时候实际上都是在使用一个ScriptableObject，你可以将这个ScriptableObject看作类似perfab预制件一样的东西，直接使用该数据对象就是直接使用预制件，都是在用同一个东西。</p>
-<p>而如果你调用 <code>InstantiateAsync</code> 来对ScriptableObject进行了实例化，则就是不同的数据对象了。</p>
-<p>https://docs.unity3d.com/cn/2019.4/Manual/class-ScriptableObject.html</p>
+<p>ScriptableOjbect的唯一性是根据你创建的asset文件唯一性来的，只要保证是引用的同一asset文件，则生成类的实例都是一样的，个人测试也是实例id都是一样的。</p>
+<p>如果是和Unity Addressable Asset system相结合，如果你的ScriptableObject是通过 <code>LoadAssetAsync</code> 加载进来的，那么在引用Asset的时候实际上都是在使用一个ScriptableObject，你可以将这个ScriptableObject看作类似perfab预制件一样的东西，直接使用该数据对象就是直接使用预制件，都是在用同一个东西。</p>
+<p>而如果你调用 <code>InstantiateAsync</code> 来对ScriptableObject进行了实例化，则就是不同的数据对象了。<a href="https://docs.unity3d.com/cn/2019.4/Manual/class-ScriptableObject.html">参考网页</a>。</p>
+<h4 id="scriptableobject_2">创建一个ScriptableObject对象</h4>
+<div class="highlight"><pre><span></span>[CreateAssetMenu(fileName = "PersistentManagers", menuName = "Scene Data/PersistentManagers")]
+public class PersistentManagersSO : GameSceneSO { }
+</pre></div>
+<p>fileName是点击菜单按钮之后默认保存的文件名，menuName是在Unity Editor对应的菜单按钮位置，上面的例子是：<code>资源-&gt;创建-&gt;场景数据-&gt;PersistentManagers</code> 。</p>
+<h3 id="unity_1">Unity协程</h3>
+<p>如果读者之前接触过协程概念，对于这里的协程的理解会很快，但有一点是需要特别强调的。那就是Unity的协程更多的是一个Unity自身基于逐帧运算然后做出来的概念，和很多编程语言上的协程概念比较起来，其底层甚至可能都不依赖于线程切换。</p>
+<p>C#语言那边有异步编程，其使用的async func 和await之类的和python的异步编程很像，这些才是严格意义上的协程概念，Unity协程只是利用了C#的 <code>IEnumerator</code> 和 <code>yield return</code> 构建起来的类似python的可迭代对象，然后在这个可迭代对象之上构建出来的Unity协程概念。</p>
+<p>具体Unity协程的编写如下：</p>
+<div class="highlight"><pre><span></span><span class="n">IEnumerator</span> <span class="nf">CoroutineExample</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">){</span>
+    <span class="c1">// do something </span>
+    <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
+    <span class="c1">// still do something</span>
+    <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>启动一个Unity协程：</p>
+<div class="highlight"><pre><span></span><span class="n">StartCoroutine</span><span class="p">(</span><span class="n">CoroutineExample</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
+</pre></div>
+<p>该CoroutineExample协程会在遇到yield return 那里停止执行，然后下一帧再回来继续执行本协程。</p>
+<p>此外可以如下启动协程：</p>
+<div class="highlight"><pre><span></span>StartCoroutine("CoroutineExample", 1);
+</pre></div>
+<p>这种指定协程名字符串的启动后面可以指定名字要求停止某个协程：</p>
+<div class="highlight"><pre><span></span>StopCoroutine("CoroutineExample")
+</pre></div>
+<p>你还可以让某个协程暂停执行多少秒：</p>
+<div class="highlight"><pre><span></span>yield return new WaitForSeconds(.1f);
+</pre></div>
+<h4 id="unity_2">嵌套Unity协程</h4>
+<p>参考了  <a href="https://www.alanzucconi.com/2017/02/15/nested-coroutines-in-unity/">这篇文章</a> 。</p>
+<p>如下：</p>
+<div class="highlight"><pre><span></span>yield return StartCoroutine(AnotherCoroutine())
+</pre></div>
+<p>这种形式，父协程要等待子协程完成才会继续往下走，也就是对于父协程来说，子协程的整个执行过程是同步的。因为子协程仍然是通过 StartCoroutine启动的，其内部的执行是异步的。</p>
+<h4 id="unity_3">平行Unity协程</h4>
+<div class="highlight"><pre><span></span>IEnumerator A()
+{
+
+    // Starts B, C, and D as coroutines and continues the execution
+    Coroutine b = StartCoroutine( B() );
+    Coroutine c = StartCoroutine( C() );
+    Coroutine d = StartCoroutine( D() );
+
+    // Waits for B, C and D to terminate
+    yield return b;
+    yield return c;
+    yield return d;
+
+}
+</pre></div>
+<p>B C D这几个子协程从启动开始就执行了，说的再直白点就是正常启动协程则一下就启动起来了，根本花费不了什么时间。</p>
+<p>上面两种情况可以总结为那就是嵌套Unity协程中，父协程是同步的。所谓同步就是Unity会一直在这里执行，而Unity协程所谓的异步指的是内部执行了很小碎片的不怎么花费时间的动作，然后就yield return了，然后再等待下一帧再继续执行，并不阻塞主程序。</p>
+<p>我们看到Unity协程解决的主要是帧动作太多的问题，通过Update等函数我们可以设计每一帧进行某个动作，然后我们发现对于很多问题并不需要每一帧都做，通过Unity协程可以解决这个问题；还有些过程可能横跨多个帧，但其内部动作可以分解为很多小动作，然后每帧再分别执行这些小动作即可，这可以通过Unity协程解决。</p>
+<p>但Unity协程不能解决某个动作就是花费时间太长，从而造成你的游戏进程阻塞这个问题，这还是需要靠多线程或异步来解决，Unity协程在这里的作用主要就是每帧来检查一下这个费时的异步动作完成了没有。</p>
 <h2 id="unity-addressable-asset-system">Unity Addressable Asset system</h2>
 <p>Unity的官方包，将Asset通过地址来访问，从而增加资源访问的灵活性。原asset bundle管理方案已经处于废弃状态。</p>
 <p>在 window-&gt;addressables groups 那里新增一个group。</p>
 <p>然后将资源拖动到这里，第一列就是后面你要使用引用的名字，默认的名字是根据你的资源的本地目录来的，你也可以修改为你想要的名字。</p>
-<p>在脚本中使用资源如下：</p>
+<p>在脚本中使用资源如下，接受的参数是该资产的名字。</p>
 <div class="highlight"><pre><span></span>using UnityEngine.AddressableAssets;
 Addressables.LoadAssetAsync&lt;GameObject&gt;("AssetAddress");
 Addressables.InstantiateAsync("AssetAddress");
+</pre></div>
+<p>如果是<code>AssetReference</code> 配置好的资产则可以直接如下调用，：</p>
+<div class="highlight"><pre><span></span>_menuLoadChannel.LoadAssetAsync&lt;LoadEventChannelSO&gt;().Completed += LoadMainMenu;
+</pre></div>
+<p>一般的使用大体如下：</p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine.AddressableAssets</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">AddressablesExample</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+    <span class="n">GameObject</span> <span class="n">myGameObject</span><span class="p">;</span>
+
+        <span class="p">...</span>
+        <span class="n">Addressables</span><span class="p">.</span><span class="n">LoadAssetAsync</span><span class="p">&lt;</span><span class="n">GameObject</span><span class="p">&gt;(</span><span class="s">"AssetAddress"</span><span class="p">).</span><span class="n">Completed</span> <span class="p">+=</span> <span class="n">OnLoadDone</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">OnLoadDone</span><span class="p">(</span><span class="n">UnityEngine</span><span class="p">.</span><span class="n">ResourceManagement</span><span class="p">.</span><span class="n">AsyncOperations</span><span class="p">.</span><span class="n">AsyncOperationHandle</span><span class="p">&lt;</span><span class="n">GameObject</span><span class="p">&gt;</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// In a production environment, you should add exception handling to catch scenarios such as a null result.</span>
+        <span class="n">myGameObject</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">Result</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 <h3 id="addressablesloadsceneasync">Addressables.LoadSceneAsync</h3>
 <p>异步加载一个scene。</p>
@@ -425,22 +517,104 @@ Addressables.InstantiateAsync("AssetAddress");
 <div class="highlight"><pre><span></span>DontDestroyOnLoad(this.gameObject);
 </pre></div>
 <p>则本脚本绑定的那个GameObject在场景切换时将不会被删除掉。</p>
-<h2 id="unity_1">基于事件驱动的Unity编程</h2>
+<h2 id="unity_4">基于事件驱动的Unity编程</h2>
 <p>作为和桌面端程序类似的存在，成熟的Unity游戏编程必然是基于事件驱动的编程模式。这对于大中小型Unity项目都是有用的和必须的。</p>
 <p>C#那边已经有成熟的事件驱动编程解决方案了，拿过来用就是了。因为Unity那边又新增了UnityAction之类的语法糖，但从 <a href="https://www.jacksondunstan.com/articles/3335">这篇文章</a> 来看，其效率反而不如C#自带的事件驱动解决方案，除非在某些Unity Editor定制人物上，才一定要使用UnityAction之类的，那个时候再使用。</p>
-<h2 id="_18">其他</h2>
+<p>在C#那边我们已经有了EventChannel的概念，现在要做的就是进一步将EventChannel做成ScriptedObject，这样一避免了数据冗余，另外可以很方便实现单例事件通道。</p>
+<p>大体操作步骤如下：</p>
+<ol>
+<li>定义事件通道</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine.Events</span><span class="p">;</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">EventChannelBaseSO</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="p">:</span> <span class="n">ScriptableObject</span>
+<span class="p">{</span>
+<span class="na">    [TextArea]</span> <span class="k">public</span> <span class="kt">string</span> <span class="n">description</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">event</span> <span class="n">EventHandler</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">Event</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">RaiseEvent</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">T</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Event</span><span class="p">?.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">AddHandler</span><span class="p">(</span><span class="n">EventHandler</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">handler</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Event</span> <span class="p">+=</span> <span class="n">handler</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">RemoveHandler</span><span class="p">(</span><span class="n">EventHandler</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">handler</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Event</span> <span class="p">-=</span> <span class="n">handler</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">LoadEventArgs</span> <span class="p">:</span> <span class="n">EventArgs</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">GameSceneSO</span> <span class="n">sceneToLoad</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">LoadEventArgs</span><span class="p">(</span><span class="n">GameSceneSO</span> <span class="n">sceneToLoad</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">sceneToLoad</span> <span class="p">=</span> <span class="n">sceneToLoad</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="na">[CreateAssetMenu(menuName = "Events/Load Event Channel")]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">LoadEventChannelSO</span> <span class="p">:</span> <span class="n">EventChannelBaseSO</span><span class="p">&lt;</span><span class="n">LoadEventArgs</span><span class="p">&gt;</span>
+<span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li>
+<p>生成事件通道的ScriptableObject文件</p>
+</li>
+<li>
+<p>一般在设计上会增加一个常驻场景，该常驻场景是最先加载的场景，然后该场景对某些事件进行了如下绑定，这些事件一般是最基本的事件，比如场景切换事件等。</p>
+</li>
+</ol>
+<p>```c#
+    [SerializeField] private LoadEventChannelSO _menuLoadChannel = default;</p>
+<div class="highlight"><pre><span></span>private void OnEnable()
+{
+    _menuLoadChannel.AddHandler(LoadMenu);
+}
+
+
+private void OnDisable()
+{
+    _menuLoadChannel.RemoveHandler(LoadMenu);
+}
+</pre></div>
+<p>```</p>
+<ol>
+<li>其他地方引用该事件通道都是如下形式：</li>
+</ol>
+<p><code>c#
+    [SerializeField] private LoadEventChannelSO _menuLoadChannel = default;</code></p>
+<p>然后指定事件通道都是那一个asset文件，则可以保证事件通道的唯一性或者说单例性。</p>
+<ol>
+<li>其他地方想调用事件如下：</li>
+</ol>
+<p><code>c#
+   _menuLoadChannel.RaiseEvent(this, new LoadEventArgs(_menuToLoad));</code></p>
+<h2 id="_18">多场景无缝切换</h2>
+<h2 id="_19">玩家场景数据记忆</h2>
+<h2 id="_20">其他</h2>
 <p><code>Ctrl+Shift+M</code> 在visual studio 上调出Unity快速方法输入。</p>
-<h3 id="_19">默认单位</h3>
+<h3 id="_21">默认单位</h3>
 <p>Unity术语里面长度用的是 1unit，比如velocity 用的每秒移动的unit。比如1unit等于多少并没有一个准数的，要看你自己那边的建模规范。</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-03-28T19:30:14.882730+08:00">2021年 3月 28日 </time>
+            <time pubdate="pubdate" datetime="2021-04-02T04:28:56.839970+08:00">2021年 4月 2日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-03-28T19:30:14.882730+08:00">2021年 3月 28日 </time>
+            <time datetime="2021-04-02T04:28:56.839970+08:00">2021年 4月 2日 </time>
 
 
             <h4>分类：</h4>
