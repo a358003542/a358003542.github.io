@@ -127,7 +127,7 @@
 <p>在决定选用pint模块之后，从astropy模块和chempy模块中可以看到关于具体学科的物理常数和物理量方面还是有一些额外的工作要做，这个后面再慢慢讨论。</p>
 <h2 id="pint">pint模块</h2>
 <p>pint模块就大的一个特色就是可定制性，就其模块本身来说只是提供了一个基本的处理物理量单位的逻辑，具体单位系统和相关运算的定义都是通过一种文本配置的形式展开的，比如：</p>
-<div class="highlight"><pre><span></span>@system SI
+<div class="highlight"><pre><span></span><code>@system SI
     second
     meter
     kilogram
@@ -136,16 +136,16 @@
     mole
     candela
 @end
-</pre></div>
+</code></pre></div>
 <p>上面这样的配置是刷单位系统的。</p>
 <p>比如：</p>
-<div class="highlight"><pre><span></span>minute = 60 * second = min
+<div class="highlight"><pre><span></span><code>minute = 60 * second = min
 hour = 60 * minute = hr
 day = 24 * hour = d
 week = 7 * day
-</pre></div>
+</code></pre></div>
 <p>就基本的使用如下：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from pint import UnitRegistry
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from pint import UnitRegistry
 &gt;&gt;&gt; unit = UnitRegistry()
 &gt;&gt;&gt; d = 3* unit.meter + 4*unit.centimeter
 &gt;&gt;&gt; d
@@ -154,51 +154,51 @@ week = 7 * day
 3.04
 &gt;&gt;&gt; d.units
 &lt;Unit('meter')&gt;
-</pre></div>
+</code></pre></div>
 <p>按照pint源码的写法，<code>UnitRegistry</code> 类  <code>SystemRegistry</code> 类，<code>ContextRegistry</code> 类， <code>NonMultiplicativeRegistry</code> 类和 <code>BaseRegistry</code> 类的各个初始化动作都执行了一遍。而且由于 <code>BaseRegistry</code> 类的元类加入这样的定制：</p>
-<div class="highlight"><pre><span></span>class RegistryMeta(type):
+<div class="highlight"><pre><span></span><code>class RegistryMeta(type):
     def __call__(self, *args, **kwargs):
         obj = super().__call__(*args, **kwargs)
         obj._after_init()
         return obj
-</pre></div>
+</code></pre></div>
 <p>使得 <code>BaseRegistry</code> 类初始化动作还额外挂载了 <code>_after_init</code> 动作。这个额外的挂载动作主要的一句是：</p>
-<div class="highlight"><pre><span></span>        if self._filename == "":
+<div class="highlight"><pre><span></span><code>        if self._filename == "":
             self.load_definitions("default_en.txt", True)
         elif self._filename is not None:
             self.load_definitions(self._filename)
-</pre></div>
+</code></pre></div>
 <p>其就是加载默认的definition文本。该文本定义的规则和语法都是pint模块自己定义的，大体如下：</p>
 <h3 id="unit">定义unit</h3>
-<div class="highlight"><pre><span></span>&lt;canonical name&gt; = &lt;relation to another unit or dimension&gt; [= &lt;symbol&gt;] [= &lt;alias&gt;] 
-</pre></div>
+<div class="highlight"><pre><span></span><code>&lt;canonical name&gt; = &lt;relation to another unit or dimension&gt; [= &lt;symbol&gt;] [= &lt;alias&gt;] 
+</code></pre></div>
 <p>比如：</p>
-<div class="highlight"><pre><span></span>minute = 60 * second = min
-</pre></div>
+<div class="highlight"><pre><span></span><code>minute = 60 * second = min
+</code></pre></div>
 <p>然后：</p>
-<div class="highlight"><pre><span></span>second = [time] = s = sec
-</pre></div>
+<div class="highlight"><pre><span></span><code>second = [time] = s = sec
+</code></pre></div>
 <p><code>[time]</code> 这个写法是说本单位是一个最基本的维度单位。</p>
 <p>还有这种写法：</p>
-<div class="highlight"><pre><span></span>[velocity] = [length] / [time] = [speed]
-</pre></div>
+<div class="highlight"><pre><span></span><code>[velocity] = [length] / [time] = [speed]
+</code></pre></div>
 <p>这是定义衍生维度单位。</p>
-<div class="highlight"><pre><span></span>@alias meter = metro = metr
-</pre></div>
+<div class="highlight"><pre><span></span><code>@alias meter = metro = metr
+</code></pre></div>
 <p>这是定义单位别名。</p>
 <h3 id="_2">定义物理常数</h3>
-<div class="highlight"><pre><span></span>speed_of_light = 299792458 m/s = c = c_0
-</pre></div>
+<div class="highlight"><pre><span></span><code>speed_of_light = 299792458 m/s = c = c_0
+</code></pre></div>
 <p>这个speed_of_light实际上就是一个单位。</p>
 <h3 id="_3">前缀支持</h3>
 <p>kilogram在定义文件里面是没有写的，不过也是可以直接使用的，因为其加入了下面这样的前缀支持语句：</p>
-<div class="highlight"><pre><span></span>kilo- =  1e3   = k-
-</pre></div>
+<div class="highlight"><pre><span></span><code>kilo- =  1e3   = k-
+</code></pre></div>
 <p>然后发现kilograms最后也会读取为kilogram单位。</p>
 <h3 id="_4">单位转换</h3>
-<div class="highlight"><pre><span></span><span class="n">test_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">unit</span><span class="o">.</span><span class="n">L</span>
+<div class="highlight"><pre><span></span><code><span class="n">test_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">unit</span><span class="o">.</span><span class="n">L</span>
 <span class="k">assert</span> <span class="n">test_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">'meter ** 3'</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>具体就是使用to方法，还是比较智能的了，看的出来这个模块从设计后后面的分析计算花了很多心思的。</p>
 <p>整个单位的转换和计算还有有效位数问题这个后面有时间再讨论。</p>
 

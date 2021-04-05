@@ -153,16 +153,16 @@
 </ul>
 </li>
 <li><a href="#unity-addressable-asset-system">Unity Addressable Asset system</a><ul>
-<li><a href="#addressablesloadsceneasync">Addressables.LoadSceneAsync</a></li>
+<li><a href="#_11">异步加载你的场景</a></li>
 </ul>
 </li>
-<li><a href="#_11">物理系统</a><ul>
-<li><a href="#_12">碰撞器组件的是否是触发器属性</a></li>
+<li><a href="#_12">物理系统</a><ul>
+<li><a href="#_13">碰撞器组件的是否是触发器属性</a></li>
 <li><a href="#physicscheckcapsule">Physics.CheckCapsule</a></li>
-<li><a href="#_13">物理系统优化</a></li>
+<li><a href="#_14">物理系统优化</a></li>
 </ul>
 </li>
-<li><a href="#_14">材质</a><ul>
+<li><a href="#_15">材质</a><ul>
 <li><a href="#albedo">albedo</a></li>
 <li><a href="#metallic">metallic</a></li>
 <li><a href="#smoothness">Smoothness</a></li>
@@ -170,20 +170,22 @@
 <li><a href="#offset">offset</a></li>
 </ul>
 </li>
-<li><a href="#_15">地形</a></li>
+<li><a href="#_16">地形</a></li>
 <li><a href="#makehuman">Makehuman工具</a></li>
 <li><a href="#cinemachine">cinemachine</a></li>
 <li><a href="#fmod">FMOD音效集成</a></li>
-<li><a href="#_16">开始菜单</a></li>
-<li><a href="#_17">场景间存在的持久数据</a><ul>
+<li><a href="#_17">开始菜单</a></li>
+<li><a href="#_18">场景间存在的持久数据</a><ul>
 <li><a href="#dontdestroyonload">DontDestroyOnLoad</a></li>
 </ul>
 </li>
 <li><a href="#unity_4">基于事件驱动的Unity编程</a></li>
-<li><a href="#_18">多场景无缝切换</a></li>
-<li><a href="#_19">玩家场景数据记忆</a></li>
-<li><a href="#_20">其他</a><ul>
-<li><a href="#_21">默认单位</a></li>
+<li><a href="#_19">多场景无缝切换</a></li>
+<li><a href="#_20">玩家场景数据记忆</a></li>
+<li><a href="#_21">单元测试</a></li>
+<li><a href="#_22">其他</a><ul>
+<li><a href="#_23">默认单位</a></li>
+<li><a href="#unitynet-core">Unity环境和.net core略有不同</a></li>
 </ul>
 </li>
 </ul>
@@ -214,35 +216,35 @@
 <h3 id="debug">入门Debug</h3>
 <p>你的脚本类需要继承自 <code>MonoBehaviour</code> ，这样unity才能知道那个是一个脚本类。</p>
 <p>Start方法每个组件游戏开始时就会执行，在这个方法里面写上这样的Debug语句：</p>
-<div class="highlight"><pre><span></span>    void Start()
+<div class="highlight"><pre><span></span><code>    void Start()
     {
         Debug.Log("hello world!");
     }
-</pre></div>
+</code></pre></div>
 <p>保存运行游戏，如果没有问题的话，你在控制台那边应该看到一个hello world的消息。入门第一课算是完成了。</p>
 <p>加分项，熟悉下面的LogFormat方法的用法，以后某些情况会很方便的。</p>
-<div class="highlight"><pre><span></span>Debug.LogFormat("{0} + {1} = {2}", 2,3,2+3);
-</pre></div>
+<div class="highlight"><pre><span></span><code>Debug.LogFormat("{0} + {1} = {2}", 2,3,2+3);
+</code></pre></div>
 <h2 id="unity">引用Unity对象</h2>
 <h3 id="getcomponet-generic-method">GetComponet generic method</h3>
 <p>GetComponet方法是一个generic method，需要指定查找的组件类型，查找只限于本GameObject的组件。</p>
-<div class="highlight"><pre><span></span>private Transform camTransform;
+<div class="highlight"><pre><span></span><code>private Transform camTransform;
 camTransform = this.GetComponent&lt;Transform&gt;();
 Debug.Log(camTransform.localPosition);
-</pre></div>
+</code></pre></div>
 <h3 id="find">Find方法</h3>
 <p>Find方法可以用于查找不是本GameObject的其他GameObject，具体名字就是Unity面板上显示的那个名字。</p>
-<div class="highlight"><pre><span></span>private GameObject directLight;
+<div class="highlight"><pre><span></span><code>private GameObject directLight;
 private Transform lightTransorm;
 
 directLight = GameObject.Find("Directional Light");
 lightTransorm = directLight.GetComponent&lt;Transform&gt;();
 Debug.Log(lightTransorm.localPosition);
-</pre></div>
+</code></pre></div>
 <h3 id="_4">引用脚本类</h3>
 <p>如果某个脚本类挂载在某个GameObject上，那么如下就可以引用该脚本类：</p>
-<div class="highlight"><pre><span></span>gameManager = GameObject.Find("GameManager").GetComponent&lt;GameBehavior&gt;();
-</pre></div>
+<div class="highlight"><pre><span></span><code>gameManager = GameObject.Find("GameManager").GetComponent&lt;GameBehavior&gt;();
+</code></pre></div>
 <p>上面代码的意思是有一个 <code>GameBehavior.csharp</code> 文件里面有 <code>GameBehavior</code> 类挂载在GameManager这个GameObject上，那么按照上面的语句就可以引用该脚本类对象了。</p>
 <h2 id="unity-editor">Unity Editor基本的使用</h2>
 <p>关于Unity Editor的基本使用请读者自行熟悉软件界面，然后试着自己慢慢搭建起，比如一个平面作为一个基本的游玩空间，平面由四面墙围起来，然后等等其他立方体等等。移动缩放旋转和复制等等。</p>
@@ -276,11 +278,11 @@ Debug.Log(lightTransorm.localPosition);
 <p>导航系统中你需要定义一系列的导航路径点，空的GameObject即可。</p>
 <h3 id="agent">如何移动一个Agent</h3>
 <p>实际会很简单，就是设定destination属性即可。</p>
-<div class="highlight"><pre><span></span>agent.destination = transform.position;
-</pre></div>
+<div class="highlight"><pre><span></span><code>agent.destination = transform.position;
+</code></pre></div>
 <h3 id="_7">巡逻模式</h3>
 <p>一个agent的巡逻模式可以通过如下类似编码来实现：</p>
-<div class="highlight"><pre><span></span>    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code>    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">agent</span><span class="p">.</span><span class="n">remainingDistance</span> <span class="p">&lt;</span> <span class="m">0.2f</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">agent</span><span class="p">.</span><span class="n">pathPending</span><span class="p">)</span>
         <span class="p">{</span>
@@ -298,7 +300,7 @@ Debug.Log(lightTransorm.localPosition);
 
         <span class="n">locationIndex</span> <span class="p">=</span> <span class="p">(</span><span class="n">locationIndex</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">%</span> <span class="n">locations</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
     <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 <p>上面的 <code>agent.pathPending</code> 的意思是当前路径还没有计算好，取值否表示一定要先等路径计算好然后剩余距离只有多少之后继续移动到下一个导航点。</p>
 <h2 id="_8">脚本</h2>
 <h3 id="gameobject">GameObject</h3>
@@ -313,10 +315,10 @@ Debug.Log(lightTransorm.localPosition);
 <p>unity的每一个gameObject都有transform这个属性，transform的parent和child概念就是来自你在世界大纲视图上定义的GameObject的层级。</p>
 <p>你可以通过transform的层级数来定位某个gameObject的transform，然后通过 <code>.gameObject</code> 这个属性来获得具体该gameObject对象。</p>
 <p>你可以通过如下语句来迭代某个GameObject下的子节点：</p>
-<div class="highlight"><pre><span></span><span class="k">foreach</span> <span class="p">(</span><span class="n">Transform</span> <span class="n">child</span> <span class="k">in</span> <span class="n">parent</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><code><span class="k">foreach</span> <span class="p">(</span><span class="n">Transform</span> <span class="n">child</span> <span class="k">in</span> <span class="n">parent</span><span class="p">){</span>
     <span class="c1">// do something</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 <h3 id="transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</h3>
 <p>经过试验结论如下，在速度特别快的情况下两个都可能发生避开物理碰撞系统而发生穿模，速度很低的情况下两个也都不会穿模。不过在速度中等的情况下，用Transform的translate方法移动物体仍时不时会避开物理刚体碰撞系统，而在这种情况下刚体的MovePosition就表现要好一下。</p>
 <p>此外FixUpdate的固定时间设定也会很好地防止物体移动速度不可捉摸的突变情况。</p>
@@ -329,12 +331,12 @@ Debug.Log(lightTransorm.localPosition);
 <p>OnCollisionEnter的触发条件较为宽松，两个GameObject的碰撞器或者刚体发生碰撞则会触发。</p>
 <h3 id="headerattribute">HeaderAttribute</h3>
 <p>在编辑器那边新增一个标题头</p>
-<div class="highlight"><pre><span></span>    [Header("Persistent managers Scene")]
-</pre></div>
+<div class="highlight"><pre><span></span><code>    [Header("Persistent managers Scene")]
+</code></pre></div>
 <h3 id="textareaattribute">TextAreaAttribute</h3>
 <p>在编辑器那里新增一个可编辑文本区域。</p>
-<div class="highlight"><pre><span></span>    [TextArea] public string description;
-</pre></div>
+<div class="highlight"><pre><span></span><code>    [TextArea] public string description;
+</code></pre></div>
 <h3 id="_10">序列化</h3>
 <p>序列化是理解Unity Editor如何工作的关键，这当然对你后面更好地使用Unity Editor从而更好地进行游戏开发很重要，但更重要的是Unity Editor可以看作利用Unity技术实现的第一个游戏，因此Unity Editor广泛使用的序列化技术对你的游戏代码开发同样具有参考价值，这点我们后续会看到。</p>
 <p>推荐读者参考阅读 <a href="https://blogs.unity3d.com/2014/06/24/serialization-in-unity/">这篇文章</a> 。</p>
@@ -365,19 +367,19 @@ Debug.Log(lightTransorm.localPosition);
 <li><code>List&lt;T&gt;</code>  T是可序列化的类型。</li>
 </ul>
 <p>需要强调的是如果不是UntiyEngine.Object衍生出来的类，而是随便自己定义的类，是不能序列化的，会出一些问题。一个推荐的做法是用结构体来中转数据来对接Unity的序列化过程。</p>
-<div class="highlight"><pre><span></span>   [Serializable]
+<div class="highlight"><pre><span></span><code>   [Serializable]
     public struct SerializableNode
     {
         public string interestingValue;
         public int childCount;
         public int indexOfFirstChild;
     }
-</pre></div>
+</code></pre></div>
 <h3 id="serializefield">SerializeField</h3>
 <p>上面序列化一节提到，一个私有字段如果加上 <code>[SerializeField]</code> 标识，Unity对该私有字段也将使用序列化技术。</p>
 <p>以编辑器脚本的某个公有字段来说，unity会将其序列化存储在硬盘中从而实现热重载，也就是下次启动游戏之后还会将你修改的这些参数填上去。如下加入 SerializeField 之后，该私有字段一样也会进入unity的序列化管理。</p>
-<div class="highlight"><pre><span></span>[SerializeField] private AssetReference _persistentManagersScene = default;
-</pre></div>
+<div class="highlight"><pre><span></span><code>[SerializeField] private AssetReference _persistentManagersScene = default;
+</code></pre></div>
 <h3 id="scriptableobject">ScriptableObject</h3>
 <p>ScriptableObject继承自UntiyEngine.Object，按照上面序列化一小节的描述，ScriptableObject是可序列化的对象。</p>
 <p>ScriptableObject的作用是充当一个数据容器。Unity的预制件实例化，里面的数据将会产生多个副本，所以对于重复使用的公有数据一般是推荐使用ScriptableObject来存储数据，然后预制件来访问这些数据。</p>
@@ -385,43 +387,55 @@ Debug.Log(lightTransorm.localPosition);
 <p>ScriptableOjbect的唯一性是根据你创建的asset文件唯一性来的，只要保证是引用的同一asset文件，则生成类的实例都是一样的，个人测试也是实例id都是一样的。</p>
 <p>如果是和Unity Addressable Asset system相结合，如果你的ScriptableObject是通过 <code>LoadAssetAsync</code> 加载进来的，那么在引用Asset的时候实际上都是在使用一个ScriptableObject，你可以将这个ScriptableObject看作类似perfab预制件一样的东西，直接使用该数据对象就是直接使用预制件，都是在用同一个东西。</p>
 <p>而如果你调用 <code>InstantiateAsync</code> 来对ScriptableObject进行了实例化，则就是不同的数据对象了。<a href="https://docs.unity3d.com/cn/2019.4/Manual/class-ScriptableObject.html">参考网页</a>。</p>
+<p>经过个人试验发现：</p>
+<div class="highlight"><pre><span></span><code>        bool t1 = _menuToLoad[0] == _menuToLoad[1];
+        bool t2 = _menuToLoad[1] == _menuToLoad[2];
+        Debug.Log($"{_menuToLoad[0].GetHashCode()}");
+        Debug.Log($"{_menuToLoad[1].GetHashCode()}");
+        Debug.Log($"{_menuToLoad[2].GetHashCode()}");
+        Debug.Log($"test:      {t1}");
+        Debug.Log($"test:      {t2}");
+
+        return;
+</code></pre></div>
+<p>上面列表一号和二号是不同的scriptableobject，二号和三号是相同的scriptableobject。然后scrptableobject的相等性可以使用 <code>==</code> 运算符来进行，然后通过HashCode发现相同的scriptableobject的哈希值也是相同的。</p>
 <h4 id="scriptableobject_2">创建一个ScriptableObject对象</h4>
-<div class="highlight"><pre><span></span>[CreateAssetMenu(fileName = "PersistentManagers", menuName = "Scene Data/PersistentManagers")]
+<div class="highlight"><pre><span></span><code>[CreateAssetMenu(fileName = "PersistentManagers", menuName = "Scene Data/PersistentManagers")]
 public class PersistentManagersSO : GameSceneSO { }
-</pre></div>
+</code></pre></div>
 <p>fileName是点击菜单按钮之后默认保存的文件名，menuName是在Unity Editor对应的菜单按钮位置，上面的例子是：<code>资源-&gt;创建-&gt;场景数据-&gt;PersistentManagers</code> 。</p>
 <h3 id="unity_1">Unity协程</h3>
 <p>如果读者之前接触过协程概念，对于这里的协程的理解会很快，但有一点是需要特别强调的。那就是Unity的协程更多的是一个Unity自身基于逐帧运算然后做出来的概念，和很多编程语言上的协程概念比较起来，其底层甚至可能都不依赖于线程切换。</p>
 <p>C#语言那边有异步编程，其使用的async func 和await之类的和python的异步编程很像，这些才是严格意义上的协程概念，Unity协程只是利用了C#的 <code>IEnumerator</code> 和 <code>yield return</code> 构建起来的类似python的可迭代对象，然后在这个可迭代对象之上构建出来的Unity协程概念。</p>
 <p>具体Unity协程的编写如下：</p>
-<div class="highlight"><pre><span></span><span class="n">IEnumerator</span> <span class="nf">CoroutineExample</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><code><span class="n">IEnumerator</span> <span class="nf">CoroutineExample</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">){</span>
     <span class="c1">// do something </span>
     <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
     <span class="c1">// still do something</span>
     <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 <p>启动一个Unity协程：</p>
-<div class="highlight"><pre><span></span><span class="n">StartCoroutine</span><span class="p">(</span><span class="n">CoroutineExample</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">StartCoroutine</span><span class="p">(</span><span class="n">CoroutineExample</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
+</code></pre></div>
 <p>该CoroutineExample协程会在遇到yield return 那里停止执行，然后下一帧再回来继续执行本协程。</p>
 <p>此外可以如下启动协程：</p>
-<div class="highlight"><pre><span></span>StartCoroutine("CoroutineExample", 1);
-</pre></div>
+<div class="highlight"><pre><span></span><code>StartCoroutine("CoroutineExample", 1);
+</code></pre></div>
 <p>这种指定协程名字符串的启动后面可以指定名字要求停止某个协程：</p>
-<div class="highlight"><pre><span></span>StopCoroutine("CoroutineExample")
-</pre></div>
+<div class="highlight"><pre><span></span><code>StopCoroutine("CoroutineExample")
+</code></pre></div>
 <p>你还可以让某个协程暂停执行多少秒：</p>
-<div class="highlight"><pre><span></span>yield return new WaitForSeconds(.1f);
-</pre></div>
+<div class="highlight"><pre><span></span><code>yield return new WaitForSeconds(.1f);
+</code></pre></div>
 <h4 id="unity_2">嵌套Unity协程</h4>
 <p>参考了  <a href="https://www.alanzucconi.com/2017/02/15/nested-coroutines-in-unity/">这篇文章</a> 。</p>
 <p>如下：</p>
-<div class="highlight"><pre><span></span>yield return StartCoroutine(AnotherCoroutine())
-</pre></div>
+<div class="highlight"><pre><span></span><code>yield return StartCoroutine(AnotherCoroutine())
+</code></pre></div>
 <p>这种形式，父协程要等待子协程完成才会继续往下走，也就是对于父协程来说，子协程的整个执行过程是同步的。因为子协程仍然是通过 StartCoroutine启动的，其内部的执行是异步的。</p>
 <h4 id="unity_3">平行Unity协程</h4>
-<div class="highlight"><pre><span></span>IEnumerator A()
+<div class="highlight"><pre><span></span><code>IEnumerator A()
 {
 
     // Starts B, C, and D as coroutines and continues the execution
@@ -435,7 +449,7 @@ public class PersistentManagersSO : GameSceneSO { }
     yield return d;
 
 }
-</pre></div>
+</code></pre></div>
 <p>B C D这几个子协程从启动开始就执行了，说的再直白点就是正常启动协程则一下就启动起来了，根本花费不了什么时间。</p>
 <p>上面两种情况可以总结为那就是嵌套Unity协程中，父协程是同步的。所谓同步就是Unity会一直在这里执行，而Unity协程所谓的异步指的是内部执行了很小碎片的不怎么花费时间的动作，然后就yield return了，然后再等待下一帧再继续执行，并不阻塞主程序。</p>
 <p>我们看到Unity协程解决的主要是帧动作太多的问题，通过Update等函数我们可以设计每一帧进行某个动作，然后我们发现对于很多问题并不需要每一帧都做，通过Unity协程可以解决这个问题；还有些过程可能横跨多个帧，但其内部动作可以分解为很多小动作，然后每帧再分别执行这些小动作即可，这可以通过Unity协程解决。</p>
@@ -445,15 +459,15 @@ public class PersistentManagersSO : GameSceneSO { }
 <p>在 window-&gt;addressables groups 那里新增一个group。</p>
 <p>然后将资源拖动到这里，第一列就是后面你要使用引用的名字，默认的名字是根据你的资源的本地目录来的，你也可以修改为你想要的名字。</p>
 <p>在脚本中使用资源如下，接受的参数是该资产的名字。</p>
-<div class="highlight"><pre><span></span>using UnityEngine.AddressableAssets;
+<div class="highlight"><pre><span></span><code>using UnityEngine.AddressableAssets;
 Addressables.LoadAssetAsync&lt;GameObject&gt;("AssetAddress");
 Addressables.InstantiateAsync("AssetAddress");
-</pre></div>
+</code></pre></div>
 <p>如果是<code>AssetReference</code> 配置好的资产则可以直接如下调用，：</p>
-<div class="highlight"><pre><span></span>_menuLoadChannel.LoadAssetAsync&lt;LoadEventChannelSO&gt;().Completed += LoadMainMenu;
-</pre></div>
+<div class="highlight"><pre><span></span><code>_menuLoadChannel.LoadAssetAsync&lt;LoadEventChannelSO&gt;().Completed += LoadMainMenu;
+</code></pre></div>
 <p>一般的使用大体如下：</p>
-<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">UnityEngine.AddressableAssets</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
@@ -472,19 +486,56 @@ Addressables.InstantiateAsync("AssetAddress");
         <span class="n">myGameObject</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">Result</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</pre></div>
-<h3 id="addressablesloadsceneasync">Addressables.LoadSceneAsync</h3>
-<p>异步加载一个scene。</p>
-<h2 id="_11">物理系统</h2>
-<h3 id="_12">碰撞器组件的是否是触发器属性</h3>
+</code></pre></div>
+<h3 id="_11">异步加载你的场景</h3>
+<p>addressables 系统可用于异步加载你的场景，非常的方便。</p>
+<div class="highlight"><pre><span></span><code>using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
+using UnityEngine.ResourceManagement.ResourceProviders;
+
+Addressables.LoadSceneAsync("sceneName", LoadSceneMode.Additive).Completed += SceneLoadComplete;
+// if scene is a AssetReference
+scene.LoadSceneAsync(LoadSceneMode.Additive).Completed += SceneLoadComplete;
+
+private void SceneLoadComplete(SceneInstance obj)
+{
+    if (obj.Status == AsyncOperationStatus.Succeeded)
+    {
+        Debug.Log("scene load succeeded.")
+        // do something.
+    }
+
+}
+</code></pre></div>
+<p>卸载场景如下：</p>
+<div class="highlight"><pre><span></span><code>private AsyncOperationHandle&lt;SceneInstance&gt; handle;
+handle = obj;
+
+Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
+</code></pre></div>
+<p>上面不管是加载还是卸载一旦启动就异步进行了，Completed事件加入回调是一种方法，但你也可以用Unity的协程方法来检查之：</p>
+<div class="highlight"><pre><span></span><code>private IEnumerator LoadingProcess()
+{
+    if (obj.Status == AsyncOperationStatus.Succeeded)
+    {
+        Debug.Log("scene load succeeded.")
+        // do something.
+    }
+    yield return null;
+}
+</code></pre></div>
+<p>如果大体每一帧都会检测一次加载是否Succeeded。</p>
+<h2 id="_12">物理系统</h2>
+<h3 id="_13">碰撞器组件的是否是触发器属性</h3>
 <p>默认是否，如果勾选，则该碰撞器不具有物体碰撞功能而只有碰撞事件触发功能，也就是你可以穿模进去了。</p>
 <h3 id="physicscheckcapsule">Physics.CheckCapsule</h3>
 <p>这个可以用来测试玩家角色是否接触地面，具体这个方法参数官方文档读起来也不是很直观，具体来说其定义了这样一个胶囊：</p>
 <p><img alt="img" src="https://a358003542.github.io/images/2021/unity_capsule.png"/></p>
 <p>其中的layer层一般将地形GameObject放入该层。</p>
-<h3 id="_13">物理系统优化</h3>
+<h3 id="_14">物理系统优化</h3>
 <p>如果物理系统表现不太如人意，应该尽可能参照真实物理世界的参数然后再根据自己的需要进行调整。</p>
-<h2 id="_14">材质</h2>
+<h2 id="_15">材质</h2>
 <h3 id="albedo">albedo</h3>
 <p>反射率，定义了材质的基本颜色，纹理也是放在这里设置的。</p>
 <h3 id="metallic">metallic</h3>
@@ -495,7 +546,7 @@ Addressables.InstantiateAsync("AssetAddress");
 <p>平铺，定义了纹理在表面平铺重复的次数。</p>
 <h3 id="offset">offset</h3>
 <p>偏移，定义了纹理在表面平铺的偏移量。</p>
-<h2 id="_15">地形</h2>
+<h2 id="_16">地形</h2>
 <p>地形的搭建应该优先考虑Unity自带的地形功能，可能某些情况下，比如封闭的山洞等地形使用blender建模地形才能实现。</p>
 <p>新建一个地形： GameObject -&gt; 3d object -&gt; terrian 。</p>
 <p>设置-&gt;网络分辨率那里修改地形的大小。 </p>
@@ -508,14 +559,14 @@ Addressables.InstantiateAsync("AssetAddress");
 <p>TODO 视频讲解</p>
 <h2 id="fmod">FMOD音效集成</h2>
 <p>TODO 视频讲解简单的FMOD集成音效知识，刚开始随便找点网上的音效进行一些试探性的集成尝试。</p>
-<h2 id="_16">开始菜单</h2>
+<h2 id="_17">开始菜单</h2>
 <p>开始菜单就是另外一个场景地图，其是一个2d场景地图，在开发的时候视图中间偏左有个选项，激活了场景处于2d视图中。然后就是在这个场景中添加一些UI元素即构成了开始菜单。</p>
 <p>TODO 视频讲解</p>
-<h2 id="_17">场景间存在的持久数据</h2>
+<h2 id="_18">场景间存在的持久数据</h2>
 <h3 id="dontdestroyonload">DontDestroyOnLoad</h3>
 <p>当加载一个新的场景时会把原场景的所有对象destroy掉，如下：</p>
-<div class="highlight"><pre><span></span>DontDestroyOnLoad(this.gameObject);
-</pre></div>
+<div class="highlight"><pre><span></span><code>DontDestroyOnLoad(this.gameObject);
+</code></pre></div>
 <p>则本脚本绑定的那个GameObject在场景切换时将不会被删除掉。</p>
 <h2 id="unity_4">基于事件驱动的Unity编程</h2>
 <p>作为和桌面端程序类似的存在，成熟的Unity游戏编程必然是基于事件驱动的编程模式。这对于大中小型Unity项目都是有用的和必须的。</p>
@@ -525,7 +576,7 @@ Addressables.InstantiateAsync("AssetAddress");
 <ol>
 <li>定义事件通道</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">UnityEngine.Events</span><span class="p">;</span>
 
@@ -566,7 +617,7 @@ Addressables.InstantiateAsync("AssetAddress");
 <span class="k">public</span> <span class="k">class</span> <span class="nc">LoadEventChannelSO</span> <span class="p">:</span> <span class="n">EventChannelBaseSO</span><span class="p">&lt;</span><span class="n">LoadEventArgs</span><span class="p">&gt;</span>
 <span class="p">{</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 <ol>
 <li>
 <p>生成事件通道的ScriptableObject文件</p>
@@ -575,46 +626,54 @@ Addressables.InstantiateAsync("AssetAddress");
 <p>一般在设计上会增加一个常驻场景，该常驻场景是最先加载的场景，然后该场景对某些事件进行了如下绑定，这些事件一般是最基本的事件，比如场景切换事件等。</p>
 </li>
 </ol>
-<p>```c#
-    [SerializeField] private LoadEventChannelSO _menuLoadChannel = default;</p>
-<div class="highlight"><pre><span></span>private void OnEnable()
-{
-    _menuLoadChannel.AddHandler(LoadMenu);
-}
+<div class="highlight"><pre><span></span><code><span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">LoadEventChannelSO</span> <span class="n">_menuLoadChannel</span> <span class="p">=</span> <span class="k">default</span><span class="p">;</span>
+
+<span class="k">private</span> <span class="k">void</span> <span class="nf">OnEnable</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="n">_menuLoadChannel</span><span class="p">.</span><span class="n">AddHandler</span><span class="p">(</span><span class="n">LoadMenu</span><span class="p">);</span>
+<span class="p">}</span>
 
 
-private void OnDisable()
-{
-    _menuLoadChannel.RemoveHandler(LoadMenu);
-}
-</pre></div>
-<p>```</p>
+<span class="k">private</span> <span class="k">void</span> <span class="nf">OnDisable</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="n">_menuLoadChannel</span><span class="p">.</span><span class="n">RemoveHandler</span><span class="p">(</span><span class="n">LoadMenu</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
 <ol>
 <li>其他地方引用该事件通道都是如下形式：</li>
 </ol>
-<p><code>c#
-    [SerializeField] private LoadEventChannelSO _menuLoadChannel = default;</code></p>
+<div class="highlight"><pre><span></span><code><span class="na">[SerializeField]</span> <span class="k">private</span> <span class="n">LoadEventChannelSO</span> <span class="n">_menuLoadChannel</span> <span class="p">=</span> <span class="k">default</span><span class="p">;</span>
+</code></pre></div>
 <p>然后指定事件通道都是那一个asset文件，则可以保证事件通道的唯一性或者说单例性。</p>
 <ol>
 <li>其他地方想调用事件如下：</li>
 </ol>
-<p><code>c#
-   _menuLoadChannel.RaiseEvent(this, new LoadEventArgs(_menuToLoad));</code></p>
-<h2 id="_18">多场景无缝切换</h2>
-<h2 id="_19">玩家场景数据记忆</h2>
-<h2 id="_20">其他</h2>
+<div class="highlight"><pre><span></span><code><span class="n">_menuLoadChannel</span><span class="p">.</span><span class="n">RaiseEvent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">new</span> <span class="n">LoadEventArgs</span><span class="p">(</span><span class="n">_menuToLoad</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="_19">多场景无缝切换</h2>
+<h2 id="_20">玩家场景数据记忆</h2>
+<h2 id="_21">单元测试</h2>
+<p>按照C#的方法，自动创建了一个单元测试项目。即使是空白单元测试也会报错：</p>
+<div class="highlight"><pre><span></span><code>CS0006 could not found file Assembly-CSharp.dll
+</code></pre></div>
+<p>大概这个错误，我好不容易才在 <a href="https://developercommunity.visualstudio.com/t/vs-doesnt-put-binaries-of-unity-project-to-output/785717">这个网页</a> 知道Unity项目在visual studio中默认是不自动完成生成项目的，你需要在：</p>
+<div class="highlight"><pre><span></span><code>工具 -&gt;  选项 -&gt; 适用于Unity的工具 -&gt; 杂项 -&gt; 禁止完整生成项目
+</code></pre></div>
+<h2 id="_22">其他</h2>
 <p><code>Ctrl+Shift+M</code> 在visual studio 上调出Unity快速方法输入。</p>
-<h3 id="_21">默认单位</h3>
+<h3 id="_23">默认单位</h3>
 <p>Unity术语里面长度用的是 1unit，比如velocity 用的每秒移动的unit。比如1unit等于多少并没有一个准数的，要看你自己那边的建模规范。</p>
+<h3 id="unitynet-core">Unity环境和.net core略有不同</h3>
+<p>不能使用 System.HashCode ？？？？？？？？？</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-04-02T04:28:56.839970+08:00">2021年 4月 2日 </time>
+            <time pubdate="pubdate" datetime="2021-04-06T05:41:10.419055+08:00">2021年 4月 6日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-04-02T04:28:56.839970+08:00">2021年 4月 2日 </time>
+            <time datetime="2021-04-06T05:41:10.419055+08:00">2021年 4月 6日 </time>
 
 
             <h4>分类：</h4>

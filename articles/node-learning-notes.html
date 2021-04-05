@@ -136,32 +136,32 @@
 <p>V8引擎性能很高，javascript会被直接编译成本地机器码。所以node使用javascript也很高效。因为V8引擎原来处理网页上的javascript脚本就实现上必须是事件驱动，非阻塞IO的，于是到了node服务器这边也是事件驱动的，非阻塞IO编程的。</p>
 <h2 id="nodenpm">node和npm</h2>
 <p>正如前面所说，node是一个平台，然后node人们也常称作node.js，因为node在作这个平台的时候内置了很多官方的js模块。比如说我们随便从网上找了一个最简单的nodejs入门样例web server程序：</p>
-<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
 
 <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span> <span class="s1">'text/plain'</span><span class="p">});</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mf">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span> <span class="s1">'text/plain'</span><span class="p">});</span>
     <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello World\n'</span><span class="p">);</span>
 
-<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mf">8888</span><span class="p">);</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:8888/'</span><span class="p">);</span>
-</pre></div>
+</code></pre></div>
 <p>其最开始的语句 <code>require('http')</code> 就是在引入node.js的官方内置js模块http。</p>
 <p>既然有了官方模块那当然就有第三方模块和模块管理工具了。一般安装好node之后除了node命令之外还有npm命令，最新的node现在还提供npx命令。</p>
 <p>首先说一下npx命令有什么用，在本地安装一个npm包之后，该包提供了一个命令，如果你希望调用这个命令，以前的做法则可能需要修改 <code>package.json</code> 的 scripts 字段：</p>
-<div class="highlight"><pre><span></span>  "scripts": {
+<div class="highlight"><pre><span></span><code>  "scripts": {
     "start": "electron .",
    }
-</pre></div>
+</code></pre></div>
 <p>然后你通过 <code>npm start</code> 来达到效果。现在你可以如下直接调用 <code>electron</code> 命令了。</p>
-<div class="highlight"><pre><span></span>npx electron .
-</pre></div>
+<div class="highlight"><pre><span></span><code>npx electron .
+</code></pre></div>
 <p>然后我们继续往下说，上面提到的 <code>package.json</code> 是npm用于包管理的很重要的一个配置信息文件。你可以手工创建一个，或者通过 <code>npm init</code> 命令来生成一个。</p>
 <p>在你想要新建的模块的根目录下运行 <code>npm init</code> ，程序会交互问一些问题，然后创建 <code>package.json</code> 文件。</p>
 <h3 id="npm">配置npm国内源</h3>
 <p>免得后面有些包下载动作太慢了，这里就先讲了。</p>
-<div class="highlight"><pre><span></span>npm config set registry https://registry.npm.taobao.org
-</pre></div>
+<div class="highlight"><pre><span></span><code>npm config set registry https://registry.npm.taobao.org
+</code></pre></div>
 <p>这个配置对后面提到的yarn也是一样有效的。</p>
 <h3 id="npm_1">npm的基本使用</h3>
 <ul>
@@ -197,31 +197,31 @@
 <h2 id="_1">模块简介</h2>
 <p>前面谈了一些关于模块的东西，本小节将进一步介绍node的模块。</p>
 <p>首先我们新建一个文件夹mymodule，然后里面新建一个 <code>index.js</code> 文件。在<code>index.js</code> 文件里面定义一个简单的函数：</p>
-<div class="highlight"><pre><span></span>function add2(a,b){
+<div class="highlight"><pre><span></span><code>function add2(a,b){
   return a + b;
 }
-</pre></div>
+</code></pre></div>
 <p>然后导出这个函数</p>
-<div class="highlight"><pre><span></span>exports.add2 = add2
-</pre></div>
+<div class="highlight"><pre><span></span><code>exports.add2 = add2
+</code></pre></div>
 <p>然后我们在外面新建一个 <code>test_mymodule.js</code> 来实际使用mymoudle模块：</p>
-<div class="highlight"><pre><span></span>var mymodule = require('./mymodule')
+<div class="highlight"><pre><span></span><code>var mymodule = require('./mymodule')
 
 console.log(mymodule.add2(1,2))
-</pre></div>
+</code></pre></div>
 <h3 id="_2">补充说明</h3>
 <p>前面简单的模块创建例子中默认的  <code>index.js</code> 入口你可以通过新建 <code>package.json</code> 文件然后通过设置 <code>main</code> 字段属性来指定其他入口js文件。</p>
 <p>如果你的模块很大型了，那么可能 <code>exports.</code> 这种写法不太合适了，你可以通过设置 <code>module.exports</code> 为其他对象来改进之。</p>
 <h3 id="npm_2">发行你自己的npm包</h3>
 <p>首先你需要在 <code>npmjs.com</code> 上申请个用户名：</p>
-<div class="highlight"><pre><span></span>npm adduser
-</pre></div>
+<div class="highlight"><pre><span></span><code>npm adduser
+</code></pre></div>
 <p>或者以前adduser过了那么：</p>
-<div class="highlight"><pre><span></span>npm login
-</pre></div>
+<div class="highlight"><pre><span></span><code>npm login
+</code></pre></div>
 <p>然后：</p>
-<div class="highlight"><pre><span></span>npm publish
-</pre></div>
+<div class="highlight"><pre><span></span><code>npm publish
+</code></pre></div>
 <p>默认发送公开的模块，npm付费用户可以发布私有模块： <code>"private": false</code>。</p>
 <h2 id="_3">参考资料</h2>
 <p>其他官方文档就不赘述了。</p>

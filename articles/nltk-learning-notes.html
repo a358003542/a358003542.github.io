@@ -105,13 +105,12 @@
 <p>nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。</p>
 <h2 id="_2">安装和使用</h2>
 <p>nltk作为python模块安装并没有什么好说的，不过你还需要安装<code>nltk_data</code> ，通过运行：</p>
-<div class="highlight"><pre><span></span>import nltk
+<div class="highlight"><pre><span></span><code>import nltk
 nltk.download()
-</pre></div>
-
+</code></pre></div>
 
 <p>即可，当然你也可以自己手工配置。其搜索路径是如下配置的：</p>
-<div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">):</span>
     <span class="c1"># Common locations on Windows:</span>
     <span class="n">path</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
@@ -133,29 +132,26 @@ nltk.download()
         <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/lib/nltk_data&quot;</span><span class="p">),</span>
         <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/local/lib/nltk_data&quot;</span><span class="p">),</span>
     <span class="p">]</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>具体里面的内容可以在 <a href="https://github.com/nltk/nltk_data">nltk_data</a> 这个github项目中找到。具体内容在packages下面，其中corpora的内容是不需要zip解压的，其他的一般需要先解压再放好位置。</p>
 <h2 id="_3">语料库管理</h2>
 <p>nltk的语料库管理并不是重点，不过其提供的一些语料库接口是值得学习的，比如说：</p>
-<div class="highlight"><pre><span></span>from nltk.book import gutenberg
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>from nltk.book import gutenberg
+</code></pre></div>
 
 <p>这个gutenberg具体利用的是 <code>PlaintextCorpusReader</code> 这个类。</p>
 <p>可以利用这个类来加载你自己的txt文本，不过中文的话需要自己定义Tokenizer类。一个简单的类如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.tokenize.api</span> <span class="kn">import</span> <span class="n">TokenizerI</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk.tokenize.api</span> <span class="kn">import</span> <span class="n">TokenizerI</span>
 
 <span class="k">class</span> <span class="nc">JiebaTokenizer</span><span class="p">(</span><span class="n">TokenizerI</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">jieba</span><span class="o">.</span><span class="n">lcut</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>你需要实现tokenize这个方法，切分字符串然后返回的是列表。</p>
 <p>中文分句一个简单实现就是利用正则表达式来切分：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">RegexpTokenizer</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">RegexpTokenizer</span>
 <span class="kn">from</span> <span class="nn">my_python_module.basic.list</span> <span class="kn">import</span> <span class="n">combine_odd_even</span>
 
 <span class="k">class</span> <span class="nc">ChineseSentenceTokenizer</span><span class="p">(</span><span class="n">RegexpTokenizer</span><span class="p">):</span>
@@ -165,12 +161,11 @@ nltk.download()
     <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ChineseSentenceTokenizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">combine_odd_even</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>上面的combine_odd_even是我自己定义的一个方法，将列表奇偶元素相加，这里不是讨论的重点，略过了。</p>
 <p>然后我们定义 <code>load_corpus</code> 来加载txt语料：</p>
-<div class="highlight"><pre><span></span>def load_corpus(root, word_tokenizer=JiebaTokenizer(),
+<div class="highlight"><pre><span></span><code>def load_corpus(root, word_tokenizer=JiebaTokenizer(),
                 sent_tokenizer=ChineseSentenceTokenizer()):
     return PlaintextCorpusReader(root, r&quot;(?!\.).*\.txt&quot;,
                                  word_tokenizer=word_tokenizer,
@@ -178,53 +173,46 @@ nltk.download()
                                  encoding=&#39;utf8&#39;)
 
 zh_gutenberg = load_corpus(&#39;D:/nlp_data/corpora/zh_gutenberg&#39;)
-</pre></div>
-
+</code></pre></div>
 
 <p>这个root指向你的语料库的文件夹即可，下面放着一些txt文本。</p>
 <p>然后如下利用nltk的Text类来加载语料进行分析。</p>
-<div class="highlight"><pre><span></span>laozi = Text(zh_gutenberg.words(&quot;laozi.txt&quot;))
+<div class="highlight"><pre><span></span><code>laozi = Text(zh_gutenberg.words(&quot;laozi.txt&quot;))
 lunyu = Text(zh_gutenberg.words(&quot;lunyu.txt&quot;))
-</pre></div>
-
+</code></pre></div>
 
 <p>后面就对应上官方教材的叙述了。</p>
 <h3 id="_4">语料库接口</h3>
 <p>如下调用语料库的原始文本，利用你之前设置好的word_tokenizer分词后的词语列表，利用你之前设置好的sent_tokenizer分句之后的句子列表。</p>
-<div class="highlight"><pre><span></span>zh_gutenberg.raw(&#39;xiyouji_s.txt&#39;)
+<div class="highlight"><pre><span></span><code>zh_gutenberg.raw(&#39;xiyouji_s.txt&#39;)
 zh_gutenberg.words(&#39;xiyouji_s.txt&#39;)
 zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
-</pre></div>
-
+</code></pre></div>
 
 <h2 id="text">Text接口</h2>
 <h3 id="concordance">concordance</h3>
 <p>索引词</p>
-<div class="highlight"><pre><span></span>text1.concordance(&quot;monstrous&quot;)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>text1.concordance(&quot;monstrous&quot;)
+</code></pre></div>
 
 <h3 id="similar">similar</h3>
 <p>根据上下词环境来找相似词</p>
-<div class="highlight"><pre><span></span>text1.similar(&quot;monstrous&quot;)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>text1.similar(&quot;monstrous&quot;)
+</code></pre></div>
 
 <h3 id="common_contexts">common_contexts</h3>
 <p>两个词之间的共同上下词环境</p>
-<div class="highlight"><pre><span></span> text2.common_contexts([&quot;monstrous&quot;, &quot;very&quot;])
-</pre></div>
-
+<div class="highlight"><pre><span></span><code> text2.common_contexts([&quot;monstrous&quot;, &quot;very&quot;])
+</code></pre></div>
 
 <h3 id="generater">generater</h3>
 <p>根据上下文来随机生成一些文本。</p>
-<div class="highlight"><pre><span></span>laozi.generate()
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>laozi.generate()
+</code></pre></div>
 
 <h3 id="collocations">collocations</h3>
 <p>原nltk的Text类里面的这个方法只是专门针对英文的，如果重新写一个ChineseText类继承并重载这个方法：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ChineseText</span><span class="p">(</span><span class="n">Text</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ChineseText</span><span class="p">(</span><span class="n">Text</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">collocation_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -262,57 +250,51 @@ zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
             <span class="bp">self</span><span class="o">.</span><span class="n">_collocations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
                 <span class="n">finder</span><span class="o">.</span><span class="n">nbest</span><span class="p">(</span><span class="n">bigram_measures</span><span class="o">.</span><span class="n">likelihood_ratio</span><span class="p">,</span> <span class="n">num</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collocations</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>具体修改是原过滤器过滤了词语的长度，这个不适合中文。然后停用词换成了中文停用词词库。然后增加了一个空白字符去除动作。</p>
 <p>具体里面评估二元语法组得分用的是 <code>bigram_measures.likelihood_ratio</code> 这个算法。有兴趣可以研究一下，这里暂时略过了。</p>
 <h2 id="freqdist">FreqDist</h2>
 <p>很有用的一个类，其继承自Counter类，用于记数的一个字典。比如下面统计老子里面最常用的词语。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
 <span class="kn">from</span> <span class="nn">my_python_module.nlp.chinese_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
 <span class="kn">from</span> <span class="nn">my_python_module.nlp.utils</span> <span class="kn">import</span> <span class="n">is_empty_string</span>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span>
     <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">laozi</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_empty_string</span><span class="p">(</span><span class="n">i</span><span class="p">))])</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>上面进行了空字符的过滤和停用词的过滤。</p>
-<div class="highlight"><pre><span></span>t.most_common(25)
+<div class="highlight"><pre><span></span><code>t.most_common(25)
 [(&#39;天下&#39;, 56), (&#39;不&#39;, 51), (&#39;圣人&#39;, 32), (&#39;道&#39;, 27), (&#39;谓&#39;, 24), (&#39;曰&#39;, 21), (&#39;万物&#39;, 20), (&#39;吾&#39;, 20), (&#39;无&#39;, 18), (&#39;欲&#39;, 14), (&#39;无为&#39;, 13), (&#39;亦&#39;, 10), (&#39;章&#39;, 10), (&#39;人&#39;, 9), (&#39;天地&#39;, 8), (&#39;不争&#39;, 8), (&#39;下&#39;, 8), (&#39;道者&#39;, 8), (&#39;大&#39;, 8), (&#39;夫&#39;, 8), (&#39;无以&#39;, 8), (&#39;贵&#39;, 7), (&#39;不知&#39;, 7), (&#39;知&#39;, 7), (&#39;善人&#39;, 7)]
-</pre></div>
-
+</code></pre></div>
 
 <h2 id="bigrams">bigrams</h2>
 <p>自然语言处理研究中的n元语法模型中的二元语法：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from nltk.util import bigrams
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from nltk.util import bigrams
 &gt;&gt;&gt; list(bigrams([1,2,3,4,5]))
 [(1, 2), (2, 3), (3, 4), (4, 5)]
-</pre></div>
-
+</code></pre></div>
 
 <h2 id="conditionalfreqdist">ConditionalFreqDist</h2>
 <p>其是一个字典套字典结构，第一个字典key是一些条件，具体再引用该条件<code>cfd[condition]</code> 返回的是一个FreqDist对象。更具体来说其用来存储某一条件下的FreqDist分布。</p>
-<div class="highlight"><pre><span></span>from nltk import ConditionalFreqDist
+<div class="highlight"><pre><span></span><code>from nltk import ConditionalFreqDist
 cfd = ConditionalFreqDist([[&#39;1&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;b&#39;],[&#39;0&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;a&#39;]])
 cfd[&#39;1&#39;]
 FreqDist({&#39;a&#39;: 2, &#39;b&#39;: 1})
 cfd[&#39;0&#39;]
 FreqDist({&#39;a&#39;: 1})
-</pre></div>
-
+</code></pre></div>
 
 <h2 id="_5">标注</h2>
 <h3 id="str2tuple">str2tuple</h3>
 <p>一般POS（part of speech）标注或者其他标注都可以采用 <code>word/tag</code> 这样的格式，然后可以利用 <code>str2tuple</code> 函数来拆分它们。</p>
-<div class="highlight"><pre><span></span>import nltk
+<div class="highlight"><pre><span></span><code>import nltk
 tagged_token = nltk.tag.str2tuple(&#39;fly/NN&#39;)
 
 tagged_token
 (&#39;fly&#39;, &#39;NN&#39;)
-</pre></div>
-
+</code></pre></div>
 
 <h3 id="pos">通用POS标注集</h3>
 <table>
@@ -388,10 +370,10 @@ tagged_token
 </table>
 <h3 id="index">Index类</h3>
 <p>Index类是一个默认为列表的defaultdict类，可以用来构建多值字典。</p>
-<div class="highlight"><pre><span></span>index = nltk.Index([(&#39;a&#39;,1),(&#39;a&#39;,2),(&#39;b&#39;,3)])
+<div class="highlight"><pre><span></span><code>index = nltk.Index([(&#39;a&#39;,1),(&#39;a&#39;,2),(&#39;b&#39;,3)])
 index
 Index(&lt;class &#39;list&#39;&gt;, {&#39;a&#39;: [1, 2], &#39;b&#39;: [3]})
-</pre></div>
+</code></pre></div>
 
         </div>
         <section>

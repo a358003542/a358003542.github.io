@@ -121,7 +121,7 @@
 <h2 id="_1">前言</h2>
 <p>electron是一个npm包，原node移除了Webkit之类的网页渲染功能，现在electron加上去了，所以可以把electron看作一个精简版的chromium浏览器。而electron可以让你使用html5的风格来灵活编写GUI，并实现跨多个平台的桌面端应用。</p>
 <p>node相关的知识这里就不赘述了，你的项目的 <code>package.json</code> 最简单的样子大概如下：</p>
-<div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
   <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"your-app"</span><span class="p">,</span>
   <span class="nt">"version"</span><span class="p">:</span> <span class="s2">"0.1.0"</span><span class="p">,</span>
   <span class="nt">"main"</span><span class="p">:</span> <span class="s2">"main.js"</span><span class="p">,</span>
@@ -129,34 +129,34 @@
     <span class="nt">"start"</span><span class="p">:</span> <span class="s2">"electron ."</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 <p>main字段提供了你的electron程序的入口，然后scripts那里的意思是你输入 <code>npm start</code> 那么实际执行的是 <code>electron .</code> 命令。</p>
 <p>当然你的项目本地仓库要安装electron，electron属于开发包依赖，应该安装在<code>devDependencies</code> 字段那里：</p>
-<div class="highlight"><pre><span></span>yarn add electron --dev
-</pre></div>
+<div class="highlight"><pre><span></span><code>yarn add electron --dev
+</code></pre></div>
 <p>入门例子推荐看官方文档的这个 <a href="https://www.electronjs.org/docs/tutorial/first-app">样例项目</a> ，这里就不赘述了，下面就其他问题做一些讨论。</p>
 <h2 id="_2">加载本地文件</h2>
 <p>加载本地文件或者URL都推荐统一采用 <code>loadURL</code> 方法：</p>
-<div class="highlight"><pre><span></span>mainWindow.loadURL(path.join('file://', __dirname, 'index.html'))
-</pre></div>
+<div class="highlight"><pre><span></span><code>mainWindow.loadURL(path.join('file://', __dirname, 'index.html'))
+</code></pre></div>
 <p>这里的 <code>__dirname</code> 就是你当前执行js脚本所在的目录位置，上面加上 <code>file://</code> ，这样就可以实现加载本地文件。</p>
 <h2 id="_3">自定义菜单栏</h2>
 <p>如果你设置mainWindow的frame属性为false：</p>
-<div class="highlight"><pre><span></span>  mainWindow = new BrowserWindow({
+<div class="highlight"><pre><span></span><code>  mainWindow = new BrowserWindow({
     width: 800, height: 700, backgroundColor: '#fff',
     frame: false
   })
-</pre></div>
+</code></pre></div>
 <p>则你会看到一个无框的窗体，当然菜单栏也不存在了，不知道这是不是你要的。</p>
 <p>或者你也可以设置：</p>
-<div class="highlight"><pre><span></span>mainWindow.autoHideMenuBar = true
-</pre></div>
+<div class="highlight"><pre><span></span><code>mainWindow.autoHideMenuBar = true
+</code></pre></div>
 <p>这样菜单栏会自动隐藏，这可能就是你想要的效果。</p>
 <p>或者你想彻底删除菜单栏：</p>
-<div class="highlight"><pre><span></span>mainWindow.removeMenu()
-</pre></div>
+<div class="highlight"><pre><span></span><code>mainWindow.removeMenu()
+</code></pre></div>
 <p>那么我们怎么定义自己的菜单栏呢，在createWindow函数下加入如下动作：</p>
-<div class="highlight"><pre><span></span>  <span class="kr">const</span> <span class="nx">template</span> <span class="o">=</span>
+<div class="highlight"><pre><span></span><code>  <span class="kd">const</span> <span class="nx">template</span> <span class="o">=</span>
     <span class="p">[</span>
       <span class="p">{</span>
         <span class="nx">label</span><span class="o">:</span> <span class="s1">'View'</span><span class="p">,</span>
@@ -181,40 +181,40 @@
 
   <span class="kd">let</span> <span class="nx">menu</span> <span class="o">=</span> <span class="nx">Menu</span><span class="p">.</span><span class="nx">buildFromTemplate</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
   <span class="nx">Menu</span><span class="p">.</span><span class="nx">setApplicationMenu</span><span class="p">(</span><span class="nx">menu</span><span class="p">);</span>
-</pre></div>
+</code></pre></div>
 <p>注意上面的Menu需要前面引入进来：</p>
-<div class="highlight"><pre><span></span>const {app, BrowserWindow, Menu} = require('electron')
-</pre></div>
+<div class="highlight"><pre><span></span><code>const {app, BrowserWindow, Menu} = require('electron')
+</code></pre></div>
 <p>如果你设置：</p>
-<div class="highlight"><pre><span></span>Menu.setApplicationMenu(null);
-</pre></div>
+<div class="highlight"><pre><span></span><code>Menu.setApplicationMenu(null);
+</code></pre></div>
 <p>也可以实现一种无菜单效果。上面的 <code>role</code> 开头的菜单是内置的，然后 <code>{ type: 'separator' }</code> 是加上一个分隔符，你也可以如下定义自己的菜单和动作：</p>
-<div class="highlight"><pre><span></span>        <span class="p">{</span>
+<div class="highlight"><pre><span></span><code>        <span class="p">{</span>
           <span class="nx">label</span><span class="o">:</span> <span class="s1">'Hello'</span><span class="p">,</span>
           <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">'Shift+CmdOrCtrl+H'</span><span class="p">,</span>
           <span class="nx">click</span><span class="p">()</span> <span class="p">{</span>
               <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Oh, hi there!'</span><span class="p">)</span>
           <span class="p">}</span>
         <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 <p>label是显示的文字，accelerator是快捷键，第三个是关联的函数对象。</p>
 <h2 id="_4">项目结构推荐</h2>
 <p>项目结构根目录放上 <code>package.json</code> 和其他一些文件即可，项目相关的内容待编译处理的放入 <code>src</code> 目录，不用编译处理的放入 <code>app</code> 目录。然后有一个特别需要强调的点，那就是建议新建一个文件夹 <code>resources</code> ，里面放着 <code>electron-builder</code> 在build过程中需要用到的一些文件，这些文件不会送入<code>app.asar</code> 中去的。具体配置是：</p>
-<div class="highlight"><pre><span></span>  "build": {
+<div class="highlight"><pre><span></span><code>  "build": {
     "appId": "io.a358003542.yaogua2",
     "productName": "yaogua2",
     "directories": {
       "buildResources": "resources"
     },
-</pre></div>
+</code></pre></div>
 <p>下面在讨论electron-builder的时候会提到，一些图标文件都会默认试着从那个文件夹下去找。</p>
 <h2 id="_5">制作安装包</h2>
 <p>继续上面的讨论，需要利用 electron-builder 来制作安装包，其也是一个npm包，类似上面的先安装一下：</p>
-<div class="highlight"><pre><span></span>yarn add electron-builder --dev
-</pre></div>
+<div class="highlight"><pre><span></span><code>yarn add electron-builder --dev
+</code></pre></div>
 <p>electron-builder的官方文档对于初次接触这块的来说我估计会非常难懂，我之前还是接触过nsis的仍然在某些地方读之不明所以。</p>
 <p>现在来看一下我这边的 <code>package.json</code> 下的 build字段情况：</p>
-<div class="highlight"><pre><span></span>  "build": {
+<div class="highlight"><pre><span></span><code>  "build": {
     "appId": "io.a358003542.yaogua2",
     "productName": "yaogua2",
     "directories": {
@@ -231,7 +231,7 @@
       "license": "LICENSE"
     }
   }
-</pre></div>
+</code></pre></div>
 <p>一般配置信息在官方文档的 <a href="https://www.electron.build/configuration/configuration">这里</a> ，win这个字段下面的配置信息在官方文档的 <a href="https://www.electron.build/configuration/win">这里</a> ，nsis这个字段下面的配置信息在官方文档的 <a href="https://www.electron.build/configuration/nsis">这里</a> 。</p>
 <p>首先说明一下上面配置的win字段是可以省略的，这里写出来是为了清晰地表明electron-builder在windows平台下默认输出目标nsis，然后对应的下面的nsis的一些配置我们可以具体定制安装包的一些行为，关于nsis这个软件读者可以参看我写的 <a href="https://a358003542.github.io/articles/nsis.html">这篇文章</a>。 </p>
 <p>比如win下面有个字段 <code>icon</code> ，其默认值是 <code>build/icon.ico</code> ，所以我们把icon.ico这个图标文件放入resources文件夹下即可。</p>
@@ -242,20 +242,20 @@
 <p>还要其他一些选项这里就不赘述了，请查阅官方文档。</p>
 <h2 id="python">整合python项目</h2>
 <p>经过本人查阅多个资料，最后确认electron项目里面如果想整合python项目比如flask项目的话，不管是决定采用http api风格还是rpc风格，最终都需要利用pyinstaller将你的python项目做成单独的exe形式，然后通过electron来开启子线程来启动一个后台api服务。具体如下所示：</p>
-<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nx">pyProc</span> <span class="o">=</span> <span class="kc">null</span>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">pyProc</span> <span class="o">=</span> <span class="kc">null</span>
 
-<span class="kr">const</span> <span class="nx">startPythonSubprocess</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">startPythonSubprocess</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">pyProc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'child_process'</span><span class="p">).</span><span class="nx">execFile</span><span class="p">(</span><span class="nx">python_project_exe</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kr">const</span> <span class="nx">exitPyProc</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">exitPyProc</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">pyProc</span><span class="p">.</span><span class="nx">kill</span><span class="p">()</span>
   <span class="nx">pyProc</span> <span class="o">=</span> <span class="kc">null</span>
 <span class="p">}</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'ready'</span><span class="p">,</span> <span class="nx">startPythonSubprocess</span><span class="p">)</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'will-quit'</span><span class="p">,</span> <span class="nx">exitPyProc</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h2 id="_6">参考资料</h2>
 <ol>
 <li><a href="https://stackoverflow.com/questions/60273475/cant-add-icon-to-electron-app-with-electron-builder/60319954#60319954">cant-add-icon-to-electron-app-with-electron-builder</a></li>

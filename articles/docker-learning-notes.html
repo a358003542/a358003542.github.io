@@ -173,15 +173,15 @@
 <p>kitematic 是docker 镜像的管理工具，推荐使用，很方便的。</p>
 <h3 id="centos">centos下安装</h3>
 <p>更详细的内容见 <a href="https://docs.docker.com/install/linux/docker-ce/centos/">官方文档</a> 。</p>
-<div class="highlight"><pre><span></span>yum install -y yum-utils
+<div class="highlight"><pre><span></span><code>yum install -y yum-utils
 yum install -y device-mapper-persistent-data
 yum install -y lvm2
 yum-config-manager  --add-repo  https://download.docker.com/linux/centos/docker-ce.repo
 yum install docker-ce
-</pre></div>
+</code></pre></div>
 <h3 id="ubuntu">ubuntu下安装</h3>
 <p>更详细的内容见 <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">官方文档</a> 。</p>
-<div class="highlight"><pre><span></span>sudo apt-get remove docker docker-engine docker.io containerd runc
+<div class="highlight"><pre><span></span><code>sudo apt-get remove docker docker-engine docker.io containerd runc
 sudo apt-get update
 sudo apt-get install <span class="se">\</span>
     apt-transport-https <span class="se">\</span>
@@ -196,17 +196,17 @@ sudo add-apt-repository <span class="se">\</span>
 <span class="s2">   stable"</span>
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
-</pre></div>
+</code></pre></div>
 <h3 id="linux">linux系统下安装之后</h3>
 <p>linux系统下安装docker之后如果出现运行：</p>
-<div class="highlight"><pre><span></span>sudo docker run hello-world
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo docker run hello-world
+</code></pre></div>
 <p>可以，但是运行：</p>
-<div class="highlight"><pre><span></span>docker run hello-world
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker run hello-world
+</code></pre></div>
 <p>不可以，那么应该把你的当前登录用户加入到docker群组中去：</p>
-<div class="highlight"><pre><span></span>sudo usermod -aG docker $USER
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo usermod -aG docker $USER
+</code></pre></div>
 <p>【NOTCIE 这个命令生效要重新退出登录下】</p>
 <h2 id="_3">第一个项目</h2>
 <p>下面的内容参考了这个视频：</p>
@@ -215,10 +215,10 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 <ol>
 <li>首先新建一个文件夹，开始编写Dockerfile</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="k">FROM</span> <span class="s">php:7.0-apache</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">php:7.0-apache</span>
 <span class="k">COPY</span> src/ /var/www/html
 <span class="k">EXPOSE</span><span class="s"> 80</span>
-</pre></div>
+</code></pre></div>
 <p>FROM what 表示本镜像基于这个镜像，该镜像的名字叫php，一个官方镜像，然后分支名字是 <code>7.0-apache</code> 。</p>
 <p>然后执行COPY动作，将本文件夹下面的src文件夹里面的内容，复制到容器【根据本镜像生成的容器，源镜像是基于linux系统的】的 <code>/var/www/html</code> 文件夹下。</p>
 <p>然后暴露容易的80端口</p>
@@ -226,46 +226,46 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 <li>src下就是一个简单的php文件，这里不是讨论的重点。</li>
 <li>生成镜像 </li>
 </ol>
-<div class="highlight"><pre><span></span>docker build -t image_name .&lt;where_foler&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker build -t image_name .&lt;where_foler&gt;
+</code></pre></div>
 <ol>
 <li>列出本地的镜像</li>
 </ol>
-<div class="highlight"><pre><span></span>docker image ls
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker image ls
+</code></pre></div>
 <ol>
 <li>从网下下载某个镜像</li>
 </ol>
-<div class="highlight"><pre><span></span>docker pull hello-world
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker pull hello-world
+</code></pre></div>
 <ol>
 <li>删除某个镜像</li>
 </ol>
-<div class="highlight"><pre><span></span>docker image rm &lt;id&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker image rm &lt;id&gt;
+</code></pre></div>
 <p>这里我制作镜像运行的命令如下，因为 <code>a358003542</code> 是我在docker hub 哪里注册的用户名，所以要采用这种写法：</p>
-<div class="highlight"><pre><span></span>docker build -t a358003542/first .
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker build -t a358003542/first .
+</code></pre></div>
 <ol>
 <li>启动镜像</li>
 </ol>
-<div class="highlight"><pre><span></span>docker run -p 8080:80 a358003542/first
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker run -p 8080:80 a358003542/first
+</code></pre></div>
 <p>docker run 命令有自动试着从docker hub那边下载镜像的功能，这个命令的run单词的含义是在一个容器内执行某个命令的意思，所以其也会自动根据一个镜像创建一个容器。</p>
 <p>这里的端口转发，docker容器内是80，容器对外发布的是8080端口。你可以通过下面命令来查看下已经创建的容器：</p>
-<div class="highlight"><pre><span></span>docker container ls
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker container ls
+</code></pre></div>
 <ol>
 <li>将你的项目提交到docker hub那边</li>
 </ol>
-<div class="highlight"><pre><span></span>docker login 
+<div class="highlight"><pre><span></span><code>docker login 
 docker push a358003542/first
-</pre></div>
+</code></pre></div>
 <p>注意这里docker push 后面名字的格式一定是 <code>你在docker hub上的用户名/你的仓库名字</code> 。</p>
 <h2 id="_4">删除虚悬镜像</h2>
 <p>docker build 或者docker pull 同名镜像，旧镜像的仓库名和tag会变成none，这类镜像叫做虚悬镜像。可用以下命令删除组合这些虚悬镜像：</p>
-<div class="highlight"><pre><span></span>docker image prune
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker image prune
+</code></pre></div>
 <h2 id="dockerignore"><code>.dockerignore</code></h2>
 <p><code>.dockerignore</code> 类似于 <code>.gitignore</code> 文件，用于我们在docker build镜像的时候忽略掉那些不需要的文件或文件夹，因为docker在build镜像过程时，会自动将指定的上下文目录打包传递给docker引擎。</p>
 <h2 id="dockerfile">Dockerfile</h2>
@@ -279,8 +279,8 @@ docker push a358003542/first
 <p>相当于在容器内执行了某个shell命令，首先各个RUN之间环境是不共用的，其次一个RUN命令就对应容器的一层，所以推荐是RUN命令都合并在一起。</p>
 <h3 id="cmd">CMD</h3>
 <p>CMD提供了运行容器的默认行为，比如 ubuntu 的镜像 CMD 是 <code>/bin/bash</code> ，那么输入：</p>
-<div class="highlight"><pre><span></span>docker run -it ubuntu
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker run -it ubuntu
+</code></pre></div>
 <p>就会直接进入bash。</p>
 <p>你在Dockerfile里面定义的ENV环境变量会先进入CMD的shell层的。</p>
 <h3 id="env">ENV</h3>
@@ -289,23 +289,23 @@ docker push a358003542/first
 <h3 id="volume">VOLUME</h3>
 <p>定义匿名卷</p>
 <p>比如：</p>
-<div class="highlight"><pre><span></span>VOLUME /home/data
-</pre></div>
+<div class="highlight"><pre><span></span><code>VOLUME /home/data
+</code></pre></div>
 <p>就定义了容器的数据存储匿名卷，一般Dockerfile的最后会申明匿名卷，就算后面容器运行时用户忘记指定存储卷了，容器运行时也不会像容器的存储卷写入大量数据。而后面我们通过 <code>-v mydata:/home/data</code> 来制定存储卷，会覆盖之前Dockerfile声明的默认配置。</p>
 <h3 id="expose">EXPOSE</h3>
 <p>声明容器提供服务的端口，你还是需要使用 <code>-p 9001:9001</code> 来映射端口。</p>
 <h3 id="workdir">WORKDIR</h3>
 <p>指定docker环境下的当前工作目录（当你运行docker run的时候也是在docker环境下）</p>
 <h2 id="_5">保存某个镜像到文件</h2>
-<div class="highlight"><pre><span></span>docker save &lt;image&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker save &lt;image&gt;
+</code></pre></div>
 <h2 id="_6">启动某个容器</h2>
 <p>下面是启动某个容器并进入bash与之交互</p>
-<div class="highlight"><pre><span></span>docker run -it "id of running container" bash
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker run -it "id of running container" bash
+</code></pre></div>
 <p>如果某个容器已经在后台运行了，你希望登入该容器，则推荐使用 exec ：</p>
-<div class="highlight"><pre><span></span>docker exec -it &lt;container&gt; bash
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker exec -it &lt;container&gt; bash
+</code></pre></div>
 <p>因为使用exec登入容器，输入 exit 也不会导致容器停止。</p>
 <h3 id="_7">容器运行时设定重启策略</h3>
 <ul>
@@ -321,21 +321,21 @@ docker push a358003542/first
 </ul>
 <h2 id="_8">查看某个容器的输出日志</h2>
 <p>如果以后台的形式启动某个容器，那么可以如下查看该容器的日志：</p>
-<div class="highlight"><pre><span></span>docker logs &lt;container&gt;
-</pre></div>
-<div class="highlight"><pre><span></span>docker logs --tail=100 &lt;container&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker logs &lt;container&gt;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>docker logs --tail=100 &lt;container&gt;
+</code></pre></div>
 <p><code>--tail</code> 表示列出最近的多少条日志。</p>
 <h2 id="docker-compose">docker compose</h2>
 <h3 id="_9">安装</h3>
 <p>更多详情参考 <a href="https://docs.docker.com/compose/install/">官方文档</a> ，下面列出linux的简单下载安装。</p>
-<div class="highlight"><pre><span></span>sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+<div class="highlight"><pre><span></span><code>sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
-</pre></div>
+</code></pre></div>
 <p>虽然docker-compose说是对docker多容器的编排工具，但实际上就是对单个容器的一些启动配置定制也是很方便的。</p>
 <p>一个简单的例子如下所示：</p>
-<div class="highlight"><pre><span></span>version: "3"
+<div class="highlight"><pre><span></span><code>version: "3"
 
 services:
   web:
@@ -347,19 +347,19 @@ services:
       - ./pycode:/home/pycode
     ports:
       - 9001:9001
-</pre></div>
+</code></pre></div>
 <p>这些选项很多在 <code>docker run</code> 命令时的可选参数，具体功能大体也都是类似的。</p>
 <p>运行docker-compose up即启动容器组，或者重启或者查看日志等等。</p>
-<div class="highlight"><pre><span></span>docker-compose up
-</pre></div>
+<div class="highlight"><pre><span></span><code>docker-compose up
+</code></pre></div>
 <h2 id="_10">多阶段构建</h2>
 <p>多阶段构建最常用的模式是将你的容器的dev环境和runtime环境分开，具体要有效的实施多阶段构建，你需要深刻理解你当前的项目那些包是运行时环境需要的，那些包是编译环境需要的。</p>
 <ol>
 <li>首先你新开一个编译环境的容器，里面装好编译你的项目代码需要的依赖等，然后将你的项目代码编译好。</li>
 <li>其次你新建一个运行时环境容器，其中最核心的代码是：</li>
 </ol>
-<div class="highlight"><pre><span></span>COPY --from=builder $ROOT/build $ROOT/build
-</pre></div>
+<div class="highlight"><pre><span></span><code>COPY --from=builder $ROOT/build $ROOT/build
+</code></pre></div>
 <p>也就是将builder容器的里面编译好的build内容复制到运行时容器里面</p>
 <p>这样做有两个好处：</p>
 <ol>
@@ -378,21 +378,21 @@ services:
 <li>别安装不需要的软件</li>
 <li>apt安装软件先update并尽量如下合并为一句话，如下是一个最佳实践，最后还将apt安装过程的缓存删掉了。</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="k">RUN</span> apt-get update <span class="o">&amp;&amp;</span> apt-get install -y <span class="se">\</span>
+<div class="highlight"><pre><span></span><code><span class="k">RUN</span> apt-get update <span class="o">&amp;&amp;</span> apt-get install -y <span class="se">\</span>
     aufs-tools <span class="se">\</span>
     automake <span class="se">\</span>
     build-essential <span class="se">\</span>
     curl <span class="se">\</span>
  <span class="o">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
-</pre></div>
+</code></pre></div>
 <h2 id="docker">docker的权限控制最佳实践</h2>
 <p>在某些docker项目下可能使用默认的root会更方便一些，而且docker容器就算里面使用root，安装性相对于容器外使用root区别还是有一些的，也可以说是相对安全吧。其他情况一般来说，还是推荐使用非root账号，而最好的实践是保持容器外运行用户和容器内运行用户是一致的。这样容器不仅会更加的安全，更重要的是你的容器里面运行的程序输出的文件，容器外相同的用户也是可以正常访问的，而你容器外该用户所有的文件夹，挂载到容器里面时，容器内的该用户运行的程序也是可以正常访问这些文件，而不会遇到任何权限方面的问题。</p>
 <p>这方面目前docker版本【18.06】还没有直接的支持，而只能通过如下的DIY定制方式达到，好在不是特别的麻烦。首先是docker通过Dockerfile来运行容器，你可以加上：</p>
-<div class="highlight"><pre><span></span>--user 1000:1000
-</pre></div>
+<div class="highlight"><pre><span></span><code>--user 1000:1000
+</code></pre></div>
 <p>来决定运行容器的用户。</p>
 <p>而通过docker-compose来启动容器的话，你可以在docker-compose.yml上如下配置：</p>
-<div class="highlight"><pre><span></span>  <span class="nt">web</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code>  <span class="nt">web</span><span class="p">:</span>
     <span class="nt">build</span><span class="p">:</span>
       <span class="nt">context</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
       <span class="nt">args</span><span class="p">:</span>
@@ -401,22 +401,22 @@ services:
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">GID=${GID}</span>
     <span class="l l-Scalar l-Scalar-Plain">...</span>
     <span class="nt">user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${UID}:${GID}</span>
-</pre></div>
+</code></pre></div>
 <p>然后你需要配置环境变量，再运行 docker-compose ，或者如下写一个bash脚本：</p>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 
 <span class="nb">export</span> <span class="nv">UNAME</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>
 <span class="nb">export</span> <span class="nv">UID</span><span class="o">=</span><span class="k">$(</span>id -u<span class="k">)</span>
 <span class="nb">export</span> <span class="nv">GID</span><span class="o">=</span><span class="k">$(</span>id -g<span class="k">)</span>
 
 <span class="nb">exec</span> docker-compose <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
-</pre></div>
+</code></pre></div>
 <p>这样你可以运行：</p>
-<div class="highlight"><pre><span></span>bash runinenv-docker-compose.sh up
-</pre></div>
+<div class="highlight"><pre><span></span><code>bash runinenv-docker-compose.sh up
+</code></pre></div>
 <p>来达到传递环境参数和启动docker-compose 命令的效果。</p>
 <p>此外你还需要在容器里面进行一些配置：</p>
-<div class="highlight"><pre><span></span><span class="k">FROM</span> <span class="s">python:3.6</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.6</span>
 
 <span class="k">ARG</span> <span class="nv">UNAME</span><span class="o">=</span>wanze
 <span class="k">ARG</span> <span class="nv">UID</span><span class="o">=</span><span class="m">1000</span>
@@ -427,35 +427,35 @@ services:
 <span class="k">RUN</span> groupadd -g <span class="nv">$GID</span> -o <span class="nv">$UNAME</span>
 <span class="k">RUN</span> useradd -m -u <span class="nv">$UID</span> -g <span class="nv">$GID</span> -o -s /bin/bash -d <span class="nv">$UHOME</span> <span class="nv">$UNAME</span>
 <span class="k">USER</span><span class="s"> $UNAME</span>
-</pre></div>
+</code></pre></div>
 <p>新建立的容器一般是只有root用户的，所以你需要新建一个容器外用户对应的用户和群组。这样你的容器默认的登录用户就配置好了。</p>
 <p>如果你如下进行了挂载VOLUMN上的配置：</p>
-<div class="highlight"><pre><span></span>    volumes:
+<div class="highlight"><pre><span></span><code>    volumes:
       - ./data:/home/${UNAME}/data
       - ./pycode:/home/${UNAME}/pycode
-</pre></div>
+</code></pre></div>
 <p>只要目标文件夹在容器外所有者是容器运行者，那么容器内的程序都是可以正常访问的。</p>
 <p>本小节参考了 <a href="https://medium.com/redbubble/running-a-docker-container-as-a-non-root-user-7d2e00f8ee15">这个网页</a> 和 <a href="https://stackoverflow.com/questions/44683119/dockerfile-replicate-the-host-user-uid-and-gid-to-the-image">这个网页</a> 。</p>
 <h2 id="docker_1">docker镜像存储地配置</h2>
 <p>本小节参考了 <a href="https://www.ibm.com/support/knowledgecenter/en/SSBS6K_3.1.2/installing/docker_dir.html">这个网页</a> ，值得一提的是这个方法如果服务器重启有需要重新配置的，好处就是这个配置很简单 ：</p>
-<div class="highlight"><pre><span></span>sudo docker rm -f $(docker ps -aq); docker rmi -f $(docker images -q)
+<div class="highlight"><pre><span></span><code>sudo docker rm -f $(docker ps -aq); docker rmi -f $(docker images -q)
 sudo systemctl stop docker
 sudo mv /var/lib/docker /var/lib/docker_bak
 sudo mkdir /var/lib/docker
 sudo mkdir /mnt/docker
 sudo mount --rbind /mnt/docker /var/lib/docker
 sudo systemctl start docker
-</pre></div>
+</code></pre></div>
 <h2 id="dockerhosts">docker对系统hosts的配置</h2>
 <p>现在你不需要手工修改 <code>/etc/hosts</code> 文件了，docker已经支持如下写法了【参考 <a href="https://stackoverflow.com/questions/38302867/how-to-update-etc-hosts-file-in-docker-image-during-docker-build">这个网页</a> 】：</p>
-<div class="highlight"><pre><span></span>extra_hosts:
+<div class="highlight"><pre><span></span><code>extra_hosts:
  - "somehost:162.242.195.82"
  - "otherhost:50.31.209.229"
-</pre></div>
+</code></pre></div>
 <h2 id="_11">设置时区</h2>
-<div class="highlight"><pre><span></span><span class="c"># set timezone to hongkong</span>
+<div class="highlight"><pre><span></span><code><span class="c"># set timezone to hongkong</span>
 <span class="k">RUN</span>  unlink /etc/localtime <span class="o">&amp;&amp;</span> ln -s /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
-</pre></div>
+</code></pre></div>
 <h2 id="docker_2">docker的备份和还原</h2>
 <p>docker可以使用save和load来进行备份和还原操作。</p>
 <p><strong>NOTICE: 这个save操作说是对image，实际上对容器也可以进行备份，而export和import只能对容器进行操作，此外export是不会保存历史数据的。</strong></p>

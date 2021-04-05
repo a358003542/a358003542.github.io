@@ -134,7 +134,7 @@
 <p>上面步骤的前两步和最后一步python的 <code>HTTPServer</code> 已经帮我们自动做了。现在只需要关注第三四五步。</p>
 <h2 id="_2">第一个例子</h2>
 <p>下面代码已针对python3版本进行了修改：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
 
 <span class="k">class</span> <span class="nc">RequestHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
     <span class="sd">"""Handle HTTP requests by returning a fixed 'page'."""</span>
@@ -161,9 +161,9 @@
     <span class="n">serverAddress</span> <span class="o">=</span> <span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">,</span> <span class="n">RequestHandler</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p><code>BaseHTTPRequestHandler</code> 将会分析HTTP请求然后决定调用具体那个方法，比如现在HTTP请求是GET方法，那么将调用本类的 <code>do_GET</code> 方法。具体该类内部是如何实现根据不同的HTTP请求方法来调用本类的不同的方法的，感兴趣的可以了解下，相关代码如下所示： </p>
-<div class="highlight"><pre><span></span>    <span class="n">mname</span> <span class="o">=</span> <span class="s1">'do_'</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span>
+<div class="highlight"><pre><span></span><code>    <span class="n">mname</span> <span class="o">=</span> <span class="s1">'do_'</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mname</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_error</span><span class="p">(</span>
             <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">NOT_IMPLEMENTED</span><span class="p">,</span>
@@ -171,13 +171,13 @@
         <span class="k">return</span>
     <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mname</span><span class="p">)</span>
     <span class="n">method</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>其中 self.command 就是http协议请求头传过来的GET或者POST等，然后 handler类会去找对应的方法，找到了再进行对应的操作。</p>
 <h2 id="_3">简单的模板输出方案</h2>
 <p>上面的HTML返回内容可以建立其一种模板输出机制，该文章是基于python字符串format方法来实现的，后面接触到的flask里面的jinja2模板引擎或者django自带的模板引擎等都是类似的过程，只是更复杂更多面手。</p>
 <h2 id="_4">挂载静态文件</h2>
 <p>静态文件就是找到对应的文件，然后返回就是了。</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
 
 
@@ -239,10 +239,10 @@
     <span class="n">serverAddress</span> <span class="o">=</span> <span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">,</span> <span class="n">RequestHandler</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>注意这里对文件不存在的异常处理，一个成熟的web server将有自己的一套异常规范。</p>
 <h2 id="indexhtml">自动挂载index.html</h2>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
 
 
@@ -348,13 +348,13 @@
     <span class="n">serverAddress</span> <span class="o">=</span> <span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">,</span> <span class="n">RequestHandler</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>现在代码和之前相比多了一个如果是文件夹那么试着自动挂载该文件夹下的index.html文件。然后现在代码结构发生了很大的变化，具体就是定义了一种类，这个类的test方法进行测试，如果如何条件则会执行act动作，否则继续下一个类的测试。</p>
 <p>这实际上是一种if-elif的加强版本，针对不同的路径或者当前路径下的不同参数或者当前路径下面临的不同情况采取不同的动作。flask或者django的路由分发就是类似的过程。</p>
 <p>也正是这种机制，后面再有各种情况都只是添加一些这种类和动作了。</p>
 <h2 id="indexhtml_1">如果文件夹下没有index.html</h2>
 <p>就是再加上了<code>case_directory_no_index_file</code> 和对应的动作。</p>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*-coding:utf-8-*-</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -498,10 +498,10 @@
     <span class="n">serverAddress</span> <span class="o">=</span> <span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">,</span> <span class="n">RequestHandler</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <h2 id="cgi">简单的cgi接口实现</h2>
 <p>接下来的cgi接口实现代码也是很简单的：</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">case_cgi_file</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">case_cgi_file</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">'''Something runnable.'''</span>
 
     <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
@@ -518,7 +518,7 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">child_stdout</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">child_stdout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_content</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>其核心就是针对某个python脚本文件，启动cgi协议接口，简单来说就是启动一个python解释器运行一下目标脚本文件，然后获取其返回的内容，作为web server的返回内容返回即可。</p>
 <h2 id="_5">后话</h2>
 <p>上面挂载静态文件到显示index.html在实践中这部分工作一般是不会扔给python程序的，一般nginx在前面就应该完成这大部分工作。也就是HTTP的各个请求分为很多不同的类别，这些请求很多已经被nginx响应并返回了。具体我们接触的flask或者django框架处理的HTTP请求就是上面的cgi接口部分。</p>

@@ -113,7 +113,7 @@
 <p>众数只关注出现次数最多的数，严格来讲其并不具有考察样本总体存在状态的能力了，不过在某些情况下却可以。比如说你头发的颜色这样的定性描述，用众数就很合适。</p>
 <h3 id="python">python相关</h3>
 <p>自python3.4起，python加入了statistics模块了，所以我们不需要重复发明轮子了。上面的mean，median和mode这三个名字在statistics模块中都是对应的函数，下面是一些演示例子：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span><span class="n">mode</span><span class="p">,</span><span class="n">median</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span><span class="n">mode</span><span class="p">,</span><span class="n">median</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">25</span><span class="p">]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">mean</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
@@ -122,24 +122,21 @@
 <span class="mf">24.0</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">mode</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
 <span class="mi">23</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>这三个函数都接受一个可迭代对象，然后进行相关操作，如果是空数据，那么将raise <code>statistics.StatisticsError</code> 。</p>
 <p>值得注意的是mode还可以操作字符串：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; mode([&#39;a&#39;,&#39;b&#39;,&#39;a&#39;,&#39;c&#39;,&#39;d&#39;])
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; mode([&#39;a&#39;,&#39;b&#39;,&#39;a&#39;,&#39;c&#39;,&#39;d&#39;])
 &#39;a&#39;
-</pre></div>
-
+</code></pre></div>
 
 <p>然后mode函数并不能处理几个数都是频率最高的情况，比如运行下面命令，将raise <code>statistics.StatisticsError</code> 。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; lst = [1,1,2,3,3]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; lst = [1,1,2,3,3]
 &gt;&gt;&gt; mode(lst)
-</pre></div>
-
+</code></pre></div>
 
 <p>我们可以利用collections模块的Counter类的most_common方法来获得更健壮的mode函数。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
 <span class="k">def</span> <span class="nf">mode</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -160,15 +157,14 @@
                 <span class="k">yield</span> <span class="n">k</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">break</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>python3的 <code>statistics</code> 内置模块进行 均值 中位数 和 众数的运算，还是存在一些问题的，python2没有那个模块就不说了，其次就是没有考虑矢量思维和计算效率问题。好了，numpy 和 scipy 出场了。</p>
 <ol>
 <li>首先我们需要把python的可迭代对象（Iterable）变成numpy的ndarray对象，然后如果已经是了，就pass掉。</li>
 <li>然后就是利用numpy和scipy的函数支持了。</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
 <span class="k">def</span> <span class="nf">to_ndarray</span><span class="p">(</span><span class="n">pyobj</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -191,8 +187,7 @@
 <span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>mode统计频数在scipy那里是有个 <code>scipy.stats.mode</code> 函数，不过其只是返回出现频数最大的那个，而且如果最大的频数有多个相同的情况也只返回一个。</p>
 <h2 id="_3">方差和标准差</h2>
@@ -203,21 +198,19 @@
 $$</div>
 <p>
 也就是总体方差是每一个数和总体均值的差的平方和的均值。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from statistics import *
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from statistics import *
 &gt;&gt;&gt; pvariance([0,0,5,5])
 6.25
 
 statistics.pvariance(data, mu=None)
-</pre></div>
-
+</code></pre></div>
 
 <p>如上所示，pvariance还可以接受 <code>mu</code> 可选参数，也就是总体均值，这样可以避免重复计算，若没有赋值则函数会自动计算。</p>
 <p>然后总体标准差就是总体方差的平方根，或者说就是上面的 <span class="math">\(\sigma\)</span> 。</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from statistics import *
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from statistics import *
 &gt;&gt;&gt; pstdev([0,0,5,5])
 2.5
-</pre></div>
-
+</code></pre></div>
 
 <p>pstdev（Population standard deviation）同样还可以接受 <code>mu</code> 可选参数。</p>
 <p>在实际应用中，绝大多数情况都是考察的样本而不是总体，所以更常用的是样本方差:
@@ -228,20 +221,19 @@ $$</div>
 <p>
 你可能已经注意到了，上面的是 (n-1) 而不是 (n) ，这其中有些统计学的考虑，什么无偏估计，也就是用样本来评估总体的方差的时候，总会估计值偏小，然后再加上一个额外的数据量来让估计值更准确些，大体就是这样，至于具体为何是 <code>n-1</code> ，那就是统计学里面的高级内容了，总之就是为了更好的估计（从样本估计总体）。</p>
 <p>python中的样本方差是 <code>variance</code> 函数，样本标准差是 <code>stdev</code> 函数:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; variance([0,0,5,5])
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; variance([0,0,5,5])
 8.333333333333334
 &gt;&gt;&gt; stdev([0,0,5,5])
 2.886751345948129
 &gt;&gt;&gt;
-</pre></div>
-
+</code></pre></div>
 
 <h3 id="_4">统计意义</h3>
 <p>方差是来描述数据集的离散程度的，标准差就是方差的平方根，当然同样可以用来描述数据集的离散程度。标准差和实际数据会更一致，比如说统计一班的身高的标准差是 10cm ，这样可以给人一个直观的感受。然后在正态分布中有 均值 $ \pm $  三个标准差，那么样本中大约 99点几的数据都包含在内了。  </p>
 <p>简单来说，总体就是整个你要考察的对象，即使是对于上面简单的均值，中位数，众数等等描述性概念，对于总体来说通常都是很难全部考察的。于是我们从总体中取出某一些考察对象（理论上要求是近似于完全的随机取样），然后组成一个样本。然后我们希望对于样本的一些统计描述性数据能够很好地反应总体的数据存在状况。这样所有统计学量实际上都有两种类型，比如均值有总体均值  <span class="math">\(\mu\)</span> 和样本均值  <span class="math">\(\overline{X}\)</span> 。</p>
 <h3 id="python_1">python相关</h3>
 <p>我们还是利用numpy来进行计算：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pvariance</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">pvariance</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
@@ -261,14 +253,13 @@ $$</div>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>注意上面计算样本方差 variance的时候  <code>ddof=1</code> 设置为1，默认是0。在计算样本的时候需要使用样本方差和样本标准差。</p>
 <h2 id="_5">中位数和分位数</h2>
 <p>中位数前面谈过了，就是最中间的那个数。同时还有一种说法是数据集里有 50% 的数比它小，有 百分之50的数比它大。于是分位数的概念由此来了，比如 25% 分位数（quantile）的意思就是在数据集里有 25% 的数比它小。所以如果我们联想到统计学的分布图的话，进而可以把 25%的分位数看作以这个数画一条线，左边的面积是总面积的 25%。</p>
 <h3 id="python_2">python相关</h3>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">to_ndarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">seq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -276,22 +267,19 @@ $$</div>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">seq</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">seq</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>numpy 里面有 <code>percentile</code> 函数就是分位数 quantile，只是具体要显示要几个分位数位置需要定制。然后上面利用pandas的 Series 数据结构返回，好说明清楚具体是那个分位数。</p>
 <h2 id="_6">极差 中程数</h2>
 <p>极差（range）就是这一组数的最大值和最小值的差值。中程数（midrange）就是这一组数的最大值和最小值的均值。</p>
 <h3 id="python_3">python相关</h3>
 <p>因为极差range这个名字和python语言的range函数相冲突，所以python并没有为极差定义一个函数，由于计算公式较简单，我们也不需要额外定义一个公式。就是：</p>
-<div class="highlight"><pre><span></span><span class="nb">max</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="nb">max</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</code></pre></div>
 
 <p>而中程数就是</p>
-<div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">lst</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
-</pre></div>
-
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">lst</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+</code></pre></div>
 
 <h3 id="_7">统计意义</h3>
 <p>极差是统计学上入门级别的粗略的对样本的离散程度的考察，比如一组数不是很分散，都集中在均值附近，那么其极差就会很小，而同样的情况另一组数如果极差更大，那么我们说第二组数离散程度更大。</p>

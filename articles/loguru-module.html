@@ -103,44 +103,39 @@
 
             <p>keep it simple , keep it stupid . loguru模块大概是符合这一精神的，其让你把精力从一些日志的调配的琐碎事情上抽离出来，好让你有更多的精力去解决核心问题。基本上使用过之后，就好像使用了python的新特性 <code>f-string</code> 一样，you just can not stop to use it. 你会忍不住想要使用它。</p>
 <p>就最简单的使用：</p>
-<div class="highlight"><pre><span></span>from loguru import logger
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>from loguru import logger
+</code></pre></div>
 
 <p>接触过logging的马上就知道这个logger是个什么东西了，然后就想通常那样 <code>logger.info('what')</code> 之类的去打日志即可。默认的logger的日志格式就已经非常好了。</p>
 <p>通常这个就已经够用了，实际上容器化了的应用或者某些应用场景，是要求你的日志都打印在默认终端上的，还有某些专门管理日志的工具，也要求你的应用就打印在默认终端。</p>
 <p>某些情况下你可能需要将日志同时打印到文件中：</p>
-<div class="highlight"><pre><span></span>logger.add(&#39;&lt;filename&gt;.log&#39;)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>logger.add(&#39;&lt;filename&gt;.log&#39;)
+</code></pre></div>
 
 <p>此外还支持这样带时间戳的文件名：</p>
-<div class="highlight"><pre><span></span>logger.add(&#39;file_{time}.log&#39;)
-</pre></div>
-
+<div class="highlight"><pre><span></span><code>logger.add(&#39;file_{time}.log&#39;)
+</code></pre></div>
 
 <p>文件控制更高级的用法如下：</p>
-<div class="highlight"><pre><span></span>logger.add(&quot;file_1.log&quot;, rotation=&quot;500 MB&quot;)    # 文件过大自动开启新的日志文件
+<div class="highlight"><pre><span></span><code>logger.add(&quot;file_1.log&quot;, rotation=&quot;500 MB&quot;)    # 文件过大自动开启新的日志文件
 logger.add(&quot;file_2.log&quot;, rotation=&quot;12:00&quot;)     # 每天12:00 开启新的文件
 logger.add(&quot;file_3.log&quot;, rotation=&quot;1 week&quot;)    # 一周的时间之后开启新的文件
 
 logger.add(&quot;file_X.log&quot;, retention=&quot;10 days&quot;)  # 10天之后清除旧日志
 
 logger.add(&quot;file_Y.log&quot;, compression=&quot;zip&quot;)    # 压缩日志
-</pre></div>
-
+</code></pre></div>
 
 <p>loguru还有很多高级用法，这个以后再看，现在最关键的一个问题是如何兼容别的logger，比如说tornado或者django有一些默认的logger。</p>
 <p>经过研究，最好的解决方案是参考官方文档的，完全整合logging的工作方式。比如下面将所有的logging都用loguru的logger再发送一遍消息。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">InterceptHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">InterceptHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="c1"># Retrieve context where the logging call occurred, this happens to be in the 6th frame upward</span>
         <span class="n">logger_opt</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">opt</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">exc_info</span><span class="p">)</span>
         <span class="n">logger_opt</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">levelno</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">getMessage</span><span class="p">())</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">InterceptHandler</span><span class="p">()],</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>这个 <code>depth=6</code> 大有讲究，似乎只有设置为6才能正确追踪原日志代码所在地，因为我们是日志信号再发送了的。</p>
 <p>然后上面的 <code>record.levelno</code> 我发现可能换成 <code>record.levelname</code> 也是不错的。</p>

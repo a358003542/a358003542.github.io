@@ -147,20 +147,20 @@
 <li>mongodb是不要求一个collection里面各个文档具有相同的chema或者简单说，相同的key的。</li>
 <li>不要把sql的join思维带入进来了，而应该更好地利用mongodb可以字典里面套字典，列表里面塞字典的特性。对于这种数据结构，mongodb有对应的查询语法，速度还是很快的。</li>
 </ol>
-<div class="highlight"><pre><span></span><span class="n">user_doc</span> <span class="o">=</span> <span class="n">dbh</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">"facebook.username"</span><span class="p">:</span><span class="s2">"foofacebook"</span><span class="p">})</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">user_doc</span> <span class="o">=</span> <span class="n">dbh</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">"facebook.username"</span><span class="p">:</span><span class="s2">"foofacebook"</span><span class="p">})</span>
+</code></pre></div>
 <p>你看上面的例子，本来一个doc（mongodb把最小的一条记录叫做doc）大概类似一个字典了，然后我们还可以点着去查询，所以必要的时候，字典里面放字典，放心，对于这种结构速度还是有保证的。</p>
 <h2 id="_2">安装</h2>
 <p>本来安装是不想多说了的，但因为历史原因，把以前在ubuntu下的一些东西放在这里吧，可能对读者有帮助。</p>
 <p>ubuntu下的安装是：</p>
-<div class="highlight"><pre><span></span>sudo apt install mongodb
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo apt install mongodb
+</code></pre></div>
 <p>其中mongo命令是client接口，然后mongod命令是服务端接口。默认开启了mongod后台服务，你可以看一下：</p>
-<div class="highlight"><pre><span></span>sudo service --status-all
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo service --status-all
+</code></pre></div>
 <p>mongodb后台服务默认端口是 <code>27027</code> ，你可以通过 mongod 来指定数据库的存放位置和具体开启端口号：</p>
-<div class="highlight"><pre><span></span>mongod --dbpath ~/mongodb --port <span class="m">12321</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code>mongod --dbpath ~/mongodb --port <span class="m">12321</span>
+</code></pre></div>
 <p>默认的mongodb的数据库存放点是 <code>/var/lib/mongodb</code> 。</p>
 <h2 id="robomongo">robomongo</h2>
 <p>一个不错的图形界面管理mongodb的软件，强烈推荐。基本上在里面可以满足一般的mongo命令需求了，不过下面还是列出来一些东西吧：</p>
@@ -175,8 +175,8 @@
 <p><code>use dbname</code> 切换到某个数据库或者创建某个数据库，要实际新建一个数据库还需要往里面塞点东西。比如:</p>
 </li>
 </ul>
-<div class="highlight"><pre><span></span>db.users.save({username:'zhangsan'})
-</pre></div>
+<div class="highlight"><pre><span></span><code>db.users.save({username:'zhangsan'})
+</code></pre></div>
 <ul>
 <li>
 <p><code>show collections</code> 显示当前数据库的所有colletions名字。</p>
@@ -190,27 +190,27 @@
 <p>使用pymongo之后，很多python中的数据类型都能够对应到某个数据类型中，所以这不是很大的问题，如果有其他数据类型需求，则需要查阅文档了。</p>
 <p>值得一提的就是python的datetime模块的datetime对象是可以直接用来作为Date类型被pymongo接受的。</p>
 <p>然后 <code>ObjectId</code> 如果要查询：</p>
-<div class="highlight"><pre><span></span>find_one({'_id': target['_id']})
-</pre></div>
+<div class="highlight"><pre><span></span><code>find_one({'_id': target['_id']})
+</code></pre></div>
 <p>可以这样直接引用，而如果进一步要执行某个 ObjectId 那么需要如下：</p>
-<div class="highlight"><pre><span></span>from bson import ObjectId
-</pre></div>
+<div class="highlight"><pre><span></span><code>from bson import ObjectId
+</code></pre></div>
 <h3 id="mongodbjson">mongodb的数据到json文件</h3>
 <p>参考了 <a href="http://stackoverflow.com/questions/16586180/typeerror-objectid-is-not-json-serializable">这个网页</a> ，比如说你想要mongodb里面的数据读出来然后存到json文件中，那么你可能会遇到这个错误：</p>
-<div class="highlight"><pre><span></span>TypeError: ObjectId('') is not JSON serializable
-</pre></div>
+<div class="highlight"><pre><span></span><code>TypeError: ObjectId('') is not JSON serializable
+</code></pre></div>
 <p>关于这种json文件的读入和写入操作，推荐的风格如下所示：</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; from bson import Binary, Code
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from bson import Binary, Code
 &gt;&gt;&gt; from bson.json_util import dumps
 &gt;&gt;&gt; dumps([{'foo': [1, 2]},
 ... {'bar': {'hello': 'world'}},
 ... {'code': Code("function x() { return 1; }")},
 ... {'bin': Binary("••••")}])
-</pre></div>
+</code></pre></div>
 <p>额外要提醒读者的是，这个bson模块，你在安装pymongo的时候就自动安装了。然后在 <code>bson.json_util</code> 里面有 dumps loads 很有用，然后 <code>bson</code> 里面提供了很多mongodb的数据类型支持，如前面提及的 <code>ObjectId Binary Code</code> 等。</p>
 <h3 id="_3">连接数据库</h3>
 <p>下面的代码我想能够说明一切了，repset是连接mongodb集群的写法。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
 <span class="kn">from</span> <span class="nn">pymongo.errors</span> <span class="kn">import</span> <span class="n">ConnectionFailure</span>
 
 <span class="k">def</span> <span class="nf">get_mongodb_client</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span> <span class="n">dbport</span><span class="o">=</span><span class="mi">27017</span><span class="p">,</span> <span class="n">repset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -227,50 +227,50 @@
         <span class="k">return</span> <span class="n">mongodb_client</span>
     <span class="k">except</span> <span class="n">ConnectionFailure</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3 id="_4">查找数据</h3>
 <p>在实际pymongo的写法中，我们一般喜欢定位到具体的某个collection，然后再进行一些操作：</p>
-<div class="highlight"><pre><span></span>db = client['dbname']
+<div class="highlight"><pre><span></span><code>db = client['dbname']
 collection = db['collection_name']
-</pre></div>
+</code></pre></div>
 <p>具体查找数据有 <code>find</code> 和 <code>find_one</code> 这两个方法，其中find_one 是只找一个目标记录（doc），而find则是找到很多。</p>
 <p>具体就是使用过滤器语法来进行查找工作，下面简单介绍一些：</p>
 <h4 id="_5">过滤器语法</h4>
 <p>首先是最简单的如下直接写上一些你希望目标记录有的属性，</p>
-<div class="highlight"><pre><span></span>q = {
+<div class="highlight"><pre><span></span><code>q = {
 "firstname" : "jane",
 "surname" : "doe"
 }
-</pre></div>
+</code></pre></div>
 <p>这个说的专业点叫做各个语句and连接，不管怎么说就理解为目标doc的属性符合这些条件吧。</p>
 <p>然后就是对属性使用操作符，比如下面：</p>
-<div class="highlight"><pre><span></span>q = {
+<div class="highlight"><pre><span></span><code>q = {
 "score" : { "$gt" : 0 }
 }
-</pre></div>
+</code></pre></div>
 <p>就是查询得分大于0的。</p>
 <p>类似的还有很多过滤操作符，如 <code>$or</code> 或 <code>$exists</code> 等等，这个后面慢慢了解之。</p>
 <ul>
 <li><code>$exists</code> </li>
 </ul>
-<div class="highlight"><pre><span></span>"email": {"$exists":True}
-</pre></div>
+<div class="highlight"><pre><span></span><code>"email": {"$exists":True}
+</code></pre></div>
 <h4 id="_6">排序</h4>
 <p>find之后后面可以继续跟着 <code>sort</code> 方法来进行排序，默认是升序（pymongo.ASCENDING）。</p>
-<div class="highlight"><pre><span></span>for doc in collection.find().sort([
+<div class="highlight"><pre><span></span><code>for doc in collection.find().sort([
     ('field1', pymongo.ASCENDING),
     ('field2', pymongo.DESCENDING)]):
     print(doc)
-</pre></div>
+</code></pre></div>
 <h3 id="_7">插入文档</h3>
-<div class="highlight"><pre><span></span>col.insert_one()
+<div class="highlight"><pre><span></span><code>col.insert_one()
 col.insert_many()
-</pre></div>
+</code></pre></div>
 <h3 id="_8">更新文档</h3>
-<div class="highlight"><pre><span></span>replace_one(filter, replacement, upsert=False)
+<div class="highlight"><pre><span></span><code>replace_one(filter, replacement, upsert=False)
 update_one(filter, update, upsert=False)
 update_many(filter, update, upsert=False)
-</pre></div>
+</code></pre></div>
 <p><code>upsert</code> 设为True是如果用过滤器找到则更新数据，否则执行插入操作。 <code>replace_one</code> 是直接用一个新文档替换旧文档，而 <code>update_one</code> 是用 更新修饰符 来操作的。</p>
 <h3 id="_9">更新修饰符</h3>
 <p>更新修饰符大体有下面这些：</p>
@@ -286,52 +286,52 @@ update_many(filter, update, upsert=False)
 <li><code>$addToSet</code> 给某个列表添加元素，有则不加，没有则加上。</li>
 </ul>
 <h3 id="_10">删除文档</h3>
-<div class="highlight"><pre><span></span>col.delete_one(filter)
+<div class="highlight"><pre><span></span><code>col.delete_one(filter)
 col.delete_many(filter)
-</pre></div>
+</code></pre></div>
 <h3 id="cursor">长时间查询丢失cursor</h3>
 <p>有的时候你写一个脚本，因为数据库数据比较大，find可能会执行很长时间，然后会返回一个cursor 找不到的错误，这是因为mongodb自动关闭了那个cursor，你需要在find方法上加上选项： <code>no_cursor_timeout=True</code> 。</p>
 <p>PS: 之前我设置这个选项了，后来还是有时候会出现这个异常，后来确定的原因是因为目前我操作的文档doc记录文本较大，所以需要设置 <code>batch_size</code>  ，默认是 4M ， 最多只能设置到 16M。</p>
-<div class="highlight"><pre><span></span>col.find({}, no_cursor_timeout=True).batch_size(16)
-</pre></div>
+<div class="highlight"><pre><span></span><code>col.find({}, no_cursor_timeout=True).batch_size(16)
+</code></pre></div>
 <h3 id="doc">doc的创建时间</h3>
 <p>不要写什么 <code>created_time</code> 了，mongodb的 ObjectId 是有该doc的创建时间含义的：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bson</span> <span class="kn">import</span> <span class="n">ObjectId</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bson</span> <span class="kn">import</span> <span class="n">ObjectId</span>
 <span class="nb">id</span> <span class="o">=</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">"5a505b643004c52888489b02"</span><span class="p">)</span>
 <span class="nb">id</span><span class="o">.</span><span class="n">generation_time</span>
 <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">bson</span><span class="o">.</span><span class="n">tz_util</span><span class="o">.</span><span class="n">FixedOffset</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x0000022CEDC414E0</span><span class="o">&gt;</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <h3 id="mongo">原生mongo命令</h3>
-<div class="highlight"><pre><span></span>比如 update_many 对应的是 updateMany ，在pymongo那边很多命令都是对应的。
-</pre></div>
+<div class="highlight"><pre><span></span><code>比如 update_many 对应的是 updateMany ，在pymongo那边很多命令都是对应的。
+</code></pre></div>
 <h2 id="_11">索引</h2>
 <p>很多初学mongodb的人用了一段时间就会抱怨，mongodb很慢，实际上mongodb不慢，这其中很大一部分原因是，他们没有进行创建索引操作。</p>
 <p>mongodb的记录 <code>_id</code> 字段默认是会创建索引的，然后可能会有某些字段，如果你的程序里面会频繁查询使用，那么当你的文档记录很多了之后，是一定要加上索引的，否则你的程序会很慢很慢。</p>
-<div class="highlight"><pre><span></span>db.COLLECTION_NAME.ensureIndex({KEY:1})
-</pre></div>
+<div class="highlight"><pre><span></span><code>db.COLLECTION_NAME.ensureIndex({KEY:1})
+</code></pre></div>
 <p>然后某些查询会涉及到多个字段，那么推荐创建一个多值索引（或者叫复合索引？）：</p>
-<div class="highlight"><pre><span></span>db.getCollection('clean').ensureIndex({'name':1,'author':1,'chapter_id':1})
-</pre></div>
+<div class="highlight"><pre><span></span><code>db.getCollection('clean').ensureIndex({'name':1,'author':1,'chapter_id':1})
+</code></pre></div>
 <h2 id="_12">备份和还原</h2>
 <p>mongo命令可能你平时不是特别需要了，不过 <code>mongodump</code> 和 <code>mongorestore</code> 这两个命令有时还是需要的，其一个是进行mongodb的备份操作，一个是进行还原操作。</p>
-<div class="highlight"><pre><span></span>mongodump
+<div class="highlight"><pre><span></span><code>mongodump
 mongorestore dump
-</pre></div>
+</code></pre></div>
 <p>最简单的流程如上，这里的备份文件就放在dump文件夹下。更多选项请读者自行了解之。比如下面：</p>
-<div class="highlight"><pre><span></span>mongodump --host<span class="o">=</span>atlas-04 --db<span class="o">=</span>mls06085 -o mongodump_2015-07-29
-</pre></div>
+<div class="highlight"><pre><span></span><code>mongodump --host<span class="o">=</span>atlas-04 --db<span class="o">=</span>mls06085 -o mongodump_2015-07-29
+</code></pre></div>
 <p><code>--db</code> 指定数据库名， <code>-o</code> 指定导出文件夹名。</p>
 <h2 id="_13">连接数据库</h2>
 <h3 id="windows">windows下连接数据库</h3>
 <p>请参看 <a href="https://stackoverflow.com/questions/18216712/cannot-authenticate-into-mongo-auth-fails">这个网页</a> ，使用 <code>-u</code> <code>-p</code> 输入用户名和密码之后不知道怎么还是连不上，最后查询发现还需要加上 admin，不太清楚为什么（现在有点清楚清楚了，这个在linux对应的选项是 <code>-authenticationDatabase</code>  ， 也就是你管理认证相关的数据库名字）。</p>
-<div class="highlight"><pre><span></span>mongo admin -u admin -p SECRETPASSWORD
-</pre></div>
+<div class="highlight"><pre><span></span><code>mongo admin -u admin -p SECRETPASSWORD
+</code></pre></div>
 <h3 id="mongodb_1">连接mongodb集群</h3>
-<div class="highlight"><pre><span></span>mongo --host=inors0504/redstone:27019,ltprod01:27108,innoali02:27018
-</pre></div>
+<div class="highlight"><pre><span></span><code>mongo --host=inors0504/redstone:27019,ltprod01:27108,innoali02:27018
+</code></pre></div>
 <h2 id="_14">查询只显示某些字段</h2>
-<div class="highlight"><pre><span></span>db.getCollection('qidian_book_info').find({},{'bookInfo.updTime':1}).sort({'updated_time':-1})
-</pre></div>
+<div class="highlight"><pre><span></span><code>db.getCollection('qidian_book_info').find({},{'bookInfo.updTime':1}).sort({'updated_time':-1})
+</code></pre></div>
 <h2 id="_15">参考资料</h2>
 <ol>
 <li>mongodb and python, Author:Niall O’Higgins, year:2011</li>

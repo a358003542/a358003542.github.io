@@ -182,7 +182,7 @@
 <li><a href="#_26">加入菜单</a></li>
 <li><a href="#_27">加入动作</a></li>
 <li><a href="#menuitem_1">menuitem</a></li>
-<li><a href="#act95window">act_window</a></li>
+<li><a href="#act_window">act_window</a></li>
 </ul>
 </li>
 <li><a href="#_28">定制视图</a><ul>
@@ -334,16 +334,16 @@
 <h1 id="_3">安装和配置</h1>
 <p>因为odoo的git仓库比较大了，推荐还是下载odoo发布的压缩包文件作为源码。下面主要讨论的是从源码安装的过程和一些问题。这其中数据库的相关配置是个难点，后面会再详细的讨论之。下面本文的叙述更多的偏向centos7，当然了从源码安装本身基于linux系统大环境，其他linux发行版除了个别安装包的支持差异外，差别不是太大了。</p>
 <h2 id="_4">准备</h2>
-<div class="highlight"><pre><span></span>yum update
+<div class="highlight"><pre><span></span><code>yum update
 yum install epel-release
 yum groupinstall Development tools
-</pre></div>
+</code></pre></div>
 <h2 id="postgresql">PostgreSQL数据库</h2>
 <p>PostgreSQL是很有名的一个开源数据库，最初由加州大学伯克利分校的计算机系开发，其和sqlite3最大的区别就是其采用了client/server模型，Odoo搭建在PostgreSQL基础之上了，也继承了这种client/server模型。Odoo对PostgreSQL数据库的版本号要求不是很严格，用最新的也是可以的。</p>
-<div class="highlight"><pre><span></span>yum install postgresql-server
+<div class="highlight"><pre><span></span><code>yum install postgresql-server
 yum install postgresql-contrib
 postgresql-setup initdb
-</pre></div>
+</code></pre></div>
 <p>最基本的安装现在先暂时这样，关于数据库的配置后面我们再进一步讨论之。然后关于 Postgresql数据库的学习，读者可以简单参考我写的 postgresql数据库 一文。</p>
 <h2 id="python_1">python虚拟环境等的配置</h2>
 <p>这一块和odoo关系不是太大，请读者自行调配之。</p>
@@ -351,7 +351,7 @@ postgresql-setup initdb
 <p>常规通过pip安装即可，这里主要是一些系统方面的依赖问题，首先请确保安装了大环境 <code>python3</code> 和 <code>python3-dev</code> ，然后看到下面的内容：</p>
 <h3 id="centos">centos那边</h3>
 <p>centos那边统一描述如下，请确保了这些软件包都安装上了：</p>
-<div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">libxml2</span>  
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">libxml2</span>  
   <span class="nt">yum</span><span class="p">:</span>
     <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">libxml2</span>
     <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
@@ -397,60 +397,60 @@ postgresql-setup initdb
   <span class="nt">yum</span><span class="p">:</span>
     <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cyrus-sasl-devel</span>
     <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
-</pre></div>
+</code></pre></div>
 <h3 id="ubuntu">ubuntu那边</h3>
 <p>关于python-ldap 模块的安装参考了 <a href="http://stackoverflow.com/questions/4768446/python-cant-install-python-ldap">这个网页</a> ，请确保下面两个软件包都安装了（否则会提示找不到lber.h错误）: </p>
-<div class="highlight"><pre><span></span>sudo apt-get install libldap2-dev 
+<div class="highlight"><pre><span></span><code>sudo apt-get install libldap2-dev 
 sudo apt-get install libsasl2-dev
-</pre></div>
+</code></pre></div>
 <p>关于psycopg2模块请确保下面软件包安装了: </p>
-<div class="highlight"><pre><span></span>sudo apt-get install libpq-dev
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo apt-get install libpq-dev
+</code></pre></div>
 <p>还有这几个软件包确保安装了，其中libxml2和lxml模块有关。</p>
-<div class="highlight"><pre><span></span>sudo apt-get install libxml2-dev
+<div class="highlight"><pre><span></span><code>sudo apt-get install libxml2-dev
 sudo apt-get install libxslt1-dev
-</pre></div>
+</code></pre></div>
 <p>pillow模块需要安装下面这个软件包:</p>
-<div class="highlight"><pre><span></span>sudo apt-get install libjpeg-dev
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo apt-get install libjpeg-dev
+</code></pre></div>
 <h2 id="nodejs">nodejs方面</h2>
 <p>centos那边现在只需要简单的通过yum命令安装了，安装之后npm工具也自动装上了。</p>
-<div class="highlight"><pre><span></span>yum install nodejs
+<div class="highlight"><pre><span></span><code>yum install nodejs
 npm install -g less
-</pre></div>
+</code></pre></div>
 <h2 id="odoo_2">安装odoo</h2>
 <p>由于odoo源码和addon生态较大，推荐不通过 <code>python setup.py install</code> 的方式安装，而是直接在odoo源码里面运行脚本启动。推荐方式如下，将setup文件夹里面的odoo文件重命名为 <code>odoo-bin</code> 然后移到项目主目录上，然后运行：</p>
-<div class="highlight"><pre><span></span>python odoo-bin
-</pre></div>
+<div class="highlight"><pre><span></span><code>python odoo-bin
+</code></pre></div>
 <p>这样后面调试修改都方便一些。</p>
 <h2 id="_5">数据库那边的配置</h2>
 <p>数据库那边需要创建一个和你当前系统登录用户同名的用户，然后其要有创建数据库的权限，或者对某个数据库有所有权限。odoo将默认通过这个用户来和postgresql数据库进行交互（参考了 <a href="https://doc.odoo.com/7.0/install/linux/postgres/">这个网页</a> ）。postgres用户名，root用户名都是不允许的。</p>
-<div class="highlight"><pre><span></span>sudo -u postgres createuser $USER
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo -u postgres createuser $USER
+</code></pre></div>
 <p>如果某个用户不存在，那么PostgreSQL将会报错: </p>
-<div class="highlight"><pre><span></span>createdb: could not connect to database template1: FATAL:  role "wanze" does not exist
-</pre></div>
+<div class="highlight"><pre><span></span><code>createdb: could not connect to database template1: FATAL:  role "wanze" does not exist
+</code></pre></div>
 <p>Odoo框架要求你这个用户还具有可以创建数据库的权限。这需要你如下这样去做: </p>
-<div class="highlight"><pre><span></span>sudo -u postgres psql postgres
+<div class="highlight"><pre><span></span><code>sudo -u postgres psql postgres
 
 ALTER USER wanze CREATEDB;
-</pre></div>
+</code></pre></div>
 <p>这样你的用户就有了创建数据库的权限了，这块内容参考了 <a href="http://dba.stackexchange.com/questions/33285/how-to-i-grant-a-user-account-permission-to-create-databases-in-postgresql">这个网页</a> 。</p>
 <p>如果系统提示你没有 <code>.psql_history</code> 这个文件，那么简单的touch一下即可。</p>
 <h3 id="pg_hbaconf">pg_hba.conf</h3>
 <p>postgresql很多连接配置出了问题都是 <code>pg_hba.conf</code> 这个文件没配置好，更多细节请参看我写的 postgresql数据库 一文。</p>
 <p>原来默认的配置是：</p>
-<div class="highlight"><pre><span></span>local   all             all                                     peer
+<div class="highlight"><pre><span></span><code>local   all             all                                     peer
 # IPv4 local connections:
 host    all             all             127.0.0.1/32           ident
 # IPv6 local connections:
 host    all             all             ::1/128                ident
-</pre></div>
+</code></pre></div>
 <p>有<a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-centos-7">文章</a> 说下面两项需要改成 <code>md5</code> ， 然后postgresql的 <a href="https://github.com/abevoelker/docker-postgres/blob/master/pg_hba.conf.default">docker版</a> 的默认配置也是改成了md5，刚开始我似乎遇到问题后来改成md5就好了，但现在odoo能够正常运行后我改回ident之后发现也能行。</p>
 <p>总之记住odoo是用你当前的系统用户名来登录postgresql的，然后如果和数据库在一个系统内，那么用的就是后面两行的连接配置，推荐改成 md5 吧。</p>
 <p>然后重启PostgreSQL服务器:</p>
-<div class="highlight"><pre><span></span>sudo service postgresql restart
-</pre></div>
+<div class="highlight"><pre><span></span><code>sudo service postgresql restart
+</code></pre></div>
 <h2 id="_6">初步启动</h2>
 <p>运行 <code>python odoo-bin --help</code> 我们会看到很多选项，简单熟悉一下吧。</p>
 <ul>
@@ -565,7 +565,7 @@ host    all             all             ::1/128                ident
 <li>smtp_user  登录smtp服务所使用的用户名</li>
 <li>smtp_password 登录smtp服务所使用的密码</li>
 </ul>
-<div class="highlight"><pre><span></span>;用于导入导出的csv文件的默认分隔符
+<div class="highlight"><pre><span></span><code>;用于导入导出的csv文件的默认分隔符
 csv_internal_sep = ,
 ;data目录，用于存放session信息、附件
 data_dir = C:\Users\shun\AppData\Local\OpenERP S.A.\Odoo
@@ -656,7 +656,7 @@ xmlrpcs_port = 8071
 链接：https://www.jianshu.com/p/8fa53743bac8
 來源：简书
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-</pre></div>
+</code></pre></div>
 <h1 id="odoo_3">初入odoo</h1>
 <p>本章节主要浅显地讲一下刚进入odoo的界面熟悉，具体更多用户操作和开发者知识等都后面再慢慢讨论。</p>
 <h2 id="_12">数据库管理界面</h2>
@@ -692,10 +692,10 @@ xmlrpcs_port = 8071
 <p>Odoo开发的一条黄金准则就是我们最好不要修改现有的模块，特别是官方内置的那些模块。这样做会让原始模块代码和我们的修改混为一谈，使得很难对软件进行升级管理。我们应该创建新的模块（在原有的模块基础之上）来达到修改和扩展功能的目的。Odoo提供了一种继承机制，允许第三方模块扩展现有模块，或者官方的或者来自社区的，这种继承修改可从任意层次来开展，从数据模型到业务逻辑到用户界面。</p>
 <h3 id="_20">快速生成模块骨架</h3>
 <p>可以如下快速生成一个模块骨架:</p>
-<div class="highlight"><pre><span></span>python odoo-bin scaffold  mymodule myaddons
-</pre></div>
+<div class="highlight"><pre><span></span><code>python odoo-bin scaffold  mymodule myaddons
+</code></pre></div>
 <p>这将在当前位置新建一个myaddons文件夹，然后在myaddons文件夹下创建一个名字叫mymodule的模块骨架。创建好了之后读者可以进入翻一下。官方推荐的模块结构如下所示：</p>
-<div class="highlight"><pre><span></span>addons/&lt;my_module_name&gt;/
+<div class="highlight"><pre><span></span><code>addons/&lt;my_module_name&gt;/
 |-- __init__.py
 |-- __manifest__.py
 |-- controllers/
@@ -720,7 +720,7 @@ xmlrpcs_port = 8071
 `-- views/
     |-- templates.xml
     |-- views.xml
-</pre></div>
+</code></pre></div>
 <p>上面只是一个泛泛而论的情况，具体有些文件夹或文件可能是不需要的。下面对这些内容进一步说明之。</p>
 <p>推荐将所有的模型定义python文件都放入models文件夹中，然后其他一些简要介绍如下：</p>
 <ul>
@@ -755,30 +755,30 @@ xmlrpcs_port = 8071
 <p>前面说了设置  <code>--addons-path=addons, myaddons</code> ，就可以加载自定义的模块了。具体安装就和安装其他模块没有两样，除了你需要清除搜索栏然后输入搜索关键词，如果你的模块是应用的话那么就可以直接在应用面板看到了。然后注意如果模块是第一次安装，那么需要 <u>激活开发者模式</u> ，然后 <u>更新应用列表</u> ，然后找到你想要的模块。</p>
 <p>自定义的模块如果只是简单内容修改，那么重启odoo即可当即生效，如果你的模块有数据库也就是模型定义的改动或者其他额外文件的添加等，那么还需要更新该模块。</p>
 <h2 id="_22">我们的第一个模块</h2>
-<div class="highlight"><pre><span></span>python odoo-bin scaffold  first myaddons
-</pre></div>
+<div class="highlight"><pre><span></span><code>python odoo-bin scaffold  first myaddons
+</code></pre></div>
 <h3 id="controllers">controllers</h3>
 <p>首先修改controllers里面的 <code>controllers.py</code> 文件：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
 
 <span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
     <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">"Hello, world"</span>
-</pre></div>
+</code></pre></div>
 <p>现在请读者安装之前所说的安装和更新自定义模块（也就是激活开发者模式，然后更新模块列表，然后安装模块）。</p>
 <p>现在先进入 <code>/first/first/</code> 来看一下效果。这里的controllers文件大体类似于的django的views.py文件，里面需要定义一些视图函数。</p>
 <p>如果没有什么问题，你应该能看到一行hello world文字，祝你好运。</p>
 <h3 id="views">views</h3>
 <p>views文件夹里面的内容更有点类似于django的模板文件，其使用的是odoo自定义的QWeb模板语法，后面会详细讨论之。首先先修改 <code>__manifest__.py</code> 文件中data属性，好把目标模板文件加载进来（这个最新的scaffold 命令已经写好了）：</p>
-<div class="highlight"><pre><span></span>    'data': [
+<div class="highlight"><pre><span></span><code>    'data': [
         # 'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
     ],
-</pre></div>
+</code></pre></div>
 <p>templates.xml文件内容如下：</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;odoo&gt;</span>
     <span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">"index"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;title&gt;</span>我的第一个模块<span class="nt">&lt;/title&gt;</span>
         <span class="nt">&lt;t</span> <span class="na">t-foreach=</span><span class="s">"fruits"</span> <span class="na">t-as=</span><span class="s">"fruit"</span><span class="nt">&gt;</span>
@@ -786,53 +786,53 @@ xmlrpcs_port = 8071
         <span class="nt">&lt;/t&gt;</span>
     <span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/odoo&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>这里使用了Qweb模板语言，就这里提及的我们可以简单了解下:</p>
-<div class="highlight"><pre><span></span>&lt;t t-foreach="[1, 2, 3]" t-as="i"&gt;
+<div class="highlight"><pre><span></span><code>&lt;t t-foreach="[1, 2, 3]" t-as="i"&gt;
 &lt;p&gt;&lt;t t-esc="i"/&gt;&lt;/p&gt;
 &lt;/t&gt;
-</pre></div>
+</code></pre></div>
 <p>其输出是:</p>
-<div class="highlight"><pre><span></span>&lt;p&gt;1&lt;/p&gt;
+<div class="highlight"><pre><span></span><code>&lt;p&gt;1&lt;/p&gt;
 &lt;p&gt;2&lt;/p&gt;
 &lt;p&gt;3&lt;/p&gt;
-</pre></div>
+</code></pre></div>
 <p>这里的 <code>&lt;t t-esc="i"/&gt;</code> 是先计算 i 的值，然后将其打印出来。</p>
 <p>然后在之前controllers那里的main.py文件那里，我们使用这个模板文件。</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
 
 <span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
     <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"first.index"</span><span class="p">,</span>
                                    <span class="p">{</span><span class="s1">'fruits'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'apple'</span><span class="p">,</span> <span class="s1">'banana'</span><span class="p">,</span> <span class="s1">'pear'</span><span class="p">]})</span>
-</pre></div>
+</code></pre></div>
 <p>这里调用 <code>http.request.render</code> 函数，可以猜到这是一个网页模板渲染输出函数。这次运行你需要加上 <code>-u first</code> 来update 目标模块。</p>
 <h3 id="models">models</h3>
 <p>熟悉django的同学应该知道这里的models是什么东西，同样odoo也是自己写的ORM接口，废话少说，看代码写法吧：</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span>
 
 <span class="k">class</span> <span class="nc">Fruits</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">'first.fruits'</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <h3 id="security">security</h3>
 <p>security文件夹里面已经有一个 <code>ir.model.access.csv</code> 文件了，其对模型的访问权限进行管理，加上记录：</p>
-<div class="highlight"><pre><span></span>id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+<div class="highlight"><pre><span></span><code>id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
-</pre></div>
+</code></pre></div>
 <p><code>group_id:id</code> 留空，这给所有用户对该模型读的权限。 </p>
 <p>然后在 <code>__manifest__.py</code> 那里把这个文件挂上：</p>
-<div class="highlight"><pre><span></span>    'data': [
+<div class="highlight"><pre><span></span><code>    'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
     ],
-</pre></div>
+</code></pre></div>
 <h3 id="demo_1">demo</h3>
 <p>在 <code>demo.xml</code> 上加上一些演示数据，方便测试我们写得模块。</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;odoo&gt;</span>
   <span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">"apple"</span> <span class="na">model=</span><span class="s">"first.fruits"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;</span>apple<span class="nt">&lt;/field&gt;</span>
   <span class="nt">&lt;/record&gt;</span>
@@ -843,10 +843,10 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
     <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;</span>pear<span class="nt">&lt;/field&gt;</span>
   <span class="nt">&lt;/record&gt;</span>
 <span class="nt">&lt;/odoo&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>这种定义数据的方式是对接之前的模型定义的，也就是上面的 <code>model</code> ，然后 <code>field name="name"</code> 里面的值就是该记录具体name的值。</p>
 <p>然后 <code>controllers.py</code> 改成这样了:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">http</span>
 
 <span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
     <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/first/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">)</span>
@@ -854,9 +854,9 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
         <span class="n">Fruits</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">'first.fruits'</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"first.index"</span><span class="p">,</span>
                                    <span class="p">{</span><span class="s1">'fruits'</span><span class="p">:</span> <span class="n">Fruits</span><span class="o">.</span><span class="n">search</span><span class="p">([])})</span>
-</pre></div>
+</code></pre></div>
 <p>而 <code>templates.xml</code> 改成这样子了:</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;odoo&gt;</span>
     <span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">"index"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;title&gt;</span>我的第一个模块<span class="nt">&lt;/title&gt;</span>
         <span class="nt">&lt;t</span> <span class="na">t-foreach=</span><span class="s">"fruits"</span> <span class="na">t-as=</span><span class="s">"fruit"</span><span class="nt">&gt;</span>
@@ -864,18 +864,18 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
         <span class="nt">&lt;/t&gt;</span>
     <span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/odoo&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>读者可以重启动odoo server来看一下显示效果（请创建一个新的数据库开启了演示模式）。</p>
 <h2 id="_23">美化网页</h2>
 <p>odoo有内置模块 <code>website</code> ，我们利用它们可以进一步开发出和原odoo网页统一风格的网页界面。</p>
 <p>首先我们需要在 <code>__manifest__.py</code> 的 "depends" 属性改为:</p>
-<div class="highlight"><pre><span></span>'depends': ['website'],
-</pre></div>
+<div class="highlight"><pre><span></span><code>'depends': ['website'],
+</code></pre></div>
 <p>然后是controllers那里加上 <code>website=True</code> 这个设置。</p>
-<div class="highlight"><pre><span></span>@http.route('/first/first/', auth='public', website=True)
-</pre></div>
+<div class="highlight"><pre><span></span><code>@http.route('/first/first/', auth='public', website=True)
+</code></pre></div>
 <p>最后是模块文件那里修改为:</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;odoo&gt;</span>
     <span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">"index"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;t</span> <span class="na">t-call=</span><span class="s">"website.layout"</span> <span class="nt">&gt;</span>
         <span class="nt">&lt;t</span> <span class="na">t-set=</span><span class="s">"title"</span><span class="nt">&gt;</span>我的第一个模块<span class="nt">&lt;/t&gt;</span>
@@ -889,22 +889,22 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
         <span class="nt">&lt;/t&gt;</span>
     <span class="nt">&lt;/template&gt;</span>
 <span class="nt">&lt;/odoo&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>然后重启odoo server，然后升级模块之后看一下（更新manifest和template）。</p>
 <p>在网站的左边有 HTML编辑和主题选择等，在顶上右边有编辑模型等。<strong>注意：</strong> HTML编辑功能经过实验升级模块后会丢失。 </p>
 <h3 id="url-route">url route加入参数</h3>
-<div class="highlight"><pre><span></span>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/academy/&lt;name&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/academy/&lt;name&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">teacher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">'&lt;h1&gt;</span><span class="si">{}</span><span class="s1">&lt;/h1&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>其他的一些东西和django那边很是类似，这里先略过，后面有需要再详细查阅和讨论之，下面主要把如何定制 odoo 自带的商业系统弄清楚。</p>
 <h2 id="data">data文件</h2>
 <p>odoo的视图使用xml数据文件表示的，这一块较为陌生，再熟悉一下。</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;odoo&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;odoo&gt;</span>
   <span class="nt">&lt;operation/&gt;</span>
    ...
 <span class="nt">&lt;/odoo&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>odoo标签下的数据就是送给odoo处理的数据。</p>
 <p>其后 <code>operation</code> 有：</p>
 <ul>
@@ -936,25 +936,25 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
 <p>这些动作对象是存放在 <code>ir_act_window</code> （对应模型名是 <code>IrActionsActWindow</code> <code>_name</code> 是 <code>ir.actions.act_window</code> ）表格中的。动作触发之后接下来是要处理视图问题。</p>
 <p>视图这边有所变动，具体视图都是存放在 <code>ir_ui_view</code> （对应的模型名是 <code>View</code> <code>_name</code> 是 <code>ir.ui.view</code> ）表格中的，然后找到视图是根据具体的模型和视图类型来的，视图类型默认是列表，还有表单，kanban等等。视图的解析过程是查找目标视图的 primary 视图的 arch 里面的内容，如果目标视图有parent，那么parent的视图也将解析，如果目标视图没有parent，那么arch里面的内容是什么就是什么，子视图也将逐步展开。</p>
 <p>比如：</p>
-<div class="highlight"><pre><span></span>select * from public.ir_ui_view where model = 'res.company' ;
-</pre></div>
+<div class="highlight"><pre><span></span><code>select * from public.ir_ui_view where model = 'res.company' ;
+</code></pre></div>
 <p>就会找到和 <code>res.company</code> 相关的视图，具体显示要根据目标类型对应的动作的 <code>view_mode</code> 这个字段来确定最优先的显示方案。</p>
 <p>具体研究对象的模型，视图，菜单，动作等，这些实际上都是odoo里面的模型，也就是具体对象的值是存放在某个具体的SQL表格里的，然后程序完成一系列的索引，取值等操作，并最终生成显示结果，这大概就是odoo框架里面发生的故事概貌了。</p>
 <h3 id="_25">定制菜单</h3>
 <p>修改 <code>views/views.xml</code> 文件来定义具体的菜单对象：</p>
 <h4 id="_26">加入菜单</h4>
-<div class="highlight"><pre><span></span><span class="c">&lt;!-- 加入菜单 --&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="c">&lt;!-- 加入菜单 --&gt;</span>
     <span class="nt">&lt;menuitem</span> <span class="na">id=</span><span class="s">"menu_qingjia"</span> <span class="na">name=</span><span class="s">"请假"</span> <span class="na">sequence=</span><span class="s">"0"</span><span class="nt">&gt;&lt;/menuitem&gt;</span>
     <span class="nt">&lt;menuitem</span> <span class="na">id=</span><span class="s">"menu_qingjia_qingjiadan"</span> <span class="na">name=</span><span class="s">"请假单"</span> <span class="na">parent=</span><span class="s">"menu_qingjia"</span><span class="nt">&gt;&lt;/menuitem&gt;</span>
     <span class="nt">&lt;menuitem</span> <span class="na">id=</span><span class="s">"menu_qingjia_qingjiadan_qingjiadan"</span> <span class="na">parent=</span><span class="s">"menu_qingjia_qingjiadan"</span> <span class="na">action=</span><span class="s">"action_qingjia_qingjd"</span><span class="nt">&gt;&lt;/menuitem&gt;</span>
-</pre></div>
+</code></pre></div>
 <h4 id="_27">加入动作</h4>
-<div class="highlight"><pre><span></span><span class="c">&lt;!-- 打开请假单动作 --&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="c">&lt;!-- 打开请假单动作 --&gt;</span>
     <span class="nt">&lt;act_window</span> <span class="na">id=</span><span class="s">"action_qingjia_qingjd"</span>
         <span class="na">name=</span><span class="s">"请假单"</span>
         <span class="na">res_model=</span><span class="s">"qingjia.qingjd"</span>
         <span class="na">view_mode=</span><span class="s">"tree,form"</span> <span class="nt">/&gt;</span>
-</pre></div>
+</code></pre></div>
 <h4 id="menuitem_1">menuitem</h4>
 <ul>
 <li>name 具体这个菜单在视图中显示的名字。</li>
@@ -962,7 +962,7 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
 <li>parent 是本菜单的父菜单。如果是子菜单则需要指定，只有顶级菜单不需要指定。</li>
 <li>action 指定本菜单连接的动作。如果连接动作了那么name属性可以不用指定了，系统会直接引用动作的name属性的。这里菜单和某个动作关联起来了。和前面联系起来，那么就是具体某个子菜单和某个数据模型关联起来了。</li>
 </ul>
-<h4 id="act95window">act_window</h4>
+<h4 id="act_window">act_window</h4>
 <ul>
 <li>name 具体act_window动作在UI中显示的名字（类似于QT中动作作为菜单中的项目的情况）。</li>
 <li>res_model act_window动作对应的某个数据模型（这里动作和数据模型关联在一起了）</li>
@@ -970,14 +970,14 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
 </ul>
 <h3 id="_28">定制视图</h3>
 <p>具体可以用的视图定义动作的时候设置：</p>
-<div class="highlight"><pre><span></span>    <span class="nt">&lt;act_window</span> <span class="na">id=</span><span class="s">"action_qingjia_qingjd"</span>
+<div class="highlight"><pre><span></span><code>    <span class="nt">&lt;act_window</span> <span class="na">id=</span><span class="s">"action_qingjia_qingjd"</span>
         <span class="na">name=</span><span class="s">"请假单"</span>
         <span class="na">res_model=</span><span class="s">"qingjia.qingjd"</span>
         <span class="na">view_mode=</span><span class="s">"tree,form"</span> <span class="nt">/&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>设置 <code>view_mode</code> ，下面定义视图的时候注意声明好模型名即可。</p>
 <h4 id="_29">表单视图</h4>
-<div class="highlight"><pre><span></span><span class="c">&lt;!--</span>
+<div class="highlight"><pre><span></span><code><span class="c">&lt;!--</span>
 <span class="c">表单视图</span>
 <span class="c">--&gt;</span>
     <span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">"qingjia_qingjd_form"</span> <span class="na">model=</span><span class="s">"ir.ui.view"</span><span class="nt">&gt;</span>
@@ -1014,9 +1014,9 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
         <span class="nt">&lt;/form&gt;</span>
     <span class="nt">&lt;/field&gt;</span>
     <span class="nt">&lt;/record&gt;</span>
-</pre></div>
+</code></pre></div>
 <h4 id="tree">tree视图</h4>
-<div class="highlight"><pre><span></span><span class="c">&lt;!--</span>
+<div class="highlight"><pre><span></span><code><span class="c">&lt;!--</span>
 <span class="c">tree视图</span>
 <span class="c">--&gt;</span>
     <span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">"qingjia_qingjd_tree"</span> <span class="na">model=</span><span class="s">"ir.ui.view"</span><span class="nt">&gt;</span>
@@ -1031,9 +1031,9 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
         <span class="nt">&lt;/tree&gt;</span>
     <span class="nt">&lt;/field&gt;</span>
     <span class="nt">&lt;/record&gt;</span>
-</pre></div>
+</code></pre></div>
 <h3 id="_30">定义模型</h3>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span>
 
 <span class="k">class</span> <span class="nc">Qingjd</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">'qingjia.qingjd'</span>
@@ -1050,7 +1050,7 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
     <span class="k">def</span> <span class="nf">confirm_qingjd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s1">'confirmed'</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
-</pre></div>
+</code></pre></div>
 <ul>
 <li><code>_name</code>  定义了本模型具体对应SQL表格的名字，</li>
 <li><code>name</code> odoo模型还需要一个name字段，很多显示和搜索行为都依赖于它。</li>
@@ -1087,24 +1087,24 @@ access_first_fruits, access_first_fruits,model_first_fruits,,1,0,0,0
 <p>新的API引入一个核心的概念就是 Recordset ，Recordset是个什么东西呢？就是前面讲的某一个模型（类）的所有对象（具体的实例）的集合就是一个Recordset对象。——这是recordset最大的情况，一个重要的限定条件就是其内元素必定是相同模型的，由这个最大的集合情况然后删除过滤掉一些元素（记录）之后仍然是recordset对象。</p>
 <p>按照官方文档的描述是，一个Recordset对象应该是已经排序了的同一模型的对象的集合。他还指出虽然现在还可以存放重复的元素，这个以后可能会变的。同时你从名字可能猜到这个Recordset对象应该支持集合的一些操作，事实确实如此。</p>
 <p>比如Recordset支持如下运算:</p>
-<div class="highlight"><pre><span></span>record in recset1     # include
+<div class="highlight"><pre><span></span><code>record in recset1     # include
 record not in recset1 # not include
 recset1 + recset2     # extend 
 recset1 | recset2     # union
 recset1 &amp; recset2     # intersect
 recset1 - recset2     # difference
 recset.copy()         # copy the recordset (not a deep copy)
-</pre></div>
+</code></pre></div>
 <p>上面的操作只有 <code>+</code> 还保留了次序，不过recordset是可以排序的，关于次序比如使用:</p>
-<div class="highlight"><pre><span></span>for record in recordset:
+<div class="highlight"><pre><span></span><code>for record in recordset:
     print(record)
-</pre></div>
+</code></pre></div>
 <p>具体的次序是否像集合set一样是不一定的还是如何呢？这里需要进一步的讨论。</p>
 <h4 id="apimulti"><code>@api.multi</code></h4>
 <p>默认行为就是这个，比如要返回一个 RecordSet，那么就返回RecordSet，并没有额外的操作。</p>
 <h4 id="apione"><code>@api.one</code></h4>
 <p>如果加上这个装饰器，那么方法里面的 <code>self</code> 是具体对应的本模型 RecordSet 的一条记录（也就是在multi装饰器的基础上，使用这个one装饰器，将自动循环每条记录）。</p>
-<div class="highlight"><pre><span></span>    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
     <span class="k">def</span> <span class="nf">do_toggle_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_done</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_done</span>
         <span class="k">return</span> <span class="kc">True</span>
@@ -1114,7 +1114,7 @@ recset.copy()         # copy the recordset (not a deep copy)
         <span class="n">done_recs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="kc">True</span><span class="p">)])</span>
         <span class="n">done_recs</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'active'</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
         <span class="k">return</span> <span class="kc">True</span>
-</pre></div>
+</code></pre></div>
 <h4 id="domain">domain语法</h4>
 <p>本小节主要参考了 <a href="http://stackoverflow.com/questions/14608775/how-to-filter-datas-in-openerp-using-domain-list">这个网页</a> 。</p>
 <p>Odoo里面的domain语法使用比较广泛，其就好像一个过滤器，应该对应的是SQL的SELECT语句。最基本的语句形式是 <code>[('field_name', 'operator', value)]</code></p>
@@ -1124,50 +1124,50 @@ recset.copy()         # copy the recordset (not a deep copy)
 <li>value 必须是和前面的field_name类型相同的某个值。</li>
 </ul>
 <p>然后这些圆括号包围的基本语句可以用以下几个逻辑运算符连接: <code>&amp;  | !</code> ，其中 <code>&amp;</code> 是默认的逻辑运算连接符，也就是你看到两个圆括号表达式中间没有逻辑运算连接符，则要视作其间加入了 <code>&amp;</code> 。具体形式大概类似这样:</p>
-<div class="highlight"><pre><span></span>[('field_name1', 'operator', value), '!',  
+<div class="highlight"><pre><span></span><code>[('field_name1', 'operator', value), '!',  
     ('field_name2', 'operator', value), '|', 
     ('field_name3', 'operator', value),('field_name4', 'operator', value)]
-</pre></div>
+</code></pre></div>
 <p>多个逻辑运算符的情况有点复杂，具体是 <code>!</code> 先解析，其只作用于后面的第一个元素；然后 <code>&amp;</code> 和 <code>|</code> 作用于后面的两个元素。一个简单的解析步骤是先将 <code>!</code> 解析进去，比如是解析为不是等，然后再将 <code>|</code> 解析进去，相当于一个并联电路接进来，然后所有的过滤条件组成一个大的串联过滤线路。这样上面的表达式就解析为:</p>
-<div class="highlight"><pre><span></span>1表达式 and 2表达式否 and 3表达式或4表达式
-</pre></div>
+<div class="highlight"><pre><span></span><code>1表达式 and 2表达式否 and 3表达式或4表达式
+</code></pre></div>
 <p>然后前面的那个domain:</p>
-<div class="highlight"><pre><span></span>domain = [('is_done', '=', True),
+<div class="highlight"><pre><span></span><code>domain = [('is_done', '=', True),
 '|', ('user_id', '=', 'self.env.uid'),
 ('user_id','=',False)]
-</pre></div>
+</code></pre></div>
 <p>应该解析为:</p>
-<div class="highlight"><pre><span></span>is_done是True and user_id 是self.env.uid 或 user_id是False
-</pre></div>
+<div class="highlight"><pre><span></span><code>is_done是True and user_id 是self.env.uid 或 user_id是False
+</code></pre></div>
 <h4 id="search">search方法</h4>
 <p>一个recordset对象调用其search方法还是返回一个recordset对象。</p>
 <p>search方法接受一个参数，这个参数就是前面谈论的基于odoo domain语法的过滤器表达式。</p>
 <p>所以下面这个表达式:</p>
-<div class="highlight"><pre><span></span>self.env[’res.users’].search([(’login’, ’=’, ’admin’)])
-</pre></div>
+<div class="highlight"><pre><span></span><code>self.env[’res.users’].search([(’login’, ’=’, ’admin’)])
+</code></pre></div>
 <p>的含义就是调用 <code>res.users</code> 这个表格或者说recordset，然后执行search方法，具体选中的record是login这个字段等于admin的。</p>
 <p>接下来执行search方法，返回的done_recs也是一个recordset对象，对于这些recordset对象执行了 write 方法，其接受一个字典值，就是直接更改SQL表格里面的某个表头（属性），将其改为某个值。值得一提的是，recordset调用write方法会将本recordset内所有的record都进行修改操作的。</p>
 <p>前面讲到通过 super() 来继承修改原模型的某个方法，请看下面的例子:</p>
-<div class="highlight"><pre><span></span><span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
 <span class="k">def</span> <span class="nf">do_toggle_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">'Only the responsible can do this!'</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TodoTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">do_toggle_done</span><span class="p">()</span>
-</pre></div>
+</code></pre></div>
 <p>这里 <code>@api.one</code> 自动遍历目标recordset，然后方法里面的self就是一个record。这里程序的逻辑很简单，就是如果用户名不是当前登录用户（因为todo task管理只是自己管理自己的任务计划），那么将会报错。如果是那么就调用之前的方法。</p>
 <h4 id="write">write方法</h4>
-<div class="highlight"><pre><span></span>done_recs.write({'active': False})
-</pre></div>
+<div class="highlight"><pre><span></span><code>done_recs.write({'active': False})
+</code></pre></div>
 <p>在 <code>api.one</code> 方法下，每一次对属性的修改都将产生一次Record的write行为:</p>
-<div class="highlight"><pre><span></span>@api.one
+<div class="highlight"><pre><span></span><code>@api.one
 def dangerous_write(self):
   self.x = 1
   self.y = 2
   self.z = 4
-</pre></div>
+</code></pre></div>
 <p>推荐如下进行 write 操作：</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">better_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">better_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
    <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
       <span class="n">rec</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'y'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'z'</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
 
@@ -1176,7 +1176,7 @@ def dangerous_write(self):
 <span class="k">def</span> <span class="nf">better_write2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
    <span class="c1"># same value on all records</span>
    <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'y'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'z'</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
-</pre></div>
+</code></pre></div>
 <h4 id="selfenv"><code>self.env</code></h4>
 <ul>
 <li><code>self.env.user</code> 当前用户</li>
@@ -1190,7 +1190,7 @@ def dangerous_write(self):
 <p>实际上，Odoo模型在我们定义的模型之外，它们都在注册中心注册了的，所谓全局环境的一部分，可以用 <code>self.env[model name]</code> 来引用之。比如要引用 <code>res.partner</code> 模型，我们就可以写作 <code>self.env['res.partner']</code> 。</p>
 <h4 id="field">给模块增加field</h4>
 <p>如下代码就是首先通过 <code>_inherit</code> 继承原模块，然后再增加一些field:</p>
-<div class="highlight"><pre><span></span>from odoo import models, fields, api
+<div class="highlight"><pre><span></span><code>from odoo import models, fields, api
 
 class TodoTask(models.Model):
 
@@ -1198,18 +1198,18 @@ class TodoTask(models.Model):
 
     user_id = fields.Many2one('res.users',string='Responsible')
     date_deadline = fields.Date('Deadline')
-</pre></div>
+</code></pre></div>
 <p>关于 <code>res.users</code> 和 <code>res.partner</code> 具体是雇员还是合作伙伴什么的，这个以后再摸清楚，这里先简单将其看作一个SQL表格，然后Many2one前面讲过了就是根据某个给定的SQL表格来生成一个下拉选单，具体是引用的该SQL表格的那个表头属性，这里应该还有一个细节讨论。</p>
 <p>不管怎么说，现在我们通过新建一个模块 todo_user ，如前面描述的将模块设置配置好之后，原模块 todo_app 的todo.task模型就增加了新的两个field了，也就是两个新的表头了。</p>
 <h4 id="field_1">修改已有的field</h4>
 <p>按照上面的继承机制，我们可以如上类似处理，只修改你希望更改的某个field的某个属性即可。如下:</p>
-<div class="highlight"><pre><span></span>name = fields.Char(help="can I help you")
-</pre></div>
+<div class="highlight"><pre><span></span><code>name = fields.Char(help="can I help you")
+</code></pre></div>
 <p>这样原模型的namefield额外增加了help帮助信息了。</p>
 <h4 id="_32">重载原模型的方法</h4>
 <p>读者一定已经想到了，类似的在这种继承机制下，可以通过重写原模型的方法来重载该方法。事实上确实可以这样做，而这里要讲的是还有一种更加优雅的继承原模型的方法，那就是通过 <code>super()</code> 来调用父类的方法。</p>
 <p>首先我们看到下面这个例子:</p>
-<div class="highlight"><pre><span></span><span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <span class="k">def</span> <span class="nf">do_clear_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'is_done'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
     <span class="s1">'|'</span><span class="p">,</span> <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="s1">'self.env.uid'</span><span class="p">),</span>
@@ -1217,15 +1217,15 @@ class TodoTask(models.Model):
     <span class="n">done_recs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
     <span class="n">done_recs</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'active'</span><span class="p">:</span><span class="kc">False</span><span class="p">})</span>
     <span class="k">return</span> <span class="kc">True</span>
-</pre></div>
+</code></pre></div>
 <h3 id="_33">视图的继承修改</h3>
 <p>本小节主要参考了 <a href="http://www.jeffzhang.cn/Odoo-Notes-2/">这篇文章</a> ，一个简单的例子如下所示：</p>
-<div class="highlight"><pre><span></span>        <span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">"product_item_hide_no_price"</span> <span class="na">inherit_id=</span><span class="s">"website_sale.products_item"</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><span></span><code>        <span class="nt">&lt;template</span> <span class="na">id=</span><span class="s">"product_item_hide_no_price"</span> <span class="na">inherit_id=</span><span class="s">"website_sale.products_item"</span><span class="nt">&gt;</span>
             <span class="nt">&lt;xpath</span> <span class="na">expr=</span><span class="s">"//div[hasclass('product_price')]/b"</span> <span class="na">position=</span><span class="s">"attributes"</span><span class="nt">&gt;</span>
                 <span class="nt">&lt;attribute</span> <span class="na">name=</span><span class="s">"t-if"</span><span class="nt">&gt;</span>product.price &gt; 0<span class="nt">&lt;/attribute&gt;</span>
             <span class="nt">&lt;/xpath&gt;</span>
         <span class="nt">&lt;/template&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>其大体分为三步：</p>
 <ol>
 <li>推荐使用 template 标签来创建一个 QWeb 对象</li>
@@ -1255,34 +1255,34 @@ class TodoTask(models.Model):
 <h2 id="odoo_7">定制odoo实战</h2>
 <h3 id="_35">寻根问底第一谈</h3>
 <p>res.company 模型对应的 </p>
-<div class="highlight"><pre><span></span>select * from public.ir_ui_menu where parent_id is null  ;
-</pre></div>
+<div class="highlight"><pre><span></span><code>select * from public.ir_ui_menu where parent_id is null  ;
+</code></pre></div>
 <p>我们看到 settings -&gt; 4  ，然后我们继续：</p>
-<div class="highlight"><pre><span></span>select * from public.ir_ui_menu where parent_id = 4  ;
-</pre></div>
+<div class="highlight"><pre><span></span><code>select * from public.ir_ui_menu where parent_id = 4  ;
+</code></pre></div>
 <p>看到 User &amp; Company 的 id 是 7 ，</p>
 <p>然后继续我们找到 Company 子菜单的 id 是54，其对应的action是 <code>"ir.actions.act_window,44"</code> ， 也就是其对应的是 第 44  号 动作，然后我们继续：</p>
-<div class="highlight"><pre><span></span>select * from public.ir_act_window where id = 44 ;
-</pre></div>
+<div class="highlight"><pre><span></span><code>select * from public.ir_act_window where id = 44 ;
+</code></pre></div>
 <p>我们看到这个动作对应的 模型就是 <code>res.company</code> 。启动的 <code>view_mode</code> 定义显示方案。具体视图是</p>
-<div class="highlight"><pre><span></span>select * from public.ir_ui_view where model = 'res.company' ;
-</pre></div>
+<div class="highlight"><pre><span></span><code>select * from public.ir_ui_view where model = 'res.company' ;
+</code></pre></div>
 <p>就会找到和 <code>res.company</code> 相关的视图。</p>
 <p>现在假设我们我要定义res.company 的某个视图，首先我们激活开发者模式，然后到目标视图那里，点击 <code>Fields View Get</code> ，我们看到 <code>form</code> 开头，也就是当前是表单视图。于是我们继续：</p>
-<div class="highlight"><pre><span></span>select name,arch_db from public.ir_ui_view where model = 'res.company' and 
+<div class="highlight"><pre><span></span><code>select name,arch_db from public.ir_ui_view where model = 'res.company' and 
         type = 'form' order by priority ;
-</pre></div>
+</code></pre></div>
 <p>具体视图的名字只是方便描述记忆用的，也不是xml里面方便引用的external id，priority这个字段也定义了继承关系的顺序。</p>
 <p>首先我们看到第一个视图内容：</p>
-<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;form</span> <span class="na">string=</span><span class="s">"Company"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;sheet&gt;</span>
 <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"logo"</span> <span class="na">widget=</span><span class="s">"image"</span> <span class="na">class=</span><span class="s">"oe_avatar"</span><span class="nt">/&gt;</span>             
 <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"oe_title"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"name"</span> <span class="na">class=</span><span class="s">"oe_edit_only"</span><span class="nt">/&gt;</span> (...)"
-</pre></div>
+</code></pre></div>
 <p>这应该内容还没有定义完，不会这么短，所以我们还是要在xml那边查找定义，现在我们可以根据name来查找xml了。我们首先获得下面这两个xml：</p>
-<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="nt">&lt;odoo&gt;</span>
     <span class="nt">&lt;data&gt;</span>
         <span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">"view_company_form"</span> <span class="na">model=</span><span class="s">"ir.ui.view"</span><span class="nt">&gt;</span>
@@ -1333,8 +1333,8 @@ class TodoTask(models.Model):
                 <span class="nt">&lt;/form&gt;</span>
             <span class="nt">&lt;/field&gt;</span>
         <span class="nt">&lt;/record&gt;</span>
-</pre></div>
-<div class="highlight"><pre><span></span>        <span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">"action_view_company_form_link_2_currencies"</span> <span class="na">model=</span><span class="s">"ir.ui.view"</span><span class="nt">&gt;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>        <span class="nt">&lt;record</span> <span class="na">id=</span><span class="s">"action_view_company_form_link_2_currencies"</span> <span class="na">model=</span><span class="s">"ir.ui.view"</span><span class="nt">&gt;</span>
             <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;</span>res.company.form<span class="nt">&lt;/field&gt;</span>
             <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"model"</span><span class="nt">&gt;</span>res.company<span class="nt">&lt;/field&gt;</span>
             <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">"inherit_id"</span> <span class="na">ref=</span><span class="s">"base.view_company_form"</span><span class="nt">/&gt;</span>
@@ -1347,96 +1347,96 @@ class TodoTask(models.Model):
                 <span class="nt">&lt;/xpath&gt;</span>
             <span class="nt">&lt;/field&gt;</span>
         <span class="nt">&lt;/record&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>然后我们对照 <code>Fields View Get</code> 看一下，大体就是这些内容了。然后我们再来分析一下第二个xml的视图继承修改动作。去看看，果然 <code>&lt;field name="currency_id"</code> 后面插入了这些内容。</p>
 <h3 id="pruchase">pruchase模块研究</h3>
 <h4 id="_36">删除询价单子菜单</h4>
 <p>这边直接创建采购单即可，不需要询价单，首先将询价单子菜单去除。我们找到采购的子菜单id 号是 265，然后继续：</p>
-<div class="highlight"><pre><span></span>select * from public.ir_ui_menu where parent_id = 265  ;
-</pre></div>
+<div class="highlight"><pre><span></span><code>select * from public.ir_ui_menu where parent_id = 265  ;
+</code></pre></div>
 <p>我们看到目标子子菜单是：</p>
-<div class="highlight"><pre><span></span>id parent_left parent_right name   active sequence parent_id web_icon action
+<div class="highlight"><pre><span></span><code>id parent_left parent_right name   active sequence parent_id web_icon action
 278;206;207;"Requests for Quotation";t;0;265;"";"ir.actions.act_window,375"
-</pre></div>
+</code></pre></div>
 <p>然后我们需要把这个子子菜单的menuitem记录删除掉，具体查询到的是xml语句：</p>
-<div class="highlight"><pre><span></span>        <span class="nt">&lt;menuitem</span> <span class="na">action=</span><span class="s">"purchase_rfq"</span> <span class="na">id=</span><span class="s">"menu_purchase_rfq"</span>
+<div class="highlight"><pre><span></span><code>        <span class="nt">&lt;menuitem</span> <span class="na">action=</span><span class="s">"purchase_rfq"</span> <span class="na">id=</span><span class="s">"menu_purchase_rfq"</span>
             <span class="na">parent=</span><span class="s">"menu_procurement_management"</span>
             <span class="na">sequence=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>于是有：</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;delete</span> <span class="na">id=</span><span class="s">"purchase.menu_purchase_rfq"</span> <span class="na">model=</span><span class="s">"ir.ui.menu"</span><span class="nt">&gt;&lt;/delete&gt;</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;delete</span> <span class="na">id=</span><span class="s">"purchase.menu_purchase_rfq"</span> <span class="na">model=</span><span class="s">"ir.ui.menu"</span><span class="nt">&gt;&lt;/delete&gt;</span>
+</code></pre></div>
 <h4 id="_37">采购订单直接生成采购单</h4>
 <p>然后我发现现在点击了之后还是生成的询价单，我希望是开始编辑采购单，也就是彻底取消询价单功能。之前我注意到下面 376 动作就是对应的就是采购单那边的。然后采购订单这边的试图还需要进一步研究，我们已经明确了要研究的模型的 <code>purchase.order</code> 。</p>
 <p>我们先查看视图那边的情况：</p>
-<div class="highlight"><pre><span></span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_view</span> <span class="k">where</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">'purchase.order'</span> <span class="p">;</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">public</span><span class="p">.</span><span class="n">ir_ui_view</span> <span class="k">where</span> <span class="n">model</span> <span class="o">=</span> <span class="s1">'purchase.order'</span> <span class="p">;</span>
+</code></pre></div>
 <p>深感现在要自如定制，还欠缺一点火候，下面继续深入学习odoo内部视图模型等等各方面的机制，然后再回到这个问题上来。</p>
 <hr/>
 <h2 id="odoo_8">继续深入学习odoo内部机制</h2>
 <h3 id="controller">controller</h3>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Academy</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Academy</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">Controller</span><span class="p">):</span>
     <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/teachers/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">Teachers</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">'academy.teachers'</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"first.index"</span><span class="p">,</span>
                                    <span class="p">{</span><span class="s1">'teachers'</span><span class="p">:</span> <span class="n">Teachers</span><span class="o">.</span><span class="n">search</span><span class="p">([])})</span>
-</pre></div>
+</code></pre></div>
 <ol>
 <li>通过<code>http.request.env</code> 来获取模型对象，通过调用 <code>search</code> 方法来获取所有记录。</li>
 <li>通过 <code>http.route</code> 装饰器来指定url分发规则，通过auth来指定认证规则，通过website来使用QWeb模版。</li>
 <li>通过 <code>http.request.render</code> 来通过模版渲染网页，第一个参数是本模块的名字加上template id来选定模版，后面的字典值来返回一些参数供网页模版调用。</li>
 </ol>
 <p>url接受参数和类型限定，</p>
-<div class="highlight"><pre><span></span>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/academy/&lt;int:id&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/academy/&lt;int:id&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">teacher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">'&lt;h1&gt;</span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">)&lt;/h1&gt;'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-</pre></div>
+</code></pre></div>
 <p>或者指定odoo内部的某个模型：</p>
-<div class="highlight"><pre><span></span>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/&lt;model("academy.teachers"):teacher&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@http</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/first/&lt;model("academy.teachers"):teacher&gt;/'</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="s1">'public'</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">teacher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">teacher</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">'first.biography'</span><span class="p">,</span> <span class="p">{</span>
             <span class="s1">'person'</span><span class="p">:</span> <span class="n">teacher</span>
         <span class="p">})</span>
-</pre></div>
+</code></pre></div>
 <h3 id="security_1">security</h3>
-<div class="highlight"><pre><span></span>id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+<div class="highlight"><pre><span></span><code>id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_first_teachers, access_first_teachers,model_academy_teachers,,1,0,0,0
-</pre></div>
+</code></pre></div>
 <p>前面的id和name名字都不是特别限定死，关键是 <code>model_id:id</code> 这个字段，名字一定是 <code>model_&lt;model_name&gt;</code> 这个里面的 <code>model_name</code> 和 <code>request.env</code> 或者在定义模型的时候 <code>self.env</code> 的引用都是一样的，只是这里的  <code>model_name</code> 只是将点号换成了下划线。</p>
 <h3 id="template_1">template</h3>
 <p>QWeb那边继续学习，QWeb里面原html标签直接写上就是了，区别就是 <code>t-</code> 开头的那些 QWeb 属性，或者 <code>t</code> 标签在条件渲染中不会渲染出来：</p>
 <h4 id="t-if">t-if</h4>
-<div class="highlight"><pre><span></span>&lt;t t-if="condition"&gt;
+<div class="highlight"><pre><span></span><code>&lt;t t-if="condition"&gt;
     &lt;p&gt;Test&lt;/p&gt;
 &lt;/t&gt;
-</pre></div>
+</code></pre></div>
 <p>若条件符合，也只是输出：</p>
-<div class="highlight"><pre><span></span>&lt;p&gt;Test&lt;/p&gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>&lt;p&gt;Test&lt;/p&gt;
+</code></pre></div>
 <p>而：</p>
-<div class="highlight"><pre><span></span>&lt;div t-if="condition"&gt;
+<div class="highlight"><pre><span></span><code>&lt;div t-if="condition"&gt;
     &lt;p&gt;Test&lt;/p&gt;
 &lt;/div&gt;
-</pre></div>
+</code></pre></div>
 <p>的输出是：</p>
-<div class="highlight"><pre><span></span>&lt;div&gt;
+<div class="highlight"><pre><span></span><code>&lt;div&gt;
     &lt;p&gt;Test&lt;/p&gt;
 &lt;/div&gt;
-</pre></div>
+</code></pre></div>
 <h4 id="t-call">t-call</h4>
-<div class="highlight"><pre><span></span>&lt;t t-call="website.layout" &gt;
-</pre></div>
+<div class="highlight"><pre><span></span><code>&lt;t t-call="website.layout" &gt;
+</code></pre></div>
 <p>调用子模板，</p>
 <h4 id="_38">循环渲染</h4>
-<div class="highlight"><pre><span></span>                <span class="nt">&lt;t</span> <span class="na">t-foreach=</span><span class="s">"teachers"</span> <span class="na">t-as=</span><span class="s">"teacher"</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><span></span><code>                <span class="nt">&lt;t</span> <span class="na">t-foreach=</span><span class="s">"teachers"</span> <span class="na">t-as=</span><span class="s">"teacher"</span><span class="nt">&gt;</span>
                     <span class="nt">&lt;p&gt;&lt;t</span> <span class="na">t-esc=</span><span class="s">"teacher.id"</span><span class="nt">/&gt;</span>
                         <span class="nt">&lt;a</span> <span class="na">t-attf-href=</span><span class="s">"/first/{{slug(teacher)}}"</span><span class="nt">&gt;</span>
                              <span class="nt">&lt;t</span> <span class="na">t-esc=</span><span class="s">"teacher.name"</span> <span class="nt">/&gt;</span>
                         <span class="nt">&lt;/a&gt;</span>
                     <span class="nt">&lt;/p&gt;</span>
                 <span class="nt">&lt;/t&gt;</span>
-</pre></div>
+</code></pre></div>
 <p>对某个参数递归，每个递归值由 <code>t-as</code> 指定，然后获取数值。 <code>t-esc</code> 接受一个表达式，然后估值然后打印出其内容。</p>
 <h4 id="t-attf-">t-attf-*</h4>
 <p>渲染某个属性，其值是个字符串 format 语句。</p>
@@ -1535,7 +1535,7 @@ access_first_teachers, access_first_teachers,model_academy_teachers,,1,0,0,0
 <li><a href="#_26">加入菜单</a></li>
 <li><a href="#_27">加入动作</a></li>
 <li><a href="#menuitem_1">menuitem</a></li>
-<li><a href="#act95window">act_window</a></li>
+<li><a href="#act_window">act_window</a></li>
 </ul>
 </li>
 <li><a href="#_28">定制视图</a><ul>
@@ -1665,11 +1665,11 @@ access_first_teachers, access_first_teachers,model_academy_teachers,,1,0,0,0
 <h2 id="_44">会计学入门</h2>
 <p>会计系统反映了企业的两个基本方面: 自己有什么和欠别人什么。资产(assert)是企业拥有或控制的能够给企业带来未来经济效益的资源。例如: 现金，物料，设备和土地等。负债(liabilities)是企业欠非其所有者（债权人）的债务，未来需要用现金、产品或服务来偿还。权益(equity)是指企业所有人对企业资产所享有的求偿权。</p>
 <p>总的来说有:</p>
-<div class="highlight"><pre><span></span>资产 = 负债 + 所有者权益
-</pre></div>
+<div class="highlight"><pre><span></span><code>资产 = 负债 + 所有者权益
+</code></pre></div>
 <p>负债已经放在所有者权益前面，因为负债应该先被满足。此外还有一个扩展的会计公式:</p>
-<div class="highlight"><pre><span></span>资产 = 负债 + 所有者名下的资本 - 所有者提取 + 收入 - 费用
-</pre></div>
+<div class="highlight"><pre><span></span><code>资产 = 负债 + 所有者名下的资本 - 所有者提取 + 收入 - 费用
+</code></pre></div>
 <p>其中收入减去费用的部分便是净利润(net income)，如果费用大于收入，则会产生净损失(net loss)。</p>
 <p>常见的经济业务:</p>
 <ul>
@@ -1793,17 +1793,17 @@ access_first_teachers, access_first_teachers,model_academy_teachers,,1,0,0,0
 <h3 id="_65">本页使用说明</h3>
 <p>子标题为模型具体通过 <code>self.env[name]</code> 可调用的名字，然后通过代码演示了该模型的具体代码定义的模型名或者也写上表格名。</p>
 <h3 id="baselanguageinstall">base.language.install</h3>
-<div class="highlight"><pre><span></span>class BaseLanguageInstall(models.TransientModel):
+<div class="highlight"><pre><span></span><code>class BaseLanguageInstall(models.TransientModel):
     _name = "base.language.install"
-</pre></div>
+</code></pre></div>
 <h3 id="rescompany">res.company</h3>
-<div class="highlight"><pre><span></span>class Company(models.Model):
+<div class="highlight"><pre><span></span><code>class Company(models.Model):
     _name = "res.company"
-</pre></div>
+</code></pre></div>
 <h3 id="purchaseorder">purchase.order</h3>
-<div class="highlight"><pre><span></span>class PurchaseOrder(models.Model):
+<div class="highlight"><pre><span></span><code>class PurchaseOrder(models.Model):
     _name = "purchase.order"
-</pre></div>
+</code></pre></div>
 <h3 id="resusers">res.users</h3>
 <p>res.uses 在网页视图下对应的菜单是: 设置→用户。 这个表格（或说模型）存储着一些登录用户的信息，比如用户名或密码等。</p>
 <h2 id="_66">参考资料</h2>
@@ -1820,7 +1820,7 @@ access_first_teachers, access_first_teachers,model_academy_teachers,,1,0,0,0
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2019-04-02T00:00:00+08:00">2019年 4月 2日 </time>
+            <time pubdate="pubdate" datetime="2019-04-06T00:00:00+08:00">2019年 4月 6日 </time>
 
             <h4>最近更新于：</h4>
             <time datetime="2021-03-11T09:11:23.482336+08:00">2021年 3月 11日 </time>
