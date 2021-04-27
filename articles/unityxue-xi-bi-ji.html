@@ -115,6 +115,7 @@
 </li>
 <li><a href="#unity-editor">Unity Editor的使用</a><ul>
 <li><a href="#_4">预制件</a></li>
+<li><a href="#perfab">解压缩Perfab</a></li>
 <li><a href="#1">练习题1</a></li>
 <li><a href="#_5">如何将某个摄像头调到当前视角</a></li>
 </ul>
@@ -151,20 +152,38 @@
 <li><a href="#_10">异步加载你的场景</a></li>
 </ul>
 </li>
-<li><a href="#_11">物理系统</a><ul>
-<li><a href="#_12">碰撞器组件的是否是触发器属性</a></li>
-<li><a href="#physicscheckcapsule">Physics.CheckCapsule</a></li>
-<li><a href="#_13">物理系统优化</a></li>
+<li><a href="#_11">新的输入系统</a><ul>
+<li><a href="#_12">判断本帧某个键位是否按下了</a></li>
 </ul>
 </li>
+<li><a href="#_13">物理系统</a><ul>
+<li><a href="#_14">碰撞器组件的是否是触发器属性</a></li>
+<li><a href="#physicscheckcapsule">Physics.CheckCapsule</a></li>
+<li><a href="#_15">物理系统优化</a></li>
+</ul>
+</li>
+<li><a href="#_16">四元数和欧拉角度</a><ul>
+<li><a href="#quaternionangleaxis">Quaternion.AngleAxis</a></li>
+</ul>
+</li>
+<li><a href="#gameobject_1">常驻GameObject</a><ul>
+<li><a href="#dontdestroyonload">DontDestroyOnLoad</a></li>
+</ul>
+</li>
+<li><a href="#unity_4">基于事件驱动的Unity编程</a><ul>
+<li><a href="#unityaction">UnityAction</a></li>
+</ul>
+</li>
+<li><a href="#ui">UI</a></li>
+<li><a href="#_17">导航系统</a><ul>
+<li><a href="#agent">如何移动一个Agent</a></li>
+<li><a href="#_18">巡逻模式</a></li>
+</ul>
+</li>
+<li><a href="#cinemachine">cinemachine</a></li>
 <li><a href="#animation-clip">animation clip</a></li>
 <li><a href="#particle-system">particle system</a></li>
-<li><a href="#_14">导航系统</a><ul>
-<li><a href="#agent">如何移动一个Agent</a></li>
-<li><a href="#_15">巡逻模式</a></li>
-</ul>
-</li>
-<li><a href="#_16">材质</a><ul>
+<li><a href="#_19">材质</a><ul>
 <li><a href="#albedo">albedo</a></li>
 <li><a href="#metallic">metallic</a></li>
 <li><a href="#smoothness">Smoothness</a></li>
@@ -172,24 +191,18 @@
 <li><a href="#offset">offset</a></li>
 </ul>
 </li>
-<li><a href="#_17">地形</a><ul>
+<li><a href="#_20">地形</a><ul>
 <li><a href="#blender">blender建模构建地形</a></li>
 </ul>
 </li>
 <li><a href="#makehuman">Makehuman工具</a></li>
-<li><a href="#cinemachine">cinemachine</a></li>
 <li><a href="#fmod">FMOD音效集成</a></li>
-<li><a href="#_18">开始菜单</a></li>
-<li><a href="#_19">场景间存在的持久数据</a><ul>
-<li><a href="#dontdestroyonload">DontDestroyOnLoad</a></li>
-</ul>
-</li>
-<li><a href="#unity_4">基于事件驱动的Unity编程</a></li>
-<li><a href="#_20">多场景无缝切换</a></li>
-<li><a href="#_21">玩家场景数据记忆</a></li>
-<li><a href="#_22">单元测试</a></li>
-<li><a href="#_23">其他</a><ul>
-<li><a href="#_24">默认单位</a></li>
+<li><a href="#_21">开始菜单</a></li>
+<li><a href="#_22">多场景无缝切换</a></li>
+<li><a href="#_23">单元测试</a></li>
+<li><a href="#_24">其他</a><ul>
+<li><a href="#requirecomponent">RequireComponent</a></li>
+<li><a href="#_25">默认单位</a></li>
 <li><a href="#unitynet-core">Unity环境和.net core略有不同</a></li>
 </ul>
 </li>
@@ -233,15 +246,18 @@
 <h2 id="unity-editor">Unity Editor的使用</h2>
 <p>关于Unity Editor的基本使用请读者自行熟悉软件界面，然后试着自己慢慢搭建起，比如一个平面作为一个基本的游玩空间，平面由四面墙围起来，然后等等其他立方体等等。移动缩放旋转和复制等等。</p>
 <p>如果对这种类似的软件不太熟悉的话，推荐是找个相关的入门视频看看，如果对这类软件有点熟悉的，可能左看看右点点就大体能够掌握了。</p>
-<p>TODO 视频讲解</p>
 <h3 id="_4">预制件</h3>
 <p>预制件Perfab非常的有用，可以说是Unity开发里面很重要的一个核心概念了。可以将Perfab理解为编程中的类，而场景中的各个对象在没有perfab之前属于游离的实例，在创建perfab之后才真正可以称之为根据某个perfab类在场景中创建的实例。所以一般来说Unity开发中场景的大部分GameObject都应该perfab化。</p>
 <p>嵌套预制件，多个perfab形成嵌套关系并没有改变原perfab和场景中实例间的继承关系。</p>
 <p>预制件变体，你可以根据某个perfab来创建某个预制件变体，这些预制件变体更类似于类的继承关系，比如你改变原预制件的某个属性，之后创建的预制件变体的某个属性也会对应发生更改。【变种属性应该继续保持原有的继承更改关系。】</p>
+<p><strong>需要注意的是在项目间重复使用，Perfab和Perfab之间和各个资产之间的引用关系必须是一致的，也就是原Asset资产的文件夹层次是保持一致的。</strong></p>
+<h3 id="perfab">解压缩Perfab</h3>
+<p>是由原场景中GameObject转成Perfab的反向操作，也就是该GameObject成为一个常规的GameObject了。</p>
 <h3 id="1">练习题1</h3>
 <p>请读者随便新建一个场景，新建一个平面，命名为ground，预制件化，然后在该平面的两角放置两个立方体，两个立方体是根据一个预制件perfab而来，然后将该立方体拖动为ground的子辈。然后将ground预制件化。然后再根据ground预制件再新建一个平面再将这两个平面对接。</p>
 <p>经过试验我们可以发现，嵌套预制件也有一种继承层次在里面。比如现在假设有 boxBase，boxRight，box3这三个材质，其中boxBase作用于box perfab，boxRight作用于ground perfab的右角盒子，box3作用于场景中某个特别的盒子。</p>
 <p>以左角的盒子为例，不受ground perfab的修改影响，不受box3修改的影响，所以最终颜色是boxBase决定的。以第二个盒子为例，受boxBase修改影响，然后再受ground perfab右角修改影响，最终颜色是boxRight。而第三个盒子的颜色则就是box3材质颜色。</p>
+<p>简单来说嵌套Perfab有一种类似编程上的继承关系在里面，</p>
 <h3 id="_5">如何将某个摄像头调到当前视角</h3>
 <p>首先在编辑器上调整好开发者视角，然后选中某个摄像头，然后选择 <code>游戏对象-&gt; align with view</code> 。</p>
 <h2 id="_6">脚本</h2>
@@ -428,7 +444,7 @@ public class PersistentManagersSO : GameSceneSO { }
 <p>我们看到Unity协程解决的主要是帧动作太多的问题，通过Update等函数我们可以设计每一帧进行某个动作，然后我们发现对于很多问题并不需要每一帧都做，通过Unity协程可以解决这个问题；还有些过程可能横跨多个帧，但其内部动作可以分解为很多小动作，然后每帧再分别执行这些小动作即可，这可以通过Unity协程解决。</p>
 <p>但Unity协程不能解决某个动作就是花费时间太长，从而造成你的游戏进程阻塞这个问题，这还是需要靠多线程或异步来解决，Unity协程在这里的作用主要就是每帧来检查一下这个费时的异步动作完成了没有。</p>
 <h2 id="unity-addressable-asset-system">Unity Addressable Asset system</h2>
-<p>Unity的官方包，将Asset通过地址来访问，从而增加资源访问的灵活性。原asset bundle管理方案已经处于废弃状态。</p>
+<p>Unity的官方包，在包管理里面搜索<code>addressables</code> 。这个包可以让你访问资产Asset通过地址访问的方式来进行，从而增加资源访问的灵活性。原asset bundle管理方案已经处于废弃状态。</p>
 <p>在 window-&gt;addressables groups 那里新增一个group。</p>
 <p>然后将资源拖动到这里，第一列就是后面你要使用引用的名字，默认的名字是根据你的资源的本地目录来的，你也可以修改为你想要的名字。</p>
 <p>在脚本中使用资源如下，接受的参数是该资产的名字。</p>
@@ -499,96 +515,68 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 }
 </code></pre></div>
 <p>如果大体每一帧都会检测一次加载是否Succeeded。</p>
-<h2 id="_11">物理系统</h2>
-<h3 id="_12">碰撞器组件的是否是触发器属性</h3>
+<h2 id="_11">新的输入系统</h2>
+<p>new unity input system 更多地多设备输入兼容。文档在 <a href="[Installation guide | Input System | 1.1.0-preview.3 (unity3d.com)](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/manual/Installation.html)">这里</a> 。</p>
+<p>激活新的输入系统： <code>Edit-&gt;Project settings-&gt;Player-&gt; Active Input Handling</code> 。</p>
+<p>添加Player Input 组件</p>
+<p>编写Action输入键位绑定</p>
+<p>如果设置的是Send Message，则假设有Move Action，则对应该GameObject的<code>OnMove</code> 方法，Move发送的是一个Vector2值。x对应的是该GameObject Right方向上的位移，y对应的是该GameObject forward方向上的位移，有一个中间值(0.7,0.7) ，是45度的方向，你可以简单理解为right方向移动了0.7个单位，forward方向移动了0.7个单位，0.7这个数字的含义表示目标方向的移动长度还是大约1个单位。</p>
+<p>另外一个是单键位绑定，返回的是float值，1表示键位触发。</p>
+<p>如果设置的是InVoke Unity Events，则需要下面写上对应Action的回调方法，似乎InVoke Unity Events功能更强大一些，其支持对按键动作多种状态的判断。</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">public</span> <span class="k">void</span> <span class="nf">OnFire</span><span class="p">(</span><span class="n">InputAction</span><span class="p">.</span><span class="n">CallbackContext</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">phase</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="n">InputActionPhase</span><span class="p">.</span><span class="n">Performed</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">interaction</span> <span class="k">is</span> <span class="n">SlowTapInteraction</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">StartCoroutine</span><span class="p">(</span><span class="n">BurstFire</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="n">context</span><span class="p">.</span><span class="n">duration</span> <span class="p">*</span> <span class="n">burstSpeed</span><span class="p">)));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">Fire</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="n">m_Charging</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">InputActionPhase</span><span class="p">.</span><span class="n">Started</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">interaction</span> <span class="k">is</span> <span class="n">SlowTapInteraction</span><span class="p">)</span>
+                    <span class="n">m_Charging</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">InputActionPhase</span><span class="p">.</span><span class="n">Canceled</span><span class="p">:</span>
+                <span class="n">m_Charging</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>上面Started最先触发，然后再触发Performed。如果你的context设置了SlowTapInteraction也就是一定时间的按键判断等，这块后面再详细了解。</p>
+<h3 id="_12">判断本帧某个键位是否按下了</h3>
+<div class="highlight"><pre><span></span><code>  Keyboard.current.space.wasPressedThisFrame
+</code></pre></div>
+<h2 id="_13">物理系统</h2>
+<h3 id="_14">碰撞器组件的是否是触发器属性</h3>
 <p>默认是否，如果勾选，则该碰撞器不具有物体碰撞功能而只有碰撞事件触发功能，也就是你可以穿模进去了。</p>
 <h3 id="physicscheckcapsule">Physics.CheckCapsule</h3>
 <p>这个可以用来测试玩家角色是否接触地面，具体这个方法参数官方文档读起来也不是很直观，具体来说其定义了这样一个胶囊：</p>
 <p><img alt="img" src="https://a358003542.github.io/images/2021/unity_capsule.png"/></p>
 <p>其中的layer层一般将地形GameObject放入该层。</p>
-<h3 id="_13">物理系统优化</h3>
+<h3 id="_15">物理系统优化</h3>
 <p>如果物理系统表现不太如人意，应该尽可能参照真实物理世界的参数然后再根据自己的需要进行调整。</p>
-<h2 id="animation-clip">animation clip</h2>
-<p>制作动画片段：</p>
-<ol>
-<li>新建一个Animations文件夹等下放动画片段资源</li>
-<li>选中你想要有动画效果的那个组件，选定window-&gt;Animation-&gt;Animation。</li>
-<li>选择启用关键帧记录模式，然后在每个帧上修改物体组件的某个属性</li>
-</ol>
-<p>动画的开头和结尾常常有卡顿现象，哪怕你设置的旋转动作是0度到360度数值上是无缝对接的，仍然会有卡顿现象，你可以在曲线那里看到数值的变动是有一个切线变化率的，每一个帧都有两个切线，左切线是进入，右切线是离开，从头帧到结尾帧要想不卡顿，左右两个切线斜率必须是相同的，也就是co-linear的。</p>
-<p>对于旋转动作可以将头尾两帧的双切线都改为线性。对应官方文档的 Broken-Linear模式。这样帧与帧之间是线性变化的，也就不存在那个变动斜率问题了。</p>
-<h2 id="particle-system">particle system</h2>
-<p>制作粒子系统：</p>
-<ol>
-<li>右键在世界大纲视图下新建-&gt;效果-&gt;粒子系统</li>
-<li>将粒子系统和你想要有该粒子系统效果的物体组件XYZ值设为一样</li>
-<li>调配你的粒子系统的各个属性</li>
-</ol>
-<h2 id="_14">导航系统</h2>
-<p>Unity内置了一个路径导航系统，首先你需要将你的地形 GameObject 进行烘焙：</p>
-<ol>
-<li>选择你的地形GameObject，选择Static菜单的Navigation Static</li>
-<li>选择Window-&gt;AI-&gt;导航，选择烘培Bake Tab，然后点击烘培。</li>
-<li>你将会在目标场景地图下面看到新建了一个NavMesh对象。</li>
-</ol>
-<p>导航系统中你想要移动的目标对象需要绑定Nav Mesh Agent组件。</p>
-<p>导航系统中你需要定义一系列的导航路径点，空的GameObject即可。</p>
-<h3 id="agent">如何移动一个Agent</h3>
-<p>实际会很简单，就是设定destination属性即可。</p>
-<div class="highlight"><pre><span></span><code>agent.destination = transform.position;
+<h2 id="_16">四元数和欧拉角度</h2>
+<p>旋转Editor看到的x y z的值就是所谓的欧拉角度，但是如果你要给tranform.rotation赋值的话则需要使用四元数（Quaternion）。</p>
+<div class="highlight"><pre><span></span><code>transorm.rotation = Quaternion.Euler(0,0,0);
 </code></pre></div>
-<h3 id="_15">巡逻模式</h3>
-<p>一个agent的巡逻模式可以通过如下类似编码来实现：</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">agent</span><span class="p">.</span><span class="n">remainingDistance</span> <span class="p">&lt;</span> <span class="m">0.2f</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">agent</span><span class="p">.</span><span class="n">pathPending</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">MoveToNextPatrolLocaton</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-        <span class="k">private</span> <span class="k">void</span> <span class="nf">MoveToNextPatrolLocaton</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">locations</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="n">agent</span><span class="p">.</span><span class="n">destination</span> <span class="p">=</span> <span class="n">locations</span><span class="p">[</span><span class="n">locationIndex</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
-
-        <span class="n">locationIndex</span> <span class="p">=</span> <span class="p">(</span><span class="n">locationIndex</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">%</span> <span class="n">locations</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
-    <span class="p">}</span>
+<p>上面的过程也可以看做将一个欧拉角度数组转换成Quaternion四元数再赋值给rotation。</p>
+<p>四元数访问对应的欧拉角度如下：</p>
+<div class="highlight"><pre><span></span><code>transform.localEulerAngles
 </code></pre></div>
-<p>上面的 <code>agent.pathPending</code> 的意思是当前路径还没有计算好，取值否表示一定要先等路径计算好然后剩余距离只有多少之后继续移动到下一个导航点。</p>
-<h2 id="_16">材质</h2>
-<h3 id="albedo">albedo</h3>
-<p>反射率，定义了材质的基本颜色，纹理也是放在这里设置的。</p>
-<h3 id="metallic">metallic</h3>
-<p>金属的，定义了材质的金属表现。</p>
-<h3 id="smoothness">Smoothness</h3>
-<p>平滑度，定义了材质的表面光滑性。一般为了看上去更真实不应该设置为0或1而是某个中间值。</p>
-<h3 id="tiling">tiling</h3>
-<p>平铺，定义了纹理在表面平铺重复的次数。</p>
-<h3 id="offset">offset</h3>
-<p>偏移，定义了纹理在表面平铺的偏移量。</p>
-<h2 id="_17">地形</h2>
-<p>地形的搭建应该优先考虑Unity自带的地形功能，可能某些情况下，比如封闭的山洞等地形使用blender建模地形才能实现。</p>
-<p>新建一个地形： GameObject -&gt; 3d object -&gt; terrian 。</p>
-<p>设置-&gt;网络分辨率那里修改地形的大小。 </p>
-<p>TODO : 此处记录下关键词，有些东西在视频下面会更方便讲一点。 unity的terrian tools package ，然后一些操作。定义图层和绘图等。</p>
-<h3 id="blender">blender建模构建地形</h3>
-<p>Unity的terrian工具是有一定局限性的，前面提到在某些封闭的场景或者需要和地形进行交互的游戏比如像minecraft这样的游戏，是不应该使用Unity terrian工具的，即使是那些Unity terrian勉强能够应付的场景，如果对于地形在表现细节上有更多要求，则也应该使用blender建模来构建地形。除此之外，当然如果你blender用的很熟练了，那么就直接用blender建模构建地形也是很好的。</p>
-<h2 id="makehuman">Makehuman工具</h2>
-<p>TODO 视频讲解 Makehuman工具</p>
-<h2 id="cinemachine">cinemachine</h2>
-<p>除了刚开始学习接触下摄像头简单的控制概念，后续正式项目推荐cinemachine package。</p>
-<p>利用cinemachine创建一个第三人称跟踪式摄像头是很方便的，而后续更多的运镜，包括摇摄，跟摄，多个摄像头视角转换都可以很容易办到。cinemachine并没有创建一个摄像头对象，其绑定在默认的主摄像头上，作为一个摄像头运镜工具而存在。</p>
-<p>TODO 视频讲解</p>
-<h2 id="fmod">FMOD音效集成</h2>
-<p>TODO 视频讲解简单的FMOD集成音效知识，刚开始随便找点网上的音效进行一些试探性的集成尝试。</p>
-<h2 id="_18">开始菜单</h2>
-<p>开始菜单就是另外一个场景地图，其是一个2d场景地图，在开发的时候视图中间偏左有个选项，激活了场景处于2d视图中。然后就是在这个场景中添加一些UI元素即构成了开始菜单。</p>
-<p>TODO 视频讲解</p>
-<h2 id="_19">场景间存在的持久数据</h2>
+<h3 id="quaternionangleaxis">Quaternion.AngleAxis</h3>
+<p>绕某个轴旋转多少角度。</p>
+<div class="highlight"><pre><span></span><code>transform.rotation = Quaternion.AngleAxis(30, Vector3.up);
+</code></pre></div>
+<h2 id="gameobject_1">常驻GameObject</h2>
+<p>你可能希望某些GameObject常驻在游戏里面然后多个场景调用。一个做法是不摧毁原场景，设置一个常驻场景作为该GameObject所在地，这可以通过规范你的项目场景加载卸载逻辑来实现。还有一个做法如下：</p>
 <h3 id="dontdestroyonload">DontDestroyOnLoad</h3>
 <p>当加载一个新的场景时会把原场景的所有对象destroy掉，如下：</p>
 <div class="highlight"><pre><span></span><code>DontDestroyOnLoad(this.gameObject);
@@ -676,30 +664,129 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 </ol>
 <div class="highlight"><pre><span></span><code><span class="n">_menuLoadChannel</span><span class="p">.</span><span class="n">RaiseEvent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">new</span> <span class="n">LoadEventArgs</span><span class="p">(</span><span class="n">_menuToLoad</span><span class="p">));</span>
 </code></pre></div>
-<h2 id="_20">多场景无缝切换</h2>
-<h2 id="_21">玩家场景数据记忆</h2>
-<h2 id="_22">单元测试</h2>
+<h3 id="unityaction">UnityAction</h3>
+<p>UnityAction带来的便利就是Unity Editor那边是支持显示一个按钮方便手工触发该事件的，除此之外UnityAction就是一个有着特定名字的C#委托，并没有什么特殊的。</p>
+<h2 id="ui">UI</h2>
+<p>UI里面有些地方用的是sprite文件对象，如果你直接导入png图片的话会发现没有对应的选项，需要将导入的png图片的属性那里更改为sprite才可以。</p>
+<p>一般来说游戏的UI会放在你的常驻场景里面，和你的其他游戏管理逻辑放在一起，而不是某单个level场景里面。</p>
+<h2 id="_17">导航系统</h2>
+<p>Unity内置了一个路径导航系统，首先你需要将你的地形 GameObject 进行烘焙：</p>
+<ol>
+<li>选择你的地形GameObject，选择Static菜单的Navigation Static</li>
+<li>选择Window-&gt;AI-&gt;导航，选择烘培Bake Tab，然后点击烘培。</li>
+<li>你将会在目标场景地图下面看到新建了一个NavMesh对象。</li>
+</ol>
+<p>导航系统中你想要移动的目标对象需要绑定Nav Mesh Agent组件。</p>
+<p>导航系统中你需要定义一系列的导航路径点，空的GameObject即可。</p>
+<h3 id="agent">如何移动一个Agent</h3>
+<p>实际会很简单，就是设定destination属性即可。</p>
+<div class="highlight"><pre><span></span><code>agent.destination = transform.position;
+</code></pre></div>
+<h3 id="_18">巡逻模式</h3>
+<p>一个agent的巡逻模式可以通过如下类似编码来实现：</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">agent</span><span class="p">.</span><span class="n">remainingDistance</span> <span class="p">&lt;</span> <span class="m">0.2f</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">agent</span><span class="p">.</span><span class="n">pathPending</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">MoveToNextPatrolLocaton</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+        <span class="k">private</span> <span class="k">void</span> <span class="nf">MoveToNextPatrolLocaton</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">locations</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">agent</span><span class="p">.</span><span class="n">destination</span> <span class="p">=</span> <span class="n">locations</span><span class="p">[</span><span class="n">locationIndex</span><span class="p">].</span><span class="n">position</span><span class="p">;</span>
+
+        <span class="n">locationIndex</span> <span class="p">=</span> <span class="p">(</span><span class="n">locationIndex</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">%</span> <span class="n">locations</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>上面的 <code>agent.pathPending</code> 的意思是当前路径还没有计算好，取值否表示一定要先等路径计算好然后剩余距离只有多少之后继续移动到下一个导航点。</p>
+<h2 id="cinemachine">cinemachine</h2>
+<p>除了刚开始学习接触下摄像头简单的控制概念，后续正式项目推荐cinemachine package。</p>
+<p>利用cinemachine创建一个第三人称跟踪式摄像头是很方便的，而后续更多的运镜，包括摇摄，跟摄，多个摄像头视角转换都可以很容易办到。cinemachine并没有创建一个摄像头对象，其绑定在默认的主摄像头上，作为一个摄像头运镜工具而存在。</p>
+<p>一般使用就使用virtual camera，其他camera只是在特定应用场景下才好用，可能额外增加的一些特性限定并不适合你的应用需求。</p>
+<p>Follow控制的摄像头的跟随对象，Body控制的是摄像头跟随跟随对象的移动行为，但是要注意3rd person follow 似乎还会有额外的摄像头旋转动作。</p>
+<p>loot at控制的摄像头的瞄准对象，Aim控制的是摄像头的旋转行为，有可以根据用户行为来旋转摄像头，但只是针对的旧版本的输入控制，如果你希望自己实现根据用户的操作来旋转摄像头，最好是自己编写脚本，那么Aim填上do nothing，免得干扰。</p>
+<p>body的Framing transposer很灵活和全面，很好用，摄像头偏移，距离，damping，dead zone，soft zone等概念都是可以调整的。</p>
+<ul>
+<li>dead zone cinemachine会保证那个黄点也就是关注点在dead zone之内</li>
+<li>soft zone 如果黄点在dead zone则不会有动作，如果黄点在soft zone 则摄像头会开始调整，摄像头调整可块可慢，具体可根据damping这个值来设置。</li>
+</ul>
+<p>更多cinemachine使用技巧后续补充。</p>
+<h2 id="animation-clip">animation clip</h2>
+<p>制作动画片段：</p>
+<ol>
+<li>新建一个Animations文件夹等下放动画片段资源</li>
+<li>选中你想要有动画效果的那个组件，选定window-&gt;Animation-&gt;Animation。</li>
+<li>选择启用关键帧记录模式，然后在每个帧上修改物体组件的某个属性</li>
+</ol>
+<p>动画的开头和结尾常常有卡顿现象，哪怕你设置的旋转动作是0度到360度数值上是无缝对接的，仍然会有卡顿现象，你可以在曲线那里看到数值的变动是有一个切线变化率的，每一个帧都有两个切线，左切线是进入，右切线是离开，从头帧到结尾帧要想不卡顿，左右两个切线斜率必须是相同的，也就是co-linear的。</p>
+<p>对于旋转动作可以将头尾两帧的双切线都改为线性。对应官方文档的 Broken-Linear模式。这样帧与帧之间是线性变化的，也就不存在那个变动斜率问题了。</p>
+<h2 id="particle-system">particle system</h2>
+<p>制作粒子系统：</p>
+<ol>
+<li>右键在世界大纲视图下新建-&gt;效果-&gt;粒子系统</li>
+<li>将粒子系统和你想要有该粒子系统效果的物体组件XYZ值设为一样</li>
+<li>调配你的粒子系统的各个属性</li>
+</ol>
+<h2 id="_19">材质</h2>
+<h3 id="albedo">albedo</h3>
+<p>反射率，定义了材质的基本颜色，纹理也是放在这里设置的。</p>
+<h3 id="metallic">metallic</h3>
+<p>金属的，定义了材质的金属表现。</p>
+<h3 id="smoothness">Smoothness</h3>
+<p>平滑度，定义了材质的表面光滑性。一般为了看上去更真实不应该设置为0或1而是某个中间值。</p>
+<h3 id="tiling">tiling</h3>
+<p>平铺，定义了纹理在表面平铺重复的次数。</p>
+<h3 id="offset">offset</h3>
+<p>偏移，定义了纹理在表面平铺的偏移量。</p>
+<h2 id="_20">地形</h2>
+<p>地形的搭建应该优先考虑Unity自带的地形功能，可能某些情况下，比如封闭的山洞等地形使用blender建模地形才能实现。</p>
+<p>新建一个地形： GameObject -&gt; 3d object -&gt; terrian 。</p>
+<p>设置-&gt;网络分辨率那里修改地形的大小。 </p>
+<p>unity的terrian tools package ，然后一些操作。定义图层和绘图等。</p>
+<h3 id="blender">blender建模构建地形</h3>
+<p>Unity的terrian工具是有一定局限性的，前面提到在某些封闭的场景或者需要和地形进行交互的游戏比如像minecraft这样的游戏，是不应该使用Unity terrian工具的，即使是那些Unity terrian勉强能够应付的场景，如果对于地形在表现细节上有更多要求，则也应该使用blender建模来构建地形。除此之外，当然如果你blender用的很熟练了，那么就直接用blender建模构建地形也是很好的。</p>
+<h2 id="makehuman">Makehuman工具</h2>
+<p>Makehuman工具</p>
+<h2 id="fmod">FMOD音效集成</h2>
+<p>FMOD集成音效</p>
+<h2 id="_21">开始菜单</h2>
+<p>开始菜单就是另外一个场景地图，其是一个2d场景地图，在开发的时候视图中间偏左有个选项，激活了场景处于2d视图中。然后就是在这个场景中添加一些UI元素即构成了开始菜单。</p>
+<h2 id="_22">多场景无缝切换</h2>
+<h2 id="_23">单元测试</h2>
 <p>按照C#的方法，自动创建了一个单元测试项目。即使是空白单元测试也会报错：</p>
 <div class="highlight"><pre><span></span><code>CS0006 could not found file Assembly-CSharp.dll
 </code></pre></div>
 <p>大概这个错误，我好不容易才在 <a href="https://developercommunity.visualstudio.com/t/vs-doesnt-put-binaries-of-unity-project-to-output/785717">这个网页</a> 知道Unity项目在visual studio中默认是不自动完成生成项目的，你需要在：</p>
 <div class="highlight"><pre><span></span><code>工具 -&gt;  选项 -&gt; 适用于Unity的工具 -&gt; 杂项 -&gt; 禁止完整生成项目
 </code></pre></div>
-<h2 id="_23">其他</h2>
+<h2 id="_24">其他</h2>
 <p><code>Ctrl+Shift+M</code> 在visual studio 上调出Unity快速方法输入。</p>
-<h3 id="_24">默认单位</h3>
+<h3 id="requirecomponent">RequireComponent</h3>
+<div class="highlight"><pre><span></span><code>[RequireComponent(typeof(PlayerInput))]
+public class PlayerScript : MonoBehaviour
+{
+//
+}
+</code></pre></div>
+<p>脚本将会自动添加给本GameObject添加某个组件来确保本GameObject的组件依赖正确。</p>
+<h3 id="_25">默认单位</h3>
 <p>Unity术语里面长度用的是 1unit，比如velocity 用的每秒移动的unit。比如1unit等于多少并没有一个准数的，要看你自己那边的建模规范。</p>
 <h3 id="unitynet-core">Unity环境和.net core略有不同</h3>
-<p>不能使用 System.HashCode ？？？？？？？？？</p>
+<p>不能使用 System.HashCode ？说明Unity虽然基于C#，但底层可能不是基于.net core，在某些地方上是有所差异的。</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-04-07T11:06:08.879662+08:00">2021年 4月 7日 </time>
+            <time pubdate="pubdate" datetime="2021-04-27T19:33:14.026950+08:00">2021年 4月 27日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-04-07T11:06:08.879662+08:00">2021年 4月 7日 </time>
+            <time datetime="2021-04-27T19:33:14.026950+08:00">2021年 4月 27日 </time>
 
 
             <h4>分类：</h4>
