@@ -348,22 +348,13 @@ this.transform.gameObject;
 </ul>
 <p>unity能够序列化的属性：</p>
 <ul>
-<li>自定义的non abstract class有[SerializeField] 属性</li>
-<li>自定义的结构有[SerializeField] 属性</li>
+<li>自定义的non abstract class有[SerializeField] 属性标注</li>
+<li>自定义的结构有[SerializeField] 属性标注</li>
 <li>由UntiyEngine.Object衍生出来的类</li>
-<li>C#的主流数据类型</li>
+<li>C#的基本数据类型（int, float, double, bool, string etc.）</li>
 <li>可以序列化对象组成的array</li>
 <li><code>List&lt;T&gt;</code>  T是可序列化的类型。</li>
 </ul>
-<p>需要强调的是如果不是UntiyEngine.Object衍生出来的类，而是随便自己定义的类，是不能序列化的，会出一些问题。一个推荐的做法是用结构体来中转数据来对接Unity的序列化过程。</p>
-<div class="highlight"><pre><span></span><code>   [Serializable]
-    public struct SerializableNode
-    {
-        public string interestingValue;
-        public int childCount;
-        public int indexOfFirstChild;
-    }
-</code></pre></div>
 <h3 id="serializefield">SerializeField</h3>
 <p>上面序列化一节提到，一个私有字段如果加上 <code>[SerializeField]</code> 标识，Unity对该私有字段也将使用序列化技术。</p>
 <p>以编辑器脚本的某个公有字段来说，unity会将其序列化存储在硬盘中从而实现热重载，也就是下次启动游戏之后还会将你修改的这些参数填上去。如下加入 SerializeField 之后，该私有字段一样也会进入unity的序列化管理。</p>
@@ -387,7 +378,7 @@ this.transform.gameObject;
 
         return;
 </code></pre></div>
-<p>上面列表一号和二号是不同的scriptableobject，二号和三号是相同的scriptableobject。然后scrptableobject的相等性可以使用 <code>==</code> 运算符来进行，然后通过HashCode发现相同的scriptableobject的哈希值也是相同的。</p>
+<p>上面代码<code>_menuToLoad</code> 列表一号和二号是不同的scriptableobject，二号和三号是相同的scriptableobject。然后scrptableobject的相等性可以使用 <code>==</code> 运算符来进行，然后通过HashCode发现相同的scriptableobject的哈希值也是相同的。</p>
 <h4 id="scriptableobject_2">创建一个ScriptableObject对象</h4>
 <div class="highlight"><pre><span></span><code>[CreateAssetMenu(fileName = "PersistentManagers", menuName = "Scene Data/PersistentManagers")]
 public class PersistentManagersSO : GameSceneSO { }
@@ -551,6 +542,7 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
     <span class="p">}</span>
 </code></pre></div>
 <p>上面Started最先触发，然后再触发Performed。如果你的context设置了SlowTapInteraction也就是一定时间的按键判断等，这块后面再详细了解。</p>
+<p><strong>NOTICE:</strong>  详细阅读上面的case判断，如果不加上case判断，一般的行为会出发三次，一次started = 1，一次performed = 1，一次canceld = 0。 </p>
 <h3 id="_12">判断本帧某个键位是否按下了</h3>
 <div class="highlight"><pre><span></span><code>  Keyboard.current.space.wasPressedThisFrame
 </code></pre></div>
@@ -783,10 +775,10 @@ public class PlayerScript : MonoBehaviour
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-04-27T19:33:14.026950+08:00">2021年 4月 27日 </time>
+            <time pubdate="pubdate" datetime="2021-05-11T13:05:50.338782+08:00">2021年 5月 11日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-04-27T19:33:14.026950+08:00">2021年 4月 27日 </time>
+            <time datetime="2021-05-11T13:05:50.338782+08:00">2021年 5月 11日 </time>
 
 
             <h4>分类：</h4>
