@@ -241,14 +241,16 @@
 </ul>
 </li>
 <li><a href="#_35">动画</a><ul>
+<li><a href="#_36">新建动画</a></li>
+<li><a href="#_37">导入模型动画时的可选配置</a></li>
 <li><a href="#animator">Animator组件</a><ul>
-<li><a href="#_36">动画状态判断</a></li>
-<li><a href="#_37">标签</a></li>
+<li><a href="#_38">动画状态判断</a></li>
+<li><a href="#_39">标签</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_38">材质</a><ul>
+<li><a href="#_40">材质</a><ul>
 <li><a href="#standard">standard着色器</a><ul>
 <li><a href="#albedo">albedo</a></li>
 <li><a href="#metallic">metallic</a></li>
@@ -259,25 +261,31 @@
 </li>
 </ul>
 </li>
-<li><a href="#_39">光源</a></li>
-<li><a href="#particle-system">particle system</a></li>
-<li><a href="#_40">开始菜单</a></li>
-<li><a href="#_41">多场景无缝切换</a></li>
+<li><a href="#_41">光源</a></li>
+<li><a href="#_42">粒子系统</a><ul>
+<li><a href="#_43">新建一个粒子系统</a></li>
+<li><a href="#_44">默认模块</a></li>
+<li><a href="#_45">发射模块</a></li>
+<li><a href="#_46">形状模块</a></li>
+</ul>
+</li>
+<li><a href="#_47">开始菜单</a></li>
+<li><a href="#_48">多场景无缝切换</a></li>
 <li><a href="#respawn">respawn玩家角色</a></li>
-<li><a href="#_42">单元测试</a></li>
-<li><a href="#_43">雾效</a></li>
+<li><a href="#_49">单元测试</a></li>
+<li><a href="#_50">雾效</a></li>
 <li><a href="#skybox">skybox</a></li>
-<li><a href="#_44">其他</a><ul>
+<li><a href="#_51">其他</a><ul>
 <li><a href="#unityc">查看你使用的Unity的C#版本</a></li>
 <li><a href="#visual-studio_1">visual studio快速方法输入</a></li>
 <li><a href="#requirecomponent">RequireComponent</a></li>
-<li><a href="#_45">默认单位</a></li>
+<li><a href="#_52">默认单位</a></li>
 </ul>
 </li>
-<li><a href="#_46">备用</a><ul>
-<li><a href="#_47">移动控制</a></li>
+<li><a href="#_53">备用</a><ul>
+<li><a href="#_54">移动控制</a></li>
 <li><a href="#transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</a></li>
-<li><a href="#_48">地形绘制纹理</a></li>
+<li><a href="#_55">地形绘制纹理</a></li>
 <li><a href="#fmod">FMOD音效集成</a></li>
 <li><a href="#makehuman">Makehuman工具</a></li>
 </ul>
@@ -563,7 +571,9 @@ public class PersistentManagersSO : GameSceneSO { }
 <p>如果读者之前接触过协程概念，对于这里的协程的理解会很快，但有一点是需要特别强调的。那就是Unity的协程更多的是一个Unity自身基于逐帧运算然后做出来的概念，和很多编程语言上的协程概念比较起来，其底层甚至可能都不依赖于线程切换。</p>
 <p>C#语言那边有异步编程，其使用的async func 和await之类的和python的异步编程很像，这些才是严格意义上的协程概念，Unity协程只是利用了C#的 <code>IEnumerator</code> 和 <code>yield return</code> 构建起来的类似python的可迭代对象，然后在这个可迭代对象之上构建出来的Unity协程概念。</p>
 <p>具体Unity协程的编写如下：</p>
-<div class="highlight"><pre><span></span><code><span class="n">IEnumerator</span> <span class="nf">CoroutineExample</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="n">IEnumerator</span> <span class="nf">CoroutineExample</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">){</span>
     <span class="c1">// do something </span>
     <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
     <span class="c1">// still do something</span>
@@ -993,6 +1003,7 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 <h3 id="navmesh-surface">NavMesh Surface</h3>
 <p>这个组件需要在 <a href="https://github.com/Unity-Technologies/NavMeshComponents">这里</a> 额外下载安装，它可以作为组件附加在游戏对象上，然后可以针对某种特定的NavMesh Agent定义可行走区域。</p>
 <h2 id="_35">动画</h2>
+<h3 id="_36">新建动画</h3>
 <p>制作动画片段：</p>
 <ol>
 <li>新建一个Animations文件夹等下放动画片段资源</li>
@@ -1001,6 +1012,14 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 </ol>
 <p>动画的开头和结尾常常有卡顿现象，哪怕你设置的旋转动作是0度到360度数值上是无缝对接的，仍然会有卡顿现象，你可以在曲线那里看到数值的变动是有一个切线变化率的，每一个帧都有两个切线，左切线是进入，右切线是离开，从头帧到结尾帧要想不卡顿，左右两个切线斜率必须是相同的，也就是co-linear的。</p>
 <p>对于旋转动作可以将头尾两帧的双切线都改为线性。对应官方文档的 Broken-Linear模式。这样帧与帧之间是线性变化的，也就不存在那个变动斜率问题了。</p>
+<h3 id="_37">导入模型动画时的可选配置</h3>
+<ul>
+<li>Loop Time 循环时间：动画是否循环播放</li>
+<li>Root Transform Rotation 根变换旋转  Bake into pose 烘焙成动作 。下面三个根变换相关的选项都是在说你是否希望动画会实际影响模型的这些属性，比如这里就是你是否希望动画会影响模型的旋转属性，如果勾选了烘焙成动作，则动画不会影响角色的根旋转。比如说直走，则动画导入勾选这个选项。</li>
+<li>Root Transform Position (Y) - 烘焙成动作。动画剪辑不会影响游戏对象的高度。大部分游戏动画剪辑都会启动此设置，只有跳跃才应该将此设置关闭，不过跳跃动画有的也只是一种原地跳姿态，然后再实际动画中用脚本去移动游戏对象。</li>
+<li>Root Transform Position (XZ) - 烘焙成动作。一般角色的IDLE状态会希望启用此选项。</li>
+</ul>
+<p>我看到有的推荐将这三个选项都勾选上，也就是动画剪辑完全不会影响游戏对象的根运动，游戏对象的移动旋转都由脚本控制。</p>
 <h3 id="animator">Animator组件</h3>
 <p>控制GameObject的动画组件，需要指定动画控制器，也就是AnimationController。</p>
 <p>Apply root motion：应用根运动。是从动画本身控制角色的移动和旋转还是从脚本。</p>
@@ -1015,16 +1034,16 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 <ul>
 <li>总是动画化，即使在屏幕外也不剔除。</li>
 </ul>
-<h4 id="_36">动画状态判断</h4>
+<h4 id="_38">动画状态判断</h4>
 <p>动画状态判断推荐使用 <code>animator.StringToHash("State")</code> 来获取一个int型hash值然后进行状态判断。</p>
 <p>具体比较是：</p>
 <div class="highlight"><pre><span></span><code>CurrentStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
 </code></pre></div>
 <p>默认的图层索引是0，上面CurrentStateInfo就是当前的动画状态，<code>CurrentStateInfo.shortNameHash</code> 就是当前动画状态的短名字的Hash值，短名字的意思就是你的动画控制器那边显示的名字是Run则就是Run，前面没有默认的图层名字。</p>
-<h4 id="_37">标签</h4>
+<h4 id="_39">标签</h4>
 <p>动画控制器的标签也是一个有用的字段方便进行一些动画控制上状态的逻辑管理。</p>
-<h2 id="_38">材质</h2>
+<h2 id="_40">材质</h2>
 <h3 id="standard">standard着色器</h3>
 <h4 id="albedo">albedo</h4>
 <p>反射率，定义了材质的基本颜色，纹理也是放在这里设置的。</p>
@@ -1036,21 +1055,51 @@ Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
 <p>平铺，定义了纹理在表面平铺重复的次数。</p>
 <h4 id="offset">offset</h4>
 <p>偏移，定义了纹理在表面平铺的偏移量。</p>
-<h2 id="_39">光源</h2>
+<h2 id="_41">光源</h2>
 <p>默认的定向光可以类比太阳光，点光源可以类比灯泡，聚光灯可以类比汽车的前照灯。</p>
 <p>需要强调一点的是Unity里面的灯光是游戏对象的组件，当你在空白地方新建一个灯光的时候，实际上是新建了一个空白对象然后包含了一个灯光组件。前面提到的各个灯光类型比如定向光点光源都是灯光组件的类型变量控制的，这都是可以调整的。</p>
 <p>以新建一个路灯为例子，路灯有杆子和上面的立方体，给上面的立方体一个灯光组件就有了一个类似路灯的效果。</p>
 <p>最后要提醒一点的是灯光只是让这个对象在发光，要让这个对象看起来在发光还需要给这个对象添加对应的发光材质。</p>
-<h2 id="particle-system">particle system</h2>
-<p>制作粒子系统：</p>
-<ol>
-<li>右键在世界大纲视图下新建-&gt;效果-&gt;粒子系统</li>
-<li>将粒子系统和你想要有该粒子系统效果的物体组件XYZ值设为一样</li>
-<li>调配你的粒子系统的各个属性</li>
-</ol>
-<h2 id="_40">开始菜单</h2>
+<h2 id="_42">粒子系统</h2>
+<p>粒子系统可以制作出很多种效果，比如爆炸，火焰，烟雾，烟花，施法效果等。粒子系统就是空间中的一个点，从这个点出发发射一些粒子对象，从而制造出一些视觉效果。</p>
+<h3 id="_43">新建一个粒子系统</h3>
+<p>新建一个粒子系统，右键在世界大纲视图下新建-&gt;效果-&gt;粒子系统。你也可以将粒子系统作为某个对象的组件添加进去。</p>
+<p>从粒子系统属性面板可以看到很多属性调配参数，这些更规范的叫法叫做模块，默认启用的模块有默认模块和发射模块和形状模块。除了默认模块其他模块都是可选可启用也可停用的。这么多模块和参数，慢慢熟悉吧。</p>
+<h3 id="_44">默认模块</h3>
+<p>显然至少默认模块的一些参数要先熟悉清楚。</p>
+<ul>
+<li>Duration 持续时间 粒子系统的运行时间</li>
+<li>Looping 是否循环播放</li>
+<li>Prewarm 预热 粒子系统从上次的循环中开始播放</li>
+<li>Start Delay 启动延迟 发射粒子之前等待的时间，不能和预热共存。</li>
+<li>Start Lifetime 每个粒子的存活时间，单位是秒</li>
+<li>Start Speed 粒子的初始速度</li>
+<li>Start Size 粒子的初始大小</li>
+<li>Start Rotation 粒子的初始旋转角度</li>
+<li>翻转旋转 某些粒子向反方向旋转</li>
+<li>Start Color 粒子的起始颜色</li>
+<li>重力修改器 应用于粒子的重力修改器</li>
+<li>模拟空间 指定坐标是本地局部坐标系还是世界坐标系</li>
+<li>模拟速度 微调粒子系统的播放速度</li>
+<li>时间差 粒子系统的时间是基于缩放时间还是非缩放时间</li>
+<li>缩放模式 缩放是基于游戏对象的父对象还是发射器的形状</li>
+<li>唤醒时播放 创建粒子系统时就开始辐射粒子</li>
+<li>发射器速度 速度的计算是基于对象的变换还是它的刚体</li>
+<li>最大粒子 粒子可以存在的最大数目，如果达到最大数目，粒子系统将暂停新粒子生成。</li>
+<li>自动随机种子 每次播放粒子系统选择不同的随机种子</li>
+<li>停止行动 选择粒子系统停止播放时执行什么动作</li>
+</ul>
+<h3 id="_45">发射模块</h3>
+<ul>
+<li>Rate over time 随单位时间产生的粒子数，即每秒发射的粒子数目</li>
+<li>Rate over distance 每Unit单位发射的粒子数目</li>
+<li>bursts 爆发，突变。在某个特定时间内突然发射额外的粒子</li>
+</ul>
+<h3 id="_46">形状模块</h3>
+<p>这个确定的是发射器，或者说发射的粒子们组成的形状。</p>
+<h2 id="_47">开始菜单</h2>
 <p>开始菜单就是另外一个场景地图，其是一个2d场景地图，在开发的时候视图中间偏左有个选项，激活了场景处于2d视图中。然后就是在这个场景中添加一些UI元素即构成了开始菜单。</p>
-<h2 id="_41">多场景无缝切换</h2>
+<h2 id="_48">多场景无缝切换</h2>
 <h2 id="respawn">respawn玩家角色</h2>
 <p>一般都是如下respawn玩家角色：</p>
 <div class="highlight"><pre><span></span><code>        player.transform.position = spawnPoint.position;
@@ -1061,18 +1110,18 @@ Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
         player.transform.rotation = spawnPoint.rotation;
         Physics.SyncTransforms();
 </code></pre></div>
-<h2 id="_42">单元测试</h2>
+<h2 id="_49">单元测试</h2>
 <p>按照C#的方法，自动创建了一个单元测试项目。即使是空白单元测试也会报错：</p>
 <div class="highlight"><pre><span></span><code>CS0006 could not found file Assembly-CSharp.dll
 </code></pre></div>
 <p>大概这个错误，我好不容易才在 <a href="https://developercommunity.visualstudio.com/t/vs-doesnt-put-binaries-of-unity-project-to-output/785717">这个网页</a> 知道Unity项目在visual studio中默认是不自动完成生成项目的，你需要在：</p>
 <div class="highlight"><pre><span></span><code>工具 -&gt;  选项 -&gt; 适用于Unity的工具 -&gt; 杂项 -&gt; 禁止完整生成项目
 </code></pre></div>
-<h2 id="_43">雾效</h2>
+<h2 id="_50">雾效</h2>
 <p>在 window-&gt;渲染-&gt;照明设置那里勾选雾，则可以为你的场景打开雾效。</p>
 <h2 id="skybox">skybox</h2>
 <p>天空盒就是在天空那个巨大盒子上应用你想要的材质。可以新建一个材质，然后这个材质在stardard着色器那里选择skybox，从而快速创建一个skybox材质，然后在 window-&gt;渲染-&gt;照明设置 那里应用该skybox材质。</p>
-<h2 id="_44">其他</h2>
+<h2 id="_51">其他</h2>
 <h3 id="unityc">查看你使用的Unity的C#版本</h3>
 <p>这个其实很重要的，最好先查看清楚，免得后面因为一些版本细节问题纠结半天。目前笔者使用的是Unity2019.4，从 <a href="https://docs.unity3d.com/2019.4/Documentation/Manual/CSharpCompiler.html">这个网页</a> 来看，它使用的是 .net 4.6，使用的C#版本是7.3，并不是C#8，有些差异还是需要特别注意的。</p>
 <p>之前的一个问题解释清楚了，我这边使用的是.net framework4.6，并没有 <code>System.HashCode</code> 这个方法。</p>
@@ -1086,15 +1135,15 @@ public class PlayerScript : MonoBehaviour
 }
 </code></pre></div>
 <p>脚本将会自动添加给本GameObject添加某个组件来确保本GameObject的组件依赖正确。</p>
-<h3 id="_45">默认单位</h3>
+<h3 id="_52">默认单位</h3>
 <p>Unity术语里面长度用的是 1unit，比如velocity 用的每秒移动的unit。比如1unit等于多少并没有一个准数的，要看你自己那边的建模规范。</p>
-<h2 id="_46">备用</h2>
-<h3 id="_47">移动控制</h3>
+<h2 id="_53">备用</h2>
+<h3 id="_54">移动控制</h3>
 <p><code>Input.GetAxis(axis_name)</code> 获取当前控制轴的值，比如Horizontal axis 方向left和 a键为-1，right和d为1。</p>
 <h3 id="transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</h3>
 <p>经过试验结论如下，在速度特别快的情况下两个都可能发生避开物理碰撞系统而发生穿模，速度很低的情况下两个也都不会穿模。不过在速度中等的情况下，用Transform的translate方法移动物体仍时不时会避开物理刚体碰撞系统，而在这种情况下刚体的MovePosition就表现要好一下。</p>
 <p>此外FixUpdate的固定时间设定也会很好地防止物体移动速度不可捉摸的突变情况。</p>
-<h3 id="_48">地形绘制纹理</h3>
+<h3 id="_55">地形绘制纹理</h3>
 <p>主要是编辑图形层那里，显示创建图层，再是添加图层。在这些图层里面利用不同的笔刷进行绘制。</p>
 <p>笔刷的不透明度是笔刷的力度。</p>
 <h3 id="fmod">FMOD音效集成</h3>
@@ -1106,10 +1155,10 @@ public class PlayerScript : MonoBehaviour
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-05-21T20:09:14.485626+08:00">2021年 5月 21日 </time>
+            <time pubdate="pubdate" datetime="2021-05-22T13:36:55.612061+08:00">2021年 5月 22日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-05-21T20:09:14.485626+08:00">2021年 5月 21日 </time>
+            <time datetime="2021-05-22T13:36:55.612061+08:00">2021年 5月 22日 </time>
 
 
             <h4>分类：</h4>
