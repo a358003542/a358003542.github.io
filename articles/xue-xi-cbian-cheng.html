@@ -191,28 +191,31 @@
 <li><a href="#delegateevent">delegate和event</a><ul>
 <li><a href="#_28">事件驱动编程</a></li>
 <li><a href="#_29">单例模式示例</a></li>
+<li><a href="#_30">和组件绑定的事件</a></li>
 </ul>
 </li>
 <li><a href="#linq">LINQ</a><ul>
 <li><a href="#array_1">检查元素是否在array中</a></li>
 </ul>
 </li>
-<li><a href="#_30">文件读写</a></li>
-<li><a href="#_31">单元测试</a></li>
-<li><a href="#_32">多线程和异步</a></li>
-<li><a href="#_33">正则表达式</a></li>
+<li><a href="#_31">文件读写</a></li>
+<li><a href="#_32">单元测试</a></li>
+<li><a href="#_33">多线程和异步</a></li>
+<li><a href="#_34">正则表达式</a></li>
 <li><a href="#relectiondynamic-programming">Relection和Dynamic Programming</a></li>
-<li><a href="#_34">其他</a><ul>
-<li><a href="#_35">表达式形式定义</a></li>
+<li><a href="#_35">其他</a><ul>
+<li><a href="#_36">表达式形式定义</a></li>
 <li><a href="#null_1">null判断运算符</a></li>
 <li><a href="#default">default</a></li>
 <li><a href="#hashset_1">hashset打印</a></li>
 <li><a href="#arraylist">array和list的选用</a></li>
-<li><a href="#_36">可折叠代码区块</a></li>
+<li><a href="#_37">可折叠代码区块</a></li>
 <li><a href="#structclass">struct和class的选择问题</a></li>
+<li><a href="#partial-class">partial class</a></li>
+<li><a href="#as">as运算符</a></li>
 </ul>
 </li>
-<li><a href="#_37">参考资料</a></li>
+<li><a href="#_38">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -1441,6 +1444,56 @@ s1.ExceptWith(b); // s1-b 差集
 <p>具体在引用的时候要如下这样使用了：</p>
 <div class="highlight"><pre><span></span><code>        public SomeEventChannel someEventChannel = SomeEventChannel.Instance;
 </code></pre></div>
+<h3 id="_30">和组件绑定的事件</h3>
+<p>在实践中有一种情况，那就是事件是和某一个组件是绑定的一对一关系，那么自然这个事件就是单例的。而这个事件作为某个组件的属性在单例的处理上就会稍微简单一点，这个组件事件也没必要发送sender这个参数了，因为事件发起人肯定是本组件this。出于代码简洁的考虑，可以引入组件事件的概念：</p>
+<div class="highlight"><pre><span></span><code>namespace System
+{
+    public delegate void VoidComponentEventHandler();
+    public delegate void ComponentEventHandler&lt;TEventArgs&gt;(TEventArgs e);
+}
+
+public class ComponentEventBase&lt;T&gt;
+{
+    public event ComponentEventHandler&lt;T&gt; Event;
+
+    public void RaiseEvent(T args)
+    {
+        Event?.Invoke(args);
+    }
+
+    public void AddHandler(ComponentEventHandler&lt;T&gt; handler)
+    {
+        Event += handler;
+    }
+    public void RemoveHandler(ComponentEventHandler&lt;T&gt; handler)
+    {
+        Event -= handler;
+    }
+}
+
+
+public class VoidComponentEvent
+{
+    public event VoidComponentEventHandler Event;
+
+    public void RaiseEvent()
+    {
+        Event?.Invoke();
+    }
+
+    public void AddHandler(VoidComponentEventHandler handler)
+    {
+        Event += handler;
+    }
+    public void RemoveHandler(VoidComponentEventHandler handler)
+    {
+        Event -= handler;
+    }
+}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>public VoidComponentEvent myEvent1 = new VoidComponentEvent();
+public VoidComponentEvent myEvent2 = new VoidComponentEvent();
+</code></pre></div>
 <h2 id="linq">LINQ</h2>
 <h3 id="array_1">检查元素是否在array中</h3>
 <div class="highlight"><pre><span></span><code>using System.Linq;
@@ -1451,17 +1504,17 @@ string fruit = "mango";
 
 bool hasMango = fruits.Contains(fruit);
 </code></pre></div>
-<h2 id="_30">文件读写</h2>
-<h2 id="_31">单元测试</h2>
+<h2 id="_31">文件读写</h2>
+<h2 id="_32">单元测试</h2>
 <p>C#项目在visual studio上很方便创建一个对应的单元测试项目，在目标public函数上右键创建一个单元测试即可。</p>
-<h2 id="_32">多线程和异步</h2>
+<h2 id="_33">多线程和异步</h2>
 <p>这块Unity那边有相应的支持，遇到需求了再说。</p>
-<h2 id="_33">正则表达式</h2>
+<h2 id="_34">正则表达式</h2>
 <p>这块后面有需求遇到了再补上。</p>
 <h2 id="relectiondynamic-programming">Relection和Dynamic Programming</h2>
 <p>粗略看了下，估计一般用不上吧。</p>
-<h2 id="_34">其他</h2>
-<h3 id="_35">表达式形式定义</h3>
+<h2 id="_35">其他</h2>
+<h3 id="_36">表达式形式定义</h3>
 <p>C#允许采用如下形式对成员通过表达式来进行定义。</p>
 <div class="highlight"><pre><span></span><code>member =&gt; expression;
 </code></pre></div>
@@ -1490,7 +1543,7 @@ List/foreach: 3054ms (589725196)
 Array/foreach: 1860ms (589725196)
 </code></pre></div>
 <p>可以看到亿以上的数据array和list才开始慢慢速度效率拉开了一点，不得不承认C#的list效率优化得很好，似乎python的list和C语言的数组比较在效率上很快就会拉开差距【说句公道话，那是因为python的list里面的元素不要求同样的类型。】，亿以上的数据，日常应用场景，放心的使用list吧。</p>
-<h3 id="_36">可折叠代码区块</h3>
+<h3 id="_37">可折叠代码区块</h3>
 <div class="highlight"><pre><span></span><code>            #region
             int a = 1;
             #endregion
@@ -1505,7 +1558,13 @@ Array/foreach: 1860ms (589725196)
 <li>它不应该经常boxed，也就是转成reference type。</li>
 </ol>
 <p>从上面的描述来看，建议使用struct的情况非常非常的少，日常使用几乎绝大部分情况应该都是推荐使用class。</p>
-<h2 id="_37">参考资料</h2>
+<h3 id="partial-class">partial class</h3>
+<p>类的定义分散在两个或更多的源码文件里面，程序编译时这些部分代码会合并起来。</p>
+<h3 id="as">as运算符</h3>
+<div class="highlight"><pre><span></span><code>E as T
+</code></pre></div>
+<p>执行E表达式，然后将结果转成类型T，此过程不会抛出异常，如果转换失败则会返回null。</p>
+<h2 id="_38">参考资料</h2>
 <ol>
 <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/">microsoft docs: a tour of csharp</a></li>
 <li>learning C# programming by Marius Bancila and Raffaele Rialdi and Ankit Sharma</li>
@@ -1515,10 +1574,10 @@ Array/foreach: 1860ms (589725196)
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-05-18T17:23:13.409473+08:00">2021年 5月 18日 </time>
+            <time pubdate="pubdate" datetime="2021-05-24T16:44:51.438772+08:00">2021年 5月 24日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-05-18T17:23:13.409473+08:00">2021年 5月 18日 </time>
+            <time datetime="2021-05-24T16:44:51.438772+08:00">2021年 5月 24日 </time>
 
 
             <h4>分类：</h4>
