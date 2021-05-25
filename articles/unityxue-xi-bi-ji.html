@@ -197,6 +197,8 @@
 </ul>
 </li>
 <li><a href="#transform">transform的层级树</a></li>
+<li><a href="#findwithtag">FindWithTag方法</a></li>
+<li><a href="#sendmessage">SendMessage方法</a></li>
 </ul>
 </li>
 <li><a href="#gameobject_1">常驻GameObject</a><ul>
@@ -278,17 +280,19 @@
 <li><a href="#_50">单元测试</a></li>
 <li><a href="#_51">雾效</a></li>
 <li><a href="#skybox">skybox</a></li>
-<li><a href="#_52">其他</a><ul>
+<li><a href="#_52">日志</a></li>
+<li><a href="#_53">其他</a><ul>
 <li><a href="#unityc">查看你使用的Unity的C#版本</a></li>
 <li><a href="#visual-studio_1">visual studio快速方法输入</a></li>
 <li><a href="#requirecomponent">RequireComponent</a></li>
-<li><a href="#_53">默认单位</a></li>
+<li><a href="#_54">默认单位</a></li>
+<li><a href="#_55">平台相关编译代码</a></li>
 </ul>
 </li>
-<li><a href="#_54">备用</a><ul>
-<li><a href="#_55">移动控制</a></li>
+<li><a href="#_56">备用</a><ul>
+<li><a href="#_57">移动控制</a></li>
 <li><a href="#transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</a></li>
-<li><a href="#_56">地形绘制纹理</a></li>
+<li><a href="#_58">地形绘制纹理</a></li>
 <li><a href="#fmod">FMOD音效集成</a></li>
 <li><a href="#makehuman">Makehuman工具</a></li>
 </ul>
@@ -414,7 +418,7 @@
     <span class="p">}</span>
 </code></pre></div>
 <p>上面Started最先触发，然后再触发Performed。如果你的context设置了SlowTapInteraction也就是一定时间的按键判断等，这块后面再详细了解。</p>
-<p><strong>NOTICE:</strong>  详细阅读上面的case判断，如果不加上case判断，一般的行为会出发三次，一次started = 1，一次performed = 1，一次canceld = 0。 </p>
+<p><strong>NOTICE:</strong>  详细阅读上面的case判断，如果不加上case判断，一般的行为会触发三次，一次started = 1，一次performed = 1，一次canceld = 0。 </p>
 <h4 id="_8">读取值</h4>
 <p>上面started，performed和canceld只是针对更复杂的按键情况，如果只是一般的使用则如下读取值然后大致类似传统输入系统那样去做即可。</p>
 <p>首先Move和Look读取Vector2的值：</p>
@@ -423,7 +427,7 @@
 <p>然后对于一般按键值读取为bool值：</p>
 <div class="highlight"><pre><span></span><code>bool m_Attack = context.ReadValueAsButton();
 </code></pre></div>
-<p>按照传统的方法这些都应该在Update方法里面写上的，现在在对应的OnMove之类的方法写上然后各个键值每帧都会更新的，也就是相当于Update上执行了这些命令。</p>
+<p>按照传统输入系统的方法读取值会在Update方法那边编写，现在在回调方法上对应地如上写上读取值之后，就类似传统输入在Update方法那里获取到目标值了，然后后面的都是类似的了。</p>
 <h4 id="_9">判断本帧某个键位是否按下了</h4>
 <p>这个键位判断不需要去设置Actions的配置对于任何按键都可以如下直接去判断。</p>
 <div class="highlight"><pre><span></span><code>  Keyboard.current.space.wasPressedThisFrame
@@ -696,7 +700,7 @@ this.transform.gameObject;
 <span class="n">lightTransorm</span> <span class="p">=</span> <span class="n">directLight</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Transform</span><span class="p">&gt;();</span>
 <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">lightTransorm</span><span class="p">.</span><span class="n">localPosition</span><span class="p">);</span>
 </code></pre></div>
-<p><strong>WARNING：</strong> Find方法是场景所有对象的遍历搜索动作，开销会很大，没有特别的理由不要使用Find方法，更推荐的其他GameObject引用参看下面。</p>
+<p><strong>WARNING：</strong> Find方法是对所有已经加载的场景中激活的所有对象的遍历搜索动作，开销会很大，没有特别的理由不要使用Find方法，更推荐的其他GameObject引用参看下面。</p>
 <h5 id="_26">更推荐的做法</h5>
 <p>在实践中如上使用Find方法其实并不是很好用，更推荐的做法是将你需要定位的GameObject做成你的脚本类的公有属性或者序列化属性，值得一提的是这种做法可用于定位目标GameObject，也可用于定位目标组件，目标组件在十万八千里远或者就在旁边都可以这样用。</p>
 <div class="highlight"><pre><span></span><code>public YouTargetClass object_name;
@@ -712,6 +716,31 @@ this.transform.gameObject;
 <span class="p">}</span>
 </code></pre></div>
 <p>然后有 <code>transform.parent</code> 来返回本transform的父节点transform对象。更多的方法请参看 Transform 类。</p>
+<h4 id="findwithtag">FindWithTag方法</h4>
+<p>正如上面的讨论，但在某些情况下你确实需要使用Find来查找，那么推荐你使用 <code>FindWithTag</code> 方法，然后你想要查找的目标GameObject上添加一个专门的标签，这样效率会高很多。</p>
+<h4 id="sendmessage">SendMessage方法</h4>
+<p>非常有用的一个方法，请注意看官方文档下面的这个例子，两个class是作为同一GameObject的两个脚本组件挂在上面的，确切来说本GameObject上所有MonoBehaviour也就是脚本组件都会被通知到，如果脚本组件有目标方法，则会执行该方法。</p>
+<div class="highlight"><pre><span></span><code>using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    void Start()
+    {
+        // Calls the function ApplyDamage with a value of 5
+        // Every script attached to the game object
+        // that has an ApplyDamage function will be called.
+        gameObject.SendMessage("ApplyDamage", 5.0);
+    }
+}
+
+public class Example2 : MonoBehaviour
+{
+    public void ApplyDamage(float damage)
+    {
+        print(damage);
+    }
+}
+</code></pre></div>
 <h3 id="gameobject_1">常驻GameObject</h3>
 <p>你可能希望某些GameObject常驻在游戏里面然后多个场景调用。一个做法是不摧毁原场景，设置一个常驻场景作为该GameObject所在地，这可以通过规范你的项目场景加载卸载逻辑来实现。还有一个做法如下：</p>
 <h4 id="dontdestroyonload">DontDestroyOnLoad</h4>
@@ -1195,7 +1224,14 @@ Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
 <p>在 window-&gt;渲染-&gt;照明设置那里勾选雾，则可以为你的场景打开雾效。</p>
 <h2 id="skybox">skybox</h2>
 <p>天空盒就是在天空那个巨大盒子上应用你想要的材质。可以新建一个材质，然后这个材质在stardard着色器那里选择skybox，从而快速创建一个skybox材质，然后在 window-&gt;渲染-&gt;照明设置 那里应用该skybox材质。</p>
-<h2 id="_52">其他</h2>
+<h2 id="_52">日志</h2>
+<p>早期调试Debug.Log基本上只是一个打印信息功能，但后面随着项目完善Debug日志就要开始慢慢规范了，也需要考虑下面方法来显示不同信息：</p>
+<div class="highlight"><pre><span></span><code>Debug.LogError
+Debug.LogWarning
+</code></pre></div>
+<p>在终端可见的这些日志信息对于正式游戏运行版本也是有的，还有游戏调试版本也会显示这些日志信息，具体日志文件在那里请参阅  <a href="https://docs.unity3d.com/Manual/LogFiles.html">官方文档的这里</a> 。</p>
+<p>Windows下玩家的日志在：<code>%USERPROFILE%\AppData\LocalLow\CompanyName\ProductName\Player.log</code> 。</p>
+<h2 id="_53">其他</h2>
 <h3 id="unityc">查看你使用的Unity的C#版本</h3>
 <p>这个其实很重要的，最好先查看清楚，免得后面因为一些版本细节问题纠结半天。目前笔者使用的是Unity2019.4，从 <a href="https://docs.unity3d.com/2019.4/Documentation/Manual/CSharpCompiler.html">这个网页</a> 来看，它使用的是 .net 4.6，使用的C#版本是7.3，并不是C#8，有些差异还是需要特别注意的。</p>
 <p>之前的一个问题解释清楚了，我这边使用的是.net framework4.6，并没有 <code>System.HashCode</code> 这个方法。</p>
@@ -1209,15 +1245,21 @@ public class PlayerScript : MonoBehaviour
 }
 </code></pre></div>
 <p>脚本将会自动添加给本GameObject添加某个组件来确保本GameObject的组件依赖正确。</p>
-<h3 id="_53">默认单位</h3>
+<h3 id="_54">默认单位</h3>
 <p>Unity术语里面长度用的是 1unit，比如velocity 用的每秒移动的unit。比如1unit等于多少并没有一个准数的，要看你自己那边的建模规范。</p>
-<h2 id="_54">备用</h2>
-<h3 id="_55">移动控制</h3>
+<h3 id="_55">平台相关编译代码</h3>
+<div class="highlight"><pre><span></span><code>#if UNITY_EDITOR
+
+#endif
+</code></pre></div>
+<p>这段宏定义了中间的一些代码调用Unity Editor的脚本，也就是依赖Unity Editor环境的。</p>
+<h2 id="_56">备用</h2>
+<h3 id="_57">移动控制</h3>
 <p><code>Input.GetAxis(axis_name)</code> 获取当前控制轴的值，比如Horizontal axis 方向left和 a键为-1，right和d为1。</p>
 <h3 id="transformtranslaterigidbodymoveposition">transform.Translate和Rigidbody.MovePosition</h3>
 <p>经过试验结论如下，在速度特别快的情况下两个都可能发生避开物理碰撞系统而发生穿模，速度很低的情况下两个也都不会穿模。不过在速度中等的情况下，用Transform的translate方法移动物体仍时不时会避开物理刚体碰撞系统，而在这种情况下刚体的MovePosition就表现要好一下。</p>
 <p>此外FixUpdate的固定时间设定也会很好地防止物体移动速度不可捉摸的突变情况。</p>
-<h3 id="_56">地形绘制纹理</h3>
+<h3 id="_58">地形绘制纹理</h3>
 <p>主要是编辑图形层那里，显示创建图层，再是添加图层。在这些图层里面利用不同的笔刷进行绘制。</p>
 <p>笔刷的不透明度是笔刷的力度。</p>
 <h3 id="fmod">FMOD音效集成</h3>
@@ -1229,10 +1271,10 @@ public class PlayerScript : MonoBehaviour
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-05-24T16:45:01.114091+08:00">2021年 5月 24日 </time>
+            <time pubdate="pubdate" datetime="2021-05-25T19:41:10.504103+08:00">2021年 5月 25日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-05-24T16:45:01.114091+08:00">2021年 5月 24日 </time>
+            <time datetime="2021-05-25T19:41:10.504103+08:00">2021年 5月 25日 </time>
 
 
             <h4>分类：</h4>
