@@ -179,19 +179,19 @@
 <li><a href="#_29">类型转换</a></li>
 </ul>
 </li>
-<li><a href="#_30">多态</a><ul>
-<li><a href="#_31">隐藏继承来的成员</a></li>
+<li><a href="#virtualoverride">多态（virtual+override）</a><ul>
+<li><a href="#_30">隐藏继承来的成员</a></li>
 <li><a href="#base">base</a></li>
-<li><a href="#_32">运算符重载</a></li>
+<li><a href="#_31">运算符重载</a></li>
 <li><a href="#tostring">重载ToString方法</a></li>
 </ul>
 </li>
-<li><a href="#_33">解构方法</a></li>
-<li><a href="#_34">做点练习题温习下</a></li>
+<li><a href="#_32">解构方法</a></li>
+<li><a href="#_33">做点练习题温习下</a></li>
 </ul>
 </li>
 <li><a href="#generic">generic泛型编程</a><ul>
-<li><a href="#_35">泛型类型限定</a></li>
+<li><a href="#_34">泛型类型限定</a></li>
 </ul>
 </li>
 <li><a href="#collection">Collection库</a><ul>
@@ -204,9 +204,9 @@
 </ul>
 </li>
 <li><a href="#delegateevent">delegate和event</a><ul>
-<li><a href="#_36">事件驱动编程</a></li>
-<li><a href="#_37">单例模式示例</a></li>
-<li><a href="#_38">和组件绑定的事件</a></li>
+<li><a href="#_35">事件驱动编程</a></li>
+<li><a href="#_36">单例模式示例</a></li>
+<li><a href="#_37">和组件绑定的事件</a></li>
 </ul>
 </li>
 <li><a href="#linq">LINQ</a><ul>
@@ -224,16 +224,31 @@
 <li><a href="#static-local-functions">Static local functions</a></li>
 </ul>
 </li>
-<li><a href="#_39">文件读写</a><ul>
+<li><a href="#_38">文件读写</a><ul>
 <li><a href="#file">File类</a></li>
 </ul>
 </li>
-<li><a href="#_40">程序诊断</a></li>
-<li><a href="#_41">资源管理</a></li>
-<li><a href="#_42">单元测试</a></li>
-<li><a href="#_43">正则表达式</a></li>
-<li><a href="#_44">其他</a><ul>
-<li><a href="#_45">表达式形式定义</a></li>
+<li><a href="#_39">程序诊断</a></li>
+<li><a href="#_40">资源管理</a><ul>
+<li><a href="#idisposable">IDisposable</a></li>
+<li><a href="#_41">自动垃圾回收</a></li>
+<li><a href="#_42">内存泄露</a><ul>
+<li><a href="#_43">记得退订事件监听</a></li>
+<li><a href="#timer">忘记回收Timer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#debug">Debug手段</a><ul>
+<li><a href="#_44">条件编译</a></li>
+<li><a href="#_45">条件属性</a></li>
+<li><a href="#debug_1">Debug类</a></li>
+</ul>
+</li>
+<li><a href="#_46">单元测试</a></li>
+<li><a href="#_47">正则表达式</a></li>
+<li><a href="#_48">其他</a><ul>
+<li><a href="#_49">表达式形式定义</a></li>
 <li><a href="#null_1">null判断运算符</a></li>
 <li><a href="#default">default</a></li>
 <li><a href="#initializer">initializer</a><ul>
@@ -242,13 +257,13 @@
 </ul>
 </li>
 <li><a href="#arraylist">array和list的选用</a></li>
-<li><a href="#_46">可折叠代码区块</a></li>
+<li><a href="#_50">可折叠代码区块</a></li>
 <li><a href="#structclass">struct和class的选择问题</a></li>
 <li><a href="#partial-class">partial class</a></li>
 <li><a href="#as">as运算符</a></li>
 <li><a href="#func-delegate">Func delegate</a></li>
 <li><a href="#action-delegate">Action delegate</a></li>
-<li><a href="#_47">获取本类的名字</a></li>
+<li><a href="#_51">获取本类的名字</a></li>
 <li><a href="#using-static">using static</a></li>
 <li><a href="#xml">XML注释文档</a><ul>
 <li><a href="#summary">summary</a></li>
@@ -256,11 +271,11 @@
 <li><a href="#return">return</a></li>
 </ul>
 </li>
-<li><a href="#_48">定义自己的可迭代对象</a></li>
+<li><a href="#_52">定义自己的可迭代对象</a></li>
 <li><a href="#linqpad">LINQpad工具</a></li>
 </ul>
 </li>
-<li><a href="#_49">参考资料</a></li>
+<li><a href="#_53">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -1038,7 +1053,7 @@ public sealed class D
 <h4 id="_29">类型转换</h4>
 <p>如果是子类对象要求向上强制转成父类对象，子类对象没有发生变化，还是指向原来的子类对象。就好比你要将香蕉转成水果，香蕉本来就是水果了，没什么好转的。</p>
 <p>但是如果是父类转子类则情况就较复杂了，还可能会失败。</p>
-<h3 id="_30">多态</h3>
+<h3 id="virtualoverride">多态（virtual+override）</h3>
 <p>C++就多态这个议题从C++11开始也有virtual和override这两个关键词了，不过都不是强制性的，正因为不是强制性的，所以引出很多问题。比如不使用virtual，如果你的子类声明的时候采用的是子类引用变量或者子类指针，那么使用的方法都将是基类的。而引入virtual这个关键词会根据实例的类型来决定使用的方法。override在C++那边更多的是一个规避bug的写法，表明你的子类的这个方法是要重载基类的某个方法，因为有时一不注意，参数类型没对上，重载行为就会无意跳过去。</p>
 <p>在C#这边virtual和override用来描述OOP面向对象编程的多态概念是推荐的标准写法了。</p>
 <p>简单来说就是基类的方法要加上virtual，子类的方法要加上override表明这里有重载行为。</p>
@@ -1055,7 +1070,7 @@ public sealed class D
     <span class="p">}</span>
 </code></pre></div>
 <p>上面的讨论主要是在说方法，属性同样也适用上面关于多态的讨论。</p>
-<h4 id="_31">隐藏继承来的成员</h4>
+<h4 id="_30">隐藏继承来的成员</h4>
 <p>如果子类直接定义一个和父类同名的成员则就直接隐藏覆盖继承来的成员了，不过编译器可能会报警说你隐藏了继承来的成员，你是有意要这样做吗，可以加个new关键词。</p>
 <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">class</span> <span class="nc">A</span> 
 <span class="p">{</span>
@@ -1076,7 +1091,7 @@ public sealed class D
 <span class="p">}</span>
 </code></pre></div>
 <p>所以base的含义就是总是调用父类，而不会管隐藏继承或者override。</p>
-<h4 id="_32">运算符重载</h4>
+<h4 id="_31">运算符重载</h4>
 <p>对于基本运算符的重载声明必须是public的static的。具体重载格式如下：</p>
 <div class="highlight"><pre><span></span><code>        public static Complex operator +(Complex a, Complex b)
         {
@@ -1089,7 +1104,7 @@ public sealed class D
 
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="_33">解构方法</h3>
+<h3 id="_32">解构方法</h3>
 <p>给你的类定义一个Deconstruct方法，然后你的类可以如下解构了：</p>
 <div class="highlight"><pre><span></span><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">Complex</span>
     <span class="p">{</span>
@@ -1119,7 +1134,7 @@ public sealed class D
 <div class="highlight"><pre><span></span><code>            double a, b;
             test.Deconstruct(out a, out b);
 </code></pre></div>
-<h3 id="_34">做点练习题温习下</h3>
+<h3 id="_33">做点练习题温习下</h3>
 <p>下面我们做几个经典的练习题来温习下前面学过的内容吧。</p>
 <ol>
 <li>编写经典的C系的swap_int函数，请使用ref关键词来实现。</li>
@@ -1277,7 +1292,7 @@ public sealed class D
 <span class="p">}</span>
 <span class="kt">var</span> <span class="n">p1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">double</span><span class="p">&gt;(</span><span class="m">1</span><span class="p">,</span> <span class="m">3.14</span><span class="p">);</span>
 </code></pre></div>
-<h3 id="_35">泛型类型限定</h3>
+<h3 id="_34">泛型类型限定</h3>
 <p>默认泛型类型可以为任意类型，你可以如下加入类型限定：</p>
 <div class="highlight"><pre><span></span><code>public class GenericList&lt;T&gt; where T : Employee
 {
@@ -1516,7 +1531,7 @@ s1.ExceptWith(b); // s1-b 差集
 <span class="p">}</span>
 </code></pre></div>
 <p>大家一下就看出来了这个C#的event和delegate似乎就是一个东西，但如果完全一样C#为何要多次一举弄出event这个关键词呢。这两个例子最大的一个关键点是event它敢让自己public，而你绝对不敢让delegate变成public。event敢变成public是因为它比直接使用delegate多了一层封装，现在event只能Add和Remove delegate这两个操作，然后它绑定的delegate是私有的。event敢变成public的好处就是抽象出一个事件属性的概念，从而可以如上编程的那样直接增减事件的调用。</p>
-<h3 id="_36">事件驱动编程</h3>
+<h3 id="_35">事件驱动编程</h3>
 <p>事件驱动编程模式或者说委托代理模式，其将构建一个事件通道作为第三中间人，事件发送方只负责告诉该第三人事件发生了，事件发送方并不关心这个第三人等下要将这些事件通知给谁。而事件接收方也不知道事件发送方是谁，它只管听第三人也就是事件通道的，事件通道说事件触发了，然后事件接收方再决定做某些事情。</p>
 <p>此外编程上还有一个观察模式，观察模式的事件发送方和事件接受方彼此是知道的，事件发生了事件发送方会直接通知各个事件接收方事件发生了。参考了 <a href="https://hackernoon.com/observer-vs-pub-sub-pattern-50d3b27f838c">这篇文章</a> 。</p>
 <p>按照上面的说法，我们最好是构建出一个EventChannel类，由这个EventChannel来负责触发事件，由这个EventChannel负责传递函数参数和通知事件接收方事件发生了。</p>
@@ -1631,7 +1646,7 @@ s1.ExceptWith(b); // s1-b 差集
 <li>从事件通道的编码上实现单例模式</li>
 <li>将你的事件通道和外部的数据文件等建立某种唯一关系等。</li>
 </ul>
-<h3 id="_37">单例模式示例</h3>
+<h3 id="_36">单例模式示例</h3>
 <p>本小节单例模式实现主要参考了 <a href="https://csharpindepth.com/articles/singleton">这个网页</a> 。</p>
 <div class="highlight"><pre><span></span><code>    <span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">SomeEventChannel</span> <span class="p">:</span> <span class="n">BaseEventChannel</span><span class="p">&lt;</span><span class="n">SomeEventArgs</span><span class="p">&gt;</span>
     <span class="p">{</span>
@@ -1646,7 +1661,7 @@ s1.ExceptWith(b); // s1-b 差集
 <p>具体在引用的时候要如下这样使用了：</p>
 <div class="highlight"><pre><span></span><code>        public SomeEventChannel someEventChannel = SomeEventChannel.Instance;
 </code></pre></div>
-<h3 id="_38">和组件绑定的事件</h3>
+<h3 id="_37">和组件绑定的事件</h3>
 <p>在实践中有一种情况，那就是事件是和某一个组件是绑定的一对一关系，那么自然这个事件就是单例的。而这个事件作为某个组件的属性在单例的处理上就会稍微简单一点，这个组件事件也没必要发送sender这个参数了，因为事件发起人肯定是本组件this。出于代码简洁的考虑，可以引入组件事件的概念：</p>
 <div class="highlight"><pre><span></span><code>namespace System
 {
@@ -1782,7 +1797,7 @@ bool hasMango = fruits.Contains(fruit);
 <h3 id="static-local-functions">Static local functions</h3>
 <p>从c#7开始方法里面还可以再定义一个函数了，这个函数叫做local function。现在C#8开始local function可以是static的了。一个static的local function不能捕捉本地变量和实例状态了【规范术语叫做enclosing scope里面的变量，local function里面叫做local scope，再外面就是enclosing scope，然后就是global scope】。</p>
 <p>这个一般能用lambda表达式就用lambda表达式，实在确实感觉需要这个再说吧。</p>
-<h2 id="_39">文件读写</h2>
+<h2 id="_38">文件读写</h2>
 <h3 id="file">File类</h3>
 <ul>
 <li>File.Exists  判断文件是否存在</li>
@@ -1794,14 +1809,121 @@ bool hasMango = fruits.Contains(fruit);
 <li>File.ReadAllText 打开某个文件，读取文本内容，然后关闭该文件，然后返回读取到的string内容。如果找不到源文件会抛出异常。</li>
 <li>File.WriteAllText 创建一个新的文件，如果目标文件已经存在，则会被覆写，然后将内容写入该文本文件中，然后关闭该文件。</li>
 </ul>
-<h2 id="_40">程序诊断</h2>
-<h2 id="_41">资源管理</h2>
-<h2 id="_42">单元测试</h2>
+<h2 id="_39">程序诊断</h2>
+<h2 id="_40">资源管理</h2>
+<h3 id="idisposable">IDisposable</h3>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="p">(</span><span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">))</span>
+<span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>等价于：</p>
+<div class="highlight"><pre><span></span><code><span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">);</span>
+<span class="k">try</span><span class="p">{</span>
+
+<span class="p">}</span><span class="k">finally</span><span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fs</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">((</span><span class="n">IDisposable</span><span class="p">)</span><span class="n">fs</span><span class="p">).</span><span class="n">Dispose</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>using语句会确保退出的时候调用Dispose方法来进行一些资源的清理释放工作。</p>
+<p>自定义的类对接IDisposable接口首先Dispose方法之后也可以类似的使用。</p>
+<h3 id="_41">自动垃圾回收</h3>
+<p>CLR会自动进行垃圾回收。</p>
+<p>在自动垃圾回收之前，类的Finalizer函数会被执行，在C++那边叫做析构函数。</p>
+<div class="highlight"><pre><span></span><code>class Test
+{
+~Test(){
+
+}
+}
+</code></pre></div>
+<p>一般来说不推荐编写析构函数，如果一定要编写你需要对析构函数里面的每一行代码具体在做什么为什么要这么做很清楚，然后还有以下规则：</p>
+<ul>
+<li>析构函数要很快执行</li>
+<li>析构函数不要Block</li>
+<li>不用引用其他finaliable object</li>
+<li>不要抛出异常</li>
+</ul>
+<h3 id="_42">内存泄露</h3>
+<h4 id="_43">记得退订事件监听</h4>
+<p>参考资料3里面讲了这个例子：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Host</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">event</span> <span class="n">EventHandler</span> <span class="n">Click</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">class</span> <span class="nc">Client</span>
+<span class="p">{</span>
+    <span class="n">Host</span> <span class="n">_host</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nf">Client</span> <span class="p">(</span><span class="n">Host</span> <span class="n">host</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_host</span> <span class="p">=</span> <span class="n">host</span><span class="p">;</span>
+        <span class="n">_host</span><span class="p">.</span><span class="n">Click</span> <span class="p">+=</span> <span class="n">HostClicked</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">void</span> <span class="nf">HostClicked</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">){}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">Test</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="n">Host</span> <span class="n">_host</span> <span class="p">=</span><span class="k">new</span> <span class="n">Host</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">CreateClient</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Client</span><span class="p">[]</span> <span class="n">clients</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1000</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">Select</span><span class="p">(</span><span class="n">i</span><span class="p">=&gt;</span> <span class="k">new</span> <span class="n">Client</span><span class="p">(</span><span class="n">_host</span><span class="p">)).</span><span class="n">ToArray</span><span class="p">();</span>
+        <span class="c1">//</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>上面的一千个client不会被正确地垃圾回收，因为它们里面还都有_host的Click事件监听，必须释放之后这些client才会被正确垃圾回收。</p>
+<div class="highlight"><pre><span></span><code>public void Dispose() {_host.Click -= HostClicked;}
+
+Array.ForEach(clients, c=&gt;c.Dispose());
+</code></pre></div>
+<h4 id="timer">忘记回收Timer</h4>
+<p>System.Timer 如果忘记调用它的 <code>Dispose</code> 方法也会出现内存泄露问题。</p>
+<h2 id="debug">Debug手段</h2>
+<h3 id="_44">条件编译</h3>
+<div class="highlight"><pre><span></span><code>#define DEBUG
+
+#if DEBUG
+Console.WriteLine("info");
+#endif
+</code></pre></div>
+<p>上面的打印信息语句只有define DEBUG之后才会进入编译，否则将会被注释掉。</p>
+<p>觉得每次写上这样一段太麻烦了，于是编写一个方法：</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Debug</span><span class="p">{</span>
+
+<span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">info</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cp">#if DEBUG</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLone</span><span class="p">(</span><span class="err">$</span><span class="s">"{info}"</span><span class="p">);</span>
+    <span class="cp">#endif</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>但后来人们觉得还是太麻烦了，于是有了条件属性。</p>
+<h3 id="_45">条件属性</h3>
+<div class="highlight"><pre><span></span><code><span class="na">[Conditional("DEBUG")]</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Debug</span><span class="p">{</span>
+
+<span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">info</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLone</span><span class="p">(</span><span class="err">$</span><span class="s">"{info}"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>条件属性的意思是这一整个类或者方法都被 <code>#if DEBUG ... #endif</code> 包围了，如果没有define DEBUG，则整个类或者方法都可以认为是空的。</p>
+<h3 id="debug_1">Debug类</h3>
+<p>C#已经有类似上面讨论的Debug类了，都封装了 <code>[Conditional("DEBUG")]</code></p>
+<div class="highlight"><pre><span></span><code>Debug.WriteLine("Data");
+</code></pre></div>
+<p>也就是这些打印信息只在DEBUG这个define之后才会打印出来。</p>
+<p>Unity里面的Debug类应该也是类似的，不过Unity里面的Debug类功能更多，此外Debug信息都会被打印入日志。</p>
+<h2 id="_46">单元测试</h2>
 <p>C#项目在visual studio上很方便创建一个对应的单元测试项目，在目标public函数上右键创建一个单元测试即可。</p>
-<h2 id="_43">正则表达式</h2>
+<h2 id="_47">正则表达式</h2>
 <p>这块后面有需求遇到了再补上。</p>
-<h2 id="_44">其他</h2>
-<h3 id="_45">表达式形式定义</h3>
+<h2 id="_48">其他</h2>
+<h3 id="_49">表达式形式定义</h3>
 <p>C#允许采用如下形式对成员通过表达式来进行定义。</p>
 <div class="highlight"><pre><span></span><code>member =&gt; expression;
 </code></pre></div>
@@ -1855,7 +1977,7 @@ List/foreach: 3054ms (589725196)
 Array/foreach: 1860ms (589725196)
 </code></pre></div>
 <p>可以看到亿以上的数据array和list才开始慢慢速度效率拉开了一点，不得不承认C#的list效率优化得很好，似乎python的list和C语言的数组比较在效率上很快就会拉开差距【说句公道话，那是因为python的list里面的元素不要求同样的类型。】，亿以上的数据，日常应用场景，放心的使用list吧。</p>
-<h3 id="_46">可折叠代码区块</h3>
+<h3 id="_50">可折叠代码区块</h3>
 <div class="highlight"><pre><span></span><code>            #region
             int a = 1;
             #endregion
@@ -1893,7 +2015,7 @@ public delegate TResult Func&lt;in T,out TResult&gt;(T arg);
 <p>无参函数直到接受16个参数的函数。</p>
 <h3 id="action-delegate">Action delegate</h3>
 <p>C#还定义了一系列的Action delegate委托，从无参直到接受16个参数的函数，和Func的唯一不同就是这些函数没有返回值。一般Action delegate在上面讨论的事件驱动编程那边应用较多。</p>
-<h3 id="_47">获取本类的名字</h3>
+<h3 id="_51">获取本类的名字</h3>
 <div class="highlight"><pre><span></span><code>this.GetType().Name
 </code></pre></div>
 <h3 id="using-static">using static</h3>
@@ -1919,7 +2041,7 @@ public void Method(){
 /// The sum of two integers.
 /// &lt;/returns&gt;
 </code></pre></div>
-<h3 id="_48">定义自己的可迭代对象</h3>
+<h3 id="_52">定义自己的可迭代对象</h3>
 <p>这个可迭代对象术语不知道正不正确，但不管怎么说意思就是你的类实现了IEumeratable接口之后，该类可以用foreach来迭代了。它需要你返回一个 IEumerator对象。</p>
 <div class="highlight"><pre><span></span><code>    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="n">GetEnumerator</span><span class="p">()</span>
     <span class="p">{</span>
@@ -1983,7 +2105,7 @@ public void Method(){
 </code></pre></div>
 <h3 id="linqpad">LINQpad工具</h3>
 <p>一个很方便地快速测试C#表达式和LINQ表达式或者C#片段小程序的工具：<a href="https://www.linqpad.net/">https://www.linqpad.net</a></p>
-<h2 id="_49">参考资料</h2>
+<h2 id="_53">参考资料</h2>
 <ol>
 <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/">microsoft docs: a tour of csharp</a></li>
 <li>learning C# programming by Marius Bancila and Raffaele Rialdi and Ankit Sharma</li>
@@ -1995,10 +2117,10 @@ public void Method(){
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-06-21T16:40:59.873021+08:00">2021年 6月 21日 </time>
+            <time pubdate="pubdate" datetime="2021-06-30T00:06:32.184418+08:00">2021年 6月 30日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-06-21T16:40:59.873021+08:00">2021年 6月 21日 </time>
+            <time datetime="2021-06-30T00:06:32.184418+08:00">2021年 6月 30日 </time>
 
 
             <h4>分类：</h4>
