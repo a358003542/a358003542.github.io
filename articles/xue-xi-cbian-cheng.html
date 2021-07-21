@@ -211,6 +211,7 @@
 </li>
 <li><a href="#linq">LINQ</a><ul>
 <li><a href="#array_1">检查元素是否在array中</a></li>
+<li><a href="#range">Range方法</a></li>
 </ul>
 </li>
 <li><a href="#c8">C#8的新特性</a><ul>
@@ -1713,6 +1714,46 @@ public VoidComponentEvent myEvent2 = new VoidComponentEvent();
 </code></pre></div>
 <h2 id="linq">LINQ</h2>
 <p>LINQ ( Language Integrated Query) </p>
+<p>首先长话短说，C#的LINQ大概类似于python的列表解析式那一块讨论的领域：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; [i for i in range(10) if i % 2 == 0]
+[0, 2, 4, 6, 8]
+</code></pre></div>
+<p>具体来说就是针对可迭代对象进行的一系列流式操作。</p>
+<p>当然上面只是一个类比，到C#这边是对实现了 <code>IEumerable&lt;T&gt;</code> 接口的类执行的一系列流式的查询操作。</p>
+<p>类似上面的python语句的C#语句是：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="k">from</span> <span class="n">num</span> <span class="k">in</span> <span class="n">array</span> <span class="k">where</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span> <span class="k">select</span> <span class="n">num</span><span class="p">;</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="k">in</span> <span class="n">query</span><span class="p">){</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>我们看到C#的LINQ语法有点类似于SQL语句，然后LINQ的查询和具体查询的执行是分开的。上面query的类型写明的话是 <code>IEumaerable&lt;int&gt;</code> 。query可以通过 <code>ToList</code> 或 <code>ToArray</code> 方法来立即执行：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="k">from</span> <span class="n">num</span> <span class="k">in</span> <span class="n">array</span> <span class="k">where</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span> <span class="k">select</span> <span class="n">num</span><span class="p">;</span>
+
+<span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">list</span> <span class="p">=</span> <span class="n">query</span><span class="p">.</span><span class="n">ToList</span><span class="p">();</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="k">in</span> <span class="n">list</span><span class="p">){</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>要使用C#的LINQ，需要加载：</p>
+<div class="highlight"><pre><span></span><code>using System.Linq;
+</code></pre></div>
+<p>然后你可能还会看到如下的method语法：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="k">from</span> <span class="n">num</span> <span class="k">in</span> <span class="n">array</span> <span class="k">where</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span> <span class="k">select</span> <span class="n">num</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">query2</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">num</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span><span class="p">);</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="k">in</span> <span class="n">query2</span><span class="p">){</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>类似python的可迭代对象，c#这边的LINQ应该也是惰性查询的，既然说到流式操作编程模式，当然LINQ是支持 <code>.what.what</code> 这样的操作。这些后面有时间会慢慢再列举一些相关例子，但总的来说LINQ是让你的C#程序在某些地方上用的更灵活更优美，不过总的来说这部分内容其实已经算不上C#语言的核心，而只是让C#更好用的组件，所以这里的讨论能够从简就从简了。</p>
 <h3 id="array_1">检查元素是否在array中</h3>
 <div class="highlight"><pre><span></span><code>using System.Linq;
 
@@ -1722,6 +1763,11 @@ string fruit = "mango";
 
 bool hasMango = fruits.Contains(fruit);
 </code></pre></div>
+<h3 id="range">Range方法</h3>
+<p>类似python的 <code>range(10)</code> 的实现：</p>
+<div class="highlight"><pre><span></span><code>int[] array = Enumerable.Range(0,10).ToArray();
+</code></pre></div>
+<p>第一个参数是起始值，第二个参数是输出数个数。</p>
 <h2 id="c8">C#8的新特性</h2>
 <p>Unity2019用的是C#7，Unity2020用的是C#8，本小节主要讨论C#8新增的然后Unity2020也是支持的新特性，剩下那四个Unity2020还不支持的就暂时略过讨论了。</p>
 <h3 id="nullable-reference-types">nullable reference types</h3>
@@ -2117,10 +2163,10 @@ public void Method(){
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-06-30T00:06:32.184418+08:00">2021年 6月 30日 </time>
+            <time pubdate="pubdate" datetime="2021-07-12T16:11:42.197162+08:00">2021年 7月 12日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-06-30T00:06:32.184418+08:00">2021年 6月 30日 </time>
+            <time datetime="2021-07-12T16:11:42.197162+08:00">2021年 7月 12日 </time>
 
 
             <h4>分类：</h4>

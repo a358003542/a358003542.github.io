@@ -13,12 +13,12 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="前言 本文主要写着一些笔者在进行Unity游戏开发时的实践经验分享。 翻译插件遇到的一个问题 个人编写的小型翻译插件没太多花里胡哨的东西，反而很好用，不过遇到了一个问题，那就是不管是设置 .text 还是通过 SetText 方法都有可能让原Text对象的原始文本内容给永久修改掉。这个似乎有时..."/>
+              content="初学krita 笔者并没什么绘画基础，打算先学习点最基础的krita知识，然后再进行绘画方面的练习。 按键B 绘制 按键E 擦除，再按一次又会进入B键笔刷模式。 按键M 画布镜像显示 按键4和6和5 4和6是画布旋转，5是回滚到最初的状态。 按键+和- 画布显示缩放，鼠标滚轮也可以。 按住sh..."/>
 
 
 <meta name="keywords" content=", 游戏开发, " />
 
-    <title>unity游戏开发  · 万泽的博客
+    <title>krita学习笔记  · 万泽的博客
 </title>
 
         <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
@@ -95,39 +95,46 @@
 <article>
 <div class="row">
     <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa.html"> unity游戏开发  </a></h1>
+    <h1><a href="https://a358003542.github.io/articles/kritaxue-xi-bi-ji.html"> krita学习笔记  </a></h1>
     </header>
 </div>
 
 <div class="row">
         <div class="col-md-8 col-md-offset-2 article-content">
 
-            <h2 id="_1">前言</h2>
-<p>本文主要写着一些笔者在进行Unity游戏开发时的实践经验分享。</p>
-<h2 id="_2">翻译插件遇到的一个问题</h2>
-<p>个人编写的小型翻译插件没太多花里胡哨的东西，反而很好用，不过遇到了一个问题，那就是不管是设置 <code>.text</code> 还是通过 <code>SetText</code> 方法都有可能让原Text对象的原始文本内容给永久修改掉。这个似乎有时并没有修改，有时会修改，可能和退出机制有关，但不管怎么说这个是不可控的。</p>
-<p>只好每个text下面再另外新增一个脚本用来保留该text的字典key。</p>
-<h2 id="uisprite">UI图像类型属性和sprite导入设置</h2>
-<p>UI图像类型有一个已切片sliced属性，假设你的sprite图像分为九个区域，其中四个角落是那种圆角，然后你希望你的图像有很好地拉伸扩展性能并保留四个圆角的显示效果，则可以选择这个sliced属性。具体来说这九个区域的设置和你的sprite导入设置有关系。</p>
-<p>sprite是单一还是多个都是可以的，不过推荐还是用外部编辑器将周边的多余的透明区块剔除掉，能够选择单一就选择单一。然后就是sprite图片从个人实践经验来看并不是像素越高越好，比如这里讨论的四个圆角，四个圆角加上一定的周边区域，32*32的图片大小就够用了，因为sprite作用在UI上缩放，直线或者涂满颜色的区块缩放显示效果都还是挺不错的。</p>
-<p>然后网格类型mesh type一定要选择 <strong>全矩形</strong> 。然后进入sprite editor：</p>
-<p><img alt="img" src="https://a358003542.github.io/images/2021/sprite_sliced.png"></p>
-<p>注意拖动要拖动中间的绿色方块，其他位置是调整整个sprite大小的。然后点击应用。</p>
-<h2 id="_3">地形环境的开发</h2>
-<p>笔者经过摸索并没有找到特别好的地形环境搭建工具，至少免费的没有。那个L3DT并不是很好用，还将很多问题弄复杂了。地形环境开发最关键的问题不是要弄出一个随机的看上去还行的地形环境出来，那随便怎么弄一下就行，而是要首先用绘画工具加上游戏设计思路将地图的大概形状和玩家活动区域分块和玩家可行走区域等设计规划出来。然后才是实际搭建unity的Terrian。</p>
-<p>游戏设计阶段对地图的大概情况也就是等高线的手绘是一个很重要的一环，我想在这一环之上，试着完善等高线图然后使用用unity的terrian地形生成，也就是基于等高线图来自动生成地形，实际输出效果不是很好。等高线边缘通过光滑倒是可以微调，等高线的相对高度通过绘制图形是利用灰度的百分比也可以做到一个大概的效果。但仍然有太多地方需要优化了，比如规划的玩家可行走路线的斜坡表达，比如河道边的效果表现，比如等高线区域太过于平坦。</p>
-<p>这些微调整优化里面有一些倒是不那么紧要的，毕竟Unity的地形仍然只是一个原型工具，比如等高线区域太过于平坦，加入岩石模型就可以改变这点，但有一些则是需要立刻在地形上进行微调的，一个是河道的深浅优化，一个是玩家可行走路线上一些斜坡的优化等。</p>
-<p>Unity的灰度百分比推荐8位灰度，0%白表示z=0，然后100%白表示你的地形的最大高度，然后进行百分比划分。Unity接受的Terrian必须是正方形的raw图片格式。</p>
-<p>整个地形环境的开发如上描述从地图等高线手绘，到玩家活动区域和行走路线设定到Unity的Terrian，再就是构想玩家于某一点的视觉呈现概念图到Unity的terrian地形微调，再到各个岩石，地面，树木等模型的建模，再到模型制成unity的预制件和根据terrian来放置，然后后期还有根据地图设计对石头树木矿石等各个资源型预制件的微调。这一流程虽然繁琐但每一步都是必要的，可见一个游戏的地形环境开发也不是一蹴而就的事。</p>
+            <h2 id="krita">初学krita</h2>
+<p>笔者并没什么绘画基础，打算先学习点最基础的krita知识，然后再进行绘画方面的练习。</p>
+<h3 id="b">按键B</h3>
+<p>绘制</p>
+<h3 id="e">按键E</h3>
+<p>擦除，再按一次又会进入B键笔刷模式。</p>
+<h3 id="m">按键M</h3>
+<p>画布镜像显示</p>
+<h3 id="465">按键4和6和5</h3>
+<p>4和6是画布旋转，5是回滚到最初的状态。</p>
+<h3 id="-">按键+和-</h3>
+<p>画布显示缩放，鼠标滚轮也可以。</p>
+<h3 id="shift">按住shift拖动</h3>
+<p>调整当前brush的size。笔刷的更多设置在工具栏的那里有一个笔刷选项面板可以调整。</p>
+<p>简单的软件操作大概粗略了解下界面和看看扫一遍官方文档差不多了，主要还是绘画联系。</p>
+<h3 id="_1">快速取色</h3>
+<p>在绘画B键激活的时候按住Ctrl键可以进行快速取色。</p>
+<h2 id="_2">数字绘画基础练习</h2>
+<p>参考这个网站进行这12个数字绘画的基础练习。</p>
+<p><a href="https://artwithflo.com/12-digital-drawing-exercise/">Digital Drawing Exercises to improve your digital drawing skills FAST (artwithflo.com)</a></p>
+<h2 id="_3">参考资料</h2>
+<ol>
+<li><a href="https://www.youtube.com/watch?v=Z06RRp81iDM&amp;t=54s&amp;ab_channel=JennaDrawing">HOW TO PAINT IN KRITA 🎨✨ (Digital Art Tutorial 2020) - YouTube</a></li>
+</ol>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-07-21T15:50:34.382239+08:00">2021年 7月 21日 </time>
+            <time pubdate="pubdate" datetime="2021-07-20T17:02:17.017045+08:00">2021年 7月 20日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-07-21T15:50:34.382239+08:00">2021年 7月 21日 </time>
+            <time datetime="2021-07-20T17:02:17.017045+08:00">2021年 7月 20日 </time>
 
 
             <h4>分类：</h4>
