@@ -740,7 +740,16 @@ PrintOrderDetails(productName: "Red Mug", sellerName: "Gift Shop", orderNum: 31)
 <h3 id="lambda">lambda表达式</h3>
 <div class="highlight"><pre><span></span><code>(input-parameters) =&gt; expression
 </code></pre></div>
-<p>labmda表达式就是程序界为大家熟知的匿名函数的概念，因为C#这边没有所谓的函数对象，所以C#lambda表达式要某就是一个delegate对象，这个delegate对象一开始就绑定了这个匿名函数定义的行为，或者其他什么对象。</p>
+<p>labmda表达式就是程序界为大家熟知的匿名函数的概念，因为C#这边没有所谓的函数对象，所以C#lambda表达式其实就是一个delegate对象，这个delegate对象一开始就绑定了这个匿名函数定义的行为，或者其他什么对象</p>
+<p>读者可进一步参考阅读 <a href="https://docs.microsoft.com/en-us/dotnet/standard/delegates-lambdas">Delegates and lambdas | Microsoft Docs</a> ，该文章中提到lambda表达式就是另外一种定义delegate对象的方式，delegate对象其实也是有匿名delegate这个说法的：</p>
+<div class="highlight"><pre><span></span><code>          <span class="k">delegate</span> <span class="p">(</span><span class="kt">int</span> <span class="n">no</span><span class="p">)</span>
+          <span class="p">{</span>
+              <span class="k">return</span> <span class="p">(</span><span class="n">no</span> <span class="p">%</span> <span class="m">2</span> <span class="p">==</span> <span class="m">0</span><span class="p">);</span>
+          <span class="p">}</span>
+</code></pre></div>
+<p>不过考虑到lambda表达式这个概念在程序界很早就已经为人们熟知了，而且经常是以编程语言中的第一公民身份出现的，所以一般匿名函数还是推荐写成C#这边的lambda表达式形式：</p>
+<div class="highlight"><pre><span></span><code><span class="n">no</span> <span class="p">=&gt;</span> <span class="n">no</span> <span class="p">%</span> <span class="m">2</span> <span class="p">==</span> <span class="m">0</span> 
+</code></pre></div>
 <h3 id="_21">异常捕捉</h3>
 <p>这一块因为和python那边很是类似，估计很多编程语言也差不多的，所以这里就没有太多赘述异常捕捉的一些基本知识。</p>
 <div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">{</span>
@@ -1746,14 +1755,13 @@ public VoidComponentEvent myEvent2 = new VoidComponentEvent();
 <p>然后你可能还会看到如下的method语法：</p>
 <div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">};</span>
 
-<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="k">from</span> <span class="n">num</span> <span class="k">in</span> <span class="n">array</span> <span class="k">where</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span> <span class="k">select</span> <span class="n">num</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">query2</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">num</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">num</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="n">num</span> <span class="p">%</span> <span class="m">2</span><span class="p">)</span> <span class="p">==</span><span class="m">0</span><span class="p">);</span>
 
-<span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="k">in</span> <span class="n">query2</span><span class="p">){</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="k">in</span> <span class="n">query</span><span class="p">){</span>
     <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>类似python的可迭代对象，c#这边的LINQ应该也是惰性查询的，既然说到流式操作编程模式，当然LINQ是支持 <code>.what.what</code> 这样的操作。这些后面有时间会慢慢再列举一些相关例子，但总的来说LINQ是让你的C#程序在某些地方上用的更灵活更优美，不过总的来说这部分内容其实已经算不上C#语言的核心，而只是让C#更好用的组件，所以这里的讨论能够从简就从简了。</p>
+<p>类似python的可迭代对象，c#这边的LINQ应该也是惰性查询的，既然说到流式操作编程模式，当然LINQ是支持 <code>.what.what</code> 这样的操作。这些后面有时间会慢慢再列举一些相关例子，但总的来说LINQ是让你的C#程序在某些地方上用的更灵活更优美，这部分内容其实已经算不上C#语言的核心，而只是个让C#更好用的组件，所以这里的讨论能够从简就从简了。</p>
 <h3 id="array_1">检查元素是否在array中</h3>
 <div class="highlight"><pre><span></span><code>using System.Linq;
 
@@ -2163,10 +2171,10 @@ public void Method(){
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-07-12T16:11:42.197162+08:00">2021年 7月 12日 </time>
+            <time pubdate="pubdate" datetime="2021-07-22T14:24:57.448464+08:00">2021年 7月 22日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-07-12T16:11:42.197162+08:00">2021年 7月 12日 </time>
+            <time datetime="2021-07-22T14:24:57.448464+08:00">2021年 7月 22日 </time>
 
 
             <h4>分类：</h4>
