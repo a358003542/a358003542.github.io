@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+    <meta name="google-site-verification" content="r5HyVvY-ZSgf7ctpcpK1aWIaEfKJ0dvAE3E9kW3vXgI" />
+    <script data-ad-client="ca-pub-5644206261254049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="基础 绘图管线 参看资料wiki ：Graphics pipeline - Wikipedia 计算机图形学中，绘图管线描述了图像系统通过一系列步骤来将3D场景渲染为2D图像的这一过程。更具体来说这一过程就是我们游戏中的3d场景投射到摄像机上的过程。 绘图管线大体分为三个主要阶段：应用阶段，几..."/>
+
+
+<meta name="keywords" content=", 游戏开发, " />
+
+    <title>UnityShader学习笔记  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+
+                <li >
+                    <a  href="/archives.html">所有博文</a></li>
+                    
+                <li ><a href="/categories.html">博文分类</a></li>
+                
+                <li><a target="_blank" href="https://github.com/a358003542">我的Github</a></li>
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/unityshaderxue-xi-bi-ji.html"> UnityShader学习笔记  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+        <div class="col-md-8 col-md-offset-2 article-content">
+
+            <h2 id="_1">基础</h2>
+<h3 id="_2">绘图管线</h3>
+<p>参看资料wiki ：<a href="https://en.wikipedia.org/wiki/Graphics_pipeline">Graphics pipeline - Wikipedia</a></p>
+<p>计算机图形学中，绘图管线描述了图像系统通过一系列步骤来将3D场景渲染为2D图像的这一过程。更具体来说这一过程就是我们游戏中的3d场景投射到摄像机上的过程。</p>
+<p>绘图管线大体分为三个主要阶段：应用阶段，几何阶段和光栅化阶段（rasterization）。</p>
+<h3 id="shader">Shader</h3>
+<p>上面的应用阶段是在CPU上进行的，而几何阶段和光栅化阶段是在GPU上进行的，基本上绘图管线上定义的工作就是GPU要做的事情。然后GPU那边的工作大概也是一系列的工作流，这其中情况各不相同，有的是固定不变的，有的是可配置的，有的是可编程的。然后这里面有一些重要的工作节点称之为什么着色器Shader。常常听到什么Shader比如片元着色器就是对应GPU的某个Shader工作节点。</p>
+<p>所以简单来说谈到Shader实际上指的是GPU上的某段程序。</p>
+<h3 id="shaderlab">ShaderLab</h3>
+<p>所谓的编写Shader其实只是因为GPU上的某个Shader提供了可配置接口或者可编程入口，然后再通过某种语言来对这个Shader进行编程或者说编写。这个语言很多GPU厂商都提供了自己特定的语言，Unity提供了两种Shader编码语言，然后会将其根据不同的GPU转成对应的它支持的语言。其中ShaderLab是Unity专门开发出来的专门写Shader的一门语言。此外Unity还支持HLSL语言，这些就不做过多讨论了。</p>
+<h3 id="_3">标准表面着色器</h3>
+<p>新建一个标准表面着色器，这个选项放在最上面，应该是最常用的，其他什么Shader后面再了解。其内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Shader</span> <span class="s">&quot;Custom/NewSurfaceShader&quot;</span>
+<span class="p">{</span>
+    <span class="n">Properties</span>
+    <span class="p">{</span>
+        <span class="n">_Color</span> <span class="p">(</span><span class="s">&quot;Color&quot;</span><span class="p">,</span> <span class="n">Color</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+        <span class="n">_MainTex</span> <span class="p">(</span><span class="s">&quot;Albedo (RGB)&quot;</span><span class="p">,</span> <span class="m">2D</span><span class="p">)</span> <span class="p">=</span> <span class="s">&quot;white&quot;</span> <span class="p">{}</span>
+        <span class="n">_Glossiness</span> <span class="p">(</span><span class="s">&quot;Smoothness&quot;</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span> <span class="p">=</span> <span class="m">0.5</span>
+        <span class="n">_Metallic</span> <span class="p">(</span><span class="s">&quot;Metallic&quot;</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span> <span class="p">=</span> <span class="m">0.0</span>
+    <span class="p">}</span>
+    <span class="n">SubShader</span>
+    <span class="p">{</span>
+        <span class="n">Tags</span> <span class="p">{</span> <span class="s">&quot;RenderType&quot;</span><span class="p">=</span><span class="s">&quot;Opaque&quot;</span> <span class="p">}</span>
+        <span class="n">LOD</span> <span class="m">200</span>
+
+        <span class="n">CGPROGRAM</span>
+        <span class="c1">// Physically based Standard lighting model, and enable shadows on all light types</span>
+        <span class="cp">#pragma surface surf Standard fullforwardshadows</span>
+
+        <span class="c1">// Use shader model 3.0 target, to get nicer looking lighting</span>
+        <span class="cp">#pragma target 3.0</span>
+
+        <span class="n">sampler2D</span> <span class="n">_MainTex</span><span class="p">;</span>
+
+        <span class="k">struct</span> <span class="nc">Input</span>
+        <span class="p">{</span>
+            <span class="n">float2</span> <span class="n">uv_MainTex</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="n">half</span> <span class="n">_Glossiness</span><span class="p">;</span>
+        <span class="n">half</span> <span class="n">_Metallic</span><span class="p">;</span>
+        <span class="n">fixed4</span> <span class="n">_Color</span><span class="p">;</span>
+
+        <span class="c1">// Add instancing support for this shader. You need to check &#39;Enable Instancing&#39; on materials that use the shader.</span>
+        <span class="c1">// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.</span>
+        <span class="c1">// #pragma instancing_options assumeuniformscaling</span>
+        <span class="n">UNITY_INSTANCING_BUFFER_START</span><span class="p">(</span><span class="n">Props</span><span class="p">)</span>
+            <span class="c1">// put more per-instance properties here</span>
+        <span class="n">UNITY_INSTANCING_BUFFER_END</span><span class="p">(</span><span class="n">Props</span><span class="p">)</span>
+
+        <span class="k">void</span> <span class="nf">surf</span> <span class="p">(</span><span class="n">Input</span> <span class="n">IN</span><span class="p">,</span> <span class="n">inout</span> <span class="n">SurfaceOutputStandard</span> <span class="n">o</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Albedo comes from a texture tinted by color</span>
+            <span class="n">fixed4</span> <span class="n">c</span> <span class="p">=</span> <span class="n">tex2D</span> <span class="p">(</span><span class="n">_MainTex</span><span class="p">,</span> <span class="n">IN</span><span class="p">.</span><span class="n">uv_MainTex</span><span class="p">)</span> <span class="p">*</span> <span class="n">_Color</span><span class="p">;</span>
+            <span class="n">o</span><span class="p">.</span><span class="n">Albedo</span> <span class="p">=</span> <span class="n">c</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+            <span class="c1">// Metallic and smoothness come from slider variables</span>
+            <span class="n">o</span><span class="p">.</span><span class="n">Metallic</span> <span class="p">=</span> <span class="n">_Metallic</span><span class="p">;</span>
+            <span class="n">o</span><span class="p">.</span><span class="n">Smoothness</span> <span class="p">=</span> <span class="n">_Glossiness</span><span class="p">;</span>
+            <span class="n">o</span><span class="p">.</span><span class="n">Alpha</span> <span class="p">=</span> <span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">ENDCG</span>
+    <span class="p">}</span>
+    <span class="n">FallBack</span> <span class="s">&quot;Diffuse&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li>Shader "Custom/NewSurfaceShader" 这里定义了你的着色器名字，后面选择着色器在Custom的NewSurfaceShader那里。</li>
+<li>Properties 定义属性，这些属性在材质面板那里可以看到。<code>_Color ("Color", Color) = (1,1,1,1)</code> ，<code>_Color</code> 是Shader内部使用该属性的调用名，后面一个元组第一个是材质那边的显示名字，第二个是该变量的类型，最后等号后面是该属性的默认值。</li>
+<li>SubShader 至少要定义一个SubShader区块，多个SubShader的意思是针对不同的硬件。</li>
+<li>FallBack 含义很明显，如果所有的SubShader都失败了则回滚到某个着色器。</li>
+</ul>
+<p>这里就简单讨论下，更详细的讨论在后面。</p>
+<h2 id="_4">参考资料</h2>
+<ol>
+<li>Unity Shader入门精要 by 冯乐乐</li>
+<li>Mastering Unity Shaders and Effects by Jamie Dean</li>
+</ol>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2021-07-27T20:06:51.183731+08:00">2021年 7月 27日 </time>
+
+            <h4>最近更新于：</h4>
+            <time datetime="2021-07-27T20:06:51.183731+08:00">2021年 7月 27日 </time>
+
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#you-xi-kai-fa-ref">游戏开发</a>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+
+
+</body>
+</html>
