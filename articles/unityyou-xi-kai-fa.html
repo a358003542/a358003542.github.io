@@ -112,19 +112,13 @@
 <p>然后网格类型mesh type一定要选择 <strong>全矩形</strong> 。然后进入sprite editor：</p>
 <p><img alt="img" src="https://a358003542.github.io/images/2021/sprite_sliced.png"></p>
 <p>注意拖动要拖动中间的绿色方块，其他位置是调整整个sprite大小的。然后点击应用。</p>
-<h3 id="_3">地形环境的开发</h3>
-<p>笔者经过摸索并没有找到特别好的地形环境搭建工具，至少免费的没有。那个L3DT并不是很好用，还将很多问题弄复杂了。地形环境开发最关键的问题不是要弄出一个随机的看上去还行的地形环境出来，那随便怎么弄一下就行，而是要首先用绘画工具加上游戏设计思路将地图的大概形状和玩家活动区域分块和玩家可行走区域等设计规划出来。然后才是实际搭建unity的Terrian。</p>
-<p>游戏设计阶段对地图的大概情况也就是等高线的手绘是一个很重要的一环，我想在这一环之上，试着完善等高线图然后使用用unity的terrian地形生成，也就是基于等高线图来自动生成地形，实际输出效果不是很好。等高线边缘通过光滑倒是可以微调，等高线的相对高度通过绘制图形是利用灰度的百分比也可以做到一个大概的效果。但仍然有太多地方需要优化了，比如规划的玩家可行走路线的斜坡表达，比如河道边的效果表现，比如等高线区域太过于平坦。</p>
-<p>这些微调整优化里面有一些倒是不那么紧要的，毕竟Unity的地形仍然只是一个原型工具，比如等高线区域太过于平坦，加入岩石模型就可以改变这点，但有一些则是需要立刻在地形上进行微调的，一个是河道边路斜面优化，一个是玩家可行走路线上一些斜坡的优化等。</p>
-<p>Unity的灰度百分比推荐8位灰度，0%白表示z=0，然后100%白表示你的地形的最大高度，然后进行百分比划分。Unity接受的Terrian必须是正方形的raw图片格式。</p>
-<p>整个地形环境的开发如上描述从地图等高线手绘，到玩家活动区域和行走路线设定到Unity的Terrian，再就是构想玩家于某一点的视觉呈现概念图到Unity的terrian地形微调，再到各个岩石，地面，树木等模型的建模，再到模型制成unity的预制件和根据terrian来放置，然后后期还有根据地图设计对石头树木矿石等各个资源型预制件的微调。这一流程虽然繁琐但每一步都是必要的，可见一个游戏的地形环境开发也不是一蹴而就的事。</p>
-<h3 id="_4">场景里面东西太多，如何选择性地显示</h3>
+<h3 id="_3">场景里面东西太多，如何选择性地显示</h3>
 <p>参考官方文档的这里： <a href="https://docs.unity3d.com/Manual/SceneVisibility.html">Unity - Manual: Scene visibility (unity3d.com)</a></p>
 <p>世界大纲视图对象左侧有个眼睛的形状可以切换该对象在场景中的可见性，不影响实际游戏中的效果。</p>
 <p>如果是只想观察场景中的某个或某些对象其他对象都希望隐藏则选中那些你想要显示的对象，然后按键 <code>Shift+H</code> 进入Isolation view模式，再按键 <code>Shift+H</code> 退出Isolation view模式。</p>
-<h3 id="_5">怎么我的场景看上去有点暗</h3>
+<h3 id="_4">怎么我的场景看上去有点暗</h3>
 <p>在窗口-渲染那些烘焙下光照，一般Build项目之前是需要烘焙下光照的。</p>
-<h3 id="_6">怎么修改动画的播放速度</h3>
+<h3 id="_5">怎么修改动画的播放速度</h3>
 <p>可以通过某个参数来控制动画的播放速度，具体如下图所示：</p>
 <p><img alt="img" src="https://a358003542.github.io/images/2021/unity_animation_speed.png"></p>
 <h3 id="audio-mixer">Audio mixer是做什么的</h3>
@@ -139,22 +133,56 @@
 
 <p>然后是启用该asset，具体是在 <code>项目设置-&gt;图形</code> 那里选择该asset文件。</p>
 <p>至此原有项目就已经升级为URP项目了。</p>
-<h4 id="_7">升级你的着色器</h4>
+<h4 id="_6">升级你的着色器</h4>
 <p>项目升级为URP项目，会自动升级你的着色器，后面你也可以手工选择那些旧有的着色器来升级为URP支持的着色器，具体就是选择：</p>
 <div class="highlight"><pre><span></span><code>Edit &gt; Render Pipeline &gt; Universal Render Pipeline
 </code></pre></div>
 
 <p>然后选择 <code>Upgrade Project Materials to URP Materials</code> 或者  <code>Upgrade Selected Materials to URP Materials</code> 。</p>
 <p>不是所有的旧有着色器都能成功升级为URP支持的着色器的。</p>
+<h3 id="null-check">null check</h3>
+<p>在C#那边推荐的null检查语法是 <code>is null</code> ，当时说的是可以规避掉 <code>==</code> 被重载的情况，null 检查会更严谨些，但在unity这边，似乎unity对象的 <code>==</code> 运算符已经被重载了，所以 <code>is null</code> 检查会失效。而unity的官方2020版推荐的null check语法是这样的：</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Example</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+    <span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="n">GameObject</span> <span class="n">go</span> <span class="p">=</span> <span class="n">GameObject</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="s">&quot;wibble&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;No game object called wibble found&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+
+<p>对于unity的对象可以这样判断，但对于C#的其他对象还是推荐使用 <code>is null</code> 。个人实践unity的null对象通过 <code>is null</code> 判断并不是一个c#的null对象，而如果通过 <code>go == null</code> 是可以判断的，然后unity的null对象能够用上面的写法，也说明了它不是一个c#的null，而是一个对象，并且这个对象还支持转bool类型的方法。个人推断这种转bool和 <code>== null</code> 写法内部区别不是太大。</p>
+<p>但这种情况是令人沮丧的，不说还需要额外区分哪些对象是不是unit对象，因为null在C#中的普遍存在，经常你编写的函数和某些地方可能返回null或者unity空对象或者unity对象，所以更推荐的做法都写成</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">if</span> <span class="p">(</span><span class="n">go</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;No game object called wibble found&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+</code></pre></div>
+
+<h3 id="_7">地形环境的开发</h3>
+<p>笔者经过摸索并没有找到特别好的地形环境搭建工具，至少免费的没有。那个L3DT并不是很好用，还将很多问题弄复杂了。地形环境开发最关键的问题不是要弄出一个随机的看上去还行的地形环境出来，那随便怎么弄一下就行，而是要首先用绘画工具加上游戏设计思路将地图的大概形状和玩家活动区域分块和玩家可行走区域等设计规划出来。然后才是实际搭建unity的Terrian。</p>
+<p>游戏设计阶段对地图的大概情况也就是等高线的手绘是一个很重要的一环，我想在这一环之上，试着完善等高线图然后使用用unity的terrian地形生成，也就是基于等高线图来自动生成地形，实际输出效果不是很好。等高线边缘通过光滑倒是可以微调，等高线的相对高度通过绘制图形是利用灰度的百分比也可以做到一个大概的效果。但仍然有太多地方需要优化了，比如规划的玩家可行走路线的斜坡表达，比如河道边的效果表现，比如等高线区域太过于平坦。</p>
+<p>这些微调整优化里面有一些倒是不那么紧要的，毕竟Unity的地形仍然只是一个原型工具，比如等高线区域太过于平坦，加入岩石模型就可以改变这点，但有一些则是需要立刻在地形上进行微调的，一个是河道边路斜面优化，一个是玩家可行走路线上一些斜坡的优化等。</p>
+<p>Unity的灰度百分比推荐8位灰度，0%白表示z=0，然后100%白表示你的地形的最大高度，然后进行百分比划分。Unity接受的Terrian必须是正方形的raw图片格式。</p>
+<p>整个地形环境的开发如上描述从地图等高线手绘，到玩家活动区域和行走路线设定到Unity的Terrian，再就是构想玩家于某一点的视觉呈现概念图到Unity的terrian地形微调，再到各个岩石，地面，树木等模型的建模，再到模型制成unity的预制件和根据terrian来放置，然后后期还有根据地图设计对石头树木矿石等各个资源型预制件的微调。这一流程虽然繁琐但每一步都是必要的，可见一个游戏的地形环境开发也不是一蹴而就的事。</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-08-02T20:01:31.705528+08:00">2021年 8月 2日 </time>
+            <time pubdate="pubdate" datetime="2021-08-11T12:42:34.844842+08:00">2021年 8月 11日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-08-02T20:01:31.705528+08:00">2021年 8月 2日 </time>
+            <time datetime="2021-08-11T12:42:34.844842+08:00">2021年 8月 11日 </time>
 
 
             <h4>分类：</h4>
