@@ -15,7 +15,7 @@
               content="前言 本文基于blender版本 2.8 。本文描述按键有时用大写字母有时用小写字母，具体来说只是指明键盘上的某个按键，并没有特别的含义。 初识blender 最左上角的菜单栏是最常见的GUI应用程序元素，然后接下来就是blender特有的概念了。blender最大的一个概念是workspac..."/>
 
 
-<meta name="keywords" content=", 游戏开发, " />
+<meta name="keywords" content=", 正在用, " />
 
     <title>blender学习笔记  · 万泽的博客
 </title>
@@ -213,7 +213,11 @@
 <li><a href="#mirror-extruding">骨架的mirror extruding</a></li>
 </ul>
 </li>
-<li><a href="#_64">参考资料</a></li>
+<li><a href="#_64">石头建模</a></li>
+<li><a href="#unity">粒子系统到Unity</a></li>
+<li><a href="#_65">树建模</a></li>
+<li><a href="#_66">人体建模</a></li>
+<li><a href="#_67">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -499,7 +503,41 @@
 <p>按键 <code>Ctrl+a</code> 会弹出一些应用选项，这个应用不会改变你当前看到的模型，但对于导出模型到fbx最好是先执行各个应用。具体来说应用将物体的location会将你的物体原点移动到全局原点也就是3d游标所在，rotation的值将会清空，scale的值将会应用之后归值为1。</p>
 <h3 id="mirror-extruding">骨架的mirror extruding</h3>
 <p>骨架一般是按键 <code>E</code> 进行挤出动作从而完成新增骨骼，你还可以在设置X轴镜像之后按键 <code>shift+E</code> 进行mirror镜像挤出动作，具体就是从一个骨骼末端镜像挤出两个骨骼。</p>
-<h2 id="_64">参考资料</h2>
+<h2 id="_64">石头建模</h2>
+<p>石头的建模非常简单，基于最开始的立方体做一些简单的修改调整即可。</p>
+<ol>
+<li>最开始的立方体进入编辑模式拖动各个顶点调整你想要的石头的大概形状</li>
+<li>加入表面细分修改器，稍微提高点细分程度。</li>
+<li>再添加一个置换修改器。纹理那里新增一个纹理，然后纹理设置那里选择类型沃罗诺伊图。稍微调整下强度参数和尺寸参数，到你大概满意的石头形状。然后可以进入编辑模式通过拖动各个顶点继续调整石头的形状。</li>
+<li>从网上找一个石头的材质应用则一个不错的石头模型就出来了。</li>
+</ol>
+<p>这种石头建模方法又简单表现效果也很不错，节点也很少很适合游戏引擎。就确定以后用这个方法来进行石头和地面等形状的建模。</p>
+<p>当然如果是人造的完全规则形状的石块或地板，那么就更加简单了。</p>
+<h2 id="unity">粒子系统到Unity</h2>
+<p>一般来说是不推荐使用blender的粒子系统来进行游戏模型的建模的，表现效果不易控制而且常常节点过多开销过大。</p>
+<p>如果一定要使用粒子系统，那么导入到Unity的时候记得先要将粒子系统实例化：</p>
+<div class="highlight"><pre><span></span><code>Object -&gt; Apply -&gt; Make Instances Real
+</code></pre></div>
+<h2 id="_65">树建模</h2>
+<p>在参考了多个树的建模视频之后，确定树干建模最好的方式就是先绘制树干线，然后加入蒙皮修改器，经过适当的末端和根部的衰减编辑的缩放操作，然后再加上精简修改器，得到的树干表现效果不错，而且节点数也是适合游戏引擎的。直到我看了 <a href="https://www.youtube.com/watch?v=wPBX9kqcHzE">这个视频</a> 知道了sapling tree gen插件。</p>
+<p>推荐的blender树干建模方法如下：</p>
+<ol>
+<li>激活blender的sapling tree gen 插件，在blender上搜索tree既可以看到。</li>
+<li><code>Shift+A</code> 在曲线那里可以看到sapling tree gen。</li>
+<li>调整各个参数，默认的参数节点数还是较多的，需要下调一些参数。</li>
+<li>然后选择 <code>物体 -&gt; 转换为 -&gt; 曲线转网格</code> </li>
+</ol>
+<p>继续了解sapling tree gen插件发现这个插件是可以生成树叶的，甚至还可以模拟风吹动时候的动画。之前提到的那个视频采用的是球体积内的粒子系统发射小型树叶模型的方式，这种方法远看还行，但近看各个树叶歪七倒八表现效果不是很令人满意的。所以强烈推荐 sapling tree gen 这个插件来进行树的基础建模，如果各个参数调整之后对于树的模型你还有哪些地方不满意的，再利用blender的功能微调整就是了。</p>
+<p>这个插件树干应该也是用的蒙皮修改器，我看到有个参数和蒙皮相关，不过树叶的生成就不清楚了，这个插件的树叶生成表现效果非常好，而且树叶的网格节点数也非常的低，如果是自己用粒子系统发射，估计要调配半天效果还不好，不是树叶节点数过多就是粒子系统发射表现效果不好。强烈推荐这个插件。</p>
+<h2 id="_66">人体建模</h2>
+<p>利用MakeHuman插件进行基础人体建模是很方便的，笔者没有绘画功底，3d建模经验也不是丰富，短时间内来看是不可能驾驭得了人体建模的，先利用MakeHuman插件人体建模救救急，后面有点功底了再可以考虑进一步的深加工和修改。</p>
+<p>出来的人体模型各个部分可以考虑再加上精简修改器试着再减小下多边形的数目。</p>
+<p>模型和衣服材质等表现效果甚至都可以导出到fbx模型中再导入到unity而得到保留，只是材质表现上可能会出现一些小问题。我遇到的一个问题就是眼睛的材质表现，参考了这个网页： <a href="http://www.makehumancommunity.org/wiki/Documentation:Saving_models_for_Unity_and_how_to_import_them_there">Documentation:Saving models for Unity and how to import them there - MakeHuman Community Wiki</a> 的这段文字：</p>
+<blockquote>
+<p>For each material that has a transparent component, you will need to set the material type to "legacy shaders" -&gt; "transparent" -&gt; "diffuse". </p>
+</blockquote>
+<p>对眼睛的shader进行一下修改即可。</p>
+<h2 id="_67">参考资料</h2>
 <ol>
 <li><a href="https://www.youtube.com/playlist?list=PLjEaoINr3zgEq0u2MzVgAaHEBt--xLB6U">Blender Beginner Tutorial Series</a></li>
 <li><a href="https://www.youtube.com/playlist?list=PLa1F2ddGya_-UvuAqHAksYnB0qL9yWDO6">Blender Fundamentals 2.8</a></li>
@@ -509,14 +547,14 @@
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-07-22T16:47:49.450436+08:00">2021年 7月 22日 </time>
+            <time pubdate="pubdate" datetime="2021-09-04T16:21:12.791929+08:00">2021年 9月 4日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-07-22T16:47:49.450436+08:00">2021年 7月 22日 </time>
+            <time datetime="2021-09-04T16:21:12.791929+08:00">2021年 9月 4日 </time>
 
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#you-xi-kai-fa-ref">游戏开发</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#zheng-zai-yong-ref">正在用</a>
 
         </div>
         </section>

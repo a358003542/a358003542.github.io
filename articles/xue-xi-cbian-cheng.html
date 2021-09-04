@@ -15,7 +15,7 @@
               content="简介 C# 程序运行在.net平台上的，在介绍C#语言之前需要介绍下.net平台。对于.net平台内部的细节和微软的设计雄心之类的我们没必要去深究，简单来说.net平台提供了一个运行时，在这个运行时之下你可以运行.net应用。.net应用五花八门并可以跨多个平台，然后开发.net应用的程序员还..."/>
 
 
-<meta name="keywords" content=", 游戏开发, " />
+<meta name="keywords" content=", 正在用, " />
 
     <title>学习C#编程  · 万泽的博客
 </title>
@@ -247,8 +247,13 @@
 </li>
 <li><a href="#_46">单元测试</a></li>
 <li><a href="#_47">正则表达式</a></li>
-<li><a href="#_48">其他</a><ul>
-<li><a href="#_49">表达式形式定义</a></li>
+<li><a href="#_48">拾遗</a><ul>
+<li><a href="#_49">扩展方法</a></li>
+<li><a href="#flags">枚举类型的Flags属性标记</a></li>
+</ul>
+</li>
+<li><a href="#_50">其他</a><ul>
+<li><a href="#_51">表达式形式定义</a></li>
 <li><a href="#null_1">null判断运算符</a></li>
 <li><a href="#default">default</a></li>
 <li><a href="#initializer">initializer</a><ul>
@@ -257,13 +262,13 @@
 </ul>
 </li>
 <li><a href="#arraylist">array和list的选用</a></li>
-<li><a href="#_50">可折叠代码区块</a></li>
+<li><a href="#_52">可折叠代码区块</a></li>
 <li><a href="#structclass">struct和class的选择问题</a></li>
 <li><a href="#partial-class">partial class</a></li>
 <li><a href="#as">as运算符</a></li>
 <li><a href="#func-delegate">Func delegate</a></li>
 <li><a href="#action-delegate">Action delegate</a></li>
-<li><a href="#_51">获取本类的名字</a></li>
+<li><a href="#_53">获取本类的名字</a></li>
 <li><a href="#using-static">using static</a></li>
 <li><a href="#xml">XML注释文档</a><ul>
 <li><a href="#summary">summary</a></li>
@@ -271,11 +276,11 @@
 <li><a href="#return">return</a></li>
 </ul>
 </li>
-<li><a href="#_52">定义自己的可迭代对象</a></li>
+<li><a href="#_54">定义自己的可迭代对象</a></li>
 <li><a href="#linqpad">LINQpad工具</a></li>
 </ul>
 </li>
-<li><a href="#_53">参考资料</a></li>
+<li><a href="#_55">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -1975,8 +1980,53 @@ Console.WriteLine("info");
 <p>C#项目在visual studio上很方便创建一个对应的单元测试项目，在目标public函数上右键创建一个单元测试即可。</p>
 <h2 id="_47">正则表达式</h2>
 <p>这块后面有需求遇到了再补上。</p>
-<h2 id="_48">其他</h2>
-<h3 id="_49">表达式形式定义</h3>
+<h2 id="_48">拾遗</h2>
+<h3 id="_49">扩展方法</h3>
+<p>比如说给string类型扩展一个方法：</p>
+<div class="highlight"><pre><span></span><code><span class="k">static</span> <span class="k">class</span> <span class="nc">StringExtensions</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="nf">Reverse</span><span class="p">(</span><span class="k">this</span> <span class="kt">string</span> <span class="n">s</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">charArray</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="n">ToCharArray</span><span class="p">();</span>
+        <span class="n">Array</span><span class="p">.</span><span class="n">Reverse</span><span class="p">(</span><span class="n">charArray</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">string</span><span class="p">(</span><span class="n">charArray</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>如上所示，在一个static class里面定义一个static method，然后第一个参数前面加上关键字 <code>this</code> ，表示本方法是一个扩展方法，这个this参数就是目标扩展的类型。然后就可以如下使用：</p>
+<div class="highlight"><pre><span></span><code>var text = "abc";
+var res = text.Reverse();
+</code></pre></div>
+<h3 id="flags">枚举类型的Flags属性标记</h3>
+<p>编程中常见的Flags属性表示问题，可以如下方便用带Flags属性标记的枚举类型来实现，有 <code>HasFlag</code> 方法支持，如下所示可以用 <code>|</code> 运算符很方便地表示出多个flag。</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+
+<span class="na">[Flags]</span> <span class="k">public</span> <span class="k">enum</span> <span class="n">DinnerItems</span> <span class="p">{</span>
+   <span class="n">None</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+   <span class="n">Entree</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>
+   <span class="n">Appetizer</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span>
+   <span class="n">Side</span> <span class="p">=</span> <span class="m">4</span><span class="p">,</span>
+   <span class="n">Dessert</span> <span class="p">=</span> <span class="m">8</span><span class="p">,</span>
+   <span class="n">Beverage</span> <span class="p">=</span> <span class="m">16</span><span class="p">,</span>
+   <span class="n">BarBeverage</span> <span class="p">=</span> <span class="m">32</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Example</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+   <span class="p">{</span>
+      <span class="n">DinnerItems</span> <span class="n">myOrder</span> <span class="p">=</span> <span class="n">DinnerItems</span><span class="p">.</span><span class="n">Appetizer</span> <span class="p">|</span> <span class="n">DinnerItems</span><span class="p">.</span><span class="n">Entree</span> <span class="p">|</span>
+                            <span class="n">DinnerItems</span><span class="p">.</span><span class="n">Beverage</span> <span class="p">|</span> <span class="n">DinnerItems</span><span class="p">.</span><span class="n">Dessert</span><span class="p">;</span>
+      <span class="n">DinnerItems</span> <span class="n">flagValue</span> <span class="p">=</span> <span class="n">DinnerItems</span><span class="p">.</span><span class="n">Entree</span> <span class="p">|</span> <span class="n">DinnerItems</span><span class="p">.</span><span class="n">Beverage</span><span class="p">;</span>
+      <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} includes {1}: {2}"</span><span class="p">,</span>
+                        <span class="n">myOrder</span><span class="p">,</span> <span class="n">flagValue</span><span class="p">,</span> <span class="n">myOrder</span><span class="p">.</span><span class="n">HasFlag</span><span class="p">(</span><span class="n">flagValue</span><span class="p">));</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// The example displays the following output:</span>
+<span class="c1">//    Entree, Appetizer, Dessert, Beverage includes Entree, Beverage: True</span>
+</code></pre></div>
+<h2 id="_50">其他</h2>
+<h3 id="_51">表达式形式定义</h3>
 <p>C#允许采用如下形式对成员通过表达式来进行定义。</p>
 <div class="highlight"><pre><span></span><code>member =&gt; expression;
 </code></pre></div>
@@ -2030,7 +2080,7 @@ List/foreach: 3054ms (589725196)
 Array/foreach: 1860ms (589725196)
 </code></pre></div>
 <p>可以看到亿以上的数据array和list才开始慢慢速度效率拉开了一点，不得不承认C#的list效率优化得很好，似乎python的list和C语言的数组比较在效率上很快就会拉开差距【说句公道话，那是因为python的list里面的元素不要求同样的类型。】，亿以上的数据，日常应用场景，放心的使用list吧。</p>
-<h3 id="_50">可折叠代码区块</h3>
+<h3 id="_52">可折叠代码区块</h3>
 <div class="highlight"><pre><span></span><code>            #region
             int a = 1;
             #endregion
@@ -2068,7 +2118,7 @@ public delegate TResult Func&lt;in T,out TResult&gt;(T arg);
 <p>无参函数直到接受16个参数的函数。</p>
 <h3 id="action-delegate">Action delegate</h3>
 <p>C#还定义了一系列的Action delegate委托，从无参直到接受16个参数的函数，和Func的唯一不同就是这些函数没有返回值。一般Action delegate在上面讨论的事件驱动编程那边应用较多。</p>
-<h3 id="_51">获取本类的名字</h3>
+<h3 id="_53">获取本类的名字</h3>
 <div class="highlight"><pre><span></span><code>this.GetType().Name
 </code></pre></div>
 <h3 id="using-static">using static</h3>
@@ -2094,7 +2144,7 @@ public void Method(){
 /// The sum of two integers.
 /// &lt;/returns&gt;
 </code></pre></div>
-<h3 id="_52">定义自己的可迭代对象</h3>
+<h3 id="_54">定义自己的可迭代对象</h3>
 <p>这个可迭代对象术语不知道正不正确，但不管怎么说意思就是你的类实现了IEumeratable接口之后，该类可以用foreach来迭代了。它需要你返回一个 IEumerator对象。</p>
 <div class="highlight"><pre><span></span><code>    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="n">GetEnumerator</span><span class="p">()</span>
     <span class="p">{</span>
@@ -2158,7 +2208,7 @@ public void Method(){
 </code></pre></div>
 <h3 id="linqpad">LINQpad工具</h3>
 <p>一个很方便地快速测试C#表达式和LINQ表达式或者C#片段小程序的工具：<a href="https://www.linqpad.net/">https://www.linqpad.net</a></p>
-<h2 id="_53">参考资料</h2>
+<h2 id="_55">参考资料</h2>
 <ol>
 <li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/">microsoft docs: a tour of csharp</a></li>
 <li>learning C# programming by Marius Bancila and Raffaele Rialdi and Ankit Sharma</li>
@@ -2170,14 +2220,14 @@ public void Method(){
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-07-22T14:24:57.448464+08:00">2021年 7月 22日 </time>
+            <time pubdate="pubdate" datetime="2021-09-04T16:23:15.454956+08:00">2021年 9月 4日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-07-22T14:24:57.448464+08:00">2021年 7月 22日 </time>
+            <time datetime="2021-09-04T16:23:15.454956+08:00">2021年 9月 4日 </time>
 
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#you-xi-kai-fa-ref">游戏开发</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#zheng-zai-yong-ref">正在用</a>
 
         </div>
         </section>
