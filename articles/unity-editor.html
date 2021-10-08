@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+    <meta name="google-site-verification" content="r5HyVvY-ZSgf7ctpcpK1aWIaEfKJ0dvAE3E9kW3vXgI" />
+    
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 本文是Unity游戏开发系列的编辑器编码部分。 本系列内容的取舍 因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。 笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。 笔者在行文上会尽可能节省笔墨，只..."/>
+
+
+<meta name="keywords" content="unity, 计算机 - 游戏开发, " />
+
+    <title>Unity游戏开发之编辑器编码  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+
+                <li >
+                    <a  href="/archives.html">所有博文</a></li>
+                    
+                <li ><a href="/categories.html">博文分类</a></li>
+                
+                <li><a target="_blank" href="https://github.com/a358003542">我的Github</a></li>
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/unity-editor.html"> Unity游戏开发之编辑器编码  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a><ul>
+<li><a href="#_2">本系列内容的取舍</a></li>
+<li><a href="#editor">Editor开发</a><ul>
+<li><a href="#_3">插入一个整数值</a></li>
+<li><a href="#lable">插入一个Lable</a></li>
+<li><a href="#_4">默认显示动作</a></li>
+</ul>
+</li>
+<li><a href="#_5">自定义属性装饰函数</a></li>
+</ul>
+</li>
+<li><a href="#_6">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">前言</h2>
+<p>本文是Unity游戏开发系列的编辑器编码部分。</p>
+<h3 id="_2">本系列内容的取舍</h3>
+<ul>
+<li>因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。</li>
+<li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
+<li>笔者在行文上会尽可能节省笔墨，只是标出官方参考文档的引用出处，但在某些地方会额外花费笔墨来说明，比如个人觉得官方文档文字可能不是很好懂，某些内容很重要需要再特别强调一遍等。</li>
+</ul>
+<h3 id="editor">Editor开发</h3>
+<p>首先列出一个简单的例子，这个例子是给你的类在编辑器视图下添加一个按钮：</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">UnityEditor</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="na">[CustomEditor(typeof(TestSerializableDict))]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">TestSerializableDictEditor</span> <span class="p">:</span> <span class="n">Editor</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnInspectorGUI</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">base</span><span class="p">.</span><span class="n">OnInspectorGUI</span><span class="p">();</span>
+
+        <span class="n">TestSerializableDict</span> <span class="n">targetScript</span> <span class="p">=</span> <span class="p">(</span><span class="n">TestSerializableDict</span><span class="p">)</span><span class="n">target</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">GUILayout</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="s">"test"</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">targetScript</span><span class="p">.</span><span class="n">Test</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这个方便有时手工触发事件或者动作或者打印Debug信息都是很有用的。</p>
+<ul>
+<li><code>using UnityEditor;</code> 一般进行Unity Editor开发需要引入这个命名空间。</li>
+<li>关于Editor的类是继承自 <code>Editor</code> 这个类。</li>
+<li><code>[CustomEditor(typeof(TestSerializableDict))]</code> 在你的类上面写上一个标记表明你的这个编辑器类是针对某个类对象进行编辑器显示定制优化的。</li>
+<li>重载 <code>OnInspectorGUI</code> 方法来实现编辑器显示定制。在<code>OnInspectorGUI</code> 方法里面 <code>target</code> 就是目标类对象。</li>
+</ul>
+<h4 id="_3">插入一个整数值</h4>
+<div class="highlight"><pre><span></span><code>myLevelScript.experience = EditorGUILayout.IntField("Experience", myLevelScript.experience);
+</code></pre></div>
+<p>上面接受两个参数，第一个参数是显示字符，第二个参数是整数值来源。</p>
+<p>上面写成再一次赋值语句，应该是从编辑器那边修改值之后，然后修改值再回写回来。【个人尝试是如果不写成这种赋值语句修改值动作是无效的】</p>
+<h4 id="lable">插入一个Lable</h4>
+<div class="highlight"><pre><span></span><code>EditorGUILayout.LabelField("Label", myLevelScript.Level.ToString());
+</code></pre></div>
+<p>上面接受两个字符串参数，其中第一个参数是左边的label，第二个参数是右边的label。</p>
+<h4 id="_4">默认显示动作</h4>
+<div class="highlight"><pre><span></span><code>public override void OnInspectorGUI(){
+    DrawDefaultInspector();
+}
+</code></pre></div>
+<p><code>DrawDefaultInspector</code> 方法会让你的自定义类显示先绘制默认的显示动作。</p>
+<p>估计 <code>base.OnInspectorGUI</code> 的写法效果是一样的。</p>
+<h3 id="_5">自定义属性装饰函数</h3>
+<p>不知道这个属性装饰函数的叫法正不正确，就是指的是如下：</p>
+<div class="highlight"><pre><span></span><code>    [Header("Persistent managers Scene")]
+</code></pre></div>
+<p>添加一个属性装饰函数Header，则会在编辑器的Inspector窗口上添加一个标题头，你也可以自定义自己的属性装饰函数。</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">HeaderLineAttribute</span> <span class="p">:</span> <span class="n">PropertyAttribute</span> <span class="p">{</span>
+
+        <span class="k">public</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">header</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">HeaderLineAttribute</span><span class="p">(</span><span class="kt">string</span> <span class="n">header</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">header</span> <span class="p">=</span> <span class="n">header</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>如上定义了一个 <code>HeaderLineAttribute</code> 属性装饰函数，实际使用是：</p>
+<div class="highlight"><pre><span></span><code>[HeaderLine("Input")]
+</code></pre></div>
+<p>【似乎如果该类的名字有Attribute则会省略。】</p>
+<p>然后该属性装饰函数你可以定义属性绘制类：</p>
+<div class="highlight"><pre><span></span><code><span class="na">    [CustomPropertyDrawer (typeof(HeaderLineAttribute))]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">HeaderLineDrawer</span> <span class="p">:</span> <span class="n">DecoratorDrawer</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">HeaderLineDrawer</span> <span class="p">()</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>DecoratorDrawer类似PropertyDrawer，区别就是DecoratorDrawer不绘制属性，除了从对应的PropertyAttribute对象那里获取的数据。</p>
+<p>具体绘图是根据 <code>OnGUI</code>  重载方法来的。</p>
+<h2 id="_6">参考资料</h2>
+<ol>
+<li>Unity官方文档</li>
+<li>Stack overflow</li>
+<li>其他模块文档</li>
+<li>Unity商城Free资源</li>
+<li>Learning c# by developing games with unity 2019 by Harrison Ferrone</li>
+<li>Unity 游戏开发 by  Mike Geig</li>
+<li>Mastering UI Development with Unity by Asheley Godbold</li>
+<li>Unity in Action by Joseph Hocking</li>
+<li>Unity Shader入门精要 by 冯乐乐</li>
+<li>Mastering Unity Shaders and Effects by Jamie Dean</li>
+</ol>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2021-10-08T06:48:20.104075+08:00">2021年 10月 8日 </time>
+
+            <h4>最近更新于：</h4>
+            <time datetime="2021-10-08T06:48:20.104075+08:00">2021年 10月 8日 </time>
+
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#unity-ref">unity
+                    <span>10</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+
+
+</body>
+</html>

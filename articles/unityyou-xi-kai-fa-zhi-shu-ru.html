@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
+    <meta name="google-site-verification" content="r5HyVvY-ZSgf7ctpcpK1aWIaEfKJ0dvAE3E9kW3vXgI" />
+    
+        <meta name="author" content="wanze"/>
+        <meta name="copyright" content="wanze"/>
+
+        <meta name="description"
+              content="前言 本文是Unity游戏开发系列的输入部分。 本系列内容的取舍 因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。 笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。 笔者在行文上会尽可能节省笔墨，只是标出..."/>
+
+
+<meta name="keywords" content="unity, 计算机 - 游戏开发, " />
+
+    <title>Unity游戏开发之输入  · 万泽的博客
+</title>
+
+        <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
+              media="screen">
+        <link href="https://a358003542.github.io/theme/css/bootstrap.min.css" rel="stylesheet"
+              media="screen">
+
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css"
+                  href="https://a358003542.github.io/theme/css/base.css" media="screen">
+
+
+
+
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-expanded="false">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://a358003542.github.io/"><span
+                    class=site-name>网站首页</span></a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+            <form action="https://a358003542.github.io/search.html"
+                  onsubmit="return validateForm(this.elements['q'].value);"
+                  class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" name="q" id="tipue_search_input"
+                           class="form-control" placeholder="Search..."
+                           style="width:430px;">
+                </div>
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+
+
+            <ul class="nav navbar-nav nav-pills navbar-right">
+
+                <li >
+                    <a  href="/archives.html">所有博文</a></li>
+                    
+                <li ><a href="/categories.html">博文分类</a></li>
+                
+                <li><a target="_blank" href="https://github.com/a358003542">我的Github</a></li>
+
+                        <li >
+                            <a href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="col-md-1 col-md-1-left"></div>
+    <div class="col-md-10">
+<article>
+<div class="row">
+    <header class="page-header col-md-10 col-md-offset-2">
+    <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-shu-ru.html"> Unity游戏开发之输入  </a></h1>
+    </header>
+</div>
+
+<div class="row">
+    <div class="col-md-2 table-of-content">
+        <nav>
+        <h4>目录</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">前言</a><ul>
+<li><a href="#_2">本系列内容的取舍</a></li>
+</ul>
+</li>
+<li><a href="#_3">输入</a><ul>
+<li><a href="#input-system">input system</a><ul>
+<li><a href="#_4">读取值</a></li>
+<li><a href="#_5">判断本帧某个键位是否按下了</a></li>
+</ul>
+</li>
+<li><a href="#inputmouseposition">Input.mousePosition</a></li>
+</ul>
+</li>
+<li><a href="#_6">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="col-md-8 article-content">
+
+            
+<h2 id="_1">前言</h2>
+<p>本文是Unity游戏开发系列的输入部分。</p>
+<h3 id="_2">本系列内容的取舍</h3>
+<ul>
+<li>因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。</li>
+<li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
+<li>笔者在行文上会尽可能节省笔墨，只是标出官方参考文档的引用出处，但在某些地方会额外花费笔墨来说明，比如个人觉得官方文档文字可能不是很好懂，某些内容很重要需要再特别强调一遍等。</li>
+<li>一般来说官方文档里面有的不会在这里赘述，不过有时某些内容会特别重要而会再强调一遍。</li>
+</ul>
+<h2 id="_3">输入</h2>
+<h3 id="input-system">input system</h3>
+<p>new unity input system 更多地多设备输入兼容。文档在 <a href="[Installation guide | Input System | 1.1.0-preview.3 (unity3d.com)](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.1/manual/Installation.html)">这里</a> 。</p>
+<p>激活新的输入系统： <code>Edit-&gt;Project settings-&gt;Player-&gt; Active Input Handling</code> 。</p>
+<p>添加Player Input 组件</p>
+<p>编写Action输入键位绑定</p>
+<p>如果设置的是Send Message，则假设有Move Action，则对应该GameObject的<code>OnMove</code> 方法，Move发送的是一个Vector2值。x对应的是该GameObject Right方向上的位移，y对应的是该GameObject forward方向上的位移，有一个中间值(0.7,0.7) ，是45度的方向，你可以简单理解为right方向移动了0.7个单位，forward方向移动了0.7个单位，0.7这个数字的含义表示目标方向的移动长度还是大约1个单位。</p>
+<p>另外一个是单键位绑定，返回的是float值，1表示键位触发。</p>
+<p>如果设置的是InVoke Unity Events，则需要下面写上对应Action的回调方法，似乎InVoke Unity Events功能更强大一些，其支持对按键动作多种状态的判断。</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">public</span> <span class="k">void</span> <span class="nf">OnFire</span><span class="p">(</span><span class="n">InputAction</span><span class="p">.</span><span class="n">CallbackContext</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">phase</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="n">InputActionPhase</span><span class="p">.</span><span class="n">Performed</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">interaction</span> <span class="k">is</span> <span class="n">SlowTapInteraction</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">StartCoroutine</span><span class="p">(</span><span class="n">BurstFire</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="n">context</span><span class="p">.</span><span class="n">duration</span> <span class="p">*</span> <span class="n">burstSpeed</span><span class="p">)));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">Fire</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="n">m_Charging</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">InputActionPhase</span><span class="p">.</span><span class="n">Started</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">interaction</span> <span class="k">is</span> <span class="n">SlowTapInteraction</span><span class="p">)</span>
+                    <span class="n">m_Charging</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">InputActionPhase</span><span class="p">.</span><span class="n">Canceled</span><span class="p">:</span>
+                <span class="n">m_Charging</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>上面Started最先触发，然后再触发Performed。如果你的context设置了SlowTapInteraction也就是一定时间的按键判断等，这块后面再详细了解。</p>
+<p><strong>NOTICE:</strong>  详细阅读上面的case判断，如果不加上case判断，一般的行为会触发三次，一次started = 1，一次performed = 1，一次canceld = 0。 </p>
+<h4 id="_4">读取值</h4>
+<p>上面started，performed和canceld只是针对更复杂的按键情况，如果只是一般的使用则如下读取值然后大致类似传统输入系统那样去做即可。</p>
+<p>首先Move和Look读取Vector2的值：</p>
+<div class="highlight"><pre><span></span><code>Vector2 m_Movement = context.ReadValue&lt;Vector2&gt;();
+</code></pre></div>
+<p>然后对于一般按键值读取为bool值：</p>
+<div class="highlight"><pre><span></span><code>bool m_Attack = context.ReadValueAsButton();
+</code></pre></div>
+<p>按照传统输入系统的方法读取值会在Update方法那边编写，现在在回调方法上对应地如上写上读取值之后，就类似传统输入在Update方法那里获取到目标值了，然后后面的都是类似的了。</p>
+<h4 id="_5">判断本帧某个键位是否按下了</h4>
+<p>这个键位判断不需要去设置Actions的配置对于任何按键都可以如下直接去判断。</p>
+<div class="highlight"><pre><span></span><code>  Keyboard.current.space.wasPressedThisFrame
+</code></pre></div>
+<h3 id="inputmouseposition">Input.mousePosition</h3>
+<p>获取当前鼠标在屏幕上的坐标，返回一个Vector3值，z值总为0，x和y都等于0时表示左下角，右上角是 <code>(Screen.width, Screen.height)</code> 。</p>
+<h2 id="_6">参考资料</h2>
+<ol>
+<li>Unity官方文档</li>
+<li>Stack overflow</li>
+<li>其他模块文档</li>
+<li>Unity商城Free资源</li>
+<li>Learning c# by developing games with unity 2019 by Harrison Ferrone</li>
+<li>Unity 游戏开发 by  Mike Geig</li>
+<li>Mastering UI Development with Unity by Asheley Godbold</li>
+<li>Unity in Action by Joseph Hocking</li>
+<li>Unity Shader入门精要 by 冯乐乐</li>
+<li>Mastering Unity Shaders and Effects by Jamie Dean</li>
+</ol>
+
+        </div>
+        <section>
+        <div class="col-md-2" style="float:right;font-size:0.9em;">
+            <h4>首发于：</h4>
+            <time pubdate="pubdate" datetime="2021-10-08T06:39:26.951209+08:00">2021年 10月 8日 </time>
+
+            <h4>最近更新于：</h4>
+            <time datetime="2021-10-08T06:39:26.951209+08:00">2021年 10月 8日 </time>
+
+
+            <h4>分类：</h4>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
+            <h4>标签：</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://a358003542.github.io/tags.html#unity-ref">unity
+                    <span>10</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>
+
+
+<div id="push"></div>
+<button id="gotop" type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+</button>
+
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> and updated by <a href="https://github.com/a358003542" title="wanze Home Page">wanze</a></li>
+    </ul>
+</div>
+</footer>
+
+        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
+
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+
+
+</body>
+</html>

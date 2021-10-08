@@ -12,12 +12,12 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="求整列的最大值 下面是求得D列的最大值 = Max(D:D) 自动筛选 选择你想使用的数据区块，然后选择 数据-&gt;自动筛选 。 默认认为你的数据区块的第一行为标题头。 这样你的整个数据区块可以根据标题头来进行升序和降序的排序操作了。 整列值是可选项 选择一列数据，然后点击菜单数据，然后选..."/>
+              content="不管是皇极经世还是紫微斗数，只要是周易预测相关的，对于月份的划分都是如下规则： 一年的定义是农历的立春到下一次的立春 一年分为十二个月，具体计算只能说大部分情况下和农历有所重合，或者近似看的话可以按照农历来，但严格意义来说，应该按照一年分为十二个月的划分。 也就是说在紫微斗数里面看到的农历只是..."/>
 
 
-<meta name="keywords" content=", 计算机 - 软件, " />
+<meta name="keywords" content=", drafts, " />
 
-    <title>Libreoffice使用技巧  · 万泽的博客
+    <title>周易预测学相关应该如何处理闰月  · 万泽的博客
 </title>
 
         <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
@@ -94,47 +94,59 @@
 <article>
 <div class="row">
     <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://a358003542.github.io/articles/libreofficeshi-yong-ji-qiao.html"> Libreoffice使用技巧  </a></h1>
+    <h1><a href="https://a358003542.github.io/drafts/zhou-yi-yu-ce-xue-xiang-guan-ying-gai-ru-he-chu-li-run-yue.html"> 周易预测学相关应该如何处理闰月  </a></h1>
     </header>
 </div>
 
 <div class="row">
         <div class="col-md-8 col-md-offset-2 article-content">
 
-            <h2 id="_1">求整列的最大值</h2>
-<p>下面是求得D列的最大值</p>
-<div class="highlight"><pre><span></span><code>= Max(D:D)
+            <p>不管是皇极经世还是紫微斗数，只要是周易预测相关的，对于月份的划分都是如下规则：</p>
+<ul>
+<li>一年的定义是农历的立春到下一次的立春</li>
+<li>一年分为十二个月，具体计算只能说大部分情况下和农历有所重合，或者近似看的话可以按照农历来，但严格意义来说，应该按照一年分为十二个月的划分。</li>
+</ul>
+<p>也就是说在紫微斗数里面看到的农历只是一种近似表达，如果盲信这个农历的月份就会对如何处理闰月而手足无措，具体来说在有闰月的年份，应该讲农历的从立春到立春的天数除以十二，然后再另外得到十二个月的划分刻度。</p>
+<p>举个例子2020年2月4日是立春，而春节是1月25日，春节在这里是不相干的。2021年2月3日是下一次的立春。这中间的距离是365天，一月大约是三十又十二分之五天。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">dateutil.relativedelta</span> <span class="kn">import</span> <span class="n">relativedelta</span>
+<span class="kn">from</span> <span class="nn">dateutil.rrule</span> <span class="kn">import</span> <span class="n">rrule</span><span class="p">,</span> <span class="n">MONTHLY</span>
+<span class="n">dt1</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+    <span class="n">dt1</span> <span class="o">+=</span> <span class="n">relativedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mf">30.4167</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dt1</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="_2">自动筛选</h2>
-<p>选择你想使用的数据区块，然后选择 <code>数据-&gt;自动筛选</code> 。</p>
-<p>默认认为你的数据区块的第一行为标题头。</p>
-<p><img alt="img" src="https://a358003542.github.io/images/2021/libreoffice_1.png"></p>
-<p>这样你的整个数据区块可以根据标题头来进行升序和降序的排序操作了。</p>
-<h2 id="_3">整列值是可选项</h2>
-<p>选择一列数据，然后点击菜单数据，然后选择数据有效性，然后选择允许列表，然后在条目下面定义你想要的值，则该列的值都是这些列表里面的可选值。</p>
-<h2 id="_4">列值唯一性约束</h2>
-<p>选择一列数据，然后点击菜单数据，然后选择数据有效性，然后选择自定义，取消勾选允许空白单元格，加入如下公式：</p>
-<div class="highlight"><pre><span></span><code>COUNTIF(B:B,INDIRECT(&quot;B&quot;&amp;ROW()))=1
+<div class="highlight"><pre><span></span><code>2020-02-04 00:00:00            第一月开始
+2020-03-05 10:00:02.880000     第二月开始
+2020-04-04 20:00:05.760000     第三月开始
+2020-05-05 06:00:08.640000     第四月开始
+2020-06-04 16:00:11.520000     第五月开始
+2020-07-05 02:00:14.400000     第六月开始
+2020-08-04 12:00:17.280000     第七月开始
+2020-09-03 22:00:20.160000     第八月开始
+2020-10-04 08:00:23.040000     第九月开始
+2020-11-03 18:00:25.920000     第十月开始
+2020-12-04 04:00:28.800000     第十一月开始
+2021-01-03 14:00:31.680000     第十二月开始
+2021-02-03 00:00:34.560000     下一年开始
 </code></pre></div>
-
-<p>COUNTIF函数的第一个参数是数据区块，这里是B列的意思。</p>
-<p>INDIRECT函数是间接取值。</p>
-<p>ROW函数是取该单元格的行数，这里 <code>"B"&amp;ROW()</code> 的意思比如说你当前正在输入B75单元格，则该值就是<code>B75</code> 。然后<code>INDIRECT("B"&amp;ROW())</code> 就是B75单元格的值。</p>
-<p>整个公式的意思是遍历B列，计算B列和你当前正在输入的单元格的值相同的单元格的数目，如果等于1则数据有效，否则数据无效。</p>
 
         </div>
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-08-01T16:48:10.460617+08:00">2021年 8月 1日 </time>
+            <time pubdate="pubdate" datetime="2020-08-30T00:00:00+08:00">2020年 8月 30日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-08-01T16:48:10.460617+08:00">2021年 8月 1日 </time>
+            <time datetime="2021-10-08T05:36:59.706342+08:00">2021年 10月 8日 </time>
 
 
             <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-ruan-jian-ref">计算机 - 软件</a>
+            <a class="category-link" href="https://a358003542.github.io/categories.html#drafts-ref">drafts</a>
 
         </div>
         </section>
