@@ -108,6 +108,7 @@
 <li><a href="#_2">本系列内容的取舍</a></li>
 </ul>
 </li>
+<li><a href="#menuitem">MenuItem</a></li>
 <li><a href="#_3">属性值</a><ul>
 <li><a href="#textareaattribute">TextAreaAttribute</a></li>
 <li><a href="#tooltipattribute">TooltipAttribute</a></li>
@@ -120,9 +121,24 @@
 <li><a href="#lable">添加一个Lable</a></li>
 <li><a href="#_7">添加一个按钮</a></li>
 <li><a href="#_8">默认显示动作</a></li>
+<li><a href="#editorguieditorguilayout">EditorGUI和EditorGUILayout的区别</a></li>
 </ul>
 </li>
-<li><a href="#_9">参考资料</a></li>
+<li><a href="#_9">附录</a><ul>
+<li><a href="#serializedobjecttarget">serializedObject和target</a></li>
+<li><a href="#serializedobject">SerializedObject</a><ul>
+<li><a href="#findproperty">FindProperty</a></li>
+</ul>
+</li>
+<li><a href="#serializedproperty">SerializedProperty</a></li>
+<li><a href="#reorderablelist">ReorderableList</a><ul>
+<li><a href="#drawheadercallback">drawHeaderCallback</a></li>
+<li><a href="#drawelementcallback">drawElementCallback</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_10">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -138,6 +154,22 @@
 <li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
 <li>笔者在行文上会尽可能节省笔墨，只是标出官方参考文档的引用出处，但在某些地方会额外花费笔墨来说明，比如个人觉得官方文档文字可能不是很好懂，某些内容很重要需要再特别强调一遍等。</li>
 </ul>
+<h2 id="menuitem">MenuItem</h2>
+<p>为你的unity编辑器添加一个菜单项。</p>
+<div class="highlight"><pre><span></span><code>public class EditorHelloWorld : EditorWindow
+{
+    [MenuItem("Tools/STStudio/Utilities/HelloWorld", false)]
+    private static void ShowWindow()
+    {
+        EditorWindow.GetWindow(typeof(EditorHelloWorld));
+    }
+
+    private void OnGUI()
+    {
+    }
+}
+</code></pre></div>
+<p>第二个参数如果是false则就是创建菜单项点击之后的动作，如果是true则下面的函数是校验函数，如果该校验函数返回false则菜单项将是禁用状态。</p>
 <h2 id="_3">属性值</h2>
 <h3 id="textareaattribute">TextAreaAttribute</h3>
 <p>这会让你的字符串有一个更宽的文本输入区域。</p>
@@ -252,7 +284,71 @@ public class Example : MonoBehaviour
 </code></pre></div>
 <p><code>DrawDefaultInspector</code> 方法会让你的自定义类显示先绘制默认的显示动作。</p>
 <p>估计 <code>base.OnInspectorGUI</code> 的写法效果是一样的。</p>
-<h2 id="_9">参考资料</h2>
+<h3 id="editorguieditorguilayout">EditorGUI和EditorGUILayout的区别</h3>
+<p>原则上Editor编码应该使用EditorGUI和EditorGUILayout，不过大致查了一下，要创建button还是需要通过GUILayout类。</p>
+<p>EditorGUI和EditorGUILayout这两个类的区别是EditorGUILayout是自动布局的，比如说创建一个Lable：</p>
+<div class="highlight"><pre><span></span><code># EditorGUI
+public static void LabelField(Rect position, string label, GUIStyle style = EditorStyles.label);
+
+# EditorGUILayout
+public static void LabelField(string label, params GUILayoutOption[] options);
+</code></pre></div>
+<p>EditorGUILayout是不需要Rect这个参数的，而EditorGUI是需要Rect这个参数要指明本Label从哪里开始还有宽和高都是多少【前两个参数x，y定义了本矩形区域的左上角顶点，然后第三个参数是width，第四个参数是height。】。</p>
+<h2 id="_9">附录</h2>
+<h3 id="serializedobjecttarget">serializedObject和target</h3>
+<p>在自定义编辑器类里面 <code>serializedObject</code> 和 <code>target</code> 都是引用当前Inspector的类对象，但是又有一些细微的差异。<code>serializedObject</code> 可以用下面的代码来理解：</p>
+<div class="highlight"><pre><span></span><code>serializedObject = new SerializedObject(targets);
+</code></pre></div>
+<p>target只是引用当前监视的第一个对象，而targets则是当前监视的多个对象【值得是Unity的多对象编辑操作】。一般实践新的代码都推荐使用serializedObject。上面讨论参考了 <a href="https://forum.unity.com/threads/editor-target-vs-editor-serializedobject.640072/">这个网页</a>。</p>
+<h3 id="serializedobject">SerializedObject</h3>
+<h4 id="findproperty"><code>FindProperty</code></h4>
+<p>根据字符串返回指向SerializedObject某个属性的SerializedProperty。</p>
+<div class="highlight"><pre><span></span><code>SerializedProperty serializedPropertyMyInt = serializedObject.FindProperty("myInt");
+</code></pre></div>
+<h3 id="serializedproperty">SerializedProperty</h3>
+<h3 id="reorderablelist">ReorderableList</h3>
+<p>这个类在 <code>UnityEditorInternal</code> 命名空间里面，官方文档对这个类也语焉不详，但是是一个很好的表现列表的类，<a href="https://va.lent.in/unity-make-your-lists-functional-with-reorderablelist/">这篇文章</a> 对这个类的讨论很有参考价值。</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="nf">ReorderableList</span><span class="p">(</span>
+    <span class="n">SerializedObject</span> <span class="n">serializedObject</span><span class="p">,</span> 
+    <span class="n">SerializedProperty</span> <span class="n">elements</span><span class="p">,</span> 
+    <span class="kt">bool</span> <span class="n">draggable</span><span class="p">,</span> 
+    <span class="kt">bool</span> <span class="n">displayHeader</span><span class="p">,</span> 
+    <span class="kt">bool</span> <span class="n">displayAddButton</span><span class="p">,</span> 
+    <span class="kt">bool</span> <span class="n">displayRemoveButton</span><span class="p">);</span>
+</code></pre></div>
+<p>SerializedProperty可以是array，应该也可以是List。该对象还提供了很多回调属性：</p>
+<ul>
+<li>drawHeaderCallback</li>
+<li>drawElementCallback</li>
+<li>onSelectCallback</li>
+<li>onAddCallback</li>
+<li>drawElementBackgroundCallback</li>
+</ul>
+<h4 id="drawheadercallback">drawHeaderCallback</h4>
+<p>列表前面的Header回调方法，首先是：</p>
+<div class="highlight"><pre><span></span><code>list.drawHeaderCallback = new ReorderableList.HeaderCallbackDelegate(DrawHeader);
+
+private void DrawHeader(Rect rect)
+{
+    EditorGUI.LabelField(rect, "Header");
+}
+</code></pre></div>
+<p>这个回调方法没有赋值可能有默认的行为，赋值之后会使用再定义的回调方法。</p>
+<h4 id="drawelementcallback">drawElementCallback</h4>
+<p>绘制列表中的某一个元素的回调方法：</p>
+<div class="highlight"><pre><span></span><code>list.drawElementCallback = new ReorderableList.ElementCallbackDelegate(DrawElement);
+
+private void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+{
+}
+</code></pre></div>
+<p>在回调方法里面，通过<code>GetArrayElementAtIndex</code> 方法来获取目标element，index是当前绘制的element索引值：</p>
+<div class="highlight"><pre><span></span><code>var element = serializedObject.FindProperty("list").GetArrayElementAtIndex(index);
+</code></pre></div>
+<p>通过 <code>FindPropertyRelative</code> 方法来获取目标element里面的属性值：</p>
+<div class="highlight"><pre><span></span><code>element.FindPropertyRelative("Name");
+</code></pre></div>
+<h2 id="_10">参考资料</h2>
 <ol>
 <li>Unity官方文档</li>
 <li>Stack overflow</li>
@@ -270,10 +366,10 @@ public class Example : MonoBehaviour
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-10-12T17:42:03.738129+08:00">2021年 10月 12日 </time>
+            <time pubdate="pubdate" datetime="2021-10-18T17:46:24.788548+08:00">2021年 10月 18日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-10-12T17:42:03.738129+08:00">2021年 10月 12日 </time>
+            <time datetime="2021-10-18T17:46:24.788548+08:00">2021年 10月 18日 </time>
 
 
             <h4>分类：</h4>
@@ -281,7 +377,7 @@ public class Example : MonoBehaviour
             <h4>标签：</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="https://a358003542.github.io/tags.html#unity-ref">unity
-                    <span>10</span>
+                    <span>11</span>
 </a></li>
             </ul>
 

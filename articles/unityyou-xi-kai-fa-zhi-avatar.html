@@ -12,12 +12,12 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="前言 本文是Unity游戏开发系列的输入部分。本文主要讨论的是Unity内置的Input输入模块，此外还有一个新的input system，不过对于刚接触unity输入系统这块的初学者来说，还是建议先学习用好unity内置的input输入模块，这个用熟了然后后面再根据需要决定是否需要升级为新的..."/>
+              content="前言 本文是Unity游戏开发系列的Avatar部分。玩家角色模型Avatar开发这里主要是利用了Unity的UMA包。 本系列内容的取舍 因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。 笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后..."/>
 
 
 <meta name="keywords" content="unity, 计算机 - 游戏开发, " />
 
-    <title>Unity游戏开发之输入  · 万泽的博客
+    <title>Unity游戏开发之Avatar  · 万泽的博客
 </title>
 
         <link href="https://a358003542.github.io/theme/css/font-awesome.css" rel="stylesheet"
@@ -94,7 +94,7 @@
 <article>
 <div class="row">
     <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-shu-ru.html"> Unity游戏开发之输入  </a></h1>
+    <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-avatar.html"> Unity游戏开发之Avatar  </a></h1>
     </header>
 </div>
 
@@ -108,12 +108,12 @@
 <li><a href="#_2">本系列内容的取舍</a></li>
 </ul>
 </li>
-<li><a href="#graphicraycasterui">GraphicRaycaster和UI操作</a><ul>
-<li><a href="#raycastall">RaycastAll</a></li>
-<li><a href="#ispointerovergameobject">IsPointerOverGameObject</a></li>
+<li><a href="#_3">第一个例子</a></li>
+<li><a href="#customizaiton">Customizaiton</a><ul>
+<li><a href="#character-colors">Character Colors</a></li>
 </ul>
 </li>
-<li><a href="#_3">参考资料</a></li>
+<li><a href="#_4">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -122,49 +122,26 @@
 
             
 <h2 id="_1">前言</h2>
-<p>本文是Unity游戏开发系列的输入部分。本文主要讨论的是Unity内置的Input输入模块，此外还有一个新的input system，不过对于刚接触unity输入系统这块的初学者来说，还是建议先学习用好unity内置的input输入模块，这个用熟了然后后面再根据需要决定是否需要升级为新的input system。</p>
+<p>本文是Unity游戏开发系列的Avatar部分。玩家角色模型Avatar开发这里主要是利用了Unity的UMA包。</p>
 <h3 id="_2">本系列内容的取舍</h3>
 <ul>
 <li>因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。</li>
 <li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
 <li>笔者在行文上会尽可能节省笔墨，只是标出官方参考文档的引用出处，但在某些地方会额外花费笔墨来说明，比如个人觉得官方文档文字可能不是很好懂，某些内容很重要需要再特别强调一遍等。</li>
-<li>一般来说官方文档里面有的不会在这里赘述，不过有时某些内容会特别重要而会再强调一遍。</li>
 </ul>
-<h2 id="graphicraycasterui">GraphicRaycaster和UI操作</h2>
-<p>Canvas的GraphicRaycaster组件的用处就是将射线投射到画布上，可以利用GraphicRaycaster来判断本Canvas当前那些画布元素是被击中的，或者说的再简单点是在鼠标当前所在位置上的。</p>
-<p>如下面的代码就是利用本画布上的GraphicRaycaster组件来获取当前鼠标位置上的画布元素。</p>
-<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="n">GraphicRaycaster</span> <span class="n">rc</span><span class="p">;</span>
-<span class="k">private</span> <span class="n">PointerEventData</span> <span class="n">pt</span><span class="p">;</span> 
-
-<span class="n">rc</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">GraphicRaycaster</span><span class="p">&gt;();</span>
-<span class="n">pt</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PointerEventData</span><span class="p">(</span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">);</span>
-
-<span class="n">pt</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">;</span>
-
-<span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;();</span>
-
-<span class="n">rc</span><span class="p">.</span><span class="n">Raycast</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">results</span><span class="p">);</span>
-</code></pre></div>
-<p>这些画布元素存储在results上：</p>
-<div class="highlight"><pre><span></span><code>        foreach (RaycastResult swatch in results)
-        {
-            Debug.Log($"{swatch.gameObject.name}");
-        }
-</code></pre></div>
-<p>假设有两个画布元素，一个Panel，Panel上面一个Image，<code>Raycast Target</code> 属性是勾选确认状态，则上面results的长度是二。如上所示<code>swatch.gameObject</code>就是该画布元素对象，后续可以进行进一步的判断操作。</p>
-<p>在一些Canvas情况不是很复杂的时候推荐使用Raycast来解决问题。</p>
-<h3 id="raycastall">RaycastAll</h3>
-<p>RaycastAll方法是所有的BaseRaycasters都进行了射线投射，这其中还包括PhysicsRaycaster等。还不清楚PhysicsRaycaster的用途，不过假设有多个Canvas的情况下，通过这个RaycastAll来进行所有GraphicRaycaster的射线投射是很便利的。</p>
-<div class="highlight"><pre><span></span><code>        <span class="n">PointerEventData</span> <span class="n">eventDataCurrentPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PointerEventData</span><span class="p">(</span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">);</span>
-        <span class="n">eventDataCurrentPosition</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">;</span>
-        <span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;();</span>
-        <span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">RaycastAll</span><span class="p">(</span><span class="n">eventDataCurrentPosition</span><span class="p">,</span> <span class="n">results</span><span class="p">);</span>
-</code></pre></div>
-<p>上面获得的result含义和之前讨论的相同，是当前鼠标所在位置射线投射穿过的所有对象。</p>
-<p>同样类似上面的讨论如果某个UI元素 <code>Raycast Target</code> 属性没有勾选也是不会检测到的。</p>
-<h3 id="ispointerovergameobject">IsPointerOverGameObject</h3>
-<p>通过 <code>EventSystem.current.IsPointerOverGameObject()</code> 可以判断当前的pointer是否在某个event system object上，在很多情况下似乎可以达到一种能够判断当前pointer是否在UI上的效果，但这个函数名，加上所谓的event system object具体是什么东西并不大确切，而且具体各个对象的属性也没有获取无法获得进一步的判断效果，这个方法只是备用。</p>
-<h2 id="_3">参考资料</h2>
+<h2 id="_3">第一个例子</h2>
+<p>首先将<code>Getting Started</code> 文件夹下的 <code>UMA_GLIB</code> 和 <code>UMADynamicCharacterAvatar</code> 拖入场景，其中最关键的初始调配属性有：</p>
+<ul>
+<li>Active Race 设置种族</li>
+<li>下面的Recipe一栏进行拖动和删除wardrobe的recepie。</li>
+</ul>
+<p>更多内容后面再详细讨论。</p>
+<h2 id="customizaiton">Customizaiton</h2>
+<h3 id="character-colors">Character Colors</h3>
+<p>基本颜色，Metallic和Gloss。Gloss光泽度由设置颜色的Alpha决定。</p>
+<p>这些属性来自你设置角色的Recipe里面的Shared colors那里。shared color从recipe那边定义，然后可能应用到某个slot，从而继续影响目标slot上的材质颜色。</p>
+<p>recipe - slot - overlay 这三者的关系是一个recipe是一个配置方案，而一个slot对应的是某个mesh，然后overlay则是该mesh上的某个或某几个材质组。</p>
+<h2 id="_4">参考资料</h2>
 <ol>
 <li>Unity官方文档</li>
 <li>Stack overflow</li>
@@ -182,10 +159,10 @@
         <section>
         <div class="col-md-2" style="float:right;font-size:0.9em;">
             <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-10-12T17:26:03.361016+08:00">2021年 10月 12日 </time>
+            <time pubdate="pubdate" datetime="2021-10-14T11:53:29.590118+08:00">2021年 10月 14日 </time>
 
             <h4>最近更新于：</h4>
-            <time datetime="2021-10-12T17:26:03.361016+08:00">2021年 10月 12日 </time>
+            <time datetime="2021-10-14T11:53:29.590118+08:00">2021年 10月 14日 </time>
 
 
             <h4>分类：</h4>
