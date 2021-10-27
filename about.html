@@ -7,12 +7,13 @@
 
     <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625"/>
     <meta name="google-site-verification" content="r5HyVvY-ZSgf7ctpcpK1aWIaEfKJ0dvAE3E9kW3vXgI" />
+    <script data-ad-client="ca-pub-5644206261254049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     
         <meta name="author" content="wanze"/>
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="简介 本网站是利用的python的pelican模块自动生成的静态站点，然后挂载在Github page上的。其中大部分内容是使用的markdown编写的，有一些是原Latex编写，然后利用pandoc处理输出的html文件。 本网站文章版权归作者所有，读者可以阅读学习研究，极小部分复制粘贴是...
+              content="简介 本网站是利用的python的pelican模块自动生成的静态站点，然后挂载在Github page上的。其中大部分内容是使用的markdown编写的，有一些则是Html5编写的，有一些是由Latex编写，然后利用pandoc处理输出的html文件。 博文分类规则 本博文的分类规则请参看 ...
 "/>
 
 
@@ -105,40 +106,18 @@
         <div class="toc">
 <ul>
 <li><a href="#_1">简介</a></li>
-<li><a href="#pelican">pelican</a><ul>
-<li><a href="#makefile">不用Makefile</a><ul>
-<li><a href="#start_serverbat">start_server.bat</a></li>
-<li><a href="#buildbat">build.bat</a></li>
-</ul>
-</li>
-<li><a href="#_2">引用本博客内部文章</a></li>
-<li><a href="#_3">引用静态资源</a></li>
-<li><a href="#faviconico">网站加入favicon.ico</a></li>
-<li><a href="#category">Category参数控制</a></li>
-<li><a href="#_4">静态资源管理</a></li>
-<li><a href="#output">output输出控制</a></li>
-<li><a href="#_5">某个文件夹下的文章内容不处理</a></li>
-<li><a href="#theme">使用theme</a></li>
-<li><a href="#_6">模板文件可以使用的变量</a></li>
-<li><a href="#markdown">Markdown相关</a><ul>
-<li><a href="#codehilite">codehilite</a></li>
-<li><a href="#fenced_code">fenced_code</a></li>
-<li><a href="#toc">toc</a></li>
-</ul>
-</li>
-<li><a href="#plugin">plugin的安装</a></li>
-<li><a href="#pelican_javascript-plugin">pelican_javascript plugin</a></li>
-</ul>
-</li>
+<li><a href="#_2">博文分类规则</a></li>
+<li><a href="#license">License</a></li>
+<li><a href="#pelican">pelican</a></li>
 <li><a href="#github-pages">Github pages</a><ul>
-<li><a href="#_7">自定义域名</a></li>
+<li><a href="#_3">自定义域名</a></li>
 <li><a href="#https">自定义域名https支持</a></li>
 <li><a href="#gitbook">挂上gitbook的内容</a></li>
 </ul>
 </li>
-<li><a href="#markdown_1">Markdown</a><ul>
-<li><a href="#_8">添加脚注</a></li>
-<li><a href="#_9">插入描述列表</a></li>
+<li><a href="#markdown">Markdown</a><ul>
+<li><a href="#_4">添加脚注</a></li>
+<li><a href="#_5">插入描述列表</a></li>
 <li><a href="#github-flavored-markdown">github flavored markdown</a></li>
 </ul>
 </li>
@@ -150,357 +129,16 @@
 
             
 <h2 id="_1">简介</h2>
-<p>本网站是利用的python的pelican模块自动生成的静态站点，然后挂载在Github page上的。其中大部分内容是使用的markdown编写的，有一些是原Latex编写，然后利用pandoc处理输出的html文件。</p>
+<p>本网站是利用的python的pelican模块自动生成的静态站点，然后挂载在Github page上的。其中大部分内容是使用的markdown编写的，有一些则是Html5编写的，有一些是由Latex编写，然后利用pandoc处理输出的html文件。</p>
+<h2 id="_2">博文分类规则</h2>
+<p>本博文的分类规则请参看 图书分类 这篇文章的讨论。</p>
+<h2 id="license">License</h2>
 <p>本网站文章版权归作者所有，读者可以阅读学习研究，极小部分复制粘贴是没有问题的，但请勿大量抄袭。【如果读者只是私底下一个人自我学习保存，那是没有问题的。】</p>
 <h2 id="pelican">pelican</h2>
-<p>pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。</p>
-<p>首先按照官方的quickstart简单的刷一遍吧，下面主要讨论 <code>pelicanconf.py</code> 和 <code>publishconf.py</code> 和 <code>Makefile</code> 这个文件作出一些说明，然后项目文档的基本结构相关作出一些说明。</p>
-<p>首先说明下 <code>publishconf.py</code> 和 <code>pelicanconf.py</code> 的区别， <code>publishconf.py</code> 文件里面有这样一句话：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pelicanconf</span> <span class="kn">import</span> <span class="o">*</span>
-</code></pre></div>
-<p>也就是其将继承所有来自 <code>pelicanconf.py</code> 里面的配置参量，不同的是 <code>publishconf.py</code> 是针对发布到远程服务器上的，而 <code>pelicanconf.py</code> 的配置只是用于本机调试的。</p>
-<p>所以 <code>pelicanconf.py</code> 里面的 <code>SITEURL</code> 变量是空值，而在 <code>publishconf.py</code> 里面是要赋一个具体的值的，该值随你的模板里面的用法不同而不同，具体就是 <code>{{ SITEURL }}</code> 这样的调用。</p>
-<p>然后发布到远程机器还会有其他一些额外的东西，比如 <code>DISQUS_SITENAME</code> 这个值，很多模板会根据这个值来决定是否开启disqus的javascript引用，而DISQUS系统在本机调试的时候是没有意义的，一般会不设置这个值从而自动关闭它。</p>
-<p><code>publishconf.py</code> 也许还有其他一些考虑，这里就略过了，下面将集中将 <code>pelicanconf.py</code> 里面的配置。</p>
-<p>然后我们看到 <code>Makefile</code> 这个文件，这个脚本很好用，下面这些命令是很经常用到的：</p>
-<div class="highlight"><pre><span></span><code>make html
-make serve
-make github
-...
-</code></pre></div>
-<p>其中make github会把你的output里面的内容刷到github pages对应的项目上去，其依赖于生成目标 <code>publish</code> ，而make publish和make html的惟一区别就是上面讨论的调用的那个具体的配置文件的不同。</p>
-<h3 id="makefile">不用Makefile</h3>
-<p>如果读者是在windows环境下，那个Makefile是不怎么好用的，说到底其只是提供了一些快捷的命令行支持，我们完全可以另外写一个python脚本来实现这点。</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*-coding:utf-8-*-</span>
-
-
-<span class="sd">"""</span>
-<span class="sd">run.bat 在windows下运行方便点 对应的就是 build 命令</span>
-
-<span class="sd">"""</span>
-
-<span class="kn">import</span> <span class="nn">click</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">threading</span>
-
-<span class="n">PROJECT</span> <span class="o">=</span> <span class="s1">'myblog'</span>
-<span class="n">BASEDIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
-<span class="n">INPUTDIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASEDIR</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">)</span>
-<span class="n">OUTPUTDIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASEDIR</span><span class="p">,</span> <span class="s1">'dev_output'</span><span class="p">)</span>
-<span class="n">PUBLISHDIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASEDIR</span><span class="p">,</span> <span class="s1">'output'</span><span class="p">)</span>
-<span class="n">CONFFILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASEDIR</span><span class="p">,</span> <span class="s1">'pelicanconf.py'</span><span class="p">)</span>
-<span class="n">PUBLISHCONF</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASEDIR</span><span class="p">,</span> <span class="s1">'publishconf.py'</span><span class="p">)</span>
-<span class="n">PORT</span> <span class="o">=</span> <span class="mi">9000</span>
-
-
-<span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="k">pass</span>
-
-
-<span class="k">def</span> <span class="nf">copy_mathjax</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
-    <span class="n">mathjax_foldername</span> <span class="o">=</span> <span class="s1">'MathJax-2.7.7'</span>
-    <span class="n">dest_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">mathjax_foldername</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_folder</span><span class="p">):</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">mathjax_foldername</span><span class="si">}</span><span class="s1"> already exists.'</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">mathjax_foldername</span><span class="p">,</span> <span class="n">dest_folder</span><span class="p">)</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">mathjax_foldername</span><span class="si">}</span><span class="s1"> copyed.'</span><span class="p">)</span>
-
-
-<span class="nd">@main</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">devserve</span><span class="p">():</span>
-    <span class="sd">"""</span>
-<span class="sd">    devbuild your pelican project</span>
-<span class="sd">    """</span>
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"start devbuild your pelican project..."</span><span class="p">)</span>
-
-    <span class="n">copy_mathjax</span><span class="p">(</span><span class="n">OUTPUTDIR</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">devbuild</span><span class="p">():</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">"pelican -r </span><span class="si">{INPUTDIR}</span><span class="s2"> -o </span><span class="si">{OUTPUTDIR}</span><span class="s2"> -s </span><span class="si">{CONFFILE}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">INPUTDIR</span><span class="o">=</span><span class="n">INPUTDIR</span><span class="p">,</span>
-            <span class="n">OUTPUTDIR</span><span class="o">=</span><span class="n">OUTPUTDIR</span><span class="p">,</span>
-            <span class="n">CONFFILE</span><span class="o">=</span><span class="n">CONFFILE</span>
-        <span class="p">)</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'start run cmd: </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">serve</span><span class="p">():</span>
-        <span class="k">while</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">OUTPUTDIR</span><span class="p">):</span>
-            <span class="kn">import</span> <span class="nn">time</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">OUTPUTDIR</span><span class="p">)</span>
-        <span class="n">serve_cmd</span> <span class="o">=</span> <span class="s1">'python -m http.server </span><span class="si">{PORT}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PORT</span><span class="o">=</span><span class="n">PORT</span><span class="p">)</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'start run cmd: </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">serve_cmd</span><span class="p">))</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">serve_cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">t0</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">devbuild</span><span class="p">)</span>
-    <span class="n">t0</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">serve</span><span class="p">)</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-    <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span>
-    <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">KeyboardInterrupt</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'用户取消了'</span><span class="p">)</span>
-
-
-<span class="nd">@main</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">build</span><span class="p">():</span>
-    <span class="sd">"""</span>
-<span class="sd">    build your pelican project</span>
-<span class="sd">    """</span>
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"start build your pelican project..."</span><span class="p">)</span>
-    <span class="n">copy_mathjax</span><span class="p">(</span><span class="n">PUBLISHDIR</span><span class="p">)</span>
-
-    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">"pelican </span><span class="si">{INPUTDIR}</span><span class="s2"> -o </span><span class="si">{PUBLISHDIR}</span><span class="s2"> -s </span><span class="si">{PUBLISHCONF}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">INPUTDIR</span><span class="o">=</span><span class="n">INPUTDIR</span><span class="p">,</span>
-        <span class="n">PUBLISHCONF</span><span class="o">=</span><span class="n">PUBLISHCONF</span><span class="p">,</span>
-        <span class="n">PUBLISHDIR</span><span class="o">=</span><span class="n">PUBLISHDIR</span>
-    <span class="p">)</span>
-
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'start run cmd: </span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'running result is:</span><span class="si">{0}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span>
-
-
-
-
-<span class="nd">@main</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">devclean</span><span class="p">():</span>
-    <span class="sd">"""</span>
-<span class="sd">    clean your dev output</span>
-<span class="sd">    """</span>
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">"start clean your output folder..."</span><span class="p">)</span>
-    <span class="n">rm</span><span class="p">(</span><span class="n">OUTPUTDIR</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">normalized_path_obj</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">'.'</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    默认支持 ~ 符号</span>
-
-<span class="sd">    返回的是 Path 对象</span>
-<span class="sd">    :param path:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'~'</span><span class="p">):</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span>
-
-
-<span class="k">def</span> <span class="nf">rm</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    the function can remove file or empty directory(default).</span>
-
-<span class="sd">    use `shutil.rmtree` to remove the non-empty directory,you need add `recursive=True`</span>
-
-<span class="sd">    """</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">normalized_path_obj</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">path</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></div>
-<p>在上面 <code>run.py</code> 的基础上，我们可以创建如下两个脚本：</p>
-<h4 id="start_serverbat">start_server.bat</h4>
-<p>此脚本用于本地调试</p>
-<div class="highlight"><pre><span></span><code>start /b python run.py devserve
-</code></pre></div>
-<h4 id="buildbat">build.bat</h4>
-<p>此脚本用于编译输出</p>
-<div class="highlight"><pre><span></span><code>start /b python run.py build
-</code></pre></div>
-<h3 id="_2">引用本博客内部文章</h3>
-<p>引用本博客内部文章不需要考虑该文章的slug细节，直接如下引用：</p>
-<div class="highlight"><pre><span></span><code>{filename}path/to/what.md
-</code></pre></div>
-<p>相对路径支持 <code>..</code> 表达。</p>
-<h3 id="_3">引用静态资源</h3>
-<p>比如在markdown里面引入图片如下所示：</p>
-<div class="highlight"><pre><span></span><code>![<span class="nt">img</span>](<span class="na">{static}/images/chemistry/Naphthalene.png</span>)
-</code></pre></div>
-<p><code>{static}</code> 后面就是具体要引用的文件路径。具体就是content文件夹下面的images文件夹，这个文件夹默认是要copy到output输出文件夹根目录哪里去的。</p>
-<h3 id="faviconico">网站加入favicon.ico</h3>
-<p>这里参考了 <a href="http://stackoverflow.com/questions/31270373/how-to-add-a-favicon-to-a-pelican-blog">这个网页</a> ，你需要如下配置，其会将extra文件夹下面的favicon.ico文件copy到output文件夹下面。</p>
-<div class="highlight"><pre><span></span><code>EXTRA_PATH_METADATA = {
-    'extra/favicon.ico': {'path': 'favicon.ico'}
-}
-</code></pre></div>
-<h3 id="category">Category参数控制</h3>
-<p>你可以配置：</p>
-<div class="highlight"><pre><span></span><code>DEFAULT_CATEGORY = 'others'
-</code></pre></div>
-<p>来决定你的pelican项目的默认Category参数值。</p>
-<p>如果你配置了：</p>
-<div class="highlight"><pre><span></span><code>USE_FOLDER_AS_CATEGORY = True
-</code></pre></div>
-<p>则 <code>Category</code> 这个参数可以省略，pelican会根据文章所在的上一级文件夹的名字来决定这个文章的Category。</p>
-<p>当然随着你的文件夹里面结构变得复杂，你可能对这个默认的Category处理方法不再满意了，那么就将这个设置关闭吧：</p>
-<div class="highlight"><pre><span></span><code>USE_FOLDER_AS_CATEGORY = False
-</code></pre></div>
-<p>然后直接在目标文章的头参数那里配置</p>
-<div class="highlight"><pre><span></span><code>Category: what
-</code></pre></div>
-<h3 id="_4">静态资源管理</h3>
-<p>images和pdfs和data和extra文件夹其实名字都是随意的，只是一般这样写罢了，pdfs里面放pdf，images里面放图片等。这几个文件夹都是所谓的静态资源文件夹，等下生成output文件夹的时候，里面的内容都放送入到output文件夹里面去。你需要如下设置：</p>
-<div class="highlight"><pre><span></span><code>STATIC_PATHS = ['images',
-                'pdfs',
-                'data',
-                'extra',]
-</code></pre></div>
-<p>然后html文件需要额外说一下，原网页的body里面的内容都会完整传过去，但是原html网页head部分里面除了必要的meta标签和title标签之外，其他多余的内容是传不过去的。那么css或者js的设置怎么弄呢，这个请参看后面的相关讨论，到时候设置好相关的meta标签即可。</p>
-<h3 id="output">output输出控制</h3>
-<div class="highlight"><pre><span></span><code>ARTICLE_URL = '{category}/{slug}.html'
-ARTICLE_SAVE_AS = ARTICLE_URL
-PAGE_URL = '{slug}.html'
-PAGE_SAVE_AS = PAGE_URL
-CATEGORY_URL = '{slug}/index.html'
-CATEGORY_SAVE_AS = CATEGORY_URL
-TAG_URL = 'tag/{slug}.html'
-TAG_SAVE_AS = TAG_URL
-</code></pre></div>
-<ul>
-<li><code>ARTICLE_URL</code> 定义了文章的URL显示，其中slug你可以在文件头属性那边自定义。</li>
-<li><code>ARTICLE_SAVE_AS</code> 定义了该文件在output文件夹那边如何的存储路径</li>
-<li>后面类似的有控制 CATEGORY TAG PAGE 页面的URL和具体网页在output文件夹里面的存储路径。</li>
-</ul>
-<h3 id="_5">某个文件夹下的文章内容不处理</h3>
-<p>通过 <code>ARTICLE_EXCLUDES</code> 可以配置一系列的文件夹列表，来让这些文件夹是跳过处理的。</p>
-<ol>
-<li>下面的路径表达是相对于PATH的相对路径表达。</li>
-<li>注意windows下因为先版本pelican代码路径解析关系【4.2.0】，要采用如下写法，而不能用<code>/</code> 这种写法。</li>
-</ol>
-<div class="highlight"><pre><span></span><code>ARTICLE_EXCLUDES= ['articles\\programming\\algorithm\\examples']
-</code></pre></div>
-<h3 id="theme">使用theme</h3>
-<p>没必要将pelican推荐的那些theme都下载下来，找一个你喜欢的theme，将你复制到你的pelican项目根目录下，然后配置 <code>your_theme_name</code> 等于你复制来的主题的文件夹名字：</p>
-<div class="highlight"><pre><span></span><code>THEME = 'your_theme_name'
-</code></pre></div>
-<p>theme内部static文件夹下的内容会copy到output文件夹下，比如 <code>static/css</code> 到 <code>theme/css</code> 。</p>
-<p>然后templates文件夹里面都是一些jinja2模板文件，具体jinja2模块引擎相关的知识就不在这里讨论了。</p>
-<h3 id="_6">模板文件可以使用的变量</h3>
-<ol>
-<li>配置文件里面的变量直接可以使用，比如你在配置文件里面定义了<code>SITEURL="WHAT"</code> ，那么在模板文件里面可以这样引用 <code>{{ SITEURL}}</code> 。注意这些配置名按照规范是应该全部大写字母的。</li>
-<li>比如在article模板下你定义的那些metadata都是可以引用的，如<code>article.tags</code> 。</li>
-</ol>
-<p>具体那些模板文件可以使用那些变量内容更多，请读者参看官方文档5.6 Creating themes的Templates and variables 一小节。</p>
-<h3 id="markdown">Markdown相关</h3>
-<p>首先需要通过：</p>
-<div class="highlight"><pre><span></span><code>pip install markdown
-</code></pre></div>
-<p>来获得pelican 对于 markdown的支持。该模块的官方文档在 <a href="https://python-markdown.github.io/">这里</a> 。就基本的使用是不需要太深入了解这个模块的，不过后面稍微有点定制需求，还有一些插件等，都是和这个模块的一些功能关联在一起的。</p>
-<p>首先我们来看最常用的两个功能，一个语法高亮功能，一个是自动目录生成功能。</p>
-<p>pelican相关的MARKDOWN配置原始参数如下：</p>
-<div class="highlight"><pre><span></span><code>MARKDOWN = {
-    'extension_configs': {
-        'markdown.extensions.codehilite': {'css_class': 'highlight'},
-        'markdown.extensions.extra': {},
-        'markdown.extensions.meta': {},
-    },
-    'output_format': 'html5',
-}
-</code></pre></div>
-<p>这些参数实际上就是传递给上面提到的 <code>markdown</code> 模块，pelican并没有管这块的。然后这里所谓的 extension_config 可以在其官方文档的 <a href="https://python-markdown.github.io/extensions/">这里</a> 获得信息，其中有很多官方插件，随着markdown模块的安装一并就安装进来了。</p>
-<h4 id="codehilite">codehilite</h4>
-<p>这个插件提供了一种代码块语法高亮方案，不过其对于代码块要求采用如下格式：</p>
-<div class="highlight"><pre><span></span><code>#!/usr/bin/python
-# Code goes here ...
-</code></pre></div>
-<p>还有其他几种格式这里就不赘述了，后面提到的 <code>fenced_code</code> 插件实际上是站在 CodeHilite 之上的，支持了我们常见了gfm代码块的表达。这两个插件都依赖 <code>pygments</code> 模块。</p>
-<ul>
-<li>css_class 配置最外面那个div区块的class名字</li>
-<li>guess_lang 也不知道从那个版本开始，这个参数默认变成True了，给我带来了一些困扰，它会让pygments去猜代码块里的语言，经常猜的不准确，我喜欢关掉，这样默认text也就是不染色最好，通常这个和用户习惯也是一致的，不指定语言一般暗含的意思就是语种不确定就按照text来。</li>
-<li>其他还有几个参数选择读者参看该插件的文档吧。比如 <code>linenums</code> 可能有些人会喜欢使用。</li>
-</ul>
-<h4 id="fenced_code">fenced_code</h4>
-<p>如上描述。</p>
-<h4 id="toc">toc</h4>
-<p>你在markdown 文档里面写上：</p>
-<div class="highlight"><pre><span></span><code>[TOC]
-</code></pre></div>
-<p>其会自动将其转成：</p>
-<div class="highlight"><pre><span></span><code>&lt;div class="toc"&gt;
-.....
-&lt;/div&gt;
-</code></pre></div>
-<p>这里顺便就提到 <code>extract_toc</code> plugin 了，该插件利用 <code>beautifulsoup4</code> 模块刷上面的toc div，将你在pelican模板中遇到的 <code>article</code> 这个变量，加入了 <code>article.toc</code> 这个属性，具体内容就是上面提及的自动生成的toc内容。</p>
-<p>出于好奇我们可以看一下extract_toc 的相关代码：</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">if</span> <span class="n">toc</span><span class="p">:</span>
-        <span class="n">toc</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-        <span class="n">content</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-        <span class="n">content</span><span class="o">.</span><span class="n">toc</span> <span class="o">=</span> <span class="n">toc</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">toc</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'&lt;html&gt;'</span><span class="p">):</span>
-            <span class="n">content</span><span class="o">.</span><span class="n">toc</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">toc</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="o">-</span><span class="mi">14</span><span class="p">]</span>
-</code></pre></div>
-<p>我们看到 <code>toc.extract()</code> 也就是将之前 toc 插件生成的目录删去了，然后将toc赋值给了content，这个content对应的就是 <code>article</code> 【当然在pelican的page就是对应的page】。</p>
-<p>因此在pelican里，你可以查看一下你的theme，如果toc显示正常的话，应该有类似如下jinja2代码：</p>
-<div class="highlight"><pre><span></span><code>    {% if article.toc %}
-    &lt;div class="col-md-2 table-of-content"&gt;
-        &lt;nav&gt;
-        ....
-        {{ article.toc }}
-        &lt;/nav&gt;
-    &lt;/div&gt;
-</code></pre></div>
-<p>按照上面的讨论现在MARKDOWN 这个变量是：</p>
-<div class="highlight"><pre><span></span><code>MARKDOWN = {
-    'extension_configs': {
-        'markdown.extensions.codehilite': {'css_class': 'highlight',
-                                           'guess_lang': False},
-        'markdown.extensions.toc': {},
-        'markdown.extensions.fenced_code': {},
-        'markdown.extensions.extra': {},
-        'markdown.extensions.meta': {},
-    },
-    'output_format': 'html5',
-}
-</code></pre></div>
-<h3 id="plugin">plugin的安装</h3>
-<p>通过如下配置来安装plugin，具体文件夹的操作就是在你的pelican项目根目录下有个 <code>myplugins</code> 文件夹，里面就是你编写的plugin或者将其他作者写的plugin copy到这里。</p>
-<div class="highlight"><pre><span></span><code>PLUGIN_PATHS = ['myplugins']
-PLUGINS = ['pelican_javascript', 'extract_toc', 'pelican_ipynb', 'tipue_search',
-           'render_math']
-</code></pre></div>
-<h3 id="pelican_javascript-plugin">pelican_javascript plugin</h3>
-<p>项目的 <a href="https://github.com/mortada/pelican_javascript">github地址在这里</a> 。</p>
-<p>js和css也是静态资源，但和上面的处理有有所不同，前面也提及了html源文件如果在head部分有css引用语句，都是会丢失的。你需要如下加上这样的meta标签语句：</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"javascripts"</span> <span class="na">content</span><span class="o">=</span><span class="s">"周易之摇卦.js"</span> <span class="p">/&gt;</span>
-</code></pre></div>
-<p>然后你还需要安装pelican-plugins里面的 <code>pelican_javascript</code> 如下所示：</p>
-<div class="highlight"><pre><span></span><code>PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
-</code></pre></div>
+<p>更多关于pelican模块的讨论请参见我写的 <a href="">pelican</a> 这篇文章和pelican的官方文档。</p>
 <h2 id="github-pages">Github pages</h2>
 <p>基本使用就是在你的github上新建一个 <code>your_name.github.io</code> 的项目，其内容一般是一个静态网站生成工具输出的内容。</p>
-<h3 id="_7">自定义域名</h3>
+<h3 id="_3">自定义域名</h3>
 <p>简单来说就是写一个 <code>CNAME</code> 文件，实际上github的 settings那里还提供了功能，具体实际做的工作也就是创建了一个 <code>CNAME</code> 文件。</p>
 <p><img alt="github_pages_cname" src="https://a358003542.github.io/images/others/github_pages_cname.png"/></p>
 <h3 id="https">自定义域名https支持</h3>
@@ -537,15 +175,15 @@ PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
 <ol>
 <li>然后运行 <code>gitbook deploy</code> 好了，现在你的gitbook已经挂载在 <code>you_name.github.io/project</code> 那里了。</li>
 </ol>
-<h2 id="markdown_1">Markdown</h2>
+<h2 id="markdown">Markdown</h2>
 <p>关于markdown的基础知识本文就不赘述了，网上随便一搜就有，本文下面主要讲了一些值得一提的知识点。</p>
-<h3 id="_8">添加脚注</h3>
+<h3 id="_4">添加脚注</h3>
 <div class="highlight"><pre><span></span><code>这里显示如何插入脚注[^1]
 
 
 [^1]: 这是一个脚注。
 </code></pre></div>
-<h3 id="_9">插入描述列表</h3>
+<h3 id="_5">插入描述列表</h3>
 <div class="highlight"><pre><span></span><code>sqrt
 : 开平方根函数，sqrt(x)。
 
