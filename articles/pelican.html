@@ -16,7 +16,7 @@
               content="pelican简介 本文的讨论基于pelican version 4.6.0 。 pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。 首先按照官方的quickstart入门教程简单的刷一遍吧，好对pelican的使用和基本情况有个了..."/>
 
 
-<meta name="keywords" content=", 软件应用, " />
+<meta name="keywords" content=", 计算机, " />
 
     <title>pelican  · 万泽的博客
 </title>
@@ -76,7 +76,6 @@
                     
                 <li ><a href="/categories.html">博文分类</a></li>
                 
-                <li><a target="_blank" href="https://github.com/a358003542">我的Github</a></li>
 
                         <li >
                             <a href="https://a358003542.github.io/about.html">关于本网站</a>
@@ -93,17 +92,17 @@
     <div class="col-md-1 col-md-1-left"></div>
     <div class="col-md-10">
 <article>
-<div class="row">
-    <header class="page-header col-md-10 col-md-offset-2">
-    <h1><a href="https://a358003542.github.io/articles/pelican.html"> pelican  </a></h1>
-    </header>
-</div>
+    <div class="row">
+        <header class="page-header col-md-10 col-md-offset-2">
+            <h1><a href="https://a358003542.github.io/articles/pelican.html"> pelican  </a></h1>
+        </header>
+    </div>
 
-<div class="row">
-    <div class="col-md-2 table-of-content">
-        <nav>
-        <h4>目录</h4>
-        <div class="toc">
+    <div class="row">
+        <div class="col-md-2 table-of-content">
+            <nav>
+                <h4>目录</h4>
+                <div class="toc">
 <ul>
 <li><a href="#pelican">pelican简介</a><ul>
 <li><a href="#pelican_1">pelican的工作流程</a></li>
@@ -147,11 +146,11 @@
 </li>
 </ul>
 </div>
-        </nav>
-    </div>
-    <div class="col-md-8 article-content">
+            </nav>
+        </div>
+        <div class="col-md-8 article-content">
 
-            
+                
 <h2 id="pelican">pelican简介</h2>
 <p><strong>本文的讨论基于pelican version 4.6.0</strong> 。</p>
 <p>pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。</p>
@@ -165,6 +164,9 @@
 <p>也就是其将继承所有来自 <code>pelicanconf.py</code> 里面的配置参量，不同的是 <code>publishconf.py</code> 是针对发布到远程服务器上的，而 <code>pelicanconf.py</code> 的配置只是用于本机调试的。</p>
 <p>所以 <code>pelicanconf.py</code> 里面的 <code>SITEURL</code> 变量是空值，而在 <code>publishconf.py</code> 里面是要赋一个具体的值的，此外还值得一提的是你在这两个配置文件里面定义的变量在pelican里面的模板，也就是基于Jinja2模板引用编写的Html输出模板，这些变量都是可以这样 <code>{{ SITEURL }}</code> 调用的。</p>
 <h3 id="pelican_1">pelican的工作流程</h3>
+<p>静态网站就是一堆html文件和其他相关的静态资源，比如css文件，图片文件等。静态资源的处理基本上就是Copy动作，唯一的区别就是决定Copy目的地的位置，这一块后面再讨论。pelican最核心的工作就是要利用各种不同类型的文件源，比如markdown文件，reStructuredText文件，html文件等各种文件格式，利用这些文件源里面的文件内容，然后输出HTML文件。</p>
+<p>程序刚开始的命令行接口和配置参数相关工作这里就略过讨论了。然后工作主体就是启动各种不同类型的generator，有默认要启动的：<code>ArticlesGenerator</code> 和 <code>PagesGenerator</code> ，如果设置了 <code>TEMPLATE_PAGES</code> ，还会启动 <code>TemplatePagesGenerator</code> 等，如果还有用户自定义的Generator也会启动。</p>
+<p>然后是调用每个Generator的  <code>generate_context</code> 方法，继而调用 <code>generate_output</code> 。<code>generate_context</code> 主要是加载各个文件然后利用Reader来加载目标文件的元数据和内容数据。<code>generate_output</code> 利用有对其他一些额外html页面的额外生成动作，但不管怎么说现在先简单理解为利用Write和之前加载的元数据和内容数据生成目标文件。</p>
 <h2 id="markdown">支持Markdown写作</h2>
 <p>请先确保当前环境安装了markdown模块：</p>
 <div class="highlight"><pre><span></span><code>pip install markdown
@@ -311,6 +313,7 @@ TAG_SAVE_AS = TAG_URL
 <ol>
 <li>配置文件里面的变量直接可以使用，比如你在配置文件里面定义了<code>SITEURL="WHAT"</code> ，那么在模板文件里面可以这样引用 <code>{{ SITEURL}}</code> 。注意这些配置名按照规范是应该全部大写字母的。</li>
 <li>比如在article模板下你定义的那些metadata都是可以引用的，如<code>article.tags</code> 。</li>
+<li>你也可以在文档头里面定义自己想要的metadata，值得一提的是这些变量在Jinja2那边都要写成小写，比如：<code>article.bookname</code> 。</li>
 </ol>
 <p>具体那些模板文件可以使用那些变量内容更多，请读者参看官方文档5.6 Creating themes的Templates and variables 一小节。</p>
 <h2 id="_8">插件</h2>
@@ -561,22 +564,23 @@ PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
 </table>
 <h3 id="jinja2">Jinja2模板里面的变量</h3>
 
+            </div>
+            <section>
+                <div class="col-md-2" style="float:right;font-size:0.9em;">
+                    <h4>首发于：</h4>
+                    <time pubdate="pubdate" datetime="2021-10-28T16:38:38.090305+08:00">2021年 10月 28日 </time>
+
+                    <h4>最近更新于：</h4>
+                    <time datetime="2021-10-28T16:38:38.090305+08:00">2021年 10月 28日 </time>
+
+
+                    <h4>分类：</h4>
+                    <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-ref">计算机</a>
+                    
+
+                </div>
+            </section>
         </div>
-        <section>
-        <div class="col-md-2" style="float:right;font-size:0.9em;">
-            <h4>首发于：</h4>
-            <time pubdate="pubdate" datetime="2021-10-26T17:20:35.517666+08:00">2021年 10月 26日 </time>
-
-            <h4>最近更新于：</h4>
-            <time datetime="2021-10-26T17:20:35.517666+08:00">2021年 10月 26日 </time>
-
-
-            <h4>分类：</h4>
-            <a class="category-link" href="https://a358003542.github.io/categories.html#ruan-jian-ying-yong-ref">软件应用</a>
-
-        </div>
-        </section>
-</div>
 </article>
     </div>
     <div class="col-md-1"></div>
@@ -597,7 +601,7 @@ PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
 </div>
 </footer>
 
-        <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/jquery.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/bootstrap.min.js"></script>
 
     <script src="https://a358003542.github.io/theme/js/moment.min.js"></script>
