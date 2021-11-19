@@ -13,10 +13,10 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的，不过你还需要安装nltk_data ，通过运行： import nltk nltk.download() 即可，当然你也可以自己手工配置。其搜索路径是如..."/>
+              content="前言 nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。 安装和使用 nltk作为python模块安装并没有什么好说的 …"/>
 
 
-<meta name="keywords" content=", 备用, " />
+<meta name="keywords" content=", 计算机 - 编程 - python, " />
 
     <title>nltk学习笔记  · 万泽的博客
 </title>
@@ -99,47 +99,116 @@
     </div>
 
     <div class="row">
-            <div class="col-md-8 col-md-offset-2 article-content">
+        <div class="col-md-2 table-of-content">
+            <nav>
+                <h4>目录</h4>
+                <div class="toc">
+<ul>
+<li><a href="#_1">前言</a></li>
+<li><a href="#_2">安装和使用</a></li>
+<li><a href="#_3">有用的工具集</a><ul>
+<li><a href="#freqdist">FreqDist</a></li>
+<li><a href="#bigrams">bigrams</a></li>
+<li><a href="#conditionalfreqdist">ConditionalFreqDist</a></li>
+<li><a href="#str2tuple">str2tuple</a></li>
+<li><a href="#index">Index类</a></li>
+</ul>
+</li>
+<li><a href="#_4">语料库管理</a><ul>
+<li><a href="#_5">语料库接口</a></li>
+</ul>
+</li>
+<li><a href="#text">Text接口</a><ul>
+<li><a href="#concordance">concordance</a></li>
+<li><a href="#similar">similar</a></li>
+<li><a href="#common_contexts">common_contexts</a></li>
+<li><a href="#generater">generater</a></li>
+<li><a href="#collocations">collocations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            </nav>
+        </div>
+        <div class="col-md-8 article-content">
 
-                <h2 id="_1">前言</h2>
+                
+<h2 id="_1">前言</h2>
 <p>nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。</p>
 <h2 id="_2">安装和使用</h2>
 <p>nltk作为python模块安装并没有什么好说的，不过你还需要安装<code>nltk_data</code> ，通过运行：</p>
 <div class="highlight"><pre><span></span><code>import nltk
 nltk.download()
 </code></pre></div>
-
 <p>即可，当然你也可以自己手工配置。其搜索路径是如下配置的：</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"win"</span><span class="p">):</span>
     <span class="c1"># Common locations on Windows:</span>
     <span class="n">path</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;share&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;APPDATA&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\nltk_data&quot;</span><span class="p">),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;D:\nltk_data&quot;</span><span class="p">),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;E:\nltk_data&quot;</span><span class="p">),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"share"</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"lib"</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">"APPDATA"</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"C:</span><span class="se">\\</span><span class="s2">"</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">"C:\nltk_data"</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">"D:\nltk_data"</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="sa">r</span><span class="s2">"E:\nltk_data"</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="c1"># Common locations on UNIX &amp; OS X:</span>
     <span class="n">path</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;share&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;nltk_data&quot;</span><span class="p">)),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/share/nltk_data&quot;</span><span class="p">),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/local/share/nltk_data&quot;</span><span class="p">),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/lib/nltk_data&quot;</span><span class="p">),</span>
-        <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;/usr/local/lib/nltk_data&quot;</span><span class="p">),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"share"</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"lib"</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="s2">"nltk_data"</span><span class="p">)),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">"/usr/share/nltk_data"</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">"/usr/local/share/nltk_data"</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">"/usr/lib/nltk_data"</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="s2">"/usr/local/lib/nltk_data"</span><span class="p">),</span>
     <span class="p">]</span>
 </code></pre></div>
-
 <p>具体里面的内容可以在 <a href="https://github.com/nltk/nltk_data">nltk_data</a> 这个github项目中找到。具体内容在packages下面，其中corpora的内容是不需要zip解压的，其他的一般需要先解压再放好位置。</p>
-<h2 id="_3">语料库管理</h2>
+<h2 id="_3">有用的工具集</h2>
+<h3 id="freqdist">FreqDist</h3>
+<p>很有用的一个类，其继承自Counter类，用于记数的一个字典。</p>
+<p>输入的是就是你分词好的词汇列表：<code>[a, b, c, a ,a ,b .....]</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">t</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">a</span><span class="o">....</span><span class="p">])</span>
+</code></pre></div>
+<p>其内部会自动处理然后得到一个词的词频统计，比如下面是看频率最高的25个： </p>
+<div class="highlight"><pre><span></span><code>t.most_common(25)
+[('天下', 56), ('不', 51), ('圣人', 32), ('道', 27), ('谓', 24), ('曰', 21), ('万物', 20), ('吾', 20), ('无', 18), ('欲', 14), ('无为', 13), ('亦', 10), ('章', 10), ('人', 9), ('天地', 8), ('不争', 8), ('下', 8), ('道者', 8), ('大', 8), ('夫', 8), ('无以', 8), ('贵', 7), ('不知', 7), ('知', 7), ('善人', 7)]
+</code></pre></div>
+<h3 id="bigrams">bigrams</h3>
+<p>自然语言处理研究中的n元语法模型中的二元语法：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(bigrams([1,2,3,4,5]))
+[(1, 2), (2, 3), (3, 4), (4, 5)]
+</code></pre></div>
+<h3 id="conditionalfreqdist">ConditionalFreqDist</h3>
+<p>其是一个字典套字典结构，第一个字典key是一些条件，具体再引用该条件<code>cfd[condition]</code> 返回的是一个FreqDist对象。更具体来说其用来存储某一条件下的FreqDist分布。</p>
+<div class="highlight"><pre><span></span><code>cfd = ConditionalFreqDist([['1','a'],['1','b'],['0','a'],['1','a']])
+cfd['1']
+FreqDist({'a': 2, 'b': 1})
+cfd['0']
+FreqDist({'a': 1})
+</code></pre></div>
+<h3 id="str2tuple">str2tuple</h3>
+<p>一般POS（part of speech）标注或者其他标注都可以采用 <code>word/tag</code> 这样的格式，然后可以利用 <code>str2tuple</code> 函数来拆分它们。</p>
+<div class="highlight"><pre><span></span><code>tagged_token = str2tuple('fly/NN')
+
+tagged_token
+('fly', 'NN')
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">str2tuple</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"/"</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>第二个参数sep默认是 <code>/</code> ，你也可以指定其他的分隔符。</p>
+<h3 id="index">Index类</h3>
+<p>Index类是一个默认为列表的defaultdict类，可以用来构建多值字典。</p>
+<div class="highlight"><pre><span></span><code>index = nltk.Index([('a',1),('a',2),('b',3)])
+index
+Index(&lt;class 'list'&gt;, {'a': [1, 2], 'b': [3]})
+</code></pre></div>
+<h2 id="_4">语料库管理</h2>
 <p>nltk的语料库管理并不是重点，不过其提供的一些语料库接口是值得学习的，比如说：</p>
 <div class="highlight"><pre><span></span><code>from nltk.book import gutenberg
 </code></pre></div>
-
 <p>这个gutenberg具体利用的是 <code>PlaintextCorpusReader</code> 这个类。</p>
 <p>可以利用这个类来加载你自己的txt文本，不过中文的话需要自己定义Tokenizer类。一个简单的类如下所示：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk.tokenize.api</span> <span class="kn">import</span> <span class="n">TokenizerI</span>
@@ -148,7 +217,6 @@ nltk.download()
     <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">jieba</span><span class="o">.</span><span class="n">lcut</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </code></pre></div>
-
 <p>你需要实现tokenize这个方法，切分字符串然后返回的是列表。</p>
 <p>中文分句一个简单实现就是利用正则表达式来切分：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">RegexpTokenizer</span>
@@ -156,80 +224,72 @@ nltk.download()
 
 <span class="k">class</span> <span class="nc">ChineseSentenceTokenizer</span><span class="p">(</span><span class="n">RegexpTokenizer</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">RegexpTokenizer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;(。|？|！)&quot;</span><span class="p">,</span> <span class="n">gaps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">RegexpTokenizer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"(。|？|！)"</span><span class="p">,</span> <span class="n">gaps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ChineseSentenceTokenizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">combine_odd_even</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </code></pre></div>
-
 <p>上面的combine_odd_even是我自己定义的一个方法，将列表奇偶元素相加，这里不是讨论的重点，略过了。</p>
 <p>然后我们定义 <code>load_corpus</code> 来加载txt语料：</p>
 <div class="highlight"><pre><span></span><code>def load_corpus(root, word_tokenizer=JiebaTokenizer(),
                 sent_tokenizer=ChineseSentenceTokenizer()):
-    return PlaintextCorpusReader(root, r&quot;(?!\.).*\.txt&quot;,
+    return PlaintextCorpusReader(root, r"(?!\.).*\.txt",
                                  word_tokenizer=word_tokenizer,
                                  sent_tokenizer=sent_tokenizer,
-                                 encoding=&#39;utf8&#39;)
+                                 encoding='utf8')
 
-zh_gutenberg = load_corpus(&#39;D:/nlp_data/corpora/zh_gutenberg&#39;)
+zh_gutenberg = load_corpus('D:/nlp_data/corpora/zh_gutenberg')
 </code></pre></div>
-
 <p>这个root指向你的语料库的文件夹即可，下面放着一些txt文本。</p>
 <p>然后如下利用nltk的Text类来加载语料进行分析。</p>
-<div class="highlight"><pre><span></span><code>laozi = Text(zh_gutenberg.words(&quot;laozi.txt&quot;))
-lunyu = Text(zh_gutenberg.words(&quot;lunyu.txt&quot;))
+<div class="highlight"><pre><span></span><code>laozi = Text(zh_gutenberg.words("laozi.txt"))
+lunyu = Text(zh_gutenberg.words("lunyu.txt"))
 </code></pre></div>
-
 <p>后面就对应上官方教材的叙述了。</p>
-<h3 id="_4">语料库接口</h3>
+<h3 id="_5">语料库接口</h3>
 <p>如下调用语料库的原始文本，利用你之前设置好的word_tokenizer分词后的词语列表，利用你之前设置好的sent_tokenizer分句之后的句子列表。</p>
-<div class="highlight"><pre><span></span><code>zh_gutenberg.raw(&#39;xiyouji_s.txt&#39;)
-zh_gutenberg.words(&#39;xiyouji_s.txt&#39;)
-zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
+<div class="highlight"><pre><span></span><code>zh_gutenberg.raw('xiyouji_s.txt')
+zh_gutenberg.words('xiyouji_s.txt')
+zh_gutenberg.sents('xiyouji_s.txt')
 </code></pre></div>
-
 <h2 id="text">Text接口</h2>
 <h3 id="concordance">concordance</h3>
 <p>索引词</p>
-<div class="highlight"><pre><span></span><code>text1.concordance(&quot;monstrous&quot;)
+<div class="highlight"><pre><span></span><code>text1.concordance("monstrous")
 </code></pre></div>
-
 <h3 id="similar">similar</h3>
 <p>根据上下词环境来找相似词</p>
-<div class="highlight"><pre><span></span><code>text1.similar(&quot;monstrous&quot;)
+<div class="highlight"><pre><span></span><code>text1.similar("monstrous")
 </code></pre></div>
-
 <h3 id="common_contexts">common_contexts</h3>
 <p>两个词之间的共同上下词环境</p>
-<div class="highlight"><pre><span></span><code> text2.common_contexts([&quot;monstrous&quot;, &quot;very&quot;])
+<div class="highlight"><pre><span></span><code> text2.common_contexts(["monstrous", "very"])
 </code></pre></div>
-
 <h3 id="generater">generater</h3>
 <p>根据上下文来随机生成一些文本。</p>
 <div class="highlight"><pre><span></span><code>laozi.generate()
 </code></pre></div>
-
 <h3 id="collocations">collocations</h3>
 <p>原nltk的Text类里面的这个方法只是专门针对英文的，如果重新写一个ChineseText类继承并重载这个方法：</p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ChineseText</span><span class="p">(</span><span class="n">Text</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">collocation_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">"""</span>
 <span class="sd">        Return collocations derived from the text, ignoring stopwords.</span>
 
 <span class="sd">            &gt;&gt;&gt; from nltk.book import text4</span>
 <span class="sd">            &gt;&gt;&gt; text4.collocation_list()[:2]</span>
-<span class="sd">            [(&#39;United&#39;, &#39;States&#39;), (&#39;fellow&#39;, &#39;citizens&#39;)]</span>
+<span class="sd">            [('United', 'States'), ('fellow', 'citizens')]</span>
 
 <span class="sd">        :param num: The maximum number of collocations to return.</span>
 <span class="sd">        :type num: int</span>
 <span class="sd">        :param window_size: The number of tokens spanned by a collocation (default=2)</span>
 <span class="sd">        :type window_size: int</span>
 <span class="sd">        :rtype: list(tuple(str, str))</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
-                <span class="s2">&quot;_collocations&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
+                <span class="s2">"_collocations"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num</span> <span class="o">==</span> <span class="n">num</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window_size</span> <span class="o">==</span> <span class="n">window_size</span>
         <span class="p">):</span>
@@ -251,142 +311,21 @@ zh_gutenberg.sents(&#39;xiyouji_s.txt&#39;)
                 <span class="n">finder</span><span class="o">.</span><span class="n">nbest</span><span class="p">(</span><span class="n">bigram_measures</span><span class="o">.</span><span class="n">likelihood_ratio</span><span class="p">,</span> <span class="n">num</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collocations</span>
 </code></pre></div>
-
 <p>具体修改是原过滤器过滤了词语的长度，这个不适合中文。然后停用词换成了中文停用词词库。然后增加了一个空白字符去除动作。</p>
 <p>具体里面评估二元语法组得分用的是 <code>bigram_measures.likelihood_ratio</code> 这个算法。有兴趣可以研究一下，这里暂时略过了。</p>
-<h2 id="freqdist">FreqDist</h2>
-<p>很有用的一个类，其继承自Counter类，用于记数的一个字典。比如下面统计老子里面最常用的词语。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
-<span class="kn">from</span> <span class="nn">my_python_module.nlp.chinese_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
-<span class="kn">from</span> <span class="nn">my_python_module.nlp.utils</span> <span class="kn">import</span> <span class="n">is_empty_string</span>
-
-<span class="n">t</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">laozi</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_empty_string</span><span class="p">(</span><span class="n">i</span><span class="p">))])</span>
-</code></pre></div>
-
-<p>上面进行了空字符的过滤和停用词的过滤。</p>
-<div class="highlight"><pre><span></span><code>t.most_common(25)
-[(&#39;天下&#39;, 56), (&#39;不&#39;, 51), (&#39;圣人&#39;, 32), (&#39;道&#39;, 27), (&#39;谓&#39;, 24), (&#39;曰&#39;, 21), (&#39;万物&#39;, 20), (&#39;吾&#39;, 20), (&#39;无&#39;, 18), (&#39;欲&#39;, 14), (&#39;无为&#39;, 13), (&#39;亦&#39;, 10), (&#39;章&#39;, 10), (&#39;人&#39;, 9), (&#39;天地&#39;, 8), (&#39;不争&#39;, 8), (&#39;下&#39;, 8), (&#39;道者&#39;, 8), (&#39;大&#39;, 8), (&#39;夫&#39;, 8), (&#39;无以&#39;, 8), (&#39;贵&#39;, 7), (&#39;不知&#39;, 7), (&#39;知&#39;, 7), (&#39;善人&#39;, 7)]
-</code></pre></div>
-
-<h2 id="bigrams">bigrams</h2>
-<p>自然语言处理研究中的n元语法模型中的二元语法：</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from nltk.util import bigrams
-&gt;&gt;&gt; list(bigrams([1,2,3,4,5]))
-[(1, 2), (2, 3), (3, 4), (4, 5)]
-</code></pre></div>
-
-<h2 id="conditionalfreqdist">ConditionalFreqDist</h2>
-<p>其是一个字典套字典结构，第一个字典key是一些条件，具体再引用该条件<code>cfd[condition]</code> 返回的是一个FreqDist对象。更具体来说其用来存储某一条件下的FreqDist分布。</p>
-<div class="highlight"><pre><span></span><code>from nltk import ConditionalFreqDist
-cfd = ConditionalFreqDist([[&#39;1&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;b&#39;],[&#39;0&#39;,&#39;a&#39;],[&#39;1&#39;,&#39;a&#39;]])
-cfd[&#39;1&#39;]
-FreqDist({&#39;a&#39;: 2, &#39;b&#39;: 1})
-cfd[&#39;0&#39;]
-FreqDist({&#39;a&#39;: 1})
-</code></pre></div>
-
-<h2 id="_5">标注</h2>
-<h3 id="str2tuple">str2tuple</h3>
-<p>一般POS（part of speech）标注或者其他标注都可以采用 <code>word/tag</code> 这样的格式，然后可以利用 <code>str2tuple</code> 函数来拆分它们。</p>
-<div class="highlight"><pre><span></span><code>import nltk
-tagged_token = nltk.tag.str2tuple(&#39;fly/NN&#39;)
-
-tagged_token
-(&#39;fly&#39;, &#39;NN&#39;)
-</code></pre></div>
-
-<h3 id="pos">通用POS标注集</h3>
-<table>
-<thead>
-<tr>
-<th>Tag</th>
-<th>Meaning</th>
-<th>English Examples</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>ADJ</code></td>
-<td>adjective</td>
-<td><em>new, good, high, special, big, local</em></td>
-</tr>
-<tr>
-<td><code>ADP</code></td>
-<td>adposition</td>
-<td><em>on, of, at, with, by, into, under</em></td>
-</tr>
-<tr>
-<td><code>ADV</code></td>
-<td>adverb</td>
-<td><em>really, already, still, early, now</em></td>
-</tr>
-<tr>
-<td><code>CONJ</code></td>
-<td>conjunction</td>
-<td><em>and, or, but, if, while, although</em></td>
-</tr>
-<tr>
-<td><code>DET</code></td>
-<td>determiner, article</td>
-<td><em>the, a, some, most, every, no, which</em></td>
-</tr>
-<tr>
-<td><code>NOUN</code></td>
-<td>noun</td>
-<td><em>year, home, costs, time, Africa</em></td>
-</tr>
-<tr>
-<td><code>NUM</code></td>
-<td>numeral</td>
-<td><em>twenty-four, fourth, 1991, 14:24</em></td>
-</tr>
-<tr>
-<td><code>PRT</code></td>
-<td>particle</td>
-<td><em>at, on, out, over per, that, up, with</em></td>
-</tr>
-<tr>
-<td><code>PRON</code></td>
-<td>pronoun</td>
-<td><em>he, their, her, its, my, I, us</em></td>
-</tr>
-<tr>
-<td><code>VERB</code></td>
-<td>verb</td>
-<td><em>is, say, told, given, playing, would</em></td>
-</tr>
-<tr>
-<td><code>.</code></td>
-<td>punctuation marks</td>
-<td><em>. , ; !</em></td>
-</tr>
-<tr>
-<td><code>X</code></td>
-<td>other</td>
-<td><em>ersatz, esprit, dunno, gr8, univeristy</em></td>
-</tr>
-</tbody>
-</table>
-<h3 id="index">Index类</h3>
-<p>Index类是一个默认为列表的defaultdict类，可以用来构建多值字典。</p>
-<div class="highlight"><pre><span></span><code>index = nltk.Index([(&#39;a&#39;,1),(&#39;a&#39;,2),(&#39;b&#39;,3)])
-index
-Index(&lt;class &#39;list&#39;&gt;, {&#39;a&#39;: [1, 2], &#39;b&#39;: [3]})
-</code></pre></div>
 
             </div>
             <section>
                 <div class="col-md-2" style="float:right;font-size:0.9em;">
                     <h4>首发于：</h4>
-                    <time pubdate="pubdate" datetime="2021-01-17T04:48:05.592307+08:00">2021年 1月 17日 </time>
+                    <time pubdate="pubdate" datetime="2021-11-19T18:00:21.315939+08:00">2021年 11月 19日 </time>
 
                     <h4>最近更新于：</h4>
-                    <time datetime="2021-01-17T04:48:05.592307+08:00">2021年 1月 17日 </time>
+                    <time datetime="2021-11-19T18:00:21.315939+08:00">2021年 11月 19日 </time>
 
 
                     <h4>分类：</h4>
-                    <a class="category-link" href="https://a358003542.github.io/categories.html#bei-yong-ref">备用</a>
+                    <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
                     
 
                 </div>

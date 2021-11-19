@@ -13,7 +13,7 @@
         <meta name="copyright" content="wanze"/>
 
         <meta name="description"
-              content="pelican简介 本文的讨论基于pelican version 4.6.0 。 pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。 首先按照官方的quickstart入门教程简单的刷一遍吧，好对pelican的使用和基本情况有个了..."/>
+              content="pelican简介 本文的讨论基于pelican version 4.6.0 【】。 pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切 …"/>
 
 
 <meta name="keywords" content=", 计算机, " />
@@ -152,7 +152,7 @@
 
                 
 <h2 id="pelican">pelican简介</h2>
-<p><strong>本文的讨论基于pelican version 4.6.0</strong> 。</p>
+<p><strong>本文的讨论基于pelican version 4.6.0</strong> 【】。</p>
 <p>pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。</p>
 <p>首先按照官方的quickstart入门教程简单的刷一遍吧，好对pelican的使用和基本情况有个了解。那个 <code>Makefile</code>  说到底也只是一个对于 <code>pelican</code> 命令的调用和其他辅助功能，感兴趣的读者可以看到后面的 <em>定制自动生成python脚本</em> 一小节，就会对pelican模块的基本命令入口有个清晰的认识。而开发调试运行和实际build分别调用的是两个不同的python配置文件，一个是 <code>pelicanconf.py</code> ，一个是 <code>publishconf.py</code> 。</p>
 <p>在 <code>publishconf.py</code> 文件里面有这样一段代码：</p>
@@ -166,7 +166,7 @@
 <h3 id="pelican_1">pelican的工作流程</h3>
 <p>静态网站就是一堆html文件和其他相关的静态资源，比如css文件，图片文件等。静态资源的处理基本上就是Copy动作，唯一的区别就是决定Copy目的地的位置，这一块后面再讨论。pelican最核心的工作就是要利用各种不同类型的文件源，比如markdown文件，reStructuredText文件，html文件等各种文件格式，利用这些文件源里面的文件内容，然后输出HTML文件。</p>
 <p>程序刚开始的命令行接口和配置参数相关工作这里就略过讨论了。然后工作主体就是启动各种不同类型的generator，有默认要启动的：<code>ArticlesGenerator</code> 和 <code>PagesGenerator</code> ，如果设置了 <code>TEMPLATE_PAGES</code> ，还会启动 <code>TemplatePagesGenerator</code> 等，如果还有用户自定义的Generator也会启动。</p>
-<p>然后是调用每个Generator的  <code>generate_context</code> 方法，继而调用 <code>generate_output</code> 。<code>generate_context</code> 主要是加载各个文件然后利用Reader来加载目标文件的元数据和内容数据。<code>generate_output</code> 利用有对其他一些额外html页面的额外生成动作，但不管怎么说现在先简单理解为利用Write和之前加载的元数据和内容数据生成目标文件。</p>
+<p>然后是调用每个Generator的  <code>generate_context</code> 方法，继而调用 <code>generate_output</code> 。<code>generate_context</code> 主要是加载各个文件然后利用Reader来加载目标文件的元数据和内容数据。<code>generate_output</code> 过程里面有对其他一些额外html页面的生成动作，但不管怎么说现在先简单理解为利用Write和之前加载的元数据和内容数据生成目标html文件。</p>
 <h2 id="markdown">支持Markdown写作</h2>
 <p>请先确保当前环境安装了markdown模块：</p>
 <div class="highlight"><pre><span></span><code>pip install markdown
@@ -215,7 +215,7 @@
         <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">toc</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'&lt;html&gt;'</span><span class="p">):</span>
             <span class="n">content</span><span class="o">.</span><span class="n">toc</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">toc</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="o">-</span><span class="mi">14</span><span class="p">]</span>
 </code></pre></div>
-<p>我们看到 <code>toc.extract()</code> 也就是将之前 toc 插件生成的目录删去了，然后将toc赋值给了content，这个content对应的就是 <code>article</code> 【当然在pelican的page就是对应的page】。</p>
+<p>我们看到 <code>toc.extract()</code> 也就是将之前 toc 插件生成的目录删去了，然后将toc赋值给了content，这个content对应的就是 <code>article</code> 。</p>
 <p>因此在pelican里，你可以查看一下你的theme，如果toc显示正常的话，应该有类似如下jinja2代码：</p>
 <div class="highlight"><pre><span></span><code>    {% if article.toc %}
     &lt;div class="col-md-2 table-of-content"&gt;
@@ -241,7 +241,7 @@
 <h2 id="_1">实践文档编写</h2>
 <h3 id="_2">引用本博客内部文章</h3>
 <p>引用本博客内部文章不需要考虑该文章的slug细节，直接如下引用：</p>
-<div class="highlight"><pre><span></span><code>{filename}path/to/what.md
+<div class="highlight"><pre><span></span><code>[what]({filename}path/to/what.md)
 </code></pre></div>
 <p>相对路径支持 <code>..</code> 表达。</p>
 <h3 id="_3">引用静态资源</h3>
@@ -568,10 +568,10 @@ PLUGINS = ['pelican_javascript', 'tipue_search', 'extract_toc']
             <section>
                 <div class="col-md-2" style="float:right;font-size:0.9em;">
                     <h4>首发于：</h4>
-                    <time pubdate="pubdate" datetime="2021-10-28T16:38:38.090305+08:00">2021年 10月 28日 </time>
+                    <time pubdate="pubdate" datetime="2021-11-18T17:50:18.394725+08:00">2021年 11月 18日 </time>
 
                     <h4>最近更新于：</h4>
-                    <time datetime="2021-10-28T16:38:38.090305+08:00">2021年 10月 28日 </time>
+                    <time datetime="2021-11-18T17:50:18.394725+08:00">2021年 11月 18日 </time>
 
 
                     <h4>分类：</h4>
