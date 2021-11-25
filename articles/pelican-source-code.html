@@ -109,6 +109,12 @@
 <li><a href="#_3">命令行参数和配置文件加载</a></li>
 <li><a href="#autoreload">autoreload</a></li>
 <li><a href="#_4">加载插件</a></li>
+<li><a href="#_5">信号</a></li>
+<li><a href="#run">run</a><ul>
+<li><a href="#generator">收集各个Generator类</a></li>
+<li><a href="#generate_context">generate_context</a></li>
+</ul>
+</li>
 </ul>
 </div>
             </nav>
@@ -125,6 +131,8 @@
 <li>pelican-themes</li>
 <li>pelcan-plugins</li>
 <li>命令行listen参数，这个只是pelican额外提供的辅助工具，自己另外再用python的 <code>http.server</code> 模块启动一个效果都是一样的。</li>
+<li>忽略了程序运行计时和相关日志的输出讨论</li>
+<li>忽略了一些程序运行统计信息和相关日志输出的讨论</li>
 </ul>
 <h3 id="_2">初始化日志</h3>
 <p>这是进入pelican模块必做的第一件事情。</p>
@@ -230,16 +238,222 @@ True
 
         <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'PLUGINS'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_plugin_name</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span><span class="p">]</span>
 </code></pre></div>
-<p>这个 <code>load_plugins</code> 有一个</p>
+<p>这个 <code>load_plugins</code> 首先做的工作是试着加载pelican模块里面的plugins文件夹下的插件，因为pelican模块默认里面什么都没有，所以这一块等于什么都没做，就略过讨论了。</p>
+<p>然后 <code>load_plugins</code> 开始分析配置的 <code>PLUGINS</code> ，然后根据配置 <code>PLUGIN_PATHS</code> 来试着加载插件。具体加载过程以最简单的情况来说就是执行：</p>
+<div class="highlight"><pre><span></span><code>spec = importlib.machinery.PathFinder.find_spec(plugin, plugin_paths)
+</code></pre></div>
+<p>find_spec是一个类方法，其返回的spec是一个特别的对象，经过module_from_spec函数处理就能转成module对象。这里的 <code>plugin_paths</code> 是一个类似 <code>sys.path</code> 的列表值：<code>['path']</code> 。</p>
+<p>剩下的加载模块动作如下</p>
+<div class="highlight"><pre><span></span><code>        <span class="c1"># Avoid loading the same plugin twice</span>
+        <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="c1"># create module object from spec</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="c1"># place it into sys.modules cache</span>
+        <span class="c1"># necessary if module imports itself at some point (e.g. packages)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># try to execute it inside module object</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># problem with import</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># remove module from sys.modules since it can't be loaded</span>
+                <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">raise</span>
+</code></pre></div>
+<p>关于上面的代码最核心的是 <code>mod = importlib.util.module_from_spec(spec)</code> 这一句，通过这一句我们就获得了对应插件，也就是python的module对象，后面的这一句：</p>
+<div class="highlight"><pre><span></span><code>sys.modules[spec.name] = mod
+</code></pre></div>
+<p>只是对于某些插件可能需要 <code>import</code> 操作才有用，然后后面的 <code>spec.loader.exec_module(mod)</code> 更多的是去试着执行module对象，是一个试着核对插件正确性的手段。</p>
+<p>再回到最开始讨论的 <code>init_plugins</code> 方法上，这里有一句：</p>
+<div class="highlight"><pre><span></span><code>plugin.register()
+</code></pre></div>
+<p>这个是在说所有的pelican的插件都应该定义 <strong>register</strong> 函数，插件被加入进来都会先执行这个register函数。</p>
+<h3 id="_5">信号</h3>
+<p>在讲到插件就必须讲到信号了，pelican利用blinker这个第三方模块来实现一种信号-函数的执行机制，上面讲的插件要和pelican的具体事务发生关系就需要通过信号来绑定上行为。简单来说就是pelican自身处理事物流程到了一定阶段就会发送一个信号，pelican的插件，具体就是register函数哪里，将这些信号也就是pelican的处理事物流程哪里，再扩展出另外一些额外的函数执行行为。</p>
+<p>因为本文关注于pelican的源码阅读，所以这些信号就要详细解读一下，虽然pelican的核心执行流程还没有说明清楚，不过这里就预先讲一点，后面再有涉及到的地方再继续补充之。</p>
+<div class="highlight"><pre><span></span><code>initialized = signal('pelican_initialized')
+</code></pre></div>
+<p>Plican对象的 <code>__init__</code> 构造方法执行完毕会发送这个信号。发送的附带参数，也就是信号connect的执行函数的接受参数为Pelican对象。</p>
+<div class="highlight"><pre><span></span><code>finalized = signal('pelican_finalized')
+</code></pre></div>
+<p>Plican对象的 <code>run</code> 方法主要工作运行完毕之后会发送这个信号。发送的附带参数是Pelican对象。</p>
+<div class="highlight"><pre><span></span><code>readers_init = signal('readers_init')
+</code></pre></div>
+<p>Readers类 <code>__init__</code> 构造方法主要工作执行完毕之后会发送这个方法，Readers类在autoreload哪里的讨论提到，pelican需要清楚自己支持的后缀名的时候就需要先执行，所以这个信号发送是很早的。一般新增的Reader按照官方文档的讨论，也就是如果新增扩展名的，都应该和这个信号绑定起来，早早地执行起来。</p>
+<p>下面这些信号后面再适当的时候引入进来再讨论之。</p>
+<div class="highlight"><pre><span></span><code>all_generators_finalized = signal('all_generators_finalized')
+
+article_generator_pretaxonomy = signal('article_generator_pretaxonomy')
+article_generator_finalized = signal('article_generator_finalized')
+article_generator_write_article = signal('article_generator_write_article')
+article_writer_finalized = signal('article_writer_finalized')
+
+page_generator_finalized = signal('page_generator_finalized')
+page_generator_write_page = signal('page_generator_write_page')
+page_writer_finalized = signal('page_writer_finalized')
+
+static_generator_init = signal('static_generator_init')
+static_generator_finalized = signal('static_generator_finalized')
+
+# Page-level signals
+
+article_generator_preread = signal('article_generator_preread')
+article_generator_context = signal('article_generator_context')
+
+page_generator_preread = signal('page_generator_preread')
+page_generator_context = signal('page_generator_context')
+
+static_generator_preread = signal('static_generator_preread')
+static_generator_context = signal('static_generator_context')
+
+content_object_init = signal('content_object_init')
+
+# Writers signals
+content_written = signal('content_written')
+feed_generated = signal('feed_generated')
+feed_written = signal('feed_written')
+</code></pre></div>
+<h3 id="run">run</h3>
+<p>终于要到Pelican核心工作流程，也就是Pelican对象的run方法的讨论了。pelican的核心工作流程如下：</p>
+<ol>
+<li>收集各个Generator类</li>
+<li>如果各个Generator有 <code>generate_context</code> 方法，则执行之。</li>
+<li>如果各个Generator有 <code>refresh_metadata_intersite_links</code> 方法，则执行之。</li>
+<li>如果各个Generator有 <code>generate_output</code> 方法，则执行之。</li>
+</ol>
+<p>在收集完各个Generator类之后有额外的逻辑：</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_outputdir</span>
+                <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonpath</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">)])</span> <span class="o">!=</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonpath</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">),</span>
+                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)])):</span>
+            <span class="n">clean_output_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_retention</span><span class="p">)</span>
+</code></pre></div>
+<p>也就是如果配置定义了 <code>DELETE_OUTPUT_DIRECTORY</code>  ，并且不是源或者父文件夹，则执行删除动作。删除动作不会删除配置 <code>OUTPUT_RETENTION</code> 定义的文件夹。</p>
+<p>这是额外的一个优化逻辑，这里就不深入讨论了。</p>
+<h4 id="generator">收集各个Generator类</h4>
+<p>默认 <code>ArticlesGenerator</code> 和 <code>PagesGenerator</code> 都要加入进来。在 <code>ArticlesGenerator</code> 类初始化的时候还有一些细节，先讨论之。</p>
+<p>ArticlesGenerator类继承自 <code>CachingGenerator</code> ，<code>CachingGenerator</code> 继承自 <code>Generator, FileStampDataCacher</code> 。</p>
+<p>先看到 <code>Generator</code> 类，其 <code>__init__</code> 构造方法执行完毕之后会发送 <code>generator_init</code> 信号。</p>
+<div class="highlight"><pre><span></span><code>generator_init = signal('generator_init')
+</code></pre></div>
+<p>Generator类构造方法里面进行了很多Jinja2相关的配置，如果你自己定义的Generator类不需要Jinja2那么则不需要继承自Generator。</p>
+<div class="highlight"><pre><span></span><code>        <span class="bp">self</span><span class="o">.</span><span class="n">_templates_path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'THEME_TEMPLATES_OVERRIDES'</span><span class="p">])</span>
+
+        <span class="n">theme_templates_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="p">,</span> <span class="s1">'templates'</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_templates_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theme_templates_path</span><span class="p">)</span>
+        <span class="n">theme_loader</span> <span class="o">=</span> <span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">theme_templates_path</span><span class="p">)</span>
+
+        <span class="n">simple_theme_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="n">simple_loader</span> <span class="o">=</span> <span class="n">FileSystemLoader</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">simple_theme_path</span><span class="p">,</span> <span class="s2">"themes"</span><span class="p">,</span> <span class="s2">"simple"</span><span class="p">,</span> <span class="s2">"templates"</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span>
+            <span class="n">loader</span><span class="o">=</span><span class="n">ChoiceLoader</span><span class="p">([</span>
+                <span class="n">FileSystemLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_templates_path</span><span class="p">),</span>
+                <span class="n">simple_loader</span><span class="p">,</span>  <span class="c1"># implicit inheritance</span>
+                <span class="n">PrefixLoader</span><span class="p">({</span>
+                    <span class="s1">'!simple'</span><span class="p">:</span> <span class="n">simple_loader</span><span class="p">,</span>
+                    <span class="s1">'!theme'</span><span class="p">:</span> <span class="n">theme_loader</span>
+                <span class="p">})</span>  <span class="c1"># explicit ones</span>
+            <span class="p">]),</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'JINJA_ENVIRONMENT'</span><span class="p">]</span>
+        <span class="p">)</span>
+</code></pre></div>
+<p>Jinja2的ChoiceLoader工作原理是如果一个template找不到则会尝试下一个loader。</p>
+<p>Jinja2的FileSystemLoader是试着从文件系统中查找一个template。</p>
+<p>PrefixLoader是根据前缀限定来查找loader，默认的<code>delimiter='/'</code> ，也就是假设你指定template名字是 <code>!simple/index.html</code> ，则会试着用simple_loader来查找index.html模板。</p>
+<p>现在总结到pelican里面jinja2模板引擎查找模板的逻辑是：</p>
+<ol>
+<li>试着从配置的 <code>THEME_TEMPLATES_OVERRIDES</code> 和 配置的 <code>THEME/template</code> 定义的文件系统来查找模板</li>
+<li>如果上面找不到则试着从pelican代码自带的simple模板里面查找。</li>
+<li>如果上面找不到而且模板名字是以 <code>!simple</code> 或者 <code>!theme</code> 前缀开头，则去掉前缀和delimiter，从对应的simple模板或者 <code>THEME/template</code> 哪里查找对应的。</li>
+</ol>
+<p>此外配置的 <code>JINJA_ENVIRONMENT</code> 可以传递额外的参数给Jinja2的Environment对象。</p>
+<div class="highlight"><pre><span></span><code>        <span class="c1"># provide utils.strftime as a jinja filter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">'strftime'</span><span class="p">:</span> <span class="n">DateFormatter</span><span class="p">()})</span>
+
+        <span class="c1"># get custom Jinja filters from user settings</span>
+        <span class="n">custom_filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'JINJA_FILTERS'</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">custom_filters</span><span class="p">)</span>
+</code></pre></div>
+<p>更新Jinja2的Environment环境下的filters， <code>self.env.filters</code> 就是一个字典值，你可以在配置中利用 <code>JINJA_FILTERS</code> 来添加更多的filter，具体filter就是一个可调用对象即有 <code>__call__</code> 的类或者函数即可。</p>
+<div class="highlight"><pre><span></span><code>        # get custom Jinja globals from user settings
+        custom_globals = self.settings['JINJA_GLOBALS']
+        self.env.globals.update(custom_globals)
+</code></pre></div>
+<p>Jinja2模板的一些全局可用变量可利用配置 <code>JINJA_GLOBALS</code> 来增加之，也是一个字典值。</p>
+<div class="highlight"><pre><span></span><code>        custom_tests = self.settings['JINJA_TESTS']
+        self.env.tests.update(custom_tests)
+</code></pre></div>
+<p>ArticlesGenerator的初始化另外还声明了一些变量，然后发送信号：</p>
+<div class="highlight"><pre><span></span><code>article_generator_init = signal('article_generator_init')
+</code></pre></div>
+<p>PagesGenerator和ArticlesGenerator一样也是继承自 <code>CachingGenerator</code> ，然后初始化也另外声明了一些变量，然后发送信号：</p>
+<div class="highlight"><pre><span></span><code>page_generator_init = signal('page_generator_init')
+</code></pre></div>
+<p>关于ArticlesGenerator和PagesGenerator的缓存优化生成策略我决定暂时先略过讨论，后面再另开一小节集中讨论之。这是另外额外添加的优化特性。</p>
+<p>如果配置有 <code>TEMPLATE_PAGES</code> ，则会再加上 <code>TemplatePagesGenerator</code> 。</p>
+<p>如果配置有 <code>OUTPUT_SOURCES</code> ，则会再加上 <code>SourceFileGenerator</code> 。</p>
+<p>这两个Generator后面再讨论。</p>
+<p>下面这段代码是支持自定义Generator插件的：</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">for</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">get_generators</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="n">values</span><span class="p">,)</span>
+            <span class="k">for</span> <span class="n">generator</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">generator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>  <span class="c1"># plugin did not return a generator</span>
+                <span class="n">discovered_generators</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">generator</span><span class="p">,</span> <span class="n">receiver</span><span class="o">.</span><span class="vm">__module__</span><span class="p">))</span>
+</code></pre></div>
+<p>我粗略看了一下，pelican里面信号send之后还有返回值的就两个，一个是 <code>get_generators</code> ，一个是 <code>get_writer</code> 。</p>
+<div class="highlight"><pre><span></span><code>get_generators = signal('get_generators')
+
+get_writer = signal('get_writer')
+</code></pre></div>
+<p>send的返回值结构如下：</p>
+<div class="highlight"><pre><span></span><code>            return [(receiver, receiver(sender, **kwargs))
+                    for receiver in self.receivers_for(sender)]
+</code></pre></div>
+<p>具体blinker内部细节不深究了，不过从这里可以看出blinker的某个信号send之后，之前connect的那些回调函数都会被调用和执行。</p>
+<div class="highlight"><pre><span></span><code>        # StaticGenerator must run last, so it can identify files that
+        # were skipped by the other generators, and so static files can
+        # have their output paths overridden by the {attach} link syntax.
+        discovered_generators.append((StaticGenerator, "internal"))
+</code></pre></div>
+<p>最后是增加 StaticGenerator ，官方文档说明了一定要最后运行。</p>
+<p>收集的Generator最后汇总并实例化：</p>
+<div class="highlight"><pre><span></span><code>        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># Share these among all the generators and content objects</span>
+        <span class="c1"># They map source paths to Content objects or None</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">'generated_content'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">'static_links'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">'static_content'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">'localsiteurl'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'SITEURL'</span><span class="p">]</span>
+
+        <span class="n">generators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">cls</span><span class="p">(</span>
+                <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+                <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="p">,</span>
+                <span class="n">output_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="p">)</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_generator_classes</span><span class="p">()</span>
+        <span class="p">]</span>
+</code></pre></div>
+<p>path来自配置 <code>PATH</code> ，theme来自 <code>THEME</code> ，output_path 来自 <code>OUTPUT_PATH</code> 。</p>
+<h4 id="generate_context">generate_context</h4>
 
             </div>
             <section>
                 <div class="col-md-2" style="float:right;font-size:0.9em;">
                     <h4>首发于：</h4>
-                    <time pubdate="pubdate" datetime="2021-11-23T17:20:19.129261+08:00">2021年 11月 23日 </time>
+                    <time pubdate="pubdate" datetime="2021-11-25T17:28:49.612329+08:00">2021年 11月 25日 </time>
 
                     <h4>最近更新于：</h4>
-                    <time datetime="2021-11-23T17:20:19.129261+08:00">2021年 11月 23日 </time>
+                    <time datetime="2021-11-25T17:28:49.612329+08:00">2021年 11月 25日 </time>
 
 
                     <h4>分类：</h4>
