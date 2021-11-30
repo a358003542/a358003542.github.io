@@ -112,7 +112,15 @@
 <li><a href="#_5">信号</a></li>
 <li><a href="#run">run</a><ul>
 <li><a href="#generator">收集各个Generator类</a></li>
-<li><a href="#generate_context">generate_context</a></li>
+<li><a href="#generate_context">generate_context</a><ul>
+<li><a href="#articlesgenerator">ArticlesGenerator</a></li>
+</ul>
+</li>
+<li><a href="#refresh_metadata_intersite_links">refresh_metadata_intersite_links</a></li>
+<li><a href="#generate_output">generate_output</a><ul>
+<li><a href="#articlesgenerator_1">ArticlesGenerator</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -133,6 +141,7 @@
 <li>命令行listen参数，这个只是pelican额外提供的辅助工具，自己另外再用python的 <code>http.server</code> 模块启动一个效果都是一样的。</li>
 <li>忽略了程序运行计时和相关日志的输出讨论</li>
 <li>忽略了一些程序运行统计信息和相关日志输出的讨论</li>
+<li>忽略翻译问题</li>
 </ul>
 <h3 id="_2">初始化日志</h3>
 <p>这是进入pelican模块必做的第一件事情。</p>
@@ -286,10 +295,7 @@ True
 <p>下面这些信号后面再适当的时候引入进来再讨论之。</p>
 <div class="highlight"><pre><span></span><code>all_generators_finalized = signal('all_generators_finalized')
 
-article_generator_pretaxonomy = signal('article_generator_pretaxonomy')
-article_generator_finalized = signal('article_generator_finalized')
 article_generator_write_article = signal('article_generator_write_article')
-article_writer_finalized = signal('article_writer_finalized')
 
 page_generator_finalized = signal('page_generator_finalized')
 page_generator_write_page = signal('page_generator_write_page')
@@ -299,10 +305,6 @@ static_generator_init = signal('static_generator_init')
 static_generator_finalized = signal('static_generator_finalized')
 
 # Page-level signals
-
-article_generator_preread = signal('article_generator_preread')
-article_generator_context = signal('article_generator_context')
-
 page_generator_preread = signal('page_generator_preread')
 page_generator_context = signal('page_generator_context')
 
@@ -444,16 +446,365 @@ get_writer = signal('get_writer')
         <span class="p">]</span>
 </code></pre></div>
 <p>path来自配置 <code>PATH</code> ，theme来自 <code>THEME</code> ，output_path 来自 <code>OUTPUT_PATH</code> 。</p>
+<p>总结：作为源码解读的第一遍过程，配置都认为是默认配置，然后不会讨论用户自定义插件问题，如此则会实例化下面这几个Generator：</p>
+<ul>
+<li>ArticlesGenerator</li>
+<li>PagesGenerator</li>
+<li>StaticGenerator</li>
+</ul>
 <h4 id="generate_context">generate_context</h4>
+<p>在pelican的基本使用学习中我们大概了解到Generator的 <code>generate_context</code> 方法是用来收集文章的各个元数据信息从而方便后面输出文章用的。下面具体就各个Generator来讨论下代码细节。</p>
+<h5 id="articlesgenerator">ArticlesGenerator</h5>
+<p>ArticlesGenerator的<code>generate_context</code> 方法首先是获取要处理的文章：</p>
+<div class="highlight"><pre><span></span><code>for f in self.get_files(
+                self.settings['ARTICLE_PATHS'],
+                exclude=self.settings['ARTICLE_EXCLUDES']):
+</code></pre></div>
+<p>在获取要处理的文章列表逻辑里面， 配置 <code>ARTICLE_EXCLUDES</code> 和 <code>IGNORE_FILES</code> 都会起作用并排除掉，然后只会处理前面提到 <code>readers.extension</code> 确定的能够处理的文件后缀名的文件。</p>
+<p>默认配置 <code>ARTICLE_PATHS</code> 的值为 <code>['']</code> ，也就是为空，从而根据：</p>
+<div class="highlight"><pre><span></span><code>root = os.path.join(self.path, path) if path else self.path
+</code></pre></div>
+<p>确定root为 <code>self.path</code> 也就是配置 <code>PATH</code> 。</p>
+<p>剩下来的核心逻辑和前面提到的autoreload监控文件变化里面的 <code>folder_watcher</code> 用到的都是一样的，就是利用 <code>os.walk</code> 递归遍历文件夹。</p>
+<p>默认的 <code>ARTICLE_PATHS</code> 和默认的 <code>PATH</code> 最后确定的路径是 <code>os.curdir</code> 这很不好，目前个人的配置是设置 <code>PATH = 'content'</code> 勉强可以，现在看来还有优化空间，一些图片和静态文件都刷进去了，虽然根据后缀名最后都会过滤掉，但这里再加上配置 </p>
+<div class="highlight"><pre><span></span><code>ARTICLE_PATHS = ['articles']
+</code></pre></div>
+<p>会更好一些。</p>
+<p>注意看到代码这里 <code>os.path.join(self.path, path)</code> ，所以你在定义你想要的文章所在地的时候，就需要在content也就是PATH下面，然后只需要写上目标文件夹名字即可。</p>
+<p>在进入各个文件处理区块之后，首先是：</p>
+<div class="highlight"><pre><span></span><code>article = self.get_cached_data(f, None)
+</code></pre></div>
+<p>这里pelican自己的处理加速缓存逻辑，如果没有处理缓存则会返回False，如果有则会返回缓存数据，然后后面就不用再计算一边了，直接利用缓存数据即可，这里假定没有缓存数据。</p>
+<p>下面代码是没有缓存的时候pelican要做的事情，看到最后一行 <code>self.cache_data(f,article)</code> 就是将处理数据存入缓存，所以可以认为这一区块就是pelican在处理文章时候的核心工作了。</p>
+<div class="highlight"><pre><span></span><code>                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">article</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readers</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span>
+                        <span class="n">base_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">content_class</span><span class="o">=</span><span class="n">Article</span><span class="p">,</span>
+                        <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span>
+                        <span class="n">preread_signal</span><span class="o">=</span><span class="n">signals</span><span class="o">.</span><span class="n">article_generator_preread</span><span class="p">,</span>
+                        <span class="n">preread_sender</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">context_signal</span><span class="o">=</span><span class="n">signals</span><span class="o">.</span><span class="n">article_generator_context</span><span class="p">,</span>
+                        <span class="n">context_sender</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                        <span class="s1">'Could not process </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s1">'</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span>
+                        <span class="n">exc_info</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'DEBUG'</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_failed_source_path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">article</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_failed_source_path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">article</span><span class="p">)</span>
+</code></pre></div>
+<p>其就是调用Readers类的实例的read_file方法，继续到read_file那边，有：</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">if</span> <span class="n">preread_signal</span><span class="p">:</span>
+            <span class="n">preread_signal</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">preread_sender</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>article_generator_preread = signal('article_generator_preread')
+</code></pre></div>
+<p>这样 <code>article_generator_preread</code> 信号就发送出去了，附带的参数是本ArticlesGenerator实例。其标记了ArticlesGenerator将要处理一篇文章的context。</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">if</span> <span class="ow">not</span> <span class="n">fmt</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">fmt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">readers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">'Pelican does not know how to parse </span><span class="si">%s</span><span class="s1">'</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># ......</span>
+
+        <span class="n">reader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">readers</span><span class="p">[</span><span class="n">fmt</span><span class="p">]</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">_filter_discardable_metadata</span><span class="p">(</span><span class="n">default_metadata</span><span class="p">(</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="n">reader</span><span class="o">.</span><span class="n">process_metadata</span><span class="p">))</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">path_metadata</span><span class="p">(</span>
+            <span class="n">full_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">))</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_filter_discardable_metadata</span><span class="p">(</span><span class="n">parse_path_metadata</span><span class="p">(</span>
+            <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">process</span><span class="o">=</span><span class="n">reader</span><span class="o">.</span><span class="n">process_metadata</span><span class="p">)))</span>
+        <span class="n">reader_name</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">'reader'</span><span class="p">]</span> <span class="o">=</span> <span class="n">reader_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'Reader'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="n">content</span><span class="p">,</span> <span class="n">reader_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cached_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">content</span><span class="p">,</span> <span class="n">reader_metadata</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">reader_metadata</span> <span class="o">=</span> <span class="n">_filter_discardable_metadata</span><span class="p">(</span><span class="n">reader_metadata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">reader_metadata</span><span class="p">))</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">reader_metadata</span><span class="p">)</span>
+</code></pre></div>
+<p>接下来是根据扩展名找到对应的Reader实例【Readers类初始化的时候已经将各个Reader实例化并对应上各个扩展名了】。</p>
+<p>接下来这一句：</p>
+<div class="highlight"><pre><span></span><code>        metadata = _filter_discardable_metadata(default_metadata(
+            settings=self.settings, process=reader.process_metadata))
+</code></pre></div>
+<p>重点不是 <code>_filter_discardable_metadata</code> 而是 <code>default_metadata</code> , <code>_filter_discardable_metadata</code> 只是过滤掉为 <code>_DISCARD</code> 值的字典项，只是细枝末节了。</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">default_metadata</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'DEFAULT_METADATA'</span><span class="p">,</span> <span class="p">{}))</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">process</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="s1">'DEFAULT_CATEGORY'</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">'DEFAULT_CATEGORY'</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">process</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s1">'category'</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">'category'</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'DEFAULT_DATE'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="n">settings</span><span class="p">[</span><span class="s1">'DEFAULT_DATE'</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">'fs'</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">'DEFAULT_DATE'</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_date</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">'DEFAULT_DATE'</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="o">*</span><span class="n">settings</span><span class="p">[</span><span class="s1">'DEFAULT_DATE'</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">metadata</span>
+</code></pre></div>
+<p>上面的process函数是<code>reader.process_metadata</code> ，<code>RstReader</code> ，<code>MarkdownReader</code> ，<code>HTMLReader</code> 都没有定义这个方法，也是继承自他们的父类也就是 <code>BaseReader</code> , 该方法如下：</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">process_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">METADATA_PROCESSORS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">METADATA_PROCESSORS</span><span class="p">[</span><span class="n">name</span><span class="p">](</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+</code></pre></div>
+<p>假设你要编写一个插件，重新写一个Reader，然后要对metadata做某些额外的动作的话，可以通过定义这个 <code>process_metadata</code> 方法来，其第一个参数是对应的metadata的key，第二个参数是该key的默认值。</p>
+<div class="highlight"><pre><span></span><code><span class="n">METADATA_PROCESSORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'tags'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="p">([</span>
+        <span class="n">Tag</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">ensure_metadata_list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">]</span> <span class="ow">or</span> <span class="n">_DISCARD</span><span class="p">),</span>
+    <span class="s1">'date'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">get_date</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)),</span>
+    <span class="s1">'modified'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">get_date</span><span class="p">(</span><span class="n">x</span><span class="p">),</span>
+    <span class="s1">'status'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="n">_DISCARD</span><span class="p">,</span>
+    <span class="s1">'category'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">_process_if_nonempty</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+    <span class="s1">'author'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">_process_if_nonempty</span><span class="p">(</span><span class="n">Author</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+    <span class="s1">'authors'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="p">([</span>
+        <span class="n">Author</span><span class="p">(</span><span class="n">author</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">ensure_metadata_list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">]</span> <span class="ow">or</span> <span class="n">_DISCARD</span><span class="p">),</span>
+    <span class="s1">'slug'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="n">_DISCARD</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这个process_metadata更像是一个后处理函数，后面再合适的时机再引入相关的讨论。</p>
+<p>继续前面的，假设你的配置通过 <code>DEFAULT_METADATA</code> 定义了一些metadata，则你的所有文章都是可以看到这些metadata的，不过你在配置里面定义的metadata还可能会经过 <code>process_metadata</code> 的后处理。现在假设你定义了：</p>
+<div class="highlight"><pre><span></span><code><span class="n">DEFAULT_METADATA</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'author'</span><span class="p">:</span><span class="s1">' abc '</span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_process_if_nonempty</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+    <span class="sd">"""Removes extra whitespace from name and applies a metadata processor.</span>
+<span class="sd">    If name is empty or all whitespace, returns _DISCARD instead.</span>
+<span class="sd">    """</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">processor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="n">_DISCARD</span>
+</code></pre></div>
+<p>最后返回的是：<code>Author('abc', settings)</code> 。 </p>
+<p>再比如 <code>authors</code> 的 <code>ensure_metadata_list</code> ：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">ensure_metadata_list</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">';'</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">';'</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">','</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">OrderedDict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span><span class="p">]</span>
+    <span class="p">))</span>
+</code></pre></div>
+<p>其认为 <code>;</code> 或者 <code>,</code> 为作者们的分隔符，这些都是小细节上的处理，完全可以根据实际情况的不同来定制你自己的metadata处理方法，具体再编写上 <code>Author</code>, <code>Category</code> , <code>Tag</code> 是要写成特殊类的，其他的都是字符串。</p>
+<p>配置的 <code>DEFAULT_CATEGORY</code> 也要这么process一下就是这个Category类的支持。<code>DEFAULT_DATE</code> 就是字符串即可。 </p>
+<div class="highlight"><pre><span></span><code>metadata.update(path_metadata(
+            full_path=path, source_path=source_path,
+            settings=self.settings))
+</code></pre></div>
+<p>其中有对配置 <code>EXTRA_PATH_METADATA</code> 的支持，我不是很关心，然后看到上面关于 <code>DEFAULT_DATE</code> 还有一点没写完的逻辑：</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'DEFAULT_DATE'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s1">'fs'</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">)</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">'modified'</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span>
+</code></pre></div>
+<p>为什么这些metadata在配置里面要以DEFAULT的字段开头，后面会讲到，这还没有实际刷文章内部定义的metadata，后面代码会显示，凡是文章内部用户自己定义的metadata都具有第一优先级，也就是字典里面的同key值覆盖动作。</p>
+<p>接下来是下面这句，具体就是根据文件的文件名来获得一些metadata信息。比如配置 <code>USE_FOLDER_AS_CATEGORY</code> 就是根据文章所在的文件夹来获得 Category metadata。其他的读者感兴趣有需要的可以参看代码，这里笔者就不做过多讨论了。</p>
+<div class="highlight"><pre><span></span><code>        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_filter_discardable_metadata</span><span class="p">(</span><span class="n">parse_path_metadata</span><span class="p">(</span>
+            <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">process</span><span class="o">=</span><span class="n">reader</span><span class="o">.</span><span class="n">process_metadata</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">parse_path_metadata</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">"""Extract a metadata dictionary from a file's path</span>
+
+<span class="sd">    &gt;&gt;&gt; import pprint</span>
+<span class="sd">    &gt;&gt;&gt; settings = {</span>
+<span class="sd">    ...     'FILENAME_METADATA': r'(?P&lt;slug&gt;[^.]*).*',</span>
+<span class="sd">    ...     'PATH_METADATA':</span>
+<span class="sd">    ...         r'(?P&lt;category&gt;[^/]*)/(?P&lt;date&gt;\d{4}-\d{2}-\d{2})/.*',</span>
+<span class="sd">    ...     }</span>
+<span class="sd">    &gt;&gt;&gt; reader = BaseReader(settings=settings)</span>
+<span class="sd">    &gt;&gt;&gt; metadata = parse_path_metadata(</span>
+<span class="sd">    ...     source_path='my-cat/2013-01-01/my-slug.html',</span>
+<span class="sd">    ...     settings=settings,</span>
+<span class="sd">    ...     process=reader.process_metadata)</span>
+<span class="sd">    &gt;&gt;&gt; pprint.pprint(metadata)  # doctest: +ELLIPSIS</span>
+<span class="sd">    {'category': &lt;pelican.urlwrappers.Category object at ...&gt;,</span>
+<span class="sd">     'date': datetime.datetime(2013, 1, 1, 0, 0),</span>
+<span class="sd">     'slug': 'my-slug'}</span>
+<span class="sd">    """</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">source_path</span><span class="p">)</span>
+    <span class="n">base</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span>
+    <span class="n">subdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="p">:</span>
+        <span class="n">checks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">'FILENAME_METADATA'</span><span class="p">,</span> <span class="n">base</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">'PATH_METADATA'</span><span class="p">,</span> <span class="n">source_path</span><span class="p">)]:</span>
+            <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">data</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'USE_FOLDER_AS_CATEGORY'</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">checks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">'(?P&lt;category&gt;.*)'</span><span class="p">,</span> <span class="n">subdir</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">regexp</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">checks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">regexp</span> <span class="ow">and</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regexp</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="c1"># .items() for py3k compat.</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># metadata must be lowercase</span>
+                        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">process</span><span class="p">:</span>
+                                <span class="n">v</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                            <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">metadata</span>
+</code></pre></div>
+<p>再看到下面这段：</p>
+<div class="highlight"><pre><span></span><code>        <span class="n">content</span><span class="p">,</span> <span class="n">reader_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cached_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">content</span><span class="p">,</span> <span class="n">reader_metadata</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">reader_metadata</span> <span class="o">=</span> <span class="n">_filter_discardable_metadata</span><span class="p">(</span><span class="n">reader_metadata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">reader_metadata</span><span class="p">))</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">reader_metadata</span><span class="p">)</span>
+</code></pre></div>
+<p>除开缓存代码，这里面的核心逻辑就是：</p>
+<div class="highlight"><pre><span></span><code>content, reader_metadata = reader.read(path)
+</code></pre></div>
+<p>这也是官方文档在如何自定义Reader里面的讨论，那就是必须定义一个 <code>read</code> 方法，这个read方法返回content，这个content就是文章要输出的核心内容content，然后就是你想要输出的metadata。正如前面讨论的，凡是在文章中读取到的metadata都会覆写可能从其他途径获得的metadata，如下是字典的update覆写逻辑：</p>
+<div class="highlight"><pre><span></span><code>metadata.update(reader_metadata)
+</code></pre></div>
+<p>再处理完毕之后将会发送信号：</p>
+<div class="highlight"><pre><span></span><code>article_generator_context = signal('article_generator_context')
+</code></pre></div>
+<p>最后read_file返回：</p>
+<div class="highlight"><pre><span></span><code>        return content_class(content=content, metadata=metadata,
+                             settings=self.settings, source_path=path,
+                             context=context)
+</code></pre></div>
+<p>具体到ArticlesGenerator这里就是：</p>
+<div class="highlight"><pre><span></span><code>Article(content=content, metadata=metadata,settings=self.settings, source_path=path,context=context)
+</code></pre></div>
+<p>这个Article类pelican内部处理逻辑的支持，比如下面这句：</p>
+<div class="highlight"><pre><span></span><code>                if not article.is_valid():
+                    self._add_failed_source_path(f)
+                    continue
+
+                if article.status == "published":
+                    all_articles.append(article)
+                elif article.status == "draft":
+                    all_drafts.append(article)
+                elif article.status == "hidden":
+                    hidden_articles.append(article)
+</code></pre></div>
+<p>这个 <code>is_valid</code> 和 <code>status</code> 属性都是Article继承自的Content类提供的。</p>
+<p>从配置，从文件名，从文件内容中获取metadata还只是第一步，第二个就是根据收集到的Article信息汇总，pelican需要进行一番内处理，从来方便后面的各个输出工作。</p>
+<div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">_process</span><span class="p">(</span><span class="n">arts</span><span class="p">):</span>
+            <span class="n">origs</span><span class="p">,</span> <span class="n">translations</span> <span class="o">=</span> <span class="n">process_translations</span><span class="p">(</span>
+                <span class="n">arts</span><span class="p">,</span> <span class="n">translation_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'ARTICLE_TRANSLATION_ID'</span><span class="p">])</span>
+            <span class="n">origs</span> <span class="o">=</span> <span class="n">order_content</span><span class="p">(</span><span class="n">origs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'ARTICLE_ORDER_BY'</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">origs</span><span class="p">,</span> <span class="n">translations</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">articles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">translations</span> <span class="o">=</span> <span class="n">_process</span><span class="p">(</span><span class="n">all_articles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_articles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_translations</span> <span class="o">=</span> <span class="n">_process</span><span class="p">(</span><span class="n">hidden_articles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drafts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drafts_translations</span> <span class="o">=</span> <span class="n">_process</span><span class="p">(</span><span class="n">all_drafts</span><span class="p">)</span>
+</code></pre></div>
+<p>根据Article的status收集到的文章已经分为三类了：<code>all_articles</code> , <code>all_drafts</code>, <code>hidden_articles</code> 。上面的<code>_process</code> 进一步对翻译语种不同进行划分。这里的细节略过讨论了。</p>
+<p>翻译问题本文忽略讨论，现在收集到三个重要的列表量： <code>self.articles</code> , <code>self.hidden_articles</code> , <code>self.drafts</code> 。</p>
+<p>处理完之后发送信号：</p>
+<div class="highlight"><pre><span></span><code>article_generator_pretaxonomy = signal('article_generator_pretaxonomy')
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>        <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">articles</span><span class="p">:</span>
+            <span class="c1"># only main articles are listed in categories and tags</span>
+            <span class="c1"># not translations or hidden articles</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">[</span><span class="n">article</span><span class="o">.</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="s1">'tags'</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="s1">'authors'</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">authors</span><span class="p">[</span><span class="n">author</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+</code></pre></div>
+<p>这是按category，tag和author来收集文章，这三个变量都是 <code>defaultdict(list)</code> 结构。</p>
+<div class="highlight"><pre><span></span><code>        <span class="bp">self</span><span class="o">.</span><span class="n">dates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">articles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dates</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">'date'</span><span class="p">),</span>
+                        <span class="n">reverse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s1">'NEWEST_FIRST_ARCHIVES'</span><span class="p">])</span>
+</code></pre></div>
+<p>这里将所有文章按日期排序然后汇集成 <code>self.dates</code> 变量。根据配置 <code>NEWEST_FIRST_ARCHIVES = True</code> 来。</p>
+<div class="highlight"><pre><span></span><code>        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'REVERSE_CATEGORY_ORDER'</span><span class="p">])</span>
+</code></pre></div>
+<p>上面的 <code>self.categories</code> 列表化之后排序，根据配置 <code>REVERSE_CATEGORY_ORDER = False</code> 来。</p>
+<div class="highlight"><pre><span></span><code>        <span class="bp">self</span><span class="o">.</span><span class="n">authors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</code></pre></div>
+<p><code>self.authors</code> 排序。</p>
+<p>最后还有一点context更新和缓存处理，这里就略过讨论了。</p>
+<p>最后发送信号：</p>
+<div class="highlight"><pre><span></span><code>article_generator_finalized = signal('article_generator_finalized')
+</code></pre></div>
+<h4 id="refresh_metadata_intersite_links">refresh_metadata_intersite_links</h4>
+<p>这个是站内链接的支持，等下再讨论。</p>
+<h4 id="generate_output">generate_output</h4>
+<h5 id="articlesgenerator_1">ArticlesGenerator</h5>
+<p>ArticlesGenerator的generate_output做的工作，一是执行 <code>generate_feeds</code> 方法，一是执行 <code>generate_pages</code> 方法，然后发送信号：</p>
+<div class="highlight"><pre><span></span><code>    def generate_output(self, writer):
+        self.generate_feeds(writer)
+        self.generate_pages(writer)
+        signals.article_writer_finalized.send(self, writer=writer)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>article_writer_finalized = signal('article_writer_finalized')
+</code></pre></div>
+<p><code>generate_feeds</code></p>
+<p><code>generate_pages</code></p>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">generate_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
+        <span class="sd">"""Generate the pages on the disk"""</span>
+        <span class="n">write</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">write_file</span><span class="p">,</span>
+                        <span class="n">relative_urls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s1">'RELATIVE_URLS'</span><span class="p">])</span>
+
+        <span class="c1"># to minimize the number of relative path stuff modification</span>
+        <span class="c1"># in writer, articles pass first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_articles</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_period_archives</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_direct_templates</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+
+        <span class="c1"># and subfolders after that</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_tags</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_categories</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_authors</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_drafts</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
+</code></pre></div>
+<p>这里就是不同的文章输出任务，首先重点看下 <code>generate_articles</code> 。</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">generate_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">write</span><span class="p">):</span>
+        <span class="sd">"""Generate the articles."""</span>
+        <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">translations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">articles</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hidden_translations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_articles</span>
+        <span class="p">):</span>
+            <span class="n">signals</span><span class="o">.</span><span class="n">article_generator_write_article</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">article</span><span class="p">)</span>
+            <span class="n">write</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">save_as</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">template</span><span class="p">),</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">article</span><span class="o">=</span><span class="n">article</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+                  <span class="n">override_output</span><span class="o">=</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="s1">'override_save_as'</span><span class="p">),</span>
+                  <span class="n">url</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">blog</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
             </div>
             <section>
                 <div class="col-md-2" style="float:right;font-size:0.9em;">
                     <h4>首发于：</h4>
-                    <time pubdate="pubdate" datetime="2021-11-25T17:28:49.612329+08:00">2021年 11月 25日 </time>
+                    <time pubdate="pubdate" datetime="2021-11-29T17:40:41.635905+08:00">2021年 11月 29日 </time>
 
                     <h4>最近更新于：</h4>
-                    <time datetime="2021-11-25T17:28:49.612329+08:00">2021年 11月 25日 </time>
+                    <time datetime="2021-11-29T17:40:41.635905+08:00">2021年 11月 29日 </time>
 
 
                     <h4>分类：</h4>
