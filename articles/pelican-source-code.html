@@ -112,17 +112,16 @@
 <li><a href="#_5">信号</a></li>
 <li><a href="#run">run</a><ul>
 <li><a href="#generator">收集各个Generator类</a></li>
-<li><a href="#generate_context">generate_context</a><ul>
-<li><a href="#articlesgenerator">ArticlesGenerator</a></li>
 </ul>
 </li>
-<li><a href="#refresh_metadata_intersite_links">refresh_metadata_intersite_links</a></li>
-<li><a href="#generate_output">generate_output</a><ul>
-<li><a href="#articlesgenerator_1">ArticlesGenerator</a></li>
+<li><a href="#articlesgenerator">ArticlesGenerator</a><ul>
+<li><a href="#generate_output">generate_output</a></li>
+<li><a href="#generate_feeds">generate_feeds</a></li>
+<li><a href="#generate_pages">generate_pages</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li><a href="#pagesgenerator">PagesGenerator</a></li>
+<li><a href="#staticgenerator">StaticGenerator</a></li>
 </ul>
 </div>
             </nav>
@@ -295,8 +294,6 @@ True
 <p>下面这些信号后面再适当的时候引入进来再讨论之。</p>
 <div class="highlight"><pre><span></span><code>all_generators_finalized = signal('all_generators_finalized')
 
-article_generator_write_article = signal('article_generator_write_article')
-
 page_generator_finalized = signal('page_generator_finalized')
 page_generator_write_page = signal('page_generator_write_page')
 page_writer_finalized = signal('page_writer_finalized')
@@ -314,7 +311,6 @@ static_generator_context = signal('static_generator_context')
 content_object_init = signal('content_object_init')
 
 # Writers signals
-content_written = signal('content_written')
 feed_generated = signal('feed_generated')
 feed_written = signal('feed_written')
 </code></pre></div>
@@ -452,9 +448,7 @@ get_writer = signal('get_writer')
 <li>PagesGenerator</li>
 <li>StaticGenerator</li>
 </ul>
-<h4 id="generate_context">generate_context</h4>
-<p>在pelican的基本使用学习中我们大概了解到Generator的 <code>generate_context</code> 方法是用来收集文章的各个元数据信息从而方便后面输出文章用的。下面具体就各个Generator来讨论下代码细节。</p>
-<h5 id="articlesgenerator">ArticlesGenerator</h5>
+<h3 id="articlesgenerator">ArticlesGenerator</h3>
 <p>ArticlesGenerator的<code>generate_context</code> 方法首先是获取要处理的文章：</p>
 <div class="highlight"><pre><span></span><code>for f in self.get_files(
                 self.settings['ARTICLE_PATHS'],
@@ -752,10 +746,35 @@ get_writer = signal('get_writer')
 <p>最后发送信号：</p>
 <div class="highlight"><pre><span></span><code>article_generator_finalized = signal('article_generator_finalized')
 </code></pre></div>
-<h4 id="refresh_metadata_intersite_links">refresh_metadata_intersite_links</h4>
-<p>这个是站内链接的支持，等下再讨论。</p>
 <h4 id="generate_output">generate_output</h4>
-<h5 id="articlesgenerator_1">ArticlesGenerator</h5>
+<p>在 <code>generate_output</code> 之前有代码：</p>
+<div class="highlight"><pre><span></span><code>writer = self._get_writer()
+</code></pre></div>
+<p>这个writer将作为参数传递给 <code>generate_output</code> 方法，其有内容：</p>
+<div class="highlight"><pre><span></span><code>    def _get_writer(self):
+        writers = [w for _, w in signals.get_writer.send(self) if isinstance(w, type)]
+        num_writers = len(writers)
+
+        if num_writers == 0:
+            return Writer(self.output_path, settings=self.settings)
+
+        if num_writers &gt; 1:
+            logger.warning("%s writers found, using only first one", num_writers)
+
+        writer = writers[0]
+
+        logger.debug("Found writer: %s (%s)", writer.__name__, writer.__module__)
+        return writer(self.output_path, settings=self.settings)
+</code></pre></div>
+<p>这一行就是对接插件Plugin的 <code>get_writer</code> 接口的：</p>
+<div class="highlight"><pre><span></span><code> writers = [w for _, w in signals.get_writer.send(self) if isinstance(w, type)]
+</code></pre></div>
+<p>上面写成列表是因为blinker的信号返回机制，但实际起作用的只是插件的第一个。现在假设没有插件对接信号 <code>get_writer</code> ，则返回的是pelican默认的Writer，即：</p>
+<div class="highlight"><pre><span></span><code>Writer(self.output_path, settings=self.settings)
+</code></pre></div>
+<p>如果有多个，返回的则只是第一个。</p>
+<p>然后这里我们看到，如果用户要自定义 <code>get_writer</code> 的插件的话，其构造函数至少要接受一个默认参数 <code>self.output_path</code> ，然后还要接受一个可选参数 <code>settings=</code> 。本文只讨论默认配置，所以后面就假设返回的是默认的Writer类了。</p>
+<p>这个 <code>self.output_path</code> 来自配置的 <code>OUTPUT_PATH</code> ，默认是 <code>output</code> 文件夹。</p>
 <p>ArticlesGenerator的generate_output做的工作，一是执行 <code>generate_feeds</code> 方法，一是执行 <code>generate_pages</code> 方法，然后发送信号：</p>
 <div class="highlight"><pre><span></span><code>    def generate_output(self, writer):
         self.generate_feeds(writer)
@@ -764,8 +783,22 @@ get_writer = signal('get_writer')
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>article_writer_finalized = signal('article_writer_finalized')
 </code></pre></div>
-<p><code>generate_feeds</code></p>
-<p><code>generate_pages</code></p>
+<h4 id="generate_feeds"><code>generate_feeds</code></h4>
+<p>首先来看 <code>generate_feeds</code> 方法，如果配置有 <code>FEED_ATOM</code> ，则执行writer的 <code>write_feed</code> 方法。如果有 <code>FEED_RSS</code> ，则执行writer的 <code>write_feed</code> 方法，其中额外有参数 <code>feed_type='rss'</code> 。后面类似的还有：</p>
+<ul>
+<li>FEED_ALL_ATOM </li>
+<li>FEED_ALL_RSS</li>
+<li>CATEGORY_FEED_ATOM</li>
+<li>CATEGORY_FEED_RSS</li>
+<li>AUTHOR_FEED_ATOM</li>
+<li>AUTHOR_FEED_RSS</li>
+<li>TAG_FEED_ATOM</li>
+<li>TAG_FEED_RSS</li>
+<li>TRANSLATION_FEED_ATOM</li>
+<li>TRANSLATION_FEED_RSS</li>
+</ul>
+<p>这些feed文件因为我都不太需要，所以之前就按照官方文档的说法将这些配置设置为 <code>None</code> 了，所以这一块的讨论我就略过了，读者如果有需要了解的，请阅读 Writer类的 <code>write_feed</code> 方法。</p>
+<h4 id="generate_pages"><code>generate_pages</code></h4>
 <div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">generate_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
         <span class="sd">"""Generate the pages on the disk"""</span>
         <span class="n">write</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">write_file</span><span class="p">,</span>
@@ -783,28 +816,92 @@ get_writer = signal('get_writer')
         <span class="bp">self</span><span class="o">.</span><span class="n">generate_authors</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">generate_drafts</span><span class="p">(</span><span class="n">write</span><span class="p">)</span>
 </code></pre></div>
-<p>这里就是不同的文章输出任务，首先重点看下 <code>generate_articles</code> 。</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">generate_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">write</span><span class="p">):</span>
-        <span class="sd">"""Generate the articles."""</span>
-        <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">translations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">articles</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hidden_translations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_articles</span>
-        <span class="p">):</span>
-            <span class="n">signals</span><span class="o">.</span><span class="n">article_generator_write_article</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">article</span><span class="p">)</span>
-            <span class="n">write</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">save_as</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">template</span><span class="p">),</span>
-                  <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">article</span><span class="o">=</span><span class="n">article</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
-                  <span class="n">override_output</span><span class="o">=</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="s1">'override_save_as'</span><span class="p">),</span>
-                  <span class="n">url</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">blog</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<p>其中这一行：</p>
+<div class="highlight"><pre><span></span><code>        write = partial(writer.write_file,
+                        relative_urls=self.settings['RELATIVE_URLS'])
 </code></pre></div>
+<p>只是需要将额外的参数 <code>relative_urls</code> 传递过去，大概查了一下代码，writer的<code>write_file</code> 之前的relative_urls都设置为了配置的 <code>RELATIVE_URLS</code> ，所以这个应该是后面为了新增配置 <code>RELATIVE_URLS</code> 而引入的临时代码，由于 <code>RELATIVE_URLS</code> 默认为False，这里就认为和原 <code>write_file</code> 方法是一样的了。</p>
+<p>现在看到 <code>generate_articles</code> 方法：</p>
+<div class="highlight"><pre><span></span><code>    def generate_articles(self, write):
+        """Generate the articles."""
+        for article in chain(
+            self.translations, self.articles,
+            self.hidden_translations, self.hidden_articles
+        ):
+            signals.article_generator_write_article.send(self, content=article)
+            write(article.save_as, self.get_template(article.template),
+                  self.context, article=article, category=article.category,
+                  override_output=hasattr(article, 'override_save_as'),
+                  url=article.url, blog=True)
+</code></pre></div>
+<p>在每篇文章输出之前都会发送信号：</p>
+<div class="highlight"><pre><span></span><code>article_generator_write_article = signal('article_generator_write_article')
+</code></pre></div>
+<p>然后就是执行 <code>write_file</code> 方法来输出文件，Writer类的write_file方法算是有点大的一个函数了，下面慢慢讲：</p>
+<div class="highlight"><pre><span></span><code>    def write_file(self, name, template, context, relative_urls=False,
+                   paginated=None, template_name=None, override_output=False,
+                   url=None, **kwargs):
+</code></pre></div>
+<p>这里的一些参数解释很多都在Article类和Content类之下，这块代码不便粘贴出来，下面就用人类的语言简要说明一下。</p>
+<ul>
+<li>
+<p>save_as 首先从文章metadata读取到的SAVE_AS会存储为 <code>override_save_as</code> ，然后如果有的话，则会优先作为save_as字段。如果没有的话则会试着根据配置的 <code>ARTICLE_SAVE_AS</code> 的来配置，这里可配置参数有：原文章中读取的metadata，path，slug，lang，date，author，category。 </p>
+</li>
+<li>
+<p>template 首先说 <code>article.template</code> ，如果文章metadata定义了<code>TEMPLATE</code>。【这里额外提一句，pelican里面自定义的metadata都是小写，然后MarkdownReader读取到的metadata都会先经过lower处理，但HTMLReader并没有这样处理，不管怎么说pelican里面的metadata都应该视作小写。】则取该值，否则取默认值 <code>article</code> 。至于那个 <code>get_template</code> 方法只是额外的封装，保证目标template文件一定存在。这个判断就是用Jinja2去试着加载， <code>self.env.get_template(name + ext)</code> ，这样返回的就是Jinja2那边的Template对象了。</p>
+</li>
+<li>
+<p>article.url 和 <code>SAVE_AS</code> 大概类似的逻辑，文章有则取文章中读取到的元数据，否则按照 <code>ARTICLE_URL</code> 来生成。</p>
+</li>
+<li>
+<p>article.category 这里是直接从传递过来的metadata中读取的，因为之前已经有category的metadata修正处理逻辑了。</p>
+</li>
+</ul>
+<p>好吧，我之前说错了，这个 <code>write_file</code> 方法挺简单的，只是额外加了一个paginated分页逻辑，这里没有分页逻辑的话，则直接执行 <code>_write_file</code> 函数。这里有一些细节上的context处理，暂时略过讨论，于是核心逻辑就剩下：</p>
+<div class="highlight"><pre><span></span><code>output = template.render(localcontext)
+</code></pre></div>
+<p>然后是一些文件名和文件夹的处理，然后就是写出文件：</p>
+<div class="highlight"><pre><span></span><code>            with self._open_w(path, 'utf-8', override=override) as f:
+                f.write(output)
+</code></pre></div>
+<p>然后发送信号：</p>
+<div class="highlight"><pre><span></span><code>content_written = signal('content_written')
+</code></pre></div>
+<p>因为localcontext是直接影响Jinja2的模板渲染的，所以关于localcontext的生成再详细谈谈。首先是最开始的context，只是从配置文件那边继承过来，然后新增了几个运行时的参数，但是也不太在意，这里又加入了一些参数，实在繁琐，后面有需要再详细讨论吧。目前就记住这个</p>
+<div class="highlight"><pre><span></span><code>localcontext = settings + 一些运行时额外的参数 + kwargs【write_file额外接受的参数，比如blog=True，这就将作为一个额外的参数传递进去。】 
+</code></pre></div>
+<p>然后就是 <code>localsiteurl</code>  有一些额外的处理，这里就略过了。</p>
+<p>下一个过程是 <code>generate_period_archives</code> 。先试着加载 <code>period_archives</code> 或者 <code>archives</code> 模板。这个周期archive输出如果你的配置里面没有配置 <code>YEAR_ARCHIVE_SAVE_AS</code> 或者 <code>MONTH_ARCHIVE_SAVE_AS</code> 或者 <code>DAY_ARCHIVE_SAVE_AS</code> 则将跳过。</p>
+<ul>
+<li>
+<p><code>generate_direct_templates</code> 是根据配置 <code>DIRECT_TEMPLATES</code> 来进行输出。</p>
+</li>
+<li>
+<p>generate_tags 根据tag模板来进行输出</p>
+</li>
+<li>generate_categories 根据category模板来进行输出</li>
+<li>
+<p>generate_authors 根据author模板来进行输出</p>
+</li>
+<li>
+<p>generate_drafts 输出draft标记的文章</p>
+</li>
+</ul>
+<p>如果你不想输出这些网页，则配置 <code>AUTHOR_SAVE_AS = ''</code> ，类似的有：<code>CATEGORY_SAVE_AS = ''</code> 和 <code>TAG_SAVE_AS = ''</code> 。</p>
+<p>要这些功能正常显示，还需要正确配置模板 authors和 categorys 和 tags，这些应该是走的 <code>generate_direct_templates</code> 来生成的。</p>
+<h3 id="pagesgenerator">PagesGenerator</h3>
+<p>在了解了ArticlesGenerator的工作原理之后，PagesGenerator在实践中可以看作某个简化版本的ArticlesGenerator，在很多地方代码会写的很简单，因为在articles那边很多需要考虑的问题都没有了。</p>
+<h3 id="staticgenerator">StaticGenerator</h3>
+<p>对于静态文件来说 <code>generate_output</code> 方法需要重写，直接利用文件操作复制过去即可。</p>
 
             </div>
             <section>
                 <div class="col-md-2" style="float:right;font-size:0.9em;">
                     <h4>首发于：</h4>
-                    <time pubdate="pubdate" datetime="2021-11-29T17:40:41.635905+08:00">2021年 11月 29日 </time>
+                    <time pubdate="pubdate" datetime="2021-12-09T17:46:15.922441+08:00">2021年 12月 9日 </time>
 
                     <h4>最近更新于：</h4>
-                    <time datetime="2021-11-29T17:40:41.635905+08:00">2021年 11月 29日 </time>
+                    <time datetime="2021-12-09T17:46:15.922441+08:00">2021年 12月 9日 </time>
 
 
                     <h4>分类：</h4>
