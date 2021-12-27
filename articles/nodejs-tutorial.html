@@ -16,7 +16,7 @@
               content="何为nodejs 我们知道javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript …"/>
 
 
-<meta name="keywords" content="javascript, node, npm, yarn, 计算机 - Web开发 - NodeJs, " />
+<meta name="keywords" content="javascript, node, npm, yarn, 计算机 - Web开发, " />
 
     <title>nodejs教程  · 万泽的博客
 </title>
@@ -111,7 +111,24 @@
 <li><a href="#npm">npm的基本使用</a></li>
 <li><a href="#npm-run">npm run</a></li>
 <li><a href="#npx">npx</a></li>
-<li><a href="#packagejson">package.json文件详解</a></li>
+<li><a href="#packagejson">package.json文件详解</a><ul>
+<li><a href="#name">name</a></li>
+<li><a href="#version">version</a></li>
+<li><a href="#description">description</a></li>
+<li><a href="#main">main</a></li>
+<li><a href="#private">private</a></li>
+<li><a href="#scripts">scripts</a></li>
+<li><a href="#dependencies">dependencies</a></li>
+<li><a href="#devdependencies">devDependencies</a></li>
+<li><a href="#homepage">homepage</a></li>
+<li><a href="#license">license</a></li>
+<li><a href="#keywords">keywords</a></li>
+<li><a href="#author">author</a></li>
+<li><a href="#repository">repository</a></li>
+<li><a href="#engine">engine</a></li>
+</ul>
+</li>
+<li><a href="#mocha">利用mocha进行单元测试</a></li>
 <li><a href="#npm_1">发行你自己的npm包</a></li>
 </ul>
 </li>
@@ -119,9 +136,12 @@
 <li><a href="#npm_2">配置npm国内源</a></li>
 </ul>
 </li>
+<li><a href="#_2">附录</a><ul>
 <li><a href="#yarn">yarn</a><ul>
 <li><a href="#yarn_1">yarn的基本使用</a></li>
-<li><a href="#_2">参考资料</a></li>
+</ul>
+</li>
+<li><a href="#_3">参考资料</a></li>
 </ul>
 </li>
 </ul>
@@ -139,7 +159,7 @@
 </blockquote>
 <p>V8引擎性能很高，javascript会被直接编译成本地机器码。所以nodejs使用javascript也很高效。因为V8引擎原来处理网页上的javascript脚本就实现上必须是事件驱动，非阻塞IO的，于是到了nodejs服务器这边也是事件驱动的，非阻塞IO编程的。</p>
 <h2 id="nodejs_1">安装nodejs</h2>
-<p>请到<a href="https://nodejs.dev/download/">这个网站</a> 下载nodejs。</p>
+<p>请到 <a href="https://nodejs.dev/download/">这个网站</a> 下载nodejs。</p>
 <h2 id="nodejs_2">一个最简单的nodejs模块</h2>
 <p>首先我们新建一个文件夹mymodule，然后里面新建一个 <code>index.js</code> 文件。在<code>index.js</code> 文件里面定义一个简单的函数：</p>
 <div class="highlight"><pre><span></span><code>function add2(a,b){
@@ -241,50 +261,99 @@ console.log(mymodule(1,2))
 <h3 id="npx">npx</h3>
 <p>前面提到了一点npx命令，如果只是自己编写的模块命令，似乎意义不大，通过npm run一样可以做到，而npx的用处就是对于第三方模块提供的what命令也是可以 <code>npx what</code> 这样调用的，一般模块都是安装在本地的，第三方的模块可执行命令在 <code>node_modules/.bin</code> 文件夹下，这在操作系统来说那些命令是不能直接在终端调用的，而如果输入 <code>./node_modules/.bin/what</code> 这又麻烦了，npx命令的好处就是在这种情况下简单输入 <code>npx what</code> 即可。</p>
 <h3 id="packagejson">package.json文件详解</h3>
-<ul>
-<li>name 本模块名字</li>
-<li>version 版本号</li>
-<li>description 简短描述</li>
-<li>main 模块入口</li>
-<li>private 设置为true将禁止本模块上传到npm公共库里面去</li>
-<li>scripts 一系列的命令行入口定义</li>
-<li>dependencies 包依赖</li>
-<li>devDependencies 开发包依赖</li>
-<li>homepage 模块主页</li>
-<li>license 版权协议</li>
-<li>keywords 描述关键字</li>
-<li>author 作者信息 </li>
-</ul>
-<div class="highlight"><pre><span></span><code>{
-  "author": {
-    "name": "Joe",
-    "email": "joe@whatever.com",
-    "url": "https://whatever.com"
-  }
-}
+<h4 id="name">name</h4>
+<p>本模块名字</p>
+<h4 id="version">version</h4>
+<p>版本号</p>
+<h4 id="description">description</h4>
+<p>简短描述</p>
+<h4 id="main">main</h4>
+<p>模块入口</p>
+<h4 id="private">private</h4>
+<p>设置为true将禁止本模块上传到npm公共库里面去</p>
+<h4 id="scripts">scripts</h4>
+<p>一系列的命令行入口定义</p>
+<h4 id="dependencies">dependencies</h4>
+<p>包依赖</p>
+<h4 id="devdependencies">devDependencies</h4>
+<p>开发包依赖</p>
+<h4 id="homepage">homepage</h4>
+<p>模块主页</p>
+<h4 id="license">license</h4>
+<p>版权协议</p>
+<h4 id="keywords">keywords</h4>
+<p>描述关键字，示例：</p>
+<div class="highlight"><pre><span></span><code>"keywords": [
+    "latex",
+    "math"
+  ],
 </code></pre></div>
-<ul>
-<li>repository 模块仓库</li>
-</ul>
-<div class="highlight"><pre><span></span><code>"repository": {
+<h4 id="author">author</h4>
+<p>作者信息，示例： </p>
+<div class="highlight"><pre><span></span><code> "author": {
+   "name": "Joe",
+   "email": "joe@whatever.com",
+   "url": "https://whatever.com"
+ }
+</code></pre></div>
+<h4 id="repository">repository</h4>
+<p>模块仓库，示例：</p>
+<div class="highlight"><pre><span></span><code>  "repository": {
   "type": "git",
   "url": "https://github.com/whatever/testing.git"
-}
+  }
 </code></pre></div>
-<ul>
-<li>engine nodejs等版本依赖</li>
-</ul>
-<div class="highlight"><pre><span></span><code>"engines": {
+<h4 id="engine">engine</h4>
+<p>nodejs等版本依赖，示例：</p>
+<div class="highlight"><pre><span></span><code>  "engines": {
   "node": "&gt;= 6.0.0",
   "npm": "&gt;= 3.0.0",
   "yarn": "^0.13.0"
-}
+  }
 </code></pre></div>
+<h3 id="mocha">利用mocha进行单元测试</h3>
+<p>首先是安装mocha</p>
+<div class="highlight"><pre><span></span><code>npm install --save-dev mocha
+</code></pre></div>
+<p>然后新建一个test文件夹，里面是你的用于测试的js文件。</p>
+<p>然后package.json配置：</p>
+<div class="highlight"><pre><span></span><code>  "scripts": {
+    "test": "mocha",
+  },
+</code></pre></div>
+<p>然后运行 <code>npm test</code> 即用mocha执行了单元测试。</p>
+<p>具体单元测试的js代码简要介绍如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">assert</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'assert'</span><span class="p">);</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">'#indexOf()'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">it</span><span class="p">(</span><span class="s1">'should return -1 when the value is not present'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span> <span class="mf">2</span><span class="p">,</span> <span class="mf">3</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="mf">4</span><span class="p">),</span> <span class="o">-</span><span class="mf">1</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+</code></pre></div>
+<p>这上面的：</p>
+<div class="highlight"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="p">...</span>
+  <span class="p">});</span>
+</code></pre></div>
+<p>和 </p>
+<div class="highlight"><pre><span></span><code>      it('should return -1 when the value is not present', function() {
+        ...
+      });
+</code></pre></div>
+<p>就是mocha的一些输出信息调配，比如上面的输出信息为：</p>
+<div class="highlight"><pre><span></span><code>  Array
+    #indexOf()
+      ✔ should return -1 when the value is not present
+</code></pre></div>
+<p>熟悉单元测试的知道最核心的就是那个 <code>assert.equal()</code> ，至于那个describe和it，跟着那么用就是了。</p>
 <h3 id="npm_1">发行你自己的npm包</h3>
 <p>首先你需要在 <code>npmjs.com</code> 上申请个用户名：</p>
 <div class="highlight"><pre><span></span><code>npm adduser
 </code></pre></div>
-<p>或者以前adduser过了那么：</p>
+<p>或者以前adduser过了那么运行：</p>
 <div class="highlight"><pre><span></span><code>npm login
 </code></pre></div>
 <p>然后：</p>
@@ -293,14 +362,21 @@ console.log(mymodule(1,2))
 <p>默认发送公开的模块，npm付费用户可以发布私有模块。</p>
 <h2 id="_1">附录</h2>
 <h3 id="npm_2">配置npm国内源</h3>
-<p>免得后面有些包下载动作太慢了，这里就先讲了。</p>
-<div class="highlight"><pre><span></span><code>npm config set registry https://registry.npm.taobao.org
+<p>如果读者遇到npm安装报错，这很可能是因为有些包下载动作太慢了就报错，这个时候建议将npm源更换为国内的源：</p>
+<div class="highlight"><pre><span></span><code>npm config set registry npm_url 
 </code></pre></div>
 <p>这个配置对后面提到的yarn也是一样有效的。</p>
-<h2 id="yarn">yarn</h2>
+<p>国内npm源有：</p>
+<ul>
+<li>cnpm http://registry.cnpmjs.org </li>
+<li>腾讯云 http://mirrors.cloud.tencent.com/npm/</li>
+<li>淘宝云 https://registry.npm.taobao.org</li>
+</ul>
+<h2 id="_2">附录</h2>
+<h3 id="yarn">yarn</h3>
 <p>很多人都推荐使用yarn而不是npm，yarn一方面是基于npm包的，然后和npm比较起来有很多优点，比如并发的网络请求，对依赖版本的处理优化等。</p>
 <p>yarn在windows下也提供了安装包，去 <a href="https://classic.yarnpkg.com/zh-Hans/docs/install">官网</a> 上下载即可。</p>
-<h3 id="yarn_1">yarn的基本使用</h3>
+<h4 id="yarn_1">yarn的基本使用</h4>
 <ul>
 <li><code>yarn init</code> 对应于 <code>npm init</code> ，适用于初始化一个新项目的，如果你的项目已经有<code>package.json</code> 这个文件了，那么你应该使用 <code>yarn install</code> 。</li>
 <li><code>yarn add</code> 对应于 <code>npm install</code> ，yarn add 不加上选项将安装到dependencies哪里， 然后 <code>--dev</code> 对应npm的 <code>--save-dev</code>  ，<code>--optional</code> 对应npm的 <code>--save-optional</code> 。此外yarn还多了一个 <code>--peer</code> 选项，其控制的字段是 <code>peerDependencies</code> ，这是一种特殊的依赖，叫做同伴依赖，在发布包的时候需要。</li>
@@ -309,7 +385,7 @@ console.log(mymodule(1,2))
 <li><code>yarn install</code> 安装项目所有依赖</li>
 </ul>
 <p>假设你自定义了npm start这个命令，那么通过 yarn start也是一样可以调用的。</p>
-<h3 id="_2">参考资料</h3>
+<h3 id="_3">参考资料</h3>
 <p>其他官方文档就不赘述了。</p>
 <ol>
 <li>node.js实战 图灵设计丛书 Node.js in action</li>
@@ -325,11 +401,11 @@ console.log(mymodule(1,2))
                     <time pubdate="pubdate" datetime="2020-11-21T00:00:00+08:00">2020年 11月 21日 </time>
 
                     <h4>最近更新于：</h4>
-                    <time datetime="2021-12-08T18:05:22.813022+08:00">2021年 12月 8日 </time>
+                    <time datetime="2021-12-27T15:29:44.073459+08:00">2021年 12月 27日 </time>
 
 
                     <h4>分类：</h4>
-                    <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webkai-fa-nodejs-ref">计算机 - Web开发 - NodeJs</a>
+                    <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webkai-fa-ref">计算机 - Web开发</a>
                     
                     <h4>标签：</h4>
                     <ul class="list-of-tags tags-in-article">
