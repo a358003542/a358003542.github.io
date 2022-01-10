@@ -40,14 +40,14 @@ function footnote_popover(){
         }
 
         $('sup',this).remove();
-        $(this).attr('data-toggle','popover');
+        $(this).attr('data-bs-toggle','popover');
         $(this).html(`<sup>注${footnote_index}</sup>`);
-        $(this).attr('data-trigger','focus');
-        $(this).attr('data-content',`${footnote_text}`);
+        $(this).attr('data-bs-trigger','focus');
+        $(this).attr('data-bs-content',`${footnote_text}`);
         $(this).attr('role','button');
         $(this).attr('tabindex','0');
         $(this).removeAttr('href');
-        $(this).attr('data-placement',"bottom");
+        $(this).attr('data-bs-placement',"bottom");
     
     })
     

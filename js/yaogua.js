@@ -97,7 +97,7 @@ function yaogua() {
         }
     
         const MAX_LENTH = 8;
-        var len = yaogua_history.push([new Date(), zhugua_target.name, biangua_target.name]);
+        var len = yaogua_history.push([new Date().toJSON(), zhugua_target.name, biangua_target.name]);
         while (len > MAX_LENTH) {
             yaogua_history.shift();
             len = yaogua_history.length;
@@ -120,7 +120,8 @@ function check_history(){
     var table_html = '<table class="table"><thead><tr><td>预测时间</td><td>主卦</td><td>变卦</td></tr></thead><tbody>'
 
     for (let item of yaogua_history.reverse()){
-        var time_str = moment(item[0]).format("YYYY-MM-DD HH:mm:ss");
+        let time_str = new Date(item[0]).toISOString()
+        time_str = time_str.substring(0, time_str.length - 5);
         table_html += `<tr><th>${time_str}</th><th>${item[1]}</th><th>${item[2]}</th></tr>` ;
     }
     table_html += '</tbody></table>'
