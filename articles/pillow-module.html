@@ -31,7 +31,6 @@
 
 
 
-
 </head>
 
 <body>
@@ -47,14 +46,14 @@
             </button>
 
 
-            <div class="navbar-collapse collapse justify-content-md-end" id="navbarContent">
+            <div class="navbar-collapse collapse" id="navbarContent">
                 <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
                     class="d-flex me-auto">
 
                     <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                        placeholder="Search..." style="width:430px;" aria-label="Search">
+                        placeholder="Search..." aria-label="Search">
 
-                    <button class="btn btn-outline-primary" type="submit">搜索</button>
+                    <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
                 </form>
 
 
@@ -307,16 +306,20 @@ new_im = im.crop(bbox)
 <div class="highlight"><pre><span></span><code>diff = ImageChops.difference(im, bg)
 </code></pre></div>
 <p>这一句，按照官方文档的描述， <code>PIL.ImageChops.difference(image1, image2)</code> 相当于对图片每个像素点逐个进行如下算术运算:</p>
+<p>
 <div class="math">$$
 out = abs(image1 - image2)
 $$</div>
+</p>
 <p>然后</p>
 <div class="highlight"><pre><span></span><code>diff = ImageChops.add(diff, diff, 2.0, -100)
 </code></pre></div>
 <p>按照官方文档的描述， <code>PIL.ImageChops.add(image1, image2, scale=1.0, offset=0)</code> 相当于对图片每个像素点做如下算术运算:</p>
+<p>
 <div class="math">$$
 out = ((image1 + image2) / scale + offset)
 $$</div>
+</p>
 <p>到这里我们看到diff这个图片对象实际上是原图片减去背景，然后双倍重叠在除以2。这些操作我们都可以看作让四周背景边框更加的趋于0。然后offset设为100，这是我最有疑问的地方，一，像素值变为负值会如何？二，为什么是减去100，有什么特殊的理由吗？</p>
 <div class="highlight"><pre><span></span><code>bbox = diff.getbbox()
 new_im = im.crop(bbox)
@@ -332,61 +335,6 @@ new_im = im.crop(bbox)
 <p><img alt="img" src="https://a358003542.github.io/images/python/lena.jpg"/></p>
 <p>还有福利图。。</p>
 <p><img alt="img" src="https://a358003542.github.io/images/python/lena_fuli.jpg"/></p>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = '/MathJax-2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js','mhchem.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
         </div>
     </div>
 
@@ -417,13 +365,6 @@ new_im = im.crop(bbox)
 
 
     </div>
-
-    <div>
-        <button id="gotop" type="button" class="btn btn-default">
-            <span class="" aria-hidden="true">↑</span>
-        </button>
-    </div>
-
 
     <footer>
         <div id="footer">
