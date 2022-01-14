@@ -227,37 +227,37 @@
 <h3 id="dsl">DSL查询表达式</h3>
 <p>实际我们搜索会使用一种专门的查询语言，DSL（领域特定语言）。这东西支持非常复杂的搜索，当然有的时候查询表达式也非常的复杂。</p>
 <p>比如下面就是按照name来搜索，这里需要讲一下，index一开始的数据结构设计很重要，比如content 一开始设计的是 <code>Text</code> 字段，然后设置好中文分词之后那么就是全文搜索，再比如name 是 Keyword 字段，那么match搜索则是精确匹配模式。</p>
-<div class="highlight"><pre><span></span><code><span class="err">GET</span> <span class="err">/book_i</span><span class="kc">nf</span><span class="err">o/_search</span>
-<span class="p">{</span>
-  <span class="nt">"query"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"match"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"未来之霸气小吃货"</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="err">GET</span><span class="w"> </span><span class="err">/book_i</span><span class="kc">nf</span><span class="err">o/_search</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"match"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"未来之霸气小吃货"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>下面是对content字段使用全文搜索，也是使用的 <code>match</code> query词。</p>
-<div class="highlight"><pre><span></span><code><span class="err">GET</span> <span class="err">/book_i</span><span class="kc">nf</span><span class="err">o/_search</span>
-<span class="p">{</span>
-  <span class="nt">"query"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"match"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"content"</span><span class="p">:</span> <span class="s2">"未来之霸气小吃货"</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="err">GET</span><span class="w"> </span><span class="err">/book_i</span><span class="kc">nf</span><span class="err">o/_search</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"match"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"未来之霸气小吃货"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="fromsize">用from和size进行分页</h3>
 <p>from 和 size 字段还有 query字段 是DSL语言最靠前的三个字段，后面更复杂的DSL查询语句都是 query字段里面继续字典套字典。</p>
-<div class="highlight"><pre><span></span><code><span class="err">GET</span> <span class="err">/book_i</span><span class="kc">nf</span><span class="err">o/_search</span>
-<span class="p">{</span>
-  <span class="nt">"query"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"match"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"content"</span><span class="p">:</span> <span class="s2">"未来之霸气小吃货"</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"from"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
-  <span class="nt">"size"</span><span class="p">:</span> <span class="mi">10</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="err">GET</span><span class="w"> </span><span class="err">/book_i</span><span class="kc">nf</span><span class="err">o/_search</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"match"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"未来之霸气小吃货"</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="_5">高亮搜索结果</h3>
 <p>和第一级 <code>query</code> 是平行关系，可以额外返回一个 highlight 搜索匹配的高亮信息。</p>
@@ -295,26 +295,26 @@
 </ul>
 <h3 id="bool">bool组合查询</h3>
 <p>bool下可有三个字段值（must, must_not, should），其将其形成组合查询逻辑。（must must_not, should对应的逻辑就是 and not or）</p>
-<div class="highlight"><pre><span></span><code><span class="err">'query'</span><span class="p">:</span> <span class="p">{</span>
-    <span class="err">'bool'</span><span class="p">:{</span>
-        <span class="err">'mus</span><span class="kc">t</span><span class="err">'</span><span class="p">:</span> <span class="p">{</span><span class="err">'ma</span><span class="kc">t</span><span class="err">ch'</span><span class="p">:</span> <span class="p">{</span><span class="err">'source'</span><span class="p">:</span> <span class="err">'wha</span><span class="kc">t</span><span class="err">'</span><span class="p">,}},</span>
-        <span class="err">'mus</span><span class="kc">t</span><span class="err">'</span><span class="p">:</span> <span class="p">{</span><span class="err">'ma</span><span class="kc">t</span><span class="err">ch'</span><span class="p">:</span> <span class="p">{</span><span class="err">'co</span><span class="kc">ntent</span><span class="err">'</span><span class="p">:</span> <span class="err">q</span><span class="p">}}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="err">'query'</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="err">'bool'</span><span class="p">:{</span><span class="w"></span>
+<span class="w">        </span><span class="err">'mus</span><span class="kc">t</span><span class="err">'</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">'ma</span><span class="kc">t</span><span class="err">ch'</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">'source'</span><span class="p">:</span><span class="w"> </span><span class="err">'wha</span><span class="kc">t</span><span class="err">'</span><span class="p">,}},</span><span class="w"></span>
+<span class="w">        </span><span class="err">'mus</span><span class="kc">t</span><span class="err">'</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">'ma</span><span class="kc">t</span><span class="err">ch'</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">'co</span><span class="kc">ntent</span><span class="err">'</span><span class="p">:</span><span class="w"> </span><span class="err">q</span><span class="p">}}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>比如上面这个例子就是content进行q字段搜索，然后source字段必须是'what'。bool组合查询也可以用于过滤语句。</p>
 <p>此外bool还可以加上 <code>filter</code> 来执行过滤逻辑，其中查询是参与评分的，而过滤则不参与评分。</p>
 <p>DSL 查询语句有的时候很复杂很多是由一些复合查询语句拼成的，bool是一个，dis_max 是一个，还有一些，后面再了解。</p>
 <h3 id="_7">多字段搜索</h3>
 <p>用 <code>multi_match</code> 来实现对多个字段同时搜索。如下所示，</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-    <span class="nt">"query"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"multi_match"</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="nt">"query"</span> <span class="p">:</span> <span class="s2">"elasticsearch guide"</span><span class="p">,</span>
-            <span class="nt">"fields"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"summary"</span><span class="p">]</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"query"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"multi_match"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">"query"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"elasticsearch guide"</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"title"</span><span class="p">,</span><span class="w"> </span><span class="s2">"summary"</span><span class="p">]</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>其默认的搜索类型是 <code>best_fields</code> 也就是找到得分最高的字段，然后得分就按那个得分最高的来。</p>
 <div class="highlight"><pre><span></span><code>    "dis_max": {

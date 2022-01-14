@@ -111,10 +111,10 @@
 <h2 id="_1">前言</h2>
 <p>这里列出一些个人日常操作遇到的案例，可以参考学习，也可以触类旁通的学习下SQL的高级知识。</p>
 <h2 id="_2">根据某些条件删除某个表格的重复行</h2>
-<div class="highlight"><pre><span></span><code><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">news</span> <span class="n">T1</span>
-   <span class="k">USING</span>  <span class="n">news</span> <span class="n">T2</span>
- <span class="k">WHERE</span>  <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span> <span class="c1">-- delete the older versions</span>
-   <span class="k">AND</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span><span class="p">;</span> <span class="c1">-- add more columns if needed</span>
+<div class="highlight"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">news</span><span class="w"> </span><span class="n">T1</span><span class="w"></span>
+<span class="w">   </span><span class="k">USING</span><span class="w">  </span><span class="n">news</span><span class="w"> </span><span class="n">T2</span><span class="w"></span>
+<span class="w"> </span><span class="k">WHERE</span><span class="w">  </span><span class="n">T1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="c1">-- delete the older versions</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="n">url</span><span class="p">;</span><span class="w"> </span><span class="c1">-- add more columns if needed</span>
 </code></pre></div>
 <p>上面这句话的意思是删除本news表格中url重复的行，删除的是那些id小的行（T1.id&lt; T2.id）</p>
 <p>这里delete语句使用using说简单点就是后面的where子句可以使用该表格，类似于select的from；说复杂点如果是本表格的话，那么就是自连接self-join。</p>
@@ -153,9 +153,9 @@
 3 a --- 3 a
 </code></pre></div>
 <p>然后再过滤，首先是url相等的行 </p>
-<div class="highlight"><pre><span></span><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">newtable</span> <span class="n">T1</span>  
-<span class="k">inner</span> <span class="k">join</span> <span class="n">newtable</span> <span class="n">T2</span>
-<span class="k">on</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span>
+<div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">newtable</span><span class="w"> </span><span class="n">T1</span><span class="w">  </span>
+<span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">newtable</span><span class="w"> </span><span class="n">T2</span><span class="w"></span>
+<span class="k">on</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="n">url</span><span class="w"></span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>1 a --- 1 a
 1 a --- 3 a
@@ -164,20 +164,20 @@
 3 a --- 3 a
 </code></pre></div>
 <p>其次是 id小一点的</p>
-<div class="highlight"><pre><span></span><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">newtable</span> <span class="n">T1</span>  
-<span class="k">inner</span> <span class="k">join</span> <span class="n">newtable</span> <span class="n">T2</span>
-<span class="k">on</span> <span class="n">T1</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">T2</span><span class="p">.</span><span class="n">url</span>
-<span class="k">where</span> <span class="n">T1</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">T2</span><span class="p">.</span><span class="n">id</span>
+<div class="highlight"><pre><span></span><code><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">newtable</span><span class="w"> </span><span class="n">T1</span><span class="w">  </span>
+<span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">newtable</span><span class="w"> </span><span class="n">T2</span><span class="w"></span>
+<span class="k">on</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="n">url</span><span class="w"></span>
+<span class="k">where</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="n">id</span><span class="w"></span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>1 a --- 3 a
 </code></pre></div>
 <p>最后得到的T1 的 1 a 这一行，然后执行delete操作将其删掉。</p>
 <p>这里我们看到self-join的情况要非常注意重复行的过滤，比如如果上面是 T1.id &lt;= T2.id 那么就会将整个表格给删掉。</p>
 <h2 id="_3">根据表格的某个字段值更新本表格</h2>
-<div class="highlight"><pre><span></span><code><span class="k">update</span> <span class="n">news</span> 
-<span class="k">set</span> <span class="n">insert_time</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">pub_time</span>
-<span class="k">from</span> <span class="n">news</span> <span class="n">t2</span>
-<span class="k">where</span> <span class="n">news</span><span class="p">.</span><span class="n">html</span> <span class="o">=</span> <span class="s1">''</span> <span class="k">and</span> <span class="n">news</span><span class="p">.</span><span class="n">insert_time</span> <span class="o">&gt;=</span> <span class="s1">'2019-11-19'</span> <span class="k">and</span> <span class="n">news</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> 
+<div class="highlight"><pre><span></span><code><span class="k">update</span><span class="w"> </span><span class="n">news</span><span class="w"> </span>
+<span class="k">set</span><span class="w"> </span><span class="n">insert_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">pub_time</span><span class="w"></span>
+<span class="k">from</span><span class="w"> </span><span class="n">news</span><span class="w"> </span><span class="n">t2</span><span class="w"></span>
+<span class="k">where</span><span class="w"> </span><span class="n">news</span><span class="p">.</span><span class="n">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">news</span><span class="p">.</span><span class="n">insert_time</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2019-11-19'</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">news</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">id</span><span class="p">;</span><span class="w"> </span>
 </code></pre></div>
 <p>同样参考postgresql的官方文档，这里update...from... 也类似于 select 里面的from_list table，如果是本表格自身的话那么就是 self join。</p>
 <p>这样self join之后后面你的update操作是可以引用这个表格的值的。</p>

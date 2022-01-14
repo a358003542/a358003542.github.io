@@ -126,17 +126,17 @@
 <h2 id="graphicraycasterui">GraphicRaycaster和UI操作</h2>
 <p>Canvas的GraphicRaycaster组件的用处就是将射线投射到画布上，可以利用GraphicRaycaster来判断本Canvas当前那些画布元素是被击中的，或者说的再简单点是在鼠标当前所在位置上的。</p>
 <p>如下面的代码就是利用本画布上的GraphicRaycaster组件来获取当前鼠标位置上的画布元素。</p>
-<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="n">GraphicRaycaster</span> <span class="n">rc</span><span class="p">;</span>
-<span class="k">private</span> <span class="n">PointerEventData</span> <span class="n">pt</span><span class="p">;</span> 
+<div class="highlight"><pre><span></span><code><span class="k">private</span><span class="w"> </span><span class="n">GraphicRaycaster</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span><span class="w"></span>
+<span class="k">private</span><span class="w"> </span><span class="n">PointerEventData</span><span class="w"> </span><span class="n">pt</span><span class="p">;</span><span class="w"> </span>
 
-<span class="n">rc</span> <span class="p">=</span> <span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">GraphicRaycaster</span><span class="p">&gt;();</span>
-<span class="n">pt</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PointerEventData</span><span class="p">(</span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">);</span>
+<span class="n">rc</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">GraphicRaycaster</span><span class="p">&gt;();</span><span class="w"></span>
+<span class="n">pt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PointerEventData</span><span class="p">(</span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">);</span><span class="w"></span>
 
-<span class="n">pt</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">;</span>
+<span class="n">pt</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">;</span><span class="w"></span>
 
-<span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;();</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;();</span><span class="w"></span>
 
-<span class="n">rc</span><span class="p">.</span><span class="n">Raycast</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">results</span><span class="p">);</span>
+<span class="n">rc</span><span class="p">.</span><span class="n">Raycast</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <p>这些画布元素存储在results上：</p>
 <div class="highlight"><pre><span></span><code>        foreach (RaycastResult swatch in results)
@@ -148,10 +148,10 @@
 <p>在一些Canvas情况不是很复杂的时候推荐使用Raycast来解决问题。</p>
 <h3 id="raycastall">RaycastAll</h3>
 <p>RaycastAll方法是所有的BaseRaycasters都进行了射线投射，这其中还包括PhysicsRaycaster等。还不清楚PhysicsRaycaster的用途，不过假设有多个Canvas的情况下，通过这个RaycastAll来进行所有GraphicRaycaster的射线投射是很便利的。</p>
-<div class="highlight"><pre><span></span><code>        <span class="n">PointerEventData</span> <span class="n">eventDataCurrentPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PointerEventData</span><span class="p">(</span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">);</span>
-        <span class="n">eventDataCurrentPosition</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">;</span>
-        <span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;();</span>
-        <span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">RaycastAll</span><span class="p">(</span><span class="n">eventDataCurrentPosition</span><span class="p">,</span> <span class="n">results</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="w">        </span><span class="n">PointerEventData</span><span class="w"> </span><span class="n">eventDataCurrentPosition</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PointerEventData</span><span class="p">(</span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">eventDataCurrentPosition</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Input</span><span class="p">.</span><span class="n">mousePosition</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="p">&lt;</span><span class="n">RaycastResult</span><span class="p">&gt;();</span><span class="w"></span>
+<span class="w">        </span><span class="n">EventSystem</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">RaycastAll</span><span class="p">(</span><span class="n">eventDataCurrentPosition</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <p>上面获得的result含义和之前讨论的相同，是当前鼠标所在位置射线投射穿过的所有对象。</p>
 <p>同样类似上面的讨论如果某个UI元素 <code>Raycast Target</code> 属性没有勾选也是不会检测到的。</p>

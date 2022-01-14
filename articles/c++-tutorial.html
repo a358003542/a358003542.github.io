@@ -683,7 +683,7 @@ int* p = &amp;x;
 <p>二维数组就不存在这种数组名和指针的无缝转换了，你必须建立一种二维指针数组，这个过程引入了太多的复杂度，实在不是一个明智的选项；而且就算是这样你在建立函数的时候，二维数组的列数也必须写死。同时我又了解到 <code>变长数组</code> 的概念，但是这个 变长数组 visual studio 现在是不支持的，而且似乎也没有支持的计划，而且这个特性最新的C语言标准也是打算废弃的意思了。</p>
 <p>此外我在 <a href="https://solarianprogrammer.com/2019/03/27/c-programming-passing-multi-dimensional-array-to-function/">这个网页</a> 了解到一种通过 malloc 函数 自动分配二维指针数组内存的方法，当然其内在本质还是依靠二维指针数组这个过于复杂的东西，个人不喜欢，尤其这种玩法还引入了 <code>int ** p</code> 这种东西，C语言的指针已经让大家很厌倦了，你还弄两个指针，显然这种玩法过于复杂现在不应该推荐了。</p>
 <p>但还有一个解决方案，而这个方案利用的C语言的struct结构，个人觉得是优美的解决方案【也许你觉得里面的一维表达很丑，但实际上计算机内存里面存储的就是这种一维表达结构】。如果采取这种方案那么就应该抛弃C语言里面 <code>x[3][2]</code> 这样的表达，而回归一维数组的本源，然后继而可以扩展一些支持方法来进一步表达分组分行等内部属性。</p>
-<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rows</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">cols</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
@@ -948,23 +948,23 @@ int* p = &amp;x;
 <h2 id="_30">结构体</h2>
 <h3 id="_31">结构体的基本使用</h3>
 <p>结构体首先需要声明才能使用：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="nc">book</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">book</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">title</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">author</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
 </code></pre></div>
 <p>这样声明之后，后面使用 <code>struct book</code> 就可以类似 <code>int</code> 一样声明相应的变量了：</p>
 <div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
-<span class="k">struct</span> <span class="nc">book</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">book</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <p>结构体的变量的初始化如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="nc">book</span><span class="w"> </span><span class="n">library</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">book</span><span class="w"> </span><span class="n">library</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="s">"this is a title"</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="s">"author"</span><span class="p">,</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
 </code></pre></div>
 <p>此外C99和C11还提供了如下初始化语法：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="nc">book</span><span class="w"> </span><span class="n">library</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">book</span><span class="w"> </span><span class="n">library</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"this is a title"</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="p">.</span><span class="n">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"author"</span><span class="p">,</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
@@ -983,7 +983,7 @@ library-&gt;author
 <span class="n">BYTE</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <p>typedef结合之前你定义的结构体类型会很好用：</p>
-<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rows</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">cols</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">[];</span><span class="w"></span>
@@ -993,9 +993,9 @@ library-&gt;author
 </code></pre></div>
 <h3 id="_32">链表</h3>
 <p>现在来实现LISP语言中常见的链表数据结构，本小节主要参考了 <strong>参考资料4</strong> 。就基本的结构定义写法还是很清晰的：</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="nc">node</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">struct</span> <span class="nc">node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
 </code></pre></div>
 <p>在上面的基础上，参考资料4做了一些灵活性拓展，个人做了一些修改于是有了下面的<code>list.h</code> 文件：</p>
@@ -1029,7 +1029,7 @@ library-&gt;author
 
 <span class="kt">bool</span><span class="w"> </span><span class="nf">is_list_empty</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">List</span><span class="o">*</span><span class="w"> </span><span class="n">plist</span><span class="p">);</span><span class="w"></span>
 
-<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">list_length</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="n">list</span><span class="p">);</span><span class="w"></span>
+<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">list_length</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="n">list</span><span class="p">);</span><span class="w"></span>
 
 <span class="cp">#endif</span>
 </code></pre></div>
@@ -1095,7 +1095,7 @@ library-&gt;author
 <span class="p">}</span><span class="w"></span>
 
 
-<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">list_length</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">list_length</span><span class="p">(</span><span class="n">List</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
 
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1106,7 +1106,7 @@ library-&gt;author
 <span class="p">}</span><span class="w"></span>
 
 
-<span class="kt">void</span><span class="w"> </span><span class="n">free_list</span><span class="p">(</span><span class="n">List</span><span class="o">*</span><span class="w"> </span><span class="n">plist</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">free_list</span><span class="p">(</span><span class="n">List</span><span class="o">*</span><span class="w"> </span><span class="n">plist</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="cm">/* NOTICE: assume all list is create by malloc </span>
 <span class="cm">    otherwise there will be a bug.</span>
 <span class="cm">    */</span><span class="w"></span>
@@ -1149,8 +1149,8 @@ library-&gt;author
 <h2 id="_33">其他</h2>
 <h3 id="enum">enum</h3>
 <p>enum提供了一种枚举类型变量：</p>
-<div class="highlight"><pre><span></span><code><span class="k">enum</span> <span class="nc">Color</span><span class="w"> </span><span class="p">{</span><span class="n">red</span><span class="p">,</span><span class="w"> </span><span class="n">green</span><span class="p">,</span><span class="w"> </span><span class="n">blue</span><span class="p">};</span><span class="w"></span>
-<span class="k">enum</span> <span class="nc">Color</span><span class="w"> </span><span class="n">color</span><span class="p">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="nc">Color</span><span class="w"> </span><span class="p">{</span><span class="n">red</span><span class="p">,</span><span class="w"> </span><span class="n">green</span><span class="p">,</span><span class="w"> </span><span class="n">blue</span><span class="p">};</span><span class="w"></span>
+<span class="k">enum</span><span class="w"> </span><span class="nc">Color</span><span class="w"> </span><span class="n">color</span><span class="p">;</span><span class="w"></span>
 <span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">red</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <p>比如上面的color就是一个枚举类型变量，其可以直接用red，green等这样的名字来赋值。具体red和green内部默认的是从0开始的整数。</p>
@@ -1695,7 +1695,7 @@ delete pn;
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">CandyBar</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">CandyBar</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">weight</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">calories</span><span class="p">;</span><span class="w"></span>
@@ -1722,7 +1722,7 @@ delete pn;
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">CandyBar</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">CandyBar</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">weight</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">calories</span><span class="p">;</span><span class="w"></span>
@@ -1773,7 +1773,7 @@ delete pn;
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">Pizza</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Pizza</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">diameter</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">weight</span><span class="p">;</span><span class="w"></span>
@@ -1824,12 +1824,12 @@ delete pn;
 <h3 id="for-range">for range语句</h3>
 <p>c++11开始支持如下的for range语句了：</p>
 <div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">};</span><span class="w"></span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="nl">n</span> <span class="p">:</span><span class="w"> </span><span class="n">a</span><span class="p">){</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">a</span><span class="p">){</span><span class="w"></span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">' '</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>C++的for语句多了一个新的下面这种形式，这个要了解下：</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="nl">x</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}){</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}){</span><span class="w"></span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
@@ -1925,14 +1925,14 @@ delete pn;
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sales</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span><span class="w"></span>
 
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="nl">month</span> <span class="p">:</span><span class="w"> </span><span class="n">months</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">months</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"please input the sale of amount in "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" : "</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">sales</span><span class="p">[</span><span class="n">count</span><span class="p">];</span><span class="w"></span>
 
 <span class="w">        </span><span class="n">count</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="nl">x</span> <span class="p">:</span><span class="w"> </span><span class="n">sales</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">sales</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"this year's sale amount is: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
@@ -1958,7 +1958,7 @@ delete pn;
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">sum_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="nl">month</span> <span class="p">:</span><span class="w"> </span><span class="n">months</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">months</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">            </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"please input year "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" the sale of amount in "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" : "</span><span class="p">;</span><span class="w"></span>
 <span class="w">            </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">sales</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">count</span><span class="p">];</span><span class="w"></span>
 
@@ -2579,7 +2579,7 @@ outFile.close();
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">box</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">box</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">maker</span><span class="p">[</span><span class="mi">40</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">height</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">width</span><span class="p">;</span><span class="w"></span>
@@ -2693,7 +2693,7 @@ outFile.close();
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
 <span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">SLEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span><span class="w"></span>
-<span class="k">struct</span> <span class="nc">student</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">student</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">fullname</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">hobby</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ooplevel</span><span class="p">;</span><span class="w"></span>
@@ -2751,7 +2751,7 @@ outFile.close();
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
 <span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">SLEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span><span class="w"></span>
-<span class="k">struct</span> <span class="nc">student</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">student</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">fullname</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">hobby</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ooplevel</span><span class="p">;</span><span class="w"></span>
@@ -2871,7 +2871,7 @@ outFile.close();
 <span class="w">    </span><span class="n">pf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subtraction</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="n">pf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">multiplication</span><span class="p">;</span><span class="w"></span>
 
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="nl">i</span> <span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">})</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">})</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">calculate</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="w"> </span><span class="mf">10.4</span><span class="p">,</span><span class="w"> </span><span class="n">pf</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"></span>
 <span class="w">        </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"result: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
@@ -2890,7 +2890,7 @@ outFile.close();
 <div class="highlight"><pre><span></span><code><span class="cp">#define SQUARE(X) ((X)*(X)) </span>
 </code></pre></div>
 <p>引用变量用于结构体和类大体逻辑可以参考上面的讨论，值得一提的是返回结构体和类采用相关的返回引用变量的形式将是高效的，不像传统返回值还需要额外的拷贝动作。</p>
-<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="nc">free_throws</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">free_throws</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">made</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
@@ -2908,7 +2908,7 @@ outFile.close();
 <p>函数重载或函数多态具体来说就是几个函数拥有相同的函数名，不同的参数数目或类型，C++编译器会匹配合适的对应的那个函数。在匹配过程中不会考虑 <code>const</code> 关键字。这种匹配是基于函数的原型声明，不会考虑具体形参的名字。这种匹配不会考虑具体函数的返回类型。</p>
 <h3 id="_50">函数模板</h3>
 <p>C++的函数模板运行你以一种泛型的概念来编写函数：</p>
-<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">AnyType</span><span class="o">&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">AnyType</span><span class="o">&gt;</span><span class="w"></span>
 <span class="kt">void</span><span class="w"> </span><span class="n">swap</span><span class="p">(</span><span class="n">AnyType</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">AnyType</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">){</span><span class="w"></span>
 <span class="w">    </span><span class="n">AnyType</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"></span>
@@ -2959,7 +2959,7 @@ void swap(T &amp;, T &amp;);
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 <span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">SLEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">CandyBar</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">CandyBar</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="n">SLEN</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">weight</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">calories</span><span class="p">;</span><span class="w"></span>
@@ -3001,10 +3001,10 @@ void swap(T &amp;, T &amp;);
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
 <span class="n">T</span><span class="w"> </span><span class="n">max5</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arr</span><span class="p">[]);</span><span class="w"></span>
 
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
 <span class="n">T</span><span class="w"> </span><span class="n">max5</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arr</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -3039,12 +3039,12 @@ void swap(T &amp;, T &amp;);
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
 <span class="n">T</span><span class="w"> </span><span class="n">maxn</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arr</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"></span>
 
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">maxn</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">arr</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"></span>
 
-<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
 <span class="n">T</span><span class="w"> </span><span class="n">maxn</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">arr</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -3167,7 +3167,7 @@ void swap(T &amp;, T &amp;);
 
 <span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="nc">golf</span><span class="p">{</span><span class="w"></span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">golf</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">fullname</span><span class="p">[</span><span class="n">Len</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">handicap</span><span class="p">;</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
@@ -3275,7 +3275,7 @@ setgolf(ann);
 <p>4．请基于下面这个名称空间编写一个由3个文件组成的程序：</p>
 <div class="highlight"><pre><span></span><code><span class="k">namespace</span><span class="w"> </span><span class="nn">SALES</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">QUARTERS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">struct</span> <span class="nc">Sales</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Sales</span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">sales</span><span class="p">[</span><span class="n">QUARTERS</span><span class="p">];</span><span class="w"></span>
 <span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">average</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">max</span><span class="p">;</span><span class="w"></span>
@@ -3399,7 +3399,7 @@ setgolf(ann);
 <p>本习题主要要求读者掌握名称空间的用法。</p>
 <h2 id="_54">类</h2>
 <p>下面进入C++语言区别C语言引入的最大特性，那就是类和相关面向对象编程的概念。本文假定读者已经熟悉一门高级编程语言比如python了，所以就面向对象编程相关概念不会做过多的讨论，预先假定读者已经对这一块很熟悉了。下面我们来看C++类是如何声明的：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Stock</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Stock</span><span class="w"></span>
 <span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">company</span><span class="p">;</span><span class="w"></span>
@@ -3428,7 +3428,7 @@ setgolf(ann);
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
 
 
-<span class="k">class</span> <span class="nc">StopWatch</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">StopWatch</span><span class="w"></span>
 <span class="p">{</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">NoOfInstances</span><span class="p">;</span><span class="w"></span>
@@ -3499,7 +3499,7 @@ setgolf(ann);
 <p>C++这个this指针的概念可以类比python的<code>self</code> ，而且这个this参数在C++的类方法里面还是作为默认参数传递进去的，也就是直接用就是了，其代表的就是对本实例的一个<strong>指针</strong>。注意this是一个指针，其调用内部成员要使用 <code>this-&gt;a</code> 这样的语法。</p>
 <p>关于返回 <code>*this</code> 有点让人困惑，请参看 <a href="https://stackoverflow.com/questions/2750316/this-vs-this-in-c">这个网页</a> ，其和方法或说成员函数的返回声明类型有关，如果是声明的 <code>Stock &amp;</code> 则 <code>*this</code> 是对本实例的引用，一个<strong>引用变量</strong> ；否则返回的是本对象的一个复制。</p>
 <h3 id="const_1">const成员函数</h3>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="p">...</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">total</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
@@ -3508,19 +3508,19 @@ setgolf(ann);
 <p>前面提到this指针，本实例作为参数是隐含传递进去了，如果希望该成员函数不修改调用对象也就是本实例的数据，则可以用上面的写法，成员函数后面跟一个const，具体术语叫做const成员函数，这样该const成员函数是不会修改本实例的数据的。</p>
 <h3 id="_58">类内定义的数组长度是常量的情况</h3>
 <p>如下类里面定义一个数组，其长度是一个常量，下面的写法是<strong>错误的</strong> 【参考资料1提到类里面定义常量都要使用enum或者static const形式我是存有疑问的，因为个人实践一般const设置的常量只要不是数组情况也是可以正常使用的。】。</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MAX</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">costs</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>这是因为类的声明还只是描述类的形式，还并没有实际进行实例化创建动作。而后面要进行这种创建动作的要找这个MAX的值却发现找不到了。你可以使用enum枚举，因为枚举只是一个符号名称，代码编译时已经自动替换为某个数值了。</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">enum</span> <span class="p">{</span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">costs</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>或者创建一个静态常量：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">staic</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MAX</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">costs</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
@@ -3529,7 +3529,7 @@ setgolf(ann);
 <p>2．下面是一个非常简单的类定义：</p>
 <div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span><span class="cp"></span>
 
-<span class="k">class</span> <span class="nc">Person</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Person</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">LIMIT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">25</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">lname</span><span class="p">;</span><span class="w"></span>
@@ -3551,7 +3551,7 @@ setgolf(ann);
 <span class="c1">//etc for two and three person</span>
 </code></pre></div>
 <p>上面 <code>Person() { lname = ""; fname[0] = '\0'; };</code> 这种在声明时就写上成员函数的定义的函数会自动成为内联函数。你也可以如下按照传统inline方法来写：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Person</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Person</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="p">...</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="n">Person</span><span class="p">();</span><span class="w"></span>
@@ -3611,7 +3611,7 @@ setgolf(ann);
 </code></pre></div>
 <p>3．重做前面<code>xiti_c9_1</code> 编程，但要用正确的golf类声明替换那里的代码。用带合适参数的构造函数替换 <code>setgolf（golf &amp;, const char *, int）</code>，以提供初始值。保留 <code>setgolf( )</code> 的交互版本，但要用构造函数来实现它（例如，setgolf( )的代码应该获得数据，将数据传递给构造函数来创建一个临时对象，并将其赋给调用对象，即 <code>*this</code> ）。</p>
 <p>在golf.h那里新增Golf类的声明：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Golf</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Golf</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">fullname</span><span class="p">[</span><span class="n">Len</span><span class="p">];</span><span class="w"></span>
@@ -3675,7 +3675,7 @@ setgolf(ann);
 </code></pre></div>
 <p>本例也算是对结构体和类之间转换的一种思考，结构内的访问属性默认是public，而类里面的变量默认访问属性是private。C++程序员该使用类就会使用类，而结构体只是某种纯粹的数据表达。</p>
 <p>6．下面是一个类的声明：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Move</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Move</span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
@@ -3762,9 +3762,9 @@ setgolf(ann);
 <span class="cp">#define ItemType double</span>
 <span class="k">typedef</span><span class="w"> </span><span class="n">ItemType</span><span class="p">(</span><span class="o">*</span><span class="n">func_type</span><span class="p">)(</span><span class="n">ItemType</span><span class="o">&amp;</span><span class="p">);</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">List</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">List</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">enum</span> <span class="p">{</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
 <span class="w">    </span><span class="n">ItemType</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
@@ -3868,7 +3868,7 @@ setgolf(ann);
 <span class="cp">#define MYTIME_H_</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-<span class="k">class</span> <span class="nc">MyTime</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyTime</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">hours</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">minutes</span><span class="p">;</span><span class="w"></span>
@@ -4040,9 +4040,9 @@ setgolf(ann);
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">VECTOR</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">class</span> <span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">        </span><span class="k">enum</span> <span class="nc">Mode</span><span class="p">{</span><span class="n">RECT</span><span class="p">,</span><span class="w"> </span><span class="n">POL</span><span class="p">};</span><span class="w"></span>
+<span class="w">        </span><span class="k">enum</span><span class="w"> </span><span class="nc">Mode</span><span class="p">{</span><span class="n">RECT</span><span class="p">,</span><span class="w"> </span><span class="n">POL</span><span class="p">};</span><span class="w"></span>
 <span class="w">        </span><span class="c1">// RECT rectangular mode POL polar mode</span>
 
 <span class="w">    </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
@@ -4415,7 +4415,7 @@ setgolf(ann);
 <span class="cp">#ifndef STONEWT_H_</span>
 <span class="cp">#define STONEWT_H_</span>
 
-<span class="k">class</span> <span class="nc">Stonewt</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Stonewt</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Lbs_per_stn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">stone</span><span class="p">;</span><span class="w"></span>
@@ -4486,9 +4486,9 @@ setgolf(ann);
 <span class="cp">#ifndef STONEWT_H_</span>
 <span class="cp">#define STONEWT_H_</span>
 
-<span class="k">class</span> <span class="nc">Stonewt</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Stonewt</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">enum</span> <span class="nc">Mode</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">STONE</span><span class="p">,</span><span class="w"> </span><span class="n">POUND</span><span class="p">,</span><span class="w"> </span><span class="n">INT_POUND</span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="nc">Mode</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">STONE</span><span class="p">,</span><span class="w"> </span><span class="n">POUND</span><span class="p">,</span><span class="w"> </span><span class="n">INT_POUND</span><span class="p">};</span><span class="w"></span>
 
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Lbs_per_stn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">;</span><span class="w"></span>
@@ -4845,7 +4845,7 @@ setgolf(ann);
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 
-<span class="k">class</span> <span class="nc">complex</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">complex</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">real</span><span class="p">;</span><span class="w"> </span><span class="c1">//real</span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">img</span><span class="p">;</span><span class="w"> </span><span class="c1">// img</span>
@@ -4943,7 +4943,7 @@ setgolf(ann);
 <span class="cp">#ifndef STRINGBAD_H_</span>
 <span class="cp">#define STRINGBAD_H_</span>
 
-<span class="k">class</span> <span class="nc">StringBad</span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">StringBad</span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">str</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
@@ -5043,7 +5043,7 @@ metto = motto;
 <span class="cp">#ifndef QUEUE_H_</span>
 <span class="cp">#define QUEUE_H_</span>
 
-<span class="k">class</span> <span class="nc">Customer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Customer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">arrive</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">processtime</span><span class="p">;</span><span class="w"></span>
@@ -5056,13 +5056,13 @@ metto = motto;
 
 <span class="k">typedef</span><span class="w"> </span><span class="n">Customer</span><span class="w"> </span><span class="n">Item</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">Queue</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Queue</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">struct</span> <span class="nc">Node</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="n">Item</span><span class="w"> </span><span class="n">item</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="k">struct</span> <span class="nc">Node</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">};</span><span class="w"></span>
-<span class="w">    </span><span class="k">enum</span> <span class="p">{</span><span class="n">Q_SIZE</span><span class="o">=</span><span class="mi">10</span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="n">Q_SIZE</span><span class="o">=</span><span class="mi">10</span><span class="p">};</span><span class="w"></span>
 <span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">front</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">rear</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">items</span><span class="p">;</span><span class="w"></span>
@@ -5261,7 +5261,7 @@ metto = motto;
 <p>首先来看新顾客的模拟，<code>(std::rand() * x / RAND_MAX &lt; 1)</code>  代码的这里会比较难懂一点，我们知道 rand会生成从0到最大整数的随机整数，所以 <code>std::rand() * x / RAND_MAX</code> 会生成0到x之间的随机整数，而x的含义是每个顾客平均几分钟。我们假设一条时间线，那么在这条时间线上平均x分钟画一条刻度，该刻度意思就是来了一个新顾客。因为随机数0到x概率分布均匀，所以可以认为上面运算公式得到bool为真的概率为1/x 。或者说该概率公式运行x个必然会得到一个刻度，而这和最开始定义的该时间线每x分钟画一个刻度表示来一个新用户是一致的，简单来说这个随机数函数返回true意思是一个新顾客来了。</p>
 <p>新顾客来了会记录自身到达的时间，然后分配给一个1-3的业务处理时间属性。然后我们继续往下看，队列开始挤出最开头的那个顾客，意思是那个顾客开始处理自己的业务了，获取该顾客的业务处理时间，后面是一些统计信息处理。下一分钟会判断该顾客业务处理完了没有，没完则等待时间减去一，完了也就是等待时间wait_time&lt;=0了那么继续处理下一个顾客。【这个模拟顾客业务处理时间和心跳时间还可以细一点，不过这不是重点。】在后面是一些统计数据的计算，都很简单。</p>
 <p>1．对于下面的类声明：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Cow</span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Cow</span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hobby</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">weight</span><span class="p">;</span><span class="w"></span>
@@ -5282,7 +5282,7 @@ metto = motto;
 <span class="k">using</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span><span class="w"></span>
 <span class="k">using</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">Cow</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cow</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">hobby</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">weight</span><span class="p">;</span><span class="w"></span>
@@ -5366,9 +5366,9 @@ metto = motto;
 <p>4．请参看下面的Stack类的头文件：</p>
 <div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">Item</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">Stack</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">enum</span> <span class="p">{</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
 <span class="w">    </span><span class="n">Item</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pitems</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">top</span><span class="p">;</span><span class="w"></span>
@@ -5392,9 +5392,9 @@ metto = motto;
 
 <span class="k">typedef</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">Item</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">Stack2</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Stack2</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="w">    </span><span class="k">enum</span> <span class="p">{</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
 <span class="w">    </span><span class="n">Item</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pitems</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">top</span><span class="p">;</span><span class="w"></span>
@@ -5634,7 +5634,7 @@ metto = motto;
 <span class="k">using</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span><span class="w"></span>
 
 
-<span class="k">class</span> <span class="nc">TableTennisPlayer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TableTennisPlayer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">firstname</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">lastname</span><span class="p">;</span><span class="w"></span>
@@ -5653,13 +5653,13 @@ metto = motto;
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">lastname</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">firstname</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">RatedPlayer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TableTennisPlayer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RatedPlayer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TableTennisPlayer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">rating</span><span class="p">;</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="n">RatedPlayer</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"none"</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ln</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"none"</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ht</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
 <span class="w">    </span><span class="n">RatedPlayer</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">TableTennisPlayer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">tp</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Rating</span><span class="p">()</span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">rating</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">Rating</span><span class="p">()</span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">rating</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
 <span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">ResetRating</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
 
@@ -5744,7 +5744,7 @@ metto = motto;
 <span class="n">format</span><span class="w"> </span><span class="nf">setFormat</span><span class="p">();</span><span class="w"></span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="n">format</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">precis</span><span class="w"> </span><span class="n">p</span><span class="p">);</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">Brass</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Brass</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">fullName</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">acctNum</span><span class="p">;</span><span class="w"></span>
@@ -5807,7 +5807,7 @@ metto = motto;
 <span class="w">    </span><span class="n">restore</span><span class="p">(</span><span class="n">initialState</span><span class="p">,</span><span class="w"> </span><span class="n">prec</span><span class="p">);</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">BrassPlus</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Brass</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BrassPlus</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Brass</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">maxLoan</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">rate</span><span class="p">;</span><span class="w"></span>
@@ -5910,7 +5910,7 @@ metto = motto;
 <p>protected类似于public和private也是用于控制类成员的访问权限的。protected更类似于private，只有在继承关系中才有区别，区别就是派生类可以访问protected里面的成员，当然不能访问私有成员，这个前面提到过了，而对于外部世界，也就是不是在继承关系中的那些类来说，保护成员跟私有成员一样不可访问。</p>
 <p>习题13.1</p>
 <p>以下面的类声明为基础：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Cd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Cd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">performers</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">label</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span><span class="w"></span>
@@ -5979,7 +5979,7 @@ metto = motto;
 <span class="cp">#ifndef CLASSIC_H_</span>
 <span class="cp">#define CLASSIC_H_</span>
 
-<span class="k">class</span> <span class="nc">Cd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">performers</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">label</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span><span class="w"></span>
@@ -5997,7 +5997,7 @@ metto = motto;
 <span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Cd</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">Classic</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Cd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Classic</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Cd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">private</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">works</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
@@ -6086,10 +6086,10 @@ metto = motto;
 <h3 id="namespace">类在namespace里面更简明的声明</h3>
 <p>如下，只是简单告诉编译器该类在某个namespace里面，后面再详细写上声明。</p>
 <div class="highlight"><pre><span></span><code><span class="k">namespace</span><span class="w"> </span><span class="nn">ns</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">class</span> <span class="nc">A</span><span class="p">;</span><span class="w"> </span><span class="c1">// just tell the compiler to expect a class def</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">;</span><span class="w"> </span><span class="c1">// just tell the compiler to expect a class def</span>
 <span class="p">}</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">ns</span><span class="o">::</span><span class="n">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ns</span><span class="o">::</span><span class="n">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// define here</span>
 <span class="p">};</span><span class="w"></span>
 </code></pre></div>
@@ -6100,10 +6100,10 @@ metto = motto;
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QMainWindow&gt;</span><span class="cp"></span>
 
 <span class="n">QT_BEGIN_NAMESPACE</span><span class="w"></span>
-<span class="k">namespace</span><span class="w"> </span><span class="nn">Ui</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">class</span> <span class="nc">MainWindow</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Ui</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MainWindow</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 <span class="n">QT_END_NAMESPACE</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">MainWindow</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">QMainWindow</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MainWindow</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">QMainWindow</span><span class="w"></span>
 <span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">Q_OBJECT</span><span class="w"></span>
 
@@ -6128,10 +6128,10 @@ metto = motto;
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QMainWindow&gt;</span><span class="cp"></span>
 
 <span class="n">QT_BEGIN_NAMESPACE</span><span class="w"></span>
-<span class="k">namespace</span><span class="w"> </span><span class="nn">Ui</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">class</span> <span class="nc">MainWindow</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Ui</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MainWindow</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 <span class="n">QT_END_NAMESPACE</span><span class="w"></span>
 
-<span class="k">class</span> <span class="nc">MyMainWindow</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">QMainWindow</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyMainWindow</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">QMainWindow</span><span class="w"></span>
 <span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">Q_OBJECT</span><span class="w"></span>
 
@@ -6159,7 +6159,7 @@ metto = motto;
 <div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span><span class="w"></span>
-<span class="k">class</span> <span class="nc">AB</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AB</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="k">public</span><span class="o">:</span><span class="w"></span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sub</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>

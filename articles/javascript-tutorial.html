@@ -200,30 +200,23 @@
 <li><a href="#json">JSON</a></li>
 <li><a href="#reg">Reg对象</a></li>
 <li><a href="#dom">DOM操作</a><ul>
-<li><a href="#setinterval">setInterval</a></li>
-<li><a href="#settimeout">setTimeout</a></li>
-<li><a href="#location">location</a></li>
-<li><a href="#history">history</a></li>
 <li><a href="#document">document</a><ul>
-<li><a href="#getelementbyid">getElementById</a></li>
-<li><a href="#createelement">createElement</a></li>
-<li><a href="#createtextnode">createTextNode</a></li>
-</ul>
-</li>
-<li><a href="#element">Element对象</a><ul>
-<li><a href="#queryselector">querySelector</a></li>
+<li><a href="#_38">查找目标标签</a></li>
+<li><a href="#_39">标签之间的关系</a></li>
+<li><a href="#matches">matches</a></li>
 <li><a href="#setattribute">setAttribute</a></li>
 <li><a href="#dataset">dataset</a></li>
 <li><a href="#classlist">classList</a></li>
-</ul>
-</li>
-<li><a href="#node">Node对象</a><ul>
 <li><a href="#textcontent">textContent</a></li>
 <li><a href="#parentelement">parentElement</a></li>
 <li><a href="#removechild">removeChild</a></li>
 </ul>
 </li>
-<li><a href="#_38">事件</a><ul>
+<li><a href="#setinterval">setInterval</a></li>
+<li><a href="#settimeout">setTimeout</a></li>
+<li><a href="#location">location</a></li>
+<li><a href="#history">history</a></li>
+<li><a href="#_40">事件</a><ul>
 <li><a href="#customevent">CustomEvent</a></li>
 <li><a href="#dispatchevent">dispatchEvent</a></li>
 <li><a href="#addeventlistener">addEventListener</a></li>
@@ -234,7 +227,7 @@
 </ul>
 </li>
 <li><a href="#no-jquery">no-jquery</a><ul>
-<li><a href="#_39">选择</a><ul>
+<li><a href="#_41">选择</a><ul>
 <li><a href="#class">选择class</a></li>
 <li><a href="#id">选择id</a></li>
 </ul>
@@ -242,13 +235,13 @@
 <li><a href="#ajax">ajax</a></li>
 </ul>
 </li>
-<li><a href="#_40">其他</a><ul>
-<li><a href="#_41">严格模式</a></li>
+<li><a href="#_42">其他</a><ul>
+<li><a href="#_43">严格模式</a></li>
 <li><a href="#mapfilterreduce">map和filter和reduce</a></li>
-<li><a href="#_42">表单提交按钮防止多次点击多次提交</a></li>
+<li><a href="#_44">表单提交按钮防止多次点击多次提交</a></li>
 </ul>
 </li>
-<li><a href="#_43">参考资料</a></li>
+<li><a href="#_45">参考资料</a></li>
 </ul>
 </div>
             </nav>
@@ -1056,36 +1049,51 @@ var s2 = new Set([1, 2, 3]); // 含1, 2, 3</p>
 </code></pre></div>
 <h2 id="reg">Reg对象</h2>
 <h2 id="dom">DOM操作</h2>
-<h3 id="setinterval">setInterval</h3>
-<div class="highlight"><pre><span></span><code>setInterval(func, 1000)
-</code></pre></div>
-<p>启动一个计时器，第二个参数是时间间隔，每个那个时间间隔将会执行一次目标函数，默认单位是ms。</p>
-<h3 id="settimeout">setTimeout</h3>
-<p>类似setInterval，启动一次性任务。</p>
-<h3 id="location">location</h3>
-<p>该窗口的Location对象</p>
-<h3 id="history">history</h3>
-<p>该窗口的History对象</p>
+<p>所谓DOM操作就是用Javascript来操作修改页面内容，这基本上是client端javascript的主要工作内容。</p>
+<p>如果熟悉python的beautifulsoup或者lxml之类的分析网页的模块，那么对Javascript的这些DOM操作概念都不会太陌生。我这里就不做太多抽象的术语上的讨论了，下面的讨论会更加注重实践方面的东西。</p>
 <h3 id="document">document</h3>
-<h4 id="getelementbyid">getElementById</h4>
-<h4 id="createelement">createElement</h4>
-<div class="highlight"><pre><span></span><code>var e = document.createElement(name);
+<p>document就是html文档的主对象，document.body就是对应着body这个标签对象。这里所说的标签对象在javascript的DOM这边对应的是Element类。在Javascript的实现中Element类并不是最底层的类，Element类继承自Node类。一般在html文档这边我们能看到的标签都是Element类，实际上通过Element类和它提供的便捷方法一般就能够完成DOM的大部分操作任务。</p>
+<p>比如下面这个例子：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">t</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">'this is text.'</span><span class="p">)</span>
+<span class="nx">e</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
 </code></pre></div>
-<p>创建一个标签，返回的是一个 <code>Element</code> 对象。</p>
-<h4 id="createtextnode">createTextNode</h4>
-<div class="highlight"><pre><span></span><code>child = document.createTextNode(child);
+<p>读者可以试一下，从这些方法的名字可以直接看出来，第一行就是创建了一个Element对象，具体就是创建了一个li标签。第二行是创建了一个文本节点。第三行是在Element最后一个子节点之后插入一个Node对象或DOMString对象【这就是MDN文档的原话】。最终结果就是：</p>
+<div class="highlight"><pre><span></span><code>'&lt;li&gt;this is text.&lt;/li&gt;'
 </code></pre></div>
-<p>创建一个文本节点。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">'this is text.'</span><span class="p">)</span>
-<span class="nx">e</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
+<p>但具体获得上面这个字符串要使用 <code>e.outerHTML</code> 。</p>
+<p>这个例子只是演示目的，实际操作只需要：</p>
+<div class="highlight"><pre><span></span><code>e.textContent = 'new text'
 </code></pre></div>
-<p>上面的例子创建了一个li标签，然后创建了一个文本节点，然后将这个文本节点附加到该li标签上，最后该li标签内容如下：</p>
-<div class="highlight"><pre><span></span><code>&lt;li&gt;this is text.&lt;/li&gt;
+<p>根本不需要了解文本节点这个概念，当然Element类的 <code>textContent</code> 这个属性调用的底层实现肯定是基于文本节点来的。再比如属性有一个属性节点的概念，同样类似上面文本节点的讨论，一般通过Element类及其提供的方法就能完成DOM的绝大部分操作，如果有代码出现了文本节点或者属性节点等概念，但是代码的具体工作通过Element类的某个方法就能够完成，那么我们应该说这个代码是有问题的，是故意写的晦涩难懂。</p>
+<h4 id="_38">查找目标标签</h4>
+<p>如果目标标签有id那么自然就直接根据id来。 </p>
+<div class="highlight"><pre><span></span><code>let e = document.getElementById('test')
 </code></pre></div>
-<h3 id="element">Element对象</h3>
-<h4 id="queryselector">querySelector</h4>
-<p>之前接触到的<code>document.querySelector</code> 是因为Document对象继承自Element对象，该方法实际来自Element对象。具体就是在本Element下继续进行搜索动作。</p>
+<p>返回的是找到的目标标签或者说Element对象。不用带 <code>#</code> 符号。</p>
+<p>现在已经不推荐使用getElementsByTagName之类的方法了，querySelector和querySelectorAll已经足够强大和好用，不需要那些杂七杂八的方法了。</p>
+<p>querySelectorAll和querySelector的区别是其返回的是所有匹配的结果而不是第一个匹配项，所以返回的是一个类似Array的对象。虽然不是数组但一般方法操作length，for语句之类的都有。</p>
+<p>querySelector的语法使用如果熟悉css那种匹配规则的话那么立马就可以写出对应标签的匹配语句了：</p>
+<div class="highlight"><pre><span></span><code>let e = document.querySelector('.class')
+</code></pre></div>
+<p>具体MDN的官方文档直接说明了其是一个 <strong>CSS选择器字符串</strong> ，所有有匹配问题实在不清楚的查阅css选择器书写规则即可。</p>
+<p>匹配到的Element对象如果还想继续查找的话可以继续调用该Element对象的 <code>querySelector</code> 和 <code>querySelectorAll</code> 方法。注意上面的表述里面 <strong>没有 <code>getElementById</code> </strong> 。</p>
+<p>因为querySelector和querySelectorAll最常用，现代Javascript教程里有一段指出，querySelector和querySelectorAll其返回的是 <strong>静态的集合</strong>。也就是这两个方法是立即调用立即查找，结果封存不变，这个了解一下。</p>
+<h4 id="_39">标签之间的关系</h4>
+<p>document不是Element对象，<code>document.documentElement</code> 才是Element对象，其对应的是html这个标签。</p>
+<p>再实践中推荐采用下面的属性来实现纯元素导航。</p>
+<ul>
+<li>children 返回本标签下面的子标签 【没有并不是返回的null，用childElementCount来判断。】</li>
+<li>parentElement  返回本标签上面的父标签 【没有则返回null】</li>
+<li>firstElementChild 本标签下面的第一个子标签 【没有则返回null】</li>
+<li>lastElementChild  本标签下面的最后一个子标签 【没有则返回null】</li>
+<li>previousElementSibling 本标签上面的兄弟标签 【没有则返回null】</li>
+<li>nextElementSibling 本标签下面的兄弟标签 【没有则返回null】</li>
+</ul>
+<h4 id="matches">matches</h4>
+<div class="highlight"><pre><span></span><code>Element.matches(css)
+</code></pre></div>
+<p>返回布尔值，该标签是否匹配给定的css选择器。</p>
 <h4 id="setattribute">setAttribute</h4>
 <p><code>Element</code> 对象可以调用这个 <code>setAttribute</code> 方法来设置标签内的属性值。</p>
 <div class="highlight"><pre><span></span><code>element.setAttribute(name, value);
@@ -1094,7 +1102,6 @@ var s2 = new Set([1, 2, 3]); // 含1, 2, 3</p>
 <p>查询到的元素如果div则是更具体的HTMLdivElement等等，其继承自HTMLElement，HTMLElement有一些专门的方法。比如这个dataset，其是可以只读属性，对应html中的<code>data-*</code> 这样的属性值，比如说 <code>data-name</code> 将变成dataset的<code>{'name': 'what'}</code> 。</p>
 <h4 id="classlist">classList</h4>
 <p>类似上面的讨论也是HTMLElement的一个属性，表示class属性数组。</p>
-<h3 id="node">Node对象</h3>
 <h4 id="textcontent">textContent</h4>
 <p>之前提到querySelector查到某个Element之后想要取出其文本内容可以调用 <code>textContent</code> 属性，document和Element都能这样做只是因为它们继承自Node对象，具体textContent这个属性的定义是在Node对象这里。</p>
 <h4 id="parentelement">parentElement</h4>
@@ -1105,7 +1112,17 @@ var s2 = new Set([1, 2, 3]); // 含1, 2, 3</p>
 <p>移除本节点的某个子节点</p>
 <div class="highlight"><pre><span></span><code>node.removeChild(child);
 </code></pre></div>
-<h3 id="_38">事件</h3>
+<h3 id="setinterval">setInterval</h3>
+<div class="highlight"><pre><span></span><code>setInterval(func, 1000)
+</code></pre></div>
+<p>启动一个计时器，第二个参数是时间间隔，每个那个时间间隔将会执行一次目标函数，默认单位是ms。</p>
+<h3 id="settimeout">setTimeout</h3>
+<p>类似setInterval，启动一次性任务。</p>
+<h3 id="location">location</h3>
+<p>该窗口的Location对象</p>
+<h3 id="history">history</h3>
+<p>该窗口的History对象</p>
+<h3 id="_40">事件</h3>
 <p>Element对象继承自EventTarget从而获得了这些方法： <code>addEventListener</code> ， <code>removeEventListener</code> 和 <code>dispatchEvent</code> ，这几个方法都是和事件处理相关的。</p>
 <p>熟悉GUI桌面程序的话会对事件有个大致的理解，大体类似于QT里面的信号。</p>
 <h4 id="customevent">CustomEvent</h4>
@@ -1129,7 +1146,7 @@ var s2 = new Set([1, 2, 3]); // 含1, 2, 3</p>
 <p>在一个目标button里面处理click事件使用event.target或者event.currentTarget是没有区别的。</p>
 <h2 id="no-jquery">no-jquery</h2>
 <p>更多相关知识请参阅参考资料四，即 <a href="https://github.com/nefe/You-Dont-Need-jQuery/blob/master/README.zh-CN.md">这个Github项目</a> 。下面就一些重点知识做出一些整理。</p>
-<h3 id="_39">选择</h3>
+<h3 id="_41">选择</h3>
 <p>jquery的选择是该库很核心的一个功能，现代JavaScript提供了 <code>document.querySelector()</code> 和 <code>document.querySelectorAll()</code> 来作为替代。然后原来的 <code>document.getElementById()</code>  ， <code>document.getElementByClassName()</code> 或 <code>document.getElementByTagName()</code> 性能更好。</p>
 <div class="highlight"><pre><span></span><code>// jQuery
 $('selector');
@@ -1178,21 +1195,21 @@ document.getElementById('id');
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="p">})</span>
 </code></pre></div>
-<h2 id="_40">其他</h2>
-<h3 id="_41">严格模式</h3>
+<h2 id="_42">其他</h2>
+<h3 id="_43">严格模式</h3>
 <p><a href="https://zh.javascript.info/strict-mode">现代javascript教程该小节</a> 提到如果代码写在 <code>class</code> 或者 <code>module</code> 里面的时候，会自动开启严格模式，这个值得了解下。 </p>
 <h3 id="mapfilterreduce">map和filter和reduce</h3>
 <p>这三个函数是函数编程很重要的几个函数，在数组对象里面可以直接调用这些方法：</p>
 <div class="highlight"><pre><span></span><code>a.map(function)
 </code></pre></div>
-<h3 id="_42">表单提交按钮防止多次点击多次提交</h3>
+<h3 id="_44">表单提交按钮防止多次点击多次提交</h3>
 <p>参考了 <a href="https://www.the-art-of-web.com/javascript/doublesubmit/">这个网页的第一小节</a> ，觉得这个解决方案很是简单，而且有效。对于单页面表单，也就是提交成功了通常切换到另外的网页那边去了的，还是很好地适用的。可能在某些情况下，本解决方案会令人不太满意，因为这个提交按钮只要提交之后就显示按钮一直处于禁用状态。</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">"POST"</span> <span class="na">action</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onsubmit</span><span class="o">=</span><span class="s">"myButton.disabled = true; return true;"</span><span class="p">&gt;</span>
 ...
 <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">"submit"</span> <span class="na">name</span><span class="o">=</span><span class="s">"myButton"</span> <span class="na">value</span><span class="o">=</span><span class="s">"Submit"</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
 </code></pre></div>
-<h2 id="_43">参考资料</h2>
+<h2 id="_45">参考资料</h2>
 <ol>
 <li>Javascript权威指南 David Flanagan著.</li>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript">mozilla docs</a></li>
@@ -1208,7 +1225,7 @@ document.getElementById('id');
         <time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
 
         <h4>最近更新于：</h4>
-        <time datetime="2021-12-31T01:04:32.539325+08:00">2021年 12月 31日 </time>
+        <time datetime="2022-01-15T03:47:49.364116+08:00">2022年 1月 15日 </time>
 
 
         <h4>分类：</h4>

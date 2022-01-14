@@ -208,9 +208,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 <ol>
 <li>首先新建一个文件夹，开始编写Dockerfile</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">php:7.0-apache</span>
-<span class="k">COPY</span> src/ /var/www/html
-<span class="k">EXPOSE</span><span class="s"> 80</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">php:7.0-apache</span>
+<span class="k">COPY</span><span class="w"> </span>src/ /var/www/html
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">80</span>
 </code></pre></div>
 <p>FROM what 表示本镜像基于这个镜像，该镜像的名字叫php，一个官方镜像，然后分支名字是 <code>7.0-apache</code> 。</p>
 <p>然后执行COPY动作，将本文件夹下面的src文件夹里面的内容，复制到容器【根据本镜像生成的容器，源镜像是基于linux系统的】的 <code>/var/www/html</code> 文件夹下。</p>
@@ -371,7 +371,7 @@ services:
 <li>别安装不需要的软件</li>
 <li>apt安装软件先update并尽量如下合并为一句话，如下是一个最佳实践，最后还将apt安装过程的缓存删掉了。</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="k">RUN</span> apt-get update <span class="o">&amp;&amp;</span> apt-get install -y <span class="se">\</span>
+<div class="highlight"><pre><span></span><code><span class="k">RUN</span><span class="w"> </span>apt-get update <span class="o">&amp;&amp;</span> apt-get install -y <span class="se">\</span>
     aufs-tools <span class="se">\</span>
     automake <span class="se">\</span>
     build-essential <span class="se">\</span>
@@ -385,15 +385,15 @@ services:
 </code></pre></div>
 <p>来决定运行容器的用户。</p>
 <p>而通过docker-compose来启动容器的话，你可以在docker-compose.yml上如下配置：</p>
-<div class="highlight"><pre><span></span><code>  <span class="nt">web</span><span class="p">:</span>
-    <span class="nt">build</span><span class="p">:</span>
-      <span class="nt">context</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
-      <span class="nt">args</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">UNAME=${UNAME}</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">UID=${UID}</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">GID=${GID}</span>
-    <span class="l l-Scalar l-Scalar-Plain">...</span>
-    <span class="nt">user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${UID}:${GID}</span>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">web</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNAME=${UNAME}</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UID=${UID}</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GID=${GID}</span><span class="w"></span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${UID}:${GID}</span><span class="w"></span>
 </code></pre></div>
 <p>然后你需要配置环境变量，再运行 docker-compose ，或者如下写一个bash脚本：</p>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
@@ -409,17 +409,17 @@ services:
 </code></pre></div>
 <p>来达到传递环境参数和启动docker-compose 命令的效果。</p>
 <p>此外你还需要在容器里面进行一些配置：</p>
-<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.6</span>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.6</span>
 
-<span class="k">ARG</span> <span class="nv">UNAME</span><span class="o">=</span>wanze
-<span class="k">ARG</span> <span class="nv">UID</span><span class="o">=</span><span class="m">1000</span>
-<span class="k">ARG</span> <span class="nv">GID</span><span class="o">=</span><span class="m">1000</span>
+<span class="k">ARG</span><span class="w"> </span><span class="nv">UNAME</span><span class="o">=</span>wanze
+<span class="k">ARG</span><span class="w"> </span><span class="nv">UID</span><span class="o">=</span><span class="m">1000</span>
+<span class="k">ARG</span><span class="w"> </span><span class="nv">GID</span><span class="o">=</span><span class="m">1000</span>
 
-<span class="k">ENV</span> <span class="nv">UHOME</span><span class="o">=</span>/home/<span class="nv">$UNAME</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">UHOME</span><span class="o">=</span>/home/<span class="nv">$UNAME</span>
 
-<span class="k">RUN</span> groupadd -g <span class="nv">$GID</span> -o <span class="nv">$UNAME</span>
-<span class="k">RUN</span> useradd -m -u <span class="nv">$UID</span> -g <span class="nv">$GID</span> -o -s /bin/bash -d <span class="nv">$UHOME</span> <span class="nv">$UNAME</span>
-<span class="k">USER</span><span class="s"> $UNAME</span>
+<span class="k">RUN</span><span class="w"> </span>groupadd -g <span class="nv">$GID</span> -o <span class="nv">$UNAME</span>
+<span class="k">RUN</span><span class="w"> </span>useradd -m -u <span class="nv">$UID</span> -g <span class="nv">$GID</span> -o -s /bin/bash -d <span class="nv">$UHOME</span> <span class="nv">$UNAME</span>
+<span class="k">USER</span><span class="w"> </span><span class="s">$UNAME</span>
 </code></pre></div>
 <p>新建立的容器一般是只有root用户的，所以你需要新建一个容器外用户对应的用户和群组。这样你的容器默认的登录用户就配置好了。</p>
 <p>如果你如下进行了挂载VOLUMN上的配置：</p>
@@ -447,7 +447,7 @@ sudo systemctl start docker
 </code></pre></div>
 <h2 id="_11">设置时区</h2>
 <div class="highlight"><pre><span></span><code><span class="c"># set timezone to hongkong</span>
-<span class="k">RUN</span>  unlink /etc/localtime <span class="o">&amp;&amp;</span> ln -s /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
+<span class="k">RUN</span><span class="w">  </span>unlink /etc/localtime <span class="o">&amp;&amp;</span> ln -s /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
 </code></pre></div>
 <h2 id="docker_2">docker的备份和还原</h2>
 <p>docker可以使用save和load来进行备份和还原操作。</p>

@@ -189,28 +189,28 @@ public class Example : MonoBehaviour
 <div class="highlight"><pre><span></span><code>    [Header("Persistent managers Scene")]
 </code></pre></div>
 <p>添加一个属性Header，则会在编辑器的Inspector窗口上添加一个标题头，你也可以自定义自己的属性装饰函数。</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">public</span> <span class="k">class</span> <span class="nc">HeaderLineAttribute</span> <span class="p">:</span> <span class="n">PropertyAttribute</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">HeaderLineAttribute</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PropertyAttribute</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-        <span class="k">public</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">header</span><span class="p">;</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">header</span><span class="p">;</span><span class="w"></span>
 
-        <span class="k">public</span> <span class="nf">HeaderLineAttribute</span><span class="p">(</span><span class="kt">string</span> <span class="n">header</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="n">header</span> <span class="p">=</span> <span class="n">header</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">HeaderLineAttribute</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">header</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">header</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">header</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>如上定义了一个 <code>HeaderLineAttribute</code> 属性装饰函数，实际使用是：</p>
 <div class="highlight"><pre><span></span><code>[HeaderLine("Input")]
 </code></pre></div>
 <p>【似乎如果该类的名字有Attribute则会省略。】</p>
 <p>然后该属性装饰函数你可以定义属性绘制类：</p>
-<div class="highlight"><pre><span></span><code><span class="na">    [CustomPropertyDrawer (typeof(HeaderLineAttribute))]</span>
-    <span class="k">public</span> <span class="k">class</span> <span class="nc">HeaderLineDrawer</span> <span class="p">:</span> <span class="n">DecoratorDrawer</span>
-    <span class="p">{</span>
-        <span class="k">public</span> <span class="nf">HeaderLineDrawer</span> <span class="p">()</span>
-        <span class="p">{</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="na">[CustomPropertyDrawer (typeof(HeaderLineAttribute))]</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">HeaderLineDrawer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">DecoratorDrawer</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">HeaderLineDrawer</span><span class="w"> </span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>DecoratorDrawer类似PropertyDrawer，区别就是DecoratorDrawer不绘制属性，除了从对应的PropertyAttribute对象那里获取的数据。</p>
 <p>具体绘图是根据 <code>OnGUI</code>  重载方法来的。</p>
@@ -218,20 +218,20 @@ public class Example : MonoBehaviour
 <p>属性值只是一个影响类的Inspector视图的方式，你还可以对你编写的类完全来定义Inspector视图。</p>
 <h3 id="_5">第一个例子</h3>
 <p>现在假设你定义了一个SomeScript类，其继承自MonoBehaviour，然后你希望定制这个SomeScript组件在Unity编辑器上的Inspector视图。一个简单的编辑器定制代码如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">UnityEditor</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEditor</span><span class="p">;</span><span class="w"></span>
 
-<span class="na">[CustomEditor(typeof(SomeScript))]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">SomeScriptEditor</span> <span class="p">:</span> <span class="n">Editor</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnInspectorGUI</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">SomeScript</span> <span class="n">someScript</span> <span class="p">=</span> <span class="p">(</span><span class="n">SomeScript</span><span class="p">)</span><span class="n">target</span><span class="p">;</span>
+<span class="na">[CustomEditor(typeof(SomeScript))]</span><span class="w"></span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SomeScriptEditor</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Editor</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnInspectorGUI</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">SomeScript</span><span class="w"> </span><span class="n">someScript</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">SomeScript</span><span class="p">)</span><span class="n">target</span><span class="p">;</span><span class="w"></span>
 
-        <span class="n">someScript</span><span class="p">.</span><span class="n">experience</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">IntField</span><span class="p">(</span><span class="s">"Experience"</span><span class="p">,</span> <span class="n">someScript</span><span class="p">.</span><span class="n">experience</span><span class="p">);</span>
+<span class="w">        </span><span class="n">someScript</span><span class="p">.</span><span class="n">experience</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">IntField</span><span class="p">(</span><span class="s">"Experience"</span><span class="p">,</span><span class="w"> </span><span class="n">someScript</span><span class="p">.</span><span class="n">experience</span><span class="p">);</span><span class="w"></span>
 
-        <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">LabelField</span><span class="p">(</span><span class="s">"Label: "</span><span class="p">,</span> <span class="n">someScript</span><span class="p">.</span><span class="n">Level</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">LabelField</span><span class="p">(</span><span class="s">"Label: "</span><span class="p">,</span><span class="w"> </span><span class="n">someScript</span><span class="p">.</span><span class="n">Level</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <ol>
 <li><code>using UnityEditor;</code> 一般进行Unity Editor开发需要引入这个命名空间。</li>
@@ -250,23 +250,23 @@ public class Example : MonoBehaviour
 <p>上面接受两个字符串参数，其中第一个参数是左边的label，第二个参数是右边的label。</p>
 <h3 id="_7">添加一个按钮</h3>
 <p>具体请参见下面的例子：</p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="nn">UnityEditor</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">UnityEditor</span><span class="p">;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="nn">UnityEngine</span><span class="p">;</span><span class="w"></span>
 
-<span class="na">[CustomEditor(typeof(TestSerializableDict))]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">TestSerializableDictEditor</span> <span class="p">:</span> <span class="n">Editor</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnInspectorGUI</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">base</span><span class="p">.</span><span class="n">OnInspectorGUI</span><span class="p">();</span>
+<span class="na">[CustomEditor(typeof(TestSerializableDict))]</span><span class="w"></span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestSerializableDictEditor</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Editor</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnInspectorGUI</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">base</span><span class="p">.</span><span class="n">OnInspectorGUI</span><span class="p">();</span><span class="w"></span>
 
-        <span class="n">TestSerializableDict</span> <span class="n">targetScript</span> <span class="p">=</span> <span class="p">(</span><span class="n">TestSerializableDict</span><span class="p">)</span><span class="n">target</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">GUILayout</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="s">"test"</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="n">targetScript</span><span class="p">.</span><span class="n">Test</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="n">TestSerializableDict</span><span class="w"> </span><span class="n">targetScript</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">TestSerializableDict</span><span class="p">)</span><span class="n">target</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">GUILayout</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="s">"test"</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">targetScript</span><span class="p">.</span><span class="n">Test</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>上面代码如果点击按钮的话会执行 <code>TestSerializableDict</code> 脚本组件里面的Test方法。</p>
 <p>上面的 <code>base.OnInspectorGUI();</code> 是将该脚本组件原来该有的属性视图都添加上，在 <a href="https://learn.unity.com/tutorial/editor-scripting">这个网页</a> 提到 <code>DrawDefaultInspector();</code> 也有类似的作用，这两者是完全一样还是有细微的差异个人不太清楚。</p>
@@ -301,13 +301,13 @@ public static void LabelField(string label, params GUILayoutOption[] options);
 <h3 id="serializedproperty">SerializedProperty</h3>
 <h3 id="reorderablelist">ReorderableList</h3>
 <p>这个类在 <code>UnityEditorInternal</code> 命名空间里面，官方文档对这个类也语焉不详，但是是一个很好的表现列表的类，<a href="https://va.lent.in/unity-make-your-lists-functional-with-reorderablelist/">这篇文章</a> 对这个类的讨论很有参考价值。</p>
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="nf">ReorderableList</span><span class="p">(</span>
-    <span class="n">SerializedObject</span> <span class="n">serializedObject</span><span class="p">,</span> 
-    <span class="n">SerializedProperty</span> <span class="n">elements</span><span class="p">,</span> 
-    <span class="kt">bool</span> <span class="n">draggable</span><span class="p">,</span> 
-    <span class="kt">bool</span> <span class="n">displayHeader</span><span class="p">,</span> 
-    <span class="kt">bool</span> <span class="n">displayAddButton</span><span class="p">,</span> 
-    <span class="kt">bool</span> <span class="n">displayRemoveButton</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="nf">ReorderableList</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">SerializedObject</span><span class="w"> </span><span class="n">serializedObject</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">SerializedProperty</span><span class="w"> </span><span class="n">elements</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">draggable</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">displayHeader</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">displayAddButton</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">displayRemoveButton</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <p>SerializedProperty可以是array，应该也可以是List。该对象还提供了很多回调属性：</p>
 <ul>

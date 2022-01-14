@@ -239,84 +239,84 @@
 <h3 id="surface-shader">surface shader</h3>
 <p>unity提出的surface shader是基于vertex and fragment shader，其需要在unity的build-in render pipeline下使用，主要是节省了原来编写Shader对光照的一些工作。</p>
 <p>下面是一个简单的vertex and fragment shader的例子，来自参考资料9：</p>
-<div class="highlight"><pre><span></span><code><span class="n">Shader</span> <span class="s">"Custom/Simple VertexFragment Shader"</span> <span class="p">{</span>
-    <span class="n">SubShader</span> <span class="p">{</span>
-        <span class="n">Pass</span> <span class="p">{</span>
-            <span class="n">CGPROGRAM</span>
-            <span class="cp">#pragma vertex vert</span>
-            <span class="cp">#pragma fragment frag</span>
+<div class="highlight"><pre><span></span><code><span class="n">Shader</span><span class="w"> </span><span class="s">"Custom/Simple VertexFragment Shader"</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">SubShader</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">Pass</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">CGPROGRAM</span><span class="w"></span>
+<span class="w">            </span><span class="cp">#pragma vertex vert</span><span class="w"></span>
+<span class="w">            </span><span class="cp">#pragma fragment frag</span><span class="w"></span>
 
-            <span class="n">float4</span> <span class="nf">vert</span><span class="p">(</span><span class="n">float4</span> <span class="n">v</span> <span class="p">:</span> <span class="n">POSITION</span><span class="p">)</span> <span class="p">:</span> <span class="n">SV_POSITION</span> <span class="p">{</span>
-                <span class="k">return</span> <span class="nf">mul</span> <span class="p">(</span><span class="n">UNITY_MATRIX_MVP</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
-            <span class="p">}</span>
+<span class="w">            </span><span class="n">float4</span><span class="w"> </span><span class="nf">vert</span><span class="p">(</span><span class="n">float4</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">POSITION</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SV_POSITION</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nf">mul</span><span class="w"> </span><span class="p">(</span><span class="n">UNITY_MATRIX_MVP</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
 
-            <span class="n">fixed4</span> <span class="nf">frag</span><span class="p">()</span> <span class="p">:</span> <span class="n">SV_Target</span> <span class="p">{</span>
-                <span class="k">return</span> <span class="nf">fixed4</span><span class="p">(</span><span class="m">1.0</span><span class="p">,</span><span class="m">0.0</span><span class="p">,</span><span class="m">0.0</span><span class="p">,</span><span class="m">1.0</span><span class="p">);</span>
-            <span class="p">}</span>
+<span class="w">            </span><span class="n">fixed4</span><span class="w"> </span><span class="nf">frag</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SV_Target</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nf">fixed4</span><span class="p">(</span><span class="m">1.0</span><span class="p">,</span><span class="m">0.0</span><span class="p">,</span><span class="m">0.0</span><span class="p">,</span><span class="m">1.0</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
 
-            <span class="n">ENDCG</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">            </span><span class="n">ENDCG</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>和surface shader的最大的区别就是其代码是放在Pass区块里面的，然后这个Pass区块在SubShader区块里面。</p>
 <h3 id="shaderlab">ShaderLab</h3>
 <p>所谓的编写Shader其实只是因为GPU上的某个Shader提供了可配置接口或者可编程入口，然后再通过某种语言来对这个Shader进行编程和配置。这个语言很多GPU厂商都提供了自己特定的语言，Unity提供了两种Shader编码语言，然后会将其根据不同的GPU转成对应的它支持的语言。其中ShaderLab是Unity开发出来的专门写Shader的一门语言。此外Unity还支持HLSL语言，不管你是用的ShaderLab还是HLSL，最终unity都会将它们针对不同的硬件编译成不同的目标机器支持的语言的。</p>
 <h4 id="_10">基本结构</h4>
 <p>要熟悉ShaderLab基本结构，最好是自己新建一个最常用的Shader，<code>Create -&gt; Shader -&gt; Standard Surface Shader</code> ，打开该文件我们会看到如下内容：</p>
-<div class="highlight"><pre><span></span><code><span class="n">Shader</span> <span class="s">"Custom/MySurfaceShader"</span>
-<span class="p">{</span>
-    <span class="n">Properties</span>
-    <span class="p">{</span>
-        <span class="n">_Color</span> <span class="p">(</span><span class="s">"Color"</span><span class="p">,</span> <span class="n">Color</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
-        <span class="n">_MainTex</span> <span class="p">(</span><span class="s">"Albedo (RGB)"</span><span class="p">,</span> <span class="m">2D</span><span class="p">)</span> <span class="p">=</span> <span class="s">"white"</span> <span class="p">{}</span>
-        <span class="n">_Glossiness</span> <span class="p">(</span><span class="s">"Smoothness"</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span> <span class="p">=</span> <span class="m">0.5</span>
-        <span class="n">_Metallic</span> <span class="p">(</span><span class="s">"Metallic"</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span> <span class="p">=</span> <span class="m">0.0</span>
-    <span class="p">}</span>
-    <span class="n">SubShader</span>
-    <span class="p">{</span>
-        <span class="n">Tags</span> <span class="p">{</span> <span class="s">"RenderType"</span><span class="p">=</span><span class="s">"Opaque"</span> <span class="p">}</span>
-        <span class="n">LOD</span> <span class="m">200</span>
+<div class="highlight"><pre><span></span><code><span class="n">Shader</span><span class="w"> </span><span class="s">"Custom/MySurfaceShader"</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Properties</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Color</span><span class="w"> </span><span class="p">(</span><span class="s">"Color"</span><span class="p">,</span><span class="w"> </span><span class="n">Color</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">_MainTex</span><span class="w"> </span><span class="p">(</span><span class="s">"Albedo (RGB)"</span><span class="p">,</span><span class="w"> </span><span class="m">2D</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"white"</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Glossiness</span><span class="w"> </span><span class="p">(</span><span class="s">"Smoothness"</span><span class="p">,</span><span class="w"> </span><span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0.5</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Metallic</span><span class="w"> </span><span class="p">(</span><span class="s">"Metallic"</span><span class="p">,</span><span class="w"> </span><span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">SubShader</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">Tags</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">"RenderType"</span><span class="p">=</span><span class="s">"Opaque"</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">LOD</span><span class="w"> </span><span class="m">200</span><span class="w"></span>
 
-        <span class="n">CGPROGRAM</span>
-        <span class="c1">// Physically based Standard lighting model, and enable shadows on all light types</span>
-        <span class="cp">#pragma surface surf Standard fullforwardshadows</span>
+<span class="w">        </span><span class="n">CGPROGRAM</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Physically based Standard lighting model, and enable shadows on all light types</span>
+<span class="w">        </span><span class="cp">#pragma surface surf Standard fullforwardshadows</span><span class="w"></span>
 
-        <span class="c1">// Use shader model 3.0 target, to get nicer looking lighting</span>
-        <span class="cp">#pragma target 3.0</span>
+<span class="w">        </span><span class="c1">// Use shader model 3.0 target, to get nicer looking lighting</span>
+<span class="w">        </span><span class="cp">#pragma target 3.0</span><span class="w"></span>
 
-        <span class="n">sampler2D</span> <span class="n">_MainTex</span><span class="p">;</span>
+<span class="w">        </span><span class="n">sampler2D</span><span class="w"> </span><span class="n">_MainTex</span><span class="p">;</span><span class="w"></span>
 
-        <span class="k">struct</span> <span class="nc">Input</span>
-        <span class="p">{</span>
-            <span class="n">float2</span> <span class="n">uv_MainTex</span><span class="p">;</span>
-        <span class="p">};</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Input</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">float2</span><span class="w"> </span><span class="n">uv_MainTex</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"></span>
 
-        <span class="n">half</span> <span class="n">_Glossiness</span><span class="p">;</span>
-        <span class="n">half</span> <span class="n">_Metallic</span><span class="p">;</span>
-        <span class="n">fixed4</span> <span class="n">_Color</span><span class="p">;</span>
+<span class="w">        </span><span class="n">half</span><span class="w"> </span><span class="n">_Glossiness</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">half</span><span class="w"> </span><span class="n">_Metallic</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">fixed4</span><span class="w"> </span><span class="n">_Color</span><span class="p">;</span><span class="w"></span>
 
-        <span class="c1">// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.</span>
-        <span class="c1">// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.</span>
-        <span class="c1">// #pragma instancing_options assumeuniformscaling</span>
-        <span class="n">UNITY_INSTANCING_BUFFER_START</span><span class="p">(</span><span class="n">Props</span><span class="p">)</span>
-            <span class="c1">// put more per-instance properties here</span>
-        <span class="n">UNITY_INSTANCING_BUFFER_END</span><span class="p">(</span><span class="n">Props</span><span class="p">)</span>
+<span class="w">        </span><span class="c1">// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.</span>
+<span class="w">        </span><span class="c1">// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.</span>
+<span class="w">        </span><span class="c1">// #pragma instancing_options assumeuniformscaling</span>
+<span class="w">        </span><span class="n">UNITY_INSTANCING_BUFFER_START</span><span class="p">(</span><span class="n">Props</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// put more per-instance properties here</span>
+<span class="w">        </span><span class="n">UNITY_INSTANCING_BUFFER_END</span><span class="p">(</span><span class="n">Props</span><span class="p">)</span><span class="w"></span>
 
-        <span class="k">void</span> <span class="nf">surf</span> <span class="p">(</span><span class="n">Input</span> <span class="n">IN</span><span class="p">,</span> <span class="n">inout</span> <span class="n">SurfaceOutputStandard</span> <span class="n">o</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">// Albedo comes from a texture tinted by color</span>
-            <span class="n">fixed4</span> <span class="n">c</span> <span class="p">=</span> <span class="n">tex2D</span> <span class="p">(</span><span class="n">_MainTex</span><span class="p">,</span> <span class="n">IN</span><span class="p">.</span><span class="n">uv_MainTex</span><span class="p">)</span> <span class="p">*</span> <span class="n">_Color</span><span class="p">;</span>
-            <span class="n">o</span><span class="p">.</span><span class="n">Albedo</span> <span class="p">=</span> <span class="n">c</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
-            <span class="c1">// Metallic and smoothness come from slider variables</span>
-            <span class="n">o</span><span class="p">.</span><span class="n">Metallic</span> <span class="p">=</span> <span class="n">_Metallic</span><span class="p">;</span>
-            <span class="n">o</span><span class="p">.</span><span class="n">Smoothness</span> <span class="p">=</span> <span class="n">_Glossiness</span><span class="p">;</span>
-            <span class="n">o</span><span class="p">.</span><span class="n">Alpha</span> <span class="p">=</span> <span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">ENDCG</span>
-    <span class="p">}</span>
-    <span class="n">FallBack</span> <span class="s">"Diffuse"</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">surf</span><span class="w"> </span><span class="p">(</span><span class="n">Input</span><span class="w"> </span><span class="n">IN</span><span class="p">,</span><span class="w"> </span><span class="n">inout</span><span class="w"> </span><span class="n">SurfaceOutputStandard</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Albedo comes from a texture tinted by color</span>
+<span class="w">            </span><span class="n">fixed4</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tex2D</span><span class="w"> </span><span class="p">(</span><span class="n">_MainTex</span><span class="p">,</span><span class="w"> </span><span class="n">IN</span><span class="p">.</span><span class="n">uv_MainTex</span><span class="p">)</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="n">_Color</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">o</span><span class="p">.</span><span class="n">Albedo</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Metallic and smoothness come from slider variables</span>
+<span class="w">            </span><span class="n">o</span><span class="p">.</span><span class="n">Metallic</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">_Metallic</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">o</span><span class="p">.</span><span class="n">Smoothness</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">_Glossiness</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">o</span><span class="p">.</span><span class="n">Alpha</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">ENDCG</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">FallBack</span><span class="w"> </span><span class="s">"Diffuse"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <ol>
 <li><code>Shader "Custom/MySurfaceShader"</code> 我已经将这个Shader的名字改为MySurfaceShader了，现在随便新建一个立方体，然后新建一个材质。该材质的最上面就可以设置该材质对应的Shader，默认是Standard Shader，现在选中我们这里新建的MySurfaceShader。</li>
@@ -339,23 +339,23 @@
 <li>3D</li>
 </ul>
 <p>参考资料9给出了一个不错的例子同时展示了这些属性的使用情况：</p>
-<div class="highlight"><pre><span></span><code><span class="n">Shader</span> <span class="s">"Custom/ShaderLabProperties"</span> <span class="p">{</span>
-    <span class="n">Properties</span> <span class="p">{</span>
-        <span class="c1">// Numbers and Sliders</span>
-        <span class="n">_Int</span> <span class="p">(</span><span class="s">"Int"</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span> <span class="p">=</span> <span class="m">2</span>
-        <span class="n">_Float</span> <span class="p">(</span><span class="s">"Float"</span><span class="p">,</span> <span class="n">Float</span><span class="p">)</span> <span class="p">=</span> <span class="m">1.5</span>
-        <span class="n">_Range</span><span class="p">(</span><span class="s">"Range"</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span><span class="m">0.0</span><span class="p">,</span> <span class="m">5.0</span><span class="p">))</span> <span class="p">=</span> <span class="m">3.0</span>
-        <span class="c1">// Colors and Vectors</span>
-        <span class="n">_Color</span> <span class="p">(</span><span class="s">"Color"</span><span class="p">,</span> <span class="n">Color</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
-        <span class="n">_Vector</span> <span class="p">(</span><span class="s">"Vector"</span><span class="p">,</span> <span class="n">Vector</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
-        <span class="c1">// Textures</span>
-        <span class="n">_2D</span> <span class="p">(</span><span class="s">"2D"</span><span class="p">,</span> <span class="m">2D</span><span class="p">)</span> <span class="p">=</span> <span class="s">""</span> <span class="p">{}</span>
-        <span class="n">_Cube</span> <span class="p">(</span><span class="s">"Cube"</span><span class="p">,</span> <span class="n">Cube</span><span class="p">)</span> <span class="p">=</span> <span class="s">"white"</span> <span class="p">{}</span>
-        <span class="n">_3D</span> <span class="p">(</span><span class="s">"3D"</span><span class="p">,</span> <span class="m">3D</span><span class="p">)</span> <span class="p">=</span> <span class="s">"black"</span> <span class="p">{}</span>
-    <span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">Shader</span><span class="w"> </span><span class="s">"Custom/ShaderLabProperties"</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Properties</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Numbers and Sliders</span>
+<span class="w">        </span><span class="n">_Int</span><span class="w"> </span><span class="p">(</span><span class="s">"Int"</span><span class="p">,</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">2</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Float</span><span class="w"> </span><span class="p">(</span><span class="s">"Float"</span><span class="p">,</span><span class="w"> </span><span class="n">Float</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1.5</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Range</span><span class="p">(</span><span class="s">"Range"</span><span class="p">,</span><span class="w"> </span><span class="n">Range</span><span class="p">(</span><span class="m">0.0</span><span class="p">,</span><span class="w"> </span><span class="m">5.0</span><span class="p">))</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">3.0</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Colors and Vectors</span>
+<span class="w">        </span><span class="n">_Color</span><span class="w"> </span><span class="p">(</span><span class="s">"Color"</span><span class="p">,</span><span class="w"> </span><span class="n">Color</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Vector</span><span class="w"> </span><span class="p">(</span><span class="s">"Vector"</span><span class="p">,</span><span class="w"> </span><span class="n">Vector</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Textures</span>
+<span class="w">        </span><span class="n">_2D</span><span class="w"> </span><span class="p">(</span><span class="s">"2D"</span><span class="p">,</span><span class="w"> </span><span class="m">2D</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">        </span><span class="n">_Cube</span><span class="w"> </span><span class="p">(</span><span class="s">"Cube"</span><span class="p">,</span><span class="w"> </span><span class="n">Cube</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"white"</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">        </span><span class="n">_3D</span><span class="w"> </span><span class="p">(</span><span class="s">"3D"</span><span class="p">,</span><span class="w"> </span><span class="m">3D</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"black"</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="n">FallBack</span> <span class="s">"Diffuse"</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="n">FallBack</span><span class="w"> </span><span class="s">"Diffuse"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h4 id="subshader">SubShader</h4>
 <h5 id="tags">Tags</h5>
