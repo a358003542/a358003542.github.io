@@ -78,59 +78,65 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-dong-hua.html"> Unity游戏开发之动画  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#_1">前言</a><ul>
-<li><a href="#_2">本系列内容的取舍</a></li>
-</ul>
-</li>
-<li><a href="#_3">动画</a><ul>
-<li><a href="#_4">新建动画</a></li>
-<li><a href="#_5">导入模型动画时的可选配置</a></li>
-<li><a href="#animator">Animator组件</a><ul>
-<li><a href="#_6">动画状态判断</a></li>
-<li><a href="#_7">标签</a></li>
-<li><a href="#_8">动画层</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_9">参考资料</a></li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-dong-hua.html"> Unity游戏开发之动画  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">前言</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a><ul>
+<li><a href="#本系列内容的取舍">本系列内容的取舍</a></li>
+</ul>
+</li>
+<li><a href="#动画">动画</a><ul>
+<li><a href="#新建动画">新建动画</a></li>
+<li><a href="#导入模型动画时的可选配置">导入模型动画时的可选配置</a></li>
+<li><a href="#animator组件">Animator组件</a></li>
+</ul>
+</li>
+<li><a href="#参考资料">参考资料</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-10-08T06:42:09.416537+08:00">2021年 10月 8日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-10-08T06:42:09.416537+08:00">2021年 10月 8日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#unity-ref">unity<span>11</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
 <p>本文是Unity游戏开发系列的动画部分。</p>
-<h3 id="_2">本系列内容的取舍</h3>
+<h3 id="本系列内容的取舍">本系列内容的取舍</h3>
 <ul>
 <li>因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。</li>
 <li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
 <li>笔者在行文上会尽可能节省笔墨，只是标出官方参考文档的引用出处，但在某些地方会额外花费笔墨来说明，比如个人觉得官方文档文字可能不是很好懂，某些内容很重要需要再特别强调一遍等。</li>
 <li>一般来说官方文档里面有的不会在这里赘述，不过有时某些内容会特别重要而会再强调一遍。</li>
 </ul>
-<h2 id="_3">动画</h2>
-<h3 id="_4">新建动画</h3>
+<h2 id="动画">动画</h2>
+<h3 id="新建动画">新建动画</h3>
 <p>制作动画片段：</p>
 <ol>
 <li>新建一个Animations文件夹等下放动画片段资源</li>
@@ -139,7 +145,7 @@
 </ol>
 <p>动画的开头和结尾常常有卡顿现象，哪怕你设置的旋转动作是0度到360度数值上是无缝对接的，仍然会有卡顿现象，你可以在曲线那里看到数值的变动是有一个切线变化率的，每一个帧都有两个切线，左切线是进入，右切线是离开，从头帧到结尾帧要想不卡顿，左右两个切线斜率必须是相同的，也就是co-linear的。</p>
 <p>对于旋转动作可以将头尾两帧的双切线都改为线性。对应官方文档的 Broken-Linear模式。这样帧与帧之间是线性变化的，也就不存在那个变动斜率问题了。</p>
-<h3 id="_5">导入模型动画时的可选配置</h3>
+<h3 id="导入模型动画时的可选配置">导入模型动画时的可选配置</h3>
 <ul>
 <li>Loop Time 循环时间：动画是否循环播放</li>
 <li>Root Transform Rotation 根变换旋转  Bake into pose 烘焙成动作 。下面三个根变换相关的选项都是在说你是否希望动画会实际影响模型的这些属性，比如这里就是你是否希望动画会影响模型的旋转属性，如果勾选了烘焙成动作，则动画不会影响角色的根旋转。比如说直走，则动画导入勾选这个选项。</li>
@@ -147,7 +153,7 @@
 <li>Root Transform Position (XZ) - 烘焙成动作。一般角色的IDLE状态会希望启用此选项。</li>
 </ul>
 <p>我看到有的推荐将这三个选项都勾选上，也就是动画剪辑完全不会影响游戏对象的根运动，游戏对象的移动旋转都由脚本控制。</p>
-<h3 id="animator">Animator组件</h3>
+<h3 id="animator组件">Animator组件</h3>
 <p>控制GameObject的动画组件，需要指定动画控制器，也就是AnimationController。</p>
 <p>Apply root motion：应用根运动。是从动画本身控制角色的移动和旋转还是从脚本。</p>
 <p>脚本那边设置这个参数是通过 <code>animator.applyRootMotion</code> 。如果脚本定义了 <code>OnAnimatorMove</code> 方法，则applyRootMotion不起作用 【参考Animator.applyRootMotion 文档。】。</p>
@@ -160,17 +166,17 @@
 <ul>
 <li>总是动画化，即使在屏幕外也不剔除。</li>
 </ul>
-<h4 id="_6">动画状态判断</h4>
+<h4 id="动画状态判断">动画状态判断</h4>
 <p>动画状态判断推荐使用 <code>animator.StringToHash("State")</code> 来获取一个int型hash值然后进行状态判断。</p>
 <p>具体比较是：</p>
 <div class="highlight"><pre><span></span><code>CurrentStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
 </code></pre></div>
 <p>默认的图层索引是0，上面CurrentStateInfo就是当前的动画状态，<code>CurrentStateInfo.shortNameHash</code> 就是当前动画状态的短名字的Hash值，短名字的意思就是你的动画控制器那边显示的名字是Run则就是Run，前面没有默认的图层名字。</p>
-<h4 id="_7">标签</h4>
+<h4 id="标签">标签</h4>
 <p>动画控制器的标签也是一个有用的字段方便进行一些动画控制上状态的逻辑管理。</p>
-<h4 id="_8">动画层</h4>
-<h2 id="_9">参考资料</h2>
+<h4 id="动画层">动画层</h4>
+<h2 id="参考资料">参考资料</h2>
 <ol>
 <li>Unity官方文档</li>
 <li>Stack overflow</li>
@@ -183,31 +189,11 @@ Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
 <li>Unity Shader入门精要 by 冯乐乐</li>
 <li>Mastering Unity Shaders and Effects by Jamie Dean</li>
 </ol>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-10-08T06:42:09.416537+08:00">2021年 10月 8日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-10-08T06:42:09.416537+08:00">2021年 10月 8日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#unity-ref">unity
-                    <span>11</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -239,8 +225,6 @@ Animator.StringToHash("Run") == CurrentStateInfo.shortNameHash;
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

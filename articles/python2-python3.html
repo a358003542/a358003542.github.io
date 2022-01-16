@@ -78,69 +78,80 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/python2-python3.html"> python2和python3兼容性问题  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#2to3">2to3内置模块</a></li>
-<li><a href="#_1">// 和 /</a><ul>
-<li><a href="#_2">兼容方案</a></li>
-</ul>
-</li>
-<li><a href="#print">print函数</a><ul>
-<li><a href="#_3">兼容性方案</a></li>
-</ul>
-</li>
-<li><a href="#unicode">unicode字符串问题</a></li>
-<li><a href="#inputraw_input">input和raw_input</a><ul>
-<li><a href="#_4">兼容方案</a></li>
-</ul>
-</li>
-<li><a href="#object">所有的类都继承自object</a><ul>
-<li><a href="#_5">兼容方案</a></li>
-</ul>
-</li>
-<li><a href="#execfile">execfile函数</a><ul>
-<li><a href="#_6">兼容方案</a></li>
-</ul>
-</li>
-<li><a href="#_7">&lt;&gt;替换为 !=</a></li>
-<li><a href="#_8">模块包的导入问题</a></li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/python2-python3.html"> python2和python3兼容性问题  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="2to3">2to3内置模块</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#2to3内置模块">2to3内置模块</a></li>
+<li><a href="#和">// 和 /</a><ul>
+<li><a href="#兼容方案">兼容方案</a></li>
+</ul>
+</li>
+<li><a href="#print函数">print函数</a><ul>
+<li><a href="#兼容性方案">兼容性方案</a></li>
+</ul>
+</li>
+<li><a href="#unicode字符串问题">unicode字符串问题</a></li>
+<li><a href="#input和raw_input">input和raw_input</a><ul>
+<li><a href="#兼容方案_1">兼容方案</a></li>
+</ul>
+</li>
+<li><a href="#所有的类都继承自object">所有的类都继承自object</a><ul>
+<li><a href="#兼容方案_2">兼容方案</a></li>
+</ul>
+</li>
+<li><a href="#execfile函数">execfile函数</a><ul>
+<li><a href="#兼容方案_3">兼容方案</a></li>
+</ul>
+</li>
+<li><a href="#替换为">&lt;&gt;替换为 !=</a></li>
+<li><a href="#模块包的导入问题">模块包的导入问题</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-01-17T05:09:05.943009+08:00">2021年 1月 17日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#python-ref">python<span>18</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="2to3内置模块">2to3内置模块</h2>
 <p>python有个 <strong>2to3</strong> 内置模块可以自动进行python2脚本到python3脚本的移植工作，不过我感觉最好是不要过分依赖这个工具，这只是适合初学者的。因为python2和python3很多地方不一样了。如果你对这个模块有很深的了解，可能自己手工进行修改会更合适一些（其中可能会涉及到新的编写思路）。具体模块的使用请参看官方文档。</p>
-<h2 id="_1"><code>//</code> 和 <code>/</code></h2>
+<h2 id="和"><code>//</code> 和 <code>/</code></h2>
 <p>在python2中，两个整数相除会返回一个整数，也就是python3的 <code>//</code>。</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 5/2
 2
 </code></pre></div>
-<h3 id="_2">兼容方案</h3>
+<h3 id="兼容方案">兼容方案</h3>
 <p>在文件头上加上一行：</p>
 <div class="highlight"><pre><span></span><code>from __future__ import division
 </code></pre></div>
 <p>这样就都是使用python3的语法规则，即:  <code>/</code> 表示常规除法， <code>//</code> 表示整除——返回商。</p>
-<h2 id="print">print函数</h2>
+<h2 id="print函数">print函数</h2>
 <p>这是最常见的错误了，推荐第一步就在文档里面进行find print这个字符串操作，然后将所有：</p>
 <div class="highlight"><pre><span></span><code>    print ...
 </code></pre></div>
@@ -160,12 +171,12 @@
 <p>其对应python3的就是file选项： </p>
 <div class="highlight"><pre><span></span><code>print(1, 2, 3, file=sys.stderr)
 </code></pre></div>
-<h3 id="_3">兼容性方案</h3>
+<h3 id="兼容性方案">兼容性方案</h3>
 <p>目前推荐在模块最上面写上:</p>
 <div class="highlight"><pre><span></span><code>from __future__ import print_function
 </code></pre></div>
 <p>然后使用python3的语法来使用print函数。这样python2里面也能正常运行。</p>
-<h2 id="unicode">unicode字符串问题</h2>
+<h2 id="unicode字符串问题">unicode字符串问题</h2>
 <p>首先说一下Unicode字符串问题的历史由来，因为python2诞生的比Unicode字符串（宽字符解决编码方案的统称）要早，所以python2早期是基于ASCII编码的，ASCII编码是8位值编码，那个时候比较单纯，python2就是一个str类型既表示8位字符又表示二进制数据。后来python2才引入unicode字符类型，其就是对应的宽字符文本。</p>
 <p>后来python2为了兼容python3也引入了bytes类似和bytearray类型。但只是为了兼容性考虑。目前python2和python3代码兼容上最大的一个坑就是python2的str类型是8位文本和二进制数据的统称，也就是在某些默认是ASCII编码的情况下，可能不知不觉，比如系统的默认编码默认是ASCII，然后这些8位值数据你不知道其到底是不是文本。（python3的str是默认的UTF-8编码，其既支持8位文本也支持宽字符文本，这样其就真的是文本的含义了。）</p>
 <p>首先我们要看到大家都同意python3的新分类是很好的： str 文本， bytes 字节流。后面的编程都应该一律采用这种思维。</p>
@@ -196,16 +207,16 @@ def to_str(unicode_or_str):
 </code></pre></div>
 <p>而对于那些历史遗留的代码，非常遗憾，考虑到python2和python3在这一块如此巨大的裂痕，更加详细的阅读和修改甚至重写代码恐怕是避免不了的了。</p>
 <p>​    </p>
-<h2 id="inputraw_input">input和raw_input</h2>
+<h2 id="input和raw_input">input和raw_input</h2>
 <p>在python2中的raw_input函数对应的就是python3的input函数。然后python2还有一个input函数，具体在python3中对应的是eval(input())，这个函数推荐被废弃掉。</p>
-<h3 id="_4">兼容方案</h3>
+<h3 id="兼容方案_1">兼容方案</h3>
 <div class="highlight"><pre><span></span><code>from builtins import input
 
 name = input('What is your name? ')
 </code></pre></div>
-<h2 id="object">所有的类都继承自object</h2>
+<h2 id="所有的类都继承自object">所有的类都继承自object</h2>
 <p>python3中所有的类都默认是object的子类。</p>
-<h3 id="_5">兼容方案</h3>
+<h3 id="兼容方案_2">兼容方案</h3>
 <p>兼容方案是引入从builtns引入object，然后都明确指明继承自object。</p>
 <div class="highlight"><pre><span></span><code>from builtins import object
 
@@ -217,7 +228,7 @@ class Upper(object):
     def __iter__(self):
         return self
 </code></pre></div>
-<h2 id="execfile">execfile函数</h2>
+<h2 id="execfile函数">execfile函数</h2>
 <p>在python2中execfile是个内置函数，可以直接运行，用来执行某个python脚本。</p>
 <div class="highlight"><pre><span></span><code>execfile(join(dirname(__file__), 'openerp', 'release.py'))  # Load release variables
 lib_name = 'openerp'
@@ -226,38 +237,18 @@ lib_name = 'openerp'
 exec(compile(open(join(dirname(__file__), 'openerp', 'release.py')).read(), join(dirname(__file__), 'openerp', 'release.py'), 'exec')) 
  lib_name = 'openerp'
 </code></pre></div>
-<h3 id="_6">兼容方案</h3>
+<h3 id="兼容方案_3">兼容方案</h3>
 <div class="highlight"><pre><span></span><code>exec(compile(open('myfile.py').read()))
 </code></pre></div>
-<h2 id="_7">&lt;&gt;替换为 !=</h2>
+<h2 id="替换为">&lt;&gt;替换为 !=</h2>
 <p>不等于号&lt;&gt;被废弃了，推荐用!=，这样python2和python3都是兼容的。</p>
-<h2 id="_8">模块包的导入问题</h2>
+<h2 id="模块包的导入问题">模块包的导入问题</h2>
 <p>python2到python3模块包的结构很多地方也发生了变动，实际上即使是python3，随着版本升级，内置模块包内部也在发生着变动，比如新加入的函数类等等。这是不可避免的，同时python2一些模块包已经被官方提醒要被废弃了，这也是值得引起我们的注意的。这一块，当然还是自己平时多阅读官方文档（通常这些变动官方文档都会有所说明的）。</p>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-01-17T05:09:05.943009+08:00">2021年 1月 17日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>18</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -289,8 +280,6 @@ exec(compile(open(join(dirname(__file__), 'openerp', 'release.py')).read(), join
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

@@ -78,45 +78,56 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/500lines-continuous-integration-system.html"> 500lines项目之一个持续集成系统  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#_1">前言</a></li>
-<li><a href="#_2">观察组件</a></li>
-<li><a href="#_3">任务分发器</a></li>
-<li><a href="#_4">任务运行器</a></li>
-<li><a href="#_5">总结</a></li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/500lines-continuous-integration-system.html"> 500lines项目之一个持续集成系统  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">前言</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#观察组件">观察组件</a></li>
+<li><a href="#任务分发器">任务分发器</a></li>
+<li><a href="#任务运行器">任务运行器</a></li>
+<li><a href="#总结">总结</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-12-07T00:00:00+08:00">2020年 12月 7日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-01-17T05:02:26.199220+08:00">2021年 1月 17日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#bei-yong-ref">备用</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#500lines-ref">500lines<span>3</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
 <p>本文讨论的500lines项目的一个简单的持续集成系统文章在这里：<a href="http://aosabook.org/en/500L/a-continuous-integration-system.html">(aosabook.org)</a> 。</p>
 <p>持续集成系统简称CI system，其作用主要是当有新的代码提交时，确保该提交没有中断任何测试。因此持续集成系统主要工作就是获取新的代码提交，运行测试并报告结果。</p>
 <p>一个简单的持续集成系统包含三个部分：一个观察组件，一个测试任务分发器和一个测试任务运行器。</p>
 <p>一个理想的持续集成系统应该是能容错的和承压的，如果是单机器单进程运行上面的三个任务则是不能容错和承压的。所以接下来项目在设计上让这三个任务或者说三个组件是分开的三个进程。然后这三个进程之间通信采用套接字形式，也因此现在该持续集成系统具有分布式的特性了。</p>
 <p>这种分布式设计进一步可以引入计算机架构设计上的故障切换机制，即某个机器发生故障了，马上另外一个备用的机器将会顶替其工作。</p>
 <p>我对该项目代码进行了一些修改，具体参见 <a href="https://github.com/a358003542/500lines_ci">a358003542/500lines_ci: 500lines a continuous integration system (github.com)</a> 。项目python代码更新为了python3版本。项目为了更具平台扩展性使用gitpython而不适用sh脚本。</p>
-<h2 id="_2">观察组件</h2>
+<h2 id="观察组件">观察组件</h2>
 <p>观察组件是 <code>repo_observer.py</code> 文件。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -206,7 +217,7 @@
 </code></pre></div>
 <p>观察组件通过分析clone的观察仓库的commit_it和更新仓库后的commit_id，如果发现不同，则说明仓库代码有变化，那么将会把最新的commit_id写入一个文件中。</p>
 <p>后面发现了这个文件将会向任务分发器发送一个信号，分发一个新的任务。观察组件套接字信号交流上很简单，此外还有一个状态确认和OK返回。</p>
-<h2 id="_3">任务分发器</h2>
+<h2 id="任务分发器">任务分发器</h2>
 <p>任务分发器是 <code>dispatcher.py</code> 。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -393,7 +404,7 @@
 <p>任务分发器在任务上和套接字信号上稍微复杂了一点。后面那两个子线程任务主要就是完成这个工作：任务运行器健康度检查，如果某个任务运行器突然挂掉了，那么将会把之前分配给的任务再发一次。</p>
 <p>核心流程继续之前的dispatch命令来就直接运行<code>dispatch_tests</code> 来实际分发任务了。</p>
 <p>任务分发器在套接字信号上一是STATUS-OK回报，一是任务运行器刚开始需要在任务分发器这边注册的。最后RESULT只是一个后续任务运行之后结果收集机制。</p>
-<h2 id="_4">任务运行器</h2>
+<h2 id="任务运行器">任务运行器</h2>
 <p>任务运行器是 <code>test_runner.py</code> 这个文件。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">errno</span>
@@ -598,7 +609,7 @@
 <p>任务运行器一是刚开始需要向任务分发器回报，其次任务分发器那边会不断地询问各个人物运行器的健康度，任务运行器这边需要写好PING-PONG消息机制。</p>
 <p>后面还多一个子线程是一种完善策略，保证任务分发器挂掉了这边任务运行器也会自动结束。</p>
 <p>任务运行首先更新git仓库，然后通过unittest来运行tests文件夹下的测试代码，结果临时保存到了results文件下面。然后继续利用利用搭建好的套接字交流机制来通过result命令将运行后的结果发给任务分发器。</p>
-<h2 id="_5">总结</h2>
+<h2 id="总结">总结</h2>
 <p>最后运行仍然和原来一样：</p>
 <div class="highlight"><pre><span></span><code>python dispatcher.py
 python test_runner.py &lt;path/to/test_repo_clone_runner&gt;
@@ -607,31 +618,11 @@ python repo_observer.py --dispatcher-server=localhost:8888 &lt;path/to/repo_clon
 <p>对原仓库进行了文件更改，将会触发dispatch，继而触发任务分发器的runtest命令。</p>
 <p>值得一提的是 <code>dispatched_commits</code> 里面的runner记录是必须在后面result报告完之后才会被删除，如果在这个过程中某个runner挂掉了，那么任务分发器的那个任务仍然是未完成状态，等下你再启动一个新的runner，将会分配任务给这个新的runner。</p>
 <p>这个项目在分布式任务管理上的设计值得学习体会，同时上面的编码会大量涉及到套接字相关网络编程的东西，这些基础知识也需要读者掌握。</p>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2020-12-07T00:00:00+08:00">2020年 12月 7日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-01-17T05:02:26.199220+08:00">2021年 1月 17日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#bei-yong-ref">备用</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#500lines-ref">500lines
-                    <span>3</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -663,8 +654,6 @@ python repo_observer.py --dispatcher-server=localhost:8888 &lt;path/to/repo_clon
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

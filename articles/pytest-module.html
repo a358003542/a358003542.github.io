@@ -78,45 +78,56 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/pytest-module.html"> pytest模块  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/pytest-module.html"> pytest模块  </a></h1>
+        </header>
+    </div>
 
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#unittest">unittest模块</a></li>
-<li><a href="#pytest">pytest模块</a></li>
-<li><a href="#_1">确认抛出某个异常</a></li>
-<li><a href="#_2">确认两个数字大约近似</a></li>
+<li><a href="#unittest模块">unittest模块</a></li>
+<li><a href="#pytest模块">pytest模块</a></li>
+<li><a href="#确认抛出某个异常">确认抛出某个异常</a></li>
+<li><a href="#确认两个数字大约近似">确认两个数字大约近似</a></li>
 <li><a href="#fixture">fixture</a></li>
-<li><a href="#setupteardown">setup和teardown怎么实现</a></li>
-<li><a href="#_3">测试过一次下次不测试了</a></li>
-<li><a href="#pythonpytest">自己写的python模块和pytest集成</a></li>
-<li><a href="#_4">自动发现测试文件</a></li>
-<li><a href="#doctest">doctest集成</a></li>
+<li><a href="#setup和teardown怎么实现">setup和teardown怎么实现</a></li>
+<li><a href="#测试过一次下次不测试了">测试过一次下次不测试了</a></li>
+<li><a href="#自己写的python模块和pytest集成">自己写的python模块和pytest集成</a></li>
+<li><a href="#自动发现测试文件">自动发现测试文件</a></li>
+<li><a href="#doctest集成">doctest集成</a></li>
 <li><a href="#mock">mock</a></li>
 <li><a href="#patch">patch</a></li>
 </ul>
 </div>
-            </nav>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-09-09T00:00:00+08:00">2020年 9月 9日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-02-17T09:05:19.935829+08:00">2021年 2月 17日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#python-ref">python<span>18</span></a></li></ul>
+                </div>
+            </div>
         </div>
 
-    </div>
-
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="unittest">unittest模块</h2>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="unittest模块">unittest模块</h2>
 <p>编写python测试代码，学习pytest模块之前，必须先学习和了解python官方模块 <strong>unitest</strong> 。首先上例子：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -162,14 +173,14 @@
 <span class="math">$\pi$</span> 值具体到小数点4位是3.1416。上面这些方法后面还可以额外接受一个提示字符串参数（Msg参数），用来具体没有断言成功的时的补充信息。</p>
 <p><code>assertRaises</code>方法用来断言某个函数在接受某些参数之后必然返回某个异常。该方法第一个参数是期望捕捉到的异常，第二个参数是具体调用的函数，后面的参数将送给这个函数，所以就不能跟之前谈及的Msg参数了。</p>
 <p>更多信息请参看该模块的 <a href="https://docs.python.org/3/library/unittest.html">官方文档</a> ，大概简单了解下unittest模块即可，实践中推荐使用pytest模块。</p>
-<h2 id="pytest">pytest模块</h2>
+<h2 id="pytest模块">pytest模块</h2>
 <p>pytest模块是站在unittest基础上的，你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。）。</p>
 <p>具体使用如下简单的写测试函数即可，也不需要类似unittest那种很多assert方法，就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_prime</span><span class="p">():</span>
     <span class="k">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
 </code></pre></div>
 <p>这样确实简单方便了不少。下面继续讨论编写单元测试代码中的知识。</p>
-<h2 id="_1">确认抛出某个异常</h2>
+<h2 id="确认抛出某个异常">确认抛出某个异常</h2>
 <p>把官方的例子copy过来了，看一下就懂了。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
 <span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
@@ -179,7 +190,7 @@
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">):</span>
         <span class="n">f</span><span class="p">()</span>
 </code></pre></div>
-<h2 id="_2">确认两个数字大约近似</h2>
+<h2 id="确认两个数字大约近似">确认两个数字大约近似</h2>
 <div class="highlight"><pre><span></span><code>assert i == pytest.approx(j, rel=0.1)
 assert i == pytest.approx(j, abs=10)
 </code></pre></div>
@@ -197,7 +208,7 @@ assert i == pytest.approx(j, abs=10)
 </code></pre></div>
 <p>也就是你的测试函数里面可以带上那个经过fixture装饰的函数名字，其实一个参数，这个参数的值就是之前fixture装饰的那个函数的返回值，然后这个参数你在测试函数里面是可以直接使用的。</p>
 <p>你可以如上将fixture和测试函数写在一起，但更加推荐的做法是：在 <code>tests</code> 文件夹下面新建一个 <code>conftest.py</code> 文件，你在里面定义的pytest的fixture是全局可共用的。</p>
-<h2 id="setupteardown">setup和teardown怎么实现</h2>
+<h2 id="setup和teardown怎么实现">setup和teardown怎么实现</h2>
 <p>结合上面的fixture你可以实现一种全局setup配置和teardown的配置。比如说我的测试用例需要生成一个临时的文件夹，在这个临时文件夹下面做一些操作，然后测试完之后希望删除这个临时文件夹。可以编写如下fixture：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -225,11 +236,11 @@ assert i == pytest.approx(j, abs=10)
             <span class="k">pass</span>
 </code></pre></div>
 <p>这里面的一个核心概念是fixture <code>yield</code> 后面的动作都属于teardown动作，如果是return的话则没有这个概念。其他测试函数可以直接调用哪个临时测试文件夹参数 <code>tempfolder</code> ，然后上面的一个额外动作是将一些文件复制到临时的测试文件夹，方便在临时的测试文件夹下做一些动作。最后teardown的动作就是删除临时文件夹。</p>
-<h2 id="_3">测试过一次下次不测试了</h2>
+<h2 id="测试过一次下次不测试了">测试过一次下次不测试了</h2>
 <p>如果你希望测试函数之前测试过一次了，然后后面就不用测试了，那么就在这个函数上面加上如下装饰器。</p>
 <div class="highlight"><pre><span></span><code>@pytest.mark.skip(reason="i have test it")
 </code></pre></div>
-<h2 id="pythonpytest">自己写的python模块和pytest集成</h2>
+<h2 id="自己写的python模块和pytest集成">自己写的python模块和pytest集成</h2>
 <p>推荐安装的有：<code>pytest</code> 和 <code>pytest-runner</code> 。然后新建 <code>setup.cfg</code> 文件，里面的内容是：</p>
 <div class="highlight"><pre><span></span><code>[aliases]
 test=pytest
@@ -249,14 +260,14 @@ addopts = --verbose
 <div class="highlight"><pre><span></span><code>python setup.py test
 </code></pre></div>
 <p>然后专心一边测试一边写代码吧。</p>
-<h2 id="_4">自动发现测试文件</h2>
+<h2 id="自动发现测试文件">自动发现测试文件</h2>
 <p>pytest是支持自动发现测试文件的，所有的 <code>test_*.py</code> 和 <code>*_test.py</code> 文件都被认为是测试文件。</p>
 <p>此外你还可以更明确地新建一个 <code>pytest.ini</code> 文件，里面的内容是：</p>
 <div class="highlight"><pre><span></span><code>[pytest]
 testpaths = tests
 </code></pre></div>
 <p>这样pytest就只处理这个tests文件夹下的测试文件了。</p>
-<h2 id="doctest">doctest集成</h2>
+<h2 id="doctest集成">doctest集成</h2>
 <p>doctest在python源码那边能够立刻起到大概说明这个函数在做什么事情，还是很方便的。这里假设读者已经初步了解了doctest的基本用法了，如果没有请参看官方文档doctest相关部分，接下来的讨论是在这个基础之上，传统写法是不需要做什么改变的。</p>
 <p>使用pytest来集成doctest有以下好处，一是python模块文件后面不需要跟上：</p>
 <div class="highlight"><pre><span></span><code>if __name__ == "__main__":
@@ -305,31 +316,11 @@ t.method(1,2,3)
 </code></pre></div>
 <p>如何理解上面的代码？当这段测试代码运行的时候，它的变量名字空间被patch给污染了，比如上面的 <code>users.views.WXAPPAPI.jscode2session</code> 这个函数，被污染成为一个 Mock 对象了，这个Mock对象传递给了这个函数的第二个参数（额外的的这个参数哪怕你后面不用也必须写上） <code>mock_jscode2session</code> 。</p>
 <p>然后代码在运行的时候遇到<code>jscode2session</code> 总会返回上面给出的值，这样你就不用考虑数据库啊，网络情况之类的问题了。上面还有一些小技巧和django框架相关，比如 <code>self.client.get(reverse('mini-login'), data)</code> 是直接利用自己django，然后自己请求自己的url获得什么响应，这个和django相关，在这里就不多说了。</p>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2020-09-09T00:00:00+08:00">2020年 9月 9日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-02-17T09:05:19.935829+08:00">2021年 2月 17日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>18</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -361,8 +352,6 @@ t.method(1,2,3)
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

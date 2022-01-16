@@ -78,23 +78,35 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/ctypesmo-kuai.html"> ctypes模块  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/ctypesmo-kuai.html"> ctypes模块  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            <h2 id="ctypes">ctypes模块</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-01-16T07:02:51.617736+08:00">2021年 1月 16日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                <h2 id="ctypes模块">ctypes模块</h2>
 <p>如果你的python程序需要和别人的dll进行交互，那么你就必须了解ctypes模块了。ctypes在linux也可以和c语言的so库进行交互，本文重点讨论的是在windows下和dll交互的问题。</p>
 <p>基本的使用如下：</p>
 <div class="highlight"><pre><span></span><code><span class="n">lib_comm</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">get_dll_path</span><span class="p">(</span><span class="s1">&#39;your_dll.dll&#39;</span><span class="p">))</span>
@@ -127,13 +139,13 @@
 <div class="highlight"><pre><span></span><code><span class="n">lib_comm</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">_ref_s</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="cdll">如何创建c++的dll</h2>
+<h2 id="如何创建c的dll">如何创建c++的dll</h2>
 <p>下面是我阅读官方 <a href="https://docs.microsoft.com/en-us/cpp/build/walkthrough-creating-and-using-a-dynamic-link-library-cpp?view=vs-2017">这篇文章</a> 关于如何利用visual studio 2017 创建 基于c++语言的dll的过程整理：</p>
 <p>首先是visual studio 要安装 C++的桌面开发环境。</p>
-<h3 id="_1">新建项目</h3>
+<h3 id="新建项目">新建项目</h3>
 <p>新建项目选择 c++ 的windows 桌面 里的 windows 桌面向导</p>
 <p>点击下一步下一个界面选择 动态链接库 dll</p>
-<h3 id="_2">添加头文件</h3>
+<h3 id="添加头文件">添加头文件</h3>
 <p>源文件里面的dllmain.cpp 一开始不需要做任何修改，然后你需要在头文件哪里新建一个.h文件，具体内容如下：</p>
 <div class="highlight"><pre><span></span><code><span class="cp">#pragma once</span>
 
@@ -152,7 +164,7 @@
 
 <p>这里 <code>MATHLIBRARY</code> 名字是可以更改的，暂时懒得改了。是关于声明dll对外开放函数的一个修饰符。具体涉及到dll的相关知识，其实就是这样一种写法就是了，不用太深究的，毕竟重点还是c++语言写的函数。</p>
 <p>下面的 <code>_stdcall</code> ，说是什么标准windows API 调用，其实暂时也不用太深究这个，就是记得头文件和源文件函数定义哪里都加上这个修饰符，然后python那边 ctypes对接的时候要使用 windll，而如果不加则要使用 cdll。</p>
-<h3 id="_3">添加源文件</h3>
+<h3 id="添加源文件">添加源文件</h3>
 <div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;stdafx.h&quot;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
@@ -177,7 +189,7 @@
 </code></pre></div>
 
 <p>然后点击 生成解决方案就在 debug文件夹下面 生成 dll了。下面讲如何和python项目集成起来。</p>
-<h2 id="python">和python项目集成</h2>
+<h2 id="和python项目集成">和python项目集成</h2>
 <p>首先我们新建一个简单的python项目，就是一个最简单的那个python项目即可。</p>
 <p>这里主要做的事情就是把前面我们创建的那个生成dll的c++项目在本解决方案中添加进来。</p>
 <p>然后在python项目的引用中，把那个项目添加进来。</p>
@@ -209,30 +221,16 @@
 </code></pre></div>
 
 <p>我们看到实际上就是把路径指向上一层的debug文件里面的dll文件，这样python和dll就可以联动调试了。</p>
-<h2 id="_4">参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ul>
 <li><a href="http://www.cnblogs.com/night-ride-depart/p/4907613.html">python ctypes探究</a></li>
 <li><a href="https://eli.thegreenplace.net/2008/08/31/ctypes-calling-cc-code-from-python">这篇文章关于ctypes和c++语言之间如何进行字符串沟通说明得很好</a></li>
 </ul>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-01-16T07:02:51.617736+08:00">2021年 1月 16日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
-
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -264,8 +262,6 @@
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

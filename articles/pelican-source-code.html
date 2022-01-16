@@ -78,51 +78,51 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/pelican-source-code.html"> pelican源码阅读  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/pelican-source-code.html"> pelican源码阅读  </a></h1>
+        </header>
+    </div>
 
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#_1">前言</a></li>
-<li><a href="#_2">初始化日志</a></li>
-<li><a href="#_3">命令行参数和配置文件加载</a></li>
+<li><a href="#前言">前言</a></li>
+<li><a href="#初始化日志">初始化日志</a></li>
+<li><a href="#命令行参数和配置文件加载">命令行参数和配置文件加载</a></li>
 <li><a href="#autoreload">autoreload</a></li>
-<li><a href="#_4">加载插件</a></li>
-<li><a href="#_5">信号</a></li>
-<li><a href="#run">run</a><ul>
-<li><a href="#generator">收集各个Generator类</a></li>
-</ul>
-</li>
-<li><a href="#articlesgenerator">ArticlesGenerator</a><ul>
-<li><a href="#generate_output">generate_output</a></li>
-<li><a href="#generate_feeds">generate_feeds</a></li>
-<li><a href="#generate_pages">generate_pages</a></li>
-</ul>
-</li>
+<li><a href="#加载插件">加载插件</a></li>
+<li><a href="#信号">信号</a></li>
+<li><a href="#run">run</a></li>
+<li><a href="#articlesgenerator">ArticlesGenerator</a></li>
 <li><a href="#pagesgenerator">PagesGenerator</a></li>
 <li><a href="#staticgenerator">StaticGenerator</a></li>
 </ul>
 </div>
-            </nav>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-12-09T17:46:15.922441+08:00">2021年 12月 9日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-12-09T17:46:15.922441+08:00">2021年 12月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webkai-fa-pelican-ref">计算机 - Web开发 - Pelican</a>
+                </div>
+
+            </div>
         </div>
 
-    </div>
-
-    <div class="col-8">
-        <div class="article-content">
-            
-<h3 id="_1">前言</h3>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h3 id="前言">前言</h3>
 <p>本文的讨论基于pelican version <strong>4.7.1</strong> 。</p>
 <p>本文主要以pelican命令为切入口来对pelican模块的核心内容进行讨论，其他辅助性质的工具和其他细枝末节的内容将会忽略掉，忽略讨论的内容有：</p>
 <ul>
@@ -135,7 +135,7 @@
 <li>忽略了一些程序运行统计信息和相关日志输出的讨论</li>
 <li>忽略翻译问题</li>
 </ul>
-<h3 id="_2">初始化日志</h3>
+<h3 id="初始化日志">初始化日志</h3>
 <p>这是进入pelican模块必做的第一件事情。</p>
 <div class="highlight"><pre><span></span><code>def init(level=None, fatal='', handler=RichHandler(console=console), name=None,
          logs_dedup_min_level=None):
@@ -152,7 +152,7 @@
 <li>如果日志接受额外的参数 <code>limit_msg</code> ，默认阈限是5，也即是报告五次之后不再报告。</li>
 </ol>
 <p>日志这块pelican就是做了上面所述的这些调整，简单了解下即可。</p>
-<h3 id="_3">命令行参数和配置文件加载</h3>
+<h3 id="命令行参数和配置文件加载">命令行参数和配置文件加载</h3>
 <p>命令行参数和配置文件加载这里就不专门讨论了，这些内容有些在pelican的使用中已有所接触，有些后面提到什么参数什么配置就默认加载进来了。</p>
 <p>配置的相关选项和默认值在 <code>settings.py</code> 哪里有，这块查看源码或者查看文档的说明即可，不作过多讨论了。</p>
 <h3 id="autoreload">autoreload</h3>
@@ -223,7 +223,7 @@
 True
 </code></pre></div>
 <p>也就是静态文件夹里面没有是有效扩展名这个判断逻辑。</p>
-<h3 id="_4">加载插件</h3>
+<h3 id="加载插件">加载插件</h3>
 <p>在运行 <code>pelican.run()</code> 之前还有一件事，那就是实例化 <code>Pelican</code> 类，从代码中看，这里面最重要的一项工作就是加载插件。</p>
 <div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">init_plugins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="p">[]</span>
@@ -272,7 +272,7 @@ True
 <div class="highlight"><pre><span></span><code>plugin.register()
 </code></pre></div>
 <p>这个是在说所有的pelican的插件都应该定义 <strong>register</strong> 函数，插件被加入进来都会先执行这个register函数。</p>
-<h3 id="_5">信号</h3>
+<h3 id="信号">信号</h3>
 <p>在讲到插件就必须讲到信号了，pelican利用blinker这个第三方模块来实现一种信号-函数的执行机制，上面讲的插件要和pelican的具体事务发生关系就需要通过信号来绑定上行为。简单来说就是pelican自身处理事物流程到了一定阶段就会发送一个信号，pelican的插件，具体就是register函数哪里，将这些信号也就是pelican的处理事物流程哪里，再扩展出另外一些额外的函数执行行为。</p>
 <p>因为本文关注于pelican的源码阅读，所以这些信号就要详细解读一下，虽然pelican的核心执行流程还没有说明清楚，不过这里就预先讲一点，后面再有涉及到的地方再继续补充之。</p>
 <div class="highlight"><pre><span></span><code>initialized = signal('pelican_initialized')
@@ -324,7 +324,7 @@ feed_written = signal('feed_written')
 </code></pre></div>
 <p>也就是如果配置定义了 <code>DELETE_OUTPUT_DIRECTORY</code>  ，并且不是源或者父文件夹，则执行删除动作。删除动作不会删除配置 <code>OUTPUT_RETENTION</code> 定义的文件夹。</p>
 <p>这是额外的一个优化逻辑，这里就不深入讨论了。</p>
-<h4 id="generator">收集各个Generator类</h4>
+<h4 id="收集各个generator类">收集各个Generator类</h4>
 <p>默认 <code>ArticlesGenerator</code> 和 <code>PagesGenerator</code> 都要加入进来。在 <code>ArticlesGenerator</code> 类初始化的时候还有一些细节，先讨论之。</p>
 <p>ArticlesGenerator类继承自 <code>CachingGenerator</code> ，<code>CachingGenerator</code> 继承自 <code>Generator, FileStampDataCacher</code> 。</p>
 <p>先看到 <code>Generator</code> 类，其 <code>__init__</code> 构造方法执行完毕之后会发送 <code>generator_init</code> 信号。</p>
@@ -886,25 +886,11 @@ get_writer = signal('get_writer')
 <p>在了解了ArticlesGenerator的工作原理之后，PagesGenerator在实践中可以看作某个简化版本的ArticlesGenerator，在很多地方代码会写的很简单，因为在articles那边很多需要考虑的问题都没有了。</p>
 <h3 id="staticgenerator">StaticGenerator</h3>
 <p>对于静态文件来说 <code>generate_output</code> 方法需要重写，直接利用文件操作复制过去即可。</p>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-12-09T17:46:15.922441+08:00">2021年 12月 9日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-12-09T17:46:15.922441+08:00">2021年 12月 9日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webkai-fa-pelican-ref">计算机 - Web开发 - Pelican</a>
-
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -936,8 +922,6 @@ get_writer = signal('get_writer')
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

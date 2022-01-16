@@ -78,50 +78,54 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/Jinja2-template-engine.html"> Jinja2模板引擎  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#jinja2">Jinja2模板引擎</a><ul>
-<li><a href="#_1">注释</a></li>
-<li><a href="#_2">变量</a></li>
-<li><a href="#if">if语句</a></li>
-<li><a href="#for">for语句</a></li>
-<li><a href="#_3">过滤器</a></li>
-<li><a href="#html">html特殊符号问题</a></li>
-<li><a href="#_4">模板文件继承机制</a></li>
-<li><a href="#_5">宏</a></li>
-<li><a href="#include">include</a></li>
-<li><a href="#_6">其他技巧</a><ul>
-<li><a href="#_7">列表排序</a></li>
-<li><a href="#_8">移除块前后的空白</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/Jinja2-template-engine.html"> Jinja2模板引擎  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="jinja2">Jinja2模板引擎</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#jinja2模板引擎">Jinja2模板引擎</a><ul>
+<li><a href="#注释">注释</a></li>
+<li><a href="#变量">变量</a></li>
+<li><a href="#if语句">if语句</a></li>
+<li><a href="#for语句">for语句</a></li>
+<li><a href="#过滤器">过滤器</a></li>
+<li><a href="#html特殊符号问题">html特殊符号问题</a></li>
+<li><a href="#模板文件继承机制">模板文件继承机制</a></li>
+<li><a href="#宏">宏</a></li>
+<li><a href="#include">include</a></li>
+<li><a href="#其他技巧">其他技巧</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-10-28T15:38:23.352453+08:00">2021年 10月 28日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-10-28T15:38:23.352453+08:00">2021年 10月 28日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webkai-fa-ref">计算机 - Web开发</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="jinja2模板引擎">Jinja2模板引擎</h2>
 <p>jinja2模板引擎在flask和pelican中都有使用，而且就是在django框架中，模版语法也大体类似，所以jinja2模板引擎还是很值得一学的。</p>
 <p>jinja2模板引擎作为python的模块简单的使用如下所示：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
@@ -130,17 +134,17 @@
 </code></pre></div>
 <p>这里的render函数就是将一些参数变量渲染进去，从而得到目标文本内容。</p>
 <p>本文接下来的简要讨论下如何在flask或者pelican中编写模板文件，更详细的内容请参见 <a href="http://docs.jinkan.org/docs/jinja2/templates.html">官方文档模板设计者文档一章</a> 。</p>
-<h3 id="_1">注释</h3>
+<h3 id="注释">注释</h3>
 <p>注释写法如下所示，之所以这个放在最前面是因为模板引擎里面注释有时很有用，但很不同于其他编程语言里面的注释写法。</p>
 <div class="highlight"><pre><span></span><code>{# this is a comment #}
 </code></pre></div>
-<h3 id="_2">变量</h3>
+<h3 id="变量">变量</h3>
 <p>如下所示，里面包含某个变量，jinja2渲染模板的时候会解析这些变量。</p>
 <div class="highlight"><pre><span></span><code>{{ variable_name }}
 </code></pre></div>
 <p>然后 <code>object.a</code> 这样的dot法引用，或者 <code>object['a']</code> 这样的写法，甚至是调用实例的某个方法 <code>object.func()</code> 也是可以的，如果这个方法返回某个字符串的话。</p>
 <p>有的时候我们需要debug一些变量一般是如上将这个变量值显示出来。</p>
-<h3 id="if">if语句</h3>
+<h3 id="if语句">if语句</h3>
 <p>条件分支主要用于有条件的显示某些内容。</p>
 <div class="highlight"><pre><span></span><code>{% if user %}
 Hello, {{ user }}!
@@ -157,7 +161,7 @@ Hello , stranger!
     Kenny looks okay --- so far
 {% endif %}
 </code></pre></div>
-<h3 id="for">for语句</h3>
+<h3 id="for语句">for语句</h3>
 <p>for语句结构如下所示:</p>
 <div class="highlight"><pre><span></span><code>&lt;ul&gt;
 {% for user in users %}
@@ -180,7 +184,7 @@ Hello , stranger!
 <li>loop.last 是否是最后一次迭代</li>
 </ul>
 <p>还有一些这里就不赘述了，请参看官方文档For语句部分。</p>
-<h3 id="_3">过滤器</h3>
+<h3 id="过滤器">过滤器</h3>
 <p>变量可以进一步加上某个过滤器来进行进一步的处理。过滤器是有点类似于linux系统的管道作业风格，多个过滤器可以叠加，如： <code>{{ var | striptags | title }}</code> 。</p>
 <p>下面列出一些过滤器的功能，更多过滤器参见官方文档的内置过滤器清单一小节。</p>
 <ul>
@@ -193,7 +197,7 @@ Hello , stranger!
 <li><code>striptags</code> 渲染之前把所有HTML标签去掉</li>
 </ul>
 <p>关于safe过滤器请参看下面讨论的特殊符号的问题。</p>
-<h3 id="html">html特殊符号问题</h3>
+<h3 id="html特殊符号问题">html特殊符号问题</h3>
 <p>如果你的变量有这些html的特殊符号:</p>
 <div class="highlight"><pre><span></span><code>&lt;  &gt;  &amp;  "
 </code></pre></div>
@@ -215,7 +219,7 @@ Hello , stranger!
 'test &lt;h1&gt;abc&lt;/h1&gt;'
 </code></pre></div>
 <p><code>escape</code> 过滤器有的模板作者会更喜欢使用别名缩写，一个小写字母 <code>e</code> 。</p>
-<h3 id="_4">模板文件继承机制</h3>
+<h3 id="模板文件继承机制">模板文件继承机制</h3>
 <p>jinja2的模板文件有一种继承机制，可以让你基于某个模板文件来建构出另外一个模板文件。具体使用是在父模板（模板文件的模板文件）构建一些block区块，如下所示:</p>
 <div class="highlight"><pre><span></span><code>&lt;title&gt;{% block title %} {% endblock %}&lt;/title&gt;
 </code></pre></div>
@@ -234,7 +238,7 @@ Hello , stranger!
 <p>本模板里面的块还可以如下重复打印使用：</p>
 <div class="highlight"><pre><span></span><code>{{ self.title() }}
 </code></pre></div>
-<h3 id="_5">宏</h3>
+<h3 id="宏">宏</h3>
 <p>宏和python的函数类似，遇到即将其展开。</p>
 <div class="highlight"><pre><span></span><code>{% macro render_comment(comment) %}
 &lt;li&gt;{{ comment }}&lt;/li&gt;
@@ -267,37 +271,23 @@ Hello , stranger!
 <div class="highlight"><pre><span></span><code>{% include 'header.html' with context %}
 {% include 'header.html' without context %}
 </code></pre></div>
-<h3 id="_6">其他技巧</h3>
-<h4 id="_7">列表排序</h4>
+<h3 id="其他技巧">其他技巧</h3>
+<h4 id="列表排序">列表排序</h4>
 <p>参考了 <a href="https://stackoverflow.com/questions/1959386/how-do-you-sort-a-list-in-jinja2">这个网页</a> ：</p>
 <div class="highlight"><pre><span></span><code>{% for movie in movie_list|sort(attribute='rating') %}
 {% for movie in movie_list|sort(attribute='rating', reverse = True) %}
 </code></pre></div>
-<h4 id="_8">移除块前后的空白</h4>
+<h4 id="移除块前后的空白">移除块前后的空白</h4>
 <p>这里所谓的空白指 空格，制表符，换行符等，jinja2这块有全局配置选项。或者可以如下手工配置，大体意思加上 <code>-</code> 表示这里要跟上一个 <code>trim_blocks</code> 操作。</p>
 <div class="highlight"><pre><span></span><code>{% for item in seq -%}
     {{ item }}
 {%- endfor %}
 </code></pre></div>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-10-28T15:38:23.352453+08:00">2021年 10月 28日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-10-28T15:38:23.352453+08:00">2021年 10月 28日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webkai-fa-ref">计算机 - Web开发</a>
-
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -329,8 +319,6 @@ Hello , stranger!
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

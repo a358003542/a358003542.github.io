@@ -78,70 +78,64 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-wu-li-xi-tong.html"> Unity游戏开发之物理系统  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#_1">前言</a><ul>
-<li><a href="#_2">本系列内容的取舍</a></li>
-</ul>
-</li>
-<li><a href="#_3">物理系统</a><ul>
-<li><a href="#_4">碰撞器</a><ul>
-<li><a href="#_5">碰撞器组件的是否是触发器属性</a></li>
-</ul>
-</li>
-<li><a href="#_6">网格碰撞器</a></li>
-<li><a href="#_7">物理材质</a></li>
-<li><a href="#_8">触发器</a><ul>
-<li><a href="#ontriggerenteroncollisionenter">OnTriggerEnter和OnCollisionEnter</a></li>
-</ul>
-</li>
-<li><a href="#character-controller">Character Controller组件</a><ul>
-<li><a href="#isgrounded">isGrounded</a></li>
-</ul>
-</li>
-<li><a href="#raycast">RayCast方法</a></li>
-<li><a href="#boxcast">BoxCast</a></li>
-<li><a href="#checkcapsule">CheckCapsule</a></li>
-<li><a href="#_9">图层</a><ul>
-<li><a href="#_10">摄像机的剔除遮罩属性</a></li>
-<li><a href="#_11">物理系统的图层碰撞矩阵</a></li>
-</ul>
-</li>
-<li><a href="#_12">刚体</a><ul>
-<li><a href="#iskinematic">isKinematic</a></li>
-<li><a href="#continuous-collision-detection">Continuous Collision Detection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_13">参考资料</a></li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-wu-li-xi-tong.html"> Unity游戏开发之物理系统  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">前言</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a><ul>
+<li><a href="#本系列内容的取舍">本系列内容的取舍</a></li>
+</ul>
+</li>
+<li><a href="#物理系统">物理系统</a><ul>
+<li><a href="#碰撞器">碰撞器</a></li>
+<li><a href="#网格碰撞器">网格碰撞器</a></li>
+<li><a href="#物理材质">物理材质</a></li>
+<li><a href="#触发器">触发器</a></li>
+<li><a href="#character-controller组件">Character Controller组件</a></li>
+<li><a href="#raycast方法">RayCast方法</a></li>
+<li><a href="#boxcast">BoxCast</a></li>
+<li><a href="#checkcapsule">CheckCapsule</a></li>
+<li><a href="#图层">图层</a></li>
+<li><a href="#刚体">刚体</a></li>
+</ul>
+</li>
+<li><a href="#参考资料">参考资料</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-10-08T06:40:07.034998+08:00">2021年 10月 8日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-10-08T06:40:07.034998+08:00">2021年 10月 8日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#unity-ref">unity<span>11</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
 <p>本文是Unity游戏开发系列的物理系统部分。</p>
-<h3 id="_2">本系列内容的取舍</h3>
+<h3 id="本系列内容的取舍">本系列内容的取舍</h3>
 <ul>
 <li>因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。</li>
 <li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
@@ -149,13 +143,13 @@
 <li>一般来说官方文档里面有的不会在这里赘述，不过有时某些内容会特别重要而会再强调一遍。</li>
 <li></li>
 </ul>
-<h2 id="_3">物理系统</h2>
-<h3 id="_4">碰撞器</h3>
-<h4 id="_5">碰撞器组件的是否是触发器属性</h4>
+<h2 id="物理系统">物理系统</h2>
+<h3 id="碰撞器">碰撞器</h3>
+<h4 id="碰撞器组件的是否是触发器属性">碰撞器组件的是否是触发器属性</h4>
 <p>默认是否，如果勾选，则该碰撞器不具有物体碰撞功能而只有碰撞事件触发功能，也就是你可以穿模进去了。比如某些液体就可以勾选这个选项这样玩家既可以进入该液体同时也可以跟踪玩家进入该液体的事件。</p>
-<h3 id="_6">网格碰撞器</h3>
+<h3 id="网格碰撞器">网格碰撞器</h3>
 <p>网格碰撞器虽然对物体边界的模拟虽然更精细了，但一般都不推荐使用，因为它非常的消耗性能。我们看到即使是最常见的玩家角色，角色控制器组件也只是简单用一个胶囊碰撞器进行了碰撞模拟。</p>
-<h3 id="_7">物理材质</h3>
+<h3 id="物理材质">物理材质</h3>
 <p>碰撞器的那个材质属性是来设置物理材质用的，物理材质可以通过新建物理材质来创建。</p>
 <ul>
 <li>dynamic friction 动态摩擦</li>
@@ -164,13 +158,13 @@
 <li>Friction Combine 摩擦力如何组合，取最小值，取最大值或者取平均值</li>
 <li>Friction Combine 反弹力如何组合，取最小值，取最大值或者取平均值</li>
 </ul>
-<h3 id="_8">触发器</h3>
+<h3 id="触发器">触发器</h3>
 <p>触发器如果被满足条件的碰撞器发生碰撞则会调用下面三个方法：</p>
 <div class="highlight"><pre><span></span><code>OnTriggerEnter(Collider other)
 OnTriggerStay(Collider other)
 OnTriggerExit(Collider other)
 </code></pre></div>
-<h4 id="ontriggerenteroncollisionenter">OnTriggerEnter和OnCollisionEnter</h4>
+<h4 id="ontriggerenter和oncollisionenter">OnTriggerEnter和OnCollisionEnter</h4>
 <p>OnTriggerEnter 的触发条件是：</p>
 <ul>
 <li>两个GameObject都有碰撞器组件，其中某个GameObject的碰撞器必须勾选了<code>isTrigger</code> ，其中某个GameObject必须刚体组件。但是如果两个碰撞器都勾选了 <code>isTrigger</code> ，也不会触发。</li>
@@ -179,12 +173,12 @@ OnTriggerExit(Collider other)
 <p>OnCollisionEnter的触发条件较为宽松，两个GameObject的碰撞器或者刚体发生碰撞则会触发。</p>
 <p>个人编写了一个测试场景，OnTriggerEnter的触发情况确实如上所述，还必须要求某个GameObject有刚体组件。</p>
 <p>但是我碰到了这样一种情况，那就是基于Unity Standard Assets的FPSController和另外一个单纯的平面trigger进行交互，两个都没有刚体也触发了OnTriggerEnter方法，<strong>经过个人试探 Unity2019.4.19f1c1这边的情况是Chatacter Controller和随便一个trigger发生碰撞就会触发OnTriggerEnter方法，并没有刚体的要求</strong>。</p>
-<h3 id="character-controller">Character Controller组件</h3>
+<h3 id="character-controller组件">Character Controller组件</h3>
 <p>一般第一人称或第三人称角色控制玩家会需要更灵活地控制角色，这种情况下玩家角色如果加入物理系统的刚体会有一种操作上的不顺畅感，但此时仍然希望保留碰撞的物理效果，可以加入Character Controller组件来实现这点。</p>
 <p>我们看到角色控制器下面有三个参数：center控制胶囊碰撞体的中心位置，半径控制胶囊碰撞体的宽度，height控制胶囊碰撞体的高度。大体可以猜到角色控制器就是通过这个胶囊碰撞体来和环境交互的。</p>
 <h4 id="isgrounded">isGrounded</h4>
 <p>本角色控制器组件在上一次移动中是否接触到了地面。</p>
-<h3 id="raycast">RayCast方法</h3>
+<h3 id="raycast方法">RayCast方法</h3>
 <div class="highlight"><pre><span></span><code>public static bool Raycast(Vector3 origin, Vector3 direction, float maxDistance = Mathf.Infinity, int layerMask = DefaultRaycastLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal);
 </code></pre></div>
 <p>从origin向这direction方向发射一个射线，如果射线和某个碰撞体相交则返回true，否则返回false。</p>
@@ -203,13 +197,13 @@ OnTriggerExit(Collider other)
 <div class="highlight"><pre><span></span><code>public static bool CheckCapsule(Vector3 start, Vector3 end, float radius, int layerMask = DefaultRaycastLayers, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal);
 </code></pre></div>
 <p>这里的layerMask是选中的图层才会进入碰撞判断。</p>
-<h3 id="_9">图层</h3>
+<h3 id="图层">图层</h3>
 <p>图层的创建和将某个GameObject分配给某个图层在Unity Editor那边操作熟悉下即可。</p>
 <p>图层在某些特定的地方会很有用，比如摄像机渲染和物理系统的射线碰撞判断，否则不要创建一些无谓的图层。</p>
-<h4 id="_10">摄像机的剔除遮罩属性</h4>
+<h4 id="摄像机的剔除遮罩属性">摄像机的剔除遮罩属性</h4>
 <p>Culling Mask 用来设置本摄像机想要渲染的图层，默认是Everything。</p>
 <p>现在假设有两个摄像机，一个摄像机对着一个红色的立方体，该红色的立方体在RED图层；另外一个摄像机对着蓝色的立方体，该蓝色的立方体在BLUE图层。第一个摄像机的剔除遮罩没有选择BLUE图层，则该摄像机的渲染图像里面没有蓝色的立方体；第二个摄像机的剔除遮罩没有选择RED图层，则该摄像机的渲染图像里面没有红色的立方体。</p>
-<h4 id="_11">物理系统的图层碰撞矩阵</h4>
+<h4 id="物理系统的图层碰撞矩阵">物理系统的图层碰撞矩阵</h4>
 <p>在 <code>Edit-&gt;Project settings-&gt;Physics</code> 那里，有一个Layer collision Matrix，用来设置你的项目里面各个图层中的各个GameObject是否有物理系统的碰撞判断。</p>
 <p>此外物理系统的射线投射函数<code>Raycast</code> 里面有个 <code>layerMask</code> 参数就是设置你希望该射线和那些图层交互的。比如：</p>
 <div class="highlight"><pre><span></span><code>int layerMask = 0;
@@ -227,14 +221,14 @@ OnTriggerExit(Collider other)
 <p>但个人还是不喜欢这种写法，还是推荐多使用 <code>LayerMask.GetMask</code> 这个方法，这个方法接受一个图层或者多个图层的名字，然后返回也就是类似上面描述的layermask的数值：</p>
 <div class="highlight"><pre><span></span><code>LayerMask.GetMask("UserLayerA", "UserLayerB");
 </code></pre></div>
-<h3 id="_12">刚体</h3>
+<h3 id="刚体">刚体</h3>
 <h4 id="iskinematic">isKinematic</h4>
 <p>是否是运动学刚体，如果勾选了，则力，碰撞和joint将不再影响刚体，刚体的移动仅仅动画或者脚本【transform.position】来控制。</p>
 <h4 id="continuous-collision-detection">Continuous Collision Detection</h4>
 <p>防止碰撞器快速移动穿过彼此，可以将碰撞属性检测设置为连续或者连续动态。</p>
 <p>设置为连续可以防止刚体穿过任何静态碰撞器。</p>
 <p>设置为连续动态可以防止刚体穿过任何支持刚体碰撞检测的物体。</p>
-<h2 id="_13">参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ol>
 <li>Unity官方文档</li>
 <li>Stack overflow</li>
@@ -247,31 +241,11 @@ OnTriggerExit(Collider other)
 <li>Unity Shader入门精要 by 冯乐乐</li>
 <li>Mastering Unity Shaders and Effects by Jamie Dean</li>
 </ol>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-10-08T06:40:07.034998+08:00">2021年 10月 8日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-10-08T06:40:07.034998+08:00">2021年 10月 8日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#unity-ref">unity
-                    <span>11</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -303,8 +277,6 @@ OnTriggerExit(Collider other)
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

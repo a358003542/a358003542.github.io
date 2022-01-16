@@ -78,67 +78,78 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-zi-chan-guan-li.html"> Unity游戏开发之资产管理  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/unityyou-xi-kai-fa-zhi-zi-chan-guan-li.html"> Unity游戏开发之资产管理  </a></h1>
+        </header>
+    </div>
 
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#_1">前言</a><ul>
-<li><a href="#_2">本系列内容的取舍</a></li>
+<li><a href="#前言">前言</a><ul>
+<li><a href="#本系列内容的取舍">本系列内容的取舍</a></li>
 </ul>
 </li>
-<li><a href="#blenderunity">blender和unity的协作</a><ul>
-<li><a href="#blender">blender建模</a></li>
-<li><a href="#blender_1">blender动画</a></li>
+<li><a href="#blender和unity的协作">blender和unity的协作</a><ul>
+<li><a href="#blender建模">blender建模</a></li>
+<li><a href="#blender动画">blender动画</a></li>
 </ul>
 </li>
 <li><a href="#unity-addressable-asset-system">Unity Addressable Asset system</a><ul>
-<li><a href="#_3">异步加载你的场景</a></li>
-<li><a href="#buildbuild">build发布前记得运行下build</a></li>
+<li><a href="#异步加载你的场景">异步加载你的场景</a></li>
+<li><a href="#build发布前记得运行下build">build发布前记得运行下build</a></li>
 </ul>
 </li>
-<li><a href="#_4">参考资料</a></li>
+<li><a href="#参考资料">参考资料</a></li>
 </ul>
 </div>
-            </nav>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-10-08T06:43:47.238626+08:00">2021年 10月 8日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-10-08T06:43:47.238626+08:00">2021年 10月 8日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#unity-ref">unity<span>11</span></a></li></ul>
+                </div>
+            </div>
         </div>
 
-    </div>
-
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">前言</h2>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
 <p>本文是Unity游戏开发系列的资产管理部分。</p>
-<h3 id="_2">本系列内容的取舍</h3>
+<h3 id="本系列内容的取舍">本系列内容的取舍</h3>
 <ul>
 <li>因为笔者开发的是3D游戏，因此专属于2D游戏的那些内容将不会在这里讨论。</li>
 <li>笔者使用的是Unity 2020.3 LTS版本，之前的版本被废弃的特性或者之后的版本新增的特性将不会在这里讨论。</li>
 <li>笔者在行文上会尽可能节省笔墨，只是标出官方参考文档的引用出处，但在某些地方会额外花费笔墨来说明，比如个人觉得官方文档文字可能不是很好懂，某些内容很重要需要再特别强调一遍等。</li>
 <li>一般来说官方文档里面有的不会在这里赘述，不过有时某些内容会特别重要而会再强调一遍。</li>
 </ul>
-<h2 id="blenderunity">blender和unity的协作</h2>
+<h2 id="blender和unity的协作">blender和unity的协作</h2>
 <p>虽然Unity的ProBuilder和PloyBrush提供了一定的模型建立和地形构建的能力，但这主要还是用于原型开发，一般建模当然还是推荐在blender上完成。</p>
 <p>至于Unity的地形工具是有局限性的，某些封闭的如洞穴场景或者如同minecraft需要和地形的元素进行交互的场景是不应该使用Unity的terrian地形工具的，而应该通过blender建模来导入到Unity场景中来。其次即使是那些似乎看起来Unity地形工具勉强能够应付的场景，如果后续对地形在表现细节上有更多的要求，那么也应该通过blender建模来实现。【<strong>这里补充说明一下</strong>：关于Unity 地形工具后面会讨论的，上面对Unity地形工具的讨论不是说Unity地形工具没用，我们在成熟的项目的场景里面可能都看不到地形这个要素了，但地形工具还是很有用，Unity地形工具和ProBuilder一样更多的是用于原型开发阶段，就好比搭建一栋大楼一样，你看到满地的砖头或者说满地的blender模型素材会无从下手的，而地形工具就好比建建筑的蓝图，后面实际场景地形搭建还是要根据你之前的地形蓝图来的。也正是因为如此，后面再介绍地形的时候我也会强调一遍，<strong>地形更多的相当于你未来场景的蓝图</strong>，所以不要花费太多精力在地形的细枝末节上。】</p>
-<h3 id="blender">blender建模</h3>
+<h3 id="blender建模">blender建模</h3>
 <p>blender建模导入Unity下面说一下基本的流程思路，可能有时会有一些细节上的问题。</p>
 <ol>
 <li>按A全选你想要导出的元素，主要是网格体和骨架。选择导出到FBX，然后选择网格体，如果有骨骼的话也推荐将骨架选上。然后导出。</li>
 <li>将FBX文件移动到你的Unity项目中，Unity会自动检测导入，但一般来说你还需要对模型导入配置参数进行一些调整。比如材质，比如如果是人形模型，而你希望根据该人形模型构建动画还需要自动创建Avatar。</li>
 <li>FBX模型最好是另外单独一个地方存放，导入的模型参数配置好之后，拖入场景，然后拖动制成Perfab预制件，然后解压缩预制件，再对该预制件进行一些你想要的修改，比如有的加上碰撞器和行为脚本之类的。在更新预制件。</li>
 </ol>
-<h3 id="blender_1">blender动画</h3>
+<h3 id="blender动画">blender动画</h3>
 <p>blender里面的动画导出到Unity也是类似上面的导出FBX，实际上就是导出的你的模型的骨架的一些移动变换数据，然后Unity接受成为动画Clips。</p>
 <ol>
 <li>按A全选你想要导出的元素，主要是网格体和骨架。选择导出到FBX，然后选择骨架，和导出一般模型不同，如果你只希望导出动画的话这里只选择骨架即可。</li>
@@ -179,7 +190,7 @@ Addressables.InstantiateAsync("AssetAddress");
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h3 id="_3">异步加载你的场景</h3>
+<h3 id="异步加载你的场景">异步加载你的场景</h3>
 <p>addressables 系统可用于异步加载你的场景，非常的方便。</p>
 <div class="highlight"><pre><span></span><code>using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -218,9 +229,9 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 }
 </code></pre></div>
 <p>如果大体每一帧都会检测一次加载是否Succeeded。</p>
-<h3 id="buildbuild">build发布前记得运行下build</h3>
+<h3 id="build发布前记得运行下build">build发布前记得运行下build</h3>
 <p>你的项目build独立运行记得将在那个窗口的build子菜单那里点击new build一个资源。</p>
-<h2 id="_4">参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ol>
 <li>Unity官方文档</li>
 <li>Stack overflow</li>
@@ -233,31 +244,11 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
 <li>Unity Shader入门精要 by 冯乐乐</li>
 <li>Mastering Unity Shaders and Effects by Jamie Dean</li>
 </ol>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-10-08T06:43:47.238626+08:00">2021年 10月 8日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-10-08T06:43:47.238626+08:00">2021年 10月 8日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-you-xi-kai-fa-ref">计算机 - 游戏开发</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#unity-ref">unity
-                    <span>11</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -289,8 +280,6 @@ Addressables.UnloadSceneAsync(handle).Completed += SceneUnloadComplete;
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

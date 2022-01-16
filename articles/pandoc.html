@@ -78,44 +78,49 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/pandoc.html"> pandoc  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#_1">前言</a><ul>
-<li><a href="#latexhtml">从latex刷html经验总结</a><ul>
-<li><a href="#metadata">metadata解释</a></li>
-</ul>
-</li>
-<li><a href="#texepub">从tex刷epub经验总结</a></li>
-<li><a href="#htmlepub">从html刷epub经验总结</a></li>
-</ul>
-</li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/pandoc.html"> pandoc  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">前言</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a><ul>
+<li><a href="#从latex刷html经验总结">从latex刷html经验总结</a></li>
+<li><a href="#从tex刷epub经验总结">从tex刷epub经验总结</a></li>
+<li><a href="#从html刷epub经验总结">从html刷epub经验总结</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-12-05T11:05:11.027972+08:00">2021年 12月 5日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-12-05T11:05:11.027972+08:00">2021年 12月 5日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-wen-dang-kai-fa-ref">计算机 - 文档开发</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
 <p>pandoc是一个非常强大的文档格式转换工具，你可以利用它来根据markdown来转换生成epub，或者根据html来生成epub。也可以根据latex文档输出markdown或者根据latex输出epub和html等等。</p>
-<h3 id="latexhtml">从latex刷html经验总结</h3>
+<h3 id="从latex刷html经验总结">从latex刷html经验总结</h3>
 <div class="highlight"><pre><span></span><code>pandoc --toc -s -o main.html main.tex --metadata-file=epub.yaml
 </code></pre></div>
 <p><code>--toc</code> 会根据latex里面的 <code>\tableofcontents</code> 再<body> 里面新增一个<nav> 字段，里面有目录结构。</nav></body></p>
@@ -148,7 +153,7 @@
 </code></pre></div>
 <p>下面讲到的metadata也可以直接传递title和author这两个metadata，效果同上。</p>
 <p><code>--metadata-file</code> 编写一个yaml文件，里面定义一些传递给pandoc的额外的参数。</p>
-<h4 id="metadata">metadata解释</h4>
+<h4 id="metadata解释">metadata解释</h4>
 <p>title和author上面已经解释了。</p>
 <ul>
 <li>date 会增加这两行关于date的信息描述，一个是meta，一个在body之下。</li>
@@ -166,7 +171,7 @@
 </ul>
 <div class="highlight"><pre><span></span><code>&lt;html xmlns="http://www.w3.org/1999/xhtml" lang="zh" xml:lang="zh"&gt;
 </code></pre></div>
-<h3 id="texepub">从tex刷epub经验总结</h3>
+<h3 id="从tex刷epub经验总结">从tex刷epub经验总结</h3>
 <p>如果你的文件源是tex并想制作epub文件，那么推荐如下一步到位：</p>
 <div class="highlight"><pre><span></span><code>pandoc -o main.epub main.tex --metadata-file=epub.yaml
 </code></pre></div>
@@ -213,7 +218,7 @@
 <p>cover-image 指定epub的封面。</p>
 </li>
 </ul>
-<h3 id="htmlepub">从html刷epub经验总结</h3>
+<h3 id="从html刷epub经验总结">从html刷epub经验总结</h3>
 <p>首先就多个html作为文件源的情况作出说明，请始终认为只有一个html文件源，pandoc接受多个html文件源首先就会将他们合并为一个html文件源。比如说文章内链接，本来可能在两个html文件内，都应该用一个html文件源的思路来处理。再说得详细点，假设两个html：ch1.html和ch2.html，其中ch2有一小节标记文章内链接锚点：</p>
 <div class="highlight"><pre><span></span><code>&lt;section id="section1"&gt;what&lt;/section&gt;
 </code></pre></div>
@@ -249,25 +254,11 @@
 <div class="highlight"><pre><span></span><code>pandoc -o main.html CHAPTER-1.html CHAPTER-2.html 
 pandoc --metadata-file=epub.yaml  -o main.epub main_out.html
 </code></pre></div>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-12-05T11:05:11.027972+08:00">2021年 12月 5日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-12-05T11:05:11.027972+08:00">2021年 12月 5日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-wen-dang-kai-fa-ref">计算机 - 文档开发</a>
-
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -299,8 +290,6 @@ pandoc --metadata-file=epub.yaml  -o main.epub main_out.html
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

@@ -78,53 +78,61 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/gao-xiao-numpyhe-pandas.html"> 高效numpy和pandas  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#numpy">高效numpy</a><ul>
-<li><a href="#numpypandas">numpy总的来说比pandas快</a></li>
-<li><a href="#numpyconcatatestack">numpy的concatate比stack快</a></li>
-<li><a href="#numpycopyview">避免numpy的copy操作而多用view</a></li>
-</ul>
-</li>
-<li><a href="#pandas">高效Pandas</a><ul>
-<li><a href="#dfconcatappend">多个相似结构的df合并推荐使用concat而不是append</a></li>
-<li><a href="#pandasnlargest">使用pandas的nlargest而不是排序之后取前几个</a></li>
-<li><a href="#_1">不要用逐个索引操作风格</a></li>
-<li><a href="#apply">尽量不要用apply</a></li>
-<li><a href="#_2">向量操作风格最高效</a></li>
-</ul>
-</li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/gao-xiao-numpyhe-pandas.html"> 高效numpy和pandas  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="numpy">高效numpy</h2>
-<h3 id="numpypandas">numpy总的来说比pandas快</h3>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#高效numpy">高效numpy</a><ul>
+<li><a href="#numpy总的来说比pandas快">numpy总的来说比pandas快</a></li>
+<li><a href="#numpy的concatate比stack快">numpy的concatate比stack快</a></li>
+<li><a href="#避免numpy的copy操作而多用view">避免numpy的copy操作而多用view</a></li>
+</ul>
+</li>
+<li><a href="#高效pandas">高效Pandas</a><ul>
+<li><a href="#多个相似结构的df合并推荐使用concat而不是append">多个相似结构的df合并推荐使用concat而不是append</a></li>
+<li><a href="#使用pandas的nlargest而不是排序之后取前几个">使用pandas的nlargest而不是排序之后取前几个</a></li>
+<li><a href="#不要用逐个索引操作风格">不要用逐个索引操作风格</a></li>
+<li><a href="#尽量不要用apply">尽量不要用apply</a></li>
+<li><a href="#向量操作风格最高效">向量操作风格最高效</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-07-21T08:44:28.130531+08:00">2020年 7月 21日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2020-07-21T08:44:28.130531+08:00">2020年 7月 21日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="高效numpy">高效numpy</h2>
+<h3 id="numpy总的来说比pandas快">numpy总的来说比pandas快</h3>
 <p>如果一个计算，你发现需要的dataframe的values的值，来进行某些numpy运算，有时可能类似这样的语句不会报错：</p>
 <div class="highlight"><pre><span></span><code>np.dot(df['a'],x)
 </code></pre></div>
 <p>但是明确写上 <code>df['a'].values</code> 通常会让你的程序速度快上那么一点点。</p>
-<h3 id="numpyconcatatestack">numpy的concatate比stack快</h3>
+<h3 id="numpy的concatate比stack快">numpy的concatate比stack快</h3>
 <p>比如下面的程序：</p>
 <div class="highlight"><pre><span></span><code>import numpy as np
 x = np.random.rand(1,1000)
@@ -141,20 +149,20 @@ res = np.concatenate([x for i in range(10000)], axis=0)
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>41.1 ms ± 697 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
 </code></pre></div>
-<h3 id="numpycopyview">避免numpy的copy操作而多用view</h3>
+<h3 id="避免numpy的copy操作而多用view">避免numpy的copy操作而多用view</h3>
 <p><a href="https://ipython-books.github.io/45-understanding-the-internals-of-numpy-to-avoid-unnecessary-array-copying/">https://ipython-books.github.io/45-understanding-the-internals-of-numpy-to-avoid-unnecessary-array-copying/</a></p>
-<h2 id="pandas">高效Pandas</h2>
+<h2 id="高效pandas">高效Pandas</h2>
 <p>这里主要参考了 <a href="https://tomaugspurger.github.io/modern-4-performance">这篇文章</a> ，这里有一系列关于如何更好的使用pandas的文章，价值很大。这里主要关注使用上speed up的问题。</p>
-<h3 id="dfconcatappend">多个相似结构的df合并推荐使用concat而不是append</h3>
+<h3 id="多个相似结构的df合并推荐使用concat而不是append">多个相似结构的df合并推荐使用concat而不是append</h3>
 <p>pandas的dataframe任何长度改变操作都会引发copy操作，最好是先将数据合并成一个或者多个dataframe再concat【不推荐append，而一行行append显然就更加不推荐了】。</p>
 <p>通常有很多类似数据源，比如多个csv文件等，需要将这些相似结构的df进行合并操作。这里推荐如下使用concat来做，而不是append：</p>
 <div class="highlight"><pre><span></span><code><span class="n">topk_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">topk_df</span><span class="p">,</span> <span class="n">local_topk</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="pandasnlargest">使用pandas的nlargest而不是排序之后取前几个</h3>
+<h3 id="使用pandas的nlargest而不是排序之后取前几个">使用pandas的nlargest而不是排序之后取前几个</h3>
 <p>你如果需要找最大的几个值，那么推荐使用Dataframe的nlargest方法，这个方法经过优化了的，简单来说就是使用了快速排序的前半部分，这样会更高效。</p>
-<h3 id="_1">不要用逐个索引操作风格</h3>
-<h3 id="apply">尽量不要用apply</h3>
-<h3 id="_2">向量操作风格最高效</h3>
+<h3 id="不要用逐个索引操作风格">不要用逐个索引操作风格</h3>
+<h3 id="尽量不要用apply">尽量不要用apply</h3>
+<h3 id="向量操作风格最高效">向量操作风格最高效</h3>
 <p>这个优化建议主要参看了 <a href="https://engineering.upside.com/a-beginners-guide-to-optimizing-pandas-code-for-speed-c09ef2c6a4d6">这篇文章</a> ，我们也可以多学习下这篇文章的分析问题测速的思路。</p>
 <p>对pandas的某个列的所有值进行操作，如下的逐个索引风格：</p>
 <div class="highlight"><pre><span></span><code>    for i in range(0, len(df)):
@@ -190,25 +198,11 @@ res = np.concatenate([x for i in range(10000)], axis=0)
 <p>而如果我们直接使用numpy的ndarray对象，速度还将继续提升4倍：</p>
 <div class="highlight"><pre><span></span><code>df['distance'] = haversine(40.671, -73.985, df['latitude'].values, df['longitude'].values)
 </code></pre></div>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2020-07-21T08:44:28.130531+08:00">2020年 7月 21日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2020-07-21T08:44:28.130531+08:00">2020年 7月 21日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
-
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -240,8 +234,6 @@ res = np.concatenate([x for i in range(10000)], axis=0)
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

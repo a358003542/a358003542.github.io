@@ -78,37 +78,48 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/cython-module.html"> cython模块  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
-
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
-                <div class="toc">
-<ul>
-<li><a href="#_1">找到性能瓶颈所在</a></li>
-<li><a href="#pyx">pyx文件</a></li>
-<li><a href="#c">集成原始c代码</a></li>
-<li><a href="#_2">参考资料</a></li>
-</ul>
-</div>
-            </nav>
-        </div>
-
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/cython-module.html"> cython模块  </a></h1>
+        </header>
     </div>
 
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">找到性能瓶颈所在</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#找到性能瓶颈所在">找到性能瓶颈所在</a></li>
+<li><a href="#pyx文件">pyx文件</a></li>
+<li><a href="#集成原始c代码">集成原始c代码</a></li>
+<li><a href="#参考资料">参考资料</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-01-16T07:02:55.833279+08:00">2021年 1月 16日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-01-16T07:02:55.833279+08:00">2021年 1月 16日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#python-ref">python<span>18</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="找到性能瓶颈所在">找到性能瓶颈所在</h2>
 <p>首先需要确认脚本或者某个函数具体到底是哪里出现了性能瓶颈：</p>
 <div class="highlight"><pre><span></span><code>python -m cProfile test.py
 </code></pre></div>
@@ -117,7 +128,7 @@
 <p>一般的python代码cython都是支持的，但一般我们是重点去开发那个限速的目标函数，而不会到处优化的。</p>
 <p>参考资料1的例子，没有加速，N设置为3000，用时 53.301s，加速之后，用时4.186s。然后没有加速的那个exp运算了很多很多次，大概花了一两秒的样子，所以我们看到原始python代码在循环操作上开销很大。某些关键计算如果循环次数太多，那么就要考虑上c扩展优化了。</p>
 <p>在做性能测试的时候有一类耗时较多的操作是不用考虑c代码优化的，这类耗时多的操作就是IO等待型操作，有的是等待数据库IO操作，有的是等待文件读写IO操作，有的是等待网络IO请求等等。这些请求很多都和socket套接字请求相关。</p>
-<h2 id="pyx">pyx文件</h2>
+<h2 id="pyx文件">pyx文件</h2>
 <p>关于pyx文件的更多请查看cython的官方手册。</p>
 <p>下面重点讲一下 python模块包的管理方案，推荐是利用 setuptools 来，</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">Extension</span>
@@ -135,7 +146,7 @@
 <li>第一个参数name就是你想让这个目标加速模块（python文件就叫模块，多个带__init__.py的叫包）在总模块中叫什么名字，支持点标记。</li>
 <li>第二个参数 sources，一个列表，把一些文件路径写上就是了。</li>
 </ul>
-<h2 id="c">集成原始c代码</h2>
+<h2 id="集成原始c代码">集成原始c代码</h2>
 <p>有的时候你会写一些原始的c代码，那么怎么利用cython集成进来呢。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">Extension</span>
 <span class="kn">from</span> <span class="nn">Cython.Distutils</span> <span class="kn">import</span> <span class="n">build_ext</span>
@@ -258,37 +269,17 @@ False
     return True
 </code></pre></div>
 <p>更多高级只是比如集成numpy等等，就需要查看cython官方文档了。</p>
-<h2 id="_2">参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ol>
 <li><a href="https://charlesnord.github.io/2017/03/11/cython-tuto/">Cython 入门教程</a></li>
 <li><a href="https://github.com/thearn/simple-cython-example">github上一个简单的cython样例</a></li>
 <li><a href="http://python3-cookbook.readthedocs.io/zh_CN/latest/c15/p10_wrap_existing_c_code_with_cython.html">python3 cookbook相关讨论</a></li>
 </ol>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2021-01-16T07:02:55.833279+08:00">2021年 1月 16日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-01-16T07:02:55.833279+08:00">2021年 1月 16日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>18</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -320,8 +311,6 @@ False
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

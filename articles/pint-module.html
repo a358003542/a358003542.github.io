@@ -78,47 +78,58 @@
         </nav>
 
 
-<div class="row">
-    <div class="col"></div>
-    <header class="col-8 page-header">
-        <h1><a href="https://a358003542.github.io/articles/pint-module.html"> pint模块  </a></h1>
-    </header>
-    <div class="col"></div>
-</div>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/pint-module.html"> pint模块  </a></h1>
+        </header>
+    </div>
 
-<div class="row">
-
-    <div class="col">
-        <div class="table-of-content">
-            <nav>
-                <h4>目录</h4>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#_1">前言</a></li>
-<li><a href="#pint">pint模块</a><ul>
-<li><a href="#unit">定义unit</a></li>
-<li><a href="#_2">定义物理常数</a></li>
-<li><a href="#_3">前缀支持</a></li>
-<li><a href="#_4">单位转换</a></li>
+<li><a href="#前言">前言</a></li>
+<li><a href="#pint模块">pint模块</a><ul>
+<li><a href="#定义unit">定义unit</a></li>
+<li><a href="#定义物理常数">定义物理常数</a></li>
+<li><a href="#前缀支持">前缀支持</a></li>
+<li><a href="#单位转换">单位转换</a></li>
 </ul>
 </li>
 </ul>
 </div>
-            </nav>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2021-10-08T05:46:11.167310+08:00">2021年 10月 8日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#pint-ref">pint<span>1</span></a></li><li><a href="https://a358003542.github.io/tags.html#python-ref">python<span>18</span></a></li></ul>
+                </div>
+            </div>
         </div>
 
-    </div>
-
-    <div class="col-8">
-        <div class="article-content">
-            
-<h2 id="_1">前言</h2>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
 <p>如何表示物理量这个问题在各个科学学科研究中是一个很基本的问题，关于这一块python有很多模块，但这一块最好是有一个公用的解决方案以供其他具体科学学科的python模块来调用。</p>
 <p>scipy模块有一个子模块constants，其提供了一些物理常数，不过这些物理常数具体就是一些数值，最好这些基本的物理常数作为物理量就是Quantity类。astropy是一个专门解决天文学方面问题的python支持模块，其有一个物理单位系统，然后里面的物理常数都是其内部定义的Quantity类，而其Quantity类是继承自np.ndarray的，个人觉得这依赖有点大了。当然它这么设计也是为了对numpy有很好的支持。然后chempy这个模块里面的单位系统依赖 <a href="https://github.com/python-quantities/python-quantities">python-quantites</a> 这个模块，其Quantity类也是继承自np.ndarray。</p>
 <p>pint模块在物理量表示这个问题上算是一个star数很多的模块了，其Quantity类并不是直接继承自np.ndarray，而是额外做了一些处理来对numpy进行了很好的支持。pint模块获得了我的青睐。</p>
 <p>慢着，还有一个竞争者。sympy模块里面有一个专门解决物理量单位系统的子模块，其采用的方法和上面的都不一样，sympy模块主要用于符号计算的，其在处理物理量甚至用到了群论的方法，至少就目前个人学习化学研究的xchemistry项目来说实在有点大材小用了。</p>
 <p>在决定选用pint模块之后，从astropy模块和chempy模块中可以看到关于具体学科的物理常数和物理量方面还是有一些额外的工作要做，这个后面再慢慢讨论。</p>
-<h2 id="pint">pint模块</h2>
+<h2 id="pint模块">pint模块</h2>
 <p>pint模块就大的一个特色就是可定制性，就其模块本身来说只是提供了一个基本的处理物理量单位的逻辑，具体单位系统和相关运算的定义都是通过一种文本配置的形式展开的，比如：</p>
 <div class="highlight"><pre><span></span><code>@system SI
     second
@@ -162,7 +173,7 @@ week = 7 * day
             self.load_definitions(self._filename)
 </code></pre></div>
 <p>其就是加载默认的definition文本。该文本定义的规则和语法都是pint模块自己定义的，大体如下：</p>
-<h3 id="unit">定义unit</h3>
+<h3 id="定义unit">定义unit</h3>
 <div class="highlight"><pre><span></span><code>&lt;canonical name&gt; = &lt;relation to another unit or dimension&gt; [= &lt;symbol&gt;] [= &lt;alias&gt;] 
 </code></pre></div>
 <p>比如：</p>
@@ -179,49 +190,26 @@ week = 7 * day
 <div class="highlight"><pre><span></span><code>@alias meter = metro = metr
 </code></pre></div>
 <p>这是定义单位别名。</p>
-<h3 id="_2">定义物理常数</h3>
+<h3 id="定义物理常数">定义物理常数</h3>
 <div class="highlight"><pre><span></span><code>speed_of_light = 299792458 m/s = c = c_0
 </code></pre></div>
 <p>这个speed_of_light实际上就是一个单位。</p>
-<h3 id="_3">前缀支持</h3>
+<h3 id="前缀支持">前缀支持</h3>
 <p>kilogram在定义文件里面是没有写的，不过也是可以直接使用的，因为其加入了下面这样的前缀支持语句：</p>
 <div class="highlight"><pre><span></span><code>kilo- =  1e3   = k-
 </code></pre></div>
 <p>然后发现kilograms最后也会读取为kilogram单位。</p>
-<h3 id="_4">单位转换</h3>
+<h3 id="单位转换">单位转换</h3>
 <div class="highlight"><pre><span></span><code><span class="n">test_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">unit</span><span class="o">.</span><span class="n">L</span>
 <span class="k">assert</span> <span class="n">test_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">'meter ** 3'</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 </code></pre></div>
 <p>具体就是使用to方法，还是比较智能的了，看的出来这个模块从设计后后面的分析计算花了很多心思的。</p>
 <p>整个单位的转换和计算还有有效位数问题这个后面有时间再讨论。</p>
+            </div>
         </div>
-    </div>
-
-    <div class="col" style="font-size:0.9em;">
-        <h4>首发于：</h4>
-        <time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
-
-        <h4>最近更新于：</h4>
-        <time datetime="2021-10-08T05:46:11.167310+08:00">2021年 10月 8日 </time>
-
-
-        <h4>分类：</h4>
-        <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
-
-        <h4>标签：</h4>
-        <ul class="list-of-tags tags-in-article">
-            <li><a href="https://a358003542.github.io/tags.html#pint-ref">pint
-                    <span>1</span>
-</a></li>
-            <li><a href="https://a358003542.github.io/tags.html#python-ref">python
-                    <span>18</span>
-</a></li>
-        </ul>
 
     </div>
-
 </div>
-
 
         <footer class="footer">
             <ul class="nav justify-content-center">
@@ -253,8 +241,6 @@ week = 7 * day
     <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://a358003542.github.io/theme/js/base.js"></script>
-
-<script src="https://a358003542.github.io/theme/dist/jquery/js/jquery.min.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 
