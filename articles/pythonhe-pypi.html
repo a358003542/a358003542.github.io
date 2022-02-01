@@ -96,13 +96,14 @@
 <li><a href="#在pypi上传你的模块">在pypi上传你的模块</a></li>
 <li><a href="#pypi下载使用国内源">pypi下载使用国内源</a></li>
 <li><a href="#pypi只下载软件源文件">pypi只下载软件源文件</a></li>
+<li><a href="#其他注意事项">其他注意事项</a></li>
 </ul>
 </div>
 
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2021-11-19T18:08:18.258418+08:00">2021年 11月 19日 </time>
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2022-02-01T15:19:41.752331+08:00">2022年 2月 1日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2021-11-19T18:08:18.258418+08:00">2021年 11月 19日 </time>
+                <div class="p-1">最近更新于：<time datetime="2022-02-01T15:19:41.752331+08:00">2022年 2月 1日 </time>
                 </div>
 
 
@@ -128,10 +129,12 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 </code></pre></div>
-<h4 id="单python模块结构">单python模块结构</h4>
-<p>一般推荐的项目结构有如下两种，现在假定这里我们讨论的python模块名字是pyskeleton，如果你的项目只有这样一个python模块，则推荐采用如下结构：</p>
+<h4 id="小型模块项目">小型模块项目</h4>
+<p>即使是非常小型的单python文件的模块，也推荐组织成为python的模块结构而不是通过<code>py_modules</code>来指定。</p>
+<p>现在假定这里我们讨论的python模块名字是pyskeleton，如果该python模块很小型，则推荐采用如下结构：</p>
 <div class="highlight"><pre><span></span><code>----pyskeleton
   --__init__.py
+  --another_file.py
 
 setup.cfg
 pyproject.toml
@@ -150,8 +153,36 @@ include_package_data = True
 packages = pyskeleton
 </code></pre></div>
 <p>也就是直接将packages写上去即可。</p>
-<h4 id="多python模块结构">多python模块结构</h4>
-<p>还有一种结构如下所示：</p>
+<p><strong>NOTICE:</strong> packages这个关键词是setuptools模块继承自distutil模块的，<strong>其不会进一步递归扫描该模块可能有的子模块</strong>。也就是上面这个写法只能添加pyskeleton文件夹下的 <code>__init__.py</code> 文件和与其平行的一些python文件。如果你还希望在下面添加几个子模块，则参见下面的讨论。</p>
+<h4 id="中型模块项目">中型模块项目</h4>
+<div class="highlight"><pre><span></span><code>----pyskeleton
+  -- submodule1
+    -- __init__.py
+  -- submodule2
+    -- __init__.py
+  --__init__.py
+  --another_file.py
+
+setup.cfg
+pyproject.toml
+</code></pre></div>
+<p>类似上面这样中型大小的python模块项目，如果子模块不是很多的话，那么你可以继续如下这样编写：</p>
+<div class="highlight"><pre><span></span><code>packages = 
+  pyskeleton
+  pyskeleton.submodule1
+  pyskeleton.submodule2
+</code></pre></div>
+<p>显然这样子模块多于两个以上就显得很麻烦了，那么这时就推荐使用setuptools模块提供的find函数。</p>
+<div class="highlight"><pre><span></span><code>packages = find:
+</code></pre></div>
+<p>其会自动从根目录开始进行扫描，然后根据 <code>__init__.py</code> 是否存在来自动生成packages列表。这个时候就有一个注意事项：你的测试文件夹 tests 最好不要有 <code>__init__.py</code> 文件了，实际上利用pytest这样的测试辅助模块也是不需要 <code>__init__.py</code> 文件的。</p>
+<p>然后有的时候你可能希望某个子模块不要添加进去了，反正有的时候就有这个需求，那么你可以加上 exclude 参数：</p>
+<div class="highlight"><pre><span></span><code>[options.packages.find]
+exclude = my_python_module.backup
+</code></pre></div>
+<p>注意写法是你预期要添加进入packages列表的字段，然后排除掉。</p>
+<h4 id="多python模块项目">多python模块项目</h4>
+<p>绝大部分情况基本上就属于上面描述的哪两种了，但对于某些公司内部大型的复杂的python项目，可能会有多个python模块放在一个文件夹下，而且这里谈论的多个python模块的意思，就是多个python模块，比如requests和scapy这样完全不相干，不属于一个父模块名的独立的python模块，大体类似下面这样的文件夹结构：</p>
 <div class="highlight"><pre><span></span><code>----src
   ----pyskeleton
     --__init__.py
@@ -161,7 +192,6 @@ packages = pyskeleton
 setup.cfg
 pyproject.toml
 </code></pre></div>
-<p>现在甚至只有一个模块的python项目也推荐采用这种结构，因为这种结构可扩展性更好一些。一些C语言写的python扩展模块放在src文件夹下也能得到很好地管理。</p>
 <p>这种结构的 <code>setup.cfg</code> 大体内容如下所示：</p>
 <div class="highlight"><pre><span></span><code>[metadata]
 name = pyskeleton
@@ -185,12 +215,11 @@ include = pyskeleton
 console_scripts =
     pyskeleton = pyskeleton.__main__:main
 </code></pre></div>
-<p>这里使用了find来自动从src文件夹下面寻找python模块，你可以将你的python的tests文件夹放在src之外，这样就避免了tests也被find进来了。你可以进一步通过 <code>include</code> 和 <code>exclude</code> 来控制find函数的行为。</p>
-<p><code>package_dir</code> 这个参数正是支持上面结构的关键，其传统的写法是这样的：</p>
+<p>首先来集中解释一下 <code>package_dir</code> 这个参数，这个参数实际上是从distuitl模块那边来的，上面这种写法对应的传统写法是：</p>
 <div class="highlight"><pre><span></span><code>package_dir = {'': 'src'}
 </code></pre></div>
-<p>意思是你的根包在src文件夹下。这个配置还可以进行其他调配，但这会弄得太复杂了，这里就把上面具体的行为说明清楚：</p>
-<p>find是自动寻找python模块，where指定要在那个寻找，所以现在find就开始在src文件夹下面寻找了，你可以通过include和exclude参数来进一步规范find的查找行为，就上面的例子来说将只会找到pyskeleton这个模块。为了后面讨论的方便现在假定找到了 <code>pyskeleton</code> 和 <code>other_module</code> 这两个模块。package_dir 定义了模块名和具体该模块在文件系统中文件夹的映射关系。比如上面设置根包在src文件夹下，则说 <code>pyskeleton</code> 就是预期要有 <code>src/pyskeleton/__init__.py</code> 这个文件，说得再具体一点，该模块将会拷贝到 <code>site-packages</code> 那里的根目录下面去。</p>
+<p>这个字典值key是模块名，value是对应的文件夹，空字符串意思是根模块。这个说起来有点难懂，我下面再将整个过程理一遍好让读者更容易懂一点。</p>
+<p>find函数的where是说要从哪里寻找python模块，所以现在find开始在src文件夹下面寻找了，include和exclude参数用来进一步控制find的查找行为，其中如果有include参数则只添加include参数指定的那些模块，比如上面只会添加pyskeleton模块，但这里还有一个点没讲。如果package_dir那个参数没配置的话，按照道理讲其对应的package name是 src.pyskeleton，因为包名是根据文件夹的结构来的，虽然我指定find从src文件夹开始查找，但是具体某个模块的文件夹结构是没变的，继而对应的packages那边的名字也是没变的，因为有了上面 package_dir 那个配置，现在模块的根位置对应的src文件夹，于是pyskeleton那个文件夹对应的模块名就是pyskeleton了。说得再具体一点pyskeleton现在将作为一个独立模块拷贝到 <code>site-packages</code> 哪里的根目录下面。</p>
 <p>为了加深理解我们可以将上面的include参数改成 <code>pyskeleton*</code> ，然后再随便新建一个pyskeleton2模块，经过测试就会发现又会多了一个pyskeleton2的模块。</p>
 <p>一般子模块会放在总模块的下面方便管理，但项目合作的时候可能各个子模块会分开开发，那么这个时候你可以使用<code>find_namespace</code> 来实现多个子模块在一个父模块名字之下，这块讨论这里就略过了。</p>
 <h4 id="metadata">metadata</h4>
@@ -344,6 +373,8 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 <p>下载pypi上的目标软件源文件而不是安装。参考了 <a href="http://stackoverflow.com/questions/7300321/how-to-use-pythons-pip-to-download-and-keep-the-zipped-files-for-a-package">这个网页</a> 。</p>
 <div class="highlight"><pre><span></span><code>pip install --download="/pth/to/downloaded/files" package_name
 </code></pre></div>
+<h3 id="其他注意事项">其他注意事项</h3>
+<p>注意那个什么egg-info这个缓存文件夹，如果你更改了你的项目的配置，最好将这个缓存文件夹删掉，有时会有干扰。</p>
             </div>
         </div>
 
