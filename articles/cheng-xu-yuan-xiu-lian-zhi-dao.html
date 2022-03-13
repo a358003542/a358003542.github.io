@@ -11,12 +11,12 @@
     <meta name="copyright" content="wanze" />
 
     <meta name="description"
-        content="模拟NPC的漫游行走 随机漫走应该可以用于模拟游戏内的NPC的活动行为，如果是二维平面模拟，则move Vector2变量随机生成。 这大 …" />
+        content="注重实效的程序员 实时不断地批判思考你的工作。 负责 提供各种选项，不要找借口。 原型 重构 易于测试的代码 自动化 无情 …" />
 
 
-<meta name="keywords" content=", drafts, " />
+<meta name="keywords" content=", 计算机 - 编程, " />
 
-<title>随机漫走用于模拟NPC的漫游行走  -
+<title>程序员修炼之道  -
     万泽的博客</title>
 
     <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -79,23 +79,37 @@
     <div class="row">
         <div class="col-md-4 col-lg-3"></div>
         <header class="col-sm-12 col-md-8 col-lg-8 page-header">
-            <h1><a href="https://a358003542.github.io/drafts/sui-ji-man-zou-yong-yu-mo-ni-npcde-man-you-xing-zou.html"> 随机漫走用于模拟NPC的漫游行走  </a></h1>
+            <h1><a href="https://a358003542.github.io/articles/cheng-xu-yuan-xiu-lian-zhi-dao.html"> 程序员修炼之道  </a></h1>
         </header>
     </div>
 
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#注重实效的程序员">注重实效的程序员</a><ul>
+<li><a href="#负责">负责</a></li>
+<li><a href="#软件的熵">软件的熵</a></li>
+<li><a href="#你的知识资产">你的知识资产</a></li>
+<li><a href="#交流">交流</a></li>
+<li><a href="#不要重复你自己">不要重复你自己</a></li>
+<li><a href="#去耦合">去耦合</a></li>
+</ul>
+</li>
+</ul>
+</div>
 
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2022-02-01T12:25:02.338722+08:00">2022年 2月 1日 </time>
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2022-03-13T15:52:21.657917+08:00">2022年 3月 13日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2022-02-01T12:25:02.338722+08:00">2022年 2月 1日 </time>
+                <div class="p-1">最近更新于：<time datetime="2022-03-13T15:52:21.657917+08:00">2022年 3月 13日 </time>
                 </div>
 
 
                 <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#drafts-ref">drafts</a>
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-ref">计算机 - 编程</a>
                 </div>
 
             </div>
@@ -103,21 +117,55 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                <h3 id="模拟npc的漫游行走">模拟NPC的漫游行走</h3>
-<p>随机漫走应该可以用于模拟游戏内的NPC的活动行为，如果是二维平面模拟，则move Vector2变量随机生成。</p>
-<p>这大体模拟了玩家随意的按键 wasd。不过应该需要两个参数控制，一个是间隔时间，一个是步长。这个间隔时间主要用于控制不让NPC的行走显得太随机和飘忽不定。</p>
-<p>然后还需要设置一个活动边界，这个活动边界具有弹性碰撞特性。</p>
-<p>在一定间隔时间内不断随机漫走，最终NPC的移动轨迹为起始点到结束点的一条直线。</p>
-<p>一般来说NPC的这种漫游行走的出现概率应该是一个平面的正态分布，游戏中可能会需要更确切的行动路线。为了获得这种确切的行动路线效果，需要指定一个目标点，基于目标点绘制一些不同大小的圆圈，如下图所示。</p>
-<p><img alt="img" src="https://a358003542.github.io/images/2021/random_walk_find_target.png"></p>
-<p>可以将这个大小的圆圈定义为猎物的气味和动物的追捕猎物的嗅觉的综合指标。当NPC比如说一只豹子在某个圆环内的时候，它的随机漫游x，y的概率并不是均值的，而受到这个deltaP的影响。比如说最中心，则随机漫游行为就变换为直接确定概率的定向移动到目标点。</p>
-<p>可以根据navmeshagent来加入无效路径判断，如果由navmeshagent计算出来的路径无效，或者路径大大超过间隔时间乘以步长则也认为路径无效，路径无效需要重新随机漫游。</p>
-<p>让NPC随机漫走和手工指定NPC的路线相比较明显让NPC随机漫走有以下优点：</p>
-<ol>
-<li>玩家观察NPC不会枯燥，不会觉得NPC的活动规律太过于死板。</li>
-<li>手工指定NPC的路线为了获得一个大体合适的游戏表现效果需要指定大量的point点，而随机漫走只需要根据游戏的设计来指定活动区域边界和确切的目标中心点。</li>
-</ol>
-<p>以上讨论都是在模拟NPC的随机漫游行为，一个大的前提就是这其中有很多不确定和信息缺失，所以才导致了NPC的随机漫游行为。如果NPC已经确切知道了目标点在那里，那么随机漫游行为应该终止，NPC的行为交由程序的其他部分来负责。</p>
+                
+<h2 id="注重实效的程序员">注重实效的程序员</h2>
+<p>实时不断地批判思考你的工作。</p>
+<h3 id="负责">负责</h3>
+<p>提供各种选项，不要找借口。</p>
+<ul>
+<li>原型</li>
+<li>重构</li>
+<li>易于测试的代码</li>
+<li>自动化</li>
+<li>无情的测试</li>
+</ul>
+<h3 id="软件的熵">软件的熵</h3>
+<p>不要留着低劣的设计，错误的决策，糟糕的代码不修理，发现一个修一个，如果没有足够的时间，则要标记出来。一个整洁的运行良好的系统，就是因为这些小问题而最终腐烂变成大型垃圾堆。</p>
+<ul>
+<li>重构</li>
+<li>注重实效的团队</li>
+</ul>
+<h3 id="你的知识资产">你的知识资产</h3>
+<p>如同管理金融资产一样，经营好你的知识资产。</p>
+<ul>
+<li>每年至少学习一种新的语言</li>
+<li>每季度阅读一本技术书籍</li>
+<li>也要阅读一些非技术书籍</li>
+<li>试验不同的环境</li>
+<li>不时上网了解新的技术</li>
+</ul>
+<h3 id="交流">交流</h3>
+<h3 id="不要重复你自己">不要重复你自己</h3>
+<p>除了一些必要的重复【一般来说这些所谓的必要重复大多是因为针对不同的信息接受者，所以需要重复。比如代码里面的注释和文档是针对不同的信息接受者的；再比如即使是程序员编写的代码还可以细分，有面向本模块开发人员和面向本模块外部使用者这两个信息接受者的不同，这个时候针对不同的受众发生一些必要的信息重复也是可以接受的。】，其他情况程序员都应该遵守DRY原则，即相同的知识信息表述不应该出现两次。</p>
+<h3 id="去耦合">去耦合</h3>
+<p>编写组件去耦合的正交系统，有两个好处：</p>
+<h4 id="提高生产率">提高生产率</h4>
+<ul>
+<li>改动得以局部化，所以开发的时间和测试的时间得以降低。</li>
+<li>组件的去耦合促进组件的复用</li>
+<li>对去耦合的组件再进行组合，生产率会有所提高。</li>
+</ul>
+<h4 id="降低风险">降低风险</h4>
+<ul>
+<li>正交的系统可以更好地测试</li>
+<li>有问题的代码被隔离开来，整个系统更健壮。</li>
+</ul>
+<h4 id="编码去耦合实践">编码去耦合实践</h4>
+<ul>
+<li>编写代码保持解耦</li>
+<li>避免使用全局数据，推荐采用语境传入模块的方式【当然这里的全局数据指的是全局变量，全局常数不在这里的讨论范围之内。】。全局数据会因为多线程多进程的情况而带来麻烦。设计模式中的单例模式一般会将其做成全局变量，在某些情况下这可能不是一个好的实现方案。</li>
+<li>避免编写相似的函数</li>
+</ul>
             </div>
         </div>
 
