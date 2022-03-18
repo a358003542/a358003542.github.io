@@ -104,6 +104,7 @@
 </li>
 <li><a href="#应用配置">应用配置</a><ul>
 <li><a href="#ready方法">ready方法</a></li>
+<li><a href="#app_label">app_label</a></li>
 </ul>
 </li>
 <li><a href="#模型层">模型层</a><ul>
@@ -111,6 +112,7 @@
 <li><a href="#数据库迁移">数据库迁移</a></li>
 <li><a href="#定义模型">定义模型</a></li>
 <li><a href="#模型的使用">模型的使用</a></li>
+<li><a href="#跨关系查询">跨关系查询</a></li>
 <li><a href="#模型层实战">模型层实战</a></li>
 </ul>
 </li>
@@ -132,10 +134,8 @@
 <li><a href="#jwt认证">JWT认证</a></li>
 </ul>
 </li>
-<li><a href="#权限管理">权限管理</a><ul>
-<li><a href="#认证">认证</a></li>
+<li><a href="#认证和权限">认证和权限</a><ul>
 <li><a href="#自定义身份认证">自定义身份认证</a></li>
-<li><a href="#权限">权限</a></li>
 <li><a href="#自定义权限管理类">自定义权限管理类</a></li>
 </ul>
 </li>
@@ -149,6 +149,15 @@
 <li><a href="#字典统一配置">字典统一配置</a></li>
 </ul>
 </li>
+<li><a href="#django的session">django的session</a></li>
+<li><a href="#django和celery">django和celery</a><ul>
+<li><a href="#celery的核心概念">celery的核心概念</a></li>
+<li><a href="#django内文件安排">django内文件安排</a></li>
+<li><a href="#celery配置">celery配置</a></li>
+<li><a href="#定义任务">定义任务</a></li>
+<li><a href="#启动任务">启动任务</a></li>
+</ul>
+</li>
 <li><a href="#部署">部署</a><ul>
 <li><a href="#apache">apache</a></li>
 <li><a href="#关于静态文件">关于静态文件</a></li>
@@ -158,7 +167,9 @@
 <li><a href="#对外部署必看">对外部署必看</a></li>
 </ul>
 </li>
-<li><a href="#备用">备用</a><ul>
+<li><a href="#备用">备用</a></li>
+<li><a href="#文件上传">文件上传</a><ul>
+<li><a href="#线程池管理后台多个子任务">线程池管理后台多个子任务</a></li>
 <li><a href="#自定义命令">自定义命令</a></li>
 <li><a href="#创建超级用户">创建超级用户</a></li>
 <li><a href="#交互式环境">交互式环境</a></li>
@@ -166,7 +177,6 @@
 </ul>
 </li>
 <li><a href="#附录">附录</a><ul>
-<li><a href="#django和celery">django和celery</a></li>
 <li><a href="#翻译">翻译</a></li>
 <li><a href="#模板层">模板层</a></li>
 <li><a href="#多数据库处理">多数据库处理</a></li>
@@ -191,7 +201,7 @@
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-04-05T00:00:00+08:00">2019年 4月 5日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2022-03-12T17:09:41.603991+08:00">2022年 3月 12日 </time>
+                <div class="p-1">最近更新于：<time datetime="2022-03-18T17:25:22.706429+08:00">2022年 3月 18日 </time>
                 </div>
 
 
@@ -346,6 +356,8 @@ class AppUserConfig(AppConfig):
 <h3 id="ready方法">ready方法</h3>
 <p>可以通过重写 <code>ready</code> 方法，来初始化本app的一些信号配置。</p>
 <p>关于信号这块在信号那一小节集中讨论。</p>
+<h3 id="app_label">app_label</h3>
+<p>默认是 name的最后一段内容，这个app_label参数还是很重要的，比如引用外键，第一段就是app_label，第二个就是模型的名字。比如 <code>user.has_perm</code> 方法接受的参数第一段就是app_label，第二段是权限的code name。</p>
 <h2 id="模型层">模型层</h2>
 <p>模型层的代码是放在models.py这个文件里面的，模型层本章内容会特别的多，初学者不可能一下就掌握的，慢慢摸索和学习。</p>
 <h3 id="数据库的配置">数据库的配置</h3>
@@ -598,6 +610,67 @@ except Person.DoesNotExist:
 <div class="highlight"><pre><span></span><code>b.related_name
 </code></pre></div>
 <p>OnetoOne关系的使用非常简单， <code>a.b</code> 或者 <code>b.a</code> 都是可以的。</p>
+<h4 id="从数据库刷新对象">从数据库刷新对象</h4>
+<p>可以通过调用模型实例的 <code>refresh_from_db</code> 方法来从数据库中更新数据：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_update_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s1">'val'</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># At this point obj.val is still 1, but the value in the database</span>
+    <span class="c1"># was updated to 2. The object's updated value needs to be reloaded</span>
+    <span class="c1"># from the database.</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">refresh_from_db</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="queryset的update方法">queryset的update方法</h4>
+<p>queryset的update方法应该是对应SQL语句的UPDATE语句：</p>
+<p>如果只是更新一个记录的某个字段并不需要其他操作的模型层代码最好是如下写：</p>
+<div class="highlight"><pre><span></span><code>Entry.objects.filter(id=10).update(comments_on=False)
+</code></pre></div>
+<p>而不是这样写：</p>
+<div class="highlight"><pre><span></span><code>e = Entry.objects.get(id=10)
+e.comments_on = False
+e.save()
+</code></pre></div>
+<p>直接用update方法会更高效一些，但是效率固然是一方面，也要记住你的post_save，pre_save信号是依赖save方法的调用的，如果你的模型有这方面信号依赖，那么要慎重改动。此外还有如果你的程序逻辑对save方法进行了重载并加入了一些额外的逻辑，那么也要慎重改动。</p>
+<h4 id="更多的自定义方法">更多的自定义方法</h4>
+<p>模型类类似python的其他类一样可以加入更多的自定义方法，这些方法的作用对象是本模型实例。而模型管理类则是不能直接获取到模型实例的，需要查询动作。</p>
+<h4 id="原生sql语句查询">原生SQL语句查询</h4>
+<div class="highlight"><pre><span></span><code>Manager.raw(raw_query, params=(), translations=None)
+</code></pre></div>
+<h4 id="模型的继承">模型的继承</h4>
+<ol>
+<li>
+<p>利用抽象基类来实现模型的继承，来避免模型字段的重复输入。抽象基类被继承时其Meta定义的属性也会被合理有选择性地继承。</p>
+</li>
+<li>
+<p>多表继承</p>
+</li>
+<li>
+<p>代理模型，不修改数据库字段相关信息，只是在修改python面对模型层数据的行为。</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code>rom django.db import models
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+class MyPerson(Person):
+    class Meta:
+        proxy = True
+
+    def do_something(self):
+        # ...
+        pass
+</code></pre></div>
+<p>代理模型和原模型都是在操作同一个数据库表格。可以通过代理模型来定义另外一种排序方法。</p>
+<h4 id="两个模型实例的比较">两个模型实例的==比较</h4>
+<p>比较的是pk主键值。</p>
+<h3 id="跨关系查询">跨关系查询</h3>
+<p>Entry manytoone blog</p>
+<p>可以如下用双下划线来实现跨关系查询，django在幕后自动处理SQL的join关系。</p>
+<div class="highlight"><pre><span></span><code>Entry.objects.filter(blog__name='Beatles Blog')
+</code></pre></div>
 <h3 id="模型层实战">模型层实战</h3>
 <h4 id="扩展用户模型">扩展用户模型</h4>
 <p>本小节主要参考了这篇 <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html">不错的文章</a> 。</p>
@@ -638,6 +711,18 @@ except Person.DoesNotExist:
 <li>create_user</li>
 <li>create_superuser</li>
 </ul>
+<h5 id="其他内容">其他内容</h5>
+<ul>
+<li>
+<p>REQUIRED_FIELDS 对django没有什么影响，唯一的影响就是createsuperuser的时候会弹出该字段的输入提示，一般没有设置 <code>blank = True</code> 的字段都可以加到该字段里面。</p>
+</li>
+<li>
+<p>EMAIL_FIELD 影响 <code>get_email_field_name</code> 方法</p>
+</li>
+<li>
+<p>USERNAME_FIELD ModelBackend的authenticate方法默认会先试着用 username+passworld来进行，如果你指定其他字段，则会试着从那个字段+passworld的方式来进行认证。</p>
+</li>
+</ul>
 <h2 id="视图层">视图层</h2>
 <p>视图层的代码是放在views.py这个文件里面的。因为本文会更加关注于Restful风格的后台API的编写，所以对于django视图层这块的讨论基本上略过了。</p>
 <h2 id="api设计">API设计</h2>
@@ -655,7 +740,9 @@ api.what.com/resource_name/&lt;id&gt;/resource_name2/&lt;id&gt;
 </code></pre></div>
 <p>上面的resource_name2的意思是SQL关系数据库中的关系，某个resource_name会关联多个resource_name2。</p>
 <h3 id="http方法">HTTP方法</h3>
-<p>按照Restful 风格推荐就采用四种方法：GET, POST, PUT, DELETE。还有一个PATCH方法不太推荐使用。具体这四种方法的分工就是增删改查对应POST，DELETE，PUT，GET。</p>
+<p>按照Restful api风格就推荐使用HTTP的这五种方法：GET, POST, PUT, DELETE和PATCH。</p>
+<p>具体在使用上首先简单的理解就是对应数据库的增删改查来对应POST，DELETE，PUT，GET这四种方法。然后在细节上POST只能用户新增记录insert逻辑，PUT则是insert or update逻辑，PATCH只能用户update更新逻辑。</p>
+<p>一般来说GET方法权限审核最宽松，POST方法次之，PUT方法和DELETE方法的权限审核最严，有时甚至完全不会将api写出来。</p>
 <h3 id="返回内容">返回内容</h3>
 <p>payload都推荐采用json的单字典格式形式。</p>
 <p>我喜欢使用这种风格：</p>
@@ -691,10 +778,11 @@ api.what.com/resource_name/&lt;id&gt;/resource_name2/&lt;id&gt;
 <li>reverse 排序是否反转的参数</li>
 </ul>
 <h3 id="选择合适的状态码响应">选择合适的状态码响应</h3>
-<p>状态码不建议弄得太复杂，必要的异常错误信息都推荐在payload的msg字段里面列出。下面列出几个必要的：</p>
+<p>状态码不建议弄得太复杂，下面列出几个必要的：</p>
 <ul>
+<li>200 正确执行 </li>
 <li>
-<p>200 正确执行 </p>
+<p>201 POST成功新增</p>
 </li>
 <li>
 <p>400 BAD REQUEST 请求参数有误</p>
@@ -709,14 +797,6 @@ api.what.com/resource_name/&lt;id&gt;/resource_name2/&lt;id&gt;
 <p>500 服务器内部错误 某些情况下需要这个状态码</p>
 </li>
 </ul>
-<p>上面这些状态码是HTTP请求包都还没有进入到django视图函数的具体执行过程就应该返回，如果程序逻辑进入了视图函数并且已经封装好了json payload，哪怕这个json里面封装的是这样的错误信息：</p>
-<div class="highlight"><pre><span></span><code>{
-    'code': 10001,
-    'msg': 'your error msg'
-}
-</code></pre></div>
-<p>推荐状态码也应该是200。</p>
-<p>我对是否使用201 CREATED状态码是持保留意见的。</p>
 <h2 id="django-rest-framework">django rest framework</h2>
 <h3 id="apiview">APIView</h3>
 <p>对于一般的视图函数根据HTTP请求方法的不同，我们一般会有如下代码：</p>
@@ -806,6 +886,20 @@ serializer.save()
         instance.save()
         return instance
 </code></pre></div>
+<h4 id="serializer类">Serializer类</h4>
+<p>Serializer类的初始化方法了解一下：</p>
+<div class="highlight"><pre><span></span><code>    def __init__(self, instance=None, data=empty, **kwargs):
+</code></pre></div>
+<p>第一个参数是instance，如果这个设置了，那么后面save的时候会调用update方法，否则调用create方法。</p>
+<p>第二个参数data为我们很熟悉了。</p>
+<p>kwargs里面还有一个参数值得一提，有的时候序列化类里面某些方法可能需要一些特殊的参数，比如：</p>
+<div class="highlight"><pre><span></span><code>        serializer = self.serializer_class(profile, context={
+            'request': request
+        })
+</code></pre></div>
+<p>后面序列化类的自定义方面里面可以如下调用这个request对象：</p>
+<div class="highlight"><pre><span></span><code>request = self.context.get('request', None)
+</code></pre></div>
 <h4 id="modelserializer">ModelSerializer</h4>
 <p>可以利用 <code>ModelSerializer</code> 类来更快地创建序列化类，比如上面的SnippetSerializer如果你是继承自Serializer类那么一些字段你是要一个个去定义的，而如果继承自 <code>ModelSerializer</code> 类则只需要指定一些模型字段就会自动创建，然后其有一个默认创建的 create和update方法，一般情况下这两个方法对于一般情况就够用了。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
@@ -826,12 +920,35 @@ serializer.save()
 &gt;&gt;&gt; serializer.data
 {'language': 'python', 'linenos': False, 'id': 3, 'title': '', 'code': 'print "hello, world2"\n', 'style': 'friendly'}
 </code></pre></div>
+<p>ModelSerializer实现了一个版本的create和update方法，你可能会对默认的版本不太满意，则你可以自己去定义自己的版本。这两个方法具体是在调用 <code>save</code> 的时候被调用的，当instance没有传入进序列化对象的时候，其会调用create方法；如果instance对象传入进来了，则调用update方法。</p>
+<div class="highlight"><pre><span></span><code>        <span class="n">validated_data</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">validated_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">validated_data</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+                <span class="s1">'`update()` did not return an object instance.'</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">validated_data</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+                <span class="s1">'`create()` did not return an object instance.'</span>
+            <span class="p">)</span>
+</code></pre></div>
 <h4 id="查看modelserializer默认配置">查看ModelSerializer默认配置</h4>
 <p>python manage.py shell</p>
 <div class="highlight"><pre><span></span><code>from myapp.serializers import AccountSerializer
 serializer = AccountSerializer()
 print(repr(serializer))
 </code></pre></div>
+<h4 id="source参数">source参数</h4>
+<p>source对于字段的一般含义如下所示：</p>
+<div class="highlight"><pre><span></span><code>    if self.source is None:
+        self.source = field_name
+</code></pre></div>
+<p>默认为None，然后赋值为字段名。扩展的用法如下：</p>
+<ol>
+<li><code>URLField(source='get_absolute_url')</code> 根据序列化类的方法来获得值</li>
+<li><code>EmailField(source='user.email')</code> 通过关系字段获得扩展属性，注意如果关系字段为NULL则会报错，最好设置下default值。</li>
+</ol>
 <h4 id="partial参数">partial参数</h4>
 <p>默认序列化类需要传入所有required字段数据，否则将抛出验证异常，可以传入 <code>partial=True</code> 来允许部分更新。</p>
 <h4 id="is_valid-方法">is_valid 方法</h4>
@@ -846,6 +963,26 @@ print(repr(serializer))
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">'start'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="s1">'finish'</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s2">"finish must occur after start"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
+</code></pre></div>
+<h4 id="read_only和write_only">read_only和write_only</h4>
+<p>序列化类的某个字段设置为 <code>read_only</code> 则该字段不会进入 read 和 update 方法的 <code>validated_data</code> 参数，但可以用于 <code>.data</code> 的序列化展示数据。</p>
+<p>如果某个字段设置为 <code>write_only</code> ，则该字段不会 <code>.data</code> 的序列化数据展示，但会进入 read 和 update 方法的 <code>validated_data</code> 参数中。</p>
+<h4 id="serializermethodfield">SerializerMethodField</h4>
+<p>这是一个read_only 字段，可以通过某个方法来给你的 <code>.data</code> 序列化输出增加额外的字段信息。</p>
+<p><strong>NOTICE: </strong> 注意目标方法接受两个参数。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.utils.timezone</span> <span class="kn">import</span> <span class="n">now</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="k">class</span> <span class="nc">UserSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="n">days_since_joined</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s1">'__all__'</span>
+
+    <span class="k">def</span> <span class="nf">get_days_since_joined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">obj</span><span class="o">.</span><span class="n">date_joined</span><span class="p">)</span><span class="o">.</span><span class="n">days</span>
 </code></pre></div>
 <h4 id="在序列化类里面引用requestuser">在序列化类里面引用request.user</h4>
 <p>参考了 <a href="https://stackoverflow.com/questions/30203652/how-to-get-request-user-in-django-rest-framework-serializer">这个问题</a> ，在序列化类里面需要通过 <code>self.context['request']</code> 来获取 request 对象，进而获取 user对象。</p>
@@ -1148,18 +1285,59 @@ def user_count_view(request, format=None):
 <p>realworld的代码似乎并没有对jwt的时效性进行校对，此外jwt认证还需要加入refresh token过程来完善。</p>
 <h4 id="refresh-token">refresh token</h4>
 <p>一般access_token时效性会设置的较短，大概几分钟的样子。在应用上不可能要求用户时不时得就输入用户名和密码，于是人们参考OAUTH2的认证方式提出了refresh token的概念，在用户首次登陆输入用户名和密码的请求哪里，还会返回一个时效性较长的refresh token，平时用access token去请求和之前的过程一样，区别就是客户端自己把那个refresh token存起来了，当客户端发现access token过期了的时候会像服务器的refresh token api 发送refresh token请求，带上的就是客户端自己保存的refresh token，服务器判断token有效，就会返回新的access token和新的refresh token。</p>
-<h2 id="权限管理">权限管理</h2>
-<p>权限管理很重要，而且内容很多，在实战中需要细心思考已确定你的应用的权限验证基本流程，并针对具体业务细节的不同要反复思考具体的权限分配问题。</p>
-<h3 id="认证">认证</h3>
-<p>在视图类里定义 <code>authentication_classes</code> 来确定目标视图类的认证行为，如果没有则采取默认的认证管理类行为。</p>
+<h2 id="认证和权限">认证和权限</h2>
+<p>django rest framework的配置 <code>DEFAULT_AUTHENTICATION_CLASSES</code> 默认是：</p>
+<div class="highlight"><pre><span></span><code>'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication'
+],
+</code></pre></div>
+<p>其对应的是APIView类下的配置：</p>
+<div class="highlight"><pre><span></span><code>authentication_classes = api_settings.DEFAULT_AUTHENTICATION_CLASSES
+</code></pre></div>
+<p>具体到APIView类的每个HTTP请求都会经过一些预处理，这其中就包括调用各个认证类的 authenticate方法。</p>
+<p>而django的 <code>AUTHENTICATION_BACKENDS</code> 配置默认是：</p>
+<div class="highlight"><pre><span></span><code>AUTHENTICATION_BACKENDS = (
+    # default django authenticate method
+    'django.contrib.auth.backends.ModelBackend',
+)
+</code></pre></div>
+<p>对应的是 <code>from django.contrib.auth import authenticate</code> 这个authenticate这个函数。在实践中这两个功能会分离出来：django提供的authenticate方法和用户的登录行为相关，这个方法只是返回User对象，说的再直白点这个只和login那一个api有关系。对于其他众多的restful 风格的api的请求仍然是需要一个认证过程的，这个认证就是通过rest framework提供的认证类来做的，这些认证类同样也有一个 authentication 方法，其返回的有User对象和token。</p>
+<p>django rest framework的 <code>permission_classes</code> 来确定目标视图类的权限管理行为，默认是 <code>AllowAny</code> 。上面的认证过程做完了就会进入权限管理逻辑，也就是说在权限检查的时候 <code>request.user</code> <code>request.auth</code> 已经是可以调用的了。</p>
+<p>最简单的权限管理类就是 <code>IsAuthenticated</code> ：</p>
+<div class="highlight"><pre><span></span><code>class IsAuthenticated(BasePermission):
+    """
+    Allows access only to authenticated users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated)
+</code></pre></div>
+<p>这个确认 <code>request.user</code> 是可用的，也就是是登录用户是可以理解的，这个 <code>request.user.is_authenticated</code> 有点看不懂，简单查了一下似乎这个值总是True，是django因为兼容性问题写的代码。</p>
+<p>最后就是<code>AUTHENTICATION_BACKENDS</code>里面认证权限不分家，django的ModelBackend自带权限校验，这块内容有点多，后面有时间再慢慢讨论。</p>
+<p>再来看下面这段代码：</p>
+<div class="highlight"><pre><span></span><code>def get_user(request):
+    if not hasattr(request, '_cached_user'):
+        request._cached_user = auth.get_user(request)
+    return request._cached_user
+
+
+class AuthenticationMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if not hasattr(request, 'session'):
+            raise ImproperlyConfigured(
+                "The Django authentication middleware requires session "
+                "middleware to be installed. Edit your MIDDLEWARE setting to "
+                "insert "
+                "'django.contrib.sessions.middleware.SessionMiddleware' before "
+                "'django.contrib.auth.middleware.AuthenticationMiddleware'."
+            )
+        request.user = SimpleLazyObject(lambda: get_user(request))
+</code></pre></div>
+<p>看的出来 <code>request.user</code> 的效果是 <code>AuthenticationMiddleware</code> 中间件做到的，然后 <code>get_user</code> 会调用各个backend的<code>get_user</code> 方法来获得user对象。 </p>
 <h3 id="自定义身份认证">自定义身份认证</h3>
 <p>写自己的身份认证类，继承自 <code>BaseAuthentication</code> ，然后重写 <code>authenticate(self, request)</code> 方法，认证成功则返回 <code>(user, auth)</code> ，否则返回None。request.user 是当前登录的用户实例， request.auth 是当前登录auth的信息。</p>
 <p>某些情况下身份认证失败你可能想要抛出 <code>AuthenticationFailed</code> 异常。</p>
-<h3 id="权限">权限</h3>
-<p>在视图类里定义 <code>permission_classes</code> 来确定目标视图类的权限管理行为，如果没有则采用默认的权限管理类行为。</p>
-<p>认证完了就会进去权限管理，也就是权限检查的时候 <code>request.user</code> <code>request.auth</code> 已经是可以调用的了。</p>
-<p>最简单的权限管理类就是 <code>IsAuthenticated</code> ，允许通过身份验证的用户访问，拒绝没通过的用户访问。</p>
-<p><code>IsAuthenticatedOrReadOnly</code> 类的意思是通过身份认证的用户完全访问，没有通过身份验证的用户只能进行只读访问。</p>
 <h3 id="自定义权限管理类">自定义权限管理类</h3>
 <p>自定义权限管理类，继承自 <code>BasePermission</code> ，然后实现下面一个两个方法：</p>
 <ul>
@@ -1186,6 +1364,11 @@ class UserTestCase(TestCase):
 </code></pre></div>
 <p>测试代码的运行会另外创建一个数据库，测试完之后删除。</p>
 <h2 id="admin站点">admin站点</h2>
+<p>简单的admin站点配置就是：</p>
+<div class="highlight"><pre><span></span><code>admin.site.register(Profile)
+</code></pre></div>
+<p>即添加对应的模型类，更复杂的则需要继承自 <code>forms.ModelForm</code> ，然后进行一些管理页面上的调配。</p>
+<p>这块不做过多介绍了，有需要的结合文档和源码慢慢研究。</p>
 <h2 id="日志">日志</h2>
 <p>django使用python的logging模块来作为的自己的日志系统，所以django项目日志管理的深入学习离不开对于logging模块的深入学习。</p>
 <p>首先需要了解如下几个词汇：loggers, handlers, filters, and formatters。</p>
@@ -1234,24 +1417,131 @@ class UserTestCase(TestCase):
     },
     'handlers': {
         'log_file': {
-            'class': 'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler',
-            'filename': config.get('web', 'log_path'),
-            'when': 'midnight',
-            'maxBytes':int(config.get('web','log_max_bytes')),
-            'interval': 1,
-            'backupDay': int(config.get('web', 'log_backup_days')),
-            'dedupetime': int(config.get('web', 'log_dedupe_time')),
-            'formatter': 'simple'
+            'class': 'logging.FileHandler',
+            'filename': 'django.log',
+            'formatter': 'simple',
+            'level': 'DEBUG'
         },
     },
     'loggers': {
-        'django.request': {
+        'django': {
             'handlers': ['log_file'],
-            'level': config.get('web', 'log_level'),
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
 }
+</code></pre></div>
+<h2 id="django的session">django的session</h2>
+<p>cookie-session之间交互的 <code>session_key</code> django对应还有一个字段：</p>
+<div class="highlight"><pre><span></span><code>    session_data = models.TextField(_('session data'))
+</code></pre></div>
+<p>也就是我们在django上接触的session对象就存在这里的。</p>
+<p>这个 <code>session_key</code> 在django这边如果一开始cookie里面没有则会自动生成。我们知道HTTP协议是无状态的，实际上在引入这样的cookie-session会话机制之后，后续HTTP请求并不能算是无状态的。</p>
+<p>一般web服务器的全局变量解决方案也是推荐利用session来完成的，当然本质上仍然是依托数据库来完成的。</p>
+<p>cookie-session这一来一回看懂了还不够，关键是还要有这个会话的概念，关键是你的头脑在构想HTTP请求和响应的时候，你要知道这个HTTP请求就好像一个用户自身已经挂载上了用户标识的。</p>
+<p>再翻看django源码我们会发现 <code>AuthenticationMiddleware</code> 做的一个主要工作就是把 <code>request.user</code> 制作好。这个user是调用的auth的backend的认证类的 <code>get_user(user_id)</code> 方法来完成的。
+而这个user_id：</p>
+<div class="highlight"><pre><span></span><code>user_id = _get_user_session_key(request)
+
+def _get_user_session_key(request):
+    # This value in the session is always serialized to a string, so we need
+    # to convert it back to Python whenever we access it.
+    return get_user_model()._meta.pk.to_python(request.session[SESSION_KEY])
+</code></pre></div>
+<p>这个 <code>request.session</code> 实际上就是对应 <code>session_data</code> 的字典表达。 这里面还有点细节问题，但这不是重点。</p>
+<p>此外还值得一提的是django的session保存策略和删除策略。django的session并没有删除策略，当用户logout之后django会删除对应的session。django的session_data的保存，推荐修改之后调用：</p>
+<div class="highlight"><pre><span></span><code>request.session.modified = True
+</code></pre></div>
+<p>更多信息参见官方文档。</p>
+<h2 id="django和celery">django和celery</h2>
+<p>本小节主要讲一下celery的基本概念，还有和django的集成问题，更多celery的知识请参阅官方文档，celery的官方文档在 <a href="http://docs.celeryproject.org/en/latest/index.html">这里</a> 。</p>
+<p>首先说一下为什么要使用celery，首先明确任务这个概念，这里讨论的任务是指你的程序主要运行流程中的一些子任务，你的程序主要工作流程中附加的一些子进程或子线程等。比如说Web server的主任务是对HTTP的API请求进行响应，另外一些附加的子进程和子线程都可以叫做子任务，但这里面有些是不需要或者不适合使用celery的，有的子进程或子线程处理的任务本质上仍然是主工作任务的一部分，有的子任务很简单也没必要上celery，有以下应用场景的则推荐使用celery来对这些子任务进行管理：</p>
+<ul>
+<li>只有那些有特殊调度需求的子任务</li>
+<li>长时间后台运行的子任务</li>
+<li>数量很多的子任务</li>
+</ul>
+<h3 id="celery的核心概念">celery的核心概念</h3>
+<ul>
+<li>broker  任务队列服务提供者，celery推荐使用redis或者rabbitmq作为broker。</li>
+<li>task 具体执行的任务，其实就是定义的一些函数。</li>
+<li>backend 用来存储任务之后的输出结果</li>
+<li>worker celery的启动就是开启一个worker。</li>
+</ul>
+<h3 id="django内文件安排">django内文件安排</h3>
+<p>本小节参考了 <a href="https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7">这篇文章</a> 和 <a href="http://geek.csdn.net/news/detail/128791">这篇文章</a> 。</p>
+<p>需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，经过下面额外的配置之后其他细节问题都可以参看celery文档了。</p>
+<p>首先推荐在你的django <code>settings.py</code> 旁新建个 <code>celeryconfig.py</code> 文件，有的教程让设置这个配置文件名字为 <code>celery.py</code> ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">'DJANGO_SETTINGS_MODULE'</span><span class="p">,</span> <span class="s1">'project_name.settings'</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s1">'project_name'</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s1">'django.conf:settings'</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">'CELERY'</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">autodiscover_tasks</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">debug_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'Request: </span><span class="si">{0!r}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">))</span>
+</code></pre></div>
+<p>这个新建的任务不过是方便测试罢了，然后上面几行配置基本上死的。最值得讲的就是这两行：</p>
+<div class="highlight"><pre><span></span><code>app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
+</code></pre></div>
+<p>第一行是从django的配置对象中读取配置，特别注意的就是那个 <code>namespace='CELERY'</code> ，这样只有 <code>CELERY_</code> 开头的配置才会读取，而且对应原celery配置的关系是：</p>
+<div class="highlight"><pre><span></span><code>CELERY_BROKER_URL  -&gt; BROKER_URL
+</code></pre></div>
+<p>我那次就是 <code>CELERY_BEAT_SCHEDULE</code> 写成了 <code>CELERYBEAT_SCHEDULE</code> 然后发现周期性程序总启动不起来。</p>
+<p>第二行也是一个优化细节，从函数名字也可以看到，就是自动发现任务。在你的django的其他app里面新建一个 <code>tasks.py</code> ，celery会自动发现你定义的任务。</p>
+<p>还是你的django项目的 <code>settings.py</code> 那个文件夹里面，<code>__init__.py</code> 推荐写上这几行内容：</p>
+<div class="highlight"><pre><span></span><code>from .celeryconfig import app as celery_app
+
+__all__ = ('celery_app',)
+</code></pre></div>
+<h3 id="celery配置">celery配置</h3>
+<p>具体celery的一些配置就统一写在 <code>settings.py</code> 文件里面，上面也提到了，都要 <code>CELERY_</code> 开头，大体如下所示：</p>
+<div class="highlight"><pre><span></span><code>CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+# schedules
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'every_miniute_for_test': {
+        'task': 'apps.workflow.tasks.test_celery',
+        'schedule': crontab(),
+    },
+}
+</code></pre></div>
+<h3 id="定义任务">定义任务</h3>
+<p>好了，定义任务，实际上就是定义一个函数，比如下面这个简单的打印函数来确认celery周期程序是工作着的：</p>
+<div class="highlight"><pre><span></span><code>from celery import shared_task
+
+@shared_task()
+def test_celery():
+    print('celery is working.')
+</code></pre></div>
+<p>celery的crontab功能很强大，比如上面的 <code>crontab()</code> 就是每分钟执行一次。具体请参看 <a href="http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html">官方文档</a> 。</p>
+<h3 id="启动任务">启动任务</h3>
+<p>和celery其他操作都是一样的，就是启动worker：</p>
+<div class="highlight"><pre><span></span><code>celery -A project_name worker -l info
+</code></pre></div>
+<p><code>-A</code> 选项跟着 celery app的名字，在这里也就是django项目的名字。 <code>-l</code> 选项设置日志打印级别。</p>
+<p>你还可以加上 <code>-B</code> 来同时启动周期性任务。</p>
+<p>或者另外开个命令：</p>
+<div class="highlight"><pre><span></span><code>celery -A project_name beat -l info
+</code></pre></div>
+<h4 id="手工启动一次任务">手工启动一次任务</h4>
+<p>参考了 <a href="https://stackoverflow.com/questions/12900023/how-can-i-run-a-celery-periodic-task-from-the-shell-manually">这个网页</a> 。</p>
+<div class="highlight"><pre><span></span><code>$ python manage.py shell
+&gt;&gt;&gt; from myapp.tasks import my_task
+&gt;&gt;&gt; eager_result = my_task.apply()
 </code></pre></div>
 <h2 id="部署">部署</h2>
 <p>这里所谓的部署就是用apache或nginx这样的web服务器来对接django项目，说的再具体一点就把django作为一个wsgi程序服务起来。</p>
@@ -1377,6 +1667,31 @@ server {
 }
 </code></pre></div>
 <h2 id="备用">备用</h2>
+<h2 id="文件上传">文件上传</h2>
+<p>请参看rest framework的 FileUploadParser 。在获取到file_obj之后，如下进行写文件动作：</p>
+<div class="highlight"><pre><span></span><code>       outfile = open('test_out.jpg', 'wb+')
+
+        for chunk in file_obj.chunks():
+            outfile.write(chunk)
+</code></pre></div>
+<p>rest framework最后仍然会使用django提供的upload handler。<code>FILE_UPLOAD_HANDLERS</code> 默认是：</p>
+<div class="highlight"><pre><span></span><code>["django.core.files.uploadhandler.MemoryFileUploadHandler",
+ "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
+</code></pre></div>
+<p>小文件会写入内存，大文件会写在临时文件上。</p>
+<p>MEDIA_ROOT 是用来控制media在本地的存放路径的。MEDIA_URL是用来控制media在url上的前缀显示的。还需要如下将media文件加入额外的静态文件管理：</p>
+<div class="highlight"><pre><span></span><code>STATICFILES_DIRS = [MEDIA_ROOT]
+</code></pre></div>
+<p>然后django urls.py哪里：</p>
+<div class="highlight"><pre><span></span><code>from django.conf.urls.static import static
+from django.conf import settings
+
+urlpatterns = [
+    ......
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+</code></pre></div>
+<p>要这样设置下media静态文件的服务。这是测试环境，生产环境请把这行去掉用ngnix这样的web server来进行静态文件服务。</p>
+<h3 id="线程池管理后台多个子任务">线程池管理后台多个子任务</h3>
 <h3 id="自定义命令">自定义命令</h3>
 <p>自定义命令的好处就是你写的python脚本可以类似在 <code>python manage.py shell</code> 环境内使用，比如一些数据库操作就可以直接写上python的ORM操作代码而不用关心数据库连接的问题。</p>
 <p>首先是在目标app下面新建一个 <code>management</code> 文件夹，然后新建一个 <code>commands</code>  文件夹，注意这两个文件夹都要带上 <code>__init__.py</code> 文件。</p>
@@ -1425,95 +1740,6 @@ server {
 <li>模型字段名应当全部小写，使用下划线代替驼峰命名。</li>
 </ul>
 <h2 id="附录">附录</h2>
-<h3 id="django和celery">django和celery</h3>
-<p>django-crontab这个模块我试过的，还是很便捷的，不过其还是基于系统的crontab，而如果我们将django和celery组合起来，celery灵活的消息分发机制，无疑将给未来开发带来更多的可能性。celery的官方文档在 <a href="http://docs.celeryproject.org/en/latest/index.html">这里</a> ，本文主要讲一下celery的基本概念和django的集成问题，更多celery的知识请参阅官方文档。</p>
-<h4 id="celery的核心概念">celery的核心概念</h4>
-<ul>
-<li>broker  任务队列服务提供者，celery推荐使用redis或者rabbitmq作为broker。</li>
-<li>task 具体执行的任务，其实就是定义的一些函数。</li>
-<li>backend 用来存储任务之后的输出结果</li>
-<li>worker celery的启动就是开启一个worker。</li>
-</ul>
-<h4 id="django内文件安排">django内文件安排</h4>
-<p>本小节参考了 <a href="https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7">这篇文章</a> 和 <a href="http://geek.csdn.net/news/detail/128791">这篇文章</a> 。需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，而且下面讲的配置实际上就是一个单独的celery app大部分都是类似的，只是多了一些细节上的处理和优化。</p>
-<h5 id="celeryconfigpy">celeryconfig.py</h5>
-<p>首先推荐在你的django app <code>settings.py</code> 旁新建个 <code>celeryconfig.py</code> 文件，有的教程让设置这个配置文件名字为 <code>celery.py</code> ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
-
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">'DJANGO_SETTINGS_MODULE'</span><span class="p">,</span> <span class="s1">'project_name.settings'</span><span class="p">)</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s1">'project_name'</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s1">'django.conf:settings'</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">'CELERY'</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">autodiscover_tasks</span><span class="p">()</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">debug_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Request: </span><span class="si">{0!r}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">))</span>
-</code></pre></div>
-<p>这个下面新建的任务不过是方便测试罢了，然后上面几行配置基本上死的。最值得讲的就是这两行：</p>
-<div class="highlight"><pre><span></span><code>app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks()
-</code></pre></div>
-<p>第一行是从django的配置对象中读取配置，特别注意的就是那个 <code>namespace='CELERY'</code> ，这样只有 <code>CELERY_</code> 开头的配置才会读取，而且对应原celery配置的关系是：</p>
-<div class="highlight"><pre><span></span><code>CELERY_BROKER_URL  -&gt; BROKER_URL
-</code></pre></div>
-<p>我那次就是 <code>CELERY_BEAT_SCHEDULE</code> 写成了 <code>CELERYBEAT_SCHEDULE</code> 然后老实发现周期性程序启动不起来。</p>
-<p>第二行也是一个优化细节，从函数名字也可以看到，就是自动发现任务。在你的django的其他app里面新建一个 <code>tasks.py</code> ，celery会自动发现你定义的任务。</p>
-<h5 id="__init__py"><code>__init__.py</code></h5>
-<p>还是你的django项目的project <code>settings.py</code> 那个文件夹里面，<code>__init__.py</code> 推荐写上这几行内容：</p>
-<div class="highlight"><pre><span></span><code>from .celeryconfig import app as celery_app
-
-__all__ = ('celery_app',)
-</code></pre></div>
-<h5 id="settingspy">settings.py</h5>
-<p>具体celery的一些配置就统一写在 <code>settings.py</code> 文件里面，上面也提到了，都要 <code>CELERY_</code> 开头，大体如下所示：</p>
-<div class="highlight"><pre><span></span><code>CELERY_BROKER_URL = 'redis://localhost:6379'
-#CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-#CELERY_ACCEPT_CONTENT = ['application/json']
-#CELERY_RESULT_SERIALIZER = 'json'
-#CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Shanghai'
-# schedules
-from celery.schedules import crontab
-CELERY_BEAT_SCHEDULE = {
-    'crawl_juhe_every_one_hour': {
-         'task': 'wxarticles.tasks.crawl_juhe',
-         'schedule': crontab(minute=0, hour='*/3'),
-    },
-    'every_miniute_for_test': {
-        'task': 'wxarticles.tasks.test_celery',
-        'schedule': crontab(),
-    },
-}
-</code></pre></div>
-<h5 id="定义任务">定义任务</h5>
-<p>好了，定义任务，实际上就是定义一个函数，比如下面这个简单的打印函数来确认celery周期程序是工作着的：</p>
-<div class="highlight"><pre><span></span><code>from celery import shared_task
-
-@shared_task()
-def test_celery():
-    print('celery is working.')
-</code></pre></div>
-<p>celery的crontab功能很强大，比如上面的 <code>crontab()</code> 就是每分钟执行一次。具体请参看 <a href="http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html">官方文档</a> 之。</p>
-<h5 id="启动任务">启动任务</h5>
-<p>和celery其他操作都是一样的，就是启动worker：</p>
-<div class="highlight"><pre><span></span><code>celery -A project_name worker -l info
-</code></pre></div>
-<p><code>-A</code> 选项跟着 celery app的名字，在这里也就是django项目的名字。 <code>-l</code> 选项设置日志打印级别。</p>
-<p>你还可以加上 <code>-B</code> 来同时启动周期性任务。</p>
-<p>或者另外开个命令：</p>
-<div class="highlight"><pre><span></span><code>celery -A project_name beat -l info
-</code></pre></div>
-<hr/>
-<p>其他制作脚本啊，制作后台程序，制作服务啊，使用supervisor啊，实际上和celery关系已经不大了，可以不在这里说了。</p>
-<h5 id="手工启动一次任务">手工启动一次任务</h5>
-<p>参考了 <a href="https://stackoverflow.com/questions/12900023/how-can-i-run-a-celery-periodic-task-from-the-shell-manually">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><code>$ python manage.py shell
-&gt;&gt;&gt; from myapp.tasks import my_task
-&gt;&gt;&gt; eager_result = my_task.apply()
-</code></pre></div>
 <h3 id="翻译">翻译</h3>
 <p>django的翻译其实已经很便捷了，因为我关注于后台api的编写，所以实际上很多教程说的：</p>
 <div class="highlight"><pre><span></span><code>TEMPLATES = [
