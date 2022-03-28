@@ -167,9 +167,9 @@
 <li><a href="#对外部署必看">对外部署必看</a></li>
 </ul>
 </li>
-<li><a href="#备用">备用</a></li>
-<li><a href="#文件上传">文件上传</a><ul>
-<li><a href="#线程池管理后台多个子任务">线程池管理后台多个子任务</a></li>
+<li><a href="#备用">备用</a><ul>
+<li><a href="#pycharm的python-console配置django环境">pycharm的python console配置django环境</a></li>
+<li><a href="#文件上传">文件上传</a></li>
 <li><a href="#自定义命令">自定义命令</a></li>
 <li><a href="#创建超级用户">创建超级用户</a></li>
 <li><a href="#交互式环境">交互式环境</a></li>
@@ -201,7 +201,7 @@
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-04-05T00:00:00+08:00">2019年 4月 5日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2022-03-20T14:15:04.615539+08:00">2022年 3月 20日 </time>
+                <div class="p-1">最近更新于：<time datetime="2022-03-28T08:32:15.228456+08:00">2022年 3月 28日 </time>
                 </div>
 
 
@@ -1667,7 +1667,16 @@ server {
 }
 </code></pre></div>
 <h2 id="备用">备用</h2>
-<h2 id="文件上传">文件上传</h2>
+<h3 id="pycharm的python-console配置django环境">pycharm的python console配置django环境</h3>
+<p>其他独立的python脚本也是类似的配置原理：</p>
+<ol>
+<li>配置环境变量： <code>DJANGO_SETTINGS_MODULE=what.settings</code></li>
+<li>加上这样两句：</li>
+</ol>
+<div class="highlight"><pre><span></span><code>import django
+django.setup()
+</code></pre></div>
+<h3 id="文件上传">文件上传</h3>
 <p>请参看rest framework的 FileUploadParser 。在获取到file_obj之后，如下进行写文件动作：</p>
 <div class="highlight"><pre><span></span><code>       outfile = open('test_out.jpg', 'wb+')
 
@@ -1691,7 +1700,6 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 </code></pre></div>
 <p>要这样设置下media静态文件的服务。这是测试环境，生产环境请把这行去掉用ngnix这样的web server来进行静态文件服务。</p>
-<h3 id="线程池管理后台多个子任务">线程池管理后台多个子任务</h3>
 <h3 id="自定义命令">自定义命令</h3>
 <p>自定义命令的好处就是你写的python脚本可以类似在 <code>python manage.py shell</code> 环境内使用，比如一些数据库操作就可以直接写上python的ORM操作代码而不用关心数据库连接的问题。</p>
 <p>首先是在目标app下面新建一个 <code>management</code> 文件夹，然后新建一个 <code>commands</code>  文件夹，注意这两个文件夹都要带上 <code>__init__.py</code> 文件。</p>
