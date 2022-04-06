@@ -201,7 +201,7 @@
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-04-05T00:00:00+08:00">2019年 4月 5日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2022-03-28T08:32:15.228456+08:00">2022年 3月 28日 </time>
+                <div class="p-1">最近更新于：<time datetime="2022-04-04T13:41:58.128968+08:00">2022年 4月 4日 </time>
                 </div>
 
 
@@ -666,6 +666,14 @@ class MyPerson(Person):
 <p>代理模型和原模型都是在操作同一个数据库表格。可以通过代理模型来定义另外一种排序方法。</p>
 <h4 id="两个模型实例的比较">两个模型实例的==比较</h4>
 <p>比较的是pk主键值。</p>
+<h4 id="create方法">create方法</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_for_write</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">force_insert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">using</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span>
+</code></pre></div>
+<p>django的queryset的create方法最后也会调用实例的save方法。</p>
 <h3 id="跨关系查询">跨关系查询</h3>
 <p>Entry manytoone blog</p>
 <p>可以如下用双下划线来实现跨关系查询，django在幕后自动处理SQL的join关系。</p>
