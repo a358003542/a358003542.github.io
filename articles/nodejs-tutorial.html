@@ -162,7 +162,7 @@ console.log(mymodule.add2(1,2))
 <p>如果一起正常，那么读者将会看到输出了数字3，恭喜，一个简单的nodejs模块就编写完成了。</p>
 <p>一般模块是默认  <code>index.js</code> 为模块的入口，你可以在mymodule文件夹下面新建 <code>package.json</code> 文件，这一般正式的模块都会定义这个文件的，然后通过设置 <code>main</code> 字段来指定目标入口js文件。【读者可以试着将index.js改为main.js然后试下，然后再按照上面的表述编写一个package.json文件来试下。】</p>
 <p>还有一种写法：</p>
-<div class="highlight"><pre><span></span><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">add2</span> <span class="o">=</span> <span class="nx">add2</span>
+<div class="highlight"><pre><span></span><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">add2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">add2</span><span class="w"></span>
 </code></pre></div>
 <p>这两个写法区别不是太大，参看官方文档：</p>
 <blockquote>
@@ -182,15 +182,15 @@ console.log(mymodule(1,2))
 <p>NOTICE: 注意nodejs的exports是后端那块的东西，而es6的export是前端的东西，别弄混了。</p>
 <h2 id="nodejs和npm">nodejs和npm</h2>
 <p>正如前面所说，nodejs是一个平台，因为nodejs在作这个平台的时候内置了很多官方的js模块。比如说我们随便从网上找了一个最简单的nodejs入门样例web server程序：</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span><span class="w"></span>
 
-<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mf">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span> <span class="s1">'text/plain'</span><span class="p">});</span>
-    <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello World\n'</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mf">200</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span><span class="w"> </span><span class="s1">'text/plain'</span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello World\n'</span><span class="p">);</span><span class="w"></span>
 
-<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mf">8888</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mf">8888</span><span class="p">);</span><span class="w"></span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:8888/'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:8888/'</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <p>其最开始的语句 <code>require('http')</code> 就是在引入nodejs的官方内置js模块http。</p>
 <p>既然有了官方模块那当然就有第三方模块和模块管理工具了。一般安装好nodejs之后除了node命令之外还有npm命令，最新的nodejs现在还提供npx命令。</p>
@@ -306,20 +306,20 @@ console.log(mymodule(1,2))
 </code></pre></div>
 <p>然后运行 <code>npm test</code> 即用mocha执行了单元测试。</p>
 <p>具体单元测试的js代码简要介绍如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">assert</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'assert'</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">assert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'assert'</span><span class="p">);</span><span class="w"></span>
 
-<span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">describe</span><span class="p">(</span><span class="s1">'#indexOf()'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">it</span><span class="p">(</span><span class="s1">'should return -1 when the value is not present'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span> <span class="mf">2</span><span class="p">,</span> <span class="mf">3</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="mf">4</span><span class="p">),</span> <span class="o">-</span><span class="mf">1</span><span class="p">);</span>
-      <span class="p">});</span>
-    <span class="p">});</span>
-  <span class="p">});</span>
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">describe</span><span class="p">(</span><span class="s1">'#indexOf()'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">it</span><span class="p">(</span><span class="s1">'should return -1 when the value is not present'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="mf">4</span><span class="p">),</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <p>这上面的：</p>
-<div class="highlight"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-<span class="p">...</span>
-  <span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <p>和 </p>
 <div class="highlight"><pre><span></span><code>      it('should return -1 when the value is not present', function() {
