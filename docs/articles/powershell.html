@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="powershell中文显示问题 现在UTF-8越来越成为主流了，不过powershell默认的当前代码页默认的是936，如果要改为UTF-8格式输出，很多程序现在也都是默认这个文本编码输出。那么需要执行 chcp 65001 。 现在【2020-8-13】最新的win10已经支持一种实验特性，如下图 …" />
+
+
+<meta name="keywords" content=", 计算机 - 操作系统, " />
+
+<title>powershell  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/powershell.html"> powershell  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#powershell中文显示问题">powershell中文显示问题</a></li>
+<li><a href="#当前目录启动powershell">当前目录启动powershell</a></li>
+<li><a href="#设置powershell启动的默认大小">设置powershell启动的默认大小</a></li>
+<li><a href="#安全策略管理">安全策略管理</a></li>
+<li><a href="#启动一个进程">启动一个进程</a></li>
+<li><a href="#获取当前工作目录">获取当前工作目录</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-03-09T08:35:14.430123+08:00">2023年 3月 9日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.430123+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-cao-zuo-xi-tong-ref">计算机 - 操作系统</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="powershell中文显示问题">powershell中文显示问题</h2>
+<p>现在UTF-8越来越成为主流了，不过powershell默认的当前代码页默认的是936，如果要改为UTF-8格式输出，很多程序现在也都是默认这个文本编码输出。那么需要执行 <code>chcp 65001</code> 。</p>
+<p>现在【2020-8-13】最新的win10已经支持一种实验特性，如下图所示：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2020/powershell_utf8.png"/></p>
+<p>这样会让你的系统默认powershell采用utf8编码，不过这个改动似乎是系统全局性的，可能有一些副作用。</p>
+<h2 id="当前目录启动powershell">当前目录启动powershell</h2>
+<p>现在的win10 按下shift键，然后点下鼠标右键，出来的菜单里面有个打开powershell功能就是当前目录启动powershell。</p>
+<h2 id="设置powershell启动的默认大小">设置powershell启动的默认大小</h2>
+<p>右键点击powershell最上面的一栏，会看到默认值那个选项，设置布局的窗口大小即可，我这边宽度高度是100-40，感觉还行。</p>
+<h2 id="安全策略管理">安全策略管理</h2>
+<p>powershell脚本的后缀是 <code>ps1</code> 。直接运行powershell脚本一般会提示有权限错误，更多信息请参看 <a href="https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2">这个网页</a> 。</p>
+<h2 id="启动一个进程">启动一个进程</h2>
+<div class="highlight"><pre><span></span><code><span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="s2">"ping.exe"</span> <span class="n">-Args</span> <span class="s2">"www.baidu.com"</span>
+</code></pre></div>
+<p>然后进程的输出可以如下进行重定向：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="s2">"ping.exe"</span> <span class="n">-Args</span> <span class="s2">"www.baidu.com"</span> <span class="n">-RedirectStandardOutput</span> <span class="s1">'.\console.out'</span> <span class="n">-RedirectStandardError</span> <span class="s1">'.\console.err'</span>
+</code></pre></div>
+<h2 id="获取当前工作目录">获取当前工作目录</h2>
+<p>下面的例子也同时讲解了基本的关于powershell里面如何定义变量和字符串中如何使用变量等知识。</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$curpath</span><span class="p">=$(</span><span class="nb">Convert-Path</span> <span class="p">.)</span>
+<span class="nb">echo </span><span class="nv">$curpath</span>
+<span class="nb">cd </span><span class="s2">"$curpath\logs"</span>
+<span class="nb">echo </span><span class="p">$(</span><span class="nb">Convert-Path</span> <span class="p">.)</span>
+<span class="nb">cd </span><span class="nv">$curpath</span>
+</code></pre></div>
+<p>熟悉脚本的看到这个例子，基本上所谓的子命令调用返回，或者字符串中变量的替换，或引用变量等都一看就清楚了。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

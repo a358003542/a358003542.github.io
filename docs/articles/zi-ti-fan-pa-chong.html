@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="在爬虫的时候，你分析网页会看到，某些东西看上去是乱码，其css设置了一种额外的字体。怎么破解里面的内容呢？ 首先你需要把目标字体下载下来 …" />
+
+
+<meta name="keywords" content=", 备用, " />
+
+<title>字体反爬虫  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/zi-ti-fan-pa-chong.html"> 字体反爬虫  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-09-08T00:00:00+08:00">2019年 9月 8日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.393498+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#bei-yong-ref">备用</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                <p>在爬虫的时候，你分析网页会看到，某些东西看上去是乱码，其css设置了一种额外的字体。怎么破解里面的内容呢？</p>
+<p>首先你需要把目标字体下载下来，通常这种字体有各种各样的名字，里面的具体字体codepoint也是随机的...</p>
+<p>如果你下载一个fontcreator会看到具体哪个字对应哪个codepoint，而爬虫这边编码，我们需要使用python的 fonttools库来加载字体。</p>
+<p>首先你需要下载好字体，保存好字体做好缓存工作。</p>
+<p>见本文的参考资料2，然后就是利用 fonttools 模块加载目标字体。</p>
+<div class="highlight"><pre><span></span><code>font = TTFont(font_filename)
+</code></pre></div>
+
+<p>然后就是分析这个字体的cmap tables的cmap数据，不同的字体似乎情况不同，这个要实际分析，由于fonttools这个模块文档较少，加上我对字体知识不太多，所以只能简单摸索下了。</p>
+<div class="highlight"><pre><span></span><code>font_mapping = font[&#39;cmap&#39;].tables[?].cmap
+</code></pre></div>
+
+<p>如果你找到 font_mapping 了，字符 用python的 ord 函数处理下，就能得到目标字符的 unicode code point，也就是我们上面说的字体的code point，在这个 font_mapping 里面你会看到的，然后具体什么内容就出来了。</p>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li>https://zhuanlan.zhihu.com/p/32087297</li>
+<li><a href="https://unix.stackexchange.com/questions/247108/how-to-find-out-which-unicode-codepoints-are-defined-in-a-ttf-file">how to find out which codepoint in ttf file</a></li>
+</ol>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

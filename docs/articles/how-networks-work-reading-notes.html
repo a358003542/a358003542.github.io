@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="前言 《网络是怎样连接的》1 一书写得很好，计算机网络这一块相关知识并不难，但各个知识点很是繁杂，从浏览器上输入URL到显示网页短短几秒的时间里面的知识点对于初学者来说还是多的可怕的 …" />
+
+
+<meta name="keywords" content="network, reading_notes, 计算机 - 互联网, " />
+
+<title>网络是怎样连接的阅读笔记  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/how-networks-work-reading-notes.html"> 网络是怎样连接的阅读笔记  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#应用层">应用层</a><ul>
+<li><a href="#http协议">HTTP协议</a></li>
+<li><a href="#dns协议">DNS协议</a></li>
+<li><a href="#套接字">套接字</a></li>
+</ul>
+</li>
+<li><a href="#传输层">传输层</a><ul>
+<li><a href="#通信协议">通信协议</a></li>
+<li><a href="#tcp协议">TCP协议</a></li>
+<li><a href="#udp协议">UDP协议</a></li>
+</ul>
+</li>
+<li><a href="#网络互联层">网络互联层</a><ul>
+<li><a href="#最基本的原理">最基本的原理</a></li>
+<li><a href="#ip协议">IP协议</a></li>
+</ul>
+</li>
+<li><a href="#网络访问层">网络访问层</a></li>
+<li><a href="#互联网架构">互联网架构</a><ul>
+<li><a href="#应用程序体系结构">应用程序体系结构</a></li>
+<li><a href="#物理设备">物理设备</a></li>
+</ul>
+</li>
+<li><a href="#其他">其他</a><ul>
+<li><a href="#防火墙">防火墙</a></li>
+<li><a href="#负载均衡器">负载均衡器</a></li>
+<li><a href="#缓存服务器">缓存服务器</a></li>
+<li><a href="#内容分发服务cdn">内容分发服务（CDN）</a></li>
+</ul>
+</li>
+<li><a href="#脚注">脚注</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-09-29T00:00:00+08:00">2020年 9月 29日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.428123+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-hu-lian-wang-ref">计算机 - 互联网</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#network-ref">network<span>1</span></a></li><li><a href="https://a358003542.github.io/tags.html#reading_notes-ref">reading_notes<span>2</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
+<p>《网络是怎样连接的》<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 一书写得很好，计算机网络这一块相关知识并不难，但各个知识点很是繁杂，从浏览器上输入URL到显示网页短短几秒的时间里面的知识点对于初学者来说还是多的可怕的。该书以一种全面整体的角度对这一块知识点进行梳理，对深入理解计算机网络如何运作的还是很有必要的。</p>
+<p>该书对计算机网络信息流给出的指导图引入了过多的细节，我认为这里介绍专门的TCP/IP网络模型是有必要的，那个复杂的OSI七层模型不提也行。TCP/IP网络模型将计算机网络分为四个抽象层：应用层，传输层，网络互连层和网络访问层。这种分层是符合编程<em>去耦合</em>的要求的，具体这四个层描述如下：</p>
+<ul>
+<li>应用层可以看做计算机网络和计算机用户使用的应用的连接中间层，一般应用层在信息交流设计上是进程对点目标主机的进程的通信考虑，这些实现一般不是操作系统内核该管的事。</li>
+<li>传输层是解决数据包在传输过程中的一些问题，从而保证主机（host）到主机（host）之间的信息传输是可靠的或安全的或顺序是对的等问题。一般这些实现由操作系统内核负责。</li>
+<li>网络互联层主要解决了这个问题，那就主机如何找到另外一个目标主机。</li>
+<li>网络访问层解决的问题就是实际传输的那些信息包到物理层（也就是电缆或光纤）那边需要做什么额外的处理，这一块实现一般是由网卡的驱动程序实现的。</li>
+</ul>
+<p>TCP/IP网络模型一个通用实现的极简版本描述如下，当我们打开一个网页时，请求的是目标服务器的某个html文件，这个html文件会经过<strong>应用层</strong>处理成HTTP请求，然后这些请求经过<strong>传输层</strong>处理成TCP信息包格式，此外TCP协议还实现了具体这些TCP信息包在传输上的一些细节问题。然后对于现实世界的复杂计算机网络拓扑结构，经过IP协议实现来找到目标主机。最后这些信息包经过网卡驱动程序处理，转换成电流或光纤信号从而实现传输，然后经过目标主机的网卡处理转成计算机这边能够识别的信息，最后这些TCP信息包经过整合，最后成为web服务器那边能够识别的HTTP请求信息包。web服务器接收这个HTTP信息包之后决定下一步做什么，比如返回一个HTTP响应信息包，这个信息包同样要经过上面描述的哪几层，然后该响应被你的浏览器接收，也就是那个html文件，然后你的浏览器负责显示这个html文件。</p>
+<p>上面的过程是极简极简的版本，大体可以让我们对这个信息流有个基本的概念，至于具体实际的情况则需要加上亿点细节。</p>
+<h2 id="应用层">应用层</h2>
+<p>应用层客户端，比如说一个浏览器，当我们在浏览器上输入一个URL，开头的<code>http://</code> 就是在告诉浏览器我要进行一个HTTP协议的请求了。浏览器还会继续解析URL后面的一些信息从而进一步丰富HTTP请求报文里面的一些细节，这个后面会提及。</p>
+<h3 id="http协议">HTTP协议</h3>
+<p>HTTP（HyperText Transfer Protocol）超文本传输协议是网络世界一个为大家熟知的协议，其属于应用层，为应用层协议。HTTP定义了两个端系统，一个客户机，一个服务器，两个之间如何进行报文交换和这些报文的格式。Web浏览器就是HTTP协议的客户机端，Web服务器就是HTTP协议的服务器端。</p>
+<p>HTTP协议使用TCP协议作为其传输层的协议，当用户请求一个Web页面时，浏览器或其他HTTP客户机将首先和服务器建立起一个TCP连接，等连接建立之后，浏览器和服务器就可以通过套接字来交流了。然后客户机经由其套接字向服务器发送一个HTTP请求报文，随后服务器接受到了这个HTTP请求报文，其内部经过某些处理，比如找到html文件即其他资源文件或者其他数据运算之后，也经由套接字回应了一个HTTP响应报文给客户机。然后HTTP服务器进程通知TCP可以断开TCP连接了，然后TCP那边大概等到客户机完整接受这个HTTP响应报文之后，TCP连接就真正断开了。HTTP客户机那边接受到HTTP响应报文，TCP连接断开了，这一次HTTP请求算是完了。</p>
+<p>然后这个Web页面还包含有其他图片引用或者javascript引用，每一个引用浏览器客户机那边都将产生一个HTTP请求，类似上面的继续处理。因此基于HTTP协议的TCP协议只进行了一个请求报文和一个响应报文的传输，一个Web页面，可能要发送十几个HTTP请求，那么就要建立十几个TCP连接。（整个过程大抵如此，而现在客户机一般都会打开5-10个并行的TCP连接。）</p>
+<p>上面描述的是HTTP协议初始版本的情况，自HTTP/ 1.1起HTTP协议加入了持久连接特性，而且默认就采用持久连接的方式。持久连接可以减少新开TCP连接的消耗，现在HTTP不会每送一个报文就请求断开TCP连接了，而是如果该连接长时间未使用，HTTP服务器才关闭该连接。</p>
+<p>然后我们说HTTP协议本身是无状态的，因为HTTP服务器并没有记忆关于客户机的任何信息，但现在有cookie和session，cookie是客户机保存状态信息，session是服务器保存状态信息，这个后面再说。</p>
+<h4 id="http报文格式">HTTP报文格式</h4>
+<p>HTTP报文就分为两种，一种是请求报文，一种是响应报文。</p>
+<p>比如下面就是一个HTTP请求</p>
+<div class="highlight"><pre><span></span><code>GET / HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+</code></pre></div>
+<p>前面提到浏览器会分析用户输入的URL，上面的GET后面跟的路径参数和HOST参数都是可以分析出来的。</p>
+<p>第一个是方法字段，HTTP有<strong>GET</strong>、<strong>POST</strong>、<strong>PUT</strong>、<strong>DELETE</strong>等方法，然后HOST是请求的主机名字，然后User-Agent是用户使用的浏览器标识，然后Connection这里设置为keep-alive正是前面说的建立持久连接。</p>
+<p>HTTP响应如下:</p>
+<div class="highlight"><pre><span></span><code>HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 231
+Content-Type: text/html; charset=UTF-8
+Date: Wed, 02 Sep 2015 08:47:52 GMT
+Location: https://www.google.com/?gws_rd=ssl
+.........
+</code></pre></div>
+<p>这个响应的那个200就是大家熟知的HTTP响应状态码。</p>
+<h4 id="cookie技术">cookie技术</h4>
+<p>cookie的作用原理如下，用户首先登录一个网站，然后该网站的服务器返回一个HTTP响应，其中有一行</p>
+<div class="highlight"><pre><span></span><code>Set-cookie: whatwhatwhat
+</code></pre></div>
+<p>这个HTTP响应被用户的浏览器接受之后，其将在特定的cookie文件中添加一行，其中有该服务器的名字（HOST）和这个Set-cookie还有后面的标识码信息。然后以后浏览器再访问这个网站的时候，其将自动在HTTP请求上加上这么一行:</p>
+<div class="highlight"><pre><span></span><code>Cookie: whatwhatwhat
+</code></pre></div>
+<p>那个网站的服务器看到HTTP请求的这么一行之后，就说，唉，张三又回来了。然后之后该用户在这个网站上的操作记录都被这个网站的数据库统一管理起来了，什么张三点击了那个页面，什么张三买了什么东西等等。</p>
+<p><u>本文不是专门介绍HTTP协议细节的文章，更多HTTP协议的方法和头字段这里略过讨论了。</u></p>
+<h3 id="dns协议">DNS协议</h3>
+<p>DNS协议虽然和计算机网络最底层的找到目标计算机操作相关，但其是属于应用层的。当我们讨论计算机网络应用层下面的几层，其标记目标计算机地址都是用的IP地址，而不是 <code>www.example.com</code> 这种形式了。这个把<code>www.example.com</code> 这样的域名解析为某个IP地址的过程叫做<strong>域名解析</strong> 。</p>
+<p>具体域名解析现在应用层程序一般是调用的套接字的 <code>gethostbyname</code> 这个函数，IPv6是另外的函数，这个在这里不是重点略过了。就前面的讨论继续，浏览器的程序某一步就调用了套接字的 <code>gethostbyname</code> 这个函数来获取对应域名的IP地址。这个函数返回的结果可能是根据你当前的主机的 <code>/etc/hosts</code> 这个文件的信息来的，当然更多的情况是去查询DNS服务。</p>
+<p>所谓查询DNS服务指的是在计算机互联网世界里，有很多DNS服务器，当前机器通过对这些DNS服务器发送请求来获得目标域名对应的IP地址。</p>
+<p>具体DNS协议规定发送DNS查询的请求信息包格式和响应信息包格式在这里的讨论中真不是重点，值得一提的是DNS传输层选择的协议是UDP协议。</p>
+<p>因为互联网世界很大，域名很多，IP地址很多，这么多查询请求和数据记录是不可能让一个服务器去处理的，于是各个DNS服务器数以万计，因为有这么多的DNS服务器，所以DNS协议在具体互联网世界里面的实现上还有一些细节值得说明一下。</p>
+<h4 id="域名注册">域名注册</h4>
+<p>互联网实际的DNS域名服务器是采用一种树状结构的，比如说你想注册你的域名 <code>www.example.com</code> ，你需要到你的域名服务上那里进行一些配置，这个配置就是DNS配置，具体来说你的域名服务商会给你开出一个 <code>example.com</code> 这个域的DNS服务，并将这个域的DNS服务器的IP地址注册到com域的DNS服务器上。</p>
+<p>com，cn等这些域的DNS服务器IP地址会注册到根域DNS服务器上，整个互联网现在有13个根域DNS服务器。</p>
+<p>域名注册完成了，下面讨论下客户端发出DNS请求如何从互联网世界里获取到其对应的IP地址的。</p>
+<h4 id="域名解析细节">域名解析细节</h4>
+<p>gethostbyname这个函数里面就有一个动作，将向你的网卡配置的第一DNS服务器发送一个DNS请求，说我们DNS解析 <code>www.example.com</code> 这个域名。这个请求被那个DNS服务器接收到了，然后它会把这个请求送给最近的根域服务器【这个根域服务器IP地址一般是固定的，基本上写死了的】，根域服务器看到<code>.com</code> ，然后返回告诉DNS服务器，com域名服务器的IP地址是多少，你去问它。</p>
+<p>然后你的DNS服务器又向com域名服务器发送了一个DNS域名解析请求，com域名服务器一看，<code>example.com</code> 这个域名的服务器IP是多少，你去问它。</p>
+<p>然后你的DNS服务器又向example.com域名服务器发送了一个DNS域名解析请求【这里额外说一下，www属于三级域名，有时都会指向同一个IP地址，有时看服务器那边配置继续分成几个DNS域名服务器也是有的】，然后example.com域名服务器说，哦这个域名是在我这里注册的，我有它的IP地址，我告诉你。</p>
+<p>然后你的DNS服务器把结果回传给你的客户端，DNS域名解析就算完成了。</p>
+<h4 id="dns服务器的缓存功能">DNS服务器的缓存功能</h4>
+<p>通过上面的讨论我们看到，你的DNS服务器和域名服务器不同，它基本上承担了大量的DNS请求查询任务，所以它的任务是很重的。于是DNS服务器开发了缓存功能来保留之前的查询记录，这样如果下次你再想你的DNS服务器发送 <code>www.example.com</code> 的域名解析任务，其会直接返回IP地址给你。域名不存在的查询记录也会被返回给客户端。缓存有个有效期时间。</p>
+<h3 id="套接字">套接字</h3>
+<p>套接字其最先就是C语言编写的一个库，当然其他编程语言也提供了对应的接口。其主要实现了一种进程间通讯的方式，现代操作系统基本上都有套接字的支持。</p>
+<p>进程和进程之间进行通信，一般是一个是客户机进程，另一个是服务器进程，这两个进程之间进行通信。就算是P2P体系结构，也可以这样理解，只是具体某一个进程其既可以是客户机也可以是服务器。我们有如下定义:</p>
+<blockquote>
+<p>在给定的一对进程之间进行通信，我们称发起通信的进程为客户机进程，在会话中等待联系的进程是服务器进程。（也可以理解为被动等待通信信号）</p>
+</blockquote>
+<p>两个进程之间具体是用套接字 (socket)来发送和接受报文的。套接字连接了应用层和传输层，如果一定要说套接字那些程序代码在计算机网络架构里面属于那一层，我愿意将其归于应用层，因为套接字并不具体实现TCP协议或UDP协议，而只是调用TCP协议或UDP协议栈，也就是那些具体实现TCP协议或UDP协议栈的代码才应该归于传输层。</p>
+<p>套接字在计算机网络编程里面是非常重要的概念，在计算机网络世界里面，基本上绝大部分应用层的程序，不管是客户端那边的还是服务器那边的，其底层都是调用的套接字。一个不错的比方是，好比浏览器对于http协议等各个协议的调用支持，然后起到调用客户端的功能，而套接字就是这么一个调用客户端，提供了对于tcp协议和udp协议的调用支持。</p>
+<p>人们在介绍套接字的时候总不可避免地去讨论太多TCP协议的细节，下面我会试着将套接字和各个协议以及其具体实现进行分离，从而让这一块概念更加清晰。</p>
+<ul>
+<li>socket函数，创建一个套接字对象，是套接字这边的顶层api，和传输层协议无关，在创建套接字对象的时候就需要指定好传输协议。</li>
+<li>connect函数，客户端套接字调用协议栈的连接动作。</li>
+<li>send和recv和write和read这些函数，具体对应各个协议的信息读写动作。</li>
+<li>close函数，对应协议栈的断开动作。</li>
+</ul>
+<h2 id="传输层">传输层</h2>
+<h3 id="通信协议">通信协议</h3>
+<p>计算机找到目标计算机了就可以开口说话了，但是不能随便说话也就是发送一堆乱码过去，那样目标机器是看不懂的。这个时候我们就需要制定计算机之间的通信协议。那么什么是计算机之间的通信协议？简单来说就好比两个人之间对话的某种规范，或者两个国家进行外交协商的某种特定交互流程。比如一个人对另外一个人说"你好"，另外一个人收到则回应"你好"，表明我已经收到了，然后第一个如果收到这个回应，则表明协议牵手成功，然后继续进行其他会话，比如"今天星期几"，发送过去，然后另外一个人收到之后回应"今天星期一"……就是类似这样的交互方式。有的连接是双向的，连接为持续存在，一般最后需要发送goodbye来关闭协议，而有的协议是单向的，也叫做无状态协议，比如HTTP协议，信息发送了完了连接就算自动关闭了。</p>
+<p>上面的描述还遗漏了一点那就是不仅交互的流程上有规范，而且发送的信息包的格式也是有规范的，或者说有一定的格式的。</p>
+<h3 id="tcp协议">TCP协议</h3>
+<p>TCP协议是面向连接的和可靠数据传输的。所谓的面向连接是指客户机和服务器之间一开始要进行握手过程好建立TCP连接，然后结束之后需要拆除连接。所谓的可靠数据传输是指TCP协议保证数据是无差错的按顺序交付发送的。此外TCP协议还具有拥塞控制机制。SMTP（电子邮件）协议，Telnet协议，HTTP协议，FTP协议多用TCP协议实现。</p>
+<h4 id="tcp信息包格式">TCP信息包格式</h4>
+<p>实际应用程序要传递的数据会被分割成一些小的数据块，然后这些数据块之前TCP协议栈发送都会加上TCP头控制信息，如下图所示：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2020/tcp_ip_data.png"/></p>
+<p>如果没有数据要传输，比如下面谈论的发送一个SYN，则就只有TCP头控制信息。具体SYN在TCP协议中定义的是那个数字位数是1这实在是细枝末节的设计问题了，这里就略过不谈论了。</p>
+<p>TCP协议里面将它要发送的信息称之为sequence包，并且它要求每个包都有编号（sequence number）。TCP协议正是通过这个编号来保证信息包的收发顺序不混乱<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>。</p>
+<p>TCP的sequence有几个必填的字段，上面的sequence number是一个，source port是一个，destination port是一个，如果ACK设置为1则需要填写acknowledgment number，还有一些这里暂时略过讨论了。</p>
+<h4 id="连接动作">连接动作</h4>
+<p>客户端要执行连接动作，服务端那边必须已经执行了bind和listen某个端口的动作，这个后面再讲。TCP协议的连接动作是经典的<strong>三次握手方式</strong>：</p>
+<ol>
+<li>SYN过程：客户端向服务端发送SYN，发送该包的时候会生成一个随机的sequence number（下面简称为seq_number）</li>
+<li>SYN-ACK过程：服务端响应SYN-ACK消息，并将其中的acknowledgment number（下面简称为ack_number）设置为之前接受到的seq_number + 1，然后本信息包另外再生成一个随机的seq_number。</li>
+<li>ACK过程：客户端响应ACK消息，其中的seq_number是接受的ack_number，ack_number是接受的seq_number +1。</li>
+</ol>
+<p>上面的过程讨论太抽象了，作图如下【下图中<code>|</code>分割左边为本机记录的seq_number，右边是本机记录的ack_number】：</p>
+<div class="highlight"><pre><span></span><code>client      signal       seq_number      ack_number         server
+
+A|            SYN               A                              |          -&gt;       
+
+A|B+1        SYN-ACK             B           A+1              B|A+1        &lt;-
+
+A+1|B+1        ACK              A+1          B+1              B+1|A+1           -&gt;
+</code></pre></div>
+<p>上面的A和B处于安全考虑实践中都是随机数。</p>
+<p>seq_number 用来记录我这边已经发送了多少数据了。在实践中会根据ack_number来取值，ack成功了其报告接受了多少数据就是我已经发送成功的数据。</p>
+<p>ack_number 用来记录我这边已经接受了多少数据了，其等于接受的seq_number+data_length。</p>
+<p>SYN过程会初始化一个随机的seq_number。</p>
+<p>SYN或者FIN表示默认data_length=1。上面的第三行ACK之后server的ack_number没变因为没有SYN标志。</p>
+<h4 id="信息读写动作">信息读写动作</h4>
+<p>在真的理解了上面的讨论之后，具体信息读写的数字生成规则就能大体推出来了。</p>
+<div class="highlight"><pre><span></span><code>client      signal       seq_number      ack_number         server
+
+A+1|B+1     PSH-ACK         A+1             B+1             B+1|A+726    -&gt;（发送了725字节，TCP头并没有这个信息）
+
+A+726|B+1    ACK            B+1             A+726           B+1|A+726     &lt;-
+
+A+726|B+1449  ACK           B+1             A+726           B+1|A+726     &lt;-   （发送了1448字节）
+
+A+726|B+1449  ACK           A+726           B+1449          B+1449|A+726   -&gt;   
+
+A+726|B+2897  ACK           B+1449          A+726          B+1449|A+726   &lt;-   (发送了1448字节)  
+</code></pre></div>
+<p>不管是客户端还是服务端都对我接受了多少数据和我发送了多少数据进行了详细的编号。这保证了不管是切分数据片之后选择性发送数据和接受数据片之后组合数据都是可行的。</p>
+<p>此外TCP协议的这种良好设计对于丢包也能很好地应对，比如某个发送数据没被对面ACK确认，则我的发送端seq_number是不会更新的，仍然需要请求再次发送。</p>
+<h4 id="使用窗口来管理ack号">使用窗口来管理ACK号</h4>
+<p>这块简单提下，毕竟TCP协议也是很复杂的东西，这里不可能面面俱到。如果按照上面的描述一来一回ACK等待的话那就太浪费时间了，实践中会通过一种滑动窗口技术来管理各个ACK号来解决这个问题，这块就不深究了。</p>
+<h4 id="断开动作">断开动作</h4>
+<p>具体套接字那边是调用的close函数，TCP协议那边是发送FIN信号，一般是客户端发送的，然后服务端那么回传一个FIN-ACK信号，然后客户端继续响应一个ACK信号从而完成TCP连接的断开动作。</p>
+<h3 id="udp协议">UDP协议</h3>
+<p>UDP是一种不提供不必要服务的轻量级传输层协议，它仅提供最小的服务。UDP是无连接的，两个进程之间没有握手过程。UDP协议并不保证报文能够被接受进程收到，也不保证数据是按顺序到达的。UDP也没有拥塞控制机制。</p>
+<p>比如前面提到的DNS协议传输层就是选用的UDP协议。</p>
+<h2 id="网络互联层">网络互联层</h2>
+<h3 id="最基本的原理">最基本的原理</h3>
+<p>Internet源起于美国的ARPAnet项目，其有个基本的知识点就是 <strong>只有两个位于同一网域的计算机才可以直接进行文件交互</strong> 。那么读者就会问了什么是网域，所谓网域说白了就是把一个大的互联网分割分割再分割的一个产物。而分割手段就是 <strong>子网掩码</strong> ，怎么判断两个计算机是同一网域呢？就是把这个计算机的IP地址和子网掩码相加，结果相同我们就说他们位于同一网域。</p>
+<p>比如 <code>192.168.0.1</code> 和 <code>192.168.0.101</code> 这两台计算机是可以直接进行交互，它们在子网掩码 <code>255.255.255.0</code> 之下是属于同一个子网的。同一个子网的机器通过路由器连接起来就可以直接进行通信了。 </p>
+<p>现在我们说一台计算机要对另外一台计算机发送一个信息包，首先这个计算机会分析自己的路由表，如果发现目标机器和自己在同一网域，那么就直接发送信息了。</p>
+<p>举一个实际的例子，比如说我输入<code>ipconfig</code> 可以查看当前我的电脑的无线网络网卡配置有：</p>
+<div class="highlight"><pre><span></span><code>Wireless LAN adapter WLAN:
+
+   Connection-specific DNS Suffix  . :
+   Link-local IPv6 Address . . . . . : fe80::296b:3e88:4a1c:e8bc%14
+   IPv4 Address. . . . . . . . . . . : 192.168.1.101
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1
+</code></pre></div>
+<p>我知道我自己的IP地址是 <code>192.168.1.101</code> ，我知道自己的子网掩码是 <code>255.255.255.0</code> 。然后我要和IP地址 <code>192.168.1.102</code> 的机器进行通信，经过计算（和子网掩码进行位逻辑AND操作得到<strong>网域</strong>，对两个网域进行位逻辑XOR操作，如果全0则是同一网域<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>）发现这两个IP位于同一<strong>网域</strong>，也就是同一子网内，则可以直接进行通信。</p>
+<p>如果不在同一网域，那么这个计算机就要根据路由表将这个信息包发送给默认的路由器（gateway），比如上面的例子就是 <code>192.168.1.1</code> 。路由器在网络世界里扮演着一个特殊的角色，那就是它们不具体处理数据，只负责数据分发。具体过程实际上就是上面描述的过程的不断迭代重复，也就是路由器也有一个自己的路由表，然后看看目标机器是不是和自己在同一网域等等，如果不则将信息包发送给另外一个默认的路由器或交换机之类的等等，直到最终目标机器和自己位于同一网域，然后将信息包发送给目标机器。</p>
+<h3 id="ip协议">IP协议</h3>
+<p>继续上面的讨论来，TCP协议的具体实现TCP模块将要传输的TCP sequence包做好之后交给IP协议的具体实现IP模块。IP模块不同于TCP模块对传过来的TCP包都统一看作数据块没有其他额外的操作动作了。</p>
+<p>IP模块会在每个数据块前面加上IP控制头和MAC控制头。IP控制头里面有目标网卡<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>的IP地址信息，MAC控制头里面有要要传输的下一个目的地的网卡MAC唯一标识信息。注意这里的表述，IP控制头里面的IP地址是你要传输的<em>最终目的地服务器IP地址</em>，而MAC控制头里面的MAC地址只是在传输过程中你要传输的<em>下一个MAC目的地</em>。这个下一个MAC目的地会被路由器修改的。而这个MAC地址是通过ARP地址解析协议来获得的。</p>
+<p><strong>ARP地址解析协议</strong> ：同一以太网或者同一子网内，ARP地址解析协议会广播询问这个IP地址是谁的，它的MAC地址是多少，目标机器如果IP对应会响应这个询问。</p>
+<p>继续上面的讨论，现在你要传输一个信息包，你根据自己的路由表知道接下来要传输给下一个路由器的IP地址，然后根据ARP获得该路由器的MAC地址，然后将这个MAC地址填入MAC控制头，至此IP模块就完成了待传输的信息包的封装工作了。</p>
+<h2 id="网络访问层">网络访问层</h2>
+<p>网卡的驱动程序在接收上面讨论的IP模块处理之后的IP信息包之后，还需要在IP包前面加上报头和起始帧分界符，在后面加上FCS检测错误的帧校验序列，将目标IP包封装为用于以太网传输的以太信息包。</p>
+<p>网卡驱动程序做的第二个工作当然就是将目标以太包转成光或电信号进入以太网。</p>
+<p>之后网卡驱动程序接收到光或电信号，还需要做一些额外的工作，然后解读出IP信息包，这里面的很多细节在这里都略过讨论了。</p>
+<h2 id="互联网架构">互联网架构</h2>
+<h3 id="应用程序体系结构">应用程序体系结构</h3>
+<p>网络世界里目前有两种应用程序体系结构：一种是client/server体系结构；另一种peer to peer，也就是P2P体系结构。</p>
+<p>选择客户机/服务器体系结构，你的应用程序会有两个命令两种工作模式，一个启动本地客户机进程，一个启动服务器进程，很多应用程序都是这样的。P2P目前主要是BitTorrent下载软件为大家熟知。</p>
+<h3 id="物理设备">物理设备</h3>
+<h4 id="网线的双绞线设计">网线的双绞线设计</h4>
+<p>网线的双绞线设计是为了抑制电磁波噪音干扰。</p>
+<h4 id="路由器">路由器</h4>
+<p>路由器在之前网络互联层已有所讨论，可以看做是对IP协议中IP地址寻址的互联网建设的最核心物理设备。</p>
+<h4 id="中继器">中继器</h4>
+<p>一种物理层链接设备，用于延长网络距离，具有信号放大功能。</p>
+<h4 id="集线器">集线器</h4>
+<p>中继器的一种，一个进入端口的信号会被放大广播到其他所有端口，用于物理组网的星型或树型网络结构。</p>
+<h4 id="交换机">交换机</h4>
+<p>交换机对信息包的传递实现了基于MAC地址的转发，但这个说法个人认为并没有将交换机的本质说清楚。交换机就其本质可以看做更智能的集线器，其本质仍然属于物理组网层，而不是互联网建设层。集线器是全端口广播，有太多信息冗余和其他问题，只可能用于小型组网。交换器的智能就在于其可以学习MAC地址，注意不是修改，而只是观察学习。当交换机学习到某个MAC地址从端口2出去行的通，于是下次遇到要传输MAC地址就不广播了，而是直接送给端口2，这样更加高效。于是人们说交换机实现了基于MAC地址的转发。</p>
+<h2 id="其他">其他</h2>
+<h3 id="防火墙">防火墙</h3>
+<p>防火墙的包过滤规则是根据接收方IP地址和发送方IP地址还有端口号等信息来判断是否让该信息包通过。</p>
+<h3 id="负载均衡器">负载均衡器</h3>
+<p>负载均衡器会将请求分配给多台web服务器，同时在实践中会有很多判断。</p>
+<ol>
+<li>分析web服务器的负载情况</li>
+<li>判断操作是否跨页面，如果跨页面则将请求都发送给同一台web服务器。</li>
+</ol>
+<h3 id="缓存服务器">缓存服务器</h3>
+<p>缓存服务器工作过程如下:</p>
+<ol>
+<li>
+<p>首先是用户那边的浏览器与缓存服务器器建立TCP连接，然后对其发送一个HTTP请求。</p>
+</li>
+<li>
+<p>缓存服务器会检查自己本地是否缓存了目标对象的备份，如果有，则web缓存器用HTTP响应回应用户浏览器。</p>
+</li>
+<li>
+<p>如果缓存服务器没有该目标对象的缓存，则其就会向初始服务器打开一个TCP连接，发送一个HTTP请求，获得该目标对象，并将该对象缓存在自己本地，当然还有向用户浏览器回应一个HTTP响应好把新获得的对象也发给用户浏览器。</p>
+</li>
+</ol>
+<p>缓存服务器本地虽然可能有目标对象缓存了，但可能这个缓存过于陈旧了。缓存服务器必须证实本地的缓存内容是最新的，其利用的是HTTP协议的 <code>If-modified-since</code> 这一行。缓存服务器将发送一个非常短小的HTTP请求，其中就包含这样一行:</p>
+<div class="highlight"><pre><span></span><code>If-modified-sine: Wed, 4 Jul 2007 09:23:24
+</code></pre></div>
+<p>这个日期是缓存服务器存储上一次该缓存对象是获得的HTTP响应头上就有的 <code>Last-Modified</code> 这一行。</p>
+<p>然后缓存服务器会回应一个很短小的HTTP响应，就是最简短的HTTP状态码和其他几个必要的信息，比如304,Not Modified。</p>
+<h3 id="内容分发服务cdn">内容分发服务（CDN）</h3>
+<p>对多个web服务器提供缓存服务。</p>
+<h2 id="脚注">脚注</h2>
+<div class="footnote">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>网络是怎样连接的 [日] 户根勤著 <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+<li id="fn:2">
+<p>参考了 <a href="https://intrinium.com/boolean-logic-and-subnet-masking/">这个网页</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
+</li>
+<li id="fn:3">
+<p>参考了 <a href="http://www.ruanyifeng.com/blog/2017/06/tcp-protocol.html">这个网页</a> <a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">↩</a></p>
+</li>
+<li id="fn:4">
+<p>IP地址是分配给网卡的，一台计算机多个网卡会有多个IP地址，所以这里更准确的描述术语是网卡。 <a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">↩</a></p>
+</li>
+</ol>
+</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="基本结构 Doc 文档 Grammar 计算机可理解的语言定义 Include C的头文件 Lib 用python写的python内置模块部分 Mac macOs支持 Misc 杂项 Modules 用C写的python内置模块部分 Objects 核心对象和类 Parser python解析..." />
+
+
+<meta name="keywords" content=", 计算机 - 编程 - python, " />
+
+<title>python源码学习  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/pythonyuan-ma-xue-xi.html"> python源码学习  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#基本结构">基本结构</a></li>
+<li><a href="#一个简单的c语言扩展">一个简单的C语言扩展</a></li>
+<li><a href="#基础知识">基础知识</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-03-09T08:35:14.445771+08:00">2023年 3月 9日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.445771+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h3 id="基本结构">基本结构</h3>
+<ul>
+<li><code>Doc</code> 文档</li>
+<li><code>Grammar</code> 计算机可理解的语言定义</li>
+<li><code>Include</code> C的头文件</li>
+<li><code>Lib</code> 用python写的python内置模块部分</li>
+<li><code>Mac</code> macOs支持</li>
+<li><code>Misc</code> 杂项</li>
+<li><code>Modules</code> 用C写的python内置模块部分</li>
+<li><code>Objects</code> 核心对象和类</li>
+<li><code>Parser</code>  python解析器</li>
+<li><code>PC</code> 对windows系统旧版本的编译支持</li>
+<li><code>PCBuild</code> 对windows系统的编译支持</li>
+<li><code>Programs</code> python命令行程序</li>
+<li><code>Python</code> CPython解释器</li>
+<li><code>Tools</code> 单独的一些有用的工具</li>
+<li><code>m4</code> 定制脚本用于自动配置makefile</li>
+</ul>
+<h3 id="一个简单的c语言扩展">一个简单的C语言扩展</h3>
+<p>如上面所示，CPython首先是一个C语言实现的解释器，其次是由C语言写的核心对象和类，再就是用C写的内置模块，最后就是用python写的内置模块。python写的模块源码是直接可以拿来阅读的，而C语言写的内置模块这就是本小节要展示。下面将通过C语言来编写一个最简单的python模块。</p>
+<p><code>ctest.c</code> 文件内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#define PY_SSIZE_T_CLEAN</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Python.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span>
+<span class="nf">ctest_hello</span><span class="p">(</span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">str</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* Parse arguments */</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">PyArg_ParseTuple</span><span class="p">(</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="s">"s"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">str</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"hello %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Py_None</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">PyMethodDef</span><span class="w"> </span><span class="n">CtestMethods</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span><span class="s">"hello"</span><span class="p">,</span><span class="w"> </span><span class="n">ctest_hello</span><span class="p">,</span><span class="w"> </span><span class="n">METH_VARARGS</span><span class="p">,</span><span class="w"> </span><span class="s">"a simple say hello function."</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">PyModuleDef</span><span class="w"> </span><span class="n">ctestmodule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">PyModuleDef_HEAD_INIT</span><span class="p">,</span>
+<span class="w">    </span><span class="s">"ctest"</span><span class="p">,</span>
+<span class="w">    </span><span class="s">"a simple python module writing in c"</span><span class="p">,</span>
+<span class="w">    </span><span class="mi">-1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">CtestMethods</span>
+<span class="p">};</span>
+
+<span class="n">PyMODINIT_FUNC</span><span class="w"> </span><span class="nf">PyInit_ctest</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">PyModule_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctestmodule</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>setup.py 是用来编译该模块的：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">setup</span><span class="p">(</span>
+        <span class="n">ext_modules</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">Extension</span><span class="p">(</span><span class="s2">"my_python_module.ctest"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"src/ctest/ctest.c"</span><span class="p">])]</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<p>读者可能注意到了，该模块是作为my_python_module的子模块引入进来的。然后正常打包安装：</p>
+<div class="highlight"><pre><span></span><code>python -m build
+pip install dist\***.whl
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; import my_python_module.ctest
+&gt;&gt;&gt; my_python_module.ctest.hello("world")
+hello world
+</code></pre></div>
+<p>因为这里不是C语言教程，所以这里不会就C语言作过多讨论，而上面的ctest.c先请读者简单看一下，熟悉一下，后面我们再慢慢学习熟悉这其中的细节。</p>
+<h3 id="基础知识">基础知识</h3>
+<p>python解释器的工作不是将你输入的python代码编译为机器码，而是一种中间语言：<code>bytecode</code> 。<code>.pyc</code>文件下存储的就是这样的字节码。</p>
+<p>python语言规范使用的是EBNF（Extended-BNF）规范。</p>
+<ul>
+<li><code>*</code> 重复</li>
+<li><code>+</code> 至少重复一次</li>
+<li><code>[]</code> 可选部分</li>
+<li><code>|</code> 可供选择的部分</li>
+<li><code>()</code> grouping</li>
+</ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

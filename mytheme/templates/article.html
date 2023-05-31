@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>{{ article.title|striptags|e }} {%if article.subtitle %} - {{ article.subtitle|striptags|e }} {% endif %} -
+    {{ SITENAME|striptags|e }}</title>
+{% endblock title %}
+
+{% block head_description %}
+{%- if article.summary %}{{ article.summary|striptags|e |truncate(150, True) }}{% endif %}
+{%- endblock head_description %}
+
+{% block head_links %}
+{{super()}}
+<link rel="stylesheet" href="{{ SITEURL }}/theme/css/pygments.css">
+<link rel="stylesheet" href="{{ SITEURL }}/theme/css/article.css">
+{% endblock head_links %}
+
+{% block meta_tags_in_head %}
+{{ super() }}
+{% if article.tags or article.category or article.keywords %}
+<meta name="keywords" content="{{ [article.tags|join(', '), article.category, article.keywords]|join(', ') }}" />
+{% endif %}
+{% endblock meta_tags_in_head %}
+
+{% block content %}
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="{{ SITEURL }}/{{ article.url }}"> {{ article.title }} {%if article.subtitle %} <small> {{
+                        article.subtitle }} </small> {% endif %} </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                {% if article.toc %}
+                <div style="font-size:1.2rem;">目录</div>
+                {{ article.toc }}
+                {% endif %}
+
+                {% if article.date %}
+                <div class="p-1">首发于：
+                {%- set day = article.date.strftime('%d')|int -%}
+                <time pubdate="pubdate" datetime="{{ article.date.isoformat() }}">
+                    {{- article.date.strftime('%Y') }}年 {{ article.date.strftime('%b') }} {{ day }}日 </time>
+                </div>
+                {% endif %}
+
+                {% if article.modified %}
+                <div class="p-1">最近更新于：{%- set day = article.modified.strftime('%d')|int -%}
+                <time datetime="{{ article.modified.isoformat() }}">
+                    {{- article.modified.strftime('%Y') }}年 {{ article.modified.strftime('%b') }} {{ day }}日 </time>
+                </div>
+                {% endif %}
+
+
+                {% if article.category|trim|count > 0 %}
+                <div class="p-1">分类：
+                <a class="category-link" href="{{ SITEURL }}/categories.html#{{ category.slug }}-ref">{{
+                    article.category }}</a>
+                </div>
+                {% endif %}
+
+                {% if article.tags and article.tags[0]|trim|count > 0 %}
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article">
+                    {%- for tag in article.tags|sort -%}
+                    <li><a href="{{ SITEURL }}/tags.html#{{ tag.slug }}-ref">{{ tag }}
+                            {%- for aTag, tagged_articles in tags if aTag == tag -%}
+                            <span>{{ tagged_articles|count }}</span>
+                            {%- endfor -%}</a></li>
+                    {%- endfor -%}
+                </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                {{ article.content }}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{{super()}}
+<script src="{{ SITEURL }}/theme/js/article.js"></script>
+{% endblock script %}

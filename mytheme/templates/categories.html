@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>分类页面 -  {{ SITENAME|striptags|e }}</title>
+{% endblock title %}
+
+{% block head_description %}
+{{ SITENAME|striptags|e }} 这里根据本网站文章的基本分类信息来展示各个访问，方便访问者快速查阅定位文章。
+{% endblock head_description %}
+
+{% block head_links %}
+{{super()}}
+<link href="{{ SITEURL }}/theme/css/categories.css" rel="stylesheet">
+{% endblock head_links %}
+
+
+{% block content %}
+<div class="container mt-3">
+
+    <div class="row">
+        <header class="col-sm-12 col-md-11 page-header" style="border-bottom: 0pt;">
+            <h1><a href="{{ SITEURL }}/categories.html">所有分类</a></h1>
+        </header>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-10 col-sm-12">
+            <div class="accordion" id="accordionExample">
+                {% for category, articles in categories %}
+                {% if category != "archived" %}
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="{{ category.slug }}-ref">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#{{ category.slug }}" aria-expanded="true" aria-controls="{{ category.slug }}">
+                            {% set num = articles|count %}
+                            {{ category }}<span class="ms-2 badge bg-info">{{ num }}</span>
+                        </button>
+                    </h2>
+
+                    <div id="{{ category.slug }}" class="accordion-collapse collapse" aria-labelledby="{{ category.slug }}-ref"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="list-articles-category">
+                                {% for article in articles %}
+                                <li><time pubdate="pubdate" datetime="{{ article.date.isoformat() }}">{{
+                                        article.locale_date }}</time><a href="{{ SITEURL }}/{{ article.url }}">{{
+                                        article.title }} {%if article.subtitle %} <small> {{ article.subtitle }}
+                                        </small> {% endif %} </a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="理解神经网络 学习深度学习不一定要了解神经生物学，对于传统机器学习各个算法也不一定要面面俱到，但对于神经网 …" />
+
+
+<meta name="keywords" content=", 备用, " />
+
+<title>机器学习学习笔记  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/machine-learning-notes-one.html"> 机器学习学习笔记  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#理解神经网络">理解神经网络</a><ul>
+<li><a href="#反向传播算法">反向传播算法</a></li>
+</ul>
+</li>
+<li><a href="#理解张量">理解张量</a><ul>
+<li><a href="#张量的shape">张量的shape</a></li>
+<li><a href="#张量的dtype">张量的dtype</a></li>
+<li><a href="#样本维度">样本维度</a></li>
+</ul>
+</li>
+<li><a href="#利用tensorflow来实现一个单层神经网络">利用tensorflow来实现一个单层神经网络</a><ul>
+<li><a href="#数据预处理">数据预处理</a></li>
+<li><a href="#感知器">感知器</a></li>
+<li><a href="#交叉熵">交叉熵</a></li>
+<li><a href="#使用tensorflow自带的交叉熵方法">使用tensorflow自带的交叉熵方法</a></li>
+</ul>
+</li>
+<li><a href="#利用keras实现一个多层感知器">利用keras实现一个多层感知器</a><ul>
+<li><a href="#准备数据">准备数据</a></li>
+<li><a href="#建模">建模</a></li>
+</ul>
+</li>
+<li><a href="#利用keras实现一个多层神经网络">利用keras实现一个多层神经网络</a><ul>
+<li><a href="#保存模型">保存模型</a></li>
+</ul>
+</li>
+<li><a href="#机器学习通用工作流程">机器学习通用工作流程</a><ul>
+<li><a href="#定义问题收集数据集">定义问题，收集数据集</a></li>
+<li><a href="#选择衡量成功的指标">选择衡量成功的指标</a></li>
+<li><a href="#确定评估方法">确定评估方法</a></li>
+<li><a href="#准备数据_1">准备数据</a></li>
+<li><a href="#开发比基准更好的模型">开发比基准更好的模型</a></li>
+<li><a href="#扩大模型规模开发过拟合模型">扩大模型规模，开发过拟合模型</a></li>
+<li><a href="#模型正则化与调节超参数">模型正则化与调节超参数</a></li>
+</ul>
+</li>
+<li><a href="#附录">附录</a><ul>
+<li><a href="#relu激活函数">relu激活函数</a></li>
+<li><a href="#广播broadcasting">广播(broadcasting)</a></li>
+<li><a href="#张量点积">张量点积</a></li>
+<li><a href="#张量变形">张量变形</a></li>
+<li><a href="#张量的导数">张量的导数</a></li>
+<li><a href="#随机梯度下降sgd">随机梯度下降(SGD)</a></li>
+<li><a href="#均值移除">均值移除</a></li>
+<li><a href="#minmax缩放">minmax缩放</a></li>
+<li><a href="#归一化">归一化</a></li>
+<li><a href="#二值化">二值化</a></li>
+<li><a href="#onehot编码">onehot编码</a></li>
+<li><a href="#label编码">label编码</a></li>
+<li><a href="#计算误差">计算误差</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-11-07T00:00:00+08:00">2020年 11月 7日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.393498+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#bei-yong-ref">备用</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="理解神经网络">理解神经网络</h2>
+<p>学习深度学习不一定要了解神经生物学，对于传统机器学习各个算法也不一定要面面俱到，但对于神经网络基本概念和具体里面矩阵，现在应该升级了，叫做张量运算还是应该有所了解的。</p>
+<p>我们来看Keras的30s上手例子：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span>
+              <span class="n">optimizer</span><span class="o">=</span><span class="s1">'sgd'</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+</code></pre></div>
+<p>首先我们需要建立一个模型，最常用的模型是 Sequential 顺序模型。这是最常用的模型。</p>
+<p>神经网络现在的发展已经和大脑并无太多关系了，当然早期发展是吸收了一些灵感，所以人们也推荐神经网络应该叫做分层表示学习或者层级表示学习。</p>
+<p>注意看上面 layer 就是层的意思，深度学习模型就是层的堆叠。</p>
+<p>而上面的Dense 就是我们常说的全连接层。全连接层大概是这样的：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/机器学习/全连接层示意图.png" title="Dense"/></p>
+<p>全连接层的意思是 本层的每个节点都和后一层的每个节点相连。</p>
+<p>Dense的units参数是本层节点数的意思，其也还有一个意思，叫做本层的输出维度数。</p>
+<p>每一层神经网络发生了 <code>output = relu(dot(W, input) + b)</code>这样的数学运算。 其中 relu 是上面 Dense 指定的 <code>activation</code> 也就是激活函数。我觉得在这里去想神经网络原来那一套并不有助于我们的理解了，反倒是根据数学思维来更方便理解一些。每一层神经网络即这样一层数学运算层，能够对某一个数据集进行了某种线性变换，然后输出另外一个对应的数据集。就如同 弗朗索瓦·肖奈所打比方描述的：</p>
+<blockquote>
+<p>一张纸被揉的皱巴巴的，我们可以通过一系列步骤的几何变换，每一步都只是简单的几何变换，但最终完成了某个展平动作，于是我们看到了这张纸上面写着的字。深度学习模型就是解开高纬数据复杂流形的数学机器。</p>
+</blockquote>
+<p>我觉得弗朗索瓦·肖奈的另外一个比方也很好，很形象。可以把深度学习网络看做多级信息的蒸馏操作，信息穿越过滤器，然后纯度越来越高（对任务的帮助越来越大）。</p>
+<p>上面公式中 W 是每一层的权重，深度学习训练的过程就是给每一次找到更好的权重参数，从而整个深度学习神经网络能够更好地帮助任务。</p>
+<div class="highlight"><pre><span></span><code>model.fit(x_train, y_train, epochs=5, batch_size=32)
+</code></pre></div>
+<p>训练的过程 x_train 是具体的数据， y_train 是对应的标签数据， epoch 是迭代次数，也就是对于某个训练数据的重复训练次数。batch_size 是一次训练所含样本数，参考了 <a href="https://blog.csdn.net/u013041398/article/details/72841854">这个网页</a> ，因为一次把所有样本训练完开销太大，而每训练一次就算一下损失函数震荡又大，所以现在通用的做法是： mini-batch gradient decent ，小批量数据的梯度下降。这里的batch_size 是一次训练所含的样本数，那么1个epoch就是把所有训练数据都训练完的训练次数是总样本数除以batch_size。</p>
+<div class="highlight"><pre><span></span><code>model.compile(loss='categorical_crossentropy',
+              optimizer='sgd',
+              metrics=['accuracy'])
+</code></pre></div>
+<p>上面模型在compile的时候需要指定损失函数loss，损失函数是用来衡量模型得到的预测值和真实目标值之间的距离的，简单来说就是损失函数就是给目前模型打分的，来评价模型的效果好坏的。</p>
+<p>根据打分来对模型的各个权重参数进行微调使用的是反向传播算法。</p>
+<h3 id="反向传播算法">反向传播算法</h3>
+<p>反向传播算法（BP算法 backpropagation）。BP算法先将输入示例提供给输入层神经元，然后信号逐渐向前传递，直到产生输出层结果；然后计算输出层的误差，再将误差逆向传播直隐含层。最后根据隐含层神经元的误差来对连接权重和阈值进行调整的过程。改迭代过程循环进行，直到达到某个条件后停止。</p>
+<p>反向传播算法进行调节由优化函数或者说优化器 optimizer来完成。</p>
+<h2 id="理解张量">理解张量</h2>
+<p>标量 向量 矩阵 一般大家都有所接触了的，张量则是更多的维度的数据结构了。再谈到张量之后我发现之前那些图形几何上的理解的东西最好丢掉，而简单将张量理解为多个维度的数据结构。具体在python程序中就将张量看做numpy模块中的ndarray对象这是没有问题的。</p>
+<h3 id="张量的shape">张量的shape</h3>
+<p>首先看下矩阵方面的情况：</p>
+<ul>
+<li>(1,3） 这是一个行矢量， for example: [1,2,3] </li>
+<li>(3,1) 这是一个列矢量，for example： </li>
+</ul>
+<p>
+<div class="math">$$
+\begin{bmatrix}
+1\ 
+2\ 
+3
+\end{bmatrix}
+$$</div>
+</p>
+<ul>
+<li>(2,3) 表示两行三列</li>
+</ul>
+<p>小维度情况带上几何思维这没有问题，但到张量了比如说 shape (3,3,2,3) ，那么最好的理解是这个张量数据有四个维度，其中第一个维度的数据容量是3个，第二个维度的数据容量也是3个。</p>
+<p>ndarray对象有这样的索引语法 ndarray[x, y , z] ，其中每一个维度也支持 ndarray[x1:x2, : , :] <code>start:end</code> 这样的语法。这样从维度来理解，就是第一个维度选择 x1:x2 之间，然后第二个维度选择所有，第三个维度选择组成的张量数据。总之在谈及张量的时候，即使是那些和空间关系很紧密的数据结构，我发现完全脱离几何思维，而只是单纯讨论维度会更方便些。</p>
+<h3 id="张量的dtype">张量的dtype</h3>
+<p>numpy的 ndarray对象，有一个 dtype参数 。表示目标张量数据结构所包含的数据类型。张量一般都包含的是数值型数据，也可能会有char型张量，但没有字符串型张量。不过我看到即使是单个字符，可能是处于字符编码问题考虑吧，但就算是纯英文的单个字符，我看到大家的通用做法还是建立字典，转成对应的数值型张量，估计计算速度也是一个考虑点吧。</p>
+<h3 id="样本维度">样本维度</h3>
+<p>在深度学习领域，一般大家把第一个维度用作样本维度，所以我们看到MNIST例子中shape (60000,28,28)，第一个维度表示有60000个样本。</p>
+<p>然后前面说到batch_size 是一次训练所含的样本数，所以实际一次训练模型送入的batch数据如下：</p>
+<div class="highlight"><pre><span></span><code>batch_size = 128
+batch = train_images[:128] # 第一个批次
+batch = train_iamges[128:256] # 第二个批次
+...
+</code></pre></div>
+<h2 id="利用tensorflow来实现一个单层神经网络">利用tensorflow来实现一个单层神经网络</h2>
+<p>本文先用tensorflow来实现单层神经网络处理mnist问题，然后用keras来写一个两层神经网络来解决mnist问题。最后试着用keras编写一个简单的深度学习模型，也就是多层神经网络来解决mnist问题。</p>
+<p>本文代码主要参考了keras的examples代码库，同时本文也考虑了一些输入数据的预处理统一化过程。</p>
+<h3 id="数据预处理">数据预处理</h3>
+<p>首先我们利用keras来下载mnist相关数据并进行必要的预处理操作。</p>
+<div class="highlight"><pre><span></span><code>from keras.datasets import mnist
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>train_images.shape
+(60000, 28, 28)
+train_labels.shape
+(60000,)
+</code></pre></div>
+<p>train_images 的shape第一维度是60000，说明有6万个图片，然后标签第一维度也是6万与之对应。</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
+</code></pre></div>
+<p>第一步将第二维第三维数据合并到一维。</p>
+<p>第二步是转换ndarray的dtype数据类型。</p>
+<p>第三部是将数据0-255 归一化为 0- 1 。</p>
+<p>类似的test_images也需要这样处理，这里就略过了。</p>
+<p>标签数据需要进行one-hot编码处理：</p>
+<div class="highlight"><pre><span></span><code>from keras.utils import to_categorical
+train_labels = to_categorical(train_labels)
+train_labels[0]
+array([0., 0., 0., 0., 0., 1., 0., 0., 0., 0.], dtype=float32)
+</code></pre></div>
+<p>one-hot编码的具体解释这里略过了，其他地方会讨论的。</p>
+<h3 id="感知器">感知器</h3>
+<p>感知器就是一层或者说单层神经网络。感知器类似于逻辑回归模型，只能做线性分类任务。</p>
+<p>单层神经网络的编写用Keras非常的简单，但如果用tensorflow还是需要写一些代码的。不过作为一开始推荐还是用tensorflow来写一个简单的单层神经网络。因为Keras是基于tensorflow的更高层模块，这对于我们理解Keras具体做了什么工作很有帮助，也能帮助我们理解具体单层神经网络进行了那些数学运算。</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">784</span><span class="p">])</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">]))</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">y_logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y_logits</span> <span class="p">)</span>
+</code></pre></div>
+<p><img alt="img" src="https://a358003542.github.io/images/机器学习/单层神经网络数学运算.png" title="单层神经网络数学运算"/></p>
+<p>输入参数x第二维度784对应权重矩阵第一维度784，通常神经网络权重矩阵W的shape是(前一层节点数, 后一层节点数) 。这样输入参数矩阵x和权重矩阵W进行矩阵乘法【张量的点积，np.dot运算】之后得到第二维度等于权重矩阵第二维度的矩阵。输出的值数据送入 y_logits。这里 <code>tf.matmul</code> 就是进行的矩阵的乘法运算。</p>
+<p>这里 <code>tf.nn.softmax</code> 是激活函数，具体softmax激活函数的讨论这里略过了。</p>
+<h3 id="交叉熵">交叉熵</h3>
+<p>tensorflow提供了专门的交叉熵计算函数，这里我们先用更原始的计算公式来看一下（参考了 <a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/tutorials/mnist_beginners.html">这篇文章</a> ）：</p>
+<div class="highlight"><pre><span></span><code><span class="n">cross_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">y_true</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span>
+</code></pre></div>
+<p>大体过程如下所示：
+<div class="math">$$
+- \sum (1,0,0) * log((0.5,0.4,0.1)) = -(1<em>log0.5 + 0</em>log0.4 + 0*log0.1) = 0.301
+$$</div>
+交叉熵越大那么预测值越偏离真实值，交叉熵越小那么预测值越接近真实值。</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cross_entropy</span><span class="p">)</span> <span class="c1"># 0.01是学习速率</span>
+</code></pre></div>
+<h3 id="使用tensorflow自带的交叉熵方法">使用tensorflow自带的交叉熵方法</h3>
+<p>推荐使用tensorflow自带的softmax+交叉熵方法来计算交叉熵，参考了 <a href="http://blog.csdn.net/behamcheung/article/details/71911133">这篇文章</a> ，说是计算会更稳定些。</p>
+<p>现在让我们把到目前的代码整理一下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+<span class="n">train_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">train_labels</span><span class="p">)</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">784</span><span class="p">])</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">]))</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">y_logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y_logits</span> <span class="p">)</span>
+<span class="n">cross_entropy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_logits</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">y_logits</span> <span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">y_true</span><span class="p">))</span>
+<span class="n">train_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cross_entropy</span><span class="p">)</span>
+</code></pre></div>
+<p>好了，我们的例子进入收尾阶段了：</p>
+<div class="highlight"><pre><span></span><code><span class="n">correct_mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">correct_mask</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span> 
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+
+    <span class="c1"># Train</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">())</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+        <span class="n">batch_xs</span> <span class="o">=</span> <span class="n">train_images</span><span class="p">[</span><span class="n">count</span><span class="o">*</span><span class="mi">128</span><span class="p">:</span><span class="mi">128</span><span class="o">*</span><span class="p">(</span><span class="n">count</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">batch_ys</span> <span class="o">=</span> <span class="n">train_labels</span><span class="p">[</span><span class="n">count</span><span class="o">*</span><span class="mi">128</span><span class="p">:</span><span class="mi">128</span><span class="o">*</span><span class="p">(</span><span class="n">count</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_step</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">batch_xs</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">batch_ys</span><span class="p">})</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">test_images</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">test_labels</span><span class="p">})</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Accuracy: </span><span class="si">{:.4}</span><span class="s2">%"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ans</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+    <span class="c1"># LAST</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">test_images</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">test_labels</span><span class="p">})</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Accuracy: </span><span class="si">{:.4}</span><span class="s2">%"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ans</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+</code></pre></div>
+<p>关于tf.argmax 函数请看下面的例子。不感兴趣的可以略过，其作用就是把标签解释出来，不是这里的重点。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">stddev</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="o">-----</span>
+<span class="n">array</span><span class="p">([[</span> <span class="mf">0.0919205</span> <span class="p">,</span>  <span class="mf">0.06030607</span><span class="p">,</span>  <span class="mf">0.01196606</span><span class="p">,</span>  <span class="mf">0.03031359</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.13546242</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.12748787</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.09680127</span><span class="p">,</span>  <span class="mf">0.12220833</span><span class="p">,</span>  <span class="mf">0.15264732</span><span class="p">,</span>  <span class="mf">0.05449662</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.01277541</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00535311</span><span class="p">,</span>  <span class="mf">0.03589706</span><span class="p">,</span>  <span class="mf">0.01658093</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.16726552</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.06979545</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14876817</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.03735523</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0439501</span> <span class="p">,</span>  <span class="mf">0.15896702</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.05869294</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14986654</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.17551927</span><span class="p">,</span>  <span class="mf">0.08360171</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00648978</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.03274798</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05770732</span><span class="p">,</span>  <span class="mf">0.01505487</span><span class="p">,</span>  <span class="mf">0.13726853</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01670119</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.02666636</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05316785</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05433881</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02210794</span><span class="p">,</span>  <span class="mf">0.01175172</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.0674843</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.06402522</span><span class="p">,</span>  <span class="mf">0.00812987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.17738222</span><span class="p">,</span>  <span class="mf">0.01375954</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.01734987</span><span class="p">,</span>  <span class="mf">0.01096244</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.19889738</span><span class="p">,</span>  <span class="mf">0.08350741</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00222254</span><span class="p">,</span>
+         <span class="mf">0.05094135</span><span class="p">,</span>  <span class="mf">0.06777989</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01986633</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1863249</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.04648132</span><span class="p">]],</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+<span class="o">---</span>
+
+<span class="n">col_max</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span>
+<span class="o">----</span>
+<span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span>
+<span class="o">---</span>
+<span class="n">row_max</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> 
+<span class="o">---</span>
+<span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span>
+<span class="o">---</span>
+</code></pre></div>
+<p>所以 tf.argmax 第二个参数是1，那么返回一行数值最大的那个index索引值。 <code>tf.argmax(y_pred, 1)</code> 返回的那个索引值在本例中比较简单，就是实际预测的数字值。</p>
+<p>tf.reduce_mean 将所有维度的元素相加然后求平均值</p>
+<p>这个例子最后就是调用tensorflow的作业流程，启动运算数据流。然后评估一下对于测试数据现在精度如何了。这些不是这里的重点。就单层神经网络来说mnist例子很难超过90%的。</p>
+<h2 id="利用keras实现一个多层感知器">利用keras实现一个多层感知器</h2>
+<p>多层感知器实际上就是两层全连接神经网络。理论上两层神经网络可以无限逼近任意连续的函数了。下面用Keras来实现一个多层感知器。</p>
+<p>首先我们试着把上面单层神经网络用Keras写一遍，下面是准备数据过程，后面都一样的。</p>
+<h3 id="准备数据">准备数据</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">train_images</span> <span class="o">=</span> <span class="n">train_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">784</span><span class="p">))</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+<span class="n">train_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">train_labels</span><span class="p">)</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="建模">建模</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">'rmsprop'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">'categorical_crossentropy'</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 1s 13us/step - loss: 0.6063 - acc: 0.8482
+Epoch 2/5
+60000/60000 [==============================] - 1s 12us/step - loss: 0.3316 - acc: 0.9083
+Epoch 3/5
+60000/60000 [==============================] - 1s 12us/step - loss: 0.3025 - acc: 0.9159
+Epoch 4/5
+60000/60000 [==============================] - 1s 11us/step - loss: 0.2889 - acc: 0.9194
+Epoch 5/5
+60000/60000 [==============================] - 1s 12us/step - loss: 0.2806 - acc: 0.9219
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>score = model.evaluate(test_images, test_labels, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.2757013351589441
+Test accuracy: 0.9232
+</code></pre></div>
+<p>结果大概也是差不多的。因为这个例子多运行几次epoch，但单层神经网络再怎么优化也只能到92%了。</p>
+<p>上面的建模过程稍微加一行，我们就构建了一个多层感知器。一般多层神经网络前面的激活函数选relu会更好一些。也就多加了一层，最后输出节点数为10的神经网络。</p>
+<div class="highlight"><pre><span></span><code>from keras.models import Sequential
+from keras.layers import Dense
+model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dense(10, activation='softmax'))
+model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(train_images, train_labels, epochs=5, batch_size=128)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 5s 85us/step - loss: 0.2569 - acc: 0.9258
+Epoch 2/5
+60000/60000 [==============================] - 5s 84us/step - loss: 0.1037 - acc: 0.9688
+Epoch 3/5
+60000/60000 [==============================] - 5s 87us/step - loss: 0.0685 - acc: 0.9790
+Epoch 4/5
+60000/60000 [==============================] - 5s 85us/step - loss: 0.0508 - acc: 0.9848
+Epoch 5/5
+60000/60000 [==============================] - 5s 87us/step - loss: 0.0368 - acc: 0.9888
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.07560657636675751
+Test accuracy: 0.9777
+</code></pre></div>
+<p>精度能够到97%了。</p>
+<p>下面是Keras代码库examples里面的解决mnist问题的多层感知器，我根据上面的讨论将代码稍微调整下，建模过程如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span><span class="n">Dropout</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">RMSprop</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div>
+<p>区别就是又加了一层神经网络。</p>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 8s 139us/step - loss: 0.2197 - acc: 0.9320
+Epoch 2/5
+60000/60000 [==============================] - 8s 140us/step - loss: 0.0815 - acc: 0.9750
+Epoch 3/5
+60000/60000 [==============================] - 9s 145us/step - loss: 0.0530 - acc: 0.9836
+Epoch 4/5
+60000/60000 [==============================] - 9s 151us/step - loss: 0.0374 - acc: 0.9886
+Epoch 5/5
+60000/60000 [==============================] - 9s 151us/step - loss: 0.0302 - acc: 0.9899
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.08149926771794035
+Test accuracy: 0.9808
+</code></pre></div>
+<p>examples里面还新加入了Dropout层，这个是一种过拟合技术，我们加上之后会如何：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span><span class="n">Dropout</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">RMSprop</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - 10s 162us/step - loss: 0.2439 - acc: 0.9253
+Epoch 2/5
+60000/60000 [==============================] - 10s 169us/step - loss: 0.1031 - acc: 0.9688
+Epoch 3/5
+60000/60000 [==============================] - 9s 151us/step - loss: 0.0760 - acc: 0.9771
+Epoch 4/5
+60000/60000 [==============================] - 10s 165us/step - loss: 0.0604 - acc: 0.9817
+Epoch 5/5
+60000/60000 [==============================] - 9s 155us/step - loss: 0.0512 - acc: 0.9846
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.07319687194137806
+Test accuracy: 0.9814
+</code></pre></div>
+<p>区别其实不大，至少就mnist来说提升最大的是又新加入了一层神经网络，加入Dropout层没看出区别。</p>
+<h2 id="利用keras实现一个多层神经网络">利用keras实现一个多层神经网络</h2>
+<p>卷积神经网络相关后面的讨论补上，这里我们主要来看下Keras代码库examples里面介绍的用CNN，深度学习神经网络来解决mnist问题效果如何。具体理解后面再说。</p>
+<div class="highlight"><pre><span></span><code>import tensorflow as tf
+from keras.datasets import mnist
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>from keras import backend as K
+if K.image_data_format() == 'channels_first':
+    train_images = train_images.reshape(60000, 1, 28, 28)
+    test_images = test_images.reshape(10000, 1, 28, 28)
+    input_shape = (1, 28, 28)
+else:
+    train_images = train_images.reshape(60000, 28, 28, 1)
+    test_images = test_images.reshape(10000, 28, 28, 1)
+    input_shape = (28, 28, 1)
+</code></pre></div>
+<p>这里似乎涉及到不同backend的图形维度选择问题，这个后面再说。</p>
+<div class="highlight"><pre><span></span><code>train_images = train_images.astype('float32')
+train_images = train_images / 255
+test_images = test_images.astype('float32')
+test_images = test_images / 255
+from keras.utils import to_categorical
+train_labels = to_categorical(train_labels)
+test_labels = to_categorical(test_labels)
+</code></pre></div>
+<p>继续之前的数据预处理。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">Flatten</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adadelta</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.25</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softmax'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</code></pre></div>
+<p>本例子跑起来开始有点慢了。Dropout应该不算一层，Flatten我估计不算一层，那么上面例子大概有5层。</p>
+<div class="highlight"><pre><span></span><code>Epoch 1/5
+60000/60000 [==============================] - ETA: 0s - loss: 0.2683 - acc: 0.917 - 119s 2ms/step - loss: 0.2683 - acc: 0.9173
+Epoch 2/5
+60000/60000 [==============================] - 120s 2ms/step - loss: 0.0891 - acc: 0.9734
+Epoch 3/5
+60000/60000 [==============================] - 115s 2ms/step - loss: 0.0655 - acc: 0.9804
+Epoch 4/5
+60000/60000 [==============================] - 111s 2ms/step - loss: 0.0555 - acc: 0.9833
+Epoch 5/5
+60000/60000 [==============================] - 114s 2ms/step - loss: 0.0466 - acc: 0.9856
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.031076731445921907
+Test accuracy: 0.9898
+</code></pre></div>
+<p>例子报道说epochs=12的时候精度能够上升到99%。</p>
+<p>为了公平起见，绝对多层感知器和CNN神经网络这两个例子都按照epochs=12再跑一次来对比一下看看。</p>
+<p>多层感知器：</p>
+<div class="highlight"><pre><span></span><code>Test loss: 0.08958661408673184
+Test accuracy: 0.9821
+</code></pre></div>
+<p>和跑5次没有区别了。</p>
+<p>CNN的看了一下个人PC CPU基本上跑满了，然后GPU没怎么用，tensorflow决定换成tensorflow-gpu 【PS：注意之前你用pip安装tensorflow了的，再安装个tensorflow-gpu即可，原来那个tensorflow包不能删的。】然后再看下。然后发现我这里显卡写着Intel UHD，似乎只有NAVID才能开启gpu，算了。</p>
+<p>CNN神经网络：</p>
+<div class="highlight"><pre><span></span><code>Test loss: 0.028602463609369078
+Test accuracy: 0.992
+</code></pre></div>
+<p>精度提升到了99%，看来CNN多训练几次后续效果还能提升，别小看了这1%的提升啊！</p>
+<h3 id="保存模型">保存模型</h3>
+<p>一次训练有点费时了，那么如何保存训练好的模型呢？这个问题在keras文档FAQ里面有，算是很经典的一个问题了。</p>
+<div class="highlight"><pre><span></span><code>model.save('my_model.h5')
+</code></pre></div>
+<p>保存的数据有：</p>
+<ul>
+<li>模型的结构，方便重新创造模型</li>
+<li>模型训练得到的权重数据</li>
+<li>训练损失和优化器配置</li>
+<li>优化器状态，允许继续上一次训练</li>
+</ul>
+<p>下次使用模型如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+<span class="p">(</span><span class="n">train_images</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">),</span> <span class="p">(</span><span class="n">test_images</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
+<span class="k">if</span> <span class="n">K</span><span class="o">.</span><span class="n">image_data_format</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'channels_first'</span><span class="p">:</span>
+    <span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+    <span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
+<span class="n">test_images</span> <span class="o">=</span> <span class="n">test_images</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">to_categorical</span><span class="p">(</span><span class="n">test_labels</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>from keras.models import load_model
+model = load_model('cnn_for_mnist_model.h5')
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>score = model.evaluate(test_images, test_labels, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Test loss: 0.028602463609369078
+Test accuracy: 0.992
+</code></pre></div>
+<h2 id="机器学习通用工作流程">机器学习通用工作流程</h2>
+<h3 id="定义问题收集数据集">定义问题，收集数据集</h3>
+<ul>
+<li>你的输入数据是什么？你要预测什么？</li>
+<li>你面对的是什么类型的问题？是二分类问题还是多分类问题等等。</li>
+</ul>
+<h3 id="选择衡量成功的指标">选择衡量成功的指标</h3>
+<p>模型要优化什么，它应该直接和你的业务目标相关。</p>
+<h3 id="确定评估方法">确定评估方法</h3>
+<ul>
+<li>留出验证集 数据量很大的时候采用 
+  具体操作就是训练数据里面一部分作为训练集，剩下来的一部分作为验证集，然后用训练集训练，验证集评估当前模型的好坏。模型参数调节好训练好之后，记得最后用整个训练集从头训练一次，最后用另外的测试集数据测试下模型的实际效果。</li>
+<li>K折交叉验证</li>
+<li>重复的K折验证</li>
+</ul>
+<h3 id="准备数据_1">准备数据</h3>
+<h4 id="数据张量化">数据张量化</h4>
+<p>神经网络的所有输入和输出目标都必须是浮点数张量（某些情况下可以是整数张量）。无论面对的是声音，文本，图像还是视频，都必须先将其转换成为张量。</p>
+<h4 id="数据标准化">数据标准化</h4>
+<p>之前我们看到的数据标准化情况有：</p>
+<ul>
+<li>图像0-255数据整除缩减到 0-1 数据区间</li>
+<li>如果是多个特征的数据，那么推荐如前面提及的进行z-score的标准化处理</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">mean</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">-=</span> <span class="n">mean</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">/=</span> <span class="n">std</span>
+</code></pre></div>
+<h4 id="处理缺失值">处理缺失值</h4>
+<p>对于神经网络来说，将缺失值设置为 <code>0</code> 是安全的。</p>
+<h4 id="特征工程">特征工程</h4>
+<p>比如自然语言处理，根据自然语言处理学到的知识，选择二元模型对输入数据进行再处理。</p>
+<ul>
+<li>良好的特征工程仍然可以让你用更少的资源更优雅地解决问题</li>
+<li>良好的特征可以让你用更少的数据解决问题</li>
+</ul>
+<h3 id="开发比基准更好的模型">开发比基准更好的模型</h3>
+<p>简单来说就是先随便开发一个小模型，要求不要太高，但至少要比随机乱猜准确率要高点的模型。</p>
+<h3 id="扩大模型规模开发过拟合模型">扩大模型规模，开发过拟合模型</h3>
+<p>一般是：</p>
+<ul>
+<li>添加更多的层</li>
+<li>让每一层变得更大</li>
+<li>训练更多次数</li>
+</ul>
+<p>要始终监控训练损失和验证损失，如果你发现模型随着训练次数增加在验证数据上性能下降了，那么就出现了过拟合。</p>
+<h3 id="模型正则化与调节超参数">模型正则化与调节超参数</h3>
+<p>这一步是最费时间的：你将不断调节模型，训练，验证，再调节模型... 。下面是一些你可能尝试的手段</p>
+<h4 id="添加dropout层">添加Dropout层</h4>
+<p>Dropout层是深度学习之父Hinton和他的学生首次提出来的，它的原理很简单：对某一层使用dropout即该层在训练的时候会随机舍弃一些输出特征（也就是值变为0）。dropout比率是被设为0的特征所占的比例，一般设0.2~0.5之间。</p>
+<p>添加Dropout层是最有效也最常用的正则化方法——正则化指降低过拟合。</p>
+<h4 id="尝试增加或者减少层">尝试增加或者减少层</h4>
+<p>一般实践中开始会选择较少的层和节点数，然后逐渐增加之，直到这种增加对验证损失影响变得很小。</p>
+<h4 id="尝试l1-l2正则化">尝试L1 L2正则化</h4>
+<p>L1正则化和L2正则化都属于权重正则化，这是一种降低过拟合的方法，强制让模型权重只能取较小的值。</p>
+<h4 id="尝试不同的超参数">尝试不同的超参数</h4>
+<p>如每层的单元个数，优化器的学习率等。</p>
+<h2 id="附录">附录</h2>
+<h3 id="relu激活函数">relu激活函数</h3>
+<p>relu激活函数具体的数学运算公式很简单，就是：</p>
+<div class="highlight"><pre><span></span><code>z = np.maximum(z, 0)
+</code></pre></div>
+<p>上面运算就是对z张量进行了relu运算了，按元素的，如果元素值大于0则为原元素的值，否则为0。</p>
+<h3 id="广播broadcasting">广播(broadcasting)</h3>
+<p>广播一种操作，shape较小的张量和shape较大的张量进行点对点运算时，需要对shape较小的张量进行广播操作，使其在运算上shape兼容。</p>
+<p>广播具体操作规则是：</p>
+<ul>
+<li>shape较小的张量添加新的维度是的两个张量维度数相同</li>
+<li>shape较小的张量在新的维度中的数据是重复的，相当于没有原维度的数据，即： y[1,j] = y[2,j] = y[3,j] =... y[j]</li>
+</ul>
+<h3 id="张量点积">张量点积</h3>
+<p>矩阵乘法也就是这里的张量点积学过线性代数的对这个概念还是很清楚了，不过到更高的维度的张量的点积情况似乎有点复杂了。这里我们需要把张量点积的shape变化弄清楚，后面可能会有用的，具体实际张量运算可以交给函数去做。
+<div class="math">$$
+x \cdot y = z
+$$</div>
+x shape (a, b) y shape (b,c) 输出 z的 shape(a, c) </p>
+<p>高维的情况如下：</p>
+<p>(a, b, c ,d) · (d,) -&gt; (a,b,c)</p>
+<p>(a, b, c ,d) · (d, e) -&gt; (a,b,c, e)</p>
+<h3 id="张量变形">张量变形</h3>
+<p>ndarray可以直接调用reshape方法来进行张量变形操作，变形后元素总个数应该不变，也就是各个维度容量乘积数不变。</p>
+<h3 id="张量的导数">张量的导数</h3>
+<p>张量的导数叫做梯度。</p>
+<h3 id="随机梯度下降sgd">随机梯度下降(SGD)</h3>
+<p>小批量SGD过程如下：</p>
+<ol>
+<li>抽取训练样本x和对应目标y组成数据批量</li>
+<li>在x上运行网络，得到预测值y_pred</li>
+<li>计算网络在这批数据上的损失，用于衡量y_pred和y之间的距离</li>
+<li>计算损失相对于网络参数的梯度</li>
+<li>将参数沿着梯度的反方向移动一点 W -= step * gradient ，从而使这批数据上的损失减小一点。这里的step即步长也叫学习率。</li>
+</ol>
+<p>目前实践中的优化器optimizer都采用的是随机梯度下降，不同的是各自进行了某些优化，这些SGD变体有：带动量的SGD，Adagrad，RMSProp等。</p>
+<h3 id="均值移除">均值移除</h3>
+<p>我更喜欢称之为z-score缩放，因为学习过统计学的就知道z-score标准分的含义，大体也知道这个缩放操作在做些什么事情。简单来说就是讲你的张量数据沿着各个特征维度，均值都为0，标准差都为1。</p>
+<p>sklearn提供了 <code>StandardScaler</code> ，然后你利用它进行fit和tranform操作即可，你还可以继续利用之前的缩放器反向回滚 <code>inverse_transform</code>。</p>
+<h3 id="minmax缩放">minmax缩放</h3>
+<p>就是控制你的张量数据的最小值和最大值范围。</p>
+<p>sklearn提供了 <code>MinMaxScaler</code> 缩放器类，类似上面的你可以进行fit和tranform操作，同样可以利用之前的缩放器进行回滚操作。</p>
+<h3 id="归一化">归一化</h3>
+<p>sklearn提供了normalize函数来支持你的张量数据的归一化操作，这是一个不可逆的操作。具体就是让特征维度的数据绝对值之和为1。</p>
+<h3 id="二值化">二值化</h3>
+<p>就是给定一个阈值，你的张量数据转变成为0 1 值。这个估计在神经网络中有用。</p>
+<h3 id="onehot编码">onehot编码</h3>
+<p>onehot编码可以算是神经网络里面的基本入门知识了，简单来说就是将 数值或者字符 编码为空间扩展的  0 1 数值特征向量。 具体sklearn提供了 <code>OneHotEncoder</code> 来进行相关操作。</p>
+<p>比如说 </p>
+<div class="highlight"><pre><span></span><code>[
+    ['male', 10],
+    ['female',5],
+    ['male', 1]
+]
+</code></pre></div>
+<p>其中性别特征列有值 male female 两个值 这一列需要两个bit位 。
+而后面的数字列有 1 5 10 三个值   这个特征列需要三个bit位 。
+上面的例子一共需要 5 个bit位。</p>
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">'male'</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">'female'</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">'male'</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">get_onehot_encoder</span><span class="p">()</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">([[</span><span class="s1">'female'</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+</code></pre></div>
+<p>上面的例子中 <code>1 0</code> 表示 female <code>0 0 1</code> 表示 10 。</p>
+<h3 id="label编码">label编码</h3>
+<p>label编码的含义也是很直接简单的，就是给定一个字典值，然后给这些字典里面的单词赋值0,2,3...这样你的张量数据就变成了数值型了。</p>
+<p>具体sklearn提供了 <code>LabelEncoder</code> 来进行相关操作。</p>
+<h3 id="计算误差">计算误差</h3>
+<h4 id="平均绝对误差mae">平均绝对误差MAE</h4>
+<p>数据集所有数据点的绝对误差的平均值</p>
+<div class="highlight"><pre><span></span><code>import sklearn.metrics as sm
+sm.mean_absolute_error(test_data, test_pred)
+</code></pre></div>
+<h4 id="均方误差mse">均方误差MSE</h4>
+<p>数据集所有数据点的误差的平方的平均值</p>
+<div class="highlight"><pre><span></span><code>sm.mean_squared_error(test_data, test_pred)
+</code></pre></div>
+<h4 id="均方根误差rmse">均方根误差RMSE</h4>
+<p>均方误差开个根号，为了更好地描述模型的误差</p>
+<h4 id="中位数绝对误差">中位数绝对误差</h4>
+<p>数据集所有数据点的误差的中位数</p>
+<div class="highlight"><pre><span></span><code>sm.median_absolute_error(test_data, test_pred)
+</code></pre></div>
+<h4 id="解释方差分">解释方差分</h4>
+<p>这个分数用来衡量我们的模型对于数据集波动的解释能力</p>
+<div class="highlight"><pre><span></span><code>sm.explained_variance_score(test_data, test_pred)
+</code></pre></div>
+<h4 id="r方得分-r2-score">R方得分 R2 score</h4>
+<p>用来衡量模型对于未知样本的预测效果。</p>
+<div class="highlight"><pre><span></span><code>sm.r2_score(test_data, test_pred)
+</code></pre></div>
+<h1 id="参考资料">参考资料</h1>
+<ol>
+<li>机器学习实战 Peter Harrington 著 李锐 李鹏等译</li>
+<li><a href="http://ml.apachecn.org/mlia/">机器学习实战线上教程</a></li>
+<li>python深度学习 弗朗索瓦·肖奈</li>
+<li><a href="https://github.com/exacity/deeplearningbook-chinese">deep learning 中文版</a></li>
+<li>机器学习 周志华著</li>
+<li><a href="https://www.cnblogs.com/subconscious/p/5058741.html">这个文章介绍神经网络写的很好</a></li>
+<li><a href="https://blog.csdn.net/weixin_40040404/article/details/81291799">这篇文章不错</a></li>
+<li>python机器学习经典案例 Prateek Joshi 著  陶俊杰 陈小莉译</li>
+</ol>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [["$$", "$$"], ['\\[', '\\]']],
+    packages: {
+      '[+]': ['mhchem']
+    }
+  },
+  loader: {
+    load: ['[tex]/mhchem']
+  },
+}
+</script>
+<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>{{ page.title|striptags|e }} {%if page.subtitle %} - {{ page.subtitle|striptags|e }} {% endif %} -
+    {{ SITENAME|striptags|e }}</title>
+{% endblock title %}
+
+{% block head_description %}
+{%- if page.summary %}
+{{ page.summary|striptags|e |truncate(150, True)}}
+{% endif %}
+{%- endblock head_description %}
+
+{% block meta_tags_in_head %}
+{{ super() }}
+{% if page.keywords %}
+<meta name="keywords" content="{{ page.keywords }}" />
+{% endif %}
+{% endblock meta_tags_in_head %}
+
+{% block head_links %}
+{{super()}}
+<link rel="stylesheet" href="{{ SITEURL }}/theme/css/article.css">
+{% endblock head_links %}
+
+{% block content %}
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="{{ SITEURL }}/{{ page.url }}"> {{ page.title }} {%if page.subtitle %} <small> {{
+                        page.subtitle }} </small> {% endif %} </a></h1>
+        </header>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                {% if page.toc %}
+                <div style="font-size:1.2rem;">目录</div>
+                {{ page.toc }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                {{ page.content }}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{{super()}}
+<script src="{{ SITEURL }}/theme/js/article.js"></script>
+{% endblock script %}

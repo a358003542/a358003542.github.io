@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>{{ article.bookname|striptags|e }} - {{ article.bookauthor | striptags | e}} -  {{ SITENAME|striptags|e }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-3">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-11 col-lg-10">
+            <div class="page-header">
+                <h1><a href="{{ SITEURL }}/{{ article.url }}"> {{ article.bookname }} </a></h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-11 col-lg-10">
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2">
+                <div class="col">
+                    <img class="img-fluid" src="{{article.bookcover }}" alt="book cover">
+                </div>
+
+
+                <div class="col">
+                    <div class="">
+                        作者：{%- for author in article.bookref_authors -%}
+                        <a href="{{ SITEURL }}/{{author.url}}">{{author.name}}</a> {{ " & " if not loop.last else "" }}
+                        {% endfor %}
+                    </div>
+
+                    {% if article.category|trim|count > 0 %}
+                    <div class="">
+                        分类：<a class="category-link" href="{{ SITEURL }}/categories.html#{{ category.slug }}-ref">{{
+                            article.category
+                            }}</a>
+                    </div>
+                    {% endif %}
+
+                    {% if article.tags and article.tags[0]|trim|count > 0 %}
+                    <div class="">
+                        标签：
+                        <ul class="list-of-tags tags-in-article">
+                            {% for tag in article.tags|sort %}
+                            <li><a href="{{ SITEURL }}/tags.html#{{ tag.slug }}-ref">{{ tag }}
+                                    {% for aTag, tagged_articles in tags if aTag == tag %}
+                                    <span>{{ tagged_articles|count }}</span>
+                                    {% endfor %}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+
+                    {% if article.bookpublisher %}
+                    <div class="">
+                        出版商：{{ article.bookpublisher}}
+                    </div>
+                    {% endif %}
+
+                    {% if article.booklanguage %}
+                    <div class="">
+                        语言：{{ article.booklanguage}}
+                    </div>
+                    {% endif %}
+
+                    {% if article.bookbaidupandownloadurl %}
+                    <div class="">
+                        <a class="btn btn-primary" target="_blank" href="{{article.bookbaidupandownloadurl}}"><span
+                                class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            百度盘下载
+                        </a>
+                        提取码是：{{ article.bookbaidupandownloadcode }}
+                    </div>
+                    {% endif %}
+
+                    {% if article.bookbaidupandirectdownloadurl %}
+                    <div class="">
+                        <a class="btn btn-primary" target="_blank" href="{{article.bookbaidupandirectdownloadurl}}"><span
+                                class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            百度盘直接下载
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if article.onedrivedownloadurl %}
+                    <div class="">
+                        <a class="btn btn-primary" target="_blank" href="{{article.onedrivedownloadurl}}"><span
+                                class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            onedrive下载
+                        </a>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+
+                    {% if article.toc %}
+                    <h2>书籍目录<h2></h2>
+                        {{ article.toc }}
+                        {% endif %}
+
+                        <h2>书籍简介</h2>
+                        {{ article.content }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

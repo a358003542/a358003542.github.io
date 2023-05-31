@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="requests模块 具体网络编程推荐使用requests模块，这是requests的 官网 ，这是中文文档的 链接 。更多信息请参看官方文档。 安装 安装推荐使用pip或者pip3命令简便安装之。 HTTP基本协议支持 下面这 …" />
+
+
+<meta name="keywords" content="python, 计算机 - 编程 - python, " />
+
+<title>requests模块  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/requests-module.html"> requests模块  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#requests模块">requests模块</a><ul>
+<li><a href="#安装">安装</a></li>
+<li><a href="#http基本协议支持">HTTP基本协议支持</a></li>
+<li><a href="#返回的reponse响应对象">返回的reponse响应对象</a></li>
+<li><a href="#异常">异常</a></li>
+<li><a href="#会话">会话</a></li>
+<li><a href="#响应体的content">响应体的content</a></li>
+<li><a href="#身份验证">身份验证</a></li>
+<li><a href="#代理">代理</a></li>
+</ul>
+</li>
+<li><a href="#附录">附录</a><ul>
+<li><a href="#urllibrequest内置模块">urllib.request内置模块</a></li>
+<li><a href="#关于http的补充理论知识">关于HTTP的补充理论知识</a></li>
+<li><a href="#参考资料">参考资料</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.445771+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#python-ref">python<span>18</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="requests模块">requests模块</h2>
+<p>具体网络编程推荐使用requests模块，这是requests的 <a href="http://docs.python-requests.org/en/latest/">官网</a> ，这是中文文档的 <a href="http://cn.python-requests.org/zh_CN/latest/">链接</a> 。更多信息请参看官方文档。</p>
+<h3 id="安装">安装</h3>
+<p>安装推荐使用pip或者pip3命令简便安装之。</p>
+<h3 id="http基本协议支持">HTTP基本协议支持</h3>
+<p>下面这几个函数一看名字就知道对应的是HTTP的GET，POST，PUT和DELETE方法，然后HTTP的冷门方法HEAD和OPTIONS requests模块有类似的head函数和options函数。</p>
+<h4 id="get函数">get函数</h4>
+<p>这是之前第一个例子的改写：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'https://www.google.com.cn'</span><span class="p">,</span><span class="s1">'https://www.google.com'</span><span class="p">,</span>
+    <span class="s1">'http://www.google.com.cn'</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+</code></pre></div>
+<p>这里使用get函数对应HTTP的GET方法来获取网页的内容，然后注意现在 <span class="underline">不能通过socket全局设置timeout了</span> ，而需要设置一个timeout参数。提取文本内容简单的调用text属性即可，后面是一些错误捕捉，这里就不赘述了。</p>
+<h5 id="params参数">params参数</h5>
+<p>params参数就是给url加入一些关键词和值等，带点前面提及的urlencode函数的功能，但整个语句更加简洁方便了。下面通过类似前面的例子来演示之：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">urllib</span><span class="c1">###use the urlparse</span>
+
+<span class="n">search_engines</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">'http://www.baidu.com/s'</span><span class="p">,</span>
+    <span class="s1">'http://www.zhihu.com/search'</span><span class="p">,</span>
+    <span class="s1">'http://stackoverflow.com/search'</span><span class="p">,</span>
+    <span class="s1">'http://www.ask.com/web'</span><span class="p">,</span>
+    <span class="s1">'http://search.yahoo.com/search'</span><span class="p">,</span>
+    <span class="s1">'http://cn.bing.com/search'</span><span class="p">,</span>
+    <span class="s1">'https://www.google.com/#'</span><span class="p">,</span>
+    <span class="s1">'https://zh.wikipedia.org/w/index.php'</span><span class="p">,</span>
+    <span class="s1">'https://en.wikipedia.org/wiki/'</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">addGETparams</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">search_string</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span> <span class="o">==</span> <span class="s1">'www.baidu.com'</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'wd'</span><span class="p">:</span><span class="n">search_string</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'www.zhihu.com'</span><span class="p">,</span><span class="s1">'stackoverflow.com'</span><span class="p">,</span><span class="s1">'cn.bing.com'</span><span class="p">,</span>
+        <span class="s1">'www.ask.com'</span><span class="p">,</span><span class="s1">'www.google.com'</span><span class="p">]:</span>
+        <span class="k">return</span>  <span class="p">{</span><span class="s1">'q'</span><span class="p">:</span><span class="n">search_string</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'search.yahoo.com'</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'p'</span><span class="p">:</span><span class="n">search_string</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'zh.wikipedia.org'</span><span class="p">,</span><span class="s1">'en.wikipedia.org'</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'search'</span><span class="p">:</span><span class="n">search_string</span><span class="p">}</span>
+
+<span class="n">search_engine</span> <span class="o">=</span> <span class="n">search_engines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">addGETparams</span><span class="p">(</span><span class="n">search_engine</span><span class="p">,</span> <span class="s1">'python'</span><span class="p">)</span>
+
+<span class="n">pyout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.html'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">search_engine</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="n">pyout</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+
+<span class="n">pyout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<p>其中search_engin的原始url做了一些修改，使得语法更加的简洁了。</p>
+<h4 id="post函数">post函数</h4>
+<p>和get函数一样如下使用：</p>
+<div class="highlight"><pre><span></span><code>response = requests.put("http://httpbin.org/put")
+</code></pre></div>
+<h5 id="data参数">data参数</h5>
+<p>data参数，就是POST方法实际传输过去的数据，可以是字符串，字典值，或者json数据（需要用json模块的dumps函数处理之）。</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; payload = {'key1': 'value1', 'key2': 'value2'}
+&gt;&gt;&gt; r = requests.post("http://httpbin.org/post", data=payload)
+</code></pre></div>
+<h5 id="headers属性">headers属性</h5>
+<p>接受一个字典值，用于定制POST方法的HTTP请求头。</p>
+<h3 id="返回的reponse响应对象">返回的reponse响应对象</h3>
+<p>上面这些函数返回的reponse对象</p>
+<h4 id="url属性">url属性</h4>
+<p>返回响应具体的url</p>
+<h4 id="text属性">text属性</h4>
+<p>返回响应的文本内容</p>
+<h4 id="encoding属性">encoding属性</h4>
+<p>返回响应的encoding。</p>
+<h4 id="content属性">content属性</h4>
+<p>返回的是响应的二进制形式。我们可以利用这个属性来下载文件。下面这个 <code>download_file</code> 函数参考了 <a href="http://stackoverflow.com/questions/16694907/how-to-download-large-file-in-python-with-requests-py">这个网页</a> 。</p>
+<p>注意这里用了 <code>stream = True</code> 参数设置，然后</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">filefold</span><span class="o">=</span><span class="s1">'download'</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">'''简单的根据url下载文件函数，filefold为下载文件存放的下一级文件夹名'''</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">filefold</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">'./'</span> <span class="o">+</span> <span class="n">filefold</span> <span class="o">+</span><span class="s1">'/'</span> <span class="o">+</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># NOTE the stream=True parameter</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span> <span class="c1"># filter out keep-alive new chunks</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">filename</span>
+</code></pre></div>
+<h4 id="json方法">json方法</h4>
+<p>如果响应是json文件，那么调用这个方法就自动将json文件解码了（相当于json模块的loads）。</p>
+<h4 id="status_code属性">status_code属性</h4>
+<p>具体响应的状态码，如404之类的。</p>
+<h4 id="headers方法">headers方法</h4>
+<p>服务器响应的HTTP头信息。</p>
+<h4 id="allow_redirects">allow_redirects</h4>
+<p>GET OPTIONS POST PUT PATCH DELETE 这些方法重定向默认打开 True
+然后HEAD方法默认重定向关闭。</p>
+<h4 id="timeout参数">timeout参数</h4>
+<p>timeout参数控制，如果超时则将抛出 <code>requests.exceptions.Timeout</code> 异常。</p>
+<h3 id="异常">异常</h3>
+<p>下面这些异常了解下：</p>
+<p>遇到网络问题（如：DNS查询失败、拒绝连接等）时，Requests会抛出一个 ConnectionError 异常。</p>
+<p>遇到罕见的无效HTTP响应时，Requests则会抛出一个 HTTPError 异常。</p>
+<p>若请求超时，则抛出一个 Timeout 异常。</p>
+<p>若请求超过了设定的最大重定向次数，则会抛出一个 TooManyRedirects 异常。</p>
+<p>所有Requests显式抛出的异常都继承自 requests.exceptions.RequestException 。</p>
+<h3 id="会话">会话</h3>
+<p>会话对象可以跨多个requests请求对象保持相同的某些参数设置，比如cookies等。</p>
+<p>Session对象有requests API的所有方法，即get，post之类。会话对象之前设置的那些参数都会保留在那里，后面调用的get方法还可以加上额外的一些参数设置，如下所示:</p>
+<div class="highlight"><pre><span></span><code>s = requests.Session()
+s.auth = ('user', 'pass')
+s.headers.update({'x-test': 'true'})
+
+# both 'x-test' and 'x-test2' are sent
+s.get('http://httpbin.org/headers', headers={'x-test2': 'true'})
+</code></pre></div>
+<h4 id="ssl验证">SSL验证</h4>
+<p>加上 <code>verify=True</code> 即要求对目标主机进行SSL验证。</p>
+<h3 id="响应体的content">响应体的content</h3>
+<p>对于响应体含有content却内容较多的情况，可以通过 <code>Stream=True</code> 来让推迟content下载，而只获取header信息。后面遇到 <code>response.content</code> 才实际下载content。</p>
+<p>然后还有 <code>Response.iter_content</code> 和 <code>Response.iter_lines</code> 方法来控制工作流，或者以 <code>Response.raw</code> 通过底层urllib3来读取响应对象。</p>
+<h4 id="responseiter_content">response.iter_content</h4>
+<div class="highlight"><pre><span></span><code>iter_content(chunk_size=1, decode_unicode=False)
+</code></pre></div>
+<p>迭代读取响应体的content内容，设置一次读取多少 <code>chunk_size</code> 。</p>
+<h4 id="responseiter_lines">response.iter_lines</h4>
+<div class="highlight"><pre><span></span><code>iter_lines(chunk_size=512, decode_unicode=None)
+</code></pre></div>
+<p>迭代读取响应体的content内容，一次读一行。行的内容应该小于chunk_size，一般不设置即可。</p>
+<h3 id="身份验证">身份验证</h3>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from requests.auth import HTTPBasicAuth
+&gt;&gt;&gt; requests.get('https://api.github.com/user', auth=HTTPBasicAuth('user', 'pass'))
+&lt;Response [200]&gt;
+&gt;&gt;&gt; requests.get('https://api.github.com/user', auth=('user', 'pass'))
+&lt;Response [200]&gt;
+</code></pre></div>
+<h3 id="代理">代理</h3>
+<div class="highlight"><pre><span></span><code>import requests
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>proxies = {
+  "http": "http://10.10.1.10:3128",
+  "https": "http://10.10.1.10:1080",
+}
+
+requests.get("http://example.org", proxies=proxies)
+</code></pre></div>
+<h2 id="附录">附录</h2>
+<h3 id="urllibrequest内置模块">urllib.request内置模块</h3>
+<p>urllib.request模块我们可以在这里稍微了解一下，其是python官方对于这一块的支持实现，可以作为参考来了解requests模块为何相比较官方模块更好用一点。</p>
+<h4 id="urlopen函数">urlopen函数</h4>
+<p>urlopen函数在urllib模块的request子模块，其提供了简单的获取目标url网页内容的接口。一个简单的例子如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'https://www.google.com.cn'</span><span class="p">,</span><span class="s1">'https://www.google.com'</span><span class="p">,</span>
+    <span class="s1">'http://www.google.com.cn'</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</code></pre></div>
+<p>为什么刚开始就用这么一个稍显复杂的例子作为演示，well，天朝网络的特色。如果你用百度的url <code>http://www.baidu.com</code> ，可能大部分情况下你都不用操心这些问题，但既然我们处在天朝网络这个大背景下，还是早点介绍这个。这个例子的返回的error种类似乎间接地反映了GFW的工作原理。</p>
+<p>比如google的.com.cn的https连接还能正常工作（目前暂时。。），只是有时会有点慢，然后其http连接则会返回404错误，这是天朝网络常见的网络错误了，大家的分析是GFW进行了dns投毒。而对于google的.com连接不管是http或者https连接都会返回OSError错误，说的是：Network is unreachable，这表明GFW对于后缀google.com的url采取的完全硬件级别的网络掐断。</p>
+<p>然后urlopen函数第一个参数是url连接这不用多说，其还有很多可选项，其中很重要的参数就是 <strong>timeout</strong> 参数，这个和socket套接字的工作模式相关。如果不加上这个timeout参数，对于某些被墙的网站就会一直尝试然后程序陷入卡死状态了。在后面会介绍 <strong>urlretrieve</strong> 函数，也在这个urllib.request模块下面，这个函数可以用于网络下载东西，其并没有内置的timeout参数，不过可以通过设置全局网络socket的timeout（前面socket模块的setdefaulttimeout函数），这个全局timeout最好设置得稍微大一点。</p>
+<p>这里的套接字socket的timeout参数就是控制阻塞时间的，因为有些网络数据不可能一次就传递完，好比下载过程一样的有个时间，而这个timeout就是控制这个下载时间的，如果超过这个时间了那么直接返回错误。这里有个问题，就是这个程序默认全局socket的timeout都设置为10秒，那么会不会以后用urlretrieve函数下载某个东西，本身就要求超过10秒？参看requests文档的 <a href="http://cn.python-requests.org/zh_CN/latest/user/quickstart.html#id10">这里</a> ，其对timeout有很好的解释，他说timeout仅对连接过程有效，与响应体的下载无关。</p>
+<p>因为网络上的情况比较复杂，关于网络的这些异常处理是不可回避的话题。上面虽然只是一个简单读取网页的程序也跟上了这么多异常捕捉，不是为了偏执的追求程序的健壮，而是必要的必须做的工作。</p>
+<h5 id="返回的是什么">返回的是什么</h5>
+<p>urlopen函数返回的是urllib.response模块的Response对象，其提供了一些简单的文件风格的操作接口，比如 <code>read()</code> 方法， <code>readline()</code> 方法，需要记住的是read之后返回的是 <strong>bytes流</strong> 。</p>
+<p>这个Response对象还有 <code>geturl()</code> 方法，其返回具体的url字符串，还有 <code>info()</code> 方法，其返回一个字典值，里面有一些关于网页的基本信息。这个请读者自己试验一下。</p>
+<h5 id="httperror和urlerror异常">HTTPError和URLError异常</h5>
+<div class="highlight"><pre><span></span><code>from urllib.error import HTTPError
+</code></pre></div>
+<p>HTTPError是URLError的子类，URLError是OSError的子类，而OSError是不要加载模块就可以直接引用的，所以简单的处理就用OSError来捕捉。</p>
+<h5 id="contenttooshorterror异常">ContentTooShortError异常</h5>
+<div class="highlight"><pre><span></span><code>from urllib.error import ContentTooShortError
+</code></pre></div>
+<p>当 <strong>urlretrieve</strong> 函数下载的数据量少于预期的数据量时返回这个错误。</p>
+<h4 id="访问网页得到401-error">访问网页得到401 error</h4>
+<p>这里以路由器为例 <code>192.168.1.1</code> 或者 <code>192.168.0.1</code> 等，上面的小脚本我们稍作修改有：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s1">'http://192.168.1.1'</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="s1">' need password, the 401 error'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+</code></pre></div>
+<p>运行会返回：</p>
+<div class="highlight"><pre><span></span><code>http://192.168.1.1  need password, the 401 error
+</code></pre></div>
+<p>返回了401异常，那么这个网页需要经过网页认证才能访问。下面是一个简单的小脚本附带网页认证功能：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">build_opener</span><span class="p">,</span> <span class="n">HTTPBasicAuthHandler</span><span class="p">,</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">import</span> <span class="nn">getpass</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s1">'http://192.168.1.1'</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"Username:"</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'try...'</span><span class="p">,</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="n">auth_handler</span> <span class="o">=</span> <span class="n">HTTPBasicAuthHandler</span><span class="p">()</span>
+    <span class="n">auth_handler</span><span class="o">.</span><span class="n">add_password</span><span class="p">(</span><span class="n">realm</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span><span class="n">uri</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span><span class="n">passwd</span> <span class="o">=</span> <span class="n">password</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opener</span> <span class="o">=</span> <span class="n">build_opener</span><span class="p">(</span><span class="n">auth_handler</span><span class="p">)</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+        <span class="c1">###install it gloably so urlopen can use it</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'I found it'</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="s1">' need password, the 401 error'</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+</code></pre></div>
+<p>这里的getpass内置模块的getpass函数提供了终端输入密码不显示的功能。然后我们看到 <code>build_opener()</code> 这个函数，其可以接受一系列的handler，根据 <code>HTTPBasicAuthHandler</code> 创建了一个handler实例，其通过 <code>add_password</code> 方法来加入用户名和密码属性，其中realm和uri我还不清楚。似乎通过你要认证的网页head可以看到。</p>
+<p>然后调用urllib子模块request的 <code>install_opener</code> 函数，其将全局性的安装这个openr，后面的urlopen函数就会使用这个opener了。如果不这样做，则需要使用opener.open单独打开一个response，这并不推荐。</p>
+<h4 id="加上代理功能来翻墙">加上代理功能来翻墙</h4>
+<p>现在我们修改最初的那个第一个例子，加入代理功能，从理论上这样写似乎应该可以了，但是并没有效果，GFW还是很强大地。。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span><span class="p">,</span> <span class="n">build_opener</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'https://www.google.com.cn'</span><span class="p">,</span><span class="s1">'https://www.google.com'</span><span class="p">,</span>
+    <span class="s1">'http://www.google.com.cn'</span><span class="p">]</span>
+
+<span class="n">proxy_handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s1">'http'</span><span class="p">:</span><span class="s1">'http://127.0.0.1:8580/'</span><span class="p">})</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy_handler</span><span class="p">)</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="通过修改url来get数据">通过修改url来GET数据</h4>
+<p>下面开始对接各个搜索引擎。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1">#search_engine = 'http://www.baidu.com/'</span>
+<span class="c1">#search_engine = 'http://www.zhihu.com/'</span>
+
+<span class="n">search_engine</span> <span class="o">=</span> <span class="s1">'http://stackoverflow.com/'</span>
+
+<span class="k">def</span> <span class="nf">addGETdata</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span> <span class="o">==</span> <span class="s1">'www.baidu.com'</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">url</span> <span class="o">+</span> <span class="s1">'s?'</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span><span class="s1">'wd'</span><span class="p">:</span><span class="n">string</span><span class="p">})</span>
+    <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'www.zhihu.com'</span><span class="p">,</span><span class="s1">'stackoverflow.com'</span><span class="p">]:</span>
+        <span class="k">return</span>  <span class="n">url</span> <span class="o">+</span> <span class="s1">'search?'</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span><span class="s1">'q'</span><span class="p">:</span><span class="n">string</span><span class="p">})</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="n">addGETdata</span><span class="p">(</span><span class="n">search_engine</span><span class="p">,</span> <span class="s1">'python urllib'</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">pyout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.html'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">html</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="n">pyout</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</code></pre></div>
+<p>这里主要要讲的是addGETdata这个函数，其修改url为目标形式，然后后面都是一样的，这个要根据具体目标搜索引擎网站来了。</p>
+<h4 id="通过post方法来获取数据">通过POST方法来获取数据</h4>
+<p>这个不太灵活，我们看到前面baidu和zhihu两个并不相同，而如果采用POST方法，默认是加入的中缀search?，这有时不太适合，其次采用POST方法需要给自己伪装头部，否则有些网站会禁止你。这个方法略过了。就直接通过修改url来GET已经很简单了。</p>
+<h3 id="关于http的补充理论知识">关于HTTP的补充理论知识</h3>
+<p>HTTP协议就支持四种方法：</p>
+<ul>
+<li><strong>GET:</strong> 从web service 那里提取信息</li>
+<li><strong>POST:</strong> 往web service 那里发送信息</li>
+<li><strong>PUT:</strong> 在web service 那里更新信息</li>
+<li><strong>DELETE:</strong> 在web service 那里删除信息</li>
+</ul>
+<h4 id="get和post的区别">GET和POST的区别</h4>
+<p>参考了 <a href="http://blog.csdn.net/gideal_wang/article/details/4316691">这个网页</a> 。前面谈及的修改网页的url来获取资源，实质就是HTTP的GET方法，也就是GET方法的信息就放在url上的，然后web service服务器会分析这些url，从而相应的决定对客户机的回应方式。而POST方法并不修改url，web service服务器接受的url上并没有任何额外的信息，具体POST方法具体会另外传输一个信息包。一般能够通过GET方法和服务器互动的就采用GET方法，但因为url的局限性，可能某些GET方法并不适用，这是就需要服务器支持对应的POST方法来互动了。至于PUT还有DELETE方法就更加少用了，有些服务器甚至根本就不支持这些冷门的方法。</p>
+<h4 id="http返回错误码含义">HTTP返回错误码含义</h4>
+<div class="highlight"><pre><span></span><code>100: ('Continue', 'Request received, please continue'),
+    101: ('Switching Protocols',
+          'Switching to new protocol; obey Upgrade header'),
+
+    200: ('OK', 'Request fulfilled, document follows'),
+    201: ('Created', 'Document created, URL follows'),
+    202: ('Accepted',
+          'Request accepted, processing continues off-line'),
+    203: ('Non-Authoritative Information', 'Request fulfilled from cache'),
+    204: ('No Content', 'Request fulfilled, nothing follows'),
+    205: ('Reset Content', 'Clear input form for further input.'),
+    206: ('Partial Content', 'Partial content follows.'),
+
+    300: ('Multiple Choices',
+          'Object has several resources -- see URI list'),
+    301: ('Moved Permanently', 'Object moved permanently -- see URI list'),
+    302: ('Found', 'Object moved temporarily -- see URI list'),
+    303: ('See Other', 'Object moved -- see Method and URL list'),
+    304: ('Not Modified',
+          'Document has not changed since given time'),
+    305: ('Use Proxy',
+          'You must use proxy specified in Location to access this '
+          'resource.'),
+    307: ('Temporary Redirect',
+          'Object moved temporarily -- see URI list'),
+
+    400: ('Bad Request',
+          'Bad request syntax or unsupported method'),
+    401: ('Unauthorized',
+          'No permission -- see authorization schemes'),
+    402: ('Payment Required',
+          'No payment -- see charging schemes'),
+    403: ('Forbidden',
+          'Request forbidden -- authorization will not help'),
+    404: ('Not Found', 'Nothing matches the given URI'),
+    405: ('Method Not Allowed',
+          'Specified method is invalid for this server.'),
+    406: ('Not Acceptable', 'URI not available in preferred format.'),
+    407: ('Proxy Authentication Required', 'You must authenticate with '
+          'this proxy before proceeding.'),
+    408: ('Request Timeout', 'Request timed out; try again later.'),
+    409: ('Conflict', 'Request conflict.'),
+    410: ('Gone',
+          'URI no longer exists and has been permanently removed.'),
+    411: ('Length Required', 'Client must specify Content-Length.'),
+    412: ('Precondition Failed', 'Precondition in headers is false.'),
+    413: ('Request Entity Too Large', 'Entity is too large.'),
+    414: ('Request-URI Too Long', 'URI is too long.'),
+    415: ('Unsupported Media Type', 'Entity body in unsupported format.'),
+    416: ('Requested Range Not Satisfiable',
+          'Cannot satisfy request range.'),
+    417: ('Expectation Failed',
+          'Expect condition could not be satisfied.'),
+
+    500: ('Internal Server Error', 'Server got itself in trouble'),
+    501: ('Not Implemented',
+          'Server does not support this operation'),
+    502: ('Bad Gateway', 'Invalid responses from another server/proxy.'),
+    503: ('Service Unavailable',
+          'The server cannot process the request due to a high load'),
+    504: ('Gateway Timeout',
+          'The gateway server did not receive a timely response'),
+    505: ('HTTP Version Not Supported', 'Cannot fulfill request.'),
+</code></pre></div>
+<h3 id="参考资料">参考资料</h3>
+<ol>
+<li>Foundations of Python Network Programming ，python网络编程基础，[美] John Goerzen 著，莫迟等译 。</li>
+<li>计算机网络 [美] 特南鲍姆</li>
+<li><a href="http://www.diveintopython3.net/http-web-services.html">diveintopython3 web services 一章</a> 这是 <a href="http://sebug.net/paper/books/dive-into-python3/http-web-services.html">中文网页</a> 。</li>
+</ol>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="前言 如何表示物理量这个问题在各个科学学科研究中是一个很基本的问题，关于这一块python有很多模块，但这一块最好是有一个公用 …" />
+
+
+<meta name="keywords" content="python, pint, 计算机 - 编程 - python, " />
+
+<title>pint模块  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/dist/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/pint-module.html"> pint模块  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#pint模块">pint模块</a><ul>
+<li><a href="#定义unit">定义unit</a></li>
+<li><a href="#定义物理常数">定义物理常数</a></li>
+<li><a href="#前缀支持">前缀支持</a></li>
+<li><a href="#单位转换">单位转换</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-03-09T08:35:14.445771+08:00">2023年 3月 9日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-python-ref">计算机 - 编程 - python</a>
+                </div>
+
+                <div class="p-1">标签：
+                <ul class="list-of-tags tags-in-article"><li><a href="https://a358003542.github.io/tags.html#pint-ref">pint<span>1</span></a></li><li><a href="https://a358003542.github.io/tags.html#python-ref">python<span>18</span></a></li></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
+<p>如何表示物理量这个问题在各个科学学科研究中是一个很基本的问题，关于这一块python有很多模块，但这一块最好是有一个公用的解决方案以供其他具体科学学科的python模块来调用。</p>
+<p>scipy模块有一个子模块constants，其提供了一些物理常数，不过这些物理常数具体就是一些数值，最好这些基本的物理常数作为物理量就是Quantity类。astropy是一个专门解决天文学方面问题的python支持模块，其有一个物理单位系统，然后里面的物理常数都是其内部定义的Quantity类，而其Quantity类是继承自np.ndarray的，个人觉得这依赖有点大了。当然它这么设计也是为了对numpy有很好的支持。然后chempy这个模块里面的单位系统依赖 <a href="https://github.com/python-quantities/python-quantities">python-quantites</a> 这个模块，其Quantity类也是继承自np.ndarray。</p>
+<p>pint模块在物理量表示这个问题上算是一个star数很多的模块了，其Quantity类并不是直接继承自np.ndarray，而是额外做了一些处理来对numpy进行了很好的支持。pint模块获得了我的青睐。</p>
+<p>慢着，还有一个竞争者。sympy模块里面有一个专门解决物理量单位系统的子模块，其采用的方法和上面的都不一样，sympy模块主要用于符号计算的，其在处理物理量甚至用到了群论的方法，至少就目前个人学习化学研究的xchemistry项目来说实在有点大材小用了。</p>
+<p>在决定选用pint模块之后，从astropy模块和chempy模块中可以看到关于具体学科的物理常数和物理量方面还是有一些额外的工作要做，这个后面再慢慢讨论。</p>
+<h2 id="pint模块">pint模块</h2>
+<p>pint模块就大的一个特色就是可定制性，就其模块本身来说只是提供了一个基本的处理物理量单位的逻辑，具体单位系统和相关运算的定义都是通过一种文本配置的形式展开的，比如：</p>
+<div class="highlight"><pre><span></span><code>@system SI
+    second
+    meter
+    kilogram
+    ampere
+    kelvin
+    mole
+    candela
+@end
+</code></pre></div>
+<p>上面这样的配置是刷单位系统的。</p>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><code>minute = 60 * second = min
+hour = 60 * minute = hr
+day = 24 * hour = d
+week = 7 * day
+</code></pre></div>
+<p>就基本的使用如下：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from pint import UnitRegistry
+&gt;&gt;&gt; unit = UnitRegistry()
+&gt;&gt;&gt; d = 3* unit.meter + 4*unit.centimeter
+&gt;&gt;&gt; d
+&lt;Quantity(3.04, 'meter')&gt;
+&gt;&gt;&gt; d.magnitude
+3.04
+&gt;&gt;&gt; d.units
+&lt;Unit('meter')&gt;
+</code></pre></div>
+<p>按照pint源码的写法，<code>UnitRegistry</code> 类  <code>SystemRegistry</code> 类，<code>ContextRegistry</code> 类， <code>NonMultiplicativeRegistry</code> 类和 <code>BaseRegistry</code> 类的各个初始化动作都执行了一遍。而且由于 <code>BaseRegistry</code> 类的元类加入这样的定制：</p>
+<div class="highlight"><pre><span></span><code>class RegistryMeta(type):
+    def __call__(self, *args, **kwargs):
+        obj = super().__call__(*args, **kwargs)
+        obj._after_init()
+        return obj
+</code></pre></div>
+<p>使得 <code>BaseRegistry</code> 类初始化动作还额外挂载了 <code>_after_init</code> 动作。这个额外的挂载动作主要的一句是：</p>
+<div class="highlight"><pre><span></span><code>        if self._filename == "":
+            self.load_definitions("default_en.txt", True)
+        elif self._filename is not None:
+            self.load_definitions(self._filename)
+</code></pre></div>
+<p>其就是加载默认的definition文本。该文本定义的规则和语法都是pint模块自己定义的，大体如下：</p>
+<h3 id="定义unit">定义unit</h3>
+<div class="highlight"><pre><span></span><code>&lt;canonical name&gt; = &lt;relation to another unit or dimension&gt; [= &lt;symbol&gt;] [= &lt;alias&gt;] 
+</code></pre></div>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><code>minute = 60 * second = min
+</code></pre></div>
+<p>然后：</p>
+<div class="highlight"><pre><span></span><code>second = [time] = s = sec
+</code></pre></div>
+<p><code>[time]</code> 这个写法是说本单位是一个最基本的维度单位。</p>
+<p>还有这种写法：</p>
+<div class="highlight"><pre><span></span><code>[velocity] = [length] / [time] = [speed]
+</code></pre></div>
+<p>这是定义衍生维度单位。</p>
+<div class="highlight"><pre><span></span><code>@alias meter = metro = metr
+</code></pre></div>
+<p>这是定义单位别名。</p>
+<h3 id="定义物理常数">定义物理常数</h3>
+<div class="highlight"><pre><span></span><code>speed_of_light = 299792458 m/s = c = c_0
+</code></pre></div>
+<p>这个speed_of_light实际上就是一个单位。</p>
+<h3 id="前缀支持">前缀支持</h3>
+<p>kilogram在定义文件里面是没有写的，不过也是可以直接使用的，因为其加入了下面这样的前缀支持语句：</p>
+<div class="highlight"><pre><span></span><code>kilo- =  1e3   = k-
+</code></pre></div>
+<p>然后发现kilograms最后也会读取为kilogram单位。</p>
+<h3 id="单位转换">单位转换</h3>
+<div class="highlight"><pre><span></span><code><span class="n">test_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">unit</span><span class="o">.</span><span class="n">L</span>
+<span class="k">assert</span> <span class="n">test_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">'meter ** 3'</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+</code></pre></div>
+<p>具体就是使用to方法，还是比较智能的了，看的出来这个模块从设计后后面的分析计算花了很多心思的。</p>
+<p>整个单位的转换和计算还有有效位数问题这个后面有时间再讨论。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/dist/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>
