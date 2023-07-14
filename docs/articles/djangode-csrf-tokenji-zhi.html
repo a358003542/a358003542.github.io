@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="基本原理 django的csrf token机制对于django的学习新手来说还是很头疼的，因为这个时候还没有太多精力去深究这里面的东西，但有时常常对新手的一些测试开发工作造成困扰。 通 …" />
+
+
+<meta name="keywords" content=", articles, " />
+
+<title>django的csrf-token机制  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/djangode-csrf-tokenji-zhi.html"> django的csrf-token机制  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-07-14T09:23:31.615580+08:00">2023年 7月 14日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-07-14T09:23:31.615580+08:00">2023年 7月 14日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#articles-ref">articles</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                <h1 id="基本原理">基本原理</h1>
+<p>django的csrf token机制对于django的学习新手来说还是很头疼的，因为这个时候还没有太多精力去深究这里面的东西，但有时常常对新手的一些测试开发工作造成困扰。</p>
+<p>通过debug和简单阅读django的源码之后，下面简单介绍下csrf token的基本作用原理。</p>
+<p>其是一个django中间件，每个请求来了都会试着读取cookie里面的csrftoken这个值。</p>
+<div class="highlight"><pre><span></span><code>Cookie: csrftoken=?????
+</code></pre></div>
+
+<p>这个只是要在request.META里面装载一个值，对后面的流程没有影响。</p>
+<p>具体起作用的是进入每个视图函数之前 <code>process_view</code> ，这里面逻辑还有有一些，下面择重点说一下。</p>
+<p>如果是GET之类安全的方法会直接放行。</p>
+<p>POST方法首先看POST对象带没带csrfmiddlewaretoken这个值，这是走页面表单，那个隐含标签，然后POST过来的时候自带的。</p>
+<p>如果没有则可能走AJAX的，会试着读取X-CSRFToken这个HEADER。</p>
+<p>综合上面两个总要获取到一个值，这个值要和Cookie里面的csrftoken这个值是对应上的。对应上就通过了，对应不上或者为空则csrf token核对失败。</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2023/csrf_token_1.png"></p>
+<h1 id="安全问题">安全问题？</h1>
+<p>看了一下默认的csrftoken的有效期是一年，因为csrftoken还有同源判断，这可能是django将这个有效期设置得这么长的原因吧。</p>
+<p>cookie里面的那个sessionid有效期就短得多了，那个sessionid如果泄露了，黑客就可以让服务器相信这个请求是另外一个人了。当然了django默认的sessionid加密只要不泄露，还是很安全的，你要说黑客已经物理入侵了，那黑客早就已经攻破防线了，而不是django的这个机制不够安全的问题了。JWT等加强版token更安全无非是token有效期时间更短等等。</p>
+<p>就我们这种可以打开开发者工具的这种，已经是物理级别的暴露了，任何加密方式，目标请求都是可以伪造出去的。毕竟HTTP协议请求的机制就摆在那里的。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>
