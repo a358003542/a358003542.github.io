@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="用nsis制作安装程序 nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。 首先你需要下载 nsis基本程序，推荐到 这里 下载 。 然后推荐下载 HM NIS …" />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>nsis  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/nsis.html"> nsis  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#用nsis制作安装程序">用nsis制作安装程序</a><ul>
+<li><a href="#学习模板">学习模板</a></li>
+<li><a href="#一些基本信息">一些基本信息</a></li>
+<li><a href="#界面语言选择">界面语言选择</a></li>
+<li><a href="#快捷方式加图标">快捷方式加图标</a></li>
+<li><a href="#product_dir_regkey">PRODUCT_DIR_REGKEY</a></li>
+<li><a href="#outfile">OutFile</a></li>
+<li><a href="#设置安装图标和删除图标">设置安装图标和删除图标</a></li>
+<li><a href="#define">!define</a></li>
+<li><a href="#使用modern-ui">使用Modern UI</a></li>
+<li><a href="#name">Name</a></li>
+<li><a href="#outfile_1">OutFile</a></li>
+<li><a href="#installdir">InstallDir</a></li>
+<li><a href="#installdirregkey">InstallDirRegKey</a></li>
+<li><a href="#showinstdetails">ShowInstDetails</a></li>
+<li><a href="#showuninstdetails">ShowUnInstDetails</a></li>
+<li><a href="#section">Section</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-07-14T21:39:13.583787+08:00">2023年 7月 14日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-07-14T21:39:13.583787+08:00">2023年 7月 14日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="用nsis制作安装程序">用nsis制作安装程序</h2>
+<p>nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉学习一下够用了。</p>
+<p>首先你需要下载 nsis基本程序，推荐到 <a href="https://nsis.sourceforge.io/Main_Page">这里</a> 下载 。</p>
+<p>然后推荐下载 <a href="http://hmne.sourceforge.net/">HM NIS Edit</a> 这个简单的程序，这个程序可以向导式生成一个nsi脚本文件。具体nsi文件的编写倒不一定要在哪里编写。</p>
+<p><strong>NOTICE</strong> HM NIS Edit 这个软件界面不推荐选择中文，输出的文件编码会是GBK的，这和现在通用的UTF8编码很不兼容了。</p>
+<p>利用HM NIS Edit填写一些信息，这个具体倒是很直观，没什么好说的。生成的脚本到另外的编辑器上一般还要做一些进一步的修改。这个脚本刷文件夹所有的文件变动还是很方便的。</p>
+<h3 id="学习模板">学习模板</h3>
+<p>下面这个是利用HM nis edit 软件自动生成模板然后做了一些修改，放在下面方便学习。</p>
+<div class="highlight"><pre><span></span><code>; Script generated by the HM NIS Edit Script Wizard.
+
+; HM NIS Edit Wizard helper defines
+!define PRODUCT_NAME "timer"
+!define PRODUCT_VERSION "1.3.1"
+!define PRODUCT_PUBLISHER "wanze"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\timer.exe"
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+
+; MUI 1.67 compatible ------
+!include "MUI2.nsh"
+
+; MUI Settings
+!define MUI_ABORTWARNING
+!define MUI_ICON "dist\timer\timer.ico"
+!define MUI_UNICON "dist\timer\timer.ico"
+
+; Welcome page
+!insertmacro MUI_PAGE_WELCOME
+; License page
+!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
+; Directory page
+!insertmacro MUI_PAGE_DIRECTORY
+; Instfiles page
+!insertmacro MUI_PAGE_INSTFILES
+; Finish page
+!define MUI_FINISHPAGE_RUN "$INSTDIR\timer.exe"
+!insertmacro MUI_PAGE_FINISH
+
+; Uninstaller pages
+!insertmacro MUI_UNPAGE_INSTFILES
+
+; Language files
+!insertmacro MUI_LANGUAGE "English"
+
+; MUI end ------
+
+Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+OutFile "timer_setup.exe"
+InstallDir "$PROGRAMFILES\Timer"
+InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+ShowInstDetails show
+ShowUnInstDetails show
+
+Section "MainSection" SEC01
+  SetOutPath "$INSTDIR"
+  SetOverwrite try
+  File "dist\timer\*.dll"
+  File "dist\timer\base_library.zip"
+  File "dist\timer\timer.ico"
+  File "dist\timer\*.pyd"
+  File /r "dist\timer\PySide2"
+  File /r "dist\timer\shiboken2"
+  File "dist\timer\timer.exe"
+  CreateDirectory "$SMPROGRAMS\timer"
+  CreateShortCut "$SMPROGRAMS\timer\timer.lnk" "$INSTDIR\timer.exe" "" "$INSTDIR\timer.ico"
+  CreateShortCut "$DESKTOP\timer.lnk" "$INSTDIR\timer.exe" "" "$INSTDIR\timer.ico"
+  File "dist\timer\timer.exe.manifest"
+SectionEnd
+
+Section -AdditionalIcons
+  CreateShortCut "$SMPROGRAMS\timer\Uninstall.lnk" "$INSTDIR\uninst.exe"
+SectionEnd
+
+Section -Post
+  WriteUninstaller "$INSTDIR\uninst.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\timer.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\timer.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+SectionEnd
+
+
+Function un.onUninstSuccess
+  HideWindow
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
+FunctionEnd
+
+Function un.onInit
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
+  Abort
+FunctionEnd
+
+Section Uninstall
+  Delete "$INSTDIR\uninst.exe"
+  Delete "$INSTDIR\*.pyd"
+  Delete "$INSTDIR\*.dll"
+  Delete "$INSTDIR\timer.exe.manifest"
+  Delete "$INSTDIR\timer.exe"
+  RMDir /r "$INSTDIR\shiboken2"
+  RMDir /r "$INSTDIR\PySide2"
+  Delete "$INSTDIR\timer.ico"
+  Delete "$INSTDIR\base_library.zip"
+  Delete "$SMPROGRAMS\timer\Uninstall.lnk"
+  Delete "$DESKTOP\timer.lnk"
+  Delete "$SMPROGRAMS\timer\timer.lnk"
+
+  RMDir "$SMPROGRAMS\timer"
+  RMDir "$INSTDIR"
+
+  DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+  DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  SetAutoClose true
+SectionEnd
+</code></pre></div>
+<h3 id="一些基本信息">一些基本信息</h3>
+<p>下面是定义软件名，软件版本号和软件出版人这些基本信息。</p>
+<div class="highlight"><pre><span></span><code>!define PRODUCT_NAME "yaogua"
+!define PRODUCT_VERSION "0.1.1"
+!define PRODUCT_PUBLISHER "wanze"
+</code></pre></div>
+<h3 id="界面语言选择">界面语言选择</h3>
+<p>之前如下这样设置是可行的：</p>
+<div class="highlight"><pre><span></span><code>!insertmacro MUI_LANGUAGE "SimpChinese"
+</code></pre></div>
+<p>繁体中文是 <code>TradChinese</code> 。</p>
+<p>但是最近我将我的win10系统全局设置为UTF8编码之后，其安装界面成乱码了。可能nsis的中文编码默认不是utf8的。稳妥起见还是选择英语吧，这肯定不会出现恼人的乱码问题：</p>
+<div class="highlight"><pre><span></span><code>; Language files
+!insertmacro MUI_LANGUAGE "English"
+</code></pre></div>
+<h3 id="快捷方式加图标">快捷方式加图标</h3>
+<p>用上面提到的工具自动生成的nsi脚本，默认的快捷方式向导是没有加上图标的，你可以如下加上图标：</p>
+<div class="highlight"><pre><span></span><code>  CreateShortCut "$SMPROGRAMS\timer\timer.lnk" "$INSTDIR\timer.exe" "" "$INSTDIR\myapp.ico"
+</code></pre></div>
+<p>第三个参数是可选的，命令行参数，没啥好填的。最后一个参数就是设置图标的，具体图标注意要填在文件复制到目的地操作之后，填写的值也是复制的目的地那边的哪里。</p>
+<h3 id="product_dir_regkey"><code>PRODUCT_DIR_REGKEY</code></h3>
+<p>这个应该是向windows系统注册本软件的安装目录：</p>
+<div class="highlight"><pre><span></span><code>!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\yaogua"
+</code></pre></div>
+<p>默认的输出似乎有时exe会指错。</p>
+<h3 id="outfile">OutFile</h3>
+<p>OutFile会控制你的输出exe的名字。</p>
+<div class="highlight"><pre><span></span><code>Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+OutFile "yaogua_Setup.exe"
+InstallDir "$PROGRAMFILES\yaogua"
+InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+</code></pre></div>
+<h3 id="设置安装图标和删除图标">设置安装图标和删除图标</h3>
+<div class="highlight"><pre><span></span><code>!define MUI_ICON "app.ico"
+!define MUI_UNICON "app.ico"
+</code></pre></div>
+<p>这个应该是那个安装程序和那个删除程序 <code>uninst.exe</code> 的图标，前面提到的 <code>CreateShortCut</code> 是一些快捷方式的图标，比如桌面快捷方式。</p>
+<h3 id="define">!define</h3>
+<p>定义了一个全局变量，后面可以通过 <code>${what}</code> 这样的格式来引用。</p>
+<h3 id="使用modern-ui">使用Modern UI</h3>
+<div class="highlight"><pre><span></span><code>!include "MUI2.nsh"
+</code></pre></div>
+<p>具体看它的 <a href="https://nsis.sourceforge.io/Docs/Modern%20UI%202/Readme.html">文档</a> ，这里做了一下修改，现在是版本2了。</p>
+<h4 id="mui_abortwarning">MUI_ABORTWARNING</h4>
+<p>当用户想要关闭安装程式则弹出一个页面。</p>
+<div class="highlight"><pre><span></span><code>!define MUI_ABORTWARNING
+</code></pre></div>
+<h4 id="mui_icon">MUI_ICON</h4>
+<p>设置安装程式的图标</p>
+<div class="highlight"><pre><span></span><code>!define MUI_ICON "dist\timer\timer.ico"
+</code></pre></div>
+<h4 id="mui_unicon">MUI_UNICON</h4>
+<p>设置卸载时程序的图标</p>
+<div class="highlight"><pre><span></span><code>!define MUI_UNICON "dist\timer\timer.ico"
+</code></pre></div>
+<h4 id="插入页面">插入页面</h4>
+<p>如下插入页面，程序将会按照写入的顺序来展示页面。</p>
+<div class="highlight"><pre><span></span><code><span class="c">; Welcome page</span>
+<span class="cp">!insertmacro</span><span class="w"> </span>MUI_PAGE_WELCOME
+<span class="c">; License page</span>
+<span class="cp">!insertmacro</span><span class="w"> </span>MUI_PAGE_LICENSE<span class="w"> </span><span class="s2">"LICENSE.txt"</span>
+<span class="c">; Directory page</span>
+<span class="cp">!insertmacro</span><span class="w"> </span>MUI_PAGE_DIRECTORY
+<span class="c">; Instfiles page</span>
+<span class="cp">!insertmacro</span><span class="w"> </span>MUI_PAGE_INSTFILES
+<span class="c">; Finish page</span>
+<span class="cp">!define</span><span class="w"> </span>MUI_FINISHPAGE_RUN<span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.exe"</span>
+<span class="cp">!insertmacro</span><span class="w"> </span>MUI_PAGE_FINISH
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>!define MUI_FINISHPAGE_RUN "$INSTDIR\timer.exe"
+</code></pre></div>
+<p>这一行定义了用户最后完成页面选择打开程序具体是打开的那个程序。</p>
+<div class="highlight"><pre><span></span><code>; Uninstaller pages
+!insertmacro MUI_UNPAGE_INSTFILES
+</code></pre></div>
+<p>这一行说明卸载程序只有一个页面。</p>
+<h4 id="设置语言">设置语言</h4>
+<div class="highlight"><pre><span></span><code>!insertmacro MUI_LANGUAGE "English"
+</code></pre></div>
+<p>可以设置多语言，后面再讨论，这里就采用默认的英语。</p>
+<h3 id="name">Name</h3>
+<p>设置安装程序的名字，后面可以使用 <code>$(^Name)</code> 来引用这个变量。</p>
+<div class="highlight"><pre><span></span><code>Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+</code></pre></div>
+<h3 id="outfile_1">OutFile</h3>
+<p>设置安装程序的输出文件名。</p>
+<h3 id="installdir">InstallDir</h3>
+<p>设置默认的安装路径。</p>
+<div class="highlight"><pre><span></span><code>InstallDir "$PROGRAMFILES\Timer"
+</code></pre></div>
+<h3 id="installdirregkey">InstallDirRegKey</h3>
+<p>试着从注册表来查找这个值，找到则会以该值为新的InstallDir。</p>
+<div class="highlight"><pre><span></span><code>InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+</code></pre></div>
+<h3 id="showinstdetails">ShowInstDetails</h3>
+<p>设置是否显示安装细节。</p>
+<div class="highlight"><pre><span></span><code>ShowInstDetails show
+</code></pre></div>
+<h3 id="showuninstdetails">ShowUnInstDetails</h3>
+<p>设置是否显示卸载细节。</p>
+<div class="highlight"><pre><span></span><code>ShowUnInstDetails show
+</code></pre></div>
+<h3 id="section">Section</h3>
+<div class="highlight"><pre><span></span><code><span class="k">Section</span><span class="w"> </span><span class="s2">"MainSection"</span><span class="w"> </span>SEC01
+<span class="w">  </span><span class="k">SetOutPath</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">"</span>
+<span class="w">  </span><span class="k">SetOverwrite</span><span class="w"> </span><span class="no">try</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="s2">"dist\timer\*.dll"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="s2">"dist\timer\base_library.zip"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="s2">"dist\timer\timer.ico"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="s2">"dist\timer\*.pyd"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="na">/r</span><span class="w"> </span><span class="s2">"dist\timer\PySide2"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="na">/r</span><span class="w"> </span><span class="s2">"dist\timer\shiboken2"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="s2">"dist\timer\timer.exe"</span>
+<span class="w">  </span><span class="k">CreateDirectory</span><span class="w"> </span><span class="s2">"</span><span class="nb">$SMPROGRAMS</span><span class="s2">\timer"</span>
+<span class="w">  </span><span class="k">CreateShortCut</span><span class="w"> </span><span class="s2">"</span><span class="nb">$SMPROGRAMS</span><span class="s2">\timer\timer.lnk"</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.exe"</span><span class="w"> </span><span class="s2">""</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.ico"</span>
+<span class="w">  </span><span class="k">CreateShortCut</span><span class="w"> </span><span class="s2">"</span><span class="nb">$DESKTOP</span><span class="s2">\timer.lnk"</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.exe"</span><span class="w"> </span><span class="s2">""</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.ico"</span>
+<span class="w">  </span><span class="k">File</span><span class="w"> </span><span class="s2">"dist\timer\timer.exe.manifest"</span>
+<span class="k">SectionEnd</span>
+
+<span class="k">Section</span><span class="w"> </span><span class="o">-</span>AdditionalIcons
+<span class="w">  </span><span class="k">CreateShortCut</span><span class="w"> </span><span class="s2">"</span><span class="nb">$SMPROGRAMS</span><span class="s2">\timer\Uninstall.lnk"</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\uninst.exe"</span>
+<span class="k">SectionEnd</span>
+
+<span class="k">Section</span><span class="w"> </span><span class="o">-</span>Post
+<span class="w">  </span><span class="k">WriteUninstaller</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\uninst.exe"</span>
+<span class="w">  </span><span class="k">WriteRegStr</span><span class="w"> </span><span class="no">HKLM</span><span class="w"> </span><span class="s2">"${PRODUCT_DIR_REGKEY}"</span><span class="w"> </span><span class="s2">""</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.exe"</span>
+<span class="w">  </span><span class="k">WriteRegStr</span><span class="w"> </span><span class="kp">${PRODUCT_UNINST_ROOT_KEY}</span><span class="w"> </span><span class="s2">"${PRODUCT_UNINST_KEY}"</span><span class="w"> </span><span class="s2">"DisplayName"</span><span class="w"> </span><span class="s2">"$(^Name)"</span>
+<span class="w">  </span><span class="k">WriteRegStr</span><span class="w"> </span><span class="kp">${PRODUCT_UNINST_ROOT_KEY}</span><span class="w"> </span><span class="s2">"${PRODUCT_UNINST_KEY}"</span><span class="w"> </span><span class="s2">"UninstallString"</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\uninst.exe"</span>
+<span class="w">  </span><span class="k">WriteRegStr</span><span class="w"> </span><span class="kp">${PRODUCT_UNINST_ROOT_KEY}</span><span class="w"> </span><span class="s2">"${PRODUCT_UNINST_KEY}"</span><span class="w"> </span><span class="s2">"DisplayIcon"</span><span class="w"> </span><span class="s2">"</span><span class="vg">$INSTDIR</span><span class="s2">\timer.exe"</span>
+<span class="w">  </span><span class="k">WriteRegStr</span><span class="w"> </span><span class="kp">${PRODUCT_UNINST_ROOT_KEY}</span><span class="w"> </span><span class="s2">"${PRODUCT_UNINST_KEY}"</span><span class="w"> </span><span class="s2">"DisplayVersion"</span><span class="w"> </span><span class="s2">"${PRODUCT_VERSION}"</span>
+<span class="w">  </span><span class="k">WriteRegStr</span><span class="w"> </span><span class="kp">${PRODUCT_UNINST_ROOT_KEY}</span><span class="w"> </span><span class="s2">"${PRODUCT_UNINST_KEY}"</span><span class="w"> </span><span class="s2">"Publisher"</span><span class="w"> </span><span class="s2">"${PRODUCT_PUBLISHER}"</span>
+<span class="k">SectionEnd</span>
+</code></pre></div>
+<p>这个Section...SectionEnd定义了一个Section区块，具体来说就是安装动作的不同安装部分，上面这个是简单的情况，虽然分成了几个Section，但后面两个因为section_name前面加上了<code>-</code> ，那么这个section是默认安装，用户不可控制的，所以只剩下一个section为主Section了，然后section_name名字都是随意的，包括这里的 MainSection 也只是一个惯例，section_name唯一的例外就是 <code>Uninstall</code>  必然表示卸载动作Section。</p>
+<h4 id="setoutpath">SetOutPath</h4>
+<p>设置安装的输出路径</p>
+<div class="highlight"><pre><span></span><code>SetOutPath "$INSTDIR"
+</code></pre></div>
+<h4 id="file">File</h4>
+<p>将某些文件移过去，支持如下的 <code>*</code> 通配选择。</p>
+<div class="highlight"><pre><span></span><code>File "dist\timer\*.dll"
+</code></pre></div>
+<h4 id="createdirectory">CreateDirectory</h4>
+<p>新建一个文件夹。下面这个 <code>$SMPROGRAMS</code> 是你的程序在应用程序开始菜单上的位置，比如下面这个具体对应的文件夹是：</p>
+<div class="highlight"><pre><span></span><code>C:\Users\wz-game\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\timer
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>CreateDirectory "$SMPROGRAMS\timer"
+</code></pre></div>
+<h4 id="createshortcut">CreateShortCut</h4>
+<p>新建一个快捷方式，具体链接到那个文件，第三个参数是启动该程序时额外的一些参数，第四个参数是设置图标。</p>
+<div class="highlight"><pre><span></span><code>  CreateShortCut "$SMPROGRAMS\timer\timer.lnk" "$INSTDIR\timer.exe" "" "$INSTDIR\timer.ico"
+</code></pre></div>
+<h4 id="writeuninstaller">WriteUninstaller</h4>
+<p>输出卸载的exe文件。</p>
+<div class="highlight"><pre><span></span><code>  WriteUninstaller "$INSTDIR\uninst.exe"
+</code></pre></div>
+<h4 id="writeregstr">WriteRegStr</h4>
+<p>这里进行了一些注册表的填写工作。</p>
+<div class="highlight"><pre><span></span><code>  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\timer.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\timer.ico"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+</code></pre></div>
+<h4 id="delete">Delete</h4>
+<p>卸载删除文件</p>
+<h4 id="rmdir">RMDir</h4>
+<p>卸载删除文件夹，可以加上 <code>/r</code> 参数递归删除该文件夹所有内容。</p>
+<div class="highlight"><pre><span></span><code>  RMDir /r "$INSTDIR\shiboken2"
+</code></pre></div>
+<h4 id="deleteregkey">DeleteRegKey</h4>
+<p>注册表字段删除</p>
+<div class="highlight"><pre><span></span><code>  DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+</code></pre></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

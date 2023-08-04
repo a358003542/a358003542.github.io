@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="简介 tesseract是开源界一款热门的OCR软件，闲话少说，现在开始慢慢研究这个软件，让OCR工作更快更精准把。 CMAKE安装 我们可以在tesseract的 github 上看到其是用用C++写的，现在C语言或C++语言编写的项目大 …" />
+
+
+<meta name="keywords" content=", drafts, " />
+
+<title>tesseract研究第一谈  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/drafts/tesseractyan-jiu-di-yi-tan.html"> tesseract研究第一谈  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#cmake安装">CMAKE安装</a></li>
+<li><a href="#一个简单的样例项目">一个简单的样例项目</a><ul>
+<li><a href="#cmake语法初识">cmake语法初识</a></li>
+</ul>
+</li>
+<li><a href="#sw">sw</a><ul>
+<li><a href="#安装sw">安装sw</a></li>
+<li><a href="#sw和cmake的集成">sw和cmake的集成</a></li>
+</ul>
+</li>
+<li><a href="#cmake基本使用">cmake基本使用</a></li>
+<li><a href="#样例项目程序的使用">样例项目程序的使用</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-08-04T11:06:22.746656+08:00">2023年 8月 4日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#drafts-ref">drafts</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="简介">简介</h2>
+<p>tesseract是开源界一款热门的OCR软件，闲话少说，现在开始慢慢研究这个软件，让OCR工作更快更精准把。</p>
+<h2 id="cmake安装">CMAKE安装</h2>
+<p>我们可以在tesseract的 <a href="https://github.com/tesseract-ocr/tesseract">github</a> 上看到其是用用C++写的，现在C语言或C++语言编写的项目大多是用的CMAKE来管理项目的编译构建工作的。首先是安装CMAKE，具体其windows也有相应的安装，已经很简便了，记得把cmake命令勾选为添加到系统PATH变量里面。</p>
+<h2 id="一个简单的样例项目">一个简单的样例项目</h2>
+<p>windows上的编译指导部分官方文档特别强调了这个简单的样例项目，这个样例项目就两个文件，其中main.cpp 就是通过C++语言来调用tesseract的，然后CMakeLists.txt 这个文件是和CMAKE编译工作相关的。</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.13</span><span class="p">)</span>
+
+<span class="nb">project</span><span class="p">(</span><span class="s">tess_example</span><span class="w"> </span><span class="s">CXX</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span><span class="w"> </span><span class="s">14</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SW_BUILD_SHARED_LIBS</span><span class="w"> </span><span class="s">1</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">DEPENDENCIES</span>
+<span class="w">    </span><span class="s">org.sw.demo.google.tesseract.libtesseract-master</span>
+<span class="w">    </span><span class="s">org.sw.demo.intel.opencv.imgproc</span>
+<span class="w">    </span><span class="s">org.sw.demo.intel.opencv.highgui</span>
+<span class="p">)</span>
+
+<span class="nb">find_package</span><span class="p">(</span><span class="s">SW</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">sw_add_package</span><span class="p">(</span><span class="o">${</span><span class="nv">DEPENDENCIES</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">sw_execute</span><span class="p">()</span>
+
+<span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">DEPENDENCIES</span><span class="o">}</span><span class="p">)</span>
+
+<span class="nb">set_property</span><span class="p">(</span><span class="s">DIRECTORY</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">VS_STARTUP_PROJECT</span><span class="w"> </span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="cmake语法初识">cmake语法初识</h3>
+<div class="highlight"><pre><span></span><code>cmake_minimum_required(VERSION 3.13)
+</code></pre></div>
+<p>这是让cmake的版本满足最小要求</p>
+<div class="highlight"><pre><span></span><code>project(tess_example CXX)
+</code></pre></div>
+<p>这是设置本项目的名字，第二个可选参数是本项目的语言。</p>
+<div class="highlight"><pre><span></span><code>add_executable(${PROJECT_NAME} main.cpp)
+</code></pre></div>
+<p>假设你的项目就一个main.cpp文件，则上面这句的效果就是明确根据main.cpp来输出 <code>{PROJECT_NAME}.exe</code> 这个可执行文件。</p>
+<div class="highlight"><pre><span></span><code>set(CMAKE_CXX_STANDARD 14)
+</code></pre></div>
+<p>这个相当于设置常量。</p>
+<div class="highlight"><pre><span></span><code>target_link_libraries(${PROJECT_NAME} ${DEPENDENCIES})
+</code></pre></div>
+<p>将目标文件和链接文件进行链接。</p>
+<h2 id="sw">sw</h2>
+<p>sw这个工具有点类似于python生态圈里面的pypi，其前面是cppan，专注于C++语言的生态圈，现在更名为Software Network，看得出来其野心是要做一个全软件的生态圈服务的。不管怎么说现在tesseract的CMAKE编译是依赖sw这个工具的。</p>
+<h3 id="安装sw">安装sw</h3>
+<p>到 <a href="https://software-network.org/">sw官网</a> 的 <a href="https://software-network.org/client/">这里</a> 下载，然后设置好 <code>PATH</code> 环境变量即可。似乎第一次还需要运行：</p>
+<div class="highlight"><pre><span></span><code>sw setup
+</code></pre></div>
+<h3 id="sw和cmake的集成">sw和cmake的集成</h3>
+<p>在sw官方文档【20200809版】的2.4小节详细叙述了sw和cmake相关集成的写法，上面给出的CMakeLists.txt这个文件的最核心部分就是这里接下来要讨论的内容。</p>
+<div class="highlight"><pre><span></span><code>find_package(SW REQUIRED)
+</code></pre></div>
+<p>这是确保sw命令是存在的。</p>
+<div class="highlight"><pre><span></span><code>sw_add_package(${DEPENDENCIES})
+</code></pre></div>
+<p>这是添加本项目sw的相关依赖。</p>
+<div class="highlight"><pre><span></span><code>sw_execute()
+</code></pre></div>
+<p>这是执行sw来引入各个目标脚本。</p>
+<div class="highlight"><pre><span></span><code>add_executable(${PROJECT_NAME} main.cpp)
+</code></pre></div>
+<h2 id="cmake基本使用">cmake基本使用</h2>
+<p>这里不讨论其他额外的参数，就最基本的cmake管理的项目编译过程大体如下：</p>
+<div class="highlight"><pre><span></span><code>mkdir build
+cd build
+cmake ..
+cmake --build .
+</code></pre></div>
+<p>一般是推荐另外新建一个build项目，然后在里面进行编译工作。</p>
+<div class="highlight"><pre><span></span><code>cmake ..
+</code></pre></div>
+<p>是根据上面的CMakeLists.txt文件进行本项目编译的预处理工作。</p>
+<div class="highlight"><pre><span></span><code>cmake --build .
+</code></pre></div>
+<p>调用cmake进行实际编译工作。</p>
+<p>上面第一步主要是sw相关的软件依赖准备工作，这个过程需要开代理翻墙才能正常跑通。目前也似乎没有针对sw的国内源。</p>
+<p>上面的第二步【20200813】我遇到了一个错误。具体定位大概是：</p>
+<div class="highlight"><pre><span></span><code>\.sw\storage\pkg\1d\13\e4d8\src\sdir\src\ccmain equationdetect.cpp
+</code></pre></div>
+<p>的这个文件的236行报错：error C3688 符号无法显示错误。具体代码是：</p>
+<div class="highlight"><pre><span></span><code>   //static const STRING kCharsToEx[] = {"'", "`", "\"", "\\", ",", ".",
+
+   //  "〈", "〉", "《", "》", "」", "「", ""};
+
+   static const STRING kCharsToEx[] = {"'", "`", "\"", "\\", ",", "."};
+</code></pre></div>
+<p>我如上将后面一些符号删掉了然后就跑的通了，暂时先不深究这个。</p>
+<h2 id="样例项目程序的使用">样例项目程序的使用</h2>
+<p>样例项目根据main.cpp出来的程序根据代码这一行判断：</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tess</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="s">"./tessdata"</span><span class="p">,</span><span class="w"> </span><span class="s">"eng"</span><span class="p">))</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"OCRTesseract: Could not initialize tesseract."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>其需要读取模型文件，模型文件在 <a href="https://github.com/tesseract-ocr/tessdata">这里</a> ，不需要都下下来，将 eng.traineddata 和 chi_sim.traineddata 下载下来即可。</p>
+<p>目前cmake是正常将本机器上的visual studio相关C++环境识别出来了，所以它也输出了本项目的visual studio的解决方案文件，用visual studio加载这个文件然后对main.cpp进行一些修改是可以很快再生成解决方案的。类似的C++项目相关知识我就不过多说明了，我们到Debug文件夹下新建一个文件夹 <code>tessdata</code> ，然后将你下载下来的模型文件放进去。</p>
+<p>继续往下看：</p>
+<div class="highlight"><pre><span></span><code>auto pixs = pixRead(argv[1]);
+</code></pre></div>
+<p>这是根据命令行的第一个参数读取图片。读者请自行制作额外的英文和中文测试图片，网页上截图即可。</p>
+<div class="highlight"><pre><span></span><code>tesseract::TessBaseAPI tess;
+
+tess.SetImage(pixs);
+tess.Recognize(0);
+
+// get result and delete[] returned char* string
+std::cout &lt;&lt; std::unique_ptr&lt;char[]&gt;(tess.GetUTF8Text()).get() &lt;&lt; std::endl;
+</code></pre></div>
+<p>简单的看代码知道setImage就是设置tess主接口当前要处理的图片，Recognize应该就是识别的意思，0这个参数意义不明，但这不是重点。然后就是输出，我们看到 <code>GetUTF8Text</code> ，这告诉我们其输出的文本是utf8编码的，这在后面给我带来了一点困扰。因为windows的powershell默认的936 gbk编码的，这样其将输出乱码，请将其调成65001 utf8编码 。</p>
+<p>样例代码默认是加载英文模型，如果要处理中文需要加载中文模型，现在临时这样修改：</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tess</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="s">"./tessdata"</span><span class="p">,</span><span class="w"> </span><span class="s">"chi_sim"</span><span class="p">))</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"OCRTesseract: Could not initialize tesseract."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>此外我还注意的tesseract-ocr还新提供了一个似乎针对LSTM训练效果更好的 <a href="https://github.com/tesseract-ocr/tessdata_best">模型仓库</a> 。</p>
+<p>针对同一图片下面是这两个模型运行效果比较：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/2020/tesseract_ch_comapre.png"/></p>
+<p>可以看到新的模型输出效果明显更好了。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

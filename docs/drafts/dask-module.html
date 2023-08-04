@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="前言 总的说来对于python生态圈来说，大数据解决方案我是推荐dask多于pyspark。接触pyspark之后最大的痛苦就是，之前学习机器学习积累下来的numpy，pandas，sklearn的知识，全部不能继续使用了。而 …" />
+
+
+<meta name="keywords" content=", drafts, " />
+
+<title>dask模块  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/drafts/dask-module.html"> dask模块  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#大数据hadoop简介">大数据hadoop简介</a></li>
+<li><a href="#dask简介">dask简介</a></li>
+<li><a href="#dask-yarn">dask-yarn</a><ul>
+<li><a href="#实际调整worker资源">实际调整worker资源</a></li>
+<li><a href="#关闭应用释放资源">关闭应用释放资源</a></li>
+<li><a href="#强制关闭某个应用">强制关闭某个应用</a></li>
+</ul>
+</li>
+<li><a href="#dataframe最佳实践">dataframe最佳实践</a></li>
+<li><a href="#dataframe的map_partitions-返回值">dataframe的map_partitions 返回值</a></li>
+<li><a href="#dask单机版">dask单机版</a></li>
+<li><a href="#参考资料">参考资料</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-09-22T00:00:00+08:00">2019年 9月 22日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-08-04T10:55:27.747143+08:00">2023年 8月 4日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#drafts-ref">drafts</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="前言">前言</h2>
+<p>总的说来对于python生态圈来说，大数据解决方案我是推荐dask多于pyspark。接触pyspark之后最大的痛苦就是，之前学习机器学习积累下来的numpy，pandas，sklearn的知识，全部不能继续使用了。而dask作为python的大数据解决方案，不说完全无缝对接，这也是不现实的，毕竟到了大数据那块，不说其他东西，就是你要应对的变量，也必然是惰性加载和惰性求值的，这也是一个区别点。但总的给我的感觉就是，作为python爱好者，之于大数据解决方案，dask真的用的很爽。</p>
+<p>dask的官方文档写的很厚实，主要是这块东西也多。本文作者尽我所知简要地说下个人使用经验吧。其他深入研究还是要读者去研究 <a href="https://docs.dask.org/en/latest/">官方文档</a> 的。</p>
+<h2 id="大数据hadoop简介">大数据hadoop简介</h2>
+<p>现在的hadoop2的架构大概如下所示：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/大数据/HADOOP.png"/></p>
+<p>底层是hadoop分布式文件系统作为大数据的文件存储支持。HDFS的基本架构如下图所示：</p>
+<p><img alt="img" src="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png"/></p>
+<p>然后中层是YARN对计算资源进行调度分配。YARN的基本架构如下图所示：</p>
+<p><img alt="img" src="http://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/yarn_architecture.gif"/></p>
+<p>如上图所示，Yarn有一个Scheduler，也就是Resource Manager 进行资源调度，然后还有很多 个worker，也就是Node Manager进行实际的应用计算任务。</p>
+<p>而最高层MapReduce框架是分布式应用程序的一个支持性框架，现在Hadoop2可扩展性很好，dask，spark等这些框架都是可以运行在Yarn之上的。</p>
+<h2 id="dask简介">dask简介</h2>
+<p>dask主要由两部分组成：</p>
+<ol>
+<li>基于计算优化的动态调度 </li>
+<li>大数据级别的集合</li>
+</ol>
+<p>简单来说就是dask基于python常见的那些数据类型概念，比如array，dataframe，进行大数据级别的集合扩展，其有很多个worker和一个scheduler，调度器主要负责计算调度，调度器面临的最小计算单位是所谓的partition，这个partition会分散在不同的worker中，具体这些worker会利用相同的python环境，来进行某些计算。</p>
+<p>dask的安装就python模块来说不是难点所在，这一块难点主要在大数据环境的搭建上。如果你们大数据工作组已经将环境搭建好了，那么利用dask-yarn还是很容易进行dask的分布式任务的分发工作的。</p>
+<h2 id="dask-yarn">dask-yarn</h2>
+<p>dask连接yarn集群</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">dask_yarn</span> <span class="kn">import</span> <span class="n">YarnCluster</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="c1"># Create a cluster where each worker has two cores and eight GiB of memory</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">YarnCluster</span><span class="p">(</span><span class="n">environment</span> <span class="o">=</span> <span class="s1">'environment.tar.gz'</span><span class="p">,</span>
+                      <span class="n">worker_vcores</span><span class="o">=</span><span class="n">w_cores</span><span class="p">,</span>
+                      <span class="n">worker_memory</span><span class="o">=</span><span class="n">w_mem</span><span class="p">,</span>
+                      <span class="n">scheduler_vcores</span><span class="o">=</span><span class="n">s_cores</span><span class="p">,</span>
+                      <span class="n">scheduler_memory</span><span class="o">=</span><span class="n">s_mem</span><span class="p">,</span>
+                      <span class="n">name</span><span class="o">=</span><span class="n">app_name</span><span class="p">,</span>
+                      <span class="n">worker_env</span><span class="o">=</span><span class="p">{</span><span class="s1">'ARROW_LIBHDFS_DIR'</span><span class="p">:</span> <span class="n">libhdfs_env</span><span class="p">})</span>
+<span class="c1"># Scale out to ten such workers</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Connect to the cluster</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</code></pre></div>
+<p>基本的连接过程如上所示，你需要安装 <code>dask-yarn</code> 模块，然后连接的时候参数</p>
+<ul>
+<li>environment 你的分布式应用程序的python环境包，你可以激活虚拟环境下运行 <code>venv-pack</code> 命令来打包之。</li>
+<li>worker_vcores 申请分配应用资源worker cpu 核数</li>
+<li>worker_memory 申请分配应用资源worker 内存数</li>
+<li>scheduler_vcores 申请分配应用资源scheduler cpu 核数</li>
+<li>scheduler_memory 申请分配应用资源scheduler 内存数</li>
+<li>name 申请分配资源的应用名字</li>
+<li>work_env 这里是大数据组配置好了hadoop的环境变量</li>
+</ul>
+<h3 id="实际调整worker资源">实际调整worker资源</h3>
+<p>最开始是没有实际开启worker资源的。</p>
+<div class="highlight"><pre><span></span><code>cluster.scale()
+</code></pre></div>
+<p>然后可以跟个数字，其会自动决定是 <code>scale_up</code> 还是 <code>scale_down</code> 。</p>
+<h3 id="关闭应用释放资源">关闭应用释放资源</h3>
+<p>似乎cluster的关闭动作会申请自动释放你在hadoop集群上申请的资源，但任何非正常推荐都可能导致申请的应用资源仍占在哪里的。更保险起见是确保异常之后总能够执行:</p>
+<div class="highlight"><pre><span></span><code>cluster.shutdown()
+</code></pre></div>
+<h3 id="强制关闭某个应用">强制关闭某个应用</h3>
+<div class="highlight"><pre><span></span><code> dask-yarn kill application_1538148161343_0051
+</code></pre></div>
+<h2 id="dataframe最佳实践">dataframe最佳实践</h2>
+<ol>
+<li>如果你的机器内存够用，那么应该直接使用pandas。</li>
+<li>代码在运算过程中，如果能够转到pandas，那么也应该尽早转到pandas。</li>
+<li>pandas的优化：避免apply，使用向量化操作，用分类等。这些对dask的dataframe都有效。尤其是向量化的操作风格，这个初学pandas的人很容易忽视。</li>
+<li>将某一列设置为索引index，某些沿着这个列的操作将会加速，比如说沿着这个列的loc，groupby，join or merge。</li>
+<li>上面提到的 <code>set_index</code> 是很昂贵的操作，你需要确认这有必要，此外不要频繁这样设置索引操作，最好后面再persist 一下。</li>
+<li>聪明的persist 推荐采用如下写法来节省占用内存：</li>
+</ol>
+<div class="highlight"><pre><span></span><code>df = client.persist(df)  # replace your old lazy DataFrame
+</code></pre></div>
+<ol>
+<li>设置合理的分区数 分区数太大太小都不好 </li>
+<li>数据存为apache parquet文件格式</li>
+</ol>
+<h2 id="dataframe的map_partitions-返回值">dataframe的map_partitions 返回值</h2>
+<p>参考了 <a href="https://stackoverflow.com/questions/40662912/python-dask-dataframe-map-partitions-return-value">这个网页</a> 。</p>
+<ol>
+<li>如果函数返回的标量，那么map_partitions 返回的是 dask Series object</li>
+<li>如果函数返回的是pd.Series object， 那么 map_partitions 会将这些 Series 对象连接起来，返回的也是 dask Series object。</li>
+<li>如果函数返回的pd.DataFrame object ，那么map_partitions 会将这些Dataframe连接起来，沿着axis=0，也就是纵向，返回的是dask DataFrame对象。</li>
+</ol>
+<h2 id="dask单机版">dask单机版</h2>
+<p>dask单机版在熟悉dask命令和基本调试代码上还是很有用的，不需要做任何配置就是dask单机版。</p>
+<p>按照官方文档，单机版也分为单机调度或分布式调度两种，官方文档推荐如下采用分布式调度，说有更好的诊断功能等。</p>
+<div class="highlight"><pre><span></span><code>from dask.distributed import Client, LocalCluster
+cluster = LocalCluster()
+client = Client(cluster)
+</code></pre></div>
+<p>似乎现在只能在linux上运行了。</p>
+<p>单机版的线程调度中还是有所区别的：</p>
+<ul>
+<li>相同的进程中用多个线程 【】 默认是dask.array dask.dataframe dask.delayed</li>
+</ul>
+<p>scheduler="threads"</p>
+<ul>
+<li>分开的进程处理 默认是dask.bag</li>
+</ul>
+<p>scheduler="processes"</p>
+<ul>
+<li>单线程式</li>
+</ul>
+<p>scheduler="single-threaded"</p>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li><a href="https://docs.dask.org/en/latest/">dask官方文档</a></li>
+</ol>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>
