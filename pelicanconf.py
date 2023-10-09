@@ -3,7 +3,7 @@
 
 import os
 import sys
-from my_python_module.pathlib import gen_allfile
+from pywander.pathlib import gen_allfile
 
 # set the author metadata
 AUTHOR = 'wanze'

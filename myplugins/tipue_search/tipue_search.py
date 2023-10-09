@@ -78,7 +78,7 @@ class Tipue_Search_JSON_Generator(object):
         words = seg.lcut(page_text)
 
         # 停用词去除
-        from my_python_module.nlp.chinese_stop_words import STOP_WORDS
+        from pywander.nlp.chinese_stop_words import STOP_WORDS
         words = [word for word in words if word not in STOP_WORDS]
 
         page_text = ' '.join(words)

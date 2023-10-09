@@ -1,6 +1,7 @@
-Slug: learning-csharp-programming
+Slug: csharp-learning-notes
 Tags: csharp,
-Status: draft
+
+
 [TOC]
 
 
