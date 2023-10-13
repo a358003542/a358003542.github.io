@@ -1,5 +1,4 @@
-Tags: editor
-Slug: texmaker-editor
+Slug: texmaker
 Date: 20201120
 
 [TOC]

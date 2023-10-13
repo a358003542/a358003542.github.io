@@ -1,5 +1,4 @@
 Slug: emacs
-Tags: emacs,
 Date: 2018
 
 [TOC]

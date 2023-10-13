@@ -1,4 +1,9 @@
-# 引言
+Date: 20230607
+
+
+[TOC]
+
+## 引言
 图书预处理最开始还是需要OCR步骤的，不可能完全手工输入，因为图书排版上的多样，再强大的OCR软件应该也是做不到百分之百准确的，当然最好预处理的时候准确率越高越好，这样后面校对手工工作就少一些。
 
 [pdf24](https://tools.pdf24.org/zh/) 这个软件以前是接触过的，进行一些pdf分割，优化压缩大小等很方面，免费又强大，然后看到pdf24已经有这个ocr文字识别功能了，试着看怎么样，不想一直在报错。
@@ -22,7 +27,7 @@ tesseract 5.3.0
 
 pdf24的tesseract竟然还挺新的，然后就阅读tesseract文档，看那个模型文件到底咋回事。
 
-# tesseract模型文件
+## tesseract模型文件
 首先需要把 [osd.traineddata](https://github.com/tesseract-ocr/tessdata/raw/3.04.00/osd.traineddata) 和 [equ.traineddata](https://github.com/tesseract-ocr/tessdata/raw/3.04.00/equ.traineddata) 这两个文件下载下来放到pdf24的tessdata文件夹下。
 
 然后tesseract模型文件从4.0+开始分为几个：

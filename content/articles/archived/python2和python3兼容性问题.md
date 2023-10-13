@@ -1,5 +1,4 @@
 Slug: python2-python3
-Tags: python
 Date: 20191018
 
 [TOC]

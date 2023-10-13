@@ -1,5 +1,4 @@
-Tags: editor
-Slug: vi-editor
+Slug: vi
 Date: 20190911
 
 

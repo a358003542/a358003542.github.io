@@ -122,7 +122,7 @@ SITE_DESCRIPTION = '欢迎来到本网站，希望本网站的文章能够对您
 
 ########################## template ############################
 # need articles or dates or page_name jinja2 env variables
-DIRECT_TEMPLATES = ['index', 'categories', 'archives', 'tags']
+DIRECT_TEMPLATES = ['index', 'categories', 'archives']
 
 # disable parse html
 READERS = {'html': None}

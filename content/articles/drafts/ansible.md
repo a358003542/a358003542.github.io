@@ -1,5 +1,4 @@
 Slug: ansible
-Tags: ansible
 Date: 20191018
 Status: draft
 [TOC]

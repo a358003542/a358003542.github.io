@@ -1,5 +1,4 @@
 Slug: emacs-orgmode-learning-notes
-Tags: emacs
 Date: 2018
 
 [TOC]
