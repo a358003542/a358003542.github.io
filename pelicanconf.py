@@ -141,7 +141,7 @@ for template_src in gen_allfile(startpath=template_file_startpath, filetype="htm
 ################################### plugin #################
 PLUGIN_PATHS = ['myplugins']
 
-PLUGINS = ['extract_toc', 'tipue_search', 'sitemap', 'pandoc_html', 'bookref']
+PLUGINS = ['extract_toc', 'search_content', 'sitemap', 'pandoc_html', 'bookref']
 
 
 SITEMAP = {

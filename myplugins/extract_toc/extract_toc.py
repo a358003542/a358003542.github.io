@@ -27,14 +27,11 @@ def extract_toc(content):
     # default Markdown reader
     if not toc and readers.MarkdownReader.enabled and extension in readers.MarkdownReader.file_extensions:
         toc = soup.find('div', class_='toc')
-        if toc:
-            toc.extract()
 
     # default reStructuredText reader
     if not toc and readers.RstReader.enabled and extension in readers.RstReader.file_extensions:
         toc = soup.find('div', class_='contents topic')
         if toc:
-            toc.extract()
             tag = BeautifulSoup(str(toc), 'html.parser')
             tag.div['class'] = 'toc'
             tag.div['id'] = ''
