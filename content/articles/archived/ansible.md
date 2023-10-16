@@ -1,6 +1,7 @@
 Slug: ansible
 Date: 20191018
-Status: draft
+
+
 [TOC]
 
 ## 前言

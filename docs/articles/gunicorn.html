@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="简介 gunicorn 挂载python的 wsgi 服务还是不错的，多进程多线程支持，大大提升服务性能。 配置 配置可以就是一个python文件，然后大体内容如下： from …" />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>gunicorn  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/gunicorn.html"> gunicorn  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#配置">配置</a></li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-09-18T00:00:00+08:00">2019年 9月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-17T04:39:02.366855+08:00">2023年 10月 17日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="简介">简介</h2>
+<p>gunicorn 挂载python的 wsgi 服务还是不错的，多进程多线程支持，大大提升服务性能。</p>
+<h2 id="配置">配置</h2>
+<p>配置可以就是一个python文件，然后大体内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">cpu_count</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span>
+
+<span class="k">def</span> <span class="nf">max_workers</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">cpu_count</span><span class="p">()</span>
+
+
+<span class="n">bind</span> <span class="o">=</span> <span class="s1">'127.0.0.1:8000'</span>
+<span class="n">max_requests</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">worker_class</span> <span class="o">=</span> <span class="s1">'gevent'</span>
+<span class="n">workers</span> <span class="o">=</span> <span class="n">max_workers</span><span class="p">()</span>
+</code></pre></div>
+<p>写上这么一个python文件之后，启动gunicorn挂载django服务大体如下：</p>
+<div class="highlight"><pre><span></span><code>gunicorn -c gunicorn_config.py youapp.wsgi
+</code></pre></div>
+<p>其他配置还有：</p>
+<ul>
+<li>pidfile</li>
+<li>reload 代码改变之后自动reload，这个前期开发会很有用</li>
+<li>accesslog access日志所在地</li>
+<li>errorlog error 日志所在地</li>
+<li>workers  进程数</li>
+<li>threads 一个进程的线程数</li>
+<li>worker_class </li>
+<li>worker_connections 单进程最大连接数</li>
+<li>loglevel 日志级别</li>
+</ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

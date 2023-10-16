@@ -1,7 +1,6 @@
-Slug: electron-learning-notes
+Slug: electron
 Date: 20201018
-Tags: gui, javascript, electron
-Status: draft
+
 [TOC]
 
 ## 前言

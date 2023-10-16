@@ -1,4 +1,4 @@
-Slug: jquery-tutorial
+Slug: jquery
 Date: 20191018
 
 [TOC]

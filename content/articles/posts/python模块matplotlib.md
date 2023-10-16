@@ -1,14 +1,10 @@
 Slug: python-module-matplotlib
 Date: 20230309
-
+Modified: 20231017
 
 [TOC]
 
-## 前言
-
-之前数据绘图一文简单介绍了下如何在jupyter notebook 下绘制简单的直线图、饼图等等，本文主要是作为matplotlib模块绘图的综合性简要介绍。
-
-经常看到一些简单的例子，比如如何画出散点图或者等等，从简单的直白的到复杂的一大堆参数调配的都有，让人迷惑。matplotlib模块还可以和PyQt或者wxpython等后端结合起来等等高级功能，但我现在最急切的就是想要理解matplotlib模块到底做了一些什么事情，那些是必要的常规操作，那些是对外的数据接口。
+### matplotlib支持中文显示
 
 比如下面的调配中文字体支持的，是matplotlib模块的外围操作，应该绘图前就要调配好的：
 

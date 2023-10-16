@@ -1,17 +1,12 @@
 Slug: python-module-lxml
 Date: 20230309
+Modified: 20231017
 
 [TOC]
 
 ## 前言
 
-本来之前是将lxml模块归于爬虫那块的，但现在是算作python第三方好伙伴，一个通用模块了。当然lxml模块目前应该主要应用领域还是在爬虫那块，然后就作为实际功能是类似于beautifulsoup专注于xml或者html等结构文档的分析工作。但如下的讨论，我也看到了lxml模块更加通用的应用的可能性。
-
-
-
-
-
-你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。这样lxml模块开始受到我的重视了，因为lxml对xpath语句有着很好的支持。
+你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。lxml模块对xpath语句有着很好的支持:
 
 ```python
 from lxml import etree

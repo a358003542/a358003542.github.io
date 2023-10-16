@@ -1,6 +1,6 @@
 Slug: python-module-nltk
 Date: 20230309
-
+Modified: 20231017
 
 [TOC]
 
@@ -8,7 +8,7 @@ Date: 20230309
 
 ## 前言
 
-nltk是一个很有用的关于自然语言处理研究学习的支持性python模块。
+nltk是一个很有用的关于自然语言处理的python模块。
 
 ## 安装和使用
 

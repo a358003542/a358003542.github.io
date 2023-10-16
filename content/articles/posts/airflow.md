@@ -1,4 +1,4 @@
-Slug: airflow-module
+Slug: airflow
 Date: 20190911
 
 [TOC]

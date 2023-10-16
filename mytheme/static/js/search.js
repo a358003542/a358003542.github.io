@@ -11,7 +11,6 @@ function getQueryVariable(variable) {
     }
 }
 
-const simpleSegmenter = new Intl.Segmenter("zh", { granularity: "word" });
 
 function initSearch() {
     fetch("/search_content.json")
@@ -34,20 +33,10 @@ function initSearch() {
             let searchTerm = getQueryVariable('q');
 
             if (searchTerm) {
-                if (searchTerm.indexOf('*') > 0){
-                    new_search_term = searchTerm
-                } else{
-                    new_search_term = [...simpleSegmenter.segment(searchTerm)]
-                    .filter((segment) => segment.isWordLike)
-                    .map((item) => (item.segment))
-                    .join(' ')
-                }
-
-                do_search(new_search_term)
+                do_search(searchTerm)
             }
         });
 }
-
 
 
 

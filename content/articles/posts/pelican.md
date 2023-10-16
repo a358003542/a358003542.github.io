@@ -1,6 +1,6 @@
 Slug: pelican
 Date: 20230309
-Modified: 20231013
+Modified: 20231017
 
 [TOC]
 
@@ -35,110 +35,6 @@ from pelicanconf import *
 
 
 
-## 支持Markdown写作
-
-请先确保当前环境安装了markdown模块：
-
-```text
-pip install markdown
-```
-
-该模块的官方文档在 [这里](https://python-markdown.github.io/) 。就基本的使用是不需要太深入了解这个模块的，不过后面稍微有点定制需求，还有一些插件等，都是和这个模块的一些功能关联在一起的。
-
-首先我们来看最常用的两个功能，一个语法高亮功能，一个是自动目录生成功能。
-
-pelican相关的MARKDOWN配置原始参数如下：
-
-```
-MARKDOWN = {
-    'extension_configs': {
-        'markdown.extensions.codehilite': {'css_class': 'highlight'},
-        'markdown.extensions.extra': {},
-        'markdown.extensions.meta': {},
-    },
-    'output_format': 'html5',
-}
-```
-
-这些参数实际上就是传递给上面提到的 `markdown` 模块，pelican并没有管这块的。然后这里所谓的 extension_config 可以在其官方文档的 [这里](https://python-markdown.github.io/extensions/) 获得信息，其中有很多官方插件，随着markdown模块的安装一并就安装进来了。
-
-### codehilite
-
-这个插件提供了一种代码块语法高亮方案，不过其对于代码块要求采用如下格式：
-
-```text
-#!/usr/bin/python
-# Code goes here ...
-```
-
-还有其他几种格式这里就不赘述了，后面提到的 `fenced_code` 插件实际上是站在 CodeHilite 之上的，支持了我们常见了gfm代码块的表达。这两个插件都依赖 `pygments` 模块。
-
-- css_class 配置最外面那个div区块的class名字
-- guess_lang 也不知道从那个版本开始，这个参数默认变成True了，给我带来了一些困扰，它会让pygments去猜代码块里的语言，经常猜的不准确，我喜欢关掉，这样默认text也就是不染色最好，通常这个和用户习惯也是一致的，不指定语言一般暗含的意思就是语种不确定就按照text来。
-- 其他还有几个参数选择读者参看该插件的文档吧。比如 `linenums` 可能有些人会喜欢使用。
-
-### fenced_code
-
-如上描述。
-
-### toc
-
-你在markdown 文档里面写上：
-
-```
-[TOC]
-```
-
-其会自动将其转成：
-
-```
-<div class="toc">
-.....
-</div>
-```
-
-这里顺便就提到 `extract_toc` plugin 了，该插件利用 `beautifulsoup4` 模块刷上面的toc div，将你在pelican模板中遇到的 `article` 这个变量，加入了 `article.toc` 这个属性，具体内容就是上面提及的自动生成的toc内容。
-
-出于好奇我们可以看一下extract_toc 的相关代码：
-
-```python
-    if toc:
-        toc.extract()
-        content._content = soup.decode()
-        content.toc = toc.decode()
-        if content.toc.startswith('<html>'):
-            content.toc = content.toc[12:-14]
-```
-
-我们看到 `toc.extract()` 也就是将之前 toc 插件生成的目录删去了，然后将toc赋值给了content，这个content对应的就是 `article` 。
-
-因此在pelican里，你可以查看一下你的theme，如果toc显示正常的话，应该有类似如下jinja2代码：
-
-```jinja2
-    {% if article.toc %}
-    <div class="col-md-2 table-of-content">
-        <nav>
-        ....
-        {{ article.toc }}
-        </nav>
-    </div>
-```
-
-按照上面的讨论现在MARKDOWN 这个变量是：
-
-```
-MARKDOWN = {
-    'extension_configs': {
-        'markdown.extensions.codehilite': {'css_class': 'highlight',
-                                           'guess_lang': False},
-        'markdown.extensions.toc': {},
-        'markdown.extensions.fenced_code': {},
-        'markdown.extensions.extra': {},
-        'markdown.extensions.meta': {},
-    },
-    'output_format': 'html5',
-}
-```
 
 
 
@@ -254,11 +150,6 @@ TAG_SAVE_AS = TAG_URL
 ARTICLE_EXCLUDES= ['articles\\programming\\algorithm\\examples']
 ```
 
-## HTML文档的处理
-
-
-
-## 模板
 
 ### 使用theme
 
@@ -272,7 +163,7 @@ theme内部static文件夹下的内容会copy到output文件夹下，比如 `sta
 
 然后templates文件夹里面都是一些jinja2模板文件，具体jinja2模块引擎相关的知识就不在这里讨论了。
 
-### 模板文件可以使用的变量
+#### 模板文件可以使用的变量
 
 1. 配置文件里面的变量直接可以使用，比如你在配置文件里面定义了`SITEURL="WHAT"` ，那么在模板文件里面可以这样引用 `{{ SITEURL}}` 。注意这些配置名按照规范是应该全部大写字母的。
 2. 比如在article模板下你定义的那些metadata都是可以引用的，如`article.tags` 。
@@ -281,8 +172,6 @@ theme内部static文件夹下的内容会copy到output文件夹下，比如 `sta
 具体那些模板文件可以使用那些变量内容更多，请读者参看官方文档5.6 Creating themes的Templates and variables 一小节。
 
 
-
-## 插件
 
 ### plugin的安装
 
@@ -294,255 +183,110 @@ PLUGINS = [ 'extract_toc', 'tipue_search', 'render_math']
 ```
 
 
+## 支持Markdown写作
 
-## 其他技巧分享
+请先确保当前环境安装了markdown模块：
 
-### 定制自动生成python脚本
+```text
+pip install markdown
+```
 
-如果读者是在windows环境下，那么pelican那个默认的Makefile是不怎么好用的，说到底其只是提供了一些快捷的命令行支持，我们完全可以另外写一个python脚本来实现这点。
+该模块的官方文档在 [这里](https://python-markdown.github.io/) 。就基本的使用是不需要太深入了解这个模块的，不过后面稍微有点定制需求，还有一些插件等，都是和这个模块的一些功能关联在一起的。
+
+首先我们来看最常用的两个功能，一个语法高亮功能，一个是自动目录生成功能。
+
+pelican相关的MARKDOWN配置原始参数如下：
+
+```
+MARKDOWN = {
+    'extension_configs': {
+        'markdown.extensions.codehilite': {'css_class': 'highlight'},
+        'markdown.extensions.extra': {},
+        'markdown.extensions.meta': {},
+    },
+    'output_format': 'html5',
+}
+```
+
+这些参数实际上就是传递给上面提到的 `markdown` 模块，pelican并没有管这块的。然后这里所谓的 extension_config 可以在其官方文档的 [这里](https://python-markdown.github.io/extensions/) 获得信息，其中有很多官方插件，随着markdown模块的安装一并就安装进来了。
+
+### codehilite
+
+这个插件提供了一种代码块语法高亮方案，不过其对于代码块要求采用如下格式：
+
+```text
+#!/usr/bin/python
+# Code goes here ...
+```
+
+还有其他几种格式这里就不赘述了，后面提到的 `fenced_code` 插件实际上是站在 CodeHilite 之上的，支持了我们常见了gfm代码块的表达。这两个插件都依赖 `pygments` 模块。
+
+- css_class 配置最外面那个div区块的class名字
+- guess_lang 也不知道从那个版本开始，这个参数默认变成True了，给我带来了一些困扰，它会让pygments去猜代码块里的语言，经常猜的不准确，我喜欢关掉，这样默认text也就是不染色最好，通常这个和用户习惯也是一致的，不指定语言一般暗含的意思就是语种不确定就按照text来。
+- 其他还有几个参数选择读者参看该插件的文档吧。比如 `linenums` 可能有些人会喜欢使用。
+
+### fenced_code
+
+如上描述。
+
+### toc
+
+你在markdown 文档里面写上：
+
+```
+[TOC]
+```
+
+其会自动将其转成：
+
+```
+<div class="toc">
+.....
+</div>
+```
+
+这里顺便就提到 `extract_toc` plugin 了，该插件利用 `beautifulsoup4` 模块刷上面的toc div，将你在pelican模板中遇到的 `article` 这个变量，加入了 `article.toc` 这个属性，具体内容就是上面提及的自动生成的toc内容。
+
+出于好奇我们可以看一下extract_toc 的相关代码：
 
 ```python
-#!/usr/bin/env python
-# -*-coding:utf-8-*-
-
-
-"""
-run.bat 在windows下运行方便点 对应的就是 build 命令
-
-"""
-
-import click
-import subprocess
-import os
-import shutil
-from pathlib import Path
-import threading
-
-PROJECT = 'myblog'
-BASEDIR = os.getcwd()
-INPUTDIR = os.path.join(BASEDIR, 'content')
-OUTPUTDIR = os.path.join(BASEDIR, 'dev_output')
-PUBLISHDIR = os.path.join(BASEDIR, 'output')
-CONFFILE = os.path.join(BASEDIR, 'pelicanconf.py')
-PUBLISHCONF = os.path.join(BASEDIR, 'publishconf.py')
-PORT = 9000
-
-
-@click.group()
-def main():
-    pass
-
-
-def copy_mathjax(dest):
-    mathjax_foldername = 'MathJax-2.7.7'
-    dest_folder = os.path.join(dest, mathjax_foldername)
-    if os.path.exists(dest_folder):
-        click.echo(f'{mathjax_foldername} already exists.')
-    else:
-        shutil.copytree(mathjax_foldername, dest_folder)
-        click.echo(f'{mathjax_foldername} copyed.')
-
-
-@main.command()
-def devserve():
-    """
-    devbuild your pelican project
-    """
-    click.echo("start devbuild your pelican project...")
-    
-    copy_mathjax(OUTPUTDIR)
-    
-    def devbuild():
-        cmd = "pelican -r {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE}".format(
-            INPUTDIR=INPUTDIR,
-            OUTPUTDIR=OUTPUTDIR,
-            CONFFILE=CONFFILE
-        )
-        click.echo('start run cmd: {0}'.format(cmd))
-        subprocess.call(cmd, shell=True)
-
-    def serve():
-        while not os.path.exists(OUTPUTDIR):
-            import time
-            time.sleep(1)
-
-        os.chdir(OUTPUTDIR)
-        serve_cmd = 'python -m http.server {PORT}'.format(PORT=PORT)
-        click.echo('start run cmd: {0}'.format(serve_cmd))
-        subprocess.call(serve_cmd, shell=True)
-
-    t0 = threading.Thread(target=devbuild)
-    t0.start()
-
-    t = threading.Thread(target=serve)
-    t.start()
-
-    threads = []
-    threads.append(t0)
-    threads.append(t)
-
-    for t in threads:
-        try:
-            t.join()
-        except KeyboardInterrupt as e:
-            print('用户取消了')
-
-
-@main.command()
-def build():
-    """
-    build your pelican project
-    """
-    click.echo("start build your pelican project...")
-    copy_mathjax(PUBLISHDIR)
-    
-    cmd = "pelican {INPUTDIR} -o {PUBLISHDIR} -s {PUBLISHCONF}".format(
-        INPUTDIR=INPUTDIR,
-        PUBLISHCONF=PUBLISHCONF,
-        PUBLISHDIR=PUBLISHDIR
-    )
-
-    click.echo('start run cmd: {0}'.format(cmd))
-    ret = subprocess.call(cmd, shell=True)
-
-    click.echo('running result is:{0}'.format(ret))
-
-    
-
-
-@main.command()
-def devclean():
-    """
-    clean your dev output
-    """
-    click.echo("start clean your output folder...")
-    rm(OUTPUTDIR, recursive=True)
-
-
-def normalized_path_obj(path='.'):
-    """
-    默认支持 ~ 符号
-
-    返回的是 Path 对象
-    :param path:
-    :return:
-    """
-    if isinstance(path, Path):
-        return path.expanduser()
-    elif isinstance(path, str):
-        if path.startswith('~'):
-            path = os.path.expanduser(path)
-        return Path(path)
-    else:
-        raise TypeError
-
-
-def rm(path, recursive=False):
-    """
-    the function can remove file or empty directory(default).
-
-    use `shutil.rmtree` to remove the non-empty directory,you need add `recursive=True`
-
-    """
-    path = normalized_path_obj(path)
-    if recursive:
-        shutil.rmtree(path)
-    else:
-        if path.is_file():
-            path.unlink()
-        else:
-            path.rmdir()
-
-
-if __name__ == '__main__':
-    main()
+    if toc:
+        toc.extract()
+        content._content = soup.decode()
+        content.toc = toc.decode()
+        if content.toc.startswith('<html>'):
+            content.toc = content.toc[12:-14]
 ```
 
-在上面 `run.py` 的基础上，我们可以创建如下两个脚本：`start_server.bat` 和 `build.bat` 。其中`start_server.bat` 是平时编写调试的时候使用， `build.bat` 是编译输出网站成品时使用。
+我们看到 `toc.extract()` 也就是将之前 toc 插件生成的目录删去了，然后将toc赋值给了content，这个content对应的就是 `article` 。
 
-这两个脚本内容很简单，就是调用上面编写的python脚本提供的命令行接口。其中 `start_server.bat` 是：
+因此在pelican里，你可以查看一下你的theme，如果toc显示正常的话，应该有类似如下jinja2代码：
 
-```text
-python run.py devserve
+```jinja2
+    {% if article.toc %}
+    <div class="col-md-2 table-of-content">
+        <nav>
+        ....
+        {{ article.toc }}
+        </nav>
+    </div>
 ```
 
-`build.bat` 的内容是：
+按照上面的讨论现在MARKDOWN 这个变量是：
 
-```text
-python run.py build
 ```
-
-关于python编程可以参看我编写的python编程一文。
-
-关于python的click模块可以参看我编写的click模块一文。
-
-
-
-## 附录
-
-### 默认的Metadata
-
-<table border="1" class="docutils">
-<colgroup>
-<col width="19%">
-<col width="81%">
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Metadata</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">title</span></code></td>
-<td>Title of the article or page</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">date</span></code></td>
-<td>Publication date (e.g., <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:SS</span></code>)</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">modified</span></code></td>
-<td>Modification date (e.g., <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:SS</span></code>)</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tags</span></code></td>
-<td>Content tags, separated by commas</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">keywords</span></code></td>
-<td>Content keywords, separated by commas (HTML content only)</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">category</span></code></td>
-<td>Content category (one only — not multiple)</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">slug</span></code></td>
-<td>Identifier used in URLs and translations</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">author</span></code></td>
-<td>Content author, when there is only one</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">authors</span></code></td>
-<td>Content authors, when there are multiple</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">summary</span></code></td>
-<td>Brief description of content for index pages</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">lang</span></code></td>
-<td>Content language ID (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">fr</span></code>, etc.)</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">translation</span></code></td>
-<td>If content is a translation of another (<code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>)</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status</span></code></td>
-<td>Content status: <code class="docutils literal notranslate"><span class="pre">draft</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden</span></code>, or <code class="docutils literal notranslate"><span class="pre">published</span></code></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">template</span></code></td>
-<td>Name of template to use to generate content (without extension)</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">save_as</span></code></td>
-<td>Save content to this relative file path</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">url</span></code></td>
-<td>URL to use for this article/page</td>
-</tr>
-</tbody>
-</table>
+MARKDOWN = {
+    'extension_configs': {
+        'markdown.extensions.codehilite': {'css_class': 'highlight',
+                                           'guess_lang': False},
+        'markdown.extensions.toc': {},
+        'markdown.extensions.fenced_code': {},
+        'markdown.extensions.extra': {},
+        'markdown.extensions.meta': {},
+    },
+    'output_format': 'html5',
+}
+```
 
 
 ## pelican源码阅读
@@ -1575,4 +1319,253 @@ localcontext = settings + 一些运行时额外的参数 + kwargs【write_file�
 对于静态文件来说 `generate_output` 方法需要重写，直接利用文件操作复制过去即可。
 
 
+
+
+
+## 附录
+
+
+### 定制自动生成python脚本
+
+如果读者是在windows环境下，那么pelican那个默认的Makefile是不怎么好用的，说到底其只是提供了一些快捷的命令行支持，我们完全可以另外写一个python脚本来实现这点。
+
+```python
+#!/usr/bin/env python
+# -*-coding:utf-8-*-
+
+
+"""
+run.bat 在windows下运行方便点 对应的就是 build 命令
+
+"""
+
+import click
+import subprocess
+import os
+import shutil
+from pathlib import Path
+import threading
+
+PROJECT = 'myblog'
+BASEDIR = os.getcwd()
+INPUTDIR = os.path.join(BASEDIR, 'content')
+OUTPUTDIR = os.path.join(BASEDIR, 'dev_output')
+PUBLISHDIR = os.path.join(BASEDIR, 'output')
+CONFFILE = os.path.join(BASEDIR, 'pelicanconf.py')
+PUBLISHCONF = os.path.join(BASEDIR, 'publishconf.py')
+PORT = 9000
+
+
+@click.group()
+def main():
+    pass
+
+
+def copy_mathjax(dest):
+    mathjax_foldername = 'MathJax-2.7.7'
+    dest_folder = os.path.join(dest, mathjax_foldername)
+    if os.path.exists(dest_folder):
+        click.echo(f'{mathjax_foldername} already exists.')
+    else:
+        shutil.copytree(mathjax_foldername, dest_folder)
+        click.echo(f'{mathjax_foldername} copyed.')
+
+
+@main.command()
+def devserve():
+    """
+    devbuild your pelican project
+    """
+    click.echo("start devbuild your pelican project...")
+    
+    copy_mathjax(OUTPUTDIR)
+    
+    def devbuild():
+        cmd = "pelican -r {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE}".format(
+            INPUTDIR=INPUTDIR,
+            OUTPUTDIR=OUTPUTDIR,
+            CONFFILE=CONFFILE
+        )
+        click.echo('start run cmd: {0}'.format(cmd))
+        subprocess.call(cmd, shell=True)
+
+    def serve():
+        while not os.path.exists(OUTPUTDIR):
+            import time
+            time.sleep(1)
+
+        os.chdir(OUTPUTDIR)
+        serve_cmd = 'python -m http.server {PORT}'.format(PORT=PORT)
+        click.echo('start run cmd: {0}'.format(serve_cmd))
+        subprocess.call(serve_cmd, shell=True)
+
+    t0 = threading.Thread(target=devbuild)
+    t0.start()
+
+    t = threading.Thread(target=serve)
+    t.start()
+
+    threads = []
+    threads.append(t0)
+    threads.append(t)
+
+    for t in threads:
+        try:
+            t.join()
+        except KeyboardInterrupt as e:
+            print('用户取消了')
+
+
+@main.command()
+def build():
+    """
+    build your pelican project
+    """
+    click.echo("start build your pelican project...")
+    copy_mathjax(PUBLISHDIR)
+    
+    cmd = "pelican {INPUTDIR} -o {PUBLISHDIR} -s {PUBLISHCONF}".format(
+        INPUTDIR=INPUTDIR,
+        PUBLISHCONF=PUBLISHCONF,
+        PUBLISHDIR=PUBLISHDIR
+    )
+
+    click.echo('start run cmd: {0}'.format(cmd))
+    ret = subprocess.call(cmd, shell=True)
+
+    click.echo('running result is:{0}'.format(ret))
+
+    
+
+
+@main.command()
+def devclean():
+    """
+    clean your dev output
+    """
+    click.echo("start clean your output folder...")
+    rm(OUTPUTDIR, recursive=True)
+
+
+def normalized_path_obj(path='.'):
+    """
+    默认支持 ~ 符号
+
+    返回的是 Path 对象
+    :param path:
+    :return:
+    """
+    if isinstance(path, Path):
+        return path.expanduser()
+    elif isinstance(path, str):
+        if path.startswith('~'):
+            path = os.path.expanduser(path)
+        return Path(path)
+    else:
+        raise TypeError
+
+
+def rm(path, recursive=False):
+    """
+    the function can remove file or empty directory(default).
+
+    use `shutil.rmtree` to remove the non-empty directory,you need add `recursive=True`
+
+    """
+    path = normalized_path_obj(path)
+    if recursive:
+        shutil.rmtree(path)
+    else:
+        if path.is_file():
+            path.unlink()
+        else:
+            path.rmdir()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+在上面 `run.py` 的基础上，我们可以创建如下两个脚本：`start_server.bat` 和 `build.bat` 。其中`start_server.bat` 是平时编写调试的时候使用， `build.bat` 是编译输出网站成品时使用。
+
+这两个脚本内容很简单，就是调用上面编写的python脚本提供的命令行接口。其中 `start_server.bat` 是：
+
+```text
+python run.py devserve
+```
+
+`build.bat` 的内容是：
+
+```text
+python run.py build
+```
+
+关于python编程可以参看我编写的python编程一文。
+
+关于python的click模块可以参看我编写的click模块一文。
+
+
+### 默认的Metadata
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%">
+<col width="81%">
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Metadata</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">title</span></code></td>
+<td>Title of the article or page</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">date</span></code></td>
+<td>Publication date (e.g., <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:SS</span></code>)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">modified</span></code></td>
+<td>Modification date (e.g., <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:SS</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tags</span></code></td>
+<td>Content tags, separated by commas</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">keywords</span></code></td>
+<td>Content keywords, separated by commas (HTML content only)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">category</span></code></td>
+<td>Content category (one only — not multiple)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">slug</span></code></td>
+<td>Identifier used in URLs and translations</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">author</span></code></td>
+<td>Content author, when there is only one</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">authors</span></code></td>
+<td>Content authors, when there are multiple</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">summary</span></code></td>
+<td>Brief description of content for index pages</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">lang</span></code></td>
+<td>Content language ID (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">fr</span></code>, etc.)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">translation</span></code></td>
+<td>If content is a translation of another (<code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status</span></code></td>
+<td>Content status: <code class="docutils literal notranslate"><span class="pre">draft</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden</span></code>, or <code class="docutils literal notranslate"><span class="pre">published</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">template</span></code></td>
+<td>Name of template to use to generate content (without extension)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">save_as</span></code></td>
+<td>Save content to this relative file path</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">url</span></code></td>
+<td>URL to use for this article/page</td>
+</tr>
+</tbody>
+</table>
 

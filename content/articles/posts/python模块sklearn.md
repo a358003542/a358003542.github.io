@@ -4,11 +4,6 @@ Slug: python-module-sklearn
 
 [TOC]
 
-## 前言
-
-sklearn的很多内容在机器学习相关文章中都有所提及，这里作为拾遗性质。
-
-
 
 ### 关于sklearn的pipeline
 
