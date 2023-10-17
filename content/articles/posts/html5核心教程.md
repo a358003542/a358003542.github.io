@@ -1,7 +1,7 @@
 Slug: html5-core-tutorial
 Date: 20191018
 Summary: 本文讨论了最基础的HTML知识，可作为学习Web开发的第一篇学习文章。
-
+Modified: 20231017
 
 [TOC]
 
@@ -11,12 +11,15 @@ If you are a english reader, I recommend [this article](https://www.websiteplane
 
 
 ## 第一个模板
+首先是一个基本的html5骨架：
 
 ```html
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
     <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>your awesome title</title>
 
     </head>
@@ -27,94 +30,40 @@ If you are a english reader, I recommend [this article](https://www.websiteplane
 </html>
 ```
 
-### doctype声明
-
-现在html5的doctype声明非常简单了，开头加入如下简单一行即可:
+第一行是本文档的doctype声明
 
     <!DOCTYPE html>
 
 然后进入 **html** 标签，然后进入 **head** 标签，在head标签里面的内容不会显示在网页上，主要是一些关于本网页的配置信息。
 
-### 字符集设置为utf-8
-
-现在html5使用如下更简洁的语法了:
+如下将本文档的字符集声明为utf-8字符集：
 
     <meta charset="utf-8">
+
+这一行一般也要加上：
+
+```
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+```
+提供响应式布局支持。
+
+然后是设置本文档的title。
 
 然后 **body** 标签里面存放这实际要显示的网页内容。
 
-## 第二个例子
+## html5语义标签并不是最佳实践
+html5的那些语义标签并不是最佳实践，不要为了使用而使用。一般只推荐使用main和header，有时可以使用下footer。详情请参看下面视频的讨论：
 
-```html
-<!DOCTYPE html>
-<html lang="zh">
-    <head>
-    <meta charset="utf-8">
-    <title>basic html</title>
-    </head>
+<div class="ratio ratio-16x9">
+<iframe src="//player.bilibili.com/player.html?aid=959112498&bvid=BV1Ep4y1c7wN&cid=1284043025&p=1" allowfullscreen> </iframe>
+</div>
 
-    <body>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">Contact Us</a></li>
-            </ul>
-        </nav>
-
-    <header>
-        <h1><a href="#">Very Basic Document</a></h1>
-        <h2>A tag line might go here</h2>
-    </header>
-
-    <section>
-        <article>
-            <h3><a href="#">First Article Title</a></h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. </p>
-        </article>
-
-        <article>
-            <h3><a href="#">Second Article Title</a></h3>
-            <p>Praesent libero. Sed cursus ante dapibus diam.</p>
-            </article>
-        </section>
-
-        <aside>
-            <h4>Connect With Us</h4>
-            <ul>
-                <li><a href="#">Twitter</a></li>
-                <li><a href="#">Facebook</a></li>
-            </ul>
-        </aside>
-
-        <footer>
-            <p>All rights reserved.</p>
-        </footer>
-    </body>
-</html>
-```
-
-html5新加入了很多关于文档结构的标签，这些标签并没有任何布局含义，相当于一个自带名字的div，也就是默认标签的意思。其主要作用就是html内容分组(group)。
-
-下面是常用的这些标签含义，在实际使用中，应该尽量规范使用这些标签。
-
--   **header:** 一个网页总要有个头，推荐都使用这个标签。
--   **nav:** 一般是目录或者导航菜单。
--   **section:** 一般是本网页的主体信息部分或者主页面——类似于GUI的主要显示窗口。
--   **article:** section下面的某一独立内容部分。
--   **aside:** 和网页主体信息不太相关的其他信息。
--   **footer:** 一般是关于作者，版权或者其他比如脚注等信息。
-
-这些都可以通过div来取代，在实际使用中如果上面的默认标签能够满足需求，那么就应该使用html5的这些默认标签。
-
-上面的例子已经出现了一些标签，然后还有一些很常用的标签，下面承接上面所讲的继续补充说明一些常用html标签清单。
 
 ## 常用html标签清单
-
+-   **h1,h2,h3 ...** 标题标签，数字表示各个标题的层级。【这里强调一下，标题标签的含义是文档的结构，而不是文字的表现形式，不要因为h3之类的能让文字显得很大就用它，这是极不规范的。】
 -   **ul:** 不编号列表，也叫无序列表（Unordered list）。里面的item用 **li** 标签封装。
 -   **ol:** 编号列表，也叫有序列表（Ordered list）。里面的item用 **li** 标签封装。
--   **h1,h2,h3 ...** 标题标签，数字表示各个标题的层级。【这里强调一下，标题标签的含义是文档的结构，而不是文字的表现形式，不要因为h3之类的能让文字显得很大就用它，这是极不规范的。】
 -   **p:** 段落标签。
 -   **b:** 文字加粗
 -   **i:** 文字斜体
@@ -152,19 +101,19 @@ html5新加入了很多关于文档结构的标签，这些标签并没有任何
 - `/what` 指向本站点的链接，加入本站点是localhost，则为 `localhost/what`
 - `./what` 链接的相对位置路径。 
 
-## 文字强调的html5规范
+### 文字强调的html5规范
 
 按照html5提出的规范，并不推荐用 `<b>` 标签作为文字的强调用途（我一般使用的文字加粗是那个词提醒读者这个词需要特别记忆）。其推荐的是 `<em>` 标签作为一级强调，然后 `<strong>` 标签作为更进一步的强调。在默认样式中，`<em>` 是斜体，然后`<strong>`是粗体。显然html5的意思是将表达文字的样式这样的标签`<b><i>`尽可能不用直到废弃，然后对于文字强调都推荐使用`<em>`和`<strong>`标签。其设计思路是html完全成为一个描述文档内容结构的标签系统，而不带有任何内容表现形式的东西。还是推荐按照html5规范来，少用`<b>`标签和`<i>`标签。请参看 [这个网页](http://stackoverflow.com/questions/271743/whats-the-difference-between-b-and-strong-i-and-em) 的讨论。
 
 
 
-## 注释
+### 注释
 
 ```html
 <!-- Make me into a comment. -->
 ```
 
-## 有序列表里面带无序列表
+### 有序列表里面带无序列表
 
 就是把无序列表嵌套进去即可。
 
@@ -178,6 +127,13 @@ html5新加入了很多关于文档结构的标签，这些标签并没有任何
     </ul>
 </ol>
 ```
+
+### div和span
+
+div（division）在html标记语言中主要是区块的意思。我们知道html页面要显示的元素就好比一个个盒子逐步排布下来，而 `div` 可以看作一个这样自定义的盒子。html中有两种显示风格的盒子，一种是块状区块，比如p段落标签；还有一种是inline盒子，比如说em标签，其不会换行。
+
+div标签更确切的表达是块状区块，可以看作其display属性是 `block` （但不一定，不过推荐接受这样的设定）；此外还有所谓的inline区块，用 `span` 标签来表示这样的元素，可以理解为改标签元素的display属性是 `inline` 。
+
 
 ## table
 
@@ -211,13 +167,6 @@ table表格有时也可用于布局，不过不推荐这种风格，因为html�
 
 
 大体在html上画表格就如上所示了，其他一些更漂亮的表格制作都是通过css来完成的，这里先略过了。
-
-## div和span
-
-div（division）在html标记语言中主要是区块的意思。我们知道html页面要显示的元素就好比一个个盒子逐步排布下来，而 `div` 可以看作一个这样自定义的盒子。html中有两种显示风格的盒子，一种是块状区块，比如p段落标签；还有一种是inline盒子，比如说em标签，其不会换行。
-
-div标签更确切的表达是块状区块，可以看作其display属性是 `block` （但不一定，不过推荐接受这样的设定）；此外还有所谓的inline区块，用 `span` 标签来表示这样的元素，可以理解为改标签元素的display属性是 `inline` 。
-
 
 
 ## 表单
@@ -395,8 +344,34 @@ html有好几种方法创建一个按钮，w3school不推荐button标签，而�
 <input id="控件id名称"
 ```
 
+## 引入css
+```
+<link rel="stylesheet" href="code_guide.css">
 
+<style></style>
 
+<p style=“font-size: 20pt;”></p>
+
+```
+
+第一个是引入外部css，第二个是直接把css写入在html文档内，第三个是直接在某个标签上写上css定义。
+
+## 引入javascript
+```
+<script src="code_guide.js"></script>
+
+<script type="module">
+    import {sayhello} from './module.js';
+</script>
+
+<script>
+// write you javascript code
+</script>
+```
+
+第一个是引入外部javascript，第二个是es6新引入的module引入，最后是直接把JavaScript代码写在html文档内。
+
+## 附录
 ### html代码规范
 
 本文参考了 [这篇文章](http://codeguide.bootcss.com) 和 [这篇文章](http://alloyteam.github.io/CodeGuide/)  。

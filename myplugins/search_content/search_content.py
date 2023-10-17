@@ -4,6 +4,8 @@ import logging
 import os.path
 import json
 from codecs import open
+
+from bs4 import BeautifulSoup
 from fenci.segment import Segment
 from pelican import signals
 
@@ -15,6 +17,21 @@ seg = Segment()
 """
 search_content = {}
 
+
+
+def clean_html_content(html_content):
+    """
+    用beautifulsoup4 来进行一些网页清洗工作
+    """
+    soup = BeautifulSoup(html_content, 'html5lib')
+
+    # remove pre code
+    for s in soup.find_all('pre'):
+        s.extract()
+
+    page_text = soup.get_text()
+
+    return page_text
 
 def process_text(page_text):
     """
@@ -36,7 +53,7 @@ def process_text(page_text):
     words = [word for word in words if word not in stopwords]
 
     # limit length to 1000
-    words = words[:1000]
+    # words = words[:1000]
 
     page_text = " ".join(words)
     return page_text
@@ -48,25 +65,17 @@ def add_search_content(generator, content):
     if getattr(article, "status", "published") != "published":
         return
 
-    source_path = article.source_path
     title = article.title
-    content = article.content
     url = article.url
+    page_text = article.summary
 
-    with open(source_path, "r", encoding="utf-8-sig") as infile:
-        raw_content = infile.read()
+    node = {
+        "url": url,
+        "title": process_text(title),
+        "text": process_text(page_text),
+    }
 
-        from .convert_to_plain_text import convert_to_plain_text
-
-        page_text = convert_to_plain_text(raw_content)
-
-        node = {
-            "url": url,
-            "title": process_text(title),
-            "text": process_text(page_text),
-        }
-
-        search_content[url] = node
+    search_content[url] = node
 
 
 def search_content_output(pelican_obj):

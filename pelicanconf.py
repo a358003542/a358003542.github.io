@@ -3,7 +3,18 @@
 
 import os
 import sys
+from pathlib import Path
+
 from pywander.pathlib import gen_allfile
+
+BASE_DIR = Path(__file__).resolve().parent
+sys.path.append(str(BASE_DIR))
+
+# apply patches
+import mypatches
+
+# article.summary 最大长度 搜索功能也是基于此 网页显示再适当截断
+SUMMARY_MAX_LENGTH = 1000
 
 # set the author metadata
 AUTHOR = 'wanze'
