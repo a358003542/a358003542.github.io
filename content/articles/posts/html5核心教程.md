@@ -56,7 +56,7 @@ If you are a english reader, I recommend [this article](https://www.websiteplane
 html5的那些语义标签并不是最佳实践，不要为了使用而使用。一般只推荐使用main和header，有时可以使用下footer。详情请参看下面视频的讨论：
 
 <div class="ratio ratio-16x9">
-<iframe src="//player.bilibili.com/player.html?aid=959112498&bvid=BV1Ep4y1c7wN&cid=1284043025&p=1" allowfullscreen> </iframe>
+<iframe src="//player.bilibili.com/player.html?aid=959112498&bvid=BV1Ep4y1c7wN&cid=1284043025&p=1&autoplay=0" allowfullscreen> </iframe>
 </div>
 
 

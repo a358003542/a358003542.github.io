@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="time模块
+time模块提供了一些和时间相关的函数，更加的底层，不过有些函数可能在某些平台并不适用。类似的模块还有datetime模块，datetime是以类的框架来解决一些时间问题的。所以如果只是需要简单的调用一下时间，那么用time模块，如果是大量和时间相关的问题，推荐使用datetim..." />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>python内置模块time  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-time.html"> python内置模块time  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#time模块">time模块</a><ul>
+<li><a href="#time函数">time函数</a></li>
+<li><a href="#gmtime函数">gmtime函数</a></li>
+<li><a href="#localtime函数">localtime函数</a></li>
+<li><a href="#ctime函数">ctime函数</a></li>
+<li><a href="#strftime函数">strftime函数</a></li>
+<li><a href="#sleep函数">sleep函数</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-19T03:40:50.377185+08:00">2023年 10月 19日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="time模块">time模块</h2>
+<p>time模块提供了一些和时间相关的函数，更加的底层，不过有些函数可能在某些平台并不适用。类似的模块还有datetime模块，datetime是以类的框架来解决一些时间问题的。所以如果只是需要简单的调用一下时间，那么用time模块，如果是大量和时间相关的问题，推荐使用datetime模块。</p>
+<h3 id="time函数">time函数</h3>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; import time
+&gt;&gt;&gt; time.time()
+1404348227.07554
+</code></pre></div>
+<p>time函数返回一个数值，这个数值表示从1970年1月1号0时0分0秒到现在的时间过了多少秒。</p>
+<h3 id="gmtime函数">gmtime函数</h3>
+<p>这个函数可以接受一个参数，这个参数是多少秒，然后返回一个特定格式的时间数组<code>struct_time</code>。如果不接受参数，那么默认接受的秒数由time函数返回，也就是从那个特定时间到现在过了多少秒，这样这个特定格式的时间数组对应的就是当前时间。</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; time.gmtime()
+time.struct_time(tm_year=2014, tm_mon=7, tm_mday=3, tm_hour=0, 
+tm_min=53, tm_sec=0, tm_wday=3, tm_yday=184, tm_isdst=0)
+&gt;&gt;&gt; time.gmtime(0)
+time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, 
+tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+</code></pre></div>
+<h3 id="localtime函数">localtime函数</h3>
+<p>此外类似的还有<strong>localtime</strong>函数，和gmtime用法和返回完全一模一样，唯一的区别就是返回的是当地的时间。</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
+'2014-07-03 09:19:40'
+&gt;&gt;&gt; time.strftime('%Y-%m-%d %H:%M:%S',time.gmtime())
+'2014-07-03 01:19:49'
+</code></pre></div>
+<h3 id="ctime函数">ctime函数</h3>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; time.ctime()
+'Thu Jul  3 08:54:54 2014'
+&gt;&gt;&gt; time.ctime(0)
+'Thu Jan  1 07:00:00 1970'
+</code></pre></div>
+<p>和gmtime类似，不过返回的是字符串格式的时间。我们看到ctime默认设置的时间是根据localtime函数来的。</p>
+<h3 id="strftime函数">strftime函数</h3>
+<p>接受那个特定格式的时间数组<code>struct_time</code>作为参数，然后返回一定字符串格式的时间。具体例子请参看前面的例子。</p>
+<p>其中最常用的格式符有：</p>
+<div class="highlight"><pre><span></span><code>%Y，多少年；%m，多少月；%d，多少日；
+%H，多少小时；%M，多少分；%S，多少秒。
+</code></pre></div>
+<p><code>%X</code> 直接输出09:27:19这样的格式，也就是前面的多少小时多少分多少秒可以用一个%X表示即可。</p>
+<p>还有一些，比如：%I表示多少小时，不过是<div class="math">$$0-12$$</div>的形式；%y表示多少年，不过是<div class="math">$$00-99$$</div>的格式，比如2014年就输出14；%p，本地的AM或PM文字。等等。</p>
+<h3 id="sleep函数">sleep函数</h3>
+<p>sleep函数有时需要用到，将程序休眠个几秒的意思。需要接受一个数值参数，单位是秒，可以是零点几秒。但sleep函数只是大概休眠几秒的意思，最好不去用来计时，因为它不大精确。</p>
+<p>更多内容请参见<a href="https://docs.python.org/3/library/time.html">官方文档</a>。</p>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [["$$", "$$"], ['\\[', '\\]']],
+    packages: {
+      '[+]': ['mhchem']
+    }
+  },
+  loader: {
+    load: ['[tex]/mhchem']
+  },
+}
+</script>
+<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

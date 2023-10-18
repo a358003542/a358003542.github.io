@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="re模块
+re模块提供了python对于正则表达式的支持，对于字符串操作，如果之前在介绍字符串类型的一些方法（比如split，replace等等），能够用它们解决问题就用它们，因为更快更简单。实在需要动用正则表达式理念才考虑使用re模块，而且你要克制写很多或者很复杂的（除非某些特殊情况）正则表..." />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>python内置模块re  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-re.html"> python内置模块re  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#re模块">re模块</a><ul>
+<li><a href="#re模块中的元字符集">re模块中的元字符集</a></li>
+<li><a href="#re模块中的特殊字符类">re模块中的特殊字符类</a></li>
+<li><a href="#转义问题">转义问题</a></li>
+<li><a href="#re模块的使用">re模块的使用</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-19T03:39:35.270870+08:00">2023年 10月 19日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="re模块">re模块</h2>
+<p>re模块提供了python对于正则表达式的支持，对于字符串操作，如果之前在介绍字符串类型的一些方法（比如split，replace等等），能够用它们解决问题就用它们，因为更快更简单。实在需要动用正则表达式理念才考虑使用re模块，而且你要克制写很多或者很复杂的（除非某些特殊情况）正则表达式的冲动，因为正则表达式的引入将会使得整个程序都更加难懂和不可捉摸。</p>
+<p>更多内容请参见<a href="https://docs.python.org/3/library/re.html">官方文档</a>。</p>
+<h3 id="re模块中的元字符集">re模块中的元字符集</h3>
+<dl>
+<dt><code>.</code></dt>
+<dd>
+<p>表示一行内的任意字符，如果如果通过re.compile指定<strong>re.DOTALL</strong>，则表示多行内的任意字符，即包括了换行符。此外还可以通过字符串模板在它的前面加上<strong>(?s)</strong>来获得同样的效果。</p>
+</dd>
+<dt><code>*</code></dt>
+<dd>
+<p>对之前的字符匹配或者多次。</p>
+</dd>
+<dt><code>+</code></dt>
+<dd>
+<p>对之前的字符匹配或者多次。</p>
+</dd>
+<dt><code>?</code></dt>
+<dd>
+<p>对之前的字符匹配或者。</p>
+</dd>
+<dt><code>{m}</code></dt>
+<dd>
+<p>对之前的字符匹配()m次。</p>
+</dd>
+<dt><code>{m,n}</code></dt>
+<dd>
+<p>对之前的字符匹配m次到n次，其中n次可能省略，视作默认值是无穷大。</p>
+</dd>
+<dt><code>^</code></dt>
+<dd>
+<p>表示字符串的开始，如果加上<strong>re.MULTILINE</strong>选项，则表示行首。此外字符串模板加上<strong>(?m)</strong>可以获得同样的效果。</p>
+</dd>
+<dt><code>$</code></dt>
+<dd>
+<p>表示字符串的结束，同<code>^</code>类似，如果加上<strong>re.MULTILINE</strong>选项，则表示行尾，可以简单理解为<code>\n</code>换行符。此外字符串模板加上<strong>(?m)</strong>可以获得同样的效果。<code>$</code>符号在re.sub函数中可以被替换为另外一个字符串，其具体效果就是原字符串尾加上了这个字符串，类似的<code>^</code>被替换成某个字符串，其具体效果就是原字符串头加上了这个字符串。这里显然<code>^</code>和<code>$</code>在字符串中都不是真实存在的字符，而没有这个所谓的标记，所以这种替换总给人怪怪的感觉。</p>
+</dd>
+<dt><code>[]</code></dt>
+<dd>
+<p>
+<div class="math">$$abc$$</div>字符组匹配一个字符，这个字符是a或者b或者c。类似的<div class="math">$$a-z$$</div>匹配所有的小写字母，<code>[\w]</code>匹配任意的字母或数字，具体请看下面的特殊字符类。</p>
+</dd>
+<dt><code>|</code></dt>
+<dd>
+<p>相当于正则表达式内的匹配或逻辑。</p>
+</dd>
+<dt><code>()</code></dt>
+<dd>
+<p>圆括号包围的部分将会记忆起来，方便后面调用。这个后面在谈及。</p>
+</dd>
+</dl>
+<h3 id="re模块中的特殊字符类">re模块中的特殊字符类</h3>
+<div class="highlight"><pre><span></span><code>\w  任意的字母或数字  [a-zA-Z0-9_]  (meaning word)
+\W  匹配任何非字母非数字 [^a-zA-Z0-9_]
+\d   [0-9]   (digit) 数字
+\D  [^0-9] 非数字
+\s   匹配任何空白字符   [ \t\n\r\f\v] 。
+\S  匹配任何非空白字符
+匹配中文:[\u4e00-\u9fa5]
+\b  文档说严格的定义是\w 和\W 之间的边界，反之亦然。粗略的理解可以看作是英文单词头或者尾。
+</code></pre></div>
+<p>其中<code>^</code>在方括号[]里面，只有在最前面，才表示排除型字符组的意思。</p>
+<h3 id="转义问题">转义问题</h3>
+<p>正则表达式的转义问题有时会比较纠结。一个简单的原则是以上谈及的有特殊作用的字符有转义问题，如果python中的字符都写成<code>r''</code>这种形式，也就是所谓的raw string形式，这样<code>\n</code>在里面就可以直接写成<code>\n</code>，而<code>\section</code>可以简单写为<code>\\section</code>即可，也就是<code>\</code>字符需要转义一次。</p>
+<p>然后字符组的方括号内[]有些字符有时是不需要转义的，这个实在不确定就转义吧，要不就用正则表达式工具测试一下。</p>
+<h3 id="re模块的使用">re模块的使用</h3>
+<p>compile方法生成regular expression object这一条线这里略过了，接下来的讨论全部基于（原始的）字符串模板。</p>
+<p>字符串模板前面提及<code>(?m)</code>和<code>(?s)</code>的用法了，然后<code>**(?i)**</code>表示忽略大小写。</p>
+<h4 id="匹配和查找">匹配和查找</h4>
+<p>search，match方法简单地用法就是：</p>
+<div class="highlight"><pre><span></span><code>re.search(字符串模板, 待匹配字符串)
+re.match(pattern, string)
+</code></pre></div>
+<p>它们将会返回一个match object或者none，其中match
+object在逻辑上就是真值的意思。match对字符串的匹配是必须从一开始就精确匹配，这对于正则表达式多少0有点突兀。推荐使用search方法，如果一定要限定行首，或者字符串开始可以用前面讨论的正则表达式各个符号来表达。请看下面的例子。</p>
+<div class="highlight"><pre><span></span><code>import re
+string = '''this is test line.
+this is the second line.
+today is sunday.'''
+
+match = re.search('(?m)^today',string)
+
+if match:
+    print('所使用的正则表达式是：',match.re)
+    print('所输入的字符串是：',match.string)
+    print('匹配的结果是：',match.group(0))
+    print('匹配的字符串index',match.span())
+else:
+    print('return the none value')
+</code></pre></div>
+<p>前面说道圆括号的部分将会记忆起来，作为匹配的结果，默认整个正则表达式所匹配的全部是group中的第0个元素，然后从左到右，子group编号依次是1，2，3......。</p>
+<div class="highlight"><pre><span></span><code>所使用的正则表达式是： re.compile('(?m)^today', re.MULTILINE)
+所输入的字符串是： this is test line.
+this is the second line.
+today is sunday.
+匹配的结果是： today
+匹配的字符串index (44, 49)
+</code></pre></div>
+<p>具体这些信息是为了说明情况，实际最简单的情况可能就需要判断一下是不是真值，字符串模板是不是匹配到了即可。</p>
+<h4 id="分割操作">分割操作</h4>
+<p>re模块的split函数可以看作字符串的split方法的升级版本，对于所描述的任何正则表达式，匹配成功之后都将成为一个分隔符，从而将原输入字符串分割开来。</p>
+<p>请参看下面的例子并理解其做了什么工作。</p>
+<div class="highlight"><pre><span></span><code>import re
+
+def zwc(string):
+    #中英文常用标点符号
+    lst = re.split('([\u4e00-\u9fa5\s，。；])',string)
+    #去除 空白
+    #去除\s 中英文常用标点符号
+    lst = [i for i in lst if not  i in
+    [""," ","\n","\t","\r","\f","\v","；","，","。"]]
+    print(lst)
+
+if __name__ == '__main__':
+    string='''道可道，非常道。名可名，非常名。無名天地之始，有名萬物之母。
+    故常無欲，以觀其妙；常有欲，以觀其徼。此兩者同出而異名，
+    同謂之玄，玄之又玄，眾妙之門。 '''
+    zwc(string)
+</code></pre></div>
+<h4 id="替换操作">替换操作</h4>
+<p>基于正则表达式的替换操作非常的有用，其实前面的search方法，再加上具体匹配字符串的索引值，然后修改原字符串，然后再search这样循环操作下去，就是一个替换操作了。re模块有sub方法来专门解决这个问题。</p>
+<h4 id="非最长匹配">非最长匹配</h4>
+<p>本小节参考了 python cookbook 的 2.7 小节，比如说：</p>
+<div class="highlight"><pre><span></span><code>re.compile(r'"(.*)"')
+</code></pre></div>
+<p>这将匹配两个双引号之间的内容，其默认是最长匹配，也就是多个双引号组成的句子都会匹配进去，你可以如下要要求最短匹配：</p>
+<div class="highlight"><pre><span></span><code>re.compile(r'"(.*?)"')
+</code></pre></div>
+<h4 id="非捕获组">非捕获组</h4>
+<p>看下面的正则表达式， <code>(?:...)</code> 这个括号的组是非捕获组，也就是不会进入
+.group 里面去。</p>
+<div class="highlight"><pre><span></span><code>re.search(r'((?:.|\n)*)',text2)
+</code></pre></div>
+<p>然后默认 <code>.</code> 是不会匹配换行符号的，如果要引入换行符则要如上所示加上。</p>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [["$$", "$$"], ['\\[', '\\]']],
+    packages: {
+      '[+]': ['mhchem']
+    }
+  },
+  loader: {
+    load: ['[tex]/mhchem']
+  },
+}
+</script>
+<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

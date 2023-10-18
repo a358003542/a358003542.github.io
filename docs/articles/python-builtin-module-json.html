@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="json模块
+什么是json
+json全称是JavaScript Object Notation，也就是JavaScript对象表示法。json是一种基于文本的，人类易读的数据存储交互格式。json文件保存使用后缀 .json 。虽然json是从javascript语言衍生出来，不过其作为数据..." />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>python内置模块json  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-json.html"> python内置模块json  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#json模块">json模块</a><ul>
+<li><a href="#什么是json">什么是json</a></li>
+<li><a href="#json存储格式语法">json存储格式语法</a></li>
+<li><a href="#存储字典值">存储字典值</a></li>
+<li><a href="#存储到文件的一些美化">存储到文件的一些美化</a></li>
+<li><a href="#dumps和loads函数">dumps和loads函数</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-19T03:38:10.628698+08:00">2023年 10月 19日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="json模块">json模块</h2>
+<h3 id="什么是json">什么是json</h3>
+<p>json全称是JavaScript Object Notation，也就是JavaScript对象表示法。json是一种基于文本的，人类易读的数据存储交互格式。json文件保存使用后缀 <code>.json</code> 。虽然json是从javascript语言衍生出来，不过其作为数据存储和交互是独立于语言的。json和xml作为数据存储和交互方案相比有更易读和读写速度更快的特点。</p>
+<h3 id="json存储格式语法">json存储格式语法</h3>
+<p>json存储格式的语法很简单，首先是最基本的数字开始，其支持两种数字类型，整数型和浮点型，其对应于python的int和float；字符串在双引号里面，其对应于python的字符串概念；布尔值true和false，其对应于python的True和False，然后还有一个null对应于python的None；json数据用<code>[]</code>表示，里面的元素用逗号分隔，其对应的正是python的列表概念；然后json的object对象用<code>{}</code> 包围，其内是key:value这样的形式，其正对应于python的字典概念。</p>
+<p>python语言已经内置了json模块，所以要读写json文件只需要简单 <code>import json</code>即可。</p>
+<p>首先让我们小试牛刀，把 <code>[1,2,3,4,5]</code> 这组数存( <strong>dump</strong>)进test.json文件里面去。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.json'</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">'w'</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div>
+<p>json不支持元组(tuple)和字节(bytes)类型，bytes类型一般不会去惊扰它，如果有tuple元组你需要存储，那么将其转换成列表即可。</p>
+<p>简单的读取是使用的json的 <code>load</code> 函数，如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.json'</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">lst2</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div>
+<p>这样lst2就被赋值  <code>[1,2,3,4,5]</code> 了，方便后面的运算。</p>
+<h3 id="存储字典值">存储字典值</h3>
+<p>上面的例子稍作修改即可以存储字典值了：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<span class="n">dict01</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s1">'b'</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s1">'c'</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]}</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.json'</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'w'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dict01</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'test.json'</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">dict02</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dict02</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="存储到文件的一些美化">存储到文件的一些美化</h3>
+<p>上面的dump函数那句读者可以考虑加入 <code>indent</code> 选项：</p>
+<div class="highlight"><pre><span></span><code><span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dict01</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+<p>这样我们的test.json文件里面的数据会进行一些缩进，会更好看一些了。</p>
+<p>此外 <code>sort_keys</code>选项有时会很有用，默认是False，如果设置为True，则输出的文件的key是排序了的 。</p>
+<p>此外 <code>ensure_ascii</code> 选项默认是True，中文字符保存会变为 <code>\uabcd</code> 之类的东西，如果设置为False，则能显示正常的中文字符。</p>
+<h3 id="dumps和loads函数">dumps和loads函数</h3>
+<p>dumps和loads函数是非文件接口版，简单了解下即可。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

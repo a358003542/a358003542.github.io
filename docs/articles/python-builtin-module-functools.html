@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="functools模块
+partial类
+functools模块定义了一个partial类，其输入参数如下所示:
+
+其将返回一个partial对象，其有 __call__
+方法，也就是其可以类似函数进行调用。然后其有 func
+属性，作为未来函数的调用； args 属性，作为未来函数的参数；
+..." />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>python内置模块functools  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-functools.html"> python内置模块functools  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#functools模块">functools模块</a><ul>
+<li><a href="#partial类">partial类</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-19T03:37:29.408543+08:00">2023年 10月 19日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="functools模块">functools模块</h2>
+<h3 id="partial类">partial类</h3>
+<p>functools模块定义了一个partial类，其输入参数如下所示:</p>
+<div class="highlight"><pre><span></span><code>    functools.partial(func, *args, **keywords)
+</code></pre></div>
+<p>其将返回一个partial对象，其有 <code>__call__</code>
+方法，也就是其可以类似函数进行调用。然后其有 <strong>func</strong>
+属性，作为未来函数的调用； <strong>args</strong> 属性，作为未来函数的参数；
+<strong>keywords</strong> 属性，作为未来函数的可选参数。
+简单来说就是partial对原函数对象func进行了封装（所以其特别适合做装饰器），
+<code>newfun=partial(func,args,keywords)</code>
+，使得调用这个newfun对象就好像调用原func一样，只是加上了额外的参数，其中args非可选参数是类似列表append形式，而keywords可选参数或说关键字参数是类似字典update形式。</p>
+<p>下面是一个简单的演示例子:</p>
+<div class="highlight"><pre><span></span><code>import functools
+
+def fun1(a,b=2):
+    print('called fun1 with',a,b)
+
+def show_details(name,f,is_partial=False):
+    print(name)
+    print(f)
+    if is_partial:
+        print(f.func)
+        print(f.args)
+        print(f.keywords)
+    else:
+        print(f.__name__)
+
+show_details('fun1',fun1)
+
+fun1('fun1 a')
+
+p1 = functools.partial(fun1,'p1 a',b=99)
+show_details('p1',p1,True)
+
+p1()
+</code></pre></div>
+<p>其输出如下:</p>
+<div class="highlight"><pre><span></span><code>    fun1
+    &lt;function fun1 at 0xb705880c&gt;
+    fun1
+    called fun1 with fun1 a 2
+    p1
+    functools.partial(&lt;function fun1 at 0xb705880c&gt;, 'p1 a', b=99)
+    &lt;function fun1 at 0xb705880c&gt;
+    ('p1 a',)
+    {'b': 99}
+    called fun1 with p1 a 99
+</code></pre></div>
+<p>这里的逻辑是首先正常执行fun1，然后将fun用partial封装成p1，新增参数字符串'p1
+a'和b=4，后面我们可以看到这个p1的参数都加进去了。然后执行这个p1我们看到了参数的变化。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>

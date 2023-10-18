@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="configparser模块
+简单的配置文件管理就用python的内置模块configparser。python2对应的模块名字叫 ConfigParser 。
+python3之后configparser的使用更加简单了，具体就分为如下几步:
+新建一个configparser对象
+
+读取某个c..." />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>python内置模块configparser  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-configparser.html"> python内置模块configparser  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#configparser模块">configparser模块</a><ul>
+<li><a href="#新建一个configparser对象">新建一个configparser对象</a></li>
+<li><a href="#读取某个config文件">读取某个config文件</a></li>
+<li><a href="#如同字典一般操作configparser对象">如同字典一般操作configparser对象</a></li>
+<li><a href="#调用write方法写入">调用write方法写入</a></li>
+<li><a href="#不默认更改大小写">不默认更改大小写</a></li>
+<li><a href="#configparse处理特殊字符">configparse处理特殊字符</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-19T03:36:32.242785+08:00">2023年 10月 19日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="configparser模块">configparser模块</h2>
+<p>简单的配置文件管理就用python的内置模块configparser。python2对应的模块名字叫 ConfigParser 。</p>
+<p>python3之后configparser的使用更加简单了，具体就分为如下几步:</p>
+<h3 id="新建一个configparser对象">新建一个configparser对象</h3>
+<div class="highlight"><pre><span></span><code>import configparser
+config = configparser.ConfigParser()
+</code></pre></div>
+<h3 id="读取某个config文件">读取某个config文件</h3>
+<p>调用read方法具体读取某个config文件。</p>
+<div class="highlight"><pre><span></span><code>config.read('test.cfg')
+</code></pre></div>
+<h3 id="如同字典一般操作configparser对象">如同字典一般操作configparser对象</h3>
+<p>然后接下来就是如同字典一般操作这个configparser对象。其中 'DEFAULT'
+是特殊的section，大致如下这样表达:</p>
+<div class="highlight"><pre><span></span><code>config['DEFAULT'] = {'ServerAliveInterval': '45',
+                     'Compression': 'yes',
+                     'CompressionLevel': '9'}
+config['bitbucket.org'] = {}
+config['bitbucket.org']['User'] = 'hg'
+config['topsecret.server.com'] = {}
+</code></pre></div>
+<h3 id="调用write方法写入">调用write方法写入</h3>
+<div class="highlight"><pre><span></span><code>with open('example.ini', 'w') as configfile:
+    config.write(configfile)
+</code></pre></div>
+<h3 id="不默认更改大小写">不默认更改大小写</h3>
+<p>具体请参看 <a href="http://stackoverflow.com/questions/19359556/configparser-reads-capital-keys-and-make-them-lower-case">这个网页</a> ，configparser模块默认把 option name 也就是每个section的key
+name改成小写，我不太喜欢这种风格，因为将configparser刷成字典值时，我们通常认为字典的key大小写是区分的，可以如下改动，然后就不自动进行小写操作了:</p>
+<div class="highlight"><pre><span></span><code>self.cfg = configparser.ConfigParser()
+self.cfg.optionxform = str## not auto make it lowercase
+</code></pre></div>
+<h3 id="configparse处理特殊字符">configparse处理特殊字符</h3>
+<p>configparse对于某些特殊字符可能会报错，参考了 <a href="https://stackoverflow.com/questions/14340366/configparser-and-string-with">这个问题</a> ，推荐使用 <code>RawConfigParser</code> ，这样就可以解决问题。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>
