@@ -2413,6 +2413,15 @@ pass命令什么都不做似乎没有什么意义，不过作为一个空占位�
 
 
 ## 异常
+通过如下语句来捕捉程序一段代码的可能异常。
+```python
+try:
+    5 / 0 
+except Exception as e:
+    print(e)
+```
+
+
 ### assert语句
 
 assert语句简单的理解就是 `assert True` ，正常刷过去，而 `assert False` 将抛出`AssertionError` 。
