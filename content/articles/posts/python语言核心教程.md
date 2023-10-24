@@ -2899,7 +2899,7 @@ reload(somemodule)
 ```
 
 ## pypi服务
-详细讨论请参阅 [这篇文章]({filename}./python和pypi.md) 的讨论。
+详细讨论请参阅 [这篇文章]({filename}./python和pypi.md) 。
 
 
 ## 附录

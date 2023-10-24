@@ -21,13 +21,34 @@ Modified: 20231021
 > Infinity === -Infinity
 < false
 ```
+### 生成一定范围内的随机数
+Math.random() 生成0-1内的随机浮点数，可能会生成0，但不会生成1。
 
-## 字符串的match方法
+如果希望产生[0,b) 的随机整数，那么可以是:
+```
+Math.floor(Math.random()*b)
+```
+
+如果希望产生[a, b) 的随机整数：
+
+```
+a + Math.floor(Math.random()* (b-a))
+```
+因为randint一般选取随机数逻辑是[a,b]，也就是包含b，所以还需要稍作修改：
+
+```js
+function randint(a, b){
+  return a + Math.floor(Math.random()* (b-a+1))
+}
+```
+
+## 字符串
+### 字符串的match方法
 
 字符串的match方法可以跟上 RegExp 对象来继续正则表达式匹配操作。
 
-
-## 命名函数表达式
+## 函数
+### 命名函数表达式
 类似下面这样的东西：
 ```js
 let sayHi = function func(who) {
@@ -43,7 +64,7 @@ let sayHi = function (who) {
 的区别是这个函数多了一个局部的函数名字，可以被函数内部自身调用自身使用。之所以不直接使用外部赋值的那个变量，是防止该变量被污染然后导致函数运行出错。
 
 
-## 立即执行的匿名函数
+### 立即执行的匿名函数
 
 某个js脚本一整段都被这样一种写法包围着：
 
@@ -128,21 +149,6 @@ class Jedi {
 
 上面的 `??` 是空值合并运算符，如果左侧为 `null` 或者 `undefined` 则返回右边的值，否则返回左边的值。现在javascript在处理默认值的问题上推荐使用空值合并运算符而不是逻辑或`||`。
 
-### in语句
-
-判断某个对象时候有某个属性，继承过来的属性也会识别在内。
-
-```js
-
-```
-
-### hasOwnProperty方法
-
-和in语句的区别是 `hasOwnProperty` 只会处理自身属性，不会处理那些继承过来的属性。
-
-```javascript
-
-```
 
 ### this
 

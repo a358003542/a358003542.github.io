@@ -17,14 +17,13 @@ Infinity
 
 正无穷大和负无穷大不相同：
 
-字符串的match方法
-字符串的match方法可以跟上 RegExp 对象来继续正则表达式匹配操作。
-命名函数表达式
-类似下面这样的东西：
+生成一定范围内的随机数
+Math.random() 生成0-1内的随机浮点数，可能会生成0，但不会生成1。
+如果希望产生[0,b) 的随机整数，那么可以是:
 
-其和
+如果希望产生[a, b) 的随机整数：
 
-的区别是这个函数多了一个局部的函数名字，可以被函数内部自身调用自..." />
+因为rand..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -106,16 +105,21 @@ Infinity
 <ul>
 <li><a href="#数值">数值</a><ul>
 <li><a href="#infinity">Infinity</a></li>
+<li><a href="#生成一定范围内的随机数">生成一定范围内的随机数</a></li>
 </ul>
 </li>
+<li><a href="#字符串">字符串</a><ul>
 <li><a href="#字符串的match方法">字符串的match方法</a></li>
+</ul>
+</li>
+<li><a href="#函数">函数</a><ul>
 <li><a href="#命名函数表达式">命名函数表达式</a></li>
 <li><a href="#立即执行的匿名函数">立即执行的匿名函数</a></li>
+</ul>
+</li>
 <li><a href="#类">类</a><ul>
 <li><a href="#constructor方法">constructor方法</a></li>
 <li><a href="#tostring方法">toString方法</a></li>
-<li><a href="#in语句">in语句</a></li>
-<li><a href="#hasownproperty方法">hasOwnProperty方法</a></li>
 <li><a href="#this">this</a></li>
 <li><a href="#属性的get和set">属性的get和set</a></li>
 <li><a href="#类的继承">类的继承</a></li>
@@ -162,9 +166,24 @@ Infinity
 <div class="highlight"><pre><span></span><code>&gt; Infinity === -Infinity
 &lt; false
 </code></pre></div>
-<h2 id="字符串的match方法">字符串的match方法</h2>
+<h3 id="生成一定范围内的随机数">生成一定范围内的随机数</h3>
+<p>Math.random() 生成0-1内的随机浮点数，可能会生成0，但不会生成1。</p>
+<p>如果希望产生[0,b) 的随机整数，那么可以是:</p>
+<div class="highlight"><pre><span></span><code>Math.floor(Math.random()*b)
+</code></pre></div>
+<p>如果希望产生[a, b) 的随机整数：</p>
+<div class="highlight"><pre><span></span><code>a + Math.floor(Math.random()* (b-a))
+</code></pre></div>
+<p>因为randint一般选取随机数逻辑是[a,b]，也就是包含b，所以还需要稍作修改：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">randint</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">){</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nx">b</span><span class="o">-</span><span class="nx">a</span><span class="o">+</span><span class="mf">1</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="字符串">字符串</h2>
+<h3 id="字符串的match方法">字符串的match方法</h3>
 <p>字符串的match方法可以跟上 RegExp 对象来继续正则表达式匹配操作。</p>
-<h2 id="命名函数表达式">命名函数表达式</h2>
+<h2 id="函数">函数</h2>
+<h3 id="命名函数表达式">命名函数表达式</h3>
 <p>类似下面这样的东西：</p>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">sayHi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">func</span><span class="p">(</span><span class="nx">who</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">alert</span><span class="p">(</span><span class="sb">`Hello, </span><span class="si">${</span><span class="nx">who</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
@@ -176,7 +195,7 @@ Infinity
 <span class="p">};</span>
 </code></pre></div>
 <p>的区别是这个函数多了一个局部的函数名字，可以被函数内部自身调用自身使用。之所以不直接使用外部赋值的那个变量，是防止该变量被污染然后导致函数运行出错。</p>
-<h2 id="立即执行的匿名函数">立即执行的匿名函数</h2>
+<h3 id="立即执行的匿名函数">立即执行的匿名函数</h3>
 <p>某个js脚本一整段都被这样一种写法包围着：</p>
 <div class="highlight"><pre><span></span><code>(function($){…})(jQuery)
 </code></pre></div>
@@ -239,14 +258,6 @@ Infinity
 &gt; 'Jedi - no name'
 </code></pre></div>
 <p>上面的 <code>??</code> 是空值合并运算符，如果左侧为 <code>null</code> 或者 <code>undefined</code> 则返回右边的值，否则返回左边的值。现在javascript在处理默认值的问题上推荐使用空值合并运算符而不是逻辑或<code>||</code>。</p>
-<h3 id="in语句">in语句</h3>
-<p>判断某个对象时候有某个属性，继承过来的属性也会识别在内。</p>
-<div class="highlight"><pre><span></span><code>
-</code></pre></div>
-<h3 id="hasownproperty方法">hasOwnProperty方法</h3>
-<p>和in语句的区别是 <code>hasOwnProperty</code> 只会处理自身属性，不会处理那些继承过来的属性。</p>
-<div class="highlight"><pre><span></span><code>
-</code></pre></div>
 <h3 id="this">this</h3>
 <p>在javascript里面，object里面定义的方法， <code>this</code> 指向的就是本对象的实例。因为函数也是一个对象，所以在函数里面也是可以使用this的，如果 <code>this</code> 在函数里面：</p>
 <div class="highlight"><pre><span></span><code>function (){

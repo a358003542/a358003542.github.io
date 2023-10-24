@@ -11,12 +11,12 @@
     <meta name="copyright" content="wanze" />
 
     <meta name="description"
-        content="alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信..." />
+        content="我们知道javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于ch..." />
 
 
 <meta name="keywords" content=", posts, " />
 
-<title>python模块alembic  -
+<title>javascript和nodejs  -
     万泽的博客</title>
 
     <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -81,29 +81,18 @@
     <div class="row">
         <div class="col-md-4 col-lg-3"></div>
         <header class="col-sm-12 col-md-8 col-lg-8 page-header">
-            <h1><a href="https://a358003542.github.io/articles/pythonmo-kuai-alembic.html"> python模块alembic  </a></h1>
+            <h1><a href="https://a358003542.github.io/articles/javascript-nodejs.html"> javascript和nodejs  </a></h1>
         </header>
     </div>
 
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#基本使用">基本使用</a><ul>
-<li><a href="#初始化alembic项目">初始化alembic项目</a></li>
-<li><a href="#根据modelspy来">根据models.py来</a></li>
-<li><a href="#升级">升级</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-24T00:00:00+08:00">2020年 10月 24日 </time>
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-24T00:00:00+08:00">2023年 10月 24日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2023-10-15T18:07:23.548727+08:00">2023年 10月 15日 </time>
+                <div class="p-1">最近更新于：<time datetime="2023-10-24T14:35:57.334295+08:00">2023年 10月 24日 </time>
                 </div>
 
 
@@ -115,27 +104,57 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
-<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
-<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
-<h2 id="基本使用">基本使用</h2>
-<h3 id="初始化alembic项目">初始化alembic项目</h3>
-<div class="highlight"><pre><span></span><code>alembic init alembic
+                <p>我们知道javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于chrome浏览器，一样是基于chrome的V8 javascript引擎，只是移除了一些和网页显示相关的webkit引擎之类的。</p>
+<p>官网为nodejs的定义如下：</p>
+<blockquote>
+<p>一个搭建在Chrome JavaScript运行时上的平台，用于构建高速、可伸缩的网络程序。Node.js采用的事件驱动、非阻塞I/O模型，使它既轻量又高效，并成为构建运行在分布式设备上的数据密集型实时程序的完美选择。</p>
+</blockquote>
+<p>V8引擎性能很高，javascript会被直接编译成本地机器码。所以nodejs使用javascript也很高效。因为V8引擎原来处理网页上的javascript脚本就实现上必须是事件驱动，非阻塞IO的，于是到了nodejs服务器这边也是事件驱动的，非阻塞IO编程的。</p>
+<p>安装nodejs请到 <a href="https://nodejs.dev/download/">这个网站</a> 下载nodejs。</p>
+<h3 id="一个最简单的nodejs模块">一个最简单的nodejs模块</h3>
+<p>首先我们新建一个文件夹mymodule，然后里面新建一个 <code>index.js</code> 文件。在<code>index.js</code> 文件里面定义一个简单的函数：</p>
+<div class="highlight"><pre><span></span><code>function add2(a,b){
+  return a + b;
+}
 </code></pre></div>
-<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
-<h3 id="根据modelspy来">根据models.py来</h3>
-<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
-<div class="highlight"><pre><span></span><code>alembic revision --autogenerate -m "add_some_key"
+
+<p>然后导出这个函数</p>
+<div class="highlight"><pre><span></span><code>exports.add2 = add2
 </code></pre></div>
-<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
-<div class="highlight"><pre><span></span><code>from myapp.models import Base
-target_metadata = Base.metadata
+
+<p>然后我们在外面新建一个 <code>test_mymodule.js</code> 来实际使用mymoudle模块：</p>
+<div class="highlight"><pre><span></span><code>var mymodule = require(&#39;./mymodule&#39;)
+
+console.log(mymodule.add2(1,2))
 </code></pre></div>
-<p>然后其会自动生成一些版本控制的py文件，有 upgrade 和 downgrade 操作。</p>
-<h3 id="升级">升级</h3>
-<div class="highlight"><pre><span></span><code>alembic upgrade head  # head是最新的版本，你也可以指定版本号
+
+<p>然后运行：</p>
+<div class="highlight"><pre><span></span><code>node test_mymodule.js
 </code></pre></div>
-<p>你也可以管理多个模型文件，多个表格对象，更多细节请参看官方文档，后面有时间本文也会详细补充之。 TODO。</p>
+
+<p>如果一起正常，那么读者将会看到输出了数字3，恭喜，一个简单的nodejs模块就编写完成了。</p>
+<p>一般模块是默认  <code>index.js</code> 为模块的入口，你可以在mymodule文件夹下面新建 <code>package.json</code> 文件，这一般正式的模块都会定义这个文件的，然后通过设置 <code>main</code> 字段来指定目标入口js文件。【读者可以试着将index.js改为main.js然后试下，然后再按照上面的表述编写一个package.json文件来试下。】</p>
+<p>还有一种写法：</p>
+<div class="highlight"><pre><span></span><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">add2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">add2</span>
+</code></pre></div>
+
+<p>这两个写法区别不是太大，参看官方文档：</p>
+<blockquote>
+<p>exports shortcut</p>
+<p>Added in: v0.1.16</p>
+<p>The exports variable is available within a module's file-level scope, and is assigned the value of <code>module.exports</code> before the module is evaluated.</p>
+<p>It allows a shortcut, so that <code>module.exports.f = ...</code>can be written more succinctly as <code>exports.f = ....</code> However, be aware that like any variable, if a new value is assigned to exports, it is no longer bound to module.exports:</p>
+<p>module.exports.hello = true; // Exported from require of module</p>
+<p>exports = { hello: false };  // Not exported, only available in the module</p>
+</blockquote>
+<p>简单来说就是如果你总是规范自己采用 <code>exports.what=what</code> 这样的语法，那么exports只是<code>module.exports</code>的语法糖罢了，不过一定要注意你不能写作 <code>exports=what</code>，这样exports这个变量就被污染了。但是你仍然可以写 <code>module.exports = add2</code> 这种形式，这样调用语句要改为：</p>
+<div class="highlight"><pre><span></span><code>var mymodule = require(&#39;./mymodule&#39;)
+
+console.log(mymodule(1,2))
+</code></pre></div>
+
+<p>我不太喜欢这种风格，因为require之后从程序员的习惯来说更期待的是引入进来一个某种模块对象的东西，我更喜欢最开始的那种语法，通过exports将模块里面的目标变量作为属性绑定到某种模块对象里面。</p>
+<p>NOTICE: 注意nodejs的exports是后端那块的东西，而es6的export是前端的东西，别弄混了。</p>
             </div>
         </div>
 

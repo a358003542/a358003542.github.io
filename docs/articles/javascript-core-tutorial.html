@@ -162,7 +162,8 @@ javascript就历史起源来说似乎并不是一个主角命，更像是编程�
 <li><a href="#异常">异常</a></li>
 <li><a href="#模块">模块</a></li>
 <li><a href="#网页端">网页端</a><ul>
-<li><a href="#查找目标标签">查找目标标签</a></li>
+<li><a href="#新建一个标签对象">新建一个标签对象</a></li>
+<li><a href="#定位目标标签对象">定位目标标签对象</a></li>
 <li><a href="#标签之间的关系">标签之间的关系</a></li>
 <li><a href="#matches">matches</a></li>
 <li><a href="#setattribute">setAttribute</a></li>
@@ -173,29 +174,14 @@ javascript就历史起源来说似乎并不是一个主角命，更像是编程�
 <li><a href="#removechild">removeChild</a></li>
 <li><a href="#setinterval">setInterval</a></li>
 <li><a href="#settimeout">setTimeout</a></li>
-<li><a href="#location">location</a></li>
-<li><a href="#history">history</a></li>
-<li><a href="#customevent">CustomEvent</a></li>
-<li><a href="#dispatchevent">dispatchEvent</a></li>
 <li><a href="#addeventlistener">addEventListener</a></li>
 <li><a href="#removeeventlistener">removeEventListener</a></li>
 <li><a href="#eventtarget和eventcurrenttarget的区别">event.target和event.currentTarget的区别</a></li>
 <li><a href="#fetch">fetch</a></li>
 </ul>
 </li>
-<li><a href="#nodejs">nodejs</a><ul>
-<li><a href="#一个最简单的nodejs模块">一个最简单的nodejs模块</a></li>
-</ul>
-</li>
-<li><a href="#npm服务">npm服务</a><ul>
-<li><a href="#npm的基本使用">npm的基本使用</a></li>
-<li><a href="#npm-run">npm run</a></li>
-<li><a href="#npx">npx</a></li>
-<li><a href="#packagejson文件详解">package.json文件详解</a></li>
-<li><a href="#利用mocha进行单元测试">利用mocha进行单元测试</a></li>
-<li><a href="#发行你自己的npm包">发行你自己的npm包</a></li>
-</ul>
-</li>
+<li><a href="#nodejs">nodejs</a></li>
+<li><a href="#npm服务">npm服务</a></li>
 <li><a href="#附录">附录</a><ul>
 <li><a href="#no-jquery">no-jquery</a></li>
 <li><a href="#javascript编码规范">javascript编码规范</a></li>
@@ -628,12 +614,13 @@ arguments.length
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="三元运算符">三元运算符</h3>
-<div class="highlight"><pre><span></span><code>&gt; let b = null
-&lt; undefined
-&gt; b = b ? b : 2
+<p>如下所示：</p>
+<div class="highlight"><pre><span></span><code>&gt; true ? 1 : 2
+&lt; 1
+&gt; false ? 1 : 2
 &lt; 2
 </code></pre></div>
-<p>如果b为true则返回b的值，否则取后面的值。</p>
+<p>第一个表达式运算得布尔值，如果为true则返回第二个表达式的值，如果为false则返回第三个表达式的值。</p>
 <h3 id="while循环">while循环</h3>
 <p>下面语句从数字0打印到数字4，共打印5次。语句用花括号包围起来让整个片段语句总不会影响外围，自身运行逻辑也总不受影响。</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -803,7 +790,7 @@ b
 <p>所谓DOM操作就是用Javascript来操作修改页面内容，这基本上是client端javascript的主要工作内容。</p>
 <p>如果熟悉python的beautifulsoup或者lxml之类的分析网页的模块，那么对Javascript的这些DOM操作概念都不会太陌生。我这里就不做太多抽象的术语上的讨论了，下面的讨论会更加注重实践方面的东西。</p>
 <p>document就是html文档的主对象，document.body就是对应着body这个标签对象。这里所说的标签对象在javascript的DOM这边对应的是Element类。在Javascript的实现中Element类并不是最底层的类，Element类继承自Node类。一般在html文档这边我们能看到的标签都是Element类，实际上通过Element类和它提供的便捷方法一般就能够完成DOM的大部分操作任务。</p>
-<p>比如下面这个例子：</p>
+<h3 id="新建一个标签对象">新建一个标签对象</h3>
 <div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">)</span>
 <span class="kd">let</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s1">'this is text.'</span><span class="p">)</span>
 <span class="nx">e</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
@@ -816,7 +803,7 @@ b
 <div class="highlight"><pre><span></span><code>e.textContent = 'new text'
 </code></pre></div>
 <p>根本不需要了解文本节点这个概念，当然Element类的 <code>textContent</code> 这个属性调用的底层实现肯定是基于文本节点来的。再比如属性有一个属性节点的概念，同样类似上面文本节点的讨论，一般通过Element类及其提供的方法就能完成DOM的绝大部分操作，如果有代码出现了文本节点或者属性节点等概念，但是代码的具体工作通过Element类的某个方法就能够完成，那么我们应该说这个代码是有问题的，是故意写的晦涩难懂。</p>
-<h3 id="查找目标标签">查找目标标签</h3>
+<h3 id="定位目标标签对象">定位目标标签对象</h3>
 <p>如果目标标签有id那么自然就直接根据id来。 </p>
 <div class="highlight"><pre><span></span><code>let e = document.getElementById('test')
 </code></pre></div>
@@ -868,22 +855,6 @@ b
 <p>启动一个计时器，第二个参数是时间间隔，每个那个时间间隔将会执行一次目标函数，默认单位是ms。</p>
 <h3 id="settimeout">setTimeout</h3>
 <p>类似setInterval，启动一次性任务。</p>
-<h3 id="location">location</h3>
-<p>该窗口的Location对象</p>
-<h3 id="history">history</h3>
-<p>该窗口的History对象</p>
-<p>Element对象继承自EventTarget从而获得了这些方法： <code>addEventListener</code> ， <code>removeEventListener</code> 和 <code>dispatchEvent</code> ，这几个方法都是和事件处理相关的。</p>
-<p>熟悉GUI桌面程序的话会对事件有个大致的理解，大体类似于QT里面的信号。</p>
-<h3 id="customevent">CustomEvent</h3>
-<p>自定义一个事件，第二个参数可以是任意的信息。</p>
-<div class="highlight"><pre><span></span><code>  new CustomEvent(name, { bubbles: true, cancelable: false })
-</code></pre></div>
-<h3 id="dispatchevent">dispatchEvent</h3>
-<p>程序触发某个Element元素上监听的事件</p>
-<div class="highlight"><pre><span></span><code><span class="nx">target</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span>
-<span class="w">      </span><span class="ow">new</span><span class="w"> </span><span class="nx">CustomEvent</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">bubbles</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nx">cancelable</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">})</span>
-<span class="p">);</span>
-</code></pre></div>
 <h3 id="addeventlistener">addEventListener</h3>
 <p>给某个元素增加一个事件监听</p>
 <h3 id="removeeventlistener">removeEventListener</h3>
@@ -915,214 +886,9 @@ b
 <span class="p">})</span>
 </code></pre></div>
 <h2 id="nodejs">nodejs</h2>
-<p>我们知道javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于chrome浏览器，一样是基于chrome的V8 javascript引擎，只是移除了一些和网页显示相关的webkit引擎之类的。</p>
-<p>官网为nodejs的定义如下：</p>
-<blockquote>
-<p>一个搭建在Chrome JavaScript运行时上的平台，用于构建高速、可伸缩的网络程序。Node.js采用的事件驱动、非阻塞I/O模型，使它既轻量又高效，并成为构建运行在分布式设备上的数据密集型实时程序的完美选择。</p>
-</blockquote>
-<p>V8引擎性能很高，javascript会被直接编译成本地机器码。所以nodejs使用javascript也很高效。因为V8引擎原来处理网页上的javascript脚本就实现上必须是事件驱动，非阻塞IO的，于是到了nodejs服务器这边也是事件驱动的，非阻塞IO编程的。</p>
-<p>安装nodejs请到 <a href="https://nodejs.dev/download/">这个网站</a> 下载nodejs。</p>
-<h3 id="一个最简单的nodejs模块">一个最简单的nodejs模块</h3>
-<p>首先我们新建一个文件夹mymodule，然后里面新建一个 <code>index.js</code> 文件。在<code>index.js</code> 文件里面定义一个简单的函数：</p>
-<div class="highlight"><pre><span></span><code>function add2(a,b){
-  return a + b;
-}
-</code></pre></div>
-<p>然后导出这个函数</p>
-<div class="highlight"><pre><span></span><code>exports.add2 = add2
-</code></pre></div>
-<p>然后我们在外面新建一个 <code>test_mymodule.js</code> 来实际使用mymoudle模块：</p>
-<div class="highlight"><pre><span></span><code>var mymodule = require('./mymodule')
-
-console.log(mymodule.add2(1,2))
-</code></pre></div>
-<p>然后运行：</p>
-<div class="highlight"><pre><span></span><code>node test_mymodule.js
-</code></pre></div>
-<p>如果一起正常，那么读者将会看到输出了数字3，恭喜，一个简单的nodejs模块就编写完成了。</p>
-<p>一般模块是默认  <code>index.js</code> 为模块的入口，你可以在mymodule文件夹下面新建 <code>package.json</code> 文件，这一般正式的模块都会定义这个文件的，然后通过设置 <code>main</code> 字段来指定目标入口js文件。【读者可以试着将index.js改为main.js然后试下，然后再按照上面的表述编写一个package.json文件来试下。】</p>
-<p>还有一种写法：</p>
-<div class="highlight"><pre><span></span><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">add2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">add2</span>
-</code></pre></div>
-<p>这两个写法区别不是太大，参看官方文档：</p>
-<blockquote>
-<p>exports shortcut</p>
-<p>Added in: v0.1.16</p>
-<p>The exports variable is available within a module's file-level scope, and is assigned the value of <code>module.exports</code> before the module is evaluated.</p>
-<p>It allows a shortcut, so that <code>module.exports.f = ...</code>can be written more succinctly as <code>exports.f = ....</code> However, be aware that like any variable, if a new value is assigned to exports, it is no longer bound to module.exports:</p>
-<p>module.exports.hello = true; // Exported from require of module</p>
-<p>exports = { hello: false };  // Not exported, only available in the module</p>
-</blockquote>
-<p>简单来说就是如果你总是规范自己采用 <code>exports.what=what</code> 这样的语法，那么exports只是<code>module.exports</code>的语法糖罢了，不过一定要注意你不能写作 <code>exports=what</code>，这样exports这个变量就被污染了。但是你仍然可以写 <code>module.exports = add2</code> 这种形式，这样调用语句要改为：</p>
-<div class="highlight"><pre><span></span><code>var mymodule = require('./mymodule')
-
-console.log(mymodule(1,2))
-</code></pre></div>
-<p>我不太喜欢这种风格，因为require之后从程序员的习惯来说更期待的是引入进来一个某种模块对象的东西，我更喜欢最开始的那种语法，通过exports将模块里面的目标变量作为属性绑定到某种模块对象里面。</p>
-<p>NOTICE: 注意nodejs的exports是后端那块的东西，而es6的export是前端的东西，别弄混了。</p>
+<p>详细讨论请参阅 <a href="https://a358003542.github.io/articles/javascript-nodejs.html">这篇文章</a> 。</p>
 <h2 id="npm服务">npm服务</h2>
-<p>正如前面所说，nodejs是一个平台，因为nodejs在作这个平台的时候内置了很多官方的js模块。比如说我们随便从网上找了一个最简单的nodejs入门样例web server程序：</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
-
-<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mf">200</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span><span class="w"> </span><span class="s1">'text/plain'</span><span class="p">});</span>
-<span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello World\n'</span><span class="p">);</span>
-
-<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mf">8888</span><span class="p">);</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Server running at http://127.0.0.1:8888/'</span><span class="p">);</span>
-</code></pre></div>
-<p>其最开始的语句 <code>require('http')</code> 就是在引入nodejs的官方内置js模块http。</p>
-<p>既然有了官方模块那当然就有第三方模块和模块管理工具了。一般安装好nodejs之后除了node命令之外还有npm命令，最新的nodejs现在还提供npx命令。</p>
-<p>首先说一下npx命令有什么用，在本地安装一个npm包之后，该包提供了一个命令，如果你希望调用这个命令，以前的做法则可能需要修改 <code>package.json</code> 的 scripts 字段：</p>
-<div class="highlight"><pre><span></span><code>  "scripts": {
-    "start": "electron .",
-   }
-</code></pre></div>
-<p>然后你通过 <code>npm start</code> 来达到效果。现在你可以如下直接调用 <code>electron</code> 命令了。</p>
-<div class="highlight"><pre><span></span><code>npx electron .
-</code></pre></div>
-<p>然后我们继续往下说，上面提到的 <code>package.json</code> 是npm用于包管理的很重要的一个配置信息文件。你可以手工创建一个，或者通过 <code>npm init</code> 命令来生成一个。</p>
-<p>在你想要新建的模块的根目录下运行 <code>npm init</code> ，程序会交互问一些问题，然后创建 <code>package.json</code> 文件。</p>
-<h3 id="npm的基本使用">npm的基本使用</h3>
-<ul>
-<li>npm install  module_name  安装某个模块 【如果不写上模块名则会自动根据当前的package.json文件来进行安装动作】</li>
-<li>npm uninstall module_name 移除某个模块 </li>
-<li>npm list  列出已经安装的模块</li>
-<li>npm update module_name 更新某个模块 【如果不写上模块名则会自动根据当前的package.json文件来进行模块升级动作】</li>
-</ul>
-<p>你可以通过 <code>-g</code> 选项来指明本次操作是针对全局的npm库，但除非有必要，现在是不推荐这样做了。 </p>
-<p><code>npm install</code> 还有一些额外的安装选项：</p>
-<ul>
-<li>
-<p><strong>默认</strong>是 <code>--save-prod</code> 或者 <code>-P</code> ，常规依赖包信息会放在 <code>dependencies</code> 字段下。一般和项目直接相关的包放在这里。【因为是默认值所以一般很少会打出这个 <code>--save-prod</code> ，在npm version5之前需要额外加个 <code>--save</code>大概也是类似的功能。】</p>
-</li>
-<li>
-<p><code>--save-dev</code> 或者 <code>-D</code> ，开发包信息会放在 <code>devDependencies</code> 。和开发调试封装打包等相关的包信息推荐放在这里，比如electron官方会提示我应该放在 <strong>devDependencies</strong> 那里。</p>
-</li>
-<li>
-<p><code>--save-optional</code> 或者 <code>-O</code> ，可选的包信息：<code>optionalDependencies</code> 。</p>
-</li>
-<li>
-<p><code>--no-save</code> 含义很明显，就是不写入包依赖信息了。</p>
-</li>
-</ul>
-<p>包信息后面的版本有一些特殊符号，其含义是：</p>
-<ul>
-<li>符号 <code>^</code> 表示之后的版本都可以</li>
-<li>符号 <code>~</code> 表示是允许小版本内的升级</li>
-</ul>
-<p>更多关于npm版本号细节请参看官方文档的 <a href="https://nodejs.dev/learn/semantic-versioning-using-npm">这里</a> 。</p>
-<h3 id="npm-run">npm run</h3>
-<p>前面提到过 <code>npm start</code> 启动某个命令，其只是 <code>npm run start</code> 的别名。你定义的 <code>scripts</code> 字段里面的命令行列表都可以通过 <code>npm run what</code> 来调用：</p>
-<div class="highlight"><pre><span></span><code>{
-  "scripts":{
-    "what": "command line"
-  }
-}
-</code></pre></div>
-<h3 id="npx">npx</h3>
-<p>前面提到了一点npx命令，如果只是自己编写的模块命令，似乎意义不大，通过npm run一样可以做到，而npx的用处就是对于第三方模块提供的what命令也是可以 <code>npx what</code> 这样调用的，一般模块都是安装在本地的，第三方的模块可执行命令在 <code>node_modules/.bin</code> 文件夹下，这在操作系统来说那些命令是不能直接在终端调用的，而如果输入 <code>./node_modules/.bin/what</code> 这又麻烦了，npx命令的好处就是在这种情况下简单输入 <code>npx what</code> 即可。</p>
-<h3 id="packagejson文件详解">package.json文件详解</h3>
-<h4 id="name">name</h4>
-<p>本模块名字</p>
-<h4 id="version">version</h4>
-<p>版本号</p>
-<h4 id="description">description</h4>
-<p>简短描述</p>
-<h4 id="main">main</h4>
-<p>模块入口</p>
-<h4 id="private">private</h4>
-<p>设置为true将禁止本模块上传到npm公共库里面去</p>
-<h4 id="scripts">scripts</h4>
-<p>一系列的命令行入口定义</p>
-<h4 id="dependencies">dependencies</h4>
-<p>包依赖</p>
-<h4 id="devdependencies">devDependencies</h4>
-<p>开发包依赖</p>
-<h4 id="homepage">homepage</h4>
-<p>模块主页</p>
-<h4 id="license">license</h4>
-<p>版权协议</p>
-<h4 id="keywords">keywords</h4>
-<p>描述关键字，示例：</p>
-<div class="highlight"><pre><span></span><code>"keywords": [
-    "latex",
-    "math"
-  ],
-</code></pre></div>
-<h4 id="author">author</h4>
-<p>作者信息，示例： </p>
-<div class="highlight"><pre><span></span><code> "author": {
-   "name": "Joe",
-   "email": "joe@whatever.com",
-   "url": "https://whatever.com"
- }
-</code></pre></div>
-<h4 id="repository">repository</h4>
-<p>模块仓库，示例：</p>
-<div class="highlight"><pre><span></span><code>  "repository": {
-  "type": "git",
-  "url": "https://github.com/whatever/testing.git"
-  }
-</code></pre></div>
-<h4 id="engine">engine</h4>
-<p>nodejs等版本依赖，示例：</p>
-<div class="highlight"><pre><span></span><code>  "engines": {
-  "node": "&gt;= 6.0.0",
-  "npm": "&gt;= 3.0.0",
-  "yarn": "^0.13.0"
-  }
-</code></pre></div>
-<h3 id="利用mocha进行单元测试">利用mocha进行单元测试</h3>
-<p>首先是安装mocha</p>
-<div class="highlight"><pre><span></span><code>npm install --save-dev mocha
-</code></pre></div>
-<p>然后新建一个test文件夹，里面是你的用于测试的js文件。</p>
-<p>然后package.json配置：</p>
-<div class="highlight"><pre><span></span><code>  "scripts": {
-    "test": "mocha",
-  },
-</code></pre></div>
-<p>然后运行 <code>npm test</code> 即用mocha执行了单元测试。</p>
-<p>具体单元测试的js代码简要介绍如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">assert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'assert'</span><span class="p">);</span>
-
-<span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">describe</span><span class="p">(</span><span class="s1">'#indexOf()'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nx">it</span><span class="p">(</span><span class="s1">'should return -1 when the value is not present'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="mf">4</span><span class="p">),</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">);</span>
-<span class="w">      </span><span class="p">});</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="w">  </span><span class="p">});</span>
-</code></pre></div>
-<p>这上面的：</p>
-<div class="highlight"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="s1">'Array'</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="p">...</span>
-<span class="w">  </span><span class="p">});</span>
-</code></pre></div>
-<p>和 </p>
-<div class="highlight"><pre><span></span><code>      it('should return -1 when the value is not present', function() {
-        ...
-      });
-</code></pre></div>
-<p>就是mocha的一些输出信息调配，比如上面的输出信息为：</p>
-<div class="highlight"><pre><span></span><code>  Array
-    #indexOf()
-      ✔ should return -1 when the value is not present
-</code></pre></div>
-<p>熟悉单元测试的知道最核心的就是那个 <code>assert.equal()</code> ，至于那个describe和it，跟着那么用就是了。</p>
-<h3 id="发行你自己的npm包">发行你自己的npm包</h3>
-<p>首先你需要在 <code>npmjs.com</code> 上申请个用户名：</p>
-<div class="highlight"><pre><span></span><code>npm adduser
-</code></pre></div>
-<p>或者以前adduser过了那么运行：</p>
-<div class="highlight"><pre><span></span><code>npm login
-</code></pre></div>
-<p>然后：</p>
-<div class="highlight"><pre><span></span><code>npm publish
-</code></pre></div>
-<p>默认发送公开的模块，npm付费用户可以发布私有模块。</p>
+<p>详细讨论请参阅 <a href="https://a358003542.github.io/articles/javascript-npm.html">这篇文章</a> 。</p>
 <h2 id="附录">附录</h2>
 <h3 id="no-jquery">no-jquery</h3>
 <p>更多相关知识请参阅参考资料四，即 <a href="https://github.com/nefe/You-Dont-Need-jQuery/blob/master/README.zh-CN.md">这个Github项目</a> 。下面就一些重点知识做出一些整理。</p>
