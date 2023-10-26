@@ -11,7 +11,8 @@
     <meta name="copyright" content="wanze" />
 
     <meta name="description"
-        content="我们知道javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于ch..." />
+        content="前言
+javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于chr..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -92,7 +93,7 @@
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-24T00:00:00+08:00">2023年 10月 24日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2023-10-24T14:35:57.334295+08:00">2023年 10月 24日 </time>
+                <div class="p-1">最近更新于：<time datetime="2023-10-26T00:00:00+08:00">2023年 10月 26日 </time>
                 </div>
 
 
@@ -104,57 +105,30 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                <p>我们知道javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于chrome浏览器，一样是基于chrome的V8 javascript引擎，只是移除了一些和网页显示相关的webkit引擎之类的。</p>
+                <h2 id="前言">前言</h2>
+<p>javascript作为前端的脚本语言是浏览器负责翻译执行的，也就是说javascript的运行是依赖于浏览器的。而nodejs是一个javascript运行时，意思是你的javascript脚本可以类似于在浏览器上在nodejs上运行。事实上nodejs就实现组件结构来说也类似于chrome浏览器，一样是基于chrome的V8 javascript引擎，只是移除了一些和网页显示相关的webkit引擎之类的。</p>
 <p>官网为nodejs的定义如下：</p>
 <blockquote>
 <p>一个搭建在Chrome JavaScript运行时上的平台，用于构建高速、可伸缩的网络程序。Node.js采用的事件驱动、非阻塞I/O模型，使它既轻量又高效，并成为构建运行在分布式设备上的数据密集型实时程序的完美选择。</p>
 </blockquote>
 <p>V8引擎性能很高，javascript会被直接编译成本地机器码。所以nodejs使用javascript也很高效。因为V8引擎原来处理网页上的javascript脚本就实现上必须是事件驱动，非阻塞IO的，于是到了nodejs服务器这边也是事件驱动的，非阻塞IO编程的。</p>
-<p>安装nodejs请到 <a href="https://nodejs.dev/download/">这个网站</a> 下载nodejs。</p>
-<h3 id="一个最简单的nodejs模块">一个最简单的nodejs模块</h3>
-<p>首先我们新建一个文件夹mymodule，然后里面新建一个 <code>index.js</code> 文件。在<code>index.js</code> 文件里面定义一个简单的函数：</p>
-<div class="highlight"><pre><span></span><code>function add2(a,b){
-  return a + b;
-}
+<p>安装nodejs请到 <a href="https://nodejs.dev/en/download/">这个网站</a> 下载nodejs。</p>
+<h3 id="commonjs模块">CommonJS模块</h3>
+<p>虽然从nodejs v12开始，nodejs就支持es6的模块系统了，但由于历史原因，我们在网上看到的代码，大多都使用的require也就是CommonJS模块导入语句。electron 要到下个v28版本才支持esm。从长远来说，JavaScript生态圈肯定会逐渐迁移到esm，只是现在还在过渡阶段。所以简单了解下CommonJS模块情况现阶段还是有用的。</p>
+<p>js模块文件你希望导出某个变量：</p>
+<div class="highlight"><pre><span></span><code>exports.what = what;
 </code></pre></div>
 
-<p>然后导出这个函数</p>
-<div class="highlight"><pre><span></span><code>exports.add2 = add2
+<p>其他地方使用这个变量：</p>
+<div class="highlight"><pre><span></span><code>const {what} = require(&#39;./where.js&#39;)
 </code></pre></div>
 
-<p>然后我们在外面新建一个 <code>test_mymodule.js</code> 来实际使用mymoudle模块：</p>
-<div class="highlight"><pre><span></span><code>var mymodule = require(&#39;./mymodule&#39;)
-
-console.log(mymodule.add2(1,2))
+<p>如果是安装的第三方模块，可以写为简单的模块名。</p>
+<p>CommonJS没有所谓的default概念，当你看到这样的语句时：</p>
+<div class="highlight"><pre><span></span><code>const path = require(&#39;path&#39;)
 </code></pre></div>
 
-<p>然后运行：</p>
-<div class="highlight"><pre><span></span><code>node test_mymodule.js
-</code></pre></div>
-
-<p>如果一起正常，那么读者将会看到输出了数字3，恭喜，一个简单的nodejs模块就编写完成了。</p>
-<p>一般模块是默认  <code>index.js</code> 为模块的入口，你可以在mymodule文件夹下面新建 <code>package.json</code> 文件，这一般正式的模块都会定义这个文件的，然后通过设置 <code>main</code> 字段来指定目标入口js文件。【读者可以试着将index.js改为main.js然后试下，然后再按照上面的表述编写一个package.json文件来试下。】</p>
-<p>还有一种写法：</p>
-<div class="highlight"><pre><span></span><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">add2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">add2</span>
-</code></pre></div>
-
-<p>这两个写法区别不是太大，参看官方文档：</p>
-<blockquote>
-<p>exports shortcut</p>
-<p>Added in: v0.1.16</p>
-<p>The exports variable is available within a module's file-level scope, and is assigned the value of <code>module.exports</code> before the module is evaluated.</p>
-<p>It allows a shortcut, so that <code>module.exports.f = ...</code>can be written more succinctly as <code>exports.f = ....</code> However, be aware that like any variable, if a new value is assigned to exports, it is no longer bound to module.exports:</p>
-<p>module.exports.hello = true; // Exported from require of module</p>
-<p>exports = { hello: false };  // Not exported, only available in the module</p>
-</blockquote>
-<p>简单来说就是如果你总是规范自己采用 <code>exports.what=what</code> 这样的语法，那么exports只是<code>module.exports</code>的语法糖罢了，不过一定要注意你不能写作 <code>exports=what</code>，这样exports这个变量就被污染了。但是你仍然可以写 <code>module.exports = add2</code> 这种形式，这样调用语句要改为：</p>
-<div class="highlight"><pre><span></span><code>var mymodule = require(&#39;./mymodule&#39;)
-
-console.log(mymodule(1,2))
-</code></pre></div>
-
-<p>我不太喜欢这种风格，因为require之后从程序员的习惯来说更期待的是引入进来一个某种模块对象的东西，我更喜欢最开始的那种语法，通过exports将模块里面的目标变量作为属性绑定到某种模块对象里面。</p>
-<p>NOTICE: 注意nodejs的exports是后端那块的东西，而es6的export是前端的东西，别弄混了。</p>
+<p>和上面的require本质上是一回事，只是用解构变量赋值大多会方便些，也就是require函数返回的就是模块对象。</p>
             </div>
         </div>
 

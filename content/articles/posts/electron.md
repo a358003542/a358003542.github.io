@@ -44,6 +44,8 @@ $env:ELECTRON_CUSTOM_DIR="{{ version }}"
 
 关于初始项目的搭建请参考官方文档 [快速入门](https://www.electronjs.org/zh/docs/latest/tutorial/quick-start) 这一章来参考学习。
 
+electron的官方文档教程写得很好，推荐读者阅读官方文档即可。下面我会就某些细节问题做出补充说明。
+
 
 ## 加载本地文件
 
@@ -55,6 +57,14 @@ mainWindow.loadURL(path.join('file://', __dirname, 'index.html'))
 
 这里的 `__dirname` 就是你当前执行js脚本所在的目录位置，上面加上 `file://` ，这样就可以实现加载本地文件。
 
+
+## electron-forge
+按照官方文档执行下面的命令，同样需要类似上面讨论的 **设置环境变量** ，否则可能也会类似安装electron一样失败。
+
+```
+npm install --save-dev @electron-forge/cli
+npx electron-forge import
+```
 
 ## 自定义菜单栏
 
@@ -154,9 +164,10 @@ label是显示的文字，accelerator是快捷键，第三个是关联的函数�
 
 下面在讨论electron-builder的时候会提到，一些图标文件都会默认试着从那个文件夹下去找。
 
-## 制作安装包
 
-继续上面的讨论，需要利用 electron-builder 来制作安装包，其也是一个npm包，类似上面的先安装一下：
+
+## electron-builder
+利用 electron-builder 来制作安装包，其也是一个npm包，类似上面的先安装一下：
 
 ```
 yarn add electron-builder --dev

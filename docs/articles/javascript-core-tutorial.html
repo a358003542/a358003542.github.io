@@ -784,8 +784,24 @@ b
 <span class="p">}</span>
 </code></pre></div>
 <h2 id="模块">模块</h2>
-<p>一个模块就是一个js文件。</p>
-<p>通过import export来实现模块间对象的互相调用。</p>
+<p>一个模块就是一个js文件，下面就es6模块系统的基本导入导出语句进行说明：</p>
+<p>模块js文件通过 <code>export</code> 来到处待使用的变量。</p>
+<div class="highlight"><pre><span></span><code>export function what(){
+
+}
+</code></pre></div>
+<p>要使用这个变量则是：</p>
+<div class="highlight"><pre><span></span><code>import {what} from './where.js'
+</code></pre></div>
+<p>不是本地的js文件，而是安装的第三方js模块，比如安装在node_modules文件夹下的，可以直接使用模块名：</p>
+<div class="highlight"><pre><span></span><code>import {what} from 'module_name'
+</code></pre></div>
+<p>一个模块可以设置一个默认的导出变量：</p>
+<div class="highlight"><pre><span></span><code>export default what;
+</code></pre></div>
+<p>对于默认的导出变量可以直接import：</p>
+<div class="highlight"><pre><span></span><code>import what from './where.js'
+</code></pre></div>
 <h2 id="网页端">网页端</h2>
 <p>所谓DOM操作就是用Javascript来操作修改页面内容，这基本上是client端javascript的主要工作内容。</p>
 <p>如果熟悉python的beautifulsoup或者lxml之类的分析网页的模块，那么对Javascript的这些DOM操作概念都不会太陌生。我这里就不做太多抽象的术语上的讨论了，下面的讨论会更加注重实践方面的东西。</p>
@@ -865,7 +881,7 @@ b
 <p>event.target是引用那个最开始触发事件的那个目标元素，而event.currentTarget是引用那个实际处理事件的元素。比如说某个div里面有一个button，你给div绑定了事件监听处理函数，然后那个事件监听处理函数里面调用 <code>event.currentTarget</code> 则会指向那个div，而如果你调用 <code>event.target</code> 则会引用最开始触发click事件的那个元素，也就是button。</p>
 <p>在一个目标button里面处理click事件使用event.target或者event.currentTarget是没有区别的。</p>
 <h3 id="fetch">fetch</h3>
-<p>更多信息请查看mozilla关于 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API">fetch函数的介绍</a> 。</p>
+<p>更多信息请查看mozilla关于 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch">fetch函数的介绍</a> 。</p>
 <div class="highlight"><pre><span></span><code><span class="nx">fetch</span><span class="p">(</span><span class="s2">"http://localhost:8080"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
 <span class="w">  </span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"请求状态: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
@@ -892,7 +908,7 @@ b
 <h2 id="附录">附录</h2>
 <h3 id="no-jquery">no-jquery</h3>
 <p>更多相关知识请参阅参考资料四，即 <a href="https://github.com/nefe/You-Dont-Need-jQuery/blob/master/README.zh-CN.md">这个Github项目</a> 。下面就一些重点知识做出一些整理。</p>
-<h4 id="选择">选择</h4>
+<h4 id="选择某个标签">选择某个标签</h4>
 <p>jquery的选择是该库很核心的一个功能，现代JavaScript提供了 <code>document.querySelector()</code> 和 <code>document.querySelectorAll()</code> 来作为替代。然后原来的 <code>document.getElementById()</code>  ， <code>document.getElementByClassName()</code> 或 <code>document.getElementByTagName()</code> 性能更好。</p>
 <div class="highlight"><pre><span></span><code>// jQuery
 $('selector');
@@ -900,7 +916,6 @@ $('selector');
 // Native
 document.querySelectorAll('selector');
 </code></pre></div>
-<h4 id="选择class">选择class</h4>
 <div class="highlight"><pre><span></span><code>// jQuery
 $('.class');
 
@@ -910,7 +925,6 @@ document.querySelectorAll('.class');
 // or
 document.getElementsByClassName('class');
 </code></pre></div>
-<h4 id="选择id">选择id</h4>
 <div class="highlight"><pre><span></span><code>// jQuery
 $('#id');
 
@@ -919,6 +933,31 @@ document.querySelector('#id');
 
 // or
 document.getElementById('id');
+</code></pre></div>
+<h4 id="设置html内容">设置html内容</h4>
+<div class="highlight"><pre><span></span><code>// jQuery
+$el.html();
+
+// Native
+el.innerHTML;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>// jQuery
+$el.html(htmlString);
+
+// Native
+el.innerHTML = htmlString;
+</code></pre></div>
+<h4 id="ajax请求">AJAX请求</h4>
+<p>推荐使用fetch。</p>
+<div class="highlight"><pre><span></span><code>$.getJSON("./yaogua.json", laterProcess);
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>fetch("./yaogua.json")
+  .then((response) =&gt; response.json())
+  .then(laterProcess);
+
+function laterProcess(data){
+  console.log(data)
+}
 </code></pre></div>
 <h3 id="javascript编码规范">javascript编码规范</h3>
 <h3 id="参考资料">参考资料</h3>

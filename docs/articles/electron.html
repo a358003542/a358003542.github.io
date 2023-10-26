@@ -95,9 +95,10 @@ nodejs..." />
 <ul>
 <li><a href="#前言">前言</a></li>
 <li><a href="#加载本地文件">加载本地文件</a></li>
+<li><a href="#electron-forge">electron-forge</a></li>
 <li><a href="#自定义菜单栏">自定义菜单栏</a></li>
 <li><a href="#项目结构推荐">项目结构推荐</a></li>
-<li><a href="#制作安装包">制作安装包</a></li>
+<li><a href="#electron-builder">electron-builder</a></li>
 <li><a href="#整合python项目">整合python项目</a></li>
 <li><a href="#参考资料">参考资料</a></li>
 </ul>
@@ -141,11 +142,17 @@ $env:ELECTRON_CUSTOM_DIR="{{ version }}"
 </code></pre></div>
 <p>好让你输入 <code>npm start</code>  时执行 <code>electron .</code> 命令。现在运行 <code>npm start</code> 还不行，因为你的项目最基本的骨架还没搭建好。</p>
 <p>关于初始项目的搭建请参考官方文档 <a href="https://www.electronjs.org/zh/docs/latest/tutorial/quick-start">快速入门</a> 这一章来参考学习。</p>
+<p>electron的官方文档教程写得很好，推荐读者阅读官方文档即可。下面我会就某些细节问题做出补充说明。</p>
 <h2 id="加载本地文件">加载本地文件</h2>
 <p>加载本地文件或者URL都推荐统一采用 <code>loadURL</code> 方法：</p>
 <div class="highlight"><pre><span></span><code>mainWindow.loadURL(path.join('file://', __dirname, 'index.html'))
 </code></pre></div>
 <p>这里的 <code>__dirname</code> 就是你当前执行js脚本所在的目录位置，上面加上 <code>file://</code> ，这样就可以实现加载本地文件。</p>
+<h2 id="electron-forge">electron-forge</h2>
+<p>按照官方文档执行下面的命令，同样需要类似上面讨论的 <strong>设置环境变量</strong> ，否则可能也会类似安装electron一样失败。</p>
+<div class="highlight"><pre><span></span><code>npm install --save-dev @electron-forge/cli
+npx electron-forge import
+</code></pre></div>
 <h2 id="自定义菜单栏">自定义菜单栏</h2>
 <p>如果你设置mainWindow的frame属性为false：</p>
 <div class="highlight"><pre><span></span><code>  mainWindow = new BrowserWindow({
@@ -214,8 +221,8 @@ $env:ELECTRON_CUSTOM_DIR="{{ version }}"
     },
 </code></pre></div>
 <p>下面在讨论electron-builder的时候会提到，一些图标文件都会默认试着从那个文件夹下去找。</p>
-<h2 id="制作安装包">制作安装包</h2>
-<p>继续上面的讨论，需要利用 electron-builder 来制作安装包，其也是一个npm包，类似上面的先安装一下：</p>
+<h2 id="electron-builder">electron-builder</h2>
+<p>利用 electron-builder 来制作安装包，其也是一个npm包，类似上面的先安装一下：</p>
 <div class="highlight"><pre><span></span><code>yarn add electron-builder --dev
 </code></pre></div>
 <p>electron-builder的官方文档对于初次接触这块的来说我估计会非常难懂，我之前还是接触过nsis的仍然在某些地方读之不明所以。</p>

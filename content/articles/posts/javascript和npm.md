@@ -21,7 +21,7 @@ npm install module_name
 
 `npm install` 还有一些额外的安装选项：
 
-- **默认**是 `--save-prod` 或者 `-P` ，常规依赖包信息会放在 `dependencies` 字段下。一般和项目直接相关的包放在这里。【因为是默认值所以一般很少会打出这个 `--save-prod` ，在npm version5之前需要额外加个 `--save`大概也是类似的功能。】
+- **默认**是 `--save-prod` 或者 `-P` ，常规依赖包信息会放在 `dependencies` 字段下。一般和项目直接相关的包放在这里。【因为是默认值所以一般很少会打出这个 `--save-prod` ，在npm version 5之前需要额外加个 `--save`大概也是类似的功能。】
 
 - `--save-dev` 或者 `-D` ，开发包信息会放在 `devDependencies` 。和开发调试封装打包等相关的包信息推荐放在这里，比如electron官方会提示我应该放在 **devDependencies** 那里。
 

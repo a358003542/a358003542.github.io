@@ -851,9 +851,38 @@ try {
 
 
 ## 模块
-一个模块就是一个js文件。
+一个模块就是一个js文件，下面就es6模块系统的基本导入导出语句进行说明：
 
-通过import export来实现模块间对象的互相调用。
+模块js文件通过 `export` 来到处待使用的变量。
+
+```
+export function what(){
+
+}
+```
+
+要使用这个变量则是：
+
+```
+import {what} from './where.js'
+```
+
+不是本地的js文件，而是安装的第三方js模块，比如安装在node_modules文件夹下的，可以直接使用模块名：
+
+```
+import {what} from 'module_name'
+```
+
+一个模块可以设置一个默认的导出变量：
+
+```
+export default what;
+```
+对于默认的导出变量可以直接import：
+
+```
+import what from './where.js'
+```
 
 
 
@@ -1008,7 +1037,7 @@ event.target是引用那个最开始触发事件的那个目标元素，而event
 
 ### fetch
 
-更多信息请查看mozilla关于 [fetch函数的介绍](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API) 。
+更多信息请查看mozilla关于 [fetch函数的介绍](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch) 。
 
 ```javascript
 fetch("http://localhost:8080").then(
@@ -1048,7 +1077,7 @@ fetch("http://localhost:8080").then(
 
 更多相关知识请参阅参考资料四，即 [这个Github项目](https://github.com/nefe/You-Dont-Need-jQuery/blob/master/README.zh-CN.md) 。下面就一些重点知识做出一些整理。
 
-#### 选择
+#### 选择某个标签
 
 jquery的选择是该库很核心的一个功能，现代JavaScript提供了 `document.querySelector()` 和 `document.querySelectorAll()` 来作为替代。然后原来的 `document.getElementById()`  ， `document.getElementByClassName()` 或 `document.getElementByTagName()` 性能更好。
 
@@ -1059,8 +1088,6 @@ $('selector');
 // Native
 document.querySelectorAll('selector');
 ```
-
-#### 选择class
 
 ```
 // jQuery
@@ -1073,8 +1100,6 @@ document.querySelectorAll('.class');
 document.getElementsByClassName('class');
 ```
 
-#### 选择id
-
 ```
 // jQuery
 $('#id');
@@ -1085,6 +1110,43 @@ document.querySelector('#id');
 // or
 document.getElementById('id');
 ```
+
+#### 设置html内容
+
+```
+// jQuery
+$el.html();
+
+// Native
+el.innerHTML;
+```
+
+
+```
+// jQuery
+$el.html(htmlString);
+
+// Native
+el.innerHTML = htmlString;
+```
+
+#### AJAX请求
+推荐使用fetch。
+
+```
+$.getJSON("./yaogua.json", laterProcess);
+```
+
+```
+fetch("./yaogua.json")
+  .then((response) => response.json())
+  .then(laterProcess);
+
+function laterProcess(data){
+  console.log(data)
+}
+```
+
 
 
 ### javascript编码规范
