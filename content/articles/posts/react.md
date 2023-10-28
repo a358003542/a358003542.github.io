@@ -1,19 +1,14 @@
 Slug: react
 Date: 20220406
-
+Modified: 20231027
 
 
 [TOC]
 
-## 前言
-React的创始人Jordan Walke最初是要解决这样一个问题：一个自动完成字段，有多个数据源对其进行更新，这些数据都是从后端异步获取的，要怎么插入新的行通过传统DOM操作会很复杂，而Walke找到了一个非常简洁而优雅的解决方案，那就是重新生成这个字段的UI也就是DOM元素。
+## react的纯前端视角
+学习react一开始就接触那些工具甚至是一些高级react插件，很是让初学者困惑而生出畏惧之心。建议初学者先跟着下面这个例子简单对react框架在做什么事有个简单的概念，然后再去接触webpack等那些工具链，因为读者作为实际开发人员最终还是会跟着大家那样去实践，编写nodejs后端的react代码，然后通过webpack，babel转成前端渲染代码，会发现这样还是更方便一些的。
 
-React更适合构建单页面Web应用，单页面Web应用的工作方式是UI大部分HTML代码生成发生在浏览器端，只有数据往返于浏览器。和单页面Web应用区别的是富服务端方式，HTML的生成是发生在服务器端的。
-
-React初学者实在不建议过早地涉及 `create-react-app` 引入的那些工具链，而是推荐先在html上简单用起来，对react用的有点感觉了后面有时间再慢慢熟悉这些工具链。
-
-### React的HelloWorld
-下面是React最简单的hello world例子。
+下面是react最简单的hello world例子，react在这里之于我们就是一个前端框架，通过react这个前端框架，将会操纵生成一些html代码，主要是 `id=reactDOM` 那里。具体执行脚本在main.js那里。
 
 ```html
 <!DOCTYPE html>
@@ -47,11 +42,11 @@ ReactDOM.render(
 )
 ```
 
-从上面这个hello world例子我们学到了什么？细细看来和React相关的只有 `React.createElement` 和 `ReactDOM.render` 这两个函数。其中 `document.getElementById('reactDOM')` 就是javascript代码，返回js的Element对象。
+从上面这个例子我们看到，React通过 `React.createElement` 和 `ReactDOM.render` 这两个函数，最终将 `document.getElementById('reactDOM')` 这个html目标标签，渲染成了你想要的样子。
 
 其中 `React.createElement` 创建一个UI元素，然后 `ReactDOM.render` 是将这个UI元素在目标位置渲染出来。
 
-读者可以进一步了解createElement这个方法，后面还可以跟上多个子元素，但写上一堆createElement实在不是一个好方法，于是React创造了JSX这个概念。
+但是写上一堆createElement来创造UI元素实在不是一个好方法，于是React创造了JSX这个概念。
 
 利用JSX，helloworld样例代码可以简单写为：
 
@@ -118,10 +113,11 @@ let a = <a href="..."></a>
 4. style属性必须传递的是JavaScript对象，比如： `<input style={{fontSize: '30pt'}} />` css的属性名采用小驼峰规则，比如font-size为fontSize，比如font-family为fontFamily。
 
 
-### 组件
+## 组件
 JSX遇到小写字母开头的标签会认为是html原生标签，用 `React.createElement` 来处理，而遇到大写字母开头的则认为是React组件。React组件有两种写法：函数组件和class组件。
 
-#### 函数组件
+读者出于省心考虑的话就学习一个函数组件即可，我看react官方文档也就是用的函数组件。后面有需要再去了解学习下class组件怎么写的。
+
 如果某个函数接受props参数并返回React元素，则其就是一个函数组件。
 
 ```
@@ -137,22 +133,8 @@ function Welcome(props) {
 const element = <Welcome name="Sara" />;
 ```
 
-#### class组件
-更常用的是class组件，写法如下：
 
-```jsx
-class Welcome extends React.Component {
-  render() {
-    return <h1>Hello, {this.props.name}</h1>;
-  }
-}
-```
-
-React.component有构造方法： `constructor(props)` ，类组件里面可以直接调用 `this.props` 就是构造函数这里做的，如果要重载构造方法，则记得先调用 `super(props)` 。
-
-
-
-## 一个实时更新时钟的例子
+## state和props
 这个例子介绍了react很多核心概念，同时又不是特别复杂，作为继hello world例子之后的第二个教学例子是很合适的。
 
 ```jsx
@@ -201,9 +183,6 @@ ReactDOM.render(
 上面例子 `componentDidMount` 是组件渲染到DOM中之后会运行。 `componentWillUnmount` 是组件生命周期最后执行的方法。
 
 
-
-
-### state和props
 类组件里面的props是不可变的，state是可变的。具体一个表示组件的属性，一个表示组件的状态。改变组件的状态要通过 `setState` 方法来进行，只有通过这个方法React才知道组件的状态发生了改变，这样其会重新调用render方法来重新渲染。
 
 出于性能的考虑，React会将多个 `setState` 语句合并，然后再更新DOM。
@@ -214,7 +193,6 @@ React的数据是向下流动的，意思是父组件的props和state可以影�
 ## 参考资料
 
 1. react官方教程和资料
-2. [electron-react-boilerplate项目](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 3. [getting-started-with-react](https://www.taniarascia.com/getting-started-with-react/)
 4. 快速上手React编程, [美]阿扎·马尔丹
 

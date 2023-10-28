@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>{{ article.bookname|striptags|e }} - {{ article.bookauthor | striptags | e}} -  {{ SITENAME|striptags|e }}</title>
+<title>{{ article.bookname|striptags|e }} - {{ article.bookauthor | striptags | e}} - {{ SITENAME|striptags|e }}</title>
 {% endblock title %}
+
+{% block head_links %}
+{{super()}}
+<link rel="stylesheet" href="{{ SITEURL }}/theme/css/bookref.css">
+{% endblock head_links %}
 
 {% block content %}
 <div class="container mt-3">
@@ -75,23 +80,26 @@
                     </div>
                     {% endif %}
 
-                    {% if article.bookbaidupandirectdownloadurl %}
-                    <div class="">
-                        <a class="btn btn-primary" target="_blank" href="{{article.bookbaidupandirectdownloadurl}}"><span
-                                class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                            百度盘直接下载
-                        </a>
-                    </div>
-                    {% endif %}
+                    <div class="btn-download">
+                        {% if article.bookbaidupandirectdownloadurl %}
+                        <div class="btn-download-item">
+                            <a class="btn btn-primary" target="_blank"
+                                href="{{article.bookbaidupandirectdownloadurl}}"><span
+                                    class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                                百度盘直接下载
+                            </a>
+                        </div>
+                        {% endif %}
 
-                    {% if article.onedrivedownloadurl %}
-                    <div class="">
-                        <a class="btn btn-primary" target="_blank" href="{{article.onedrivedownloadurl}}"><span
-                                class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                            onedrive下载
-                        </a>
+                        {% if article.onedrivedownloadurl %}
+                        <div class="btn-download-item">
+                            <a class="btn btn-primary" target="_blank" href="{{article.onedrivedownloadurl}}"><span
+                                    class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                                onedrive下载
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
 
                 </div>
             </div>

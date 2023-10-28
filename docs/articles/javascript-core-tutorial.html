@@ -177,6 +177,7 @@ javascript就历史起源来说似乎并不是一个主角命，更像是编程�
 <li><a href="#addeventlistener">addEventListener</a></li>
 <li><a href="#removeeventlistener">removeEventListener</a></li>
 <li><a href="#eventtarget和eventcurrenttarget的区别">event.target和event.currentTarget的区别</a></li>
+<li><a href="#文档加载之后执行的行为">文档加载之后执行的行为</a></li>
 <li><a href="#fetch">fetch</a></li>
 </ul>
 </li>
@@ -880,6 +881,14 @@ b
 <p>首先说一下事件的冒泡机制，当某个元素触发了某个事件，其会触发本元素上事件响应处理程序，然后该事件会继续冒泡到本元素的父元素之上，再触发父元素的事件响应处理程序。</p>
 <p>event.target是引用那个最开始触发事件的那个目标元素，而event.currentTarget是引用那个实际处理事件的元素。比如说某个div里面有一个button，你给div绑定了事件监听处理函数，然后那个事件监听处理函数里面调用 <code>event.currentTarget</code> 则会指向那个div，而如果你调用 <code>event.target</code> 则会引用最开始触发click事件的那个元素，也就是button。</p>
 <p>在一个目标button里面处理click事件使用event.target或者event.currentTarget是没有区别的。</p>
+<h3 id="文档加载之后执行的行为">文档加载之后执行的行为</h3>
+<p>文档加载之后执行的行为如下实现，不要直接在渲染js脚本里面直接运行了。</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">readyState</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">'loading'</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">your_function</span><span class="p">()</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'DOMContentLoaded'</span><span class="p">,</span><span class="w"> </span><span class="nx">your_function</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
 <h3 id="fetch">fetch</h3>
 <p>更多信息请查看mozilla关于 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch">fetch函数的介绍</a> 。</p>
 <div class="highlight"><pre><span></span><code><span class="nx">fetch</span><span class="p">(</span><span class="s2">"http://localhost:8080"</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>

@@ -1035,6 +1035,17 @@ event.target是引用那个最开始触发事件的那个目标元素，而event
 在一个目标button里面处理click事件使用event.target或者event.currentTarget是没有区别的。
 
 
+### 文档加载之后执行的行为
+文档加载之后执行的行为如下实现，不要直接在渲染js脚本里面直接运行了。
+```js
+if (document.readyState !== 'loading') {
+    your_function()
+} else {
+    document.addEventListener('DOMContentLoaded', your_function)
+}
+```
+
+
 ### fetch
 
 更多信息请查看mozilla关于 [fetch函数的介绍](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch) 。

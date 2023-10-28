@@ -66,6 +66,13 @@ npm install --save-dev @electron-forge/cli
 npx electron-forge import
 ```
 
+项目设置好之后制作安装包命令是：
+```
+npm run make
+```
+注意，制作安装包的时候同样也要类似上面讨论的 **设置好环境变量**。
+
+
 ## 自定义菜单栏
 
 如果你设置mainWindow的frame属性为false：
