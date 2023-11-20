@@ -1,11 +1,56 @@
-"use strict"
-
 let currentIndex = 0
 let maxPageShow = 12
 let currentPageNum = 1
 let article_group = _.chunk(articles, maxPageShow)
 let maxPageNum = article_group.length
 let buttonNums = 5
+
+
+
+function _validateDistributionArray(distributionArray, currentPageNum, maxPageNum) {
+    if (currentPageNum - distributionArray[0] <= 0) {
+        return false
+    }
+    if (currentPageNum + distributionArray[1] > maxPageNum) {
+        return false
+    }
+    return true
+}
+
+function balanceDistributionArray(distributionArray, currentPageNum, maxPageNum) {
+    let originArray = [distributionArray[0], distributionArray[1]]
+
+    function _balanceDistributionArray(distributionArray) {
+        if (distributionArray[0] > distributionArray[1]) {
+            if (currentPageNum + distributionArray[1] + 1 > maxPageNum) {
+                if (_validateDistributionArray(distributionArray, currentPageNum, maxPageNum)) {
+                    return distributionArray
+                } else {
+                    return balanceDistributionArray([originArray[1], originArray[0]], currentPageNum, maxPageNum)
+                }
+            } else {
+                return _balanceDistributionArray([distributionArray[0] - 1, distributionArray[1] + 1], currentPageNum, maxPageNum)
+            }
+        } else if (distributionArray[0] < distributionArray[1]) {
+            if (currentPageNum - distributionArray[0] - 1 <= 0) {
+                if (_validateDistributionArray(distributionArray, currentPageNum, maxPageNum)) {
+                    return distributionArray
+                } else {
+                    return balanceDistributionArray([originArray[1], originArray[0]], currentPageNum, maxPageNum)
+                }
+            } else {
+                return _balanceDistributionArray([distributionArray[0] + 1, distributionArray[1] - 1], currentPageNum, maxPageNum)
+            }
+        } else {
+            if (_validateDistributionArray(distributionArray, currentPageNum, maxPageNum)) {
+                return distributionArray
+            } else {
+                return balanceDistributionArray([originArray[1], originArray[0]], currentPageNum, maxPageNum)
+            }
+        }
+    }
+    return _balanceDistributionArray(distributionArray)
+}
 
 function initPageButton() {
     let currentPageButton = document.getElementById("currentPageButton")
@@ -50,7 +95,7 @@ function changePage(pageNum) {
     articlesDom.replaceWith(newArticlesDom)
 }
 
-changePage(1)
+
 
 function changePageButton(pageId) {
     let pageNum = parseInt(pageId)
@@ -88,6 +133,12 @@ function changePageButton(pageId) {
 
     // change page content
     changePage(currentPageNum)
+
+    // change page view history
+    const nextURL = `/archives.html?page=${currentPageNum}`;
+    const nextTitle = '所有博文 - 万泽的博客';
+    const nextState = { additionalInformation: 'Updated the URL with JS' };
+    window.history.replaceState(nextState, nextTitle, nextURL);
 
     // change button status
     let currentPageButton = document.getElementById("currentPageButton")
@@ -145,49 +196,33 @@ function changePageButton(pageId) {
 
 }
 
-function balanceDistributionArray(distributionArray, currentPageNum, maxPageNum) {
-    let originArray = [distributionArray[0], distributionArray[1]]
+function getPageParameter() {
+    let paras = window.location.search.substring(1);
+    let vars = paras.split('&');
+    let page = 1;
 
-    function _balanceDistributionArray(distributionArray) {
-        if (distributionArray[0] > distributionArray[1]) {
-            if (currentPageNum + distributionArray[1] + 1 > maxPageNum) {
-                if (_validateDistributionArray(distributionArray, currentPageNum, maxPageNum)) {
-                    return distributionArray
-                } else {
-                    return balanceDistributionArray([originArray[1], originArray[0]], currentPageNum, maxPageNum)
-                }
-            } else {
-                return _balanceDistributionArray([distributionArray[0] - 1, distributionArray[1] + 1], currentPageNum, maxPageNum)
-            }
-        } else if (distributionArray[0] < distributionArray[1]) {
-            if (currentPageNum - distributionArray[0] - 1 <= 0) {
-                if (_validateDistributionArray(distributionArray, currentPageNum, maxPageNum)) {
-                    return distributionArray
-                } else {
-                    return balanceDistributionArray([originArray[1], originArray[0]], currentPageNum, maxPageNum)
-                }
-            } else {
-                return _balanceDistributionArray([distributionArray[0] + 1, distributionArray[1] - 1], currentPageNum, maxPageNum)
-            }
-        } else {
-            if (_validateDistributionArray(distributionArray, currentPageNum, maxPageNum)) {
-                return distributionArray
-            } else {
-                return balanceDistributionArray([originArray[1], originArray[0]], currentPageNum, maxPageNum)
-            }
+    for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split('=');
+
+        if (pair[0] === 'page') {
+            page = parseInt(pair[1]);
         }
     }
-    return _balanceDistributionArray(distributionArray)
+    return page;
 }
 
-function _validateDistributionArray(distributionArray, currentPageNum, maxPageNum) {
-    if (currentPageNum - distributionArray[0] <= 0) {
-        return false
-    }
-    if (currentPageNum + distributionArray[1] > maxPageNum) {
-        return false
-    }
-    return true
+function initAction() {    
+    changePage(1)
+    initPageButton()
+
+    let page = getPageParameter()
+
+    changePageButton(page)
 }
 
-initPageButton()
+
+if (document.readyState !== 'loading') {
+    initAction()
+} else {
+    document.addEventListener('DOMContentLoaded', initAction)
+}
