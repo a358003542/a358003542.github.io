@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
+
+    <meta name="author" content="wanze" />
+    <meta name="copyright" content="wanze" />
+
+    <meta name="description"
+        content="APIView
+对于一般的视图函数根据HTTP请求方法的不同，我们一般会有如下代码：
+
+django那边提出View类的概念，只需要具体编写get、post等方法就实现了对应方法的响应。
+
+django restframework的 APIView 继承自 django 的 View，然后针对..." />
+
+
+<meta name="keywords" content=", posts, " />
+
+<title>djangorestframework  -
+    万泽的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
+                        class="d-flex me-auto">
+
+                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
+                            placeholder="Search..." aria-label="Search">
+
+                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
+                        
+                    </form>
+
+
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-3"></div>
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/django-restframework.html"> djangorestframework  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <div class="p-3 bg-white small">
+                <div style="font-size:1.2rem;">目录</div>
+                <div class="toc">
+<ul>
+<li><a href="#apiview">APIView</a><ul>
+<li><a href="#request对象">Request对象</a></li>
+<li><a href="#response对象">Response对象</a></li>
+</ul>
+</li>
+<li><a href="#序列化">序列化</a><ul>
+<li><a href="#serializer类">Serializer类</a></li>
+<li><a href="#modelserializer">ModelSerializer</a></li>
+<li><a href="#查看modelserializer默认配置">查看ModelSerializer默认配置</a></li>
+<li><a href="#source参数">source参数</a></li>
+<li><a href="#partial参数">partial参数</a></li>
+<li><a href="#is_valid-方法">is_valid 方法</a></li>
+<li><a href="#read_only和write_only">read_only和write_only</a></li>
+<li><a href="#serializermethodfield">SerializerMethodField</a></li>
+<li><a href="#在序列化类里面引用requestuser">在序列化类里面引用request.user</a></li>
+</ul>
+</li>
+<li><a href="#渲染器">渲染器</a><ul>
+<li><a href="#自定义渲染器">自定义渲染器</a></li>
+<li><a href="#自定义异常处理">自定义异常处理</a></li>
+</ul>
+</li>
+<li><a href="#jwt认证">JWT认证</a><ul>
+<li><a href="#refresh-token">refresh token</a></li>
+</ul>
+</li>
+<li><a href="#认证和权限">认证和权限</a></li>
+<li><a href="#restful-api">Restful API</a><ul>
+<li><a href="#url">URL</a></li>
+<li><a href="#http方法">HTTP方法</a></li>
+<li><a href="#返回内容">返回内容</a></li>
+<li><a href="#参数设计">参数设计</a></li>
+<li><a href="#选择合适的状态码响应">选择合适的状态码响应</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-17T00:00:00+08:00">2023年 10月 17日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-11-23T00:00:00+08:00">2023年 11月 23日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
+                
+<h2 id="apiview">APIView</h2>
+<p>对于一般的视图函数根据HTTP请求方法的不同，我们一般会有如下代码：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'GET'</span><span class="p">:</span>
+        <span class="c1"># &lt;view logic&gt;</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
+</code></pre></div>
+<p>django那边提出View类的概念，只需要具体编写<code>get</code>、<code>post</code>等方法就实现了对应方法的响应。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
+
+<span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="c1"># &lt;view logic&gt;</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">'result'</span><span class="p">)</span>
+</code></pre></div>
+<p>django restframework的 APIView 继承自 django 的 View，然后针对restful风格的api提供了很多便捷的功能支持。此外rest framework还提供了 <code>GenericAPIView</code> 和 <code>RetrieveAPIView</code> 等等其他视图类，还提供了 <code>ListModelMixin</code> 等等其他Mixin，一般来说视图类的编写继承自 <code>APIView</code> 类即可，其他Mixin和视图类很方便，在应用上可以节省很多代码的编写，读者可以随着对这些视图类和Mixin的熟悉程度而慢慢使用之【对于新手推荐就直接使用APIView类，已经足够的好用了，rest fraemwork提供的其他视图类如果熟悉的话就用，不熟悉就不用，过多的类嵌套层次不一定是一件好事】。</p>
+<h3 id="request对象">Request对象</h3>
+<p>APIView视图类下面定义get，post等方法，默认第一个参数是request参数，即Request对象，这个对象有：</p>
+<ul>
+<li>
+<p>query_params 其对应的是URL参数上解析获得的参数，一般情况是GET方法的URL上的参数，但其他方法也可能会有。</p>
+</li>
+<li>
+<p>data 其对应的是HTTP请求体BODY部分的解析内容，对于Restful风格API来说，一种常见的情况就是POST，PUT上传递过来的json字典值。而更厉害的是对于传过来的文件，表单其都有不错的支持。</p>
+</li>
+<li>
+<p>user 如果请求经过认证了会返回相应的用户记录，你编写auth类的时候会知道的，如果没有认证，那么返回 <code>AnonymousUser</code></p>
+</li>
+</ul>
+<h3 id="response对象">Response对象</h3>
+<p>rest framework的Response对象继承自django的SimpleTemplateResponse类，其继承自django的HttpResponse对象，也就是最终返回的仍是django的HttpResponse对象，只是针对Restful风格API作了很多优化，一般来说是推荐使用rest framework提供的Response类。</p>
+<div class="highlight"><pre><span></span><code>Response(data, status=None, template_name=None, headers=None, content_type=None)
+</code></pre></div>
+<p>headers http协议响应头，status http状态码等等。</p>
+<p>下面贴上一个视图类的代码样例，因为rest framework的视图类编写的具体过程很是大同小异，多看几遍就清楚了该做那些事情了。</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SnippetDetail</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Retrieve, update or delete a snippet instance.</span>
+<span class="sd">    """</span>
+    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Snippet</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Snippet</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Http404</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="p">(</span><span class="n">snippet</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">SnippetSerializer</span><span class="p">(</span><span class="n">snippet</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">serializer</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">snippet</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="序列化">序列化</h2>
+<p>rest framework的序列化类提供了沟通django的Model类到JSON数据格式之间的桥梁【说的简单点就是序列化就是数据从模型层流向python代码层的过程。】。</p>
+<p>比如下面是模型层到python代码层的过程，序列化之后的 <code>data</code> 就是python的字典值了。</p>
+<div class="highlight"><pre><span></span><code>serializer = SnippetSerializer(snippet)
+serializer.data
+# {'pk': 2, 'title': u'', 'code': u'print "hello, world"\n', 'linenos': False, 'language': u'python', 'style': u'friendly'}
+</code></pre></div>
+<p>下面的过程是反序列化过程【数据从python代码层流向模型层的过程】：</p>
+<div class="highlight"><pre><span></span><code>serializer = SnippetSerializer(data=data)
+serializer.save()
+</code></pre></div>
+<p>这个save方法具体行为如果你定义的save方法当然就是直接调用save方法，如果没有则依赖于你定义的 <code>create</code> 和 <code>update</code> 方法。如下所示：</p>
+<div class="highlight"><pre><span></span><code>    def create(self, validated_data):
+        return Comment.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.content = validated_data.get('content', instance.content)
+        instance.created = validated_data.get('created', instance.created)
+        instance.save()
+        return instance
+</code></pre></div>
+<h3 id="serializer类">Serializer类</h3>
+<p>Serializer类的初始化方法了解一下：</p>
+<div class="highlight"><pre><span></span><code>    def __init__(self, instance=None, data=empty, **kwargs):
+</code></pre></div>
+<p>第一个参数是instance，如果这个设置了，那么后面save的时候会调用update方法，否则调用create方法。</p>
+<p>第二个参数data为我们很熟悉了。</p>
+<p>kwargs里面还有一个参数值得一提，有的时候序列化类里面某些方法可能需要一些特殊的参数，比如：</p>
+<div class="highlight"><pre><span></span><code>        serializer = self.serializer_class(profile, context={
+            'request': request
+        })
+</code></pre></div>
+<p>后面序列化类的自定义方面里面可以如下调用这个request对象：</p>
+<div class="highlight"><pre><span></span><code>request = self.context.get('request', None)
+</code></pre></div>
+<h3 id="modelserializer">ModelSerializer</h3>
+<p>可以利用 <code>ModelSerializer</code> 类来更快地创建序列化类，比如上面的SnippetSerializer如果你是继承自Serializer类那么一些字段你是要一个个去定义的，而如果继承自 <code>ModelSerializer</code> 类则只需要指定一些模型字段就会自动创建，然后其有一个默认创建的 create和update方法，一般情况下这两个方法对于一般情况就够用了。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="k">class</span> <span class="nc">SnippetSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">allow_blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Snippet</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'title'</span><span class="p">,</span> <span class="s1">'code'</span><span class="p">,</span> <span class="s1">'linenos'</span><span class="p">,</span> <span class="s1">'language'</span><span class="p">,</span> <span class="s1">'style'</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>值得一提的是：</strong> 上面这种写法，比如说title字段你也可以明确声明出来，下面fields再列出来也是不冲突的，因为可能有时默认的字段声明你不是很满意。</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from snippets.models import Snippet
+&gt;&gt;&gt; snippet = Snippet(code='print "hello, world2"\n')
+&gt;&gt;&gt; from snippets.serializers import SnippetSerializer
+&gt;&gt;&gt; snippet.save()
+&gt;&gt;&gt; serializer = SnippetSerializer(snippet)
+&gt;&gt;&gt; serializer.data
+{'language': 'python', 'linenos': False, 'id': 3, 'title': '', 'code': 'print "hello, world2"\n', 'style': 'friendly'}
+</code></pre></div>
+<p>ModelSerializer实现了一个版本的create和update方法，你可能会对默认的版本不太满意，则你可以自己去定义自己的版本。这两个方法具体是在调用 <code>save</code> 的时候被调用的，当instance没有传入进序列化对象的时候，其会调用create方法；如果instance对象传入进来了，则调用update方法。</p>
+<div class="highlight"><pre><span></span><code>        <span class="n">validated_data</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">validated_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">validated_data</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+                <span class="s1">'`update()` did not return an object instance.'</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">validated_data</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+                <span class="s1">'`create()` did not return an object instance.'</span>
+            <span class="p">)</span>
+</code></pre></div>
+<h3 id="查看modelserializer默认配置">查看ModelSerializer默认配置</h3>
+<p>python manage.py shell</p>
+<div class="highlight"><pre><span></span><code>from myapp.serializers import AccountSerializer
+serializer = AccountSerializer()
+print(repr(serializer))
+</code></pre></div>
+<h3 id="source参数">source参数</h3>
+<p>source对于字段的一般含义如下所示：</p>
+<div class="highlight"><pre><span></span><code>    if self.source is None:
+        self.source = field_name
+</code></pre></div>
+<p>默认为None，然后赋值为字段名。扩展的用法如下：</p>
+<ol>
+<li><code>URLField(source='get_absolute_url')</code> 根据序列化类的方法来获得值</li>
+<li><code>EmailField(source='user.email')</code> 通过关系字段获得扩展属性，注意如果关系字段为NULL则会报错，最好设置下default值。</li>
+</ol>
+<h3 id="partial参数">partial参数</h3>
+<p>默认序列化类需要传入所有required字段数据，否则将抛出验证异常，可以传入 <code>partial=True</code> 来允许部分更新。</p>
+<h3 id="is_valid-方法">is_valid 方法</h3>
+<p>当反序列化的时候，一般需要调用 <code>is_valid</code> 方法来判断数据是否合适保存到模型层去。</p>
+<div class="highlight"><pre><span></span><code>serializer.is_valid(raise_exception=True)
+</code></pre></div>
+<p>你可以定义 <code>validate</code> 方法来进行目标对象的验证行为，或者定义 <code>validate_&lt;fieldname&gt;</code> 来定义字段级别的验证行为。</p>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Check that the start is before the stop.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">'start'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">data</span><span class="p">[</span><span class="s1">'finish'</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s2">"finish must occur after start"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+</code></pre></div>
+<h3 id="read_only和write_only">read_only和write_only</h3>
+<p>序列化类的某个字段设置为 <code>read_only</code> 则该字段不会进入 read 和 update 方法的 <code>validated_data</code> 参数，但可以用于 <code>.data</code> 的序列化展示数据。</p>
+<p>如果某个字段设置为 <code>write_only</code> ，则该字段不会 <code>.data</code> 的序列化数据展示，但会进入 read 和 update 方法的 <code>validated_data</code> 参数中。</p>
+<h3 id="serializermethodfield">SerializerMethodField</h3>
+<p>这是一个read_only 字段，可以通过某个方法来给你的 <code>.data</code> 序列化输出增加额外的字段信息。</p>
+<p>**NOTICE: ** 注意目标方法接受两个参数。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.utils.timezone</span> <span class="kn">import</span> <span class="n">now</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="k">class</span> <span class="nc">UserSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="n">days_since_joined</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s1">'__all__'</span>
+
+    <span class="k">def</span> <span class="nf">get_days_since_joined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">obj</span><span class="o">.</span><span class="n">date_joined</span><span class="p">)</span><span class="o">.</span><span class="n">days</span>
+</code></pre></div>
+<h3 id="在序列化类里面引用requestuser">在序列化类里面引用request.user</h3>
+<p>参考了 <a href="https://stackoverflow.com/questions/30203652/how-to-get-request-user-in-django-rest-framework-serializer">这个问题</a> ，在序列化类里面需要通过 <code>self.context['request']</code> 来获取 request 对象，进而获取 user对象。</p>
+<div class="highlight"><pre><span></span><code>user =  self.context['request'].user
+</code></pre></div>
+<h2 id="渲染器">渲染器</h2>
+<p>如下是配置rest framework的全局默认渲染器：</p>
+<div class="highlight"><pre><span></span><code>REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}
+</code></pre></div>
+<p>对于继承自 <code>APIView</code> 的视图类，可以通过 <code>renderer_classes</code> 来设置它的渲染器：</p>
+<div class="highlight"><pre><span></span><code>from django.contrib.auth.models import User
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+class UserCountView(APIView):
+    """
+    A view that returns the count of active users in JSON.
+    """
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request, format=None):
+        user_count = User.objects.filter(active=True).count()
+        content = {'user_count': user_count}
+        return Response(content)
+</code></pre></div>
+<p>或者：</p>
+<div class="highlight"><pre><span></span><code>@api_view(['GET'])
+@renderer_classes([JSONRenderer])
+def user_count_view(request, format=None):
+    """
+    A view that returns the count of active users in JSON.
+    """
+    user_count = User.objects.filter(active=True).count()
+    content = {'user_count': user_count}
+    return Response(content)
+</code></pre></div>
+<h3 id="自定义渲染器">自定义渲染器</h3>
+<p>在realworld有这样一个自定义渲染器样例：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">rest_framework.renderers</span> <span class="kn">import</span> <span class="n">JSONRenderer</span>
+
+
+<span class="k">class</span> <span class="nc">ConduitJSONRenderer</span><span class="p">(</span><span class="n">JSONRenderer</span><span class="p">):</span>
+    <span class="n">charset</span> <span class="o">=</span> <span class="s1">'utf-8'</span>
+    <span class="n">object_label</span> <span class="o">=</span> <span class="s1">'object'</span>
+    <span class="n">pagination_object_label</span> <span class="o">=</span> <span class="s1">'objects'</span>
+    <span class="n">pagination_object_count</span> <span class="o">=</span> <span class="s1">'count'</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'results'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pagination_object_label</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">'results'</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pagination_count_label</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]</span>
+            <span class="p">})</span>
+
+        <span class="c1"># If the view throws an error (such as the user can't be authenticated</span>
+        <span class="c1"># or something similar), `data` will contain an `errors` key. We want</span>
+        <span class="c1"># the default JSONRenderer to handle rendering errors, so we need to</span>
+        <span class="c1"># check for this case.</span>
+        <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'errors'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ConduitJSONRenderer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">object_label</span><span class="p">:</span> <span class="n">data</span>
+            <span class="p">})</span>
+
+<span class="n">显然渲染器就是要实现render方法</span><span class="err">，</span><span class="n">这里的思路就是假如说是多个结果的情况</span><span class="err">，</span><span class="n">那么最好封装成为</span><span class="err">：</span>
+</code></pre></div>
+<p>{
+    "results": ...
+    "count": ...
+}</p>
+<div class="highlight"><pre><span></span><code>这样的结构形式，然后后续不同的render可以更改 `pagination_object_label` 这个参数。
+
+假如说是异常错误的情况则推荐采用格式：
+</code></pre></div>
+<p>{
+    "errors": ...
+}</p>
+<div class="highlight"><pre><span></span><code>加入是单个对象的返回值，视图函数那边直接返回该对象的数据，然后会封装成为：
+</code></pre></div>
+<p>{
+    "object_label" : data
+}</p>
+<div class="highlight"><pre><span></span><code>class UserJSONRenderer(ConduitJSONRenderer):
+    charset = 'utf-8'
+    object_label = 'user'
+    pagination_object_label = 'users'
+    pagination_count_label = 'usersCount'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        # If we recieve a `token` key as part of the response, it will by a
+        # byte object. Byte objects don't serializer well, so we need to
+        # decode it before rendering the User object.
+        token = data.get('token', None)
+
+        if token is not None and isinstance(token, bytes):
+            # Also as mentioned above, we will decode `token` if it is of type
+            # bytes.
+            data['token'] = token.decode('utf-8')
+
+        return super(UserJSONRenderer, self).render(data)
+</code></pre></div>
+<p>UserJSONRenderer主要在ConduitJSONRenderer的基础上新增了一个token字段。</p>
+<p><strong>警告：</strong> 上面的例子只是参考，还是有点问题的，比如media_type和renderer_context参数已经传递丢失了。</p>
+<p>renderer_context 里面的参数有：view, request, response, args, kwargs 。这些args和kwargs都是视图函数那边的。</p>
+<p><strong>警告：</strong> 自定义的渲染器的返回值格式变动TestCase那边的测试代码是不知道的，因为那边调用的是response对象，你需要修改 <code>renderer_context['response']</code> 。</p>
+<h3 id="自定义异常处理">自定义异常处理</h3>
+<p>对于API视图函数抛出的异常，可以通过异常处理函数，根据接受到的异常转成Response对象。</p>
+<p>这个函数接受两个参数，第一个exc是当前正在处理的异常，第二个参数是一个字典值context，一些额外的环境参数。</p>
+<p>异常处理函数要某返回一个Response对象，或者返回None。如果返回的是None，则该异常将会抛给Django，然后Django返回一个标准的500 Server error响应。</p>
+<p>下面这个样例异常处理函数，会将所有的响应状态码写入response字典数据里面。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">exception_handler</span>
+
+<span class="k">def</span> <span class="nf">custom_exception_handler</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="c1"># Call REST framework's default exception handler first,</span>
+    <span class="c1"># to get the standard error response.</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">exception_handler</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="c1"># Now add the HTTP status code to the response.</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">'status_code'</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div>
+<p>再比如realworld里面自定义的异常处理函数：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">core_exception_handler</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="c1"># If an exception is thrown that we don't explicitly handle here, we want</span>
+    <span class="c1"># to delegate to the default exception handler offered by DRF. If we do</span>
+    <span class="c1"># handle this exception type, we will still want access to the response</span>
+    <span class="c1"># generated by DRF, so we get that response up front.</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">exception_handler</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+    <span class="n">handlers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'ValidationError'</span><span class="p">:</span> <span class="n">_handle_generic_error</span>
+    <span class="p">}</span>
+    <span class="c1"># This is how we identify the type of the current exception. We will use</span>
+    <span class="c1"># this in a moment to see whether we should handle this exception or let</span>
+    <span class="c1"># Django REST Framework do it's thing.</span>
+    <span class="n">exception_class</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="k">if</span> <span class="n">exception_class</span> <span class="ow">in</span> <span class="n">handlers</span><span class="p">:</span>
+        <span class="c1"># If this exception is one that we can handle, handle it. Otherwise,</span>
+        <span class="c1"># return the response generated earlier by the default exception </span>
+        <span class="c1"># handler.</span>
+        <span class="k">return</span> <span class="n">handlers</span><span class="p">[</span><span class="n">exception_class</span><span class="p">](</span><span class="n">exc</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div>
+<p>也就是根据你定义的异常类型来决定不同的处理策略，比如 <code>_handle_not_found_error</code> :</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_handle_generic_error</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="c1"># This is about the most straightforward exception handler we can create.</span>
+    <span class="c1"># We take the response generated by DRF and wrap it in the `errors` key.</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'errors'</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div>
+<p><code>context['view']</code> 可以获取目标视图函数。上面就是简单将异常信息封装进errors键里面。</p>
+<p>自定义的异常要在 <code>REST_FRAMEWORK</code> 上配置后才生效。</p>
+<div class="highlight"><pre><span></span><code>REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'my_project.my_app.utils.custom_exception_handler'
+}
+</code></pre></div>
+<h2 id="jwt认证">JWT认证</h2>
+<p>首先说一下JWT认证和传统的session的区别在哪里，有很多文章会比较它们的优缺点，比如session需要服务器在数据库里面存储于是这是一笔额外的计算开销，这个是一个点，至于因此带来的服务器分布式的可扩展性问题会麻烦点，但不是没有办法解决。此外有的批评JWT的安全性的观点我认为是有待考量的，有的认为JWT具有实现简单的优势我也不是很认同，我不认为JWT会比session简单，结合对JWT的安全性的批评我们会发现，JWT作为一种新技术要将其用好，比如安全性方面完善好也不简单。所以我发现网上的关于JWT认证和基于session的认证的优缺点对比说的点我觉得都不是很重要，至少我可以确定在小用户量应用场景下这两者是不能说谁优于谁的。</p>
+<p>不过这里我提出一个点，这个点就是JWT认证在设计上会更加吻合HTTP的无状态特性，更吻合Restful 风格api的无状态设计理念。正确的设计理念有的时候很重要，人们谈论的很多问题JWT在实践上都可以慢慢完善，唯独这个设计理念如果不对味后面也是完善不了的。所以讨论了这么久无非是这个问题，服务器到底有没有必要存储session信息，看着数据库里面一堆乱码般的django_session数据库，这些无谓的临时冗余信息让我不是很喜欢，所以以下是个人的一家之言：如果你不清楚该用那种认证方式，那么推荐JWT认证。</p>
+<p>jwt认证的基本思路是对于某个api请求，用户输入用户名和密码，正确的话服务器返回jwt的token，然后后面用户要请求其他url则需要在HTTP请求的Header上加上 <code>Authorization</code> 这个字段。具体这个字段的值可能会有所差异的，我略微查看了pyjwt <code>version 2.3.0</code> 的源码，得到这一行：</p>
+<div class="highlight"><pre><span></span><code>authentication.get_authorization_header(request)
+</code></pre></div>
+<p>就会获取 <code>Authorization</code> 的值。realworld的样例在处理上会有一个额外的动作：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jwt</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">authentication</span><span class="p">,</span> <span class="n">exceptions</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+
+<span class="k">class</span> <span class="nc">JWTAuthentication</span><span class="p">(</span><span class="n">authentication</span><span class="o">.</span><span class="n">BaseAuthentication</span><span class="p">):</span>
+    <span class="n">authentication_header_prefix</span> <span class="o">=</span> <span class="s1">'Token'</span>
+
+    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        The `authenticate` method is called on every request, regardless of</span>
+<span class="sd">        whether the endpoint requires authentication.</span>
+
+<span class="sd">        `authenticate` has two possible return values:</span>
+
+<span class="sd">        1) `None` - We return `None` if we do not wish to authenticate. Usually</span>
+<span class="sd">        this means we know authentication will fail. An example of</span>
+<span class="sd">        this is when the request does not include a token in the</span>
+<span class="sd">        headers.</span>
+
+<span class="sd">        2) `(user, token)` - We return a user/token combination when</span>
+<span class="sd">        authentication was successful.</span>
+
+<span class="sd">        If neither of these two cases were met, that means there was an error.</span>
+<span class="sd">        In the event of an error, we do not return anything. We simple raise</span>
+<span class="sd">        the `AuthenticationFailed` exception and let Django REST Framework</span>
+<span class="sd">        handle the rest.</span>
+<span class="sd">        """</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># `auth_header` should be an array with two elements: 1) the name of</span>
+        <span class="c1"># the authentication header (in this case, "Token") and 2) the JWT</span>
+        <span class="c1"># that we should authenticate against.</span>
+        <span class="n">auth_header</span> <span class="o">=</span> <span class="n">authentication</span><span class="o">.</span><span class="n">get_authorization_header</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">auth_header_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authentication_header_prefix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">auth_header</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">auth_header</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Invalid token header. No credentials provided. Do not attempt to</span>
+            <span class="c1"># authenticate.</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">auth_header</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># Invalid token header. Token string should not contain spaces. Do</span>
+            <span class="c1"># not attempt to authenticate.</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># The JWT library we're using can't handle the `byte` type, which is</span>
+        <span class="c1"># commonly used by standard libraries in Python 3. To get around this,</span>
+        <span class="c1"># we simply have to decode `prefix` and `token`. This does not make for</span>
+        <span class="c1"># clean code, but it is a good decision because we would get an error</span>
+        <span class="c1"># if we didn't decode these values.</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">auth_header</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">auth_header</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prefix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="n">auth_header_prefix</span><span class="p">:</span>
+            <span class="c1"># The auth header prefix is not what we expected. Do not attempt to</span>
+            <span class="c1"># authenticate.</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># By now, we are sure there is a *chance* that authentication will</span>
+        <span class="c1"># succeed. We delegate the actual credentials authentication to the</span>
+        <span class="c1"># method below.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_authenticate_credentials</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_authenticate_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Try to authenticate the given credentials. If authentication is</span>
+<span class="sd">        successful, return the user and token. If not, throw an error.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="s1">'HS256'</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">'Invalid authentication. Could not decode token.'</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationFailed</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s1">'id'</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">User</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">'No user matching this token was found.'</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationFailed</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">is_active</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">'This user has been deactivated.'</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationFailed</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>注意看那个split方法和后面的：</p>
+<div class="highlight"><pre><span></span><code>        prefix = auth_header[0].decode('utf-8')
+        token = auth_header[1].decode('utf-8')
+</code></pre></div>
+<p>也就是 <code>Authorization</code> 内的值是：</p>
+<div class="highlight"><pre><span></span><code>Token token....
+</code></pre></div>
+<p>这样的格式。</p>
+<p>注意pyjwt version 2.3.0版本decode是 <code>algorithms</code> 参数名，encode是 <code>algorithm</code> 参数名，好像最新的才都改为了 <code>algorithms</code> 。</p>
+<p>默认的rest framework认证配置是：</p>
+<div class="highlight"><pre><span></span><code>REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+</code></pre></div>
+<p>这是一个尝试清单，realworld改为了：</p>
+<div class="highlight"><pre><span></span><code>REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apps.app_user.backends.JWTAuthentication',
+    )
+}
+</code></pre></div>
+<p>认证类认证成功返回 <code>(user, auth)</code> 认证成功后到视图函数那边，通过 <code>request.user</code> 和 <code>request.auth</code> 来获得对应的这两个值。没有认证成功则 <code>request.user</code> 是默认值： <code>django.contrib.auth.models.AnonymousUser</code> ，可通过 <code>UNAUTHENTICATED_USER</code> 另外配置。 <code>request.auth</code> 是默认值 <code>None</code> ，可通过 <code>UNAUTHENTICATED_TOKEN</code> 配置。</p>
+<div class="highlight"><pre><span></span><code>from django.contrib.auth import authenticate
+</code></pre></div>
+<p>这个autheticate函数的功能的实现就是根据你定义的那些认证类来的。</p>
+<p>realworld的代码似乎并没有对jwt的时效性进行校对，此外jwt认证还需要加入refresh token过程来完善。</p>
+<h3 id="refresh-token">refresh token</h3>
+<p>一般access_token时效性会设置的较短，大概几分钟的样子。在应用上不可能要求用户时不时得就输入用户名和密码，于是人们参考OAUTH2的认证方式提出了refresh token的概念，在用户首次登陆输入用户名和密码的请求哪里，还会返回一个时效性较长的refresh token，平时用access token去请求和之前的过程一样，区别就是客户端自己把那个refresh token存起来了，当客户端发现access token过期了的时候会像服务器的refresh token api 发送refresh token请求，带上的就是客户端自己保存的refresh token，服务器判断token有效，就会返回新的access token和新的refresh token。</p>
+<h2 id="认证和权限">认证和权限</h2>
+<p>django rest framework的配置 <code>DEFAULT_AUTHENTICATION_CLASSES</code> 默认是：</p>
+<div class="highlight"><pre><span></span><code>'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication'
+],
+</code></pre></div>
+<p>其对应的是APIView类下的配置：</p>
+<div class="highlight"><pre><span></span><code>authentication_classes = api_settings.DEFAULT_AUTHENTICATION_CLASSES
+</code></pre></div>
+<p>具体到APIView类的每个HTTP请求都会经过一些预处理，这其中就包括调用各个认证类的 authenticate方法。</p>
+<p>而django的 <code>AUTHENTICATION_BACKENDS</code> 配置默认是：</p>
+<div class="highlight"><pre><span></span><code>AUTHENTICATION_BACKENDS = (
+    # default django authenticate method
+    'django.contrib.auth.backends.ModelBackend',
+)
+</code></pre></div>
+<p>对应的是 <code>from django.contrib.auth import authenticate</code> 这个authenticate这个函数。在实践中这两个功能会分离出来：django提供的authenticate方法和用户的登录行为相关，这个方法只是返回User对象，说的再直白点这个只和login那一个api有关系。对于其他众多的restful 风格的api的请求仍然是需要一个认证过程的，这个认证就是通过rest framework提供的认证类来做的，这些认证类同样也有一个 authentication 方法，其返回的有User对象和token。</p>
+<p>django rest framework的 <code>permission_classes</code> 来确定目标视图类的权限管理行为，默认是 <code>AllowAny</code> 。上面的认证过程做完了就会进入权限管理逻辑，也就是说在权限检查的时候 <code>request.user</code> <code>request.auth</code> 已经是可以调用的了。</p>
+<p>最简单的权限管理类就是 <code>IsAuthenticated</code> ：</p>
+<div class="highlight"><pre><span></span><code>class IsAuthenticated(BasePermission):
+    """
+    Allows access only to authenticated users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated)
+</code></pre></div>
+<p>这个确认 <code>request.user</code> 是可用的，也就是是登录用户是可以理解的，这个 <code>request.user.is_authenticated</code> 有点看不懂，简单查了一下似乎这个值总是True，是django因为兼容性问题写的代码。</p>
+<p>最后就是<code>AUTHENTICATION_BACKENDS</code>里面认证权限不分家，django的ModelBackend自带权限校验，这块内容有点多，后面有时间再慢慢讨论。</p>
+<p>再来看下面这段代码：</p>
+<div class="highlight"><pre><span></span><code>def get_user(request):
+    if not hasattr(request, '_cached_user'):
+        request._cached_user = auth.get_user(request)
+    return request._cached_user
+
+
+class AuthenticationMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if not hasattr(request, 'session'):
+            raise ImproperlyConfigured(
+                "The Django authentication middleware requires session "
+                "middleware to be installed. Edit your MIDDLEWARE setting to "
+                "insert "
+                "'django.contrib.sessions.middleware.SessionMiddleware' before "
+                "'django.contrib.auth.middleware.AuthenticationMiddleware'."
+            )
+        request.user = SimpleLazyObject(lambda: get_user(request))
+</code></pre></div>
+<p>看的出来 <code>request.user</code> 的效果是 <code>AuthenticationMiddleware</code> 中间件做到的，然后 <code>get_user</code> 会调用各个backend的<code>get_user</code> 方法来获得user对象。 </p>
+<h2 id="restful-api">Restful API</h2>
+<p>本章节讨论的内容主要是基于HTTP协议的Restful API风格的编写原则。</p>
+<h3 id="url">URL</h3>
+<p>目前url域名都推荐使用 api.what.com 这样的风格，然后关于API的版本，在URL上加上版本号，并不是一个很好的主意。在当前前后端分离的大背景下，这给前端和后端的代码都带来了一些额外的复杂度。</p>
+<p>版本号按照 <a href="http://www.ruanyifeng.com/blog/2011/09/restful.html">阮一峰的这篇文章</a> ，推荐使用 Accept 字段：</p>
+<div class="highlight"><pre><span></span><code>Accept: vnd.example-com.foo+json; version=2.0
+</code></pre></div>
+<p>推荐的URL风格如下：</p>
+<div class="highlight"><pre><span></span><code>api.what.com/resource_name
+api.what.com/resource_name/&lt;id&gt;
+api.what.com/resource_name/&lt;id&gt;/resource_name2
+api.what.com/resource_name/&lt;id&gt;/resource_name2/&lt;id&gt;
+</code></pre></div>
+<p>上面的resource_name2的意思是SQL关系数据库中的关系，某个resource_name会关联多个resource_name2。</p>
+<h3 id="http方法">HTTP方法</h3>
+<p>按照Restful api风格就推荐使用HTTP的这五种方法：GET, POST, PUT, DELETE和PATCH。</p>
+<p>具体在使用上首先简单的理解就是对应数据库的增删改查来对应POST，DELETE，PUT，GET这四种方法。然后在细节上POST只能用户新增记录insert逻辑，PUT则是insert or update逻辑，PATCH只能用户update更新逻辑。</p>
+<p>一般来说GET方法权限审核最宽松，POST方法次之，PUT方法和DELETE方法的权限审核最严，有时甚至完全不会将api写出来。</p>
+<h3 id="返回内容">返回内容</h3>
+<p>payload都推荐采用json的单字典格式形式。</p>
+<p>我喜欢使用这种风格：</p>
+<ol>
+<li>成功则直接返回各个结果：</li>
+</ol>
+<div class="highlight"><pre><span></span><code>{
+    'a':1
+}
+</code></pre></div>
+<p>有些人会说成功之后也应该加上code:200的代码，可是这是完全没有必要的，如果你需要获取数据，那么拿就是了，如果你怕数据不存在，那么加个针对目标数据的判断即可。加个code:200，但是目标数据字段还是不存在，程序不一样也会报错？</p>
+<ol>
+<li>失败则必须带上code错误码和msg错误信息</li>
+</ol>
+<div class="highlight"><pre><span></span><code>{
+    'code': 10001,
+    'msg': 'your error msg'
+}
+</code></pre></div>
+<p>错误码软件系统内部应该有一个统一的规范，常见的错误类型有：</p>
+<ul>
+<li>资源没有找到</li>
+<li>找到多个资源</li>
+<li>未知错误</li>
+<li>输入缺少参数</li>
+</ul>
+<h3 id="参数设计">参数设计</h3>
+<p>查询操作如果针对的是目标资源集合，有以下参数是推荐加上的：</p>
+<ul>
+<li>limit 返回个数</li>
+<li>offset 偏移值，可以通过它来实现分页效果</li>
+<li>sort 或者sortby等，总之一个排序的参数</li>
+<li>reverse 排序是否反转的参数</li>
+</ul>
+<h3 id="选择合适的状态码响应">选择合适的状态码响应</h3>
+<p>状态码不建议弄得太复杂，下面列出几个必要的：</p>
+<ul>
+<li>200 正确执行 </li>
+<li>
+<p>201 POST成功新增</p>
+</li>
+<li>
+<p>400 BAD REQUEST 请求参数有误</p>
+</li>
+<li>401 未认证 用户未登陆未被识别</li>
+<li>403 被禁止的 用户无权限</li>
+<li>404 请求的URL不存在 </li>
+<li>
+<p>405 请求的方法不被允许</p>
+</li>
+<li>
+<p>500 服务器内部错误 某些情况下需要这个状态码</p>
+</li>
+</ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wanze & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://oncrashreboot.com/pelican-elegant">Elegant</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.npmjs.com/">Npm</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://a358003542.github.io/theme/js/base.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>
