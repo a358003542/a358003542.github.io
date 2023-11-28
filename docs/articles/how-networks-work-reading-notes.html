@@ -12,8 +12,8 @@
 
     <meta name="description"
         content="前言
-《网络是怎样连接的》1 一书写得很好，计算机网络这一块相关知识并不难，但各个知识点很是繁杂，从浏览器上输入URL到显示网页短短几秒的时间里面的知识点对于初学者来说还是多的可怕的。该书以一种全面整体的角度对这一块知识点进行梳理，对深入理解计算机网络如何运作的还是很有必要的。
-该书对计算机网..." />
+《网络是怎样连接的》 一书写得很好，计算机网络这一块相关知识并不难，但各个知识点很是繁杂，从浏览器上输入URL到显示网页短短几秒的时间里面的知识点对于初学者来说还是多的可怕的。该书以一种全面整体的角度对这一块知识点进行梳理，对深入理解计算机网络如何运作的还是很有帮助的。
+该书对计算机网络..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -131,7 +131,7 @@
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-09-29T00:00:00+08:00">2020年 9月 29日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2023-10-13T15:50:04.349411+08:00">2023年 10月 13日 </time>
+                <div class="p-1">最近更新于：<time datetime="2023-11-28T00:00:00+08:00">2023年 11月 28日 </time>
                 </div>
 
 
@@ -145,8 +145,8 @@
             <div class="article-content">
                 
 <h2 id="前言">前言</h2>
-<p>《网络是怎样连接的》<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> 一书写得很好，计算机网络这一块相关知识并不难，但各个知识点很是繁杂，从浏览器上输入URL到显示网页短短几秒的时间里面的知识点对于初学者来说还是多的可怕的。该书以一种全面整体的角度对这一块知识点进行梳理，对深入理解计算机网络如何运作的还是很有必要的。</p>
-<p>该书对计算机网络信息流给出的指导图引入了过多的细节，我认为这里介绍专门的TCP/IP网络模型是有必要的，那个复杂的OSI七层模型不提也行。TCP/IP网络模型将计算机网络分为四个抽象层：应用层，传输层，网络互连层和网络访问层。这种分层是符合编程<em>去耦合</em>的要求的，具体这四个层描述如下：</p>
+<p>《<a href="https://a358003542.github.io/articles/wang-luo-shi-zen-yang-lian-jie-de-ri-hu-gen-qin.html">网络是怎样连接的</a>》 一书写得很好，计算机网络这一块相关知识并不难，但各个知识点很是繁杂，从浏览器上输入URL到显示网页短短几秒的时间里面的知识点对于初学者来说还是多的可怕的。该书以一种全面整体的角度对这一块知识点进行梳理，对深入理解计算机网络如何运作的还是很有帮助的。</p>
+<p>该书对计算机网络信息流给出的指导图引入了过多的细节，我认为这里介绍专门的TCP/IP网络模型是有必要的，那个复杂的OSI七层模型不提也行。TCP/IP网络模型将计算机网络分为四个抽象层：应用层，传输层，网络互联层和网络访问层。这种分层是符合编程<em>去耦合</em>的要求的，具体这四个层描述如下：</p>
 <ul>
 <li>应用层可以看做计算机网络和计算机用户使用的应用的连接中间层，一般应用层在信息交流设计上是进程对点目标主机的进程的通信考虑，这些实现一般不是操作系统内核该管的事。</li>
 <li>传输层是解决数据包在传输过程中的一些问题，从而保证主机（host）到主机（host）之间的信息传输是可靠的或安全的或顺序是对的等问题。一般这些实现由操作系统内核负责。</li>
@@ -160,8 +160,8 @@
 <h3 id="http协议">HTTP协议</h3>
 <p>HTTP（HyperText Transfer Protocol）超文本传输协议是网络世界一个为大家熟知的协议，其属于应用层，为应用层协议。HTTP定义了两个端系统，一个客户机，一个服务器，两个之间如何进行报文交换和这些报文的格式。Web浏览器就是HTTP协议的客户机端，Web服务器就是HTTP协议的服务器端。</p>
 <p>HTTP协议使用TCP协议作为其传输层的协议，当用户请求一个Web页面时，浏览器或其他HTTP客户机将首先和服务器建立起一个TCP连接，等连接建立之后，浏览器和服务器就可以通过套接字来交流了。然后客户机经由其套接字向服务器发送一个HTTP请求报文，随后服务器接受到了这个HTTP请求报文，其内部经过某些处理，比如找到html文件即其他资源文件或者其他数据运算之后，也经由套接字回应了一个HTTP响应报文给客户机。然后HTTP服务器进程通知TCP可以断开TCP连接了，然后TCP那边大概等到客户机完整接受这个HTTP响应报文之后，TCP连接就真正断开了。HTTP客户机那边接受到HTTP响应报文，TCP连接断开了，这一次HTTP请求算是完了。</p>
-<p>然后这个Web页面还包含有其他图片引用或者javascript引用，每一个引用浏览器客户机那边都将产生一个HTTP请求，类似上面的继续处理。因此基于HTTP协议的TCP协议只进行了一个请求报文和一个响应报文的传输，一个Web页面，可能要发送十几个HTTP请求，那么就要建立十几个TCP连接。（整个过程大抵如此，而现在客户机一般都会打开5-10个并行的TCP连接。）</p>
-<p>上面描述的是HTTP协议初始版本的情况，自HTTP/ 1.1起HTTP协议加入了持久连接特性，而且默认就采用持久连接的方式。持久连接可以减少新开TCP连接的消耗，现在HTTP不会每送一个报文就请求断开TCP连接了，而是如果该连接长时间未使用，HTTP服务器才关闭该连接。</p>
+<p>一个Web页面不仅包含一个html文件，还包含有其他图片引用或者javascript引用，每一个引用浏览器客户机那边都将产生一个HTTP请求，类似上面的继续处理。因此基于HTTP协议的TCP协议只进行了一个请求报文和一个响应报文的传输，一个Web页面，可能要发送十几个HTTP请求，那么就要建立十几个TCP连接。（整个过程大抵如此，而现在客户机一般都会打开5-10个并行的TCP连接。）</p>
+<p>上面描述的是HTTP协议初始版本的情况，自HTTP 1.1起HTTP协议加入了持久连接特性，而且默认就采用持久连接的方式。持久连接可以减少新开TCP连接的消耗，现在HTTP不会每送一个报文就请求断开TCP连接了，而是如果该连接长时间未使用，HTTP服务器才关闭该连接。</p>
 <p>然后我们说HTTP协议本身是无状态的，因为HTTP服务器并没有记忆关于客户机的任何信息，但现在有cookie和session，cookie是客户机保存状态信息，session是服务器保存状态信息，这个后面再说。</p>
 <h4 id="http报文格式">HTTP报文格式</h4>
 <p>HTTP报文就分为两种，一种是请求报文，一种是响应报文。</p>
@@ -176,6 +176,7 @@ Connection: keep-alive
 </code></pre></div>
 <p>前面提到浏览器会分析用户输入的URL，上面的GET后面跟的路径参数和HOST参数都是可以分析出来的。</p>
 <p>第一个是方法字段，HTTP有<strong>GET</strong>、<strong>POST</strong>、<strong>PUT</strong>、<strong>DELETE</strong>等方法，然后HOST是请求的主机名字，然后User-Agent是用户使用的浏览器标识，然后Connection这里设置为keep-alive正是前面说的建立持久连接。</p>
+<p>HTTP请求包还可能包含额外的body请求体信息，比如POST一个json消息体，这个消息体是在上面的各个头字段之后空一行，然后继续写上的。</p>
 <p>HTTP响应如下:</p>
 <div class="highlight"><pre><span></span><code>HTTP/1.1 200 OK
 Cache-Control: private
@@ -186,6 +187,7 @@ Location: https://www.google.com/?gws_rd=ssl
 .........
 </code></pre></div>
 <p>这个响应的那个200就是大家熟知的HTTP响应状态码。</p>
+<p>HTTP响应包也可以包含额外的body响应体信息，在各个头字段之后，空一行，然后继续写上。</p>
 <h4 id="cookie技术">cookie技术</h4>
 <p>cookie的作用原理如下，用户首先登录一个网站，然后该网站的服务器返回一个HTTP响应，其中有一行</p>
 <div class="highlight"><pre><span></span><code>Set-cookie: whatwhatwhat
@@ -232,12 +234,13 @@ Location: https://www.google.com/?gws_rd=ssl
 <p>计算机找到目标计算机了就可以开口说话了，但是不能随便说话也就是发送一堆乱码过去，那样目标机器是看不懂的。这个时候我们就需要制定计算机之间的通信协议。那么什么是计算机之间的通信协议？简单来说就好比两个人之间对话的某种规范，或者两个国家进行外交协商的某种特定交互流程。比如一个人对另外一个人说"你好"，另外一个人收到则回应"你好"，表明我已经收到了，然后第一个如果收到这个回应，则表明协议牵手成功，然后继续进行其他会话，比如"今天星期几"，发送过去，然后另外一个人收到之后回应"今天星期一"……就是类似这样的交互方式。有的连接是双向的，连接为持续存在，一般最后需要发送goodbye来关闭协议，而有的协议是单向的，也叫做无状态协议，比如HTTP协议，信息发送了完了连接就算自动关闭了。</p>
 <p>上面的描述还遗漏了一点那就是不仅交互的流程上有规范，而且发送的信息包的格式也是有规范的，或者说有一定的格式的。</p>
 <h3 id="tcp协议">TCP协议</h3>
-<p>TCP协议是面向连接的和可靠数据传输的。所谓的面向连接是指客户机和服务器之间一开始要进行握手过程好建立TCP连接，然后结束之后需要拆除连接。所谓的可靠数据传输是指TCP协议保证数据是无差错的按顺序交付发送的。此外TCP协议还具有拥塞控制机制。SMTP（电子邮件）协议，Telnet协议，HTTP协议，FTP协议多用TCP协议实现。</p>
+<p>TCP协议是面向连接的和可靠数据传输的。所谓的面向连接是指客户机和服务器之间一开始要进行握手过程好建立TCP连接，然后结束之后需要拆除连接。所谓的可靠数据传输是指TCP协议保证数据是无差错的按顺序交付发送的。此外TCP协议还具有拥塞控制机制。SMTP（电子邮件）协议，Telnet协议，HTTP协议，FTP协议就是用的TCP协议实现的。</p>
 <h4 id="tcp信息包格式">TCP信息包格式</h4>
-<p>实际应用程序要传递的数据会被分割成一些小的数据块，然后这些数据块之前TCP协议栈发送都会加上TCP头控制信息，如下图所示：</p>
+<p>互联网中实际要传递的数据会被分割成一些小的数据块，这些数据块前面会加上TCP控制头和IP控制头，如下图所示：</p>
 <p><img alt="img" src="https://a358003542.github.io/images/2020/tcp_ip_data.png"/></p>
-<p>如果没有数据要传输，比如下面谈论的发送一个SYN，则就只有TCP头控制信息。具体SYN在TCP协议中定义的是那个数字位数是1这实在是细枝末节的设计问题了，这里就略过不谈论了。</p>
-<p>TCP协议里面将它要发送的信息称之为sequence包，并且它要求每个包都有编号（sequence number）。TCP协议正是通过这个编号来保证信息包的收发顺序不混乱<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>。</p>
+<p>如果没有数据要传输，比如只是发送一个SYN信号，则就只有IP控制头和TCP控制头。</p>
+<p>具体SYN信号在TCP协议中定义TCP控制头的第一个数字位则是具体协议细节问题了，这里就略过讨论了。</p>
+<p>TCP协议里面将它要发送的信息称之为sequence包，并且它要求每个包都有编号（sequence number）。TCP协议正是通过这个编号来保证信息包的收发顺序不混乱<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>。</p>
 <p>TCP的sequence有几个必填的字段，上面的sequence number是一个，source port是一个，destination port是一个，如果ACK设置为1则需要填写acknowledgment number，还有一些这里暂时略过讨论了。</p>
 <h4 id="连接动作">连接动作</h4>
 <p>客户端要执行连接动作，服务端那边必须已经执行了bind和listen某个端口的动作，这个后面再讲。TCP协议的连接动作是经典的<strong>三次握手方式</strong>：</p>
@@ -297,11 +300,11 @@ A+726|B+2897  ACK           B+1449          A+726          B+1449|A+726   &lt;- 
    Subnet Mask . . . . . . . . . . . : 255.255.255.0
    Default Gateway . . . . . . . . . : 192.168.1.1
 </code></pre></div>
-<p>我知道我自己的IP地址是 <code>192.168.1.101</code> ，我知道自己的子网掩码是 <code>255.255.255.0</code> 。然后我要和IP地址 <code>192.168.1.102</code> 的机器进行通信，经过计算（和子网掩码进行位逻辑AND操作得到<strong>网域</strong>，对两个网域进行位逻辑XOR操作，如果全0则是同一网域<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>）发现这两个IP位于同一<strong>网域</strong>，也就是同一子网内，则可以直接进行通信。</p>
+<p>我知道我自己的IP地址是 <code>192.168.1.101</code> ，我知道自己的子网掩码是 <code>255.255.255.0</code> 。然后我要和IP地址 <code>192.168.1.102</code> 的机器进行通信，经过计算（和子网掩码进行位逻辑AND操作得到<strong>网域</strong>，对两个网域进行位逻辑XOR操作，如果全0则是同一网域<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>）发现这两个IP位于同一<strong>网域</strong>，也就是同一子网内，则可以直接进行通信。</p>
 <p>如果不在同一网域，那么这个计算机就要根据路由表将这个信息包发送给默认的路由器（gateway），比如上面的例子就是 <code>192.168.1.1</code> 。路由器在网络世界里扮演着一个特殊的角色，那就是它们不具体处理数据，只负责数据分发。具体过程实际上就是上面描述的过程的不断迭代重复，也就是路由器也有一个自己的路由表，然后看看目标机器是不是和自己在同一网域等等，如果不则将信息包发送给另外一个默认的路由器或交换机之类的等等，直到最终目标机器和自己位于同一网域，然后将信息包发送给目标机器。</p>
 <h3 id="ip协议">IP协议</h3>
 <p>继续上面的讨论来，TCP协议的具体实现TCP模块将要传输的TCP sequence包做好之后交给IP协议的具体实现IP模块。IP模块不同于TCP模块对传过来的TCP包都统一看作数据块没有其他额外的操作动作了。</p>
-<p>IP模块会在每个数据块前面加上IP控制头和MAC控制头。IP控制头里面有目标网卡<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>的IP地址信息，MAC控制头里面有要要传输的下一个目的地的网卡MAC唯一标识信息。注意这里的表述，IP控制头里面的IP地址是你要传输的<em>最终目的地服务器IP地址</em>，而MAC控制头里面的MAC地址只是在传输过程中你要传输的<em>下一个MAC目的地</em>。这个下一个MAC目的地会被路由器修改的。而这个MAC地址是通过ARP地址解析协议来获得的。</p>
+<p>IP模块会在每个数据块前面加上IP控制头和MAC控制头。IP控制头里面有目标网卡<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>的IP地址信息，MAC控制头里面有要要传输的下一个目的地的网卡MAC唯一标识信息。注意这里的表述，IP控制头里面的IP地址是你要传输的<em>最终目的地服务器IP地址</em>，而MAC控制头里面的MAC地址只是在传输过程中你要传输的<em>下一个MAC目的地</em>。这个下一个MAC目的地会被路由器修改的。而这个MAC地址是通过ARP地址解析协议来获得的。</p>
 <p><strong>ARP地址解析协议</strong> ：同一以太网或者同一子网内，ARP地址解析协议会广播询问这个IP地址是谁的，它的MAC地址是多少，目标机器如果IP对应会响应这个询问。</p>
 <p>继续上面的讨论，现在你要传输一个信息包，你根据自己的路由表知道接下来要传输给下一个路由器的IP地址，然后根据ARP获得该路由器的MAC地址，然后将这个MAC地址填入MAC控制头，至此IP模块就完成了待传输的信息包的封装工作了。</p>
 <h2 id="网络访问层">网络访问层</h2>
@@ -357,16 +360,13 @@ A+726|B+2897  ACK           B+1449          A+726          B+1449|A+726   &lt;- 
 <hr/>
 <ol>
 <li id="fn:1">
-<p>网络是怎样连接的 [日] 户根勤著 <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
+<p>参考了 <a href="https://intrinium.com/boolean-logic-and-subnet-masking/">这个网页</a> <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
 <li id="fn:2">
-<p>参考了 <a href="https://intrinium.com/boolean-logic-and-subnet-masking/">这个网页</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
+<p>参考了 <a href="http://www.ruanyifeng.com/blog/2017/06/tcp-protocol.html">这个网页</a> <a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">↩</a></p>
 </li>
 <li id="fn:3">
-<p>参考了 <a href="http://www.ruanyifeng.com/blog/2017/06/tcp-protocol.html">这个网页</a> <a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">↩</a></p>
-</li>
-<li id="fn:4">
-<p>IP地址是分配给网卡的，一台计算机多个网卡会有多个IP地址，所以这里更准确的描述术语是网卡。 <a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">↩</a></p>
+<p>IP地址是分配给网卡的，一台计算机多个网卡会有多个IP地址，所以这里更准确的描述术语是网卡。 <a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">↩</a></p>
 </li>
 </ol>
 </div>
