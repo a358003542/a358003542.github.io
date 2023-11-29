@@ -5,7 +5,43 @@ Slug: sql-database
 [TOC]
 
 
+## 字符串的模糊匹配
 
+```
+select * from table where column like 'ab%'; 
+```
+
+`%` 类似于正则表达式里面的* 【零个或者多个】。
+
+
+## 查询值在某个列表内
+
+```
+select * from table where column in ("a", "b") ;
+```
+
+## 查询值在某个区间
+
+```
+select * from table where date_of_birth between '2010-01-01' and '2010-06-30';
+```
+
+## 列值唯一选取
+单列唯一选取：
+
+```
+select distinct column_name from table;
+```
+多列组合唯一选取：
+
+```
+select distinct column1_name column2_name from table;
+```
+唯一计数：
+
+```
+SELECT COUNT(DISTINCT country)  FROM customers; 
+```
 
 
 ## 根据某些条件删除某个表格的重复行

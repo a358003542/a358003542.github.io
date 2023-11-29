@@ -24,6 +24,7 @@ sudo mysql_secure_installation
 
 这里我选择了移除匿名用户，禁止root用户远程登录，移除test database和重载权限表格。
 
+
 ### mariadb设置用户可以远程登录
 本小节的讨论主要参考了 [官方文档的这篇文章](https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/) 。
 
@@ -109,6 +110,22 @@ mysql> create table test(x int,y integer,z integer);
 这里就简单创建了一个名叫test的表格，然后定义表头为三个整数，integer和int是一个意思。
 
 
+### 修改列字段
+增加一列
+```
+alter table table_name add (column_name data_type);
+```
+
+删除一列
+```
+alter table table_name drop column column_name;
+```
+
+修改某列数据类型
+
+```
+alter table talbe_name modify column_name data_type;
+```
 
 ### 插入数据
 
@@ -118,6 +135,26 @@ mysql> create table test(x int,y integer,z integer);
 mysql> insert into test(x,y,z) values(1,2,3) ;
 ```
 
+从一个表格中读取数据然后插入数据：
+
+```
+insert into target_tb (column_name) select column_name from source_tb; 
+```
+### 更新数据
+```
+update user set last_name ='amy' where id = 3 ; 
+```
+
+### 删除数据
+根据条件删除数据
+```
+delete from table_name where a = 1 ;
+```
+
+删除表格中所有数据
+```
+delete from table_name ;
+```
 
 ### 删除table
 

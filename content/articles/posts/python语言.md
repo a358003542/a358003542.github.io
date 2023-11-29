@@ -3198,6 +3198,54 @@ visual studio的`生成->配置管理器`那里可以选择Debug或者Release，
 
 
 ## 其他
+### python class类定义里面的语句会直接执行
+python class类定义里面的语句会直接执行，而函数里面定义的语句不会直接执行。
+
+### python操作符优先级
+一般不需要查看本表，放在这里备用。
+
+| Priority      | Operator | |
+| ----------- | ----------- | -----|
+| 1      | ~, +, -       |unary|
+| 2   | **        |  |
+| 3   | *, /, //, %        |  |
+| 4   | +, -        | binary  |
+| 5   | <<, >>        |  |
+| 6   | <, <=, >, >=        |  |
+| 7   | ==, !=        |  |
+| 8   | &        |  |
+| 9   | \|        |  |
+| 10   | =, +=, -=, *=, /=, %=, &=, ^=, |=, >>=, <<=        |  |
+
+### 列表的del语句支持索引范围
+```
+>>> my_list = [10, 8, 6, 4, 2]
+>>> my_list[1:3]
+[8, 6]
+>>> del my_list[1:3]
+>>> my_list
+[10, 4, 2]
+```
+
+### python3.6开始字典保留插入顺序
+Python 3.6x dictionaries have become ordered collections by default.
+
+
+In the older versions of Python, i.e., before 3.6.7, the popitem() method removes a random item from a dictionary.
+
+### python3.10开始增加了match语句
+```
+http_status = 200
+
+match http_status:
+    case 200 | 201:
+         print('Success')
+    case 400:
+        print('Not Found')
+    case _:
+        print('Unknown')
+```
+
 ### locals和globals
 
 python的 `locals()` 返回本函数内的局部变量字典值，而 `globals()` 则返回本模块文件的全局变量。 `locals` 是只读的，而 `globals()` 不是，我们可以利用`globals()` 对脚本文件玩出一些新花样。

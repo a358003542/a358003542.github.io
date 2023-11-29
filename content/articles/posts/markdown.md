@@ -7,6 +7,21 @@ Date: 20230309
 ## Markdown
 
 关于markdown的基础知识本文就不赘述了，网上随便一搜就有，本文下面主要讲了一些值得一提的知识点。
+### 表格
+如下
+```
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+```
+
+将会制造一个表格：
+
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
 
 ### 删除线
 用 `~~` 来包围文字，例如：
