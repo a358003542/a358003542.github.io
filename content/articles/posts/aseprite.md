@@ -1,4 +1,6 @@
+Slug: aseprite
 Date: 20230309
+Modified: 20231205
 
 [TOC]
 
@@ -39,3 +41,8 @@ Date: 20230309
 ### 线对齐提示
 
 在画笔工具激活下按键 `Ctrl` 有线对齐提示。
+
+
+
+### Aseprite汉化及界面调整教程
+[详见网页](https://steamcommunity.com/sharedfiles/filedetails/?id=1333477949)
