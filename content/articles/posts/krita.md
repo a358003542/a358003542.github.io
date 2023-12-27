@@ -41,7 +41,7 @@ Modified: 20231220
 
 
 ## 手绘brush工具
-按键 `B` 切换到刷子工具。
+按键 `B` 切换到刷子工具。相对于传统绘画，B工具对应的是从铅笔到毛刷到滚筒刷所有这些传统绘画工具。
 
 ## 擦除工具
 按键 `E` 选择擦除工具，再按一次又会进入B键刷子模式。
@@ -49,6 +49,13 @@ Modified: 20231220
 ## 快速取色
 在刷子B键激活的时候按住Ctrl键可以进行快速取色。
 
+
+
+Drawing Line Segments: b (select brush tool) + hold v + draw the line
+
+Drawing Horizontal and Vertical Lines: v + hold Shift while drawing the line
+
+Brush Diameter Slider: Shift + drag
 
 
 ### 按键M
