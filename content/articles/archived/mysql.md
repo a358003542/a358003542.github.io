@@ -6,7 +6,7 @@ Modified: 20231017
 [TOC]
 
 
-在阅读本文之前推荐先阅读 [SQL核心教程]({filename}../posts/SQL核心教程.md) 一文，对SQL语言有一个基本的认识。
+在阅读本文之前推荐先阅读 [SQL核心教程]({filename}./SQL核心教程.md) 一文，对SQL语言有一个基本的认识。
 
 
 
