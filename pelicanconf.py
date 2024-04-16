@@ -14,7 +14,7 @@ sys.path.append(str(BASE_DIR))
 import mypatches
 
 # article.summary 最大长度 搜索功能也是基于此 网页显示再适当截断
-SUMMARY_MAX_LENGTH = 1000
+SUMMARY_MAX_LENGTH = 1500
 
 # set the author metadata
 AUTHOR = 'wanze'
