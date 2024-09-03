@@ -17,7 +17,7 @@ import mypatches
 SUMMARY_MAX_LENGTH = 1500
 
 # set the author metadata
-AUTHOR = 'wanze'
+AUTHOR = 'wander'
 
 # the filename decide the title metadata
 FILENAME_METADATA = '(?P<title>.*)'
@@ -29,7 +29,7 @@ USE_FOLDER_AS_CATEGORY = True
 # show the pages
 DISPLAY_PAGES_ON_MENU = True
 
-SITENAME = "万泽的博客"
+SITENAME = "wander的博客"
 SITEURL = ''
 
 PATH = 'content'
