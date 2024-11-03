@@ -1,8 +1,8 @@
+Slug: http
 Date: 20191018
 
 [TOC]
 
-## HTTP知识
 
 ## URL结构
 
@@ -27,13 +27,13 @@ URL是只支持ascii字符表示的，其他的字符要经过utf-8编码操作�
 ```
 在URL中对应的就是 `%e4%b9%a6` 。还有其他一些细节，当然实际操作中各个编程语言都提供了良好的函数接口了的，比如python的urlencode函数。
 
-### http header详解
+## http header详解
 
 本小节主要参考了 [这个网页](http://kb.cnblogs.com/page/92320/) ，内容整理得不错，都搬过来了，做备份用。
 
 http协议过程分为http请求过程和http响应过程，http请求过程就是发送http请求信息包，http响应过程就是发送http响应信息包的过程。
 
-### http 请求信息包
+## http 请求信息包
 
 http请求信息包格式如下:
 ```
@@ -305,7 +305,7 @@ http响应信息包格式如下:
 
 http的方法method和状态码为大家所熟知，下面就header的一些内容列出来说明之。
 
-### 响应headers详解
+## 响应headers详解
 
 <table>
 
@@ -523,7 +523,8 @@ http的方法method和状态码为大家所熟知，下面就header的一些内�
 </tbody>
 </table>
 
-### http状态码详
+
+## http状态码
 
 -   **MIME type:** 其全称是Multipurpose Internet Mail Extensions ，可以看得出来和email系统有关，但不管怎么说，我们知道其在http里面用于描述文件类型即可。具体就是对应的
 ```
@@ -541,3 +542,78 @@ http的方法method和状态码为大家所熟知，下面就header的一些内�
 ```
 目前几乎绝大部分URI就是URL，URN只在某些特别领域使用。
 
+
+
+
+
+## GET和POST的区别
+
+参考了 [这个网页](http://blog.csdn.net/gideal_wang/article/details/4316691) 。前面谈及的修改网页的url来获取资源，实质就是HTTP的GET方法，也就是GET方法的信息就放在url上的，然后web service服务器会分析这些url，从而相应的决定对客户机的回应方式。而POST方法并不修改url，web service服务器接受的url上并没有任何额外的信息，具体POST方法具体会另外传输一个信息包。一般能够通过GET方法和服务器互动的就采用GET方法，但因为url的局限性，可能某些GET方法并不适用，这是就需要服务器支持对应的POST方法来互动了。至于PUT还有DELETE方法就更加少用了，有些服务器甚至根本就不支持这些冷门的方法。
+
+## HTTP返回错误码含义
+
+```
+100: ('Continue', 'Request received, please continue'),
+    101: ('Switching Protocols',
+          'Switching to new protocol; obey Upgrade header'),
+
+    200: ('OK', 'Request fulfilled, document follows'),
+    201: ('Created', 'Document created, URL follows'),
+    202: ('Accepted',
+          'Request accepted, processing continues off-line'),
+    203: ('Non-Authoritative Information', 'Request fulfilled from cache'),
+    204: ('No Content', 'Request fulfilled, nothing follows'),
+    205: ('Reset Content', 'Clear input form for further input.'),
+    206: ('Partial Content', 'Partial content follows.'),
+
+    300: ('Multiple Choices',
+          'Object has several resources -- see URI list'),
+    301: ('Moved Permanently', 'Object moved permanently -- see URI list'),
+    302: ('Found', 'Object moved temporarily -- see URI list'),
+    303: ('See Other', 'Object moved -- see Method and URL list'),
+    304: ('Not Modified',
+          'Document has not changed since given time'),
+    305: ('Use Proxy',
+          'You must use proxy specified in Location to access this '
+          'resource.'),
+    307: ('Temporary Redirect',
+          'Object moved temporarily -- see URI list'),
+
+    400: ('Bad Request',
+          'Bad request syntax or unsupported method'),
+    401: ('Unauthorized',
+          'No permission -- see authorization schemes'),
+    402: ('Payment Required',
+          'No payment -- see charging schemes'),
+    403: ('Forbidden',
+          'Request forbidden -- authorization will not help'),
+    404: ('Not Found', 'Nothing matches the given URI'),
+    405: ('Method Not Allowed',
+          'Specified method is invalid for this server.'),
+    406: ('Not Acceptable', 'URI not available in preferred format.'),
+    407: ('Proxy Authentication Required', 'You must authenticate with '
+          'this proxy before proceeding.'),
+    408: ('Request Timeout', 'Request timed out; try again later.'),
+    409: ('Conflict', 'Request conflict.'),
+    410: ('Gone',
+          'URI no longer exists and has been permanently removed.'),
+    411: ('Length Required', 'Client must specify Content-Length.'),
+    412: ('Precondition Failed', 'Precondition in headers is false.'),
+    413: ('Request Entity Too Large', 'Entity is too large.'),
+    414: ('Request-URI Too Long', 'URI is too long.'),
+    415: ('Unsupported Media Type', 'Entity body in unsupported format.'),
+    416: ('Requested Range Not Satisfiable',
+          'Cannot satisfy request range.'),
+    417: ('Expectation Failed',
+          'Expect condition could not be satisfied.'),
+
+    500: ('Internal Server Error', 'Server got itself in trouble'),
+    501: ('Not Implemented',
+          'Server does not support this operation'),
+    502: ('Bad Gateway', 'Invalid responses from another server/proxy.'),
+    503: ('Service Unavailable',
+          'The server cannot process the request due to a high load'),
+    504: ('Gateway Timeout',
+          'The gateway server did not receive a timely response'),
+    505: ('HTTP Version Not Supported', 'Cannot fulfill request.'),
+```
