@@ -11,12 +11,15 @@
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="一般能够使用python的内置模块datetime解决的问题或者简单写几个辅助函数就能解决的问题是没必要上 python-dateutil 模块的，但有的时候某些问题，上python-dateutil模块会非常的方便，然后我发现好多有名的模块都默认安装这个模块了。
+        content="dateutil模块
+安装是运行:
+
+本文简要介绍python的第三方日期时间处理支持模块dateutil,更多细节参考 官方文档 .
 relativedelta
-..." />
+python自带的timedelta对某个datetime对象进行加减, 我记得以前似乎是不能很好应对跨月问题, 但最近测试显示是..." />
 
 
-<meta name="keywords" content=", posts, " />
+<meta name="keywords" content=", 计算机 - 编程, " />
 
 <title>python模块dateutil  -
     wander的博客</title>
@@ -110,6 +113,7 @@ relativedelta
                 <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
+<li><a href="#dateutil模块">dateutil模块</a></li>
 <li><a href="#relativedelta">relativedelta</a></li>
 <li><a href="#rrule">rrule</a></li>
 <li><a href="#parse">parse</a></li>
@@ -119,12 +123,12 @@ relativedelta
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-09-18T00:00:00+08:00">2019年 9月 18日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2024-09-08T11:38:27.181053+08:00">2024年 9月 8日 </time>
+                <div class="p-1">最近更新于：<time datetime="2024-11-04T00:00:00+08:00">2024年 11月 4日 </time>
                 </div>
 
 
                 <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-ref">计算机 - 编程</a>
                 </div>
             </div>
         </div>
@@ -132,10 +136,13 @@ relativedelta
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
                 
-<p>一般能够使用python的内置模块datetime解决的问题或者简单写几个辅助函数就能解决的问题是没必要上 python-dateutil 模块的，但有的时候某些问题，上python-dateutil模块会非常的方便，然后我发现好多有名的模块都默认安装这个模块了。</p>
+<h2 id="dateutil模块">dateutil模块</h2>
+<p>安装是运行:</p>
+<div class="highlight"><pre><span></span><code>pip install python-dateutil
+</code></pre></div>
+<p>本文简要介绍python的第三方日期时间处理支持模块dateutil,更多细节参考 <a href="https://dateutil.readthedocs.io/en/stable/">官方文档</a> .</p>
 <h2 id="relativedelta">relativedelta</h2>
-<p>某些问题，用datetime的replace将某个值设为0或者什么值，或者用timedelta来减去什么值，大部分都能解决，但有的时候，比如跨月份涉及到要考虑天数不等或者其他等等问题，用relativedelta还是很方便的。</p>
-<p>总的说来涉及到datetime的某个跨度的计算问题，还是推荐使用 relativedelta函数。</p>
+<p>python自带的timedelta对某个datetime对象进行加减, 我记得以前似乎是不能很好应对跨月问题, 但最近测试显示是可以的, 至于闰年问题是不是已经很好地解决了不太清楚, 不管怎么说, 还是推荐使用dateutil模块的 relativedelta函数.</p>
 <div class="highlight"><pre><span></span><code>from dateutil.relativedelta import relativedelta
 now = datetime.utcnow()
 sdt = now - relativedelta(months=months)
@@ -143,10 +150,24 @@ sdt = now - relativedelta(months=months)
 <h2 id="rrule">rrule</h2>
 <p>虽然没有lrule，但根据上面的relativedelta配置的起始时间，然后指定结束时间，通过rrule函数来生成一个时间区间，有时是很方便的。</p>
 <div class="highlight"><pre><span></span><code>from dateutil.rrule import rrule, MONTHLY
-list(rrule(freq=MONTHLY, dtstart=sdt, until=now))
+
+def get_datetime_range(months, tz=timezone.utc):
+    """
+    返回一系列的datetime object 列表, 从当前时间往前数几个月.
+
+    &gt;&gt;&gt; get_datetime_range(1) # doctest: +SKIP
+    [datetime.datetime(2024, 10, 5, 14, 27, 46, tzinfo=datetime.timezone.utc),
+    datetime.datetime(2024, 11, 5, 14, 27, 46, tzinfo=datetime.timezone.utc)]
+
+    &gt;&gt;&gt; get_datetime_range(0) # doctest: +SKIP
+    [datetime.datetime(2024, 11, 5, 14, 27, 53, tzinfo=datetime.timezone.utc)]
+
+    """
+    start_dt = dt_current(tz=tz) - relativedelta(months=months)
+    return list(rrule(freq=MONTHLY, dtstart=start_dt, until=dt_current(tz=tz)))
 </code></pre></div>
 <h2 id="parse">parse</h2>
-<p>dateutil 的 parse函数根据输入日期时间字符串来获得datetime object还是很方便的，不过在某些简单的情况下，可能使用datetime的 strftime  函数就够用了。</p>
+<p>根据给定的日期时间字符串来获得datetime object, 某些简单的情况下用datetime的 <code>strptime</code> 够用了, 如果情况较复杂, 你可以看看dateutil提供的 parse函数, 也许能够很好地解决你的问题.</p>
             </div>
         </div>
 

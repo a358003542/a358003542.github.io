@@ -12,10 +12,13 @@
 
     <meta name="description"
         content="time模块
-time模块提供了一些和时间相关的函数，更加的底层，不过有些函数可能在某些平台并不适用。类似的模块还有datetime模块，datetime是以类的框架来解决一些时间问题的。所以如果只是需要简单的调用一下时间，那么用time模块，如果是大量和时间相关的问题，推荐使用datetim..." />
+本文简要介绍time模块，更多内容请参看 官方文档 。
+time模块提供了一些和时间相关的函数，更加的底层，不具有平台通用性, 一般应用会优先推荐使用datetime模块和calendar模块或者其他第三方模块,只在必要时使用time模块.
+time函数
+返回从 1970-01-..." />
 
 
-<meta name="keywords" content=", posts, " />
+<meta name="keywords" content=", 计算机 - 编程, " />
 
 <title>python内置模块time  -
     wander的博客</title>
@@ -109,27 +112,21 @@ time模块提供了一些和时间相关的函数，更加的底层，不过有�
                 <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#time模块">time模块</a><ul>
+<li><a href="#time模块">time模块</a></li>
 <li><a href="#time函数">time函数</a></li>
-<li><a href="#gmtime函数">gmtime函数</a></li>
-<li><a href="#localtime函数">localtime函数</a></li>
-<li><a href="#ctime函数">ctime函数</a></li>
-<li><a href="#strftime函数">strftime函数</a></li>
 <li><a href="#sleep函数">sleep函数</a></li>
-</ul>
-</li>
 </ul>
 </div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2024-09-08T11:38:27.181053+08:00">2024年 9月 8日 </time>
+                <div class="p-1">最近更新于：<time datetime="2024-11-04T00:00:00+08:00">2024年 11月 4日 </time>
                 </div>
 
 
                 <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-ref">计算机 - 编程</a>
                 </div>
             </div>
         </div>
@@ -138,62 +135,12 @@ time模块提供了一些和时间相关的函数，更加的底层，不过有�
             <div class="article-content">
                 
 <h2 id="time模块">time模块</h2>
-<p>time模块提供了一些和时间相关的函数，更加的底层，不过有些函数可能在某些平台并不适用。类似的模块还有datetime模块，datetime是以类的框架来解决一些时间问题的。所以如果只是需要简单的调用一下时间，那么用time模块，如果是大量和时间相关的问题，推荐使用datetime模块。</p>
-<h3 id="time函数">time函数</h3>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; import time
-&gt;&gt;&gt; time.time()
-1404348227.07554
-</code></pre></div>
-<p>time函数返回一个数值，这个数值表示从1970年1月1号0时0分0秒到现在的时间过了多少秒。</p>
-<h3 id="gmtime函数">gmtime函数</h3>
-<p>这个函数可以接受一个参数，这个参数是多少秒，然后返回一个特定格式的时间数组<code>struct_time</code>。如果不接受参数，那么默认接受的秒数由time函数返回，也就是从那个特定时间到现在过了多少秒，这样这个特定格式的时间数组对应的就是当前时间。</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; time.gmtime()
-time.struct_time(tm_year=2014, tm_mon=7, tm_mday=3, tm_hour=0, 
-tm_min=53, tm_sec=0, tm_wday=3, tm_yday=184, tm_isdst=0)
-&gt;&gt;&gt; time.gmtime(0)
-time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, 
-tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
-</code></pre></div>
-<h3 id="localtime函数">localtime函数</h3>
-<p>此外类似的还有<strong>localtime</strong>函数，和gmtime用法和返回完全一模一样，唯一的区别就是返回的是当地的时间。</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
-'2014-07-03 09:19:40'
-&gt;&gt;&gt; time.strftime('%Y-%m-%d %H:%M:%S',time.gmtime())
-'2014-07-03 01:19:49'
-</code></pre></div>
-<h3 id="ctime函数">ctime函数</h3>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; time.ctime()
-'Thu Jul  3 08:54:54 2014'
-&gt;&gt;&gt; time.ctime(0)
-'Thu Jan  1 07:00:00 1970'
-</code></pre></div>
-<p>和gmtime类似，不过返回的是字符串格式的时间。我们看到ctime默认设置的时间是根据localtime函数来的。</p>
-<h3 id="strftime函数">strftime函数</h3>
-<p>接受那个特定格式的时间数组<code>struct_time</code>作为参数，然后返回一定字符串格式的时间。具体例子请参看前面的例子。</p>
-<p>其中最常用的格式符有：</p>
-<div class="highlight"><pre><span></span><code>%Y，多少年；%m，多少月；%d，多少日；
-%H，多少小时；%M，多少分；%S，多少秒。
-</code></pre></div>
-<p><code>%X</code> 直接输出09:27:19这样的格式，也就是前面的多少小时多少分多少秒可以用一个%X表示即可。</p>
-<p>还有一些，比如：%I表示多少小时，不过是<div class="math">$$0-12$$</div>的形式；%y表示多少年，不过是<div class="math">$$00-99$$</div>的格式，比如2014年就输出14；%p，本地的AM或PM文字。等等。</p>
-<h3 id="sleep函数">sleep函数</h3>
-<p>sleep函数有时需要用到，将程序休眠个几秒的意思。需要接受一个数值参数，单位是秒，可以是零点几秒。但sleep函数只是大概休眠几秒的意思，最好不去用来计时，因为它不大精确。</p>
-<p>更多内容请参见<a href="https://docs.python.org/3/library/time.html">官方文档</a>。</p>
-<script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [["$$", "$$"], ['\\[', '\\]']],
-    packages: {
-      '[+]': ['mhchem']
-    }
-  },
-  loader: {
-    load: ['[tex]/mhchem']
-  },
-}
-</script>
-<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+<p>本文简要介绍time模块，更多内容请参看 <a href="https://docs.python.org/zh-cn/3/library/time.html">官方文档</a> 。</p>
+<p>time模块提供了一些和时间相关的函数，更加的底层，不具有平台通用性, 一般应用会优先推荐使用datetime模块和calendar模块或者其他第三方模块,只在必要时使用time模块.</p>
+<h2 id="time函数">time函数</h2>
+<p>返回从 <code>1970-01-01, 00:00:00 (UTC)</code> 开始到现在经过的秒数.</p>
+<h2 id="sleep函数">sleep函数</h2>
+<p>调用方线程停止执行几秒. </p>
             </div>
         </div>
 

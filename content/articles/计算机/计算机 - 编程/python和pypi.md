@@ -1,9 +1,12 @@
 Slug: python-pypi
 Date: 20191018
+Modified: 20241104
+
 
 [TOC]
-### 前言
 
+
+### 前言
 本文讨论的内容有如果要编写自己的python模块，并上传到pypi.org则需要了解的知识点。主要有setuptool模块的使用，pip命令行工具，如何在pypi上上传自己的模块和其他相关知识。
 
 ### setuptools
