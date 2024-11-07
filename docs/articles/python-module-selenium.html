@@ -11,17 +11,14 @@
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="dataclasses模块
-本文简要介绍了python的内置模块dataclasses, 更多内容请参看 官方文档.
-dataclasses主要提供了创建数据类的支持, 这种数据封装对象在某些需要传递特定格式数据包时非常有用.
-如下所示:
-
-其大体帮你实现了类似下面的 __init__ 方法,..." />
+        content="selenium
+本文主要关注利用selenium来实现自动化爬虫任务, selenium还有很多其他用途, 比如关于网页前端展示的自动化测试等. 更多内容请参看 官方文档.
+selenium来做爬虫最大的好处是基本上等同于和人一样正常浏览网页, 只要略微注意下是基本上不会被封的, 否则该网站..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
 
-<title>python内置模块dataclasses  -
+<title>python模块selenium  -
     wander的博客</title>
 
     <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -103,7 +100,7 @@ dataclasses主要提供了创建数据类的支持, 这种数据封装对象在�
     <div class="row">
         <div class="col-md-4 col-lg-3"></div>
         <header class="col-sm-12 col-md-8 col-lg-8 page-header">
-            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-dataclasses.html"> python内置模块dataclasses  </a></h1>
+            <h1><a href="https://a358003542.github.io/articles/python-module-selenium.html"> python模块selenium  </a></h1>
         </header>
     </div>
 
@@ -113,12 +110,24 @@ dataclasses主要提供了创建数据类的支持, 这种数据封装对象在�
                 <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#dataclasses模块">dataclasses模块</a></li>
-<li><a href="#__post_init__-方法">__post_init__ 方法</a></li>
+<li><a href="#selenium">selenium</a></li>
+<li><a href="#打开一个url">打开一个url</a></li>
+<li><a href="#等待一会">等待一会</a></li>
+<li><a href="#获取网页源码">获取网页源码</a></li>
+<li><a href="#退出driver">退出driver</a></li>
+<li><a href="#浏览器参数配置">浏览器参数配置</a><ul>
+<li><a href="#配置useragent">配置useragent</a></li>
+<li><a href="#浏览器开始窗口最大化">浏览器开始窗口最大化</a></li>
+<li><a href="#开启移动端模拟">开启移动端模拟</a></li>
+<li><a href="#配置缓存路径">配置缓存路径</a></li>
+<li><a href="#配置缓存最大大小">配置缓存最大大小</a></li>
+<li><a href="#开启无头浏览器">开启无头浏览器</a></li>
+</ul>
+</li>
 </ul>
 </div>
 
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2024-11-06T00:00:00+08:00">2024年 11月 6日 </time>
                 </div>
 
                 <div class="p-1">最近更新于：<time datetime="2024-11-07T00:00:00+08:00">2024年 11月 7日 </time>
@@ -134,28 +143,52 @@ dataclasses主要提供了创建数据类的支持, 这种数据封装对象在�
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
                 
-<h2 id="dataclasses模块">dataclasses模块</h2>
-<p>本文简要介绍了python的内置模块dataclasses, 更多内容请参看 <a href="https://docs.python.org/zh-cn/3/library/dataclasses.html">官方文档</a>.</p>
-<p>dataclasses主要提供了创建数据类的支持, 这种数据封装对象在某些需要传递特定格式数据包时非常有用.</p>
-<p>如下所示:</p>
-<div class="highlight"><pre><span></span><code>@dataclass
-class InventoryItem:
-    '''Class for keeping track of an item in inventory.'''
-    name: str
-    unit_price: float
-    quantity_on_hand: int = 0
+<h2 id="selenium">selenium</h2>
+<p>本文主要关注利用selenium来实现自动化爬虫任务, selenium还有很多其他用途, 比如关于网页前端展示的自动化测试等. 更多内容请参看 <a href="https://www.selenium.dev/zh-cn/documentation/">官方文档</a>.</p>
+<p>selenium来做爬虫最大的好处是基本上等同于和人一样正常浏览网页, 只要略微注意下是基本上不会被封的, 否则该网站也会把正常用户也封禁了. 当然selenium因为加载东西很多开销还是很大的, 如果利用requests编写的传统爬虫是可行的, 那么还是优先选择传统方式.</p>
+<p>用pip安装如下:</p>
+<div class="highlight"><pre><span></span><code>pip install selenium
 </code></pre></div>
-<p>其大体帮你实现了类似下面的 <code>__init__</code> 方法, 还有 <code>__repr__</code> 和其他方法的自动添加.</p>
-<div class="highlight"><pre><span></span><code>def __init__(self, name: str, unit_price: float, quantity_on_hand: int=0):
-    self.name = name
-    self.unit_price = unit_price
-    self.quantity_on_hand = quantity_on_hand
+<h2 id="打开一个url">打开一个url</h2>
+<div class="highlight"><pre><span></span><code>driver = webdriver.Chrome()
+
+driver.get("https://www.selenium.dev/selenium/web/web-form.html")
 </code></pre></div>
-<h2 id="__post_init__-方法"><code>__post_init__</code> 方法</h2>
-<p>定义一些初始化 <code>__init__</code> 方法之后的后处理动作, 这在某些情况下会有用. 比如上面定义默认值对于可变类型列表等是禁止的,这个时候你可以类似下面做:</p>
-<div class="highlight"><pre><span></span><code>    def __post_init__(self):
-        if self.args is None:
-            self.args = list()
+<h2 id="等待一会">等待一会</h2>
+<p>初次打开一个页面最好先等待一会儿.</p>
+<div class="highlight"><pre><span></span><code><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="获取网页源码">获取网页源码</h2>
+<div class="highlight"><pre><span></span><code>page_source = driver.page_source
+</code></pre></div>
+<h2 id="退出driver">退出driver</h2>
+<div class="highlight"><pre><span></span><code>driver.quit()
+</code></pre></div>
+<h2 id="浏览器参数配置">浏览器参数配置</h2>
+<h3 id="配置useragent">配置useragent</h3>
+<div class="highlight"><pre><span></span><code><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--user-agent=</span><span class="si">{</span><span class="n">user_agent</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<p>你可以执行下面代码来实际查看下useragent：</p>
+<div class="highlight"><pre><span></span><code><span class="n">agent</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">"return navigator.userAgent"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="浏览器开始窗口最大化">浏览器开始窗口最大化</h3>
+<div class="highlight"><pre><span></span><code><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--start-maximized"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="开启移动端模拟">开启移动端模拟</h3>
+<div class="highlight"><pre><span></span><code><span class="n">mobile_emulation</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"deviceName"</span><span class="p">:</span> <span class="s2">"iPhone X"</span><span class="p">}</span>
+<span class="n">options</span><span class="o">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s2">"mobileEmulation"</span><span class="p">,</span> <span class="n">mobile_emulation</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="配置缓存路径">配置缓存路径</h3>
+<div class="highlight"><pre><span></span><code><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--disk-cache-dir=d:/cache'</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="配置缓存最大大小">配置缓存最大大小</h3>
+<p>单位是字节，这个数值必须是int型，最多只能到2G。</p>
+<div class="highlight"><pre><span></span><code><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--disk-cache-size=2073741824'</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="开启无头浏览器">开启无头浏览器</h3>
+<p>也就是不显示浏览器了，会在后台运行。</p>
+<div class="highlight"><pre><span></span><code><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--headless"</span><span class="p">)</span>
 </code></pre></div>
             </div>
         </div>

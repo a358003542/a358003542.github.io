@@ -11,12 +11,15 @@
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信..." />
+        content="threading模块
+本文简要介绍了python的内置模块threading, 更多内容请参看 官方文档.
+什么是线程
+我们知道各个进程之间可以看作彼此独立的程序, 但是进程的开销非常昂贵, 因为不同的进程是抢占系统资源的关系, 于是在操作系统之上开发出了更轻量化的解决方案来解决同一时间处理..." />
 
 
-<meta name="keywords" content=", archived, " />
+<meta name="keywords" content=", 计算机 - 编程, " />
 
-<title>python模块alembic  -
+<title>python内置模块threading  -
     wander的博客</title>
 
     <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -98,7 +101,7 @@
     <div class="row">
         <div class="col-md-4 col-lg-3"></div>
         <header class="col-sm-12 col-md-8 col-lg-8 page-header">
-            <h1><a href="https://a358003542.github.io/articles/pythonmo-kuai-alembic.html"> python模块alembic  </a></h1>
+            <h1><a href="https://a358003542.github.io/articles/python-builtin-module-threading.html"> python内置模块threading  </a></h1>
         </header>
     </div>
 
@@ -108,24 +111,27 @@
                 <div style="font-size:1.2rem;">目录</div>
                 <div class="toc">
 <ul>
-<li><a href="#基本使用">基本使用</a><ul>
-<li><a href="#初始化alembic项目">初始化alembic项目</a></li>
-<li><a href="#根据modelspy来">根据models.py来</a></li>
-<li><a href="#升级">升级</a></li>
+<li><a href="#threading模块">threading模块</a><ul>
+<li><a href="#什么是线程">什么是线程</a></li>
 </ul>
 </li>
+<li><a href="#thread类">Thread类</a><ul>
+<li><a href="#守护线程">守护线程</a></li>
+</ul>
+</li>
+<li><a href="#线程锁">线程锁</a></li>
 </ul>
 </div>
 
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-11-07T00:00:00+08:00">2020年 11月 7日 </time>
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2024-11-06T00:00:00+08:00">2024年 11月 6日 </time>
                 </div>
 
-                <div class="p-1">最近更新于：<time datetime="2023-10-15T18:07:23.548727+08:00">2023年 10月 15日 </time>
+                <div class="p-1">最近更新于：<time datetime="2024-11-07T00:00:00+08:00">2024年 11月 7日 </time>
                 </div>
 
 
                 <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>
+                <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-bian-cheng-ref">计算机 - 编程</a>
                 </div>
             </div>
         </div>
@@ -133,26 +139,53 @@
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
                 
-<p>alembic模块有什么，如果读者熟悉django的话，那么可以将其类比为django里面的makemigrations和migrate相关的命令，简单来说，其管理数据库版本，进行数据库迁移工作。随着我们对于数据库操作的使用频繁，我相信读者就会开始慢慢感受到数据库迁移管理的必要性，实际上我相信读者会从一开始不愿意将这些东西加入代码版本控制，到后来开始主动要将其加入代码版本控制。</p>
-<p>更多关于alembic的使用请参看官方文档，下面就一些基本的使用概念说一下。</p>
-<h2 id="基本使用">基本使用</h2>
-<h3 id="初始化alembic项目">初始化alembic项目</h3>
-<div class="highlight"><pre><span></span><code>alembic init alembic
+<h2 id="threading模块">threading模块</h2>
+<p>本文简要介绍了python的内置模块threading, 更多内容请参看 <a href="https://docs.python.org/zh-cn/3/library/threading.html">官方文档</a>.</p>
+<h3 id="什么是线程">什么是线程</h3>
+<p>我们知道各个进程之间可以看作彼此独立的程序, 但是进程的开销非常昂贵, 因为不同的进程是抢占系统资源的关系, 于是在操作系统之上开发出了更轻量化的解决方案来解决同一时间处理不同任务的需求. 同一进程下的不同线程是共享本进程的大部分资源的, 这大大地降低了系统资源开销, 然后进程之下各个线程是可以直接共享某些公共变量的, 而进程之间完全是独立的程序根本不存在这种可能性.</p>
+<p>对于CPU密集任务, 开多个进程来申请更多的系统资源才是王道; 而对于IO密集性任务, 开多个线程则是更合适的解决方案. </p>
+<h2 id="thread类">Thread类</h2>
+<p>通过Thread类来新建一个线程，其中 <code>target</code> 来给出该线程等下执行要调用的函数, 然后调用 <code>start</code> 方法来启动该线程.</p>
+<p>你可以继承Thread类来新建一个线程类, 这个时候你需要重载 <code>run</code> 方法来定义该线程等下要做的事情. 上面提到的target指向某函数, start之后也是调用内置的run方法还是调用该函数.</p>
+<p>下面是一个简单的例子:</p>
+<div class="highlight"><pre><span></span><code>import random, threading
+
+result = []
+
+def randchar_number(i):
+    number_list = list(range(48,58))
+    coden = random.choice(number_list)
+    result.append(chr(coden))
+    print('thread:', i)
+
+for i in range(8):
+    t = threading.Thread(target = randchar_number, args=(i,))
+    t.start()
+
+print(''.join(result))
+
+thread: 0
+thread: 1
+thread: 2
+thread: 3
+thread: 4
+thread: 5
+thread: 6
+thread: 7
+22972371
 </code></pre></div>
-<p>然后当前目录下会多一个 <code>alembic.ini</code> 文件，这个配置文件里面有很多重要的配置，其中 <code>sqlalchemy.url</code> 是必配的。</p>
-<h3 id="根据modelspy来">根据models.py来</h3>
-<p>类似于django的 models.py 文件里面定义一些模型，我们利用sqlalchemy模块也可以定义一些模型文件，然后根据这个模型文件的定义，我们可以利用alembic来自动根据你的数据库的一些更改：</p>
-<div class="highlight"><pre><span></span><code>alembic revision --autogenerate -m "add_some_key"
+<p><strong>注意: 控制参数后面那个逗号必须加上。</strong></p>
+<h3 id="守护线程">守护线程</h3>
+<p>可以通过设置 <code>daemon=True</code> 来让该线程成为守护线程, 主线程不是守护线程, 如果主线程上面的程序流程已经走完了, 但是某个子线程还没有走完, 该子线程是非守护线程, 这时python程序不会自动退出, 还会卡在那里. python程序只在没有存活的非守护线程之后才会自动退出. </p>
+<p>一般来说监听性质的线程必须设置为守护线程, 因为该线程从工作性质来说会在那里循环永远也走不完的, 当然你也可以设置某种信号机制在工作都做完之后发送信号告诉该线程可以退出循环了,但没有这个必要, 主线程做好工作都做完的判断阻塞程序就好.</p>
+<h2 id="线程锁">线程锁</h2>
+<p>python有两种类型线程锁 <code>Lock</code> 和 <code>RLock</code> ，其都是通过 <code>acquire</code> 来获取锁和 <code>release</code> 来释放锁。当一个线程试着访问某个unlocked的锁，<code>acquire</code> 将立即返回；如果访问的是locked的锁，那么该线程将阻塞，直到一个 <code>release</code> 释放了该锁。</p>
+<p>RLock和Lock的区别是RLock可以被相同的线程acquire多次，RLock人们也称之为递归锁，如果你的某个（递归）函数在某个线程中多次访问资源，而这时被允许的，那么你应该使用RLock。</p>
+<p>RLock常和with语句一起使用：</p>
+<div class="highlight"><pre><span></span><code>lock = threading.RLock()
+with lock:
+    do something...
 </code></pre></div>
-<p>你需要定义好 alembic 文件下的 <code>env.py</code> 里面的 target_metadata 这个变量：</p>
-<div class="highlight"><pre><span></span><code>from myapp.models import Base
-target_metadata = Base.metadata
-</code></pre></div>
-<p>然后其会自动生成一些版本控制的py文件，有 upgrade 和 downgrade 操作。</p>
-<h3 id="升级">升级</h3>
-<div class="highlight"><pre><span></span><code>alembic upgrade head  # head是最新的版本，你也可以指定版本号
-</code></pre></div>
-<p>你也可以管理多个模型文件，多个表格对象，更多细节请参看官方文档，后面有时间本文也会详细补充之。 TODO。</p>
             </div>
         </div>
 
