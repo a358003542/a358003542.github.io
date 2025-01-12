@@ -144,21 +144,21 @@
 <p>我对该项目代码进行了一些修改，具体参见 <a href="https://github.com/a358003542/500lines_ci">a358003542/500lines_ci: 500lines a continuous integration system (github.com)</a> 。项目python代码更新为了python3版本。项目为了更具平台扩展性使用gitpython而不适用sh脚本。</p>
 <h2 id="观察组件">观察组件</h2>
 <p>观察组件是 <code>repo_observer.py</code> 文件。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">git</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
-<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="n">run_or_fail</span><span class="p">,</span> <span class="n">communicate</span>
-<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> <span class="n">COMMUNICATE_STATUS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="n">run_or_fail</span><span class="p">,</span> <span class="n">communicate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> <span class="n">COMMUNICATE_STATUS</span>
 
 <span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"repo_observer.log"</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">poll</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">poll</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--dispatcher-server"</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">"dispatcher host:port, "</span> \
@@ -200,7 +200,7 @@
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">update_repo</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_repo</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">git</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">git</span>
 
@@ -234,17 +234,17 @@
 <p>后面发现了这个文件将会向任务分发器发送一个信号，分发一个新的任务。观察组件套接字信号交流上很简单，此外还有一个状态确认和OK返回。</p>
 <h2 id="任务分发器">任务分发器</h2>
 <p>任务分发器是 <code>dispatcher.py</code> 。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">socketserver</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">threading</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socketserver</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
 
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
-<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">communicate</span><span class="p">,</span> <span class="n">COMMUNICATE_PING</span><span class="p">,</span> <span class="n">COMMUNICATE_PONG</span><span class="p">,</span> \
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">communicate</span><span class="p">,</span> <span class="n">COMMUNICATE_PING</span><span class="p">,</span> <span class="n">COMMUNICATE_PONG</span><span class="p">,</span> \
     <span class="n">COMMUNICATE_STATUS</span><span class="p">,</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> <span class="n">COMMUNICATE_REGISTER</span><span class="p">,</span> \
     <span class="n">COMMUNICATE_DISPATCH</span><span class="p">,</span> <span class="n">COMMUNICATE_RESULT</span>
 
@@ -252,7 +252,7 @@
 
 
 <span class="c1"># Shared dispatcher code</span>
-<span class="k">def</span> <span class="nf">dispatch_tests</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dispatch_tests</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">):</span>
     <span class="c1"># NOTE: usually we don't run this forever</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"trying to dispatch to runners"</span><span class="p">)</span>
@@ -269,14 +269,14 @@
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">ThreadingTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ThreadingTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
     <span class="n">runners</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Keeps track of test runner pool</span>
     <span class="n">dead</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Indicate to other threads that we are no longer running</span>
     <span class="n">dispatched_commits</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Keeps track of commits we dispatched</span>
     <span class="n">pending_commits</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Keeps track of commits we have yet to dispatch</span>
 
 
-<span class="k">class</span> <span class="nc">DispatcherHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DispatcherHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The RequestHandler class for our dispatcher.</span>
 <span class="sd">    This will dispatch test runners against the incoming commit</span>
@@ -286,7 +286,7 @@
     <span class="n">command_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(\w+)(:.+)*"</span><span class="p">)</span>
     <span class="n">BUF_SIZE</span> <span class="o">=</span> <span class="mi">1024</span>
 
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># self.request is the TCP socket connected to the client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BUF_SIZE</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
@@ -347,7 +347,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"Invalid command"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
 
-<span class="k">def</span> <span class="nf">serve</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">serve</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--host"</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">"dispatcher's host, by default it uses localhost"</span><span class="p">,</span>
@@ -364,8 +364,8 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">'serving on </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 
     <span class="c1"># Create a thread to check the runner pool</span>
-    <span class="k">def</span> <span class="nf">runner_checker</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">manage_commit_lists</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">runner_checker</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">manage_commit_lists</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">commit</span><span class="p">,</span> <span class="n">assigned_runner</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">dispatched_commits</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">assigned_runner</span> <span class="o">==</span> <span class="n">runner</span><span class="p">:</span>
                     <span class="k">del</span> <span class="n">server</span><span class="o">.</span><span class="n">dispatched_commits</span><span class="p">[</span><span class="n">commit</span><span class="p">]</span>
@@ -388,7 +388,7 @@
                     <span class="n">manage_commit_lists</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
 
     <span class="c1"># this will kick off tests that failed</span>
-    <span class="k">def</span> <span class="nf">redistribute</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redistribute</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="n">server</span><span class="o">.</span><span class="n">dead</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">pending_commits</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"running redistribute"</span><span class="p">)</span>
@@ -421,27 +421,27 @@
 <p>任务分发器在套接字信号上一是STATUS-OK回报，一是任务运行器刚开始需要在任务分发器这边注册的。最后RESULT只是一个后续任务运行之后结果收集机制。</p>
 <h2 id="任务运行器">任务运行器</h2>
 <p>任务运行器是 <code>test_runner.py</code> 这个文件。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">errno</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">socketserver</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">threading</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">errno</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socketserver</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
 
-<span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">git</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
-<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">run_or_fail</span><span class="p">,</span> <span class="n">communicate</span><span class="p">,</span> <span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> \
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_or_fail</span><span class="p">,</span> <span class="n">communicate</span><span class="p">,</span> <span class="n">COMMIT_ID_FILE</span><span class="p">,</span> <span class="n">COMMUNICATE_OK</span><span class="p">,</span> \
     <span class="n">COMMUNICATE_STATUS</span><span class="p">,</span> <span class="n">COMMUNICATE_PING</span><span class="p">,</span> <span class="n">COMMUNICATE_PONG</span><span class="p">,</span> <span class="n">COMMUNICATE_RUNTEST</span><span class="p">,</span> \
     <span class="n">COMMUNICATE_RESULT</span>
 
 <span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"test_runner.log"</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">ThreadingTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ThreadingTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
     <span class="n">dispatcher_server</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1"># Holds the dispatcher server host/port information</span>
     <span class="n">last_communication</span> <span class="o">=</span> <span class="kc">None</span>
@@ -450,14 +450,14 @@
     <span class="n">dead</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Status flag</span>
 
 
-<span class="k">class</span> <span class="nc">TestHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The RequestHandler class for our server.</span>
 <span class="sd">    """</span>
 
     <span class="n">command_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(\w+)(:.+)*"</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># self.request is the TCP socket connected to the client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">command_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -487,7 +487,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="s2">"Invalid command"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">run_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">,</span> <span class="n">repo_folder</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">,</span> <span class="n">repo_folder</span><span class="p">):</span>
         <span class="c1"># update git repo</span>
         <span class="n">test_runner_script</span><span class="p">(</span><span class="n">repo_folder</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">)</span>
 
@@ -509,7 +509,7 @@
                         <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">COMMUNICATE_RESULT</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">commit_id</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">serve</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">serve</span><span class="p">():</span>
     <span class="n">range_start</span> <span class="o">=</span> <span class="mi">8900</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--host"</span><span class="p">,</span>
@@ -571,7 +571,7 @@
         <span class="c1"># first register runner need init last_communication</span>
         <span class="n">server</span><span class="o">.</span><span class="n">last_communication</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">dispatcher_checker</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dispatcher_checker</span><span class="p">(</span><span class="n">server</span><span class="p">):</span>
         <span class="c1"># Checks if the dispatcher went down. If it is down, we will shut down</span>
         <span class="c1"># if since the dispatcher may not have the same host/port</span>
         <span class="c1"># when it comes back up.</span>
@@ -604,7 +604,7 @@
         <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">test_runner_script</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_runner_script</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">commit_id</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">COMMIT_ID_FILE</span><span class="p">)</span>
 

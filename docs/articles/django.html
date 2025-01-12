@@ -192,16 +192,16 @@
 </code></pre></div>
 <p>来查看目前已经有的命令列表。</p>
 <p>一个基本的命令脚本编写大概如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.core.management.base</span> <span class="kn">import</span> <span class="n">BaseCommand</span><span class="p">,</span> <span class="n">CommandError</span>
-<span class="kn">from</span> <span class="nn">polls.models</span> <span class="kn">import</span> <span class="n">Question</span> <span class="k">as</span> <span class="n">Poll</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">django.core.management.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span><span class="p">,</span> <span class="n">CommandError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polls.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Question</span> <span class="k">as</span> <span class="n">Poll</span>
 
-<span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Command</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
     <span class="n">help</span> <span class="o">=</span> <span class="s1">'Closes the specified poll for voting'</span>
 
-    <span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'poll_id'</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">'+'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">poll_id</span> <span class="ow">in</span> <span class="n">options</span><span class="p">[</span><span class="s1">'poll_id'</span><span class="p">]:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">poll</span> <span class="o">=</span> <span class="n">Poll</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
@@ -341,8 +341,8 @@ def _get_user_session_key(request):
 <p>本小节参考了 <a href="https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7">这篇文章</a> 和 <a href="http://geek.csdn.net/news/detail/128791">这篇文章</a> 。</p>
 <p>需要提醒读者的是，django和celery集成现在并不需要额外安装什么插件了，经过下面额外的配置之后其他细节问题都可以参看celery文档了。</p>
 <p>首先推荐在你的django <code>settings.py</code> 旁新建个 <code>celeryconfig.py</code> 文件，有的教程让设置这个配置文件名字为 <code>celery.py</code> ，这样很不好，文件名和某个模块名字重复有时会出问题的。里面的内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">celery</span><span class="w"> </span><span class="kn">import</span> <span class="n">Celery</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">'DJANGO_SETTINGS_MODULE'</span><span class="p">,</span> <span class="s1">'project_name.settings'</span><span class="p">)</span>
 
@@ -352,7 +352,7 @@ def _get_user_session_key(request):
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">debug_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">debug_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">'Request: </span><span class="si">{0!r}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">))</span>
 </code></pre></div>
 <p>这个新建的任务不过是方便测试罢了，然后上面几行配置基本上死的。最值得讲的就是这两行：</p>
@@ -823,7 +823,7 @@ TEMPLATES = [
 messages.set_level(request, messages.DEBUG)
 </code></pre></div>
 <p>下面我定义了一个简单的flash函数</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">flash</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">'info'</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">flash</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">'info'</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    利用django的message系统发送一个信息，对接模板的sweetalert。</span>
 <span class="sd">    """</span>
@@ -965,15 +965,15 @@ pip install dist/what.tar.gz
 <p>一般扩展django自带的用户模型，最常见的就下面两种情况【实际上下面讨论的两种情况你可能都会用到】：</p>
 <h5 id="user和profile">User和Profile</h5>
 <p>你对django原有的用户登录机制，也就是基于session和cookies那一套是满意的，但是觉得django原有的User里面用户的信息太少了不是很满意。那么可以新建一个Profile模型，然后将User和Profile建立onetoone关系。User那边是django原有的登录相关的东西，Profile这边是存放着更多的用户资料信息。一般在代码实践上会采用如下的信号机制：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
-<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.signals</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_save</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">receiver</span>
 
-<span class="kn">from</span> <span class="nn">apps.profiles.models</span> <span class="kn">import</span> <span class="n">Profile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apps.profiles.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Profile</span>
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
 
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_related_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_related_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># Notice that we're checking for `created` here. We only want to do this</span>
     <span class="c1"># the first time the `User` instance is created. If the save that caused</span>
     <span class="c1"># this signal to be run was an update action, we know the user already</span>

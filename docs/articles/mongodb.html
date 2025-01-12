@@ -223,10 +223,10 @@ mongodb作为一款主流的nosql和sql数据库区别还是很大的，虽然�
 <p>额外要提醒读者的是，这个bson模块，你在安装pymongo的时候就自动安装了。然后在 <code>bson.json_util</code> 里面有 dumps loads 很有用，然后 <code>bson</code> 里面提供了很多mongodb的数据类型支持，如前面提及的 <code>ObjectId Binary Code</code> 等。</p>
 <h3 id="连接数据库">连接数据库</h3>
 <p>下面的代码我想能够说明一切了，repset是连接mongodb集群的写法。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span>
-<span class="kn">from</span> <span class="nn">pymongo.errors</span> <span class="kn">import</span> <span class="n">ConnectionFailure</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pymongo</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pymongo.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionFailure</span>
 
-<span class="k">def</span> <span class="nf">get_mongodb_client</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span> <span class="n">dbport</span><span class="o">=</span><span class="mi">27017</span><span class="p">,</span> <span class="n">repset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mongodb_client</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span> <span class="n">dbport</span><span class="o">=</span><span class="mi">27017</span><span class="p">,</span> <span class="n">repset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">dbport</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dbport</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -309,7 +309,7 @@ col.delete_many(filter)
 </code></pre></div>
 <h3 id="doc的创建时间">doc的创建时间</h3>
 <p>不要写什么 <code>created_time</code> 了，mongodb的 ObjectId 是有该doc的创建时间含义的：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bson</span> <span class="kn">import</span> <span class="n">ObjectId</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">bson</span><span class="w"> </span><span class="kn">import</span> <span class="n">ObjectId</span>
 <span class="nb">id</span> <span class="o">=</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">"5a505b643004c52888489b02"</span><span class="p">)</span>
 <span class="nb">id</span><span class="o">.</span><span class="n">generation_time</span>
 <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">bson</span><span class="o">.</span><span class="n">tz_util</span><span class="o">.</span><span class="n">FixedOffset</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x0000022CEDC414E0</span><span class="o">&gt;</span><span class="p">)</span>

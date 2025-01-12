@@ -162,14 +162,14 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
 <p>tornado是python的异步的网络框架模块，tornado在应对高并发请求上性能很好。</p>
 <h3 id="安装">安装</h3>
 <h3 id="第一个例子">第一个例子</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tornado.ioloop</span>
-<span class="kn">import</span> <span class="nn">tornado.web</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">tornado.ioloop</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tornado.web</span>
 
-<span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Hello, world"</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">make_app</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_app</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">([</span>
         <span class="p">(</span><span class="sa">r</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">),</span>
     <span class="p">])</span>
@@ -189,27 +189,27 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
 <p>从tornado5.0开始，tornado已经自动和asyncio集成起来了，这里所谓的集成指的是：tornado的事件驱动自动挂载到asyncio的主事件驱动循环之上了。</p>
 <h3 id="make-a-app">make a app</h3>
 <p>我们需要创建一个Application对象，这个Application对象后面再详细讨论:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_app</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">make_app</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">([</span>
         <span class="p">(</span><span class="sa">r</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">),</span>
     <span class="p">])</span>
 </code></pre></div>
 <p>然后从上面的代码我们就已经看到，根据不同的URL将分发不同的Handler，这个类似于flask的URL和视图函数分发过程。所以我们也可以把这里的 MainHandler 看作一个视图处理类。</p>
 <h3 id="编写各个视图处理类">编写各个视图处理类:</h3>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
          <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Hello, world"</span><span class="p">)</span>
 </code></pre></div>
 <p>视图处理类里面很多细节后面再详细讨论之。</p>
 <h3 id="一个简单的异步例子">一个简单的异步例子</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tornado.ioloop</span>
-<span class="kn">import</span> <span class="nn">tornado.web</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">tornado.ioloop</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tornado.web</span>
 
-<span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"Hello, world"</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">make_app</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_app</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">([</span>
         <span class="p">(</span><span class="sa">r</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">),</span>
     <span class="p">])</span>
@@ -227,16 +227,16 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
 <p>tornado的某些代码只希望运行一次，可让目标对象成为全局变量，如果是Handler级别的全局变量，那么可以直接将全局变量申请放在Handler类里面。</p>
 <p>而如果你想某个全部变量多个Handler之间共用，也就是该全局变量是Application级别的，那么可以 <a href="https://stackoverflow.com/questions/25067916/python-tornado-updating-shared-data-between-requests">这个网页</a> 提供的解决方案。</p>
 <p>大致就是各个Hanlder接收字典参数，然后在 <code>initialize</code> 方法初始化时将变量赋值过来：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">PageTwoHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">PageTwoHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">configs</span>
 
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">Application</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Application</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">handlers</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'/pageone'</span><span class="p">,</span> <span class="n">PageOneHandler</span><span class="p">,</span> <span class="p">{</span><span class="s1">'configs'</span> <span class="p">:</span> <span class="n">configs</span><span class="p">}),</span>
                 <span class="p">(</span><span class="s1">'/pagetwo'</span><span class="p">,</span> <span class="n">PageTwoHandler</span><span class="p">,</span> <span class="p">{</span><span class="s1">'configs'</span><span class="p">:</span> <span class="n">configs</span><span class="p">})]</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">template_path</span><span class="o">=</span><span class="s1">'/templates'</span><span class="p">,</span>
@@ -247,7 +247,7 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
 <p>因为有的时候需要定制tornado关闭动作，然后和supervisor配合有时会出现端口无法正常释放，加上希望tornado能够温和的关闭重启而不杀死正在进行的动作保证数据的完整和安全，这个问题在网上已经看到很多人提及了，经过一番搜索之后，感觉github仓库下的 <a href="https://github.com/tornadoweb/tornado/issues/1791">这个issue</a>【20190606还open着的】可能下面的描述更值得我们细看一下。</p>
 <p>这里面我获得的一个背景知识是，server.stop() 是只停止接收新的请求，但是那些keepalive的请求是无效的。</p>
 <p>然后supervisor默认发送的信号是 <code>signal.SIGTERM</code> ，可能有其他关闭信号是 <code>signal.SIGINT</code> 。</p>
-<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">():</span>
     <span class="n">periodic_task</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="n">http_server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">ws_clients</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -255,7 +255,7 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
     <span class="k">await</span> <span class="n">gen</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">exit_handler</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">exit_handler</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
     <span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">add_callback_from_signal</span><span class="p">(</span><span class="n">shutdown</span><span class="p">)</span>
 
 <span class="o">...</span>
@@ -283,11 +283,11 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
 <p>这里group匹配到的参数，将作为入口参数传递个 <code>RequestHandler</code> 对象的 HTTP method，也就是 <code>get</code> <code>post</code> 等。</p>
 <p>然后我们看到 <code>Application.reverse_url(name,*args)</code> 其后接受的一些参数也对应这里的正则表达式匹配，其反向解析url将进行匹配子group的替换操作。</p>
 <p>然后kwargs这个字典值，传递给 <code>initialize</code> 方法大致如下所示:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">StoryHandler</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">StoryHandler</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
 
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">story_id</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">story_id</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"this is story </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">story_id</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">([</span>
@@ -308,19 +308,19 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
 <h2 id="单元测试">单元测试</h2>
 <p>tornado的单元测试样例如下:</p>
 <p>这是 <code>api.py</code> 文件:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">tornado</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">tornado.web</span> <span class="kn">import</span> <span class="n">RequestHandler</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">tornado</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tornado.web</span><span class="w"> </span><span class="kn">import</span> <span class="n">RequestHandler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 
-<span class="k">class</span> <span class="nc">AnalyticsBWSpecificHour</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalyticsBWSpecificHour</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">'message'</span><span class="p">:</span><span class="s1">'no get method'</span><span class="p">})</span>
 
 
-<span class="k">class</span> <span class="nc">Application</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Application</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">api_handlers</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="sa">r</span><span class="s2">"/"</span><span class="p">,</span> <span class="n">AnalyticsBWSpecificHour</span><span class="p">),</span>
         <span class="p">]</span>
@@ -330,20 +330,20 @@ tornado是python的异步的网络框架模块，tornado在应对高并发请求
         <span class="nb">super</span><span class="p">(</span><span class="n">Application</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api_handlers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div>
 <p>这是 <code>test_api.py</code> 文件:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">api</span> <span class="kn">import</span> <span class="n">Application</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
 
-<span class="kn">from</span> <span class="nn">tornado.testing</span> <span class="kn">import</span> <span class="n">AsyncHTTPTestCase</span>
-<span class="kn">import</span> <span class="nn">tornado</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tornado.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncHTTPTestCase</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tornado</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
 
-<span class="k">class</span> <span class="nc">ApiTestCase</span><span class="p">(</span><span class="n">AsyncHTTPTestCase</span><span class="p">):</span>
-   <span class="k">def</span> <span class="nf">get_app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ApiTestCase</span><span class="p">(</span><span class="n">AsyncHTTPTestCase</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="nf">get_app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span>
 
-    <span class="k">def</span> <span class="nf">test_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">'GET'</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">code</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
 

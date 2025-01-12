@@ -393,8 +393,8 @@
 <p>elasticsearch_dsl 刚开始不是很推荐使用，尽可能使用 elasticsearch-py 模块，其内部使用的doc语法和 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html">官方文档</a>  和一些教程都是一致的，而且原生的查询语句在 kibana上也是很好输入和测试的。就是查询语句多少复杂繁琐点了，这个需要另外开个python脚本文件统一管理。</p>
 <h3 id="创建索引">创建索引</h3>
 <p>elasticsearch 数据库除了有 index 索引的概念，还有一个 doc_type 的概念，然后不使用那个 doc_type ，发现大体也是可以使用的，刚开始我没有考虑 doc_type 概念。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">Elasticsearch</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">elasticsearch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Elasticsearch</span>
 <span class="n">es</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">()</span>
 
 <span class="n">res</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">"test-index"</span><span class="p">)</span>
@@ -403,7 +403,7 @@
 <p>elasticsearch数据库默认开启了自动创建索引，删除索引等操作暂时先不涉及吧，所以下面集中精力把搜索和修改数据库弄清楚。</p>
 <h3 id="忽略某些连接异常">忽略某些连接异常</h3>
 <p>可能你在编程的时候希望能够忽略某些连接异常，加上 <code>ignore</code> 参数即可：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">Elasticsearch</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">elasticsearch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Elasticsearch</span>
 <span class="n">es</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">()</span>
 
 <span class="c1"># ignore 400 cause by IndexAlreadyExistsException when creating an index</span>
@@ -433,7 +433,7 @@
 <p>似乎不太方便，同步存储风格可能会更好一点，因为elasticsearch对同一文档有版本控制，旧文档会慢慢自动删除的。</p>
 <h3 id="同步存储">同步存储</h3>
 <p>同步存储用 <code>elasticsearch-dsl</code> 模块还是很方便的，官方文档推荐使用 <code>DocType</code> ，如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">DocType</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">DocType</span><span class="p">):</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">Text</span><span class="p">()</span>
     <span class="n">title_suggest</span> <span class="o">=</span> <span class="n">Completion</span><span class="p">()</span>
     <span class="n">created_at</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
@@ -443,15 +443,15 @@
         <span class="n">fields</span><span class="o">=</span><span class="p">{</span><span class="s1">'raw'</span><span class="p">:</span> <span class="n">Keyword</span><span class="p">()}</span>
     <span class="p">)</span>
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="s1">'blog'</span>
 
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span> <span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">**</span> <span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div>
 <p>然后连接推荐如下设置默认连接风格：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">elasticsearch_dsl.connections</span> <span class="kn">import</span> <span class="n">connections</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">elasticsearch_dsl.connections</span><span class="w"> </span><span class="kn">import</span> <span class="n">connections</span>
 
 <span class="n">connections</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </code></pre></div>
@@ -475,14 +475,14 @@
 <h2 id="附录">附录</h2>
 <h3 id="插入点数据">插入点数据</h3>
 <p>数据库的学习总要先往里面插入点数据，否则再好的戏也出不来。按照 阮一峰的elasticsearch数据库入门教程 描述，其参考的是 <a href="https://www.elastic.co/blog/index-type-parent-child-join-now-future-in-elasticsearch">这篇文章</a> ，说elasticsearch5目前一个index下可以有多个type，elasticsearch6一个index下只能有一个type，elasticsearch7下将彻底移除type这个概念，这样将更加简单了。我们来看 elasticsearch-dsl-py 项目提供的 插入数据的 有点类似于 model的 这段代码：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">DocType</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Article</span><span class="p">(</span><span class="n">DocType</span><span class="p">):</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="n">analyzer</span><span class="o">=</span><span class="s1">'snowball'</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">{</span><span class="s1">'raw'</span><span class="p">:</span> <span class="n">Keyword</span><span class="p">()})</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="n">analyzer</span><span class="o">=</span><span class="s1">'snowball'</span><span class="p">)</span>
     <span class="n">tags</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">()</span>
     <span class="n">published_from</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="n">Integer</span><span class="p">()</span>
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="s1">'blog'</span>
 </code></pre></div>
 <p>刚开始我没意识到问题，后来开始意识到问题了，那就是这样操作，和网上的 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/index.html">elasticsearch权威指南</a> 这本书描述的很不一样，那就是这样定义elasticsearch的数据模型，除了说明下index之外，doctype的名字没看到在哪里定义的，后来发现大部分搜索工作都能正常进行就没管了，一开始还有点不放心，现在放心了，也就是我们以后思考elasticsearch数据库的架构，完全可以丢弃type这个概念了。</p>

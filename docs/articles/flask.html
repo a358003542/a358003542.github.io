@@ -175,12 +175,12 @@ django是一种构建大型商务网站的解决方案，除非目前贵公司�
 <h2 id="flask基础">flask基础</h2>
 <h3 id="最简单的例子">最简单的例子</h3>
 <p>编写如下脚本，运行之，就是一个最简单的flask后台api服务了。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
     <span class="k">return</span> <span class="s1">'hello world'</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
@@ -224,13 +224,13 @@ FLASK_DEBUG=1
 <h3 id="url分发">url分发</h3>
 <p>url分发是web server的很核心的一个功能。flask最简单的url分发的编写就是通过app.route这样封装各个函数来实现：</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/users/&lt;int:id&gt;'</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get_or_404</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
 </code></pre></div>
 <p>上面实现了一个动态路由，也就是假设用户请求 <code>/users/1</code> ，到对应的函数那边将传递一个id参数进去，这个id参数类型是int型，数值是1。再来看个例子：</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/users/&lt;username&gt;'</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">show_user_profile</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show_user_profile</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">username</span>
 </code></pre></div>
 <p>假设现在用户请求的是 <code>/users/zhangsan</code> ， 那么到对应的函数那边username将有值 zhangsan，这是一个字符串类型，默认前面不加类型说明的就是字符串类型。此外动态路由还支持的类型有：</p>
@@ -242,66 +242,66 @@ FLASK_DEBUG=1
 <h3 id="使用蓝图来管理你的项目">使用蓝图来管理你的项目</h3>
 <p>关于项目结构管理有很多规范，有些并不是那么必要，但推荐使用蓝图来管理你的flask项目这一点是非常重要的一点。实际上除非你的项目是最早期的那种hello world临时测试性质，否则建议马上转成蓝图组织结构。</p>
 <p>首先推荐你编写一个 <code>create_app</code> 函数，这一块有些配置上的优化，这还不是很紧要的选项，暂时略过：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span>
 
 
-<span class="k">def</span> <span class="nf">create_app</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_app</span><span class="p">():</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">.main</span> <span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">main_blueprint</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">main_blueprint</span>
     <span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">main_blueprint</span><span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">errors</span> <span class="k">as</span> <span class="n">errors_blueprint</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">errors</span> <span class="k">as</span> <span class="n">errors_blueprint</span>
     <span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">errors_blueprint</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">app</span>
 </code></pre></div>
 <p>各个蓝图比如说errors.py内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">jsonify</span>
-<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsonify</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blueprint</span>
 
 <span class="n">errors</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">'errors'</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="nd">@errors</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">bad_request</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bad_request</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">'error'</span><span class="p">:</span> <span class="s1">'bad request'</span><span class="p">,</span> <span class="s1">'message'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)})</span>
     <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">400</span>
     <span class="k">return</span> <span class="n">response</span>
 
 
 <span class="nd">@errors</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">401</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">unauthorized</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">unauthorized</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">'error'</span><span class="p">:</span> <span class="s1">'unauthorized'</span><span class="p">,</span> <span class="s1">'message'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)})</span>
     <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">401</span>
     <span class="k">return</span> <span class="n">response</span>
 
 
 <span class="nd">@errors</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">403</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">forbidden</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">forbidden</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">'error'</span><span class="p">:</span> <span class="s1">'forbidden'</span><span class="p">,</span> <span class="s1">'message'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)})</span>
     <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">403</span>
     <span class="k">return</span> <span class="n">response</span>
 </code></pre></div>
 <p>然后main.py内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blueprint</span>
 
 <span class="n">main</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">'main'</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="nd">@main</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s1">'content'</span><span class="p">:</span> <span class="s1">'hello world'</span>
     <span class="p">}</span>
 </code></pre></div>
 <p>蓝图在应用中注册写法如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">.main</span> <span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">main_blueprint</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">main_blueprint</span>
 <span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">main_blueprint</span><span class="p">)</span>
 </code></pre></div>
 <p>蓝图的错误页面需要使用 <code>app_errorhandler</code> 要注册为全局的错误处理，如果是 <code>errorhandler</code> 则只负责本蓝图内的错误。</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@main</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">page_not_found</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">page_not_found</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'404.html'</span><span class="p">),</span> <span class="mi">404</span>
 </code></pre></div>
 <p>蓝图内注册的视图函数，用 <code>url_for</code> 来获取的是 <code>main.index</code> 这种形式，即蓝图名加上视图函数名。</p>
@@ -320,7 +320,7 @@ FLASK_DEBUG=1
 <h2 id="其他技巧">其他技巧</h2>
 <h3 id="flask-shell命令定制">flask shell命令定制</h3>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">shell_context_processor</span>
-<span class="k">def</span> <span class="nf">make_shell_context</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_shell_context</span><span class="p">():</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">User</span><span class="o">=</span><span class="n">User</span><span class="p">,</span> <span class="n">Role</span><span class="o">=</span><span class="n">Role</span><span class="p">)</span>
 </code></pre></div>
 <p>运行： </p>
@@ -335,7 +335,7 @@ def page_not_found(e):
 </code></pre></div>
 <p>如果是蓝图的话，要有全局的效果，则应该使用 <code>app_errorhandler</code> ：</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@main</span><span class="o">.</span><span class="n">app_errorhandler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">page_not_found</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">page_not_found</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">'404.html'</span><span class="p">),</span> <span class="mi">404</span>
 </code></pre></div>
 <h3 id="查看当前url分发情况">查看当前url分发情况</h3>
@@ -412,10 +412,10 @@ response.set_cookie('a',1)
 <p>abort函数 其返回的是状态码404 其是抛出异常 </p>
 <h3 id="问题一-gunicorn多进程模式是怎样和flask作用的">问题一 gunicorn多进程模式是怎样和flask作用的</h3>
 <p>参考 <a href="https://stackoverflow.com/questions/670891/is-there-a-way-for-multiple-processes-to-share-a-listening-socket#">这个问题</a> 的解答：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
     <span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8888</span><span class="p">))</span>
     <span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -426,7 +426,7 @@ response.set_cookie('a',1)
 
     <span class="n">accept_conn</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">,</span> <span class="n">serversocket</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">accept_conn</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">c</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
         <span class="nb">print</span> <span class="s1">'Got connection from in </span><span class="si">%s</span><span class="s1">'</span> <span class="o">%</span> <span class="n">message</span>
@@ -438,7 +438,7 @@ response.set_cookie('a',1)
 </code></pre></div>
 <p>gunicorn 采用的是 pre-fork work 模式，大概作业模式如上代码所示，不同点是 gunicorn 起的主进程不负责消息处理，只负责端口监听和消息分发给子进程。</p>
 <p>多进程的情况我们大体是熟悉的，基本上都是独立运行的内部变量类之间完全不相同的程序了。flask wsgi源码中有如下代码：</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">wsgi_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">wsgi_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_context</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
         <span class="n">error</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
@@ -469,12 +469,12 @@ response.set_cookie('a',1)
 <p>原则上如果flask使用的python的threading的local，那么对于协程问题是不能很好地应对的，这个python3.7似乎新增了一个 <code>contextvars</code> 模块就是为了解决这个问题的。那么问题就来了，我们知道gunicorn 可以开始多个进程的worker，而且多个进程worker之下还可以开启多个线程，除了默认的线程之外，gunicorn是还可以开启gevent之类的异步线程的。gevent之类的就是在开启多协程，那么flask能够应对这种情况吗？</p>
 <p>flask使用的是 werkzeug定义的Local类，而在源码中我们看到这个：</p>
 <div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">greenlet</span> <span class="kn">import</span> <span class="n">getcurrent</span> <span class="k">as</span> <span class="n">get_ident</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">greenlet</span><span class="w"> </span><span class="kn">import</span> <span class="n">getcurrent</span> <span class="k">as</span> <span class="n">get_ident</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">thread</span> <span class="kn">import</span> <span class="n">get_ident</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">thread</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ident</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">_thread</span> <span class="kn">import</span> <span class="n">get_ident</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">_thread</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ident</span>
 </code></pre></div>
 <p>也就是werkzeug会试着先加载greenlet的get_ident 函数，我想这个函数应该是支持不同的greenlet协程的，而gevent底层似乎开启的就是greenlet协程。</p>
 <p>这就说明清楚了，也就是说flask的请求环境栈和应用环境栈不仅是线程独立的，而且还有额外对于greenlet的支持。</p>
@@ -485,7 +485,7 @@ response.set_cookie('a',1)
 <p>因为前面讨论过在flask能够应对的多线程多协程默认下，【下面为了讨论方便，只说线程了】，在最小的线程单元中，每个请求环境栈和应用环境栈都是不同的，都会默默记录下当前的请求环境和应用环境，都是一个请求一个请求顺序处理的。于是一个请求来，push，处理完，pop。这是很简单的模式。</p>
 <p>具体应用环境存储做了一些优化，比如当前top的和当前一致的话就直接存储None，到时候需要的话，直接调用 <code>current_app</code> 来取就是了。</p>
 <p>在取的时候采用了如下代码使用了一种惰性的动态代理机制：</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_lookup_req_object</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_lookup_req_object</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="n">top</span> <span class="o">=</span> <span class="n">_request_ctx_stack</span><span class="o">.</span><span class="n">top</span>
     <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">_request_ctx_err_msg</span><span class="p">)</span>
@@ -502,16 +502,16 @@ response.set_cookie('a',1)
 </code></pre></div>
 <p>这个session具体怎么传递的还不是清楚，应该在werkzeug那边。</p>
 <p>flask推荐g的一种使用方式，是比如管理数据库的连接等，虽然g可能会为空，但只要如下，确保引用的时候，检查一下即可：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">g</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">g</span>
 
-<span class="k">def</span> <span class="nf">get_db</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_db</span><span class="p">():</span>
     <span class="k">if</span> <span class="s1">'db'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
         <span class="n">g</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">connect_to_database</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">db</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">teardown_appcontext</span>
-<span class="k">def</span> <span class="nf">teardown_db</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">teardown_db</span><span class="p">():</span>
     <span class="n">db</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -519,9 +519,9 @@ response.set_cookie('a',1)
 </code></pre></div>
 <h3 id="问题五-多应用的情况是怎么回事">问题五 多应用的情况是怎么回事</h3>
 <p>参考了 <a href="https://cizixs.com/2017/01/13/flask-insight-context/">这篇文章</a> 的讨论 ，flask是支持多应用的编码风格的：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">werkzeug.wsgi</span> <span class="kn">import</span> <span class="n">DispatcherMiddleware</span>
-<span class="kn">from</span> <span class="nn">frontend_app</span> <span class="kn">import</span> <span class="n">application</span> <span class="k">as</span> <span class="n">frontend</span>
-<span class="kn">from</span> <span class="nn">backend_app</span> <span class="kn">import</span> <span class="n">application</span> <span class="k">as</span> <span class="n">backend</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">werkzeug.wsgi</span><span class="w"> </span><span class="kn">import</span> <span class="n">DispatcherMiddleware</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">frontend_app</span><span class="w"> </span><span class="kn">import</span> <span class="n">application</span> <span class="k">as</span> <span class="n">frontend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">backend_app</span><span class="w"> </span><span class="kn">import</span> <span class="n">application</span> <span class="k">as</span> <span class="n">backend</span>
 
 <span class="n">application</span> <span class="o">=</span> <span class="n">DispatcherMiddleware</span><span class="p">(</span><span class="n">frontend</span><span class="p">,</span> <span class="p">{</span>
     <span class="s1">'/backend'</span><span class="p">:</span>     <span class="n">backend</span>
@@ -557,9 +557,9 @@ r.set_cookie('a','1')
 <h3 id="flask-migrate">flask-migrate</h3>
 <p><code>flask-migrate</code> 其基于sqlalchemy 的  alembic ，然后做了一些额外的工作。 主要提供了一些便捷的命令行接口，具体使用还是要熟悉sqlalchemy和alembic。</p>
 <p>一个简要的例子如下：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
-<span class="kn">from</span> <span class="nn">flask_sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemy</span>
-<span class="kn">from</span> <span class="nn">flask_migrate</span> <span class="kn">import</span> <span class="n">Migrate</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask_sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLAlchemy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask_migrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Migrate</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'SQLALCHEMY_DATABASE_URI'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sqlite:///app.db'</span>
@@ -569,7 +569,7 @@ r.set_cookie('a','1')
 <span class="n">db</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 <span class="n">migrate</span> <span class="o">=</span> <span class="n">Migrate</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
 </code></pre></div>
@@ -599,10 +599,10 @@ flask db downgrade # 对应的是 alembic downgrade
 <li>首先我们在flask应用下加上这样两个命令，负责最开始的创建数据库和根本代码生成表格工作。</li>
 <li>表格生成成功之后后面都用flask-migrate 或者说 alembic来管理，经过测试比如在models.py 哪里新加一列，然后利用 <code>flask db migrate</code> 是能够自动检测新加入了一列，从而自动生成的代码会更加精准。</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">drop_database</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">drop_database</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">initdb</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">initdb</span><span class="p">():</span>
     <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'本命令只用于数据库初始化，后续更改请使用alembic来管理，确定请输入 [Y]'</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">user_input</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'y'</span><span class="p">:</span>
@@ -612,22 +612,22 @@ flask db downgrade # 对应的是 alembic downgrade
             <span class="n">create_database</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">'db exists...'</span><span class="p">)</span>
-            <span class="kn">import</span> <span class="nn">sys</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
 
         <span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
 
-        <span class="kn">from</span> <span class="nn">alembic.config</span> <span class="kn">import</span> <span class="n">Config</span>
-        <span class="kn">from</span> <span class="nn">alembic</span> <span class="kn">import</span> <span class="n">command</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">alembic.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">alembic</span><span class="w"> </span><span class="kn">import</span> <span class="n">command</span>
         <span class="n">alembic_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">'migrations/alembic.ini'</span><span class="p">)</span>
 
         <span class="n">command</span><span class="o">.</span><span class="n">stamp</span><span class="p">(</span><span class="n">alembic_cfg</span><span class="p">,</span> <span class="s2">"head"</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">dropdb</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dropdb</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    TODO 生产环境不允许调用本命令</span>
 <span class="sd">    :return:</span>
@@ -651,9 +651,9 @@ flask db downgrade # 对应的是 alembic downgrade
 <h4 id="wtforms模块">WTForms模块</h4>
 <p>简单来说WTForms模块做的工作就是方便你在模板引擎上比如jinja2模块引擎上快速创建输入表单和相关验证事宜。</p>
 <p>首先需要定义一个Form类：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">validators</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">wtforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Form</span><span class="p">,</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">validators</span>
 
-<span class="k">class</span> <span class="nc">RegistrationForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RegistrationForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="n">username</span>     <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'Username'</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">25</span><span class="p">)])</span>
     <span class="n">email</span>        <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'Email Address'</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">Length</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">35</span><span class="p">)])</span>
     <span class="n">accept_rules</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="s1">'I accept the site rules'</span><span class="p">,</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">InputRequired</span><span class="p">()])</span>
@@ -666,7 +666,7 @@ flask db downgrade # 对应的是 alembic downgrade
 </ol>
 <p>这个Form类在python中的代码使用如下：</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/submit'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">submit</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">submit</span><span class="p">():</span>
     <span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">'POST'</span> <span class="ow">and</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">():</span>
          <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">'/success'</span><span class="p">)</span>
@@ -674,7 +674,7 @@ flask db downgrade # 对应的是 alembic downgrade
 </code></pre></div>
 <p>然后 flask-wtf 下的使用代码如下：</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/submit'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'POST'</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">submit</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">submit</span><span class="p">():</span>
     <span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">validate_on_submit</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">'/success'</span><span class="p">)</span>
@@ -694,7 +694,7 @@ flask db downgrade # 对应的是 alembic downgrade
 <div class="highlight"><pre><span></span><code>&lt;input id="content" name="content" type="text" value="foobar" /&gt;
 </code></pre></div>
 <p>我们看到一般模板引擎渲染时，比如jinja2，会接受form实例。然后一个一般的表单渲染如下：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">LoginForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">LoginForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
     <span class="n">username</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">'Username'</span><span class="p">)</span>
     <span class="n">password</span> <span class="o">=</span> <span class="n">PasswordField</span><span class="p">(</span><span class="s1">'Password'</span><span class="p">)</span>
 

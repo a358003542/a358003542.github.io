@@ -142,7 +142,7 @@ READERS = {'html': None}
 # not include the articles and dates jinja2 env variables
 template_file_startpath = 'content/template_pages'
 TEMPLATE_PAGES = {}
-for template_src in gen_allfile(startpath=template_file_startpath, filetype="html$"):
+for template_src in gen_allfile(template_file_startpath, filetype="html$"):
     template_dest = template_src
     template_src = os.path.join('template_pages', template_src)
     TEMPLATE_PAGES[template_src] = template_dest
