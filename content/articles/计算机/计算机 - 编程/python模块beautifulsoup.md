@@ -1,25 +1,17 @@
 Slug: python-module-beautifulsoup
 Date: 20191018
+Modified: 20250201
+
 
 [TOC]
 
+
+
 ## 简介
+本文将对bs4模块进行简单的介绍，更多细节请参看 [官方文档](https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/) 。
 
-BeautifulSoup模块在python网页分析这一块是很有名的一个模块，其确实让网页分析任务变得轻松而easy了。本文将对bs4模块进行简单的介绍，更多细节请参看 [官方文档](http://www.crummy.com/software/BeautifulSoup/bs4/doc/) 。
-
-### 安装
-
-安装就简单用pip命令安装之:
-
-    sudo pip install beautifulsoup
 
 ### 第一个例子
-
-然后在使用上因为python2和python3的urllib相关改动很大，加上urllib在使用上不是很友好，强烈推荐大家直接用requests模块来进行相关操作。然后beautifulsoup的引入语句一般如下所示:
-
-    from bs4 import BeautifulSoup
-
-最简单的和requests的组合使用如下所示:
 
 ```python
 import requests
