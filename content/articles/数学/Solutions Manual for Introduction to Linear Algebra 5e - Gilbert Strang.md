@@ -13,6 +13,5 @@ BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1nJ6GcsDGLbrCo_RcsEeuxQ?p
 
 相关书籍：
 
-- [线性代数引论（第五版）]({filename}./线性代数引论（第五版） - Gilbert Strang.md)
 - [Introduction to Linear Algebra 5e]({filename}./Introduction to Linear Algebra 5e - Gilbert Strang.md)
 
