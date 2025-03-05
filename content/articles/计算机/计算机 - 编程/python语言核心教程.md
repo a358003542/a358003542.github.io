@@ -2965,6 +2965,7 @@ PEP8代码风格规范是每个python程序员都应该了解的内容，其具�
 - 首字母大写的我们一般认为它是类或者异常名字，多个单词的用驼峰写法表示。
 
 - 其他一律是小写字母，用下划线隔开。
+
 - 一般开发者不应该命名下划线开头的变量，你若这样写你必须知道自己在干什么。
 
 
@@ -2985,43 +2986,36 @@ it = (len(x) for x in open('/tmp/myfile.txt'))
 
 
 
-#### python哲学
+#### The Zen of Python
+在python环境下运行 `import this` ，将会弹出以下python代码编写上推荐的原则：
 
-参考了 [这个网页的翻译](https://github.com/oldratlee/translations/tree/master/python-philosophy) 。
+如果你能读懂某段英文的意思，最好不要翻译成中文，就在英文语境下去理解。翻译就是一个再创作的过程，长篇大论下有语境约束还好，简短的语句下英文和中文翻译完全就是两个东西，就算中文翻译家再怎么考究，功力深厚，语言之间的鸿沟是无法消除的。
 
-<ol>
-<li>美优于丑。</li>
-<li>直白优于隐晦。</li>
-<li>简单优于复杂。 </li>
-<li>复杂优于纠结。 </li>
-<li>扁平优于嵌套。 </li>
-<li>稀疏优于稠密。 </li>
-<li>可读性是有重要价值的。</li>
-<li>特例可以有，但不能特例到打破规则。
-<ul>
-<li>尽管在纯粹性和实用性之间倾向的是实用性。</li>
-</ul>
-</li>
-<li>出错决不能无声无息地忽略。
-<ul>
-<li>除非明确地说明了是无声无息的。</li>
-</ul>
-</li>
-<li>面对二义性情况时，要拒绝任何猜的诱惑。</li>
-<li>一件事应该一种做法 —— 并且宁愿只有一种做法 —— 一种显而易见的做法。
-<ul>
-<li>尽管在刚开始的时候这个做法可能不是那么显而易见，毕竟你不是荷兰人。 </li>
-</ul>
-</li>
-<li>『现在』优于『决不』。 
-<ul>
-<li>尽管『决不』常常优于『<strong><em>马上</em></strong>』。 </li>
-</ul>
-</li>
-<li>如果一个实现难于解释清楚，那它是个差的想法。</li>
-<li>如果一个实现很容易解释清楚，那它可能是个好的想法。</li>
-<li>命名空间是个拍案叫绝的想法 — 放手多多用起来吧！</li>
-</ol>
+```
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+```
+
+
 
 
 
