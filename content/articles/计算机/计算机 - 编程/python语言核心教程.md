@@ -37,7 +37,7 @@ Modified: 20241104
 
 12. 熟悉python的for while循环控制语句。熟悉循环结构中如果加上break或continue程序会怎么走。
 
-13. 会用for语句迭代列表和字典，介绍字典的keys values和enumerate函数。
+13. 会用for语句迭代列表和字典，介绍字典的keys values方法和enumerate函数。
 
 14. 简单介绍异常的概念，会用try except来捕捉异常。
 
@@ -282,7 +282,7 @@ $x^y$，x的y次方如上面第二行所述就是用`x**y`这样的形式即可�
 
 ### 数值比较
 
-数值比较除了之前提及的 >，<，==之外，\>=，<=，!=也是有的（大于等于，小于等于，不等于）。此外python还支持连续比较，就是数学格式 $a<x<b$ ，x在区间 $(a,b)$ 的判断。在python中可以直接写成如下形式：`a<x<b`。这实际实现的过程就是两个比较操作的进一步与操作。虽然python支持这种写法，但个人建议写成 `x < b && x > a` 这样会更具有编程语言上的通用性。
+数值比较除了之前提及的 >，<，==之外，\>=，<=，!=也是有的（大于等于，小于等于，不等于）。此外python还支持连续比较，就是数学格式 $a<x<b$ ，x在区间 $(a,b)$ 的判断。在python中可以直接写成如下形式：`a<x<b`。这实际实现的过程就是两个比较操作的进一步与操作。
 
 ### 相除取商或余
 
@@ -473,17 +473,17 @@ random模块提供了一些函数来解决随机数问题。
 random
 
 :   random函数产生0到1之间的随机实数（包括0）。
-​    random()-\>\[0.0, 1.0)。
+​    `random()-> [0.0, 1.0) `。
 
 uniform
 
 :   uniform函数产生从a到b之间的随机实数（a，b的值指定，包括a。）。
-​    uniform(a,b)-\>\[a.0, b.0)。
+​    `uniform(a,b)-> [a, b)` 。
 
 randint
 
 :   randint函数产生从a到b之间的随机整数，包含a和b。
-​    randint(a,b)-\>\[a,b\]
+​    `randint(a,b)-> [a,b]`
 
 choice
 
@@ -786,6 +786,42 @@ python语言不像c语言，字符和字符串是不分的，用单引号或者�
     这是一段测试文字
       this is a test line
           其中空白和    换行都所见所得式的保留。''')
+
+
+### format方法
+字符串的format方法，一般的使用还是很简单的，但是有的时候有些特殊的高级需求，请参考官方文档。下面这个网站也给了很好地说明： [pyformat.info](https://pyformat.info/) 。 但现在推荐使用f-string表达，请看下面。
+
+### f-string表达
+python3.6新加入进来的特性，短短时间马上流行起来了，因为真的非常好用：
+
+
+```
+f"hello. {name}"
+```
+
+等价于
+
+```
+"hello. {name}".format(name=name)
+```
+
+#### 等宽数字
+
+```
+ {:0>2d} 
+```
+
+目标数字宽度为两位，左边填充0 ， `>` 表示左边填充， `0>` 表示左边填充0，此外还有 `>` 表示右边填充。
+
+#### 花括号的问题
+
+花括号因为是特殊字符，要显示花括号，需要如下输入两次：
+
+```
+>>> print(f'{{----}}')
+{----}
+```
+
 
 ### startswith方法
 
@@ -2333,6 +2369,17 @@ False
 
 从上面例子可以看到，一般的列表判断元素是否存在和我们之前预料的一致，关于字典需要说的就是in语句，不判断值。
 
+#### 三元运算符
+
+也就是类似这样的结构:
+
+```
+loop = loop if loop is not None else get_event_loop()
+```
+
+通常我们在处理函数的入口参数实现默认值的情况的时候会用到，比如上面一般函数参数那里写着 `loop=None` ，用上面这种一行形式更简洁一些。而我们不直接在函数定义的那里采用默认值可能有两种情况，一是该默认值并不方便作为默认值，而最好默认为None；还有一种情况是默认值是需要通过某个函数等运算得到的。
+
+
 ### for迭代语句
 
 一般有内部重复操作的程序可以先考虑for迭代结构实现，实在不行才考虑while循环结构，毕竟简单更美更安全。
@@ -3016,7 +3063,332 @@ Namespaces are one honking great idea -- let's do more of those!
 ```
 
 
+### 迭代器和生成器
+有很多内容会因为并不常使用而属于28法则里面偏高级的内容，但迭代器和生成器的讨论我认为是一个例外，因为这块内容怎么说呢，表面上看似乎偏高级并不常用，但其实深究起来是深入python的骨髓的，简直是到处都在用。所以决定这块内容还是放在核心教程的附录部分，因为这块内容的讨论即使不常用，但真的很重要。
 
+首先推荐 [这篇文章](https://foofish.net/iterators-vs-generators.html)，对本小节概念的理清帮助很大。下面我们慢慢来说。
+
+首先Iterable叫做可迭代对象，Iterator叫做迭代器。在collections里面有这两个类，可以做出判断：
+
+    from collections import Iterable,Iterator
+    isinstance(obj, Iterable)
+    isinstance(obj, Iterator)
+
+然后我们再来看官方文档的词语解释：
+
+> iterable -- 可迭代对象
+>
+> 能够逐一返回其成员项的对象。可迭代对象的例子包括所有序列类型（例如 [`list`](https://docs.python.org/zh-cn/3/library/stdtypes.html#list)、[`str`](https://docs.python.org/zh-cn/3/library/stdtypes.html#str) 和 [`tuple`](https://docs.python.org/zh-cn/3/library/stdtypes.html#tuple)）以及某些非序列类型例如 [`dict`](https://docs.python.org/zh-cn/3/library/stdtypes.html#dict)、[文件对象](https://docs.python.org/zh-cn/3/glossary.html#term-file-object) 以及定义了 [`__iter__()`](https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__) 方法或是实现了 [Sequence](https://docs.python.org/zh-cn/3/glossary.html#term-sequence) 语义的 [`__getitem__()`](https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__getitem__) 方法的任意自定义类对象。
+>
+> 可迭代对象被可用于 [`for`](https://docs.python.org/zh-cn/3/reference/compound_stmts.html#for) 循环以及许多其他需要一个序列的地方（[`zip()`](https://docs.python.org/zh-cn/3/library/functions.html#zip)、[`map()`](https://docs.python.org/zh-cn/3/library/functions.html#map) ...）。当一个可迭代对象作为参数传给内置函数 [`iter()`](https://docs.python.org/zh-cn/3/library/functions.html#iter) 时，它会返回该对象的迭代器。这种迭代器适用于对值集合的一次性遍历。在使用可迭代对象时，你通常不需要调用 [`iter()`](https://docs.python.org/zh-cn/3/library/functions.html#iter) 或者自己处理迭代器对象。`for` 语句会为你自动处理那些操作，创建一个临时的未命名变量用来在循环期间保存迭代器。参见 [iterator](https://docs.python.org/zh-cn/3/glossary.html#term-iterator)、[sequence](https://docs.python.org/zh-cn/3/glossary.html#term-sequence) 以及 [generator](https://docs.python.org/zh-cn/3/glossary.html#term-generator)。
+>
+> iterator -- 迭代器
+>
+> 用来表示一连串数据流的对象。重复调用迭代器的 [`__next__()`](https://docs.python.org/zh-cn/3/library/stdtypes.html#iterator.__next__) 方法（或将其传给内置函数 [`next()`](https://docs.python.org/zh-cn/3/library/functions.html#next)）将逐个返回流中的项。当没有数据可用时则将引发 [`StopIteration`](https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration) 异常。到这时迭代器对象中的数据项已耗尽，继续调用其 `__next__()` 方法只会再次引发 [`StopIteration`](https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration) 异常。迭代器必须具有 [`__iter__()`](https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__) 方法用来返回该迭代器对象自身，因此迭代器必定也是可迭代对象，可被用于其他可迭代对象适用的大部分场合。一个显著的例外是那些会多次重复访问迭代项的代码。容器对象（例如 [`list`](https://docs.python.org/zh-cn/3/library/stdtypes.html#list)）在你每次向其传入 [`iter()`](https://docs.python.org/zh-cn/3/library/functions.html#iter) 函数或是在 [`for`](https://docs.python.org/zh-cn/3/reference/compound_stmts.html#for) 循环中使用它时都会产生一个新的迭代器。如果在此情况下你尝试用迭代器则会返回在之前迭代过程中被耗尽的同一迭代器对象，使其看起来就像是一个空容器。
+
+生成器函数区别一般函数是使用了yield语句返回，具体这块和python的异步相关，后面再说。然后还有生成器表达式：
+
+```
+test1 = (i+1 for i in range(5))
+isinstance(test1, Iterator)
+>>> True
+isinstance(test1, Iterable)
+>>> True
+```
+
+其都是生成器，生成器是某种简化版的迭代器，迭代器一定是可迭代对象。而某个可迭代对象经过 iter 函数处理就成了 迭代器了。就一般而言简单理解，认为某个对象具有 `__iter__` 方法，那么它就是一个可迭代对象，如果某个对象具有 `__next__` 方法，那么它就是一个迭代器。
+
+常见的for遍历的过程如下所示：
+
+```python
+>>> list=[1,2,3]
+>>> iter=iter(list)
+>>> while True:
+...    try:
+...        x=next(iter)
+...    except StopIteration:
+...        break
+...    print(x)
+... 
+1
+2
+3
+```
+
+iter函数是调用目标对象的 `__iter__` 方法（决定了该对象是可迭代对象的方法），就一般而言的简单情况是，`__iter__` 方法返回的目标对象自身，因为目标对象自身已经定义了 `__next__` 方法。
+
+而就迭代器来说，其迭代过程就是调用自身的 `__next__` 方法来获取下一个值，遇到 `StopIteration` 异常停止获取。
+
+上面提到的for语句，还有map zip 之类的函数是将这个过程自动做了的。包括iter函数处理和捕获终止异常。
+
+比如文件对象本身就是可迭代的，调用`__next__`方法就返回文件中下一行的内容，到达文件尾也就是迭代越界了返回：**StopIteration**异常。
+
+next函数比如next(f)等价于`f.__next__()` 。
+
+    >>> for line in open('removeduplicate.py'):
+    ...  print(line,end='')
+    ... 
+    #!/usr/bin/env python3
+    #-*-coding:utf-8-*-
+    #此处一些内容省略。
+        
+    >>> f=open('removeduplicate.py')
+    >>> next(f)
+    '#!/usr/bin/env python3\n'
+
+所以你可以通过定义类的 `__next__` 方法来获得这个类对于next函数时的反应。
+
+序列（列表，元组，字典，ranges对象）等是可迭代对象，不是迭代器。其经过iter函数处理就成了迭代器了。
+
+除了上面提及的常规操作，通过 `__iter__` 返回自身，然后通过构建 `__next__` 方法来定制迭代器行为外：
+
+```python
+class Test(object):
+    def __init__(self):
+        self.count = 0
+    def __iter__(self):
+        return self
+    def __next__(self):
+        self.count += 1
+        if self.count >= 3:
+            raise StopIteration
+        return self.count
+```
+
+```
+isinstance(t, Iterator)
+>>> True
+list(t)
+>>> [1, 2]
+```
+
+你也可以直接通过定义 `__iter__`方法返回一个生成器对象（generator object），这因为生成器总是迭代器。
+
+下面这个例子通过重新定义字典类的`__iter__`方法来获得一个新类，这个类用iter函数处理之后的迭代器返回的是经过排序的字典的键。
+
+```python
+class SortedDict(dict):
+    def __init__(self,dict={}):
+        super().__init__(dict)
+
+    def __iter__(self):
+        self._keys = sorted(self.keys())
+        for i in self._keys:
+            yield i
+
+dict02 = SortedDict()
+dict02['a'] = 1
+dict02['b'] = 1
+dict02['d'] = 1
+dict02['c'] = 1
+```
+
+```
+for i in dict02:
+    print(i)
+```
+
+```
+a
+b
+c
+d
+```
+
+但是要注意上面的例子，只在for语句直接迭代目标对象时才会调用 `__iter__` 方法的。
+
+#### 深入理解python的迭代操作
+
+在python中一般复杂的代码运算效率就会低一点，如果完成类似的工作但你可以用更简单的语句那么运算效率就会高一点。当然这只是python的一个设计理念，并不尽然，但确实很有意思。
+
+程序结构中最有用的就是多个操作的重复，其中有迭代和递归还有一般的循环语句。递归函式感觉对于某些特殊的问题很有用，然后一般基于数据结构的不是特别复杂的操作重复用迭代语句即可，最后才考虑一般循环语句。
+
+迭代语句中for语句运算效率最低，然后是map函数（不尽然），然后是列表解析。所以我们在处理问题的时候最pythonic的风格，运算效率最高的就是列表解析了，如果一个问题能够用列表解析解决那么就用列表解析解决，因为python的设计者的很多优化工作都是针对迭代操作进行的，然后python3进一步深化了迭代思想，最后python中的迭代是用c语言来实现的。
+
+可是让我们反思一下为什么列表解析在问题处理的时候如此通用？比如说range函数或者文件对象或者列表字符串等等，他们都可以称之为可迭代对象。可迭代对象最大的特色就是有一系列的元素，然后这一系列的元素可以逐个调出来，而列表解析就是对这些调出来的元素进行了某个表达式操作，然后将其收集起来。这是什么？我们看下面这张图片：
+
+![img]({static}/images/python/lie-biao-jie-xi.png)
+
+这张图片告诉我们列表解析和数学上所谓的集合还有函数的定义非常的类似，可迭代对象就好像是一个集合（有顺序或者没顺序都行），然后这些集合中的所有元素经过了某个操作，这个操作似乎就是我们数学中定义的函数，然后加上过滤条件，某些元素不参加运算，这样就生成了第二个可迭代对象（一般是列表也可以是字典什么的。）
+
+有一个哲学上的假定，那就是我们的世界一切问题都可以用数学来描述，而一些数学问题都可以用函数即如上的信息操作过滤流来描述之。当然这不尽然，但我们可以看到列表解析在一般问题处理上是很通用的思想。
+
+不过我们看到有限的元素的集合问题适合用迭代，但无限元素的集合问题也许用递归或者循环更适合一些。然后我们又想到集合的描述分为列举描述（有限个元素的列举）和定义描述。比如说 `1<x<10` ，x属于整数，这就定义了一个集合。那么我们就想到python存在这样的通过描述而不是列举（如列表一样）的集合吗？range函数似乎就是为了这样的目的而生的，比如说 `range(10)` 就定义了 `[0,10)`这一系列的整数集合，range函数生成一个range对象，range对象是一个可迭代对象，我们可以把它看作可迭代对象中的描述集合类型吧。这时我们就问了，既然 `0<=x<10`这样的整数集合可以通过描述来实现，那么更加复杂的函数描述可不可以实现呢？我们可不可以建立更加复杂的类似range对象的描述性可迭代对象呢？
+
+#### map和filter函数
+
+按照之前的迭代模式的描述，虽然使用常见的列表解析格式(for语句)就可以完成对某个集合中各个元素的操作或者过滤，不过python中还有另外两个函数来实现类似的功能，map对应对集合中各个元素进行某个函数操作（可以接受lambda函式），而filter则实现如上所述的过滤功能。然后值得一提的是python3之后map函数和filter函数返回都是一个可迭代对象而不是列表，和range函数等其他可迭代对象一样可用于列表解析结构。
+
+#### map函数
+
+这里列出一些例子：
+
+```
+>>> map(abs, [-2,-1,0,1,2])
+<map object at 0xb707dccc>
+>>> [x for x in map(abs, [-2,-1,0,1,2])]
+[2, 1, 0, 1, 2]
+>>> [x for x in map(lambda x : x+2, [-2,-1,0,1,2])]
+[0, 1, 2, 3, 4]
+```
+
+map函数还可以接受两个可迭代对象的协作参数模式，这个学过lisp语言的会觉得很眼熟，不过这里按照我们的理解也是很便捷的。具体就是第一个可迭代对象取出一个元素作为map的函数的第一个参数，然后第二个可迭代对象取出第二个参数，然后经过函数运算，得到一个结果，这个结果如果不列表解析的话就是一个map对象（可迭代对象），然后展开以此类推。值得一提的是两个可迭代对象的*深度由最短的那个决定*，请看下面的例子：
+
+```
+>>> [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1,2])]
+[-4, -2, 0, 2, 4]
+>>> [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1])]
+[-4, -2, 0, 2]
+```
+
+#### filter函数
+
+同样和上面的谈及的类似，filter函数过滤一个可迭代对象然后产生一个可迭代对象。类似的功能可以用列表解析的后的if语句来实现。前面谈到map函数的时候提及一般还是优先使用列表解析模式，但filter函数这里有点不同，因为列表解析后面跟个if可能有时会让人困惑，这时推荐还是用filter函数来进行可迭代对象的过滤操作。
+
+filter函数的基本逻辑是只有 `return True`（用lambda表达式就是这个表达式的值为真) 的时候元素才被收集起来，或者说是过滤出来。
+
+请参看下面的例子来理解：
+
+```
+>>> [x for x in filter(lambda x:x&1,[1,2,3,5,9,10,155,-20,-25])]
+[1, 3, 5, 9, 155, -25]
+>>> [x for x in filter(lambda x:not x&1,[1,2,3,5,9,10,155,-20,-25])]
+[2, 10, -20]
+```
+
+当然你也可以传统的编写函数：
+
+```
+>>> def even(n):
+...    if n % 2 ==0:
+...         return True
+
+>>> [x for x in filter(even,[1,2,3,5,9,10,155,-25])]
+[2, 10]
+```
+
+#### zip函数
+
+这里就顺便把zip函数也一起提了，zip函数同样返回一个可迭代对象，它接受任意数目的可迭代对象，然后逐个取出可迭代对象元素构成一个元组成为自己的一个元素。和map函数类似*迭代深度由最短的那个可迭代对象决定*。
+
+```
+>>> zip(['a','b','c'],[1,2,3,4])
+<zip object at 0xb7055e6c>
+>>> [x for x in zip(['a','b','c'],[1,2,3,4])]
+[('a', 1), ('b', 2), ('c', 3)]
+>>> list(zip(['a','b','c'],[1,2,3,4]))
+[('a', 1), ('b', 2), ('c', 3)]
+>>> dict(zip(['a','b','c'],[1,2,3,4]))
+{'c': 3, 'b': 2, 'a': 1}
+```
+
+#### 列表到字典
+
+这个例子似乎使用价值不大，只是说明zip函数接受任意数目参数的情况。y.items()解包之后是4个参数传递给zip函数，而zip函数的封装逻辑就是如果有人问我，我就把你们这些迭代对象每个取出一个元素，然后用元组包装之后返回。
+
+```
+x1 = ['a','b','c','e']
+x2 = [1,2,3,4]
+y = dict(zip(x1,x2))
+print('列表到字典：',y)
+new_x1,new_x2 = zip(*y.items())
+print(new_x1,new_x2)
+
+列表到字典： {'b': 2, 'c': 3, 'a': 1, 'e': 4}
+('b', 'c', 'a', 'e') (2, 3, 1, 4)
+```
+
+这个例子如果到更加复杂的情况，我们可以跳过字典形式，来个数据映射对：
+
+```
+>>> x1 = ['a','b','c','e']
+>>> x2 = ['red','yellow','red','blue']
+>>> x3 = [1,2,3,4]
+>>> list(zip(x1,x2,x3))
+[('a', 'red', 1), ('b', 'yellow', 2), ('c', 'red', 3), ('e', 'blue', 4)]
+>>> new_x1,new_x2,new_x3 = zip(*list(zip(x1,x2,x3)))
+>>> new_x1
+('a', 'b', 'c', 'e')
+>>> new_x2
+('red', 'yellow', 'red', 'blue')
+>>> new_x3
+(1, 2, 3, 4)
+```
+
+当然对于多属性数据问题一般还是推荐使用类来处理，不过某些情况下可能不需要使用类，就这样简单处理之。
+
+值得一提的是这种数据存储形式和sql存储是一致的，而且不知道你们注意到没有，这似乎实现了矩阵的转置功能。
+
+
+
+### 一些核心关键词参考
+#### all和any关键词
+
+这是python语言里面的关键词函数，源码很简单，下面列出来，看一下就清楚了:
+
+```
+def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return True
+
+def any(iterable):
+    for element in iterable:
+        if element:
+            return True
+    return False
+```
+
+
+如果用语言表述的话是:
+
+- all，都是True，则返回True，否则返回False
+- any，只要有一个True则返回True，否则返回False。
+
+#### locals和globals
+
+python的 `locals()` 返回本函数内的局部变量字典值，而 `globals()` 则返回本模块文件的全局变量。 `locals` 是只读的，而 `globals()` 不是，我们可以利用`globals()` 对脚本文件玩出一些新花样。
+
+
+
+
+
+#### `__name__` 和 `__file__`
+
+这里所谓脚本被引入是指用import或者from语句被另外一个脚本引入进去，而这里所谓的脚本被执行是指直接如 `python test.py` 这样的形式执行该py脚本。
+
+这两种形式很有一些区别，下面慢慢谈论:
+
+
+- `__name__` 的区别。这个大家应该很熟悉了。如果脚本是被引入的，`__name__` 的值是该引入的脚本文件名，比如引入的是 `test.py` ，那么该脚本被引入，对于这个test.py文件来说，其内的 `__name__` 的值就是 `test` ，也就是 **模块名**  ；而如果是作为脚本被执行，则该 `__name__` 是 `__main__` 。
+- `__file__` 的区别。如果脚本是被执行的，假设该脚本文件是 `hello.py` ，那么在这个被执行脚本中， `__file__` 的值是 `hello.py` ，也就是 **文件名** 。如果是被引用的，那么对于那个被引入的脚本来说， `__file__` 的值是该被引入脚本相对系统来说的 **完整文件名** ，比如是 `/home/wanze/桌面/hello.py` 。
+
+
+### 优先级参考
+#### 操作符优先级
+| Priority      | Operator | |
+| ----------- | ----------- | -----|
+| 1      | ~, +, -       |unary|
+| 2   | **        |  |
+| 3   | *, /, //, %        |  |
+| 4   | +, -        | binary  |
+| 5   | <<, >>        |  |
+| 6   | <, <=, >, >=        |  |
+| 7   | ==, !=        |  |
+| 8   | &        |  |
+| 9   | \|        |  |
+| 10   | =, +=, -=, *=, /=, %=, &=, ^=, |=, >>=, <<=        |  |
+
+
+#### and or not的运算优先级
+not优先级最高，and的优先级好比or的高，请看下面这个例子： 
+
+
+```
+>>> True or True and False
+True
+```
 
 
 ### 参考资料

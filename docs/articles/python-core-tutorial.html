@@ -138,6 +138,8 @@
 </li>
 <li><a href="#字符串的其他特性">字符串的其他特性</a><ul>
 <li><a href="#三单引号和三双引号">三单引号和三双引号</a></li>
+<li><a href="#format方法">format方法</a></li>
+<li><a href="#f-string表达">f-string表达</a></li>
 <li><a href="#startswith方法">startswith方法</a></li>
 <li><a href="#find方法">find方法</a></li>
 <li><a href="#replace方法">replace方法</a></li>
@@ -146,7 +148,7 @@
 <li><a href="#split方法">split方法</a></li>
 <li><a href="#join方法">join方法</a></li>
 <li><a href="#strip方法">strip方法</a></li>
-<li><a href="#format方法">format方法</a></li>
+<li><a href="#format方法_1">format方法</a></li>
 <li><a href="#转义和不转义">转义和不转义</a></li>
 <li><a href="#count方法">count方法</a></li>
 <li><a href="#r什么的方法">r什么的方法</a></li>
@@ -248,6 +250,9 @@
 <li><a href="#附录">附录</a><ul>
 <li><a href="#python虚拟环境">python虚拟环境</a></li>
 <li><a href="#python编码规范">python编码规范</a></li>
+<li><a href="#迭代器和生成器">迭代器和生成器</a></li>
+<li><a href="#一些核心关键词参考">一些核心关键词参考</a></li>
+<li><a href="#优先级参考">优先级参考</a></li>
 <li><a href="#参考资料">参考资料</a></li>
 <li><a href="#脚注">脚注</a></li>
 </ul>
@@ -313,7 +318,7 @@
 <p>熟悉python的for while循环控制语句。熟悉循环结构中如果加上break或continue程序会怎么走。</p>
 </li>
 <li>
-<p>会用for语句迭代列表和字典，介绍字典的keys values和enumerate函数。</p>
+<p>会用for语句迭代列表和字典，介绍字典的keys values方法和enumerate函数。</p>
 </li>
 <li>
 <p>简单介绍异常的概念，会用try except来捕捉异常。</p>
@@ -495,7 +500,7 @@ f'{number:x}'  hex(number)
 <h3 id="数学幂方运算">数学幂方运算</h3>
 <p><span class="math">$x^y$</span>，x的y次方如上面第二行所述就是用<code>x**y</code>这样的形式即可。此外pow函数作用是一样的，<code>pow(x,y)</code>。</p>
 <h3 id="数值比较">数值比较</h3>
-<p>数值比较除了之前提及的 &gt;，&lt;，==之外，&gt;=，&lt;=，!=也是有的（大于等于，小于等于，不等于）。此外python还支持连续比较，就是数学格式 <span class="math">$a&lt;x&lt;b$</span> ，x在区间 <span class="math">$(a,b)$</span> 的判断。在python中可以直接写成如下形式：<code>a&lt;x&lt;b</code>。这实际实现的过程就是两个比较操作的进一步与操作。虽然python支持这种写法，但个人建议写成 <code>x &lt; b &amp;&amp; x &gt; a</code> 这样会更具有编程语言上的通用性。</p>
+<p>数值比较除了之前提及的 &gt;，&lt;，==之外，&gt;=，&lt;=，!=也是有的（大于等于，小于等于，不等于）。此外python还支持连续比较，就是数学格式 <span class="math">$a&lt;x&lt;b$</span> ，x在区间 <span class="math">$(a,b)$</span> 的判断。在python中可以直接写成如下形式：<code>a&lt;x&lt;b</code>。这实际实现的过程就是两个比较操作的进一步与操作。</p>
 <h3 id="相除取商或余">相除取商或余</h3>
 <p>就作为正整数相除使用 <code>x//y</code> 得到的值意义还是很明显的就是<strong>商</strong>。相关的还有<strong>取余</strong>数，就是<code>x%y</code>，【这个百分号在其他编程语言里面对应那个mod函数，也就是取模操作，在数学上就是取余数的含义。】这样就得到x除以y之后的余数了。</p>
 <h3 id="复数">复数</h3>
@@ -649,18 +654,17 @@ True
 <dt>random</dt>
 <dd>
 <p>random函数产生0到1之间的随机实数（包括0）。
-​    random()-&gt;[0.0, 1.0)。</p>
+​    <code>random()-&gt; [0.0, 1.0)</code>。</p>
 </dd>
 <dt>uniform</dt>
 <dd>
 <p>uniform函数产生从a到b之间的随机实数（a，b的值指定，包括a。）。
-​    uniform(a,b)-&gt;[a.0, b.0)。</p>
+​    <code>uniform(a,b)-&gt; [a, b)</code> 。</p>
 </dd>
 <dt>randint</dt>
 <dd>
 <p>randint函数产生从a到b之间的随机整数，包含a和b。
-​    randint(a,b)-&gt;<div class="math">$$a,b$$</div>
-</p>
+​    <code>randint(a,b)-&gt; [a,b]</code></p>
 </dd>
 <dt>choice</dt>
 <dd>
@@ -912,6 +916,24 @@ abcabcabc
   this is a test line
       其中空白和    换行都所见所得式的保留。''')
 </code></pre></div>
+<h3 id="format方法">format方法</h3>
+<p>字符串的format方法，一般的使用还是很简单的，但是有的时候有些特殊的高级需求，请参考官方文档。下面这个网站也给了很好地说明： <a href="https://pyformat.info/">pyformat.info</a> 。 但现在推荐使用f-string表达，请看下面。</p>
+<h3 id="f-string表达">f-string表达</h3>
+<p>python3.6新加入进来的特性，短短时间马上流行起来了，因为真的非常好用：</p>
+<div class="highlight"><pre><span></span><code>f"hello. {name}"
+</code></pre></div>
+<p>等价于</p>
+<div class="highlight"><pre><span></span><code>"hello. {name}".format(name=name)
+</code></pre></div>
+<h4 id="等宽数字">等宽数字</h4>
+<div class="highlight"><pre><span></span><code> {:0&gt;2d} 
+</code></pre></div>
+<p>目标数字宽度为两位，左边填充0 ， <code>&gt;</code> 表示左边填充， <code>0&gt;</code> 表示左边填充0，此外还有 <code>&gt;</code> 表示右边填充。</p>
+<h4 id="花括号的问题">花括号的问题</h4>
+<p>花括号因为是特殊字符，要显示花括号，需要如下输入两次：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; print(f'{{----}}')
+{----}
+</code></pre></div>
 <h3 id="startswith方法">startswith方法</h3>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x = 'helloABC'
 &gt;&gt;&gt; x
@@ -1000,7 +1022,7 @@ replaced,replaced,5,4,replaced,6
 <p>字符串右边的空格都删除。换行符也会被删除掉。</p>
 <h4 id="lstrip方法">lstrip方法</h4>
 <p>类似rstrip方法，字符串左边的空格都删除。换行符也会被删除掉。</p>
-<h3 id="format方法">format方法</h3>
+<h3 id="format方法_1">format方法</h3>
 <p>字符串的format方法方便对字符串内的一些变量进行替换操作，其中花括号不带数字跟format方法里面所有的替换量，带数字0表示第一个替换量，后面类推。此外还可以直接用确定的名字引用。</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; print('1+1={0}，2+2={1}'.format(1+1,2+2))
 1+1=2，2+2=4
@@ -2151,6 +2173,11 @@ False
 False
 </code></pre></div>
 <p>从上面例子可以看到，一般的列表判断元素是否存在和我们之前预料的一致，关于字典需要说的就是in语句，不判断值。</p>
+<h4 id="三元运算符">三元运算符</h4>
+<p>也就是类似这样的结构:</p>
+<div class="highlight"><pre><span></span><code>loop = loop if loop is not None else get_event_loop()
+</code></pre></div>
+<p>通常我们在处理函数的入口参数实现默认值的情况的时候会用到，比如上面一般函数参数那里写着 <code>loop=None</code> ，用上面这种一行形式更简洁一些。而我们不直接在函数定义的那里采用默认值可能有两种情况，一是该默认值并不方便作为默认值，而最好默认为None；还有一种情况是默认值是需要通过某个函数等运算得到的。</p>
 <h3 id="for迭代语句">for迭代语句</h3>
 <p>一般有内部重复操作的程序可以先考虑for迭代结构实现，实在不行才考虑while循环结构，毕竟简单更美更安全。</p>
 <p>python的for迭代语句有点类似lisp语言的dolist和dotimes函数，具体例子如下：</p>
@@ -2655,6 +2682,284 @@ Although never is often better than *right* now.
 If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
+</code></pre></div>
+<h3 id="迭代器和生成器">迭代器和生成器</h3>
+<p>有很多内容会因为并不常使用而属于28法则里面偏高级的内容，但迭代器和生成器的讨论我认为是一个例外，因为这块内容怎么说呢，表面上看似乎偏高级并不常用，但其实深究起来是深入python的骨髓的，简直是到处都在用。所以决定这块内容还是放在核心教程的附录部分，因为这块内容的讨论即使不常用，但真的很重要。</p>
+<p>首先推荐 <a href="https://foofish.net/iterators-vs-generators.html">这篇文章</a>，对本小节概念的理清帮助很大。下面我们慢慢来说。</p>
+<p>首先Iterable叫做可迭代对象，Iterator叫做迭代器。在collections里面有这两个类，可以做出判断：</p>
+<div class="highlight"><pre><span></span><code>from collections import Iterable,Iterator
+isinstance(obj, Iterable)
+isinstance(obj, Iterator)
+</code></pre></div>
+<p>然后我们再来看官方文档的词语解释：</p>
+<blockquote>
+<p>iterable -- 可迭代对象</p>
+<p>能够逐一返回其成员项的对象。可迭代对象的例子包括所有序列类型（例如 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#list"><code>list</code></a>、<a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#str"><code>str</code></a> 和 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#tuple"><code>tuple</code></a>）以及某些非序列类型例如 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#dict"><code>dict</code></a>、<a href="https://docs.python.org/zh-cn/3/glossary.html#term-file-object">文件对象</a> 以及定义了 <a href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__"><code>__iter__()</code></a> 方法或是实现了 <a href="https://docs.python.org/zh-cn/3/glossary.html#term-sequence">Sequence</a> 语义的 <a href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__getitem__"><code>__getitem__()</code></a> 方法的任意自定义类对象。</p>
+<p>可迭代对象被可用于 <a href="https://docs.python.org/zh-cn/3/reference/compound_stmts.html#for"><code>for</code></a> 循环以及许多其他需要一个序列的地方（<a href="https://docs.python.org/zh-cn/3/library/functions.html#zip"><code>zip()</code></a>、<a href="https://docs.python.org/zh-cn/3/library/functions.html#map"><code>map()</code></a> ...）。当一个可迭代对象作为参数传给内置函数 <a href="https://docs.python.org/zh-cn/3/library/functions.html#iter"><code>iter()</code></a> 时，它会返回该对象的迭代器。这种迭代器适用于对值集合的一次性遍历。在使用可迭代对象时，你通常不需要调用 <a href="https://docs.python.org/zh-cn/3/library/functions.html#iter"><code>iter()</code></a> 或者自己处理迭代器对象。<code>for</code> 语句会为你自动处理那些操作，创建一个临时的未命名变量用来在循环期间保存迭代器。参见 <a href="https://docs.python.org/zh-cn/3/glossary.html#term-iterator">iterator</a>、<a href="https://docs.python.org/zh-cn/3/glossary.html#term-sequence">sequence</a> 以及 <a href="https://docs.python.org/zh-cn/3/glossary.html#term-generator">generator</a>。</p>
+<p>iterator -- 迭代器</p>
+<p>用来表示一连串数据流的对象。重复调用迭代器的 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#iterator.__next__"><code>__next__()</code></a> 方法（或将其传给内置函数 <a href="https://docs.python.org/zh-cn/3/library/functions.html#next"><code>next()</code></a>）将逐个返回流中的项。当没有数据可用时则将引发 <a href="https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration"><code>StopIteration</code></a> 异常。到这时迭代器对象中的数据项已耗尽，继续调用其 <code>__next__()</code> 方法只会再次引发 <a href="https://docs.python.org/zh-cn/3/library/exceptions.html#StopIteration"><code>StopIteration</code></a> 异常。迭代器必须具有 <a href="https://docs.python.org/zh-cn/3/reference/datamodel.html#object.__iter__"><code>__iter__()</code></a> 方法用来返回该迭代器对象自身，因此迭代器必定也是可迭代对象，可被用于其他可迭代对象适用的大部分场合。一个显著的例外是那些会多次重复访问迭代项的代码。容器对象（例如 <a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#list"><code>list</code></a>）在你每次向其传入 <a href="https://docs.python.org/zh-cn/3/library/functions.html#iter"><code>iter()</code></a> 函数或是在 <a href="https://docs.python.org/zh-cn/3/reference/compound_stmts.html#for"><code>for</code></a> 循环中使用它时都会产生一个新的迭代器。如果在此情况下你尝试用迭代器则会返回在之前迭代过程中被耗尽的同一迭代器对象，使其看起来就像是一个空容器。</p>
+</blockquote>
+<p>生成器函数区别一般函数是使用了yield语句返回，具体这块和python的异步相关，后面再说。然后还有生成器表达式：</p>
+<div class="highlight"><pre><span></span><code>test1 = (i+1 for i in range(5))
+isinstance(test1, Iterator)
+&gt;&gt;&gt; True
+isinstance(test1, Iterable)
+&gt;&gt;&gt; True
+</code></pre></div>
+<p>其都是生成器，生成器是某种简化版的迭代器，迭代器一定是可迭代对象。而某个可迭代对象经过 iter 函数处理就成了 迭代器了。就一般而言简单理解，认为某个对象具有 <code>__iter__</code> 方法，那么它就是一个可迭代对象，如果某个对象具有 <code>__next__</code> 方法，那么它就是一个迭代器。</p>
+<p>常见的for遍历的过程如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">iter</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="o">...</span>    <span class="k">try</span><span class="p">:</span>
+<span class="o">...</span>        <span class="n">x</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
+<span class="o">...</span>    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+<span class="o">...</span>        <span class="k">break</span>
+<span class="o">...</span>    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">...</span> 
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
+</code></pre></div>
+<p>iter函数是调用目标对象的 <code>__iter__</code> 方法（决定了该对象是可迭代对象的方法），就一般而言的简单情况是，<code>__iter__</code> 方法返回的目标对象自身，因为目标对象自身已经定义了 <code>__next__</code> 方法。</p>
+<p>而就迭代器来说，其迭代过程就是调用自身的 <code>__next__</code> 方法来获取下一个值，遇到 <code>StopIteration</code> 异常停止获取。</p>
+<p>上面提到的for语句，还有map zip 之类的函数是将这个过程自动做了的。包括iter函数处理和捕获终止异常。</p>
+<p>比如文件对象本身就是可迭代的，调用<code>__next__</code>方法就返回文件中下一行的内容，到达文件尾也就是迭代越界了返回：<strong>StopIteration</strong>异常。</p>
+<p>next函数比如next(f)等价于<code>f.__next__()</code> 。</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; for line in open('removeduplicate.py'):
+...  print(line,end='')
+... 
+#!/usr/bin/env python3
+#-*-coding:utf-8-*-
+#此处一些内容省略。
+
+&gt;&gt;&gt; f=open('removeduplicate.py')
+&gt;&gt;&gt; next(f)
+'#!/usr/bin/env python3\n'
+</code></pre></div>
+<p>所以你可以通过定义类的 <code>__next__</code> 方法来获得这个类对于next函数时的反应。</p>
+<p>序列（列表，元组，字典，ranges对象）等是可迭代对象，不是迭代器。其经过iter函数处理就成了迭代器了。</p>
+<p>除了上面提及的常规操作，通过 <code>__iter__</code> 返回自身，然后通过构建 <code>__next__</code> 方法来定制迭代器行为外：</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Test</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>isinstance(t, Iterator)
+&gt;&gt;&gt; True
+list(t)
+&gt;&gt;&gt; [1, 2]
+</code></pre></div>
+<p>你也可以直接通过定义 <code>__iter__</code>方法返回一个生成器对象（generator object），这因为生成器总是迭代器。</p>
+<p>下面这个例子通过重新定义字典类的<code>__iter__</code>方法来获得一个新类，这个类用iter函数处理之后的迭代器返回的是经过排序的字典的键。</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SortedDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">dict</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">i</span>
+
+<span class="n">dict02</span> <span class="o">=</span> <span class="n">SortedDict</span><span class="p">()</span>
+<span class="n">dict02</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">dict02</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">dict02</span><span class="p">[</span><span class="s1">'d'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">dict02</span><span class="p">[</span><span class="s1">'c'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>for i in dict02:
+    print(i)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>a
+b
+c
+d
+</code></pre></div>
+<p>但是要注意上面的例子，只在for语句直接迭代目标对象时才会调用 <code>__iter__</code> 方法的。</p>
+<h4 id="深入理解python的迭代操作">深入理解python的迭代操作</h4>
+<p>在python中一般复杂的代码运算效率就会低一点，如果完成类似的工作但你可以用更简单的语句那么运算效率就会高一点。当然这只是python的一个设计理念，并不尽然，但确实很有意思。</p>
+<p>程序结构中最有用的就是多个操作的重复，其中有迭代和递归还有一般的循环语句。递归函式感觉对于某些特殊的问题很有用，然后一般基于数据结构的不是特别复杂的操作重复用迭代语句即可，最后才考虑一般循环语句。</p>
+<p>迭代语句中for语句运算效率最低，然后是map函数（不尽然），然后是列表解析。所以我们在处理问题的时候最pythonic的风格，运算效率最高的就是列表解析了，如果一个问题能够用列表解析解决那么就用列表解析解决，因为python的设计者的很多优化工作都是针对迭代操作进行的，然后python3进一步深化了迭代思想，最后python中的迭代是用c语言来实现的。</p>
+<p>可是让我们反思一下为什么列表解析在问题处理的时候如此通用？比如说range函数或者文件对象或者列表字符串等等，他们都可以称之为可迭代对象。可迭代对象最大的特色就是有一系列的元素，然后这一系列的元素可以逐个调出来，而列表解析就是对这些调出来的元素进行了某个表达式操作，然后将其收集起来。这是什么？我们看下面这张图片：</p>
+<p><img alt="img" src="https://a358003542.github.io/images/python/lie-biao-jie-xi.png"/></p>
+<p>这张图片告诉我们列表解析和数学上所谓的集合还有函数的定义非常的类似，可迭代对象就好像是一个集合（有顺序或者没顺序都行），然后这些集合中的所有元素经过了某个操作，这个操作似乎就是我们数学中定义的函数，然后加上过滤条件，某些元素不参加运算，这样就生成了第二个可迭代对象（一般是列表也可以是字典什么的。）</p>
+<p>有一个哲学上的假定，那就是我们的世界一切问题都可以用数学来描述，而一些数学问题都可以用函数即如上的信息操作过滤流来描述之。当然这不尽然，但我们可以看到列表解析在一般问题处理上是很通用的思想。</p>
+<p>不过我们看到有限的元素的集合问题适合用迭代，但无限元素的集合问题也许用递归或者循环更适合一些。然后我们又想到集合的描述分为列举描述（有限个元素的列举）和定义描述。比如说 <code>1&lt;x&lt;10</code> ，x属于整数，这就定义了一个集合。那么我们就想到python存在这样的通过描述而不是列举（如列表一样）的集合吗？range函数似乎就是为了这样的目的而生的，比如说 <code>range(10)</code> 就定义了 <code>[0,10)</code>这一系列的整数集合，range函数生成一个range对象，range对象是一个可迭代对象，我们可以把它看作可迭代对象中的描述集合类型吧。这时我们就问了，既然 <code>0&lt;=x&lt;10</code>这样的整数集合可以通过描述来实现，那么更加复杂的函数描述可不可以实现呢？我们可不可以建立更加复杂的类似range对象的描述性可迭代对象呢？</p>
+<h4 id="map和filter函数">map和filter函数</h4>
+<p>按照之前的迭代模式的描述，虽然使用常见的列表解析格式(for语句)就可以完成对某个集合中各个元素的操作或者过滤，不过python中还有另外两个函数来实现类似的功能，map对应对集合中各个元素进行某个函数操作（可以接受lambda函式），而filter则实现如上所述的过滤功能。然后值得一提的是python3之后map函数和filter函数返回都是一个可迭代对象而不是列表，和range函数等其他可迭代对象一样可用于列表解析结构。</p>
+<h4 id="map函数">map函数</h4>
+<p>这里列出一些例子：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; map(abs, [-2,-1,0,1,2])
+&lt;map object at 0xb707dccc&gt;
+&gt;&gt;&gt; [x for x in map(abs, [-2,-1,0,1,2])]
+[2, 1, 0, 1, 2]
+&gt;&gt;&gt; [x for x in map(lambda x : x+2, [-2,-1,0,1,2])]
+[0, 1, 2, 3, 4]
+</code></pre></div>
+<p>map函数还可以接受两个可迭代对象的协作参数模式，这个学过lisp语言的会觉得很眼熟，不过这里按照我们的理解也是很便捷的。具体就是第一个可迭代对象取出一个元素作为map的函数的第一个参数，然后第二个可迭代对象取出第二个参数，然后经过函数运算，得到一个结果，这个结果如果不列表解析的话就是一个map对象（可迭代对象），然后展开以此类推。值得一提的是两个可迭代对象的<em>深度由最短的那个决定</em>，请看下面的例子：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1,2])]
+[-4, -2, 0, 2, 4]
+&gt;&gt;&gt; [x for x in map(lambda x,y : x+y, [-2,-1,0,1,2],[-2,-1,0,1])]
+[-4, -2, 0, 2]
+</code></pre></div>
+<h4 id="filter函数">filter函数</h4>
+<p>同样和上面的谈及的类似，filter函数过滤一个可迭代对象然后产生一个可迭代对象。类似的功能可以用列表解析的后的if语句来实现。前面谈到map函数的时候提及一般还是优先使用列表解析模式，但filter函数这里有点不同，因为列表解析后面跟个if可能有时会让人困惑，这时推荐还是用filter函数来进行可迭代对象的过滤操作。</p>
+<p>filter函数的基本逻辑是只有 <code>return True</code>（用lambda表达式就是这个表达式的值为真) 的时候元素才被收集起来，或者说是过滤出来。</p>
+<p>请参看下面的例子来理解：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; [x for x in filter(lambda x:x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
+[1, 3, 5, 9, 155, -25]
+&gt;&gt;&gt; [x for x in filter(lambda x:not x&amp;1,[1,2,3,5,9,10,155,-20,-25])]
+[2, 10, -20]
+</code></pre></div>
+<p>当然你也可以传统的编写函数：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; def even(n):
+...    if n % 2 ==0:
+...         return True
+
+&gt;&gt;&gt; [x for x in filter(even,[1,2,3,5,9,10,155,-25])]
+[2, 10]
+</code></pre></div>
+<h4 id="zip函数">zip函数</h4>
+<p>这里就顺便把zip函数也一起提了，zip函数同样返回一个可迭代对象，它接受任意数目的可迭代对象，然后逐个取出可迭代对象元素构成一个元组成为自己的一个元素。和map函数类似<em>迭代深度由最短的那个可迭代对象决定</em>。</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; zip(['a','b','c'],[1,2,3,4])
+&lt;zip object at 0xb7055e6c&gt;
+&gt;&gt;&gt; [x for x in zip(['a','b','c'],[1,2,3,4])]
+[('a', 1), ('b', 2), ('c', 3)]
+&gt;&gt;&gt; list(zip(['a','b','c'],[1,2,3,4]))
+[('a', 1), ('b', 2), ('c', 3)]
+&gt;&gt;&gt; dict(zip(['a','b','c'],[1,2,3,4]))
+{'c': 3, 'b': 2, 'a': 1}
+</code></pre></div>
+<h4 id="列表到字典">列表到字典</h4>
+<p>这个例子似乎使用价值不大，只是说明zip函数接受任意数目参数的情况。y.items()解包之后是4个参数传递给zip函数，而zip函数的封装逻辑就是如果有人问我，我就把你们这些迭代对象每个取出一个元素，然后用元组包装之后返回。</p>
+<div class="highlight"><pre><span></span><code>x1 = ['a','b','c','e']
+x2 = [1,2,3,4]
+y = dict(zip(x1,x2))
+print('列表到字典：',y)
+new_x1,new_x2 = zip(*y.items())
+print(new_x1,new_x2)
+
+列表到字典： {'b': 2, 'c': 3, 'a': 1, 'e': 4}
+('b', 'c', 'a', 'e') (2, 3, 1, 4)
+</code></pre></div>
+<p>这个例子如果到更加复杂的情况，我们可以跳过字典形式，来个数据映射对：</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x1 = ['a','b','c','e']
+&gt;&gt;&gt; x2 = ['red','yellow','red','blue']
+&gt;&gt;&gt; x3 = [1,2,3,4]
+&gt;&gt;&gt; list(zip(x1,x2,x3))
+[('a', 'red', 1), ('b', 'yellow', 2), ('c', 'red', 3), ('e', 'blue', 4)]
+&gt;&gt;&gt; new_x1,new_x2,new_x3 = zip(*list(zip(x1,x2,x3)))
+&gt;&gt;&gt; new_x1
+('a', 'b', 'c', 'e')
+&gt;&gt;&gt; new_x2
+('red', 'yellow', 'red', 'blue')
+&gt;&gt;&gt; new_x3
+(1, 2, 3, 4)
+</code></pre></div>
+<p>当然对于多属性数据问题一般还是推荐使用类来处理，不过某些情况下可能不需要使用类，就这样简单处理之。</p>
+<p>值得一提的是这种数据存储形式和sql存储是一致的，而且不知道你们注意到没有，这似乎实现了矩阵的转置功能。</p>
+<h3 id="一些核心关键词参考">一些核心关键词参考</h3>
+<h4 id="all和any关键词">all和any关键词</h4>
+<p>这是python语言里面的关键词函数，源码很简单，下面列出来，看一下就清楚了:</p>
+<div class="highlight"><pre><span></span><code>def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return True
+
+def any(iterable):
+    for element in iterable:
+        if element:
+            return True
+    return False
+</code></pre></div>
+<p>如果用语言表述的话是:</p>
+<ul>
+<li>all，都是True，则返回True，否则返回False</li>
+<li>any，只要有一个True则返回True，否则返回False。</li>
+</ul>
+<h4 id="locals和globals">locals和globals</h4>
+<p>python的 <code>locals()</code> 返回本函数内的局部变量字典值，而 <code>globals()</code> 则返回本模块文件的全局变量。 <code>locals</code> 是只读的，而 <code>globals()</code> 不是，我们可以利用<code>globals()</code> 对脚本文件玩出一些新花样。</p>
+<h4 id="__name__-和-__file__"><code>__name__</code> 和 <code>__file__</code></h4>
+<p>这里所谓脚本被引入是指用import或者from语句被另外一个脚本引入进去，而这里所谓的脚本被执行是指直接如 <code>python test.py</code> 这样的形式执行该py脚本。</p>
+<p>这两种形式很有一些区别，下面慢慢谈论:</p>
+<ul>
+<li><code>__name__</code> 的区别。这个大家应该很熟悉了。如果脚本是被引入的，<code>__name__</code> 的值是该引入的脚本文件名，比如引入的是 <code>test.py</code> ，那么该脚本被引入，对于这个test.py文件来说，其内的 <code>__name__</code> 的值就是 <code>test</code> ，也就是 <strong>模块名</strong>  ；而如果是作为脚本被执行，则该 <code>__name__</code> 是 <code>__main__</code> 。</li>
+<li><code>__file__</code> 的区别。如果脚本是被执行的，假设该脚本文件是 <code>hello.py</code> ，那么在这个被执行脚本中， <code>__file__</code> 的值是 <code>hello.py</code> ，也就是 <strong>文件名</strong> 。如果是被引用的，那么对于那个被引入的脚本来说， <code>__file__</code> 的值是该被引入脚本相对系统来说的 <strong>完整文件名</strong> ，比如是 <code>/home/wanze/桌面/hello.py</code> 。</li>
+</ul>
+<h3 id="优先级参考">优先级参考</h3>
+<h4 id="操作符优先级">操作符优先级</h4>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Operator</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>~, +, -</td>
+<td>unary</td>
+</tr>
+<tr>
+<td>2</td>
+<td>**</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>*, /, //, %</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>+, -</td>
+<td>binary</td>
+</tr>
+<tr>
+<td>5</td>
+<td>&lt;&lt;, &gt;&gt;</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>&lt;, &lt;=, &gt;, &gt;=</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>==, !=</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>&amp;</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>|</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>=, +=, -=, *=, /=, %=, &amp;=, ^=,</td>
+<td>=, &gt;&gt;=, &lt;&lt;=</td>
+</tr>
+</tbody>
+</table>
+<h4 id="and-or-not的运算优先级">and or not的运算优先级</h4>
+<p>not优先级最高，and的优先级好比or的高，请看下面这个例子： </p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; True or True and False
+True
 </code></pre></div>
 <h3 id="参考资料">参考资料</h3>
 <ul>
