@@ -1,5 +1,5 @@
 Slug: emacs-orgmode-learning-notes
-Date: 2018
+Date: 20180316
 
 [TOC]
 

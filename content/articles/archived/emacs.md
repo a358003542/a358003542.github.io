@@ -1,5 +1,5 @@
 Slug: emacs
-Date: 2018
+Date: 20180316
 
 [TOC]
 

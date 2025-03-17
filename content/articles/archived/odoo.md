@@ -1,5 +1,5 @@
 Slug: odoo-learning-notes
-Date: 2019
+Date: 20190316
 
 [TOC]
 
