@@ -364,7 +364,16 @@ git commit -m "update submodule"
 
 ## 中文乱码问题
 
-主要参考了 [这个网页](https://segmentfault.com/a/1190000000578037) 。
+
+如果看到路径的中文字符以转义符号加数字的形式显示，那么可以通过设置：
+
+```
+git config --global core.quotepath false
+```
+
+来解决这个问题。
+
+此外参考了 [这个网页](https://segmentfault.com/a/1190000000578037) 。
 
 我的用户家目录下的 `.gitconfig` 文件有这些设置，读者可以参考下：
 

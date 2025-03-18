@@ -157,7 +157,7 @@ padding: 5px;
 
 下面这个图片来自 [这个网页](http://www.hicksdesign.co.uk/boxmodel/) 。
 
-![img]({static}/images/前端开发/html_box_model.png "html_box_model")
+![img]({static}/images/2019/html_box_model.png "html_box_model")
 
 [这篇文章](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Introduction_to_the_CSS_box_model) 讲解得很好。
 

@@ -4,13 +4,14 @@ BookAuthor: [美]Eric S. Raymond
 BookPublisher: 电子工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/unix编程艺术 - [美]Eric S. Raymond.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1Ity04KwkVTqa48Huj7uP2w?pwd=00mz 
-
+BookBaidupanDirectDownloadEpubUrl: https://pan.baidu.com/s/1Ity04KwkVTqa48Huj7uP2w?pwd=00mz 
+BookBaidupanDirectDownloadPdfUrl: https://pan.baidu.com/s/1nvXD0791nCOOJkZkGIsfUw?pwd=bicz
 
 
 [TOC]
 
-本书是epub格式 。
+本书是我手工输入整理用Latex排版而得，Github项目地址是： [github.com/a358003542/unixbianchengyishu](https://github.com/a358003542/unixbianchengyishu)
+
 
 
 
