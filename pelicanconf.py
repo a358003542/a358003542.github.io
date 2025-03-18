@@ -73,7 +73,6 @@ LINKS = (('MyGitHub', 'http://www.github.com/a358003542'),
 STATIC_PATHS = ['images',
                 'data',
                 'extra',
-                'html_pages',
                 ]
 
 EXTRA_PATH_METADATA = {
