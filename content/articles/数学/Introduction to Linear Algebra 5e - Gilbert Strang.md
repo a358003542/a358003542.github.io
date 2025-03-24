@@ -3,6 +3,7 @@ BookName: Introduction to Linear Algebra 5e
 BookAuthor: Gilbert Strang
 BookPublisher: Wellesley
 BookLanguage: 英语
+BookScore: 4
 BookCover: /images/Covers/Introduction to Linear Algebra 5e - Gilbert Strang.jpg
 BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1atsVq_494D3f8r5nDIKTJg?pwd=5q6m
 

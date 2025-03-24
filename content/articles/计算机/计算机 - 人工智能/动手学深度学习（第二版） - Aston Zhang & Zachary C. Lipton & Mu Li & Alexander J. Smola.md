@@ -1,6 +1,7 @@
 Template: bookref
 BookName: 动手学深度学习（第二版）
 BookAuthor: Aston Zhang & Zachary C. Lipton & Mu Li & Alexander J. Smola
+BookScore: 5
 BookPublisher: Cambridge University Press
 BookLanguage: 中文
 BookCover: /images/Covers/动手学深度学习（第二版） - Aston Zhang & Zachary C. Lipton & Mu Li & Alexander J. Smola.jpg

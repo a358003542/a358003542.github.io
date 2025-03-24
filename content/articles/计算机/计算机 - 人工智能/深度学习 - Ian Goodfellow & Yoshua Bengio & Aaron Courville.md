@@ -3,6 +3,7 @@ BookName: 深度学习
 BookAuthor: Ian Goodfellow & Yoshua Bengio & Aaron Courville
 BookPublisher: MIT Press
 BookLanguage: 中文
+BookScore: 5
 BookCover: /images/Covers/深度学习 - Ian Goodfellow & Yoshua Bengio & Aaron Courville.jpg
 BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1DV2pPoT6_hMhdgJwxQs2EA?pwd=6hmh
 

@@ -17,7 +17,7 @@ git clone https://github.com/a358003542/xelatex-guide-book.git
 ```
 
 -   初始化本地仓库 `git init` 命令用于初始化本地仓库， `git clone` 下来的仓库文件已经初始化了，然后 `origin` 这个远程服务器名字也已经加上去了。
--   本地仓库进入索引 你可以先用 `git status` 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 `git checkout what` 来放弃这个更改，如果某项改动你想提交上去，则用 `git add what` 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 `--all` 选项：
+-   本地仓库进入索引 你可以先用 `git status` 命令查看一下当前仓库的改动情况，如果某个文件你不想改动，可以用 `git restore what` 来放弃这个更改，如果某项改动你想提交上去，则用 `git add what` 把目标文件加入索引。这个add命令也可以跟上某个文件夹名，则该文件夹下所有的文件都将被跟踪。然后你本地删除了某个文件，如果你希望仓库也删除这个文件，那么可以加上 `--all` 选项：
 
 ```bash
 git add --all which_folder
@@ -152,21 +152,21 @@ git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --grap
 
 
 ## 切换版本
-
 切回到另外一个版本中去：
 
 ```bash
-git checkout  3fbdf2c
+git reset  3fbdf2c
 ```
 
 具体commit的hash值可用git log查看之，这个命令将会将本地文件夹返回到某个特定的版本状态。
 
+
 ## 取消对文件的修改
 
 ```bash
-git  checkout  file_or_folder
+git  restore  file_or_folder
 ```
-如果你修改了某个文件，还没有add和commit，然后对现在修改不满意，想全部舍弃。那么可以如上使用checkout某个文件或者文件夹来取消修改，从而文件回滚到最后一次commit时未修改的样子。
+如果你修改了某个文件，还没有add和commit，然后对现在修改不满意，想全部舍弃。那么可以如上使用restore某个文件或者文件夹来取消修改，从而文件回滚到最后一次commit时未修改的样子。
 
 ## 最后一次commit的更改
 
@@ -182,9 +182,25 @@ git commit --amend
 ## 取消已经add了的文件
 如果你不小心 `add .` 所有的文件，然后有些文件你不想add的，那么可以如下取消add操作。
 ```bash
-git reset HEAD file_or_folder
+git restore --staged file_or_folder
 ```
 
+## commit几次之后的后悔行为
+如果你commit几次了，然后对这几次commit都不太满意，想回滚到之前的某个commit下。可以如下：
+
+
+```bash
+git reset --hard commit_id
+
+## 修改
+## 新的commit
+git push --force
+```
+
+- `--mixed` 是默认的选项，重设索引，本地文件修改都会保留。
+- `--hard` 是强制回滚到那个版本，重设索引，而且你的本地文件修改也会丢失。
+- `--soft` 是你做的本地修改和索引都不更改，只是说git现在回滚到那个版本了。
+- 因为你很有可能之前远程仓库的commit已经推送了，所以这个时候是需要加上 `--force` 选项的。
 
 
 ## 分支功能
@@ -294,21 +310,6 @@ git push --tag
 
 
 
-## commit几次之后的后悔行为
-
-如果你commit几次了，然后对这几次commit都不太满意，想回滚到之前的某个commit下。可以如下：
-
-
-```bash
-git reset --hard commit_id
-
-## 修改
-## 新的commit
-git push --force
-```
-
-- `--hard` 是强制回滚到那个版本，重设索引，而且你的本地文件修改也会丢失。 `--soft` 是你做的本地修改和索引都不更改，只是说git现在回滚到那个版本了。`--mixed` 是默认的选项，重设索引，本地文件修改都会保留。
-- 因为你很有可能之前远程仓库的commit已经推送了，所以这个时候是需要加上 `--force` 选项的。
 
 ## 子模块功能
 

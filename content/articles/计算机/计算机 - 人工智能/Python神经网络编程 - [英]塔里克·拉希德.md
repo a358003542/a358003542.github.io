@@ -3,6 +3,7 @@ BookName: Python神经网络编程
 BookAuthor: [英]塔里克·拉希德
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
+BookScore: 5
 BookCover: /images/Covers/Python神经网络编程 - [英]塔里克·拉希德.jpg
 BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1i2UrHiBlA2yxjq4607gU5A?pwd=aaae
 
