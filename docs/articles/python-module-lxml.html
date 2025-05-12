@@ -5,18 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="前言
-你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。lxml模块对xpath语句有着很好的支持:
-
-此外lxml还可以很方便的去构建一个xml或者lxml文本：
-
-实际上..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#前言&#34;&gt;前言&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#如何按照xpath删除元素&#..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -47,17 +43,6 @@
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -93,22 +78,6 @@
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#如何按照xpath删除元素">如何按照xpath删除元素</a></li>
-<li><a href="#xpath简明教程">xpath简明教程</a><ul>
-<li><a href="#选择title">选择title</a></li>
-<li><a href="#选择title包含的文本">选择title包含的文本</a></li>
-<li><a href="#按照id选择">按照id选择</a></li>
-<li><a href="#继续往下选">继续往下选</a></li>
-<li><a href="#选择目标标签的属性">选择目标标签的属性</a></li>
-<li><a href="#string">string</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-03-09T00:00:00+08:00">2023年 3月 9日 </time>
                 </div>
@@ -125,23 +94,39 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#如何按照xpath删除元素">如何按照xpath删除元素</a></li>
+<li><a href="#xpath简明教程">xpath简明教程</a><ul>
+<li><a href="#选择title">选择title</a></li>
+<li><a href="#选择title包含的文本">选择title包含的文本</a></li>
+<li><a href="#按照id选择">按照id选择</a></li>
+<li><a href="#继续往下选">继续往下选</a></li>
+<li><a href="#选择目标标签的属性">选择目标标签的属性</a></li>
+<li><a href="#string">string</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="前言">前言</h2>
 <p>你就会发现xpath语句才是正确的从xml或html中抽取信息的标准流程化语言，而即使是功能还算强大的css selector选择器，其实也不过是xpath语句的精简版。lxml模块对xpath语句有着很好的支持:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">etree</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
 <span class="n">selector</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
-<span class="n">html_e</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">'//title'</span><span class="p">)</span>
+<span class="n">html_e</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//title&#39;</span><span class="p">)</span>
 </code></pre></div>
-<p>此外lxml还可以很方便的去构建一个xml或者lxml文本：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">etree</span>
 
-<span class="n">root</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
-<span class="n">child_1</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">'child_1'</span><span class="p">)</span>
-<span class="n">child_1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span>
-<span class="n">child_1</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">'this is a text'</span>
-<span class="n">child_2</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">'child_2'</span><span class="p">)</span>
+<p>此外lxml还可以很方便的去构建一个xml或者lxml文本：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">)</span>
+<span class="n">child_1</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;child_1&#39;</span><span class="p">)</span>
+<span class="n">child_1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">child_1</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;this is a text&#39;</span>
+<span class="n">child_2</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;child_2&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </code></pre></div>
+
 <p>实际上xml几乎是可以表达任何结构信息的，从简单的html到复杂的语法树。而基于xpath我们可以实现对于非常复杂的结构信息的精准信息搜索定位等操作。</p>
 <p>关于xml谁是element谁是属性并没有特别的标准了，很可能实际上完全是两个相同的结构信息会有不同的xml结构表达，这方面各个具体实现领域有不同的考量，但在实践上还是有很多参考指导建议的，这个感兴趣的可以看下<a href="https://www.ibm.com/developerworks/library/x-eleatt/">这个网页</a> 。</p>
 <p>lxml类似于beautifulsoup也提供了find和find_all方法，但还是推荐读者使用xpath方法，实际上据说lxml里面的find和find_all方法也是基于lxml的xpath方法的，推荐读者多多使用xpath方法，熟悉xpath语法。</p>
@@ -149,11 +134,12 @@
 <p>关于具体的使用下面有时间慢慢写上一些。</p>
 <h2 id="如何按照xpath删除元素">如何按照xpath删除元素</h2>
 <p>参考了 <a href="https://stackoverflow.com/questions/7981840/how-to-remove-an-element-in-lxml">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">remove_tag_by_xpath</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">xpath</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">remove_tag_by_xpath</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">xpath</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">bad</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">):</span>
         <span class="n">bad</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bad</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">tree</span>
 </code></pre></div>
+
 <h2 id="xpath简明教程">xpath简明教程</h2>
 <p>下面主要通过各个例子简要介绍xpath语法之，参考了 <a href="http://www.ruanyifeng.com/blog/2009/07/xpath_path_expressions.html">阮一峰的这篇文章</a> 和菜鸟教程的xpath教程。</p>
 <p><strong><a href="https://devhints.io/xpath">xpath参考手册提供了更多的使用样例</a></strong></p>
@@ -161,47 +147,58 @@
 <div class="highlight"><pre><span></span><code>/what   基本路径表达，下个节点
 //what  基本路径表达，任意位置的下个节点
 </code></pre></div>
+
 <p>这里 <code>/</code> 表示在下个节点中匹配， <code>//</code> 下个或所有子节点匹配。 </p>
-<div class="highlight"><pre><span></span><code>//div[@id='what']   根据id定位
-//div[@id='what']/a[1] 根据id定位后找下面的第一个a标签
-//div[@id='what']/a[*] 根据id定位后找下面的所有a标签
+<div class="highlight"><pre><span></span><code>//div[@id=&#39;what&#39;]   根据id定位
+//div[@id=&#39;what&#39;]/a[1] 根据id定位后找下面的第一个a标签
+//div[@id=&#39;what&#39;]/a[*] 根据id定位后找下面的所有a标签
 </code></pre></div>
+
 <p>这里 <code>*</code> 表示所有的意思。</p>
 <div class="highlight"><pre><span></span><code>//div[@name]   找具有name属性的div标签
 
-//div[@name='what'] 找name属性等于what的div标签 
+//div[@name=&#39;what&#39;] 找name属性等于what的div标签 
 
-//*[contains(@class,'what')] 找某个标签class属性有 what NOTICE: 这里的意思是有，多个class属性也是可以匹配的 class="what what_what"
-//div[@class='what'] 那个目标标签的class属性就是what，也就是匹配的是 class="what"
+//*[contains(@class,&#39;what&#39;)] 找某个标签class属性有 what NOTICE: 这里的意思是有，多个class属性也是可以匹配的 class=&quot;what what_what&quot;
+//div[@class=&#39;what&#39;] 那个目标标签的class属性就是what，也就是匹配的是 class=&quot;what&quot;
 
-//*[@id="list"]//dd[*]/a[@href and @title] 找id=list的标签下面的所有dd标签下面的a标签，a标签必须有href和title属性。
+//*[@id=&quot;list&quot;]//dd[*]/a[@href and @title] 找id=list的标签下面的所有dd标签下面的a标签，a标签必须有href和title属性。
 </code></pre></div>
+
 <div class="highlight"><pre><span></span><code>//title[@*]  选择title，随意属性，但title标签必须有属性
 </code></pre></div>
+
 <h3 id="选择title">选择title</h3>
 <div class="highlight"><pre><span></span><code>//title
 </code></pre></div>
+
 <p>这是选择到了文档中任意位置的 title 标签， <code>/</code> 开头的话会选择根节点，这不太好用。</p>
 <h3 id="选择title包含的文本">选择title包含的文本</h3>
 <div class="highlight"><pre><span></span><code>//title/text()
 </code></pre></div>
+
 <h3 id="按照id选择">按照id选择</h3>
-<div class="highlight"><pre><span></span><code>//div[@id='post-date']/text()
+<div class="highlight"><pre><span></span><code>//div[@id=&#39;post-date&#39;]/text()
 </code></pre></div>
+
 <p>上面例子的意思是选择一个div标签，其有id属性 <code>post-date</code> ，如果div改为 <code>*</code> 则为随便什么标签名字。</p>
 <h3 id="继续往下选">继续往下选</h3>
-<div class="highlight"><pre><span></span><code>//*[@id='js_profile_qrcode']/div/p[1]/span/text()
+<div class="highlight"><pre><span></span><code>//*[@id=&#39;js_profile_qrcode&#39;]/div/p[1]/span/text()
 </code></pre></div>
+
 <h3 id="选择目标标签的属性">选择目标标签的属性</h3>
-<div class="highlight"><pre><span></span><code>////*[@id='js_profile_qrcode']//a/@href
+<div class="highlight"><pre><span></span><code>////*[@id=&#39;js_profile_qrcode&#39;]//a/@href
 </code></pre></div>
+
 <h3 id="string">string</h3>
 <p>对于选择的节点（注意如果返回的是节点集 nodeset将只取第一个），将所有的节点（也就是包括子节点）的文本抽取出来并合并。</p>
-<div class="highlight"><pre><span></span><code>string(//div[@class="lemma-summary"])
+<div class="highlight"><pre><span></span><code>string(//div[@class=&quot;lemma-summary&quot;])
 </code></pre></div>
+
 <p>如果你想提取本element节点下所有的问题：</p>
-<div class="highlight"><pre><span></span><code>e.xpath('string(.)')
+<div class="highlight"><pre><span></span><code>e.xpath(&#39;string(.)&#39;)
 </code></pre></div>
+
 <p>这里 <code>.</code> 的意思是选取当前节点，而 <code>..</code> 是选取当前节点的父节点。</p>
             </div>
         </div>
@@ -237,7 +234,6 @@
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

@@ -5,17 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="pyinstaller制作exe
-简介
-所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。
-推荐使用pyinstaller。 pyinstaller的官网在 这里 。安装就是用pip安装即可。
-然后推荐在你的项..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#pyinstaller制作exe&#34;&gt;pyinstaller制作exe&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -46,17 +43,6 @@
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -92,22 +78,6 @@
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#pyinstaller制作exe">pyinstaller制作exe</a><ul>
-<li><a href="#简介">简介</a></li>
-<li><a href="#输出单个exe文件">输出单个exe文件</a></li>
-<li><a href="#环境配置和使用建议">环境配置和使用建议</a></li>
-<li><a href="#不弹出那个cmd窗口">不弹出那个cmd窗口</a></li>
-<li><a href="#修改输出exe名字">修改输出exe名字</a></li>
-<li><a href="#检查python包依赖情况">检查python包依赖情况</a></li>
-<li><a href="#添加额外的文件">添加额外的文件</a></li>
-<li><a href="#python包里面的数据文件">python包里面的数据文件</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-07-14T00:00:00+08:00">2023年 7月 14日 </time>
                 </div>
@@ -124,7 +94,21 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#pyinstaller制作exe">pyinstaller制作exe</a><ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#输出单个exe文件">输出单个exe文件</a></li>
+<li><a href="#环境配置和使用建议">环境配置和使用建议</a></li>
+<li><a href="#不弹出那个cmd窗口">不弹出那个cmd窗口</a></li>
+<li><a href="#修改输出exe名字">修改输出exe名字</a></li>
+<li><a href="#检查python包依赖情况">检查python包依赖情况</a></li>
+<li><a href="#添加额外的文件">添加额外的文件</a></li>
+<li><a href="#python包里面的数据文件">python包里面的数据文件</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="pyinstaller制作exe">pyinstaller制作exe</h2>
 <h3 id="简介">简介</h3>
 <p>所谓的exe制作也就是把你写python程序freeze起来，这样目标机器上用户没有安装python或者等等其他依赖都能正常运行程序。</p>
@@ -134,18 +118,22 @@
 <p>具体使用很简单：</p>
 <div class="highlight"><pre><span></span><code>pyinstaller you_entry_point.py
 </code></pre></div>
+
 <p>当然该脚本文件不一定在当前目录下，你也可以如下来指定目标脚本文件：</p>
 <div class="highlight"><pre><span></span><code>pyinstaller yaogua\gui.py
 </code></pre></div>
+
 <p>如果一切顺利，到 <code>dist</code> 文件夹下运行你的目标程序exe运行正常，一切都OK，那么恭喜你了。没必要继续往下看了。如果出问题了，那么请钻研官方文档吧，下面也会做出一些补充说明。</p>
 <p>首先你不能依靠自动生成的 <code>.spec</code> 文件了，接下来讨论了很多定制都是基于对这个 <code>.spec</code> 文件的修改。修改好了之后你后面要运行pyinstaller需要如下运行了：</p>
 <div class="highlight"><pre><span></span><code>pyinstaller you_entry_point.spec
 </code></pre></div>
+
 <h3 id="输出单个exe文件">输出单个exe文件</h3>
 <p>一般桌面端程序和较大型的项目是不推荐输出单个exe文件的，而对于一些小型的项目或者命令行工具，输出单个exe文件有时是很便捷的。然后在某些情况下你可能会遇到找不到python3.*.dll之类的错误，那么这个时候是一定要采用输出单个exe文件的方案的。</p>
 <p>对于输出单个exe文件方案的spec文件，你先如下生成最基本的spec文件：</p>
 <div class="highlight"><pre><span></span><code>pyinstaller -F you_entry_point.py
 </code></pre></div>
+
 <p>然后接下来就是对该spec文件进行一些定制工作了。</p>
 <h3 id="环境配置和使用建议">环境配置和使用建议</h3>
 <p>你的python项目推荐使用虚拟环境，只安装必要的python依赖。然后python系统最好没有安装pyside2之类的模块，免得有干扰。然后你的pyinstaller安装在虚拟环境里面，一切命令执行也在虚拟环境里面。</p>
@@ -158,17 +146,20 @@
 <p>一般pyinstaller输出之后很多时候出问题是python包依赖没有正确检测到，通过查看<code>build/{name}/xref-{name}.html</code> 这个文件来确认python包依赖是否都加载进去了，没有则修改<code>a = Analysis</code> 下的 <code>hiddenimports</code> 字段，将缺失的模块名加入进去。</p>
 <h3 id="添加额外的文件">添加额外的文件</h3>
 <p>spec文件下配置 <code>datas</code> 这个列表值：</p>
-<div class="highlight"><pre><span></span><code>datas=[ ('src/README.txt', '.') ],
+<div class="highlight"><pre><span></span><code>datas=[ (&#39;src/README.txt&#39;, &#39;.&#39;) ],
 </code></pre></div>
+
 <p>大概意思是把那里的那个文件copy到目标dist文件夹的那里。</p>
 <h3 id="python包里面的数据文件">python包里面的数据文件</h3>
 <p>推荐都规范为使用 <code>pkg_resources</code> 来管理：</p>
 <div class="highlight"><pre><span></span><code>from pkg_resources import resource_filename
 </code></pre></div>
+
 <p>但是这样你的数据文件exe程序还是不能使用的，你需要按照上面做的添加额外的文件，来把各个文件添加进去，比如：</p>
-<div class="highlight"><pre><span></span><code>             datas=[('yaogua/html_resource','yaogua/html_resource'),
-             ('yaogua/yaogua.json','yaogua')],
+<div class="highlight"><pre><span></span><code>             datas=[(&#39;yaogua/html_resource&#39;,&#39;yaogua/html_resource&#39;),
+             (&#39;yaogua/yaogua.json&#39;,&#39;yaogua&#39;)],
 </code></pre></div>
+
 <p>上面是把yaogua模块的html_resource下的所有文件内容都复制到dist文件夹下的对应软件名的yaogua的html_resource那里，这样使用 <code>resource_filename</code> 引用路径仍是可行的可用的。</p>
             </div>
         </div>
@@ -204,7 +195,6 @@
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

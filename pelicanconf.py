@@ -5,16 +5,8 @@ import os
 import sys
 from pathlib import Path
 
-from pywander.pathlib import gen_allfile
-
 BASE_DIR = Path(__file__).resolve().parent
 sys.path.append(str(BASE_DIR))
-
-# apply patches
-import mypatches
-
-# article.summary 最大长度 搜索功能也是基于此 网页显示再适当截断
-SUMMARY_MAX_LENGTH = 1500
 
 # set the author metadata
 AUTHOR = 'wander'
@@ -140,34 +132,18 @@ READERS = {'html': None}
 # auto add template pages
 # not include the articles and dates jinja2 env variables
 template_file_startpath = 'content/template_pages'
+from pywander_utils import gen_all_file2, remove_first_directory
 TEMPLATE_PAGES = {}
-for template_src in gen_allfile(template_file_startpath, filetype="html$"):
-    template_dest = template_src
-    template_src = os.path.join('template_pages', template_src)
+for template_src in gen_all_file2(template_file_startpath, filetype="html$"):
+    template_src = remove_first_directory(template_src)
+    template_dest = remove_first_directory(template_src)
     TEMPLATE_PAGES[template_src] = template_dest
-
 
 
 ################################### plugin #################
 PLUGIN_PATHS = ['myplugins']
 
-PLUGINS = ['extract_toc', 'search_content', 'sitemap', 'pandoc_html', 'bookref']
-
-
-SITEMAP = {
-    'format': 'xml',
-    'priorities': {
-        'articles': 0.8,
-        'indexes': 0.2,
-        'pages': 0.5
-    },
-    'changefreqs': {
-        'articles': 'weekly',
-        'indexes': 'weekly',
-        'pages': 'monthly'
-    },
-    'exclude': ['tags/', 'categorys/']
-}
+PLUGINS = ['bookref']
 
 ##################################################################
 BOOKREFAUTHOR_SAVE_AS = 'bookref_author/{slug}.html'

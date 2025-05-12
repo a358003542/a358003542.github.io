@@ -5,15 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="前言
-如何表示物理量这个问题在各个科学学科研究中是一个很基本的问题，关于这一块python有很多模块，但这一块最好是有一个公用的解决方案以供其他具体科学学科的python模块来调用。
-scipy模块有一个子模块constants，其提供了一些物理常数，不过这些物理常数具体就是一些数值，最好这些..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#前言&#34;&gt;前言&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#pint模块&#34;&gt;..." />
 
 
 <meta name="keywords" content=", archived, " />
@@ -44,17 +43,6 @@ scipy模块有一个子模块constants，其提供了一些物理常数，不过
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -90,19 +78,6 @@ scipy模块有一个子模块constants，其提供了一些物理常数，不过
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#pint模块">pint模块</a><ul>
-<li><a href="#定义unit">定义unit</a></li>
-<li><a href="#定义物理常数">定义物理常数</a></li>
-<li><a href="#前缀支持">前缀支持</a></li>
-<li><a href="#单位转换">单位转换</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
                 </div>
@@ -119,7 +94,18 @@ scipy模块有一个子模块constants，其提供了一些物理常数，不过
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#pint模块">pint模块</a><ul>
+<li><a href="#定义unit">定义unit</a></li>
+<li><a href="#定义物理常数">定义物理常数</a></li>
+<li><a href="#前缀支持">前缀支持</a></li>
+<li><a href="#单位转换">单位转换</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="前言">前言</h2>
 <p>如何表示物理量这个问题在各个科学学科研究中是一个很基本的问题，关于这一块python有很多模块，但这一块最好是有一个公用的解决方案以供其他具体科学学科的python模块来调用。</p>
 <p>scipy模块有一个子模块constants，其提供了一些物理常数，不过这些物理常数具体就是一些数值，最好这些基本的物理常数作为物理量就是Quantity类。astropy是一个专门解决天文学方面问题的python支持模块，其有一个物理单位系统，然后里面的物理常数都是其内部定义的Quantity类，而其Quantity类是继承自np.ndarray的，个人觉得这依赖有点大了。当然它这么设计也是为了对numpy有很好的支持。然后chempy这个模块里面的单位系统依赖 <a href="https://github.com/python-quantities/python-quantities">python-quantites</a> 这个模块，其Quantity类也是继承自np.ndarray。</p>
@@ -138,6 +124,7 @@ scipy模块有一个子模块constants，其提供了一些物理常数，不过
     candela
 @end
 </code></pre></div>
+
 <p>上面这样的配置是刷单位系统的。</p>
 <p>比如：</p>
 <div class="highlight"><pre><span></span><code>minute = 60 * second = min
@@ -145,17 +132,19 @@ hour = 60 * minute = hr
 day = 24 * hour = d
 week = 7 * day
 </code></pre></div>
+
 <p>就基本的使用如下：</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from pint import UnitRegistry
 &gt;&gt;&gt; unit = UnitRegistry()
 &gt;&gt;&gt; d = 3* unit.meter + 4*unit.centimeter
 &gt;&gt;&gt; d
-&lt;Quantity(3.04, 'meter')&gt;
+&lt;Quantity(3.04, &#39;meter&#39;)&gt;
 &gt;&gt;&gt; d.magnitude
 3.04
 &gt;&gt;&gt; d.units
-&lt;Unit('meter')&gt;
+&lt;Unit(&#39;meter&#39;)&gt;
 </code></pre></div>
+
 <p>按照pint源码的写法，<code>UnitRegistry</code> 类  <code>SystemRegistry</code> 类，<code>ContextRegistry</code> 类， <code>NonMultiplicativeRegistry</code> 类和 <code>BaseRegistry</code> 类的各个初始化动作都执行了一遍。而且由于 <code>BaseRegistry</code> 类的元类加入这样的定制：</p>
 <div class="highlight"><pre><span></span><code>class RegistryMeta(type):
     def __call__(self, *args, **kwargs):
@@ -163,43 +152,53 @@ week = 7 * day
         obj._after_init()
         return obj
 </code></pre></div>
+
 <p>使得 <code>BaseRegistry</code> 类初始化动作还额外挂载了 <code>_after_init</code> 动作。这个额外的挂载动作主要的一句是：</p>
-<div class="highlight"><pre><span></span><code>        if self._filename == "":
-            self.load_definitions("default_en.txt", True)
+<div class="highlight"><pre><span></span><code>        if self._filename == &quot;&quot;:
+            self.load_definitions(&quot;default_en.txt&quot;, True)
         elif self._filename is not None:
             self.load_definitions(self._filename)
 </code></pre></div>
+
 <p>其就是加载默认的definition文本。该文本定义的规则和语法都是pint模块自己定义的，大体如下：</p>
 <h3 id="定义unit">定义unit</h3>
 <div class="highlight"><pre><span></span><code>&lt;canonical name&gt; = &lt;relation to another unit or dimension&gt; [= &lt;symbol&gt;] [= &lt;alias&gt;] 
 </code></pre></div>
+
 <p>比如：</p>
 <div class="highlight"><pre><span></span><code>minute = 60 * second = min
 </code></pre></div>
+
 <p>然后：</p>
 <div class="highlight"><pre><span></span><code>second = [time] = s = sec
 </code></pre></div>
+
 <p><code>[time]</code> 这个写法是说本单位是一个最基本的维度单位。</p>
 <p>还有这种写法：</p>
 <div class="highlight"><pre><span></span><code>[velocity] = [length] / [time] = [speed]
 </code></pre></div>
+
 <p>这是定义衍生维度单位。</p>
 <div class="highlight"><pre><span></span><code>@alias meter = metro = metr
 </code></pre></div>
+
 <p>这是定义单位别名。</p>
 <h3 id="定义物理常数">定义物理常数</h3>
 <div class="highlight"><pre><span></span><code>speed_of_light = 299792458 m/s = c = c_0
 </code></pre></div>
+
 <p>这个speed_of_light实际上就是一个单位。</p>
 <h3 id="前缀支持">前缀支持</h3>
 <p>kilogram在定义文件里面是没有写的，不过也是可以直接使用的，因为其加入了下面这样的前缀支持语句：</p>
 <div class="highlight"><pre><span></span><code>kilo- =  1e3   = k-
 </code></pre></div>
+
 <p>然后发现kilograms最后也会读取为kilogram单位。</p>
 <h3 id="单位转换">单位转换</h3>
 <div class="highlight"><pre><span></span><code><span class="n">test_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">unit</span><span class="o">.</span><span class="n">L</span>
-<span class="k">assert</span> <span class="n">test_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">'meter ** 3'</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">test_value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;meter ** 3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 </code></pre></div>
+
 <p>具体就是使用to方法，还是比较智能的了，看的出来这个模块从设计后后面的分析计算花了很多心思的。</p>
 <p>整个单位的转换和计算还有有效位数问题这个后面有时间再讨论。</p>
             </div>
@@ -236,7 +235,6 @@ week = 7 * day
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

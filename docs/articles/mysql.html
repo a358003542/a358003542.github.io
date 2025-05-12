@@ -5,20 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="在阅读本文之前推荐先阅读 SQL核心教程 一文，对SQL语言有一个基本的认识。
-ubuntu22.04安装mariadb
-
-初次安装还需要运行如下脚本：
-
-这里我选择了移除匿名用户，禁止root用户远程登录，移除test database和重载权限表格。
-mariadb设置用户可以远程登录
-本..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ubuntu2204安装mariadb&#34;&gt;ubuntu22.04安装mariadb&lt;/a&gt;&lt;/li&gt;
+&lt;li&..." />
 
 
 <meta name="keywords" content=", archived, " />
@@ -49,17 +43,6 @@ mariadb设置用户可以远程登录
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -95,7 +78,22 @@ mariadb设置用户可以远程登录
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-03-09T00:00:00+08:00">2023年 3月 9日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-17T00:00:00+08:00">2023年 10月 17日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
                 <div class="toc">
 <ul>
 <li><a href="#ubuntu2204安装mariadb">ubuntu22.04安装mariadb</a></li>
@@ -126,40 +124,27 @@ mariadb设置用户可以远程登录
 </li>
 </ul>
 </div>
-
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-03-09T00:00:00+08:00">2023年 3月 9日 </time>
-                </div>
-
-                <div class="p-1">最近更新于：<time datetime="2023-10-17T00:00:00+08:00">2023年 10月 17日 </time>
-                </div>
-
-
-                <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-8 col-lg-8">
-            <div class="article-content">
-                
 <p>在阅读本文之前推荐先阅读 <a href="https://a358003542.github.io/articles/sql-core-tutorial.html">SQL核心教程</a> 一文，对SQL语言有一个基本的认识。</p>
 <h3 id="ubuntu2204安装mariadb">ubuntu22.04安装mariadb</h3>
 <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mariadb-server
 </code></pre></div>
+
 <p>初次安装还需要运行如下脚本：</p>
 <div class="highlight"><pre><span></span><code>sudo mysql_secure_installation
 </code></pre></div>
+
 <p>这里我选择了移除匿名用户，禁止root用户远程登录，移除test database和重载权限表格。</p>
 <h3 id="mariadb设置用户可以远程登录">mariadb设置用户可以远程登录</h3>
 <p>本小节的讨论主要参考了 <a href="https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/">官方文档的这篇文章</a> 。</p>
 <p>首先你需要以root用户的身份登录</p>
 <div class="highlight"><pre><span></span><code>sudo mysql -u root -p
 </code></pre></div>
+
 <p>默认是没设密码，直接按Enter。</p>
 <p>然后需要如下配置好一个用户访问权限</p>
-<div class="highlight"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'wander'</span><span class="nv">@'192.168.30.%'</span><span class="w"> </span><span class="k">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'admin@123'</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="k">GRANT</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;wander&#39;</span><span class="nv">@&#39;192.168.30.%&#39;</span><span class="w"> </span><span class="k">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;admin@123&#39;</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="k">GRANT</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span>
 </code></pre></div>
+
 <ul>
 <li>第一个 <code>*.*</code> 的意思是所有database的所有表格。</li>
 <li>wander这里是具体的用户名，读者请选择自己的。</li>
@@ -169,82 +154,104 @@ mariadb设置用户可以远程登录
 <p>然后你还需要把 <code>/etc/mysql/mariadb.conf.d/50-server.cnf</code> 文件里面的</p>
 <div class="highlight"><pre><span></span><code>bind-address     = 127.0.0.1
 </code></pre></div>
+
 <p>这一行注释掉。</p>
 <p>然后再重启mysql服务，则该用户可以远程登录了。</p>
 <div class="highlight"><pre><span></span><code>systemctl restart mysql
 </code></pre></div>
+
 <h3 id="列出数据库">列出数据库</h3>
 <div class="highlight"><pre><span></span><code><span class="k">show</span><span class="w"> </span><span class="k">databases</span><span class="p">;</span>
 </code></pre></div>
+
 <h3 id="切换数据库">切换数据库</h3>
 <div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">mysql</span><span class="p">;</span>
 </code></pre></div>
+
 <h3 id="列出表格">列出表格</h3>
 <div class="highlight"><pre><span></span><code><span class="k">show</span><span class="w"> </span><span class="k">tables</span><span class="p">;</span>
 </code></pre></div>
+
 <h3 id="创建数据库">创建数据库</h3>
 <p>我们先创建一个新的数据库:</p>
 <div class="highlight"><pre><span></span><code><span class="k">create</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">test</span><span class="p">;</span>
 </code></pre></div>
+
 <h4 id="创建数据库指定字符集">创建数据库指定字符集</h4>
 <div class="highlight"><pre><span></span><code>create database database_name character set utf8 collate utf8_unicode_ci;
 </code></pre></div>
+
 <h3 id="创建表格">创建表格</h3>
 <div class="highlight"><pre><span></span><code><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="n">y</span><span class="w"> </span><span class="kt">integer</span><span class="p">,</span><span class="n">z</span><span class="w"> </span><span class="kt">integer</span><span class="p">);</span>
 </code></pre></div>
+
 <p>这里就简单创建了一个名叫test的表格，然后定义表头为三个整数，integer和int是一个意思。</p>
 <h3 id="修改列字段">修改列字段</h3>
 <p>增加一列</p>
 <div class="highlight"><pre><span></span><code>alter table table_name add (column_name data_type);
 </code></pre></div>
+
 <p>删除一列</p>
 <div class="highlight"><pre><span></span><code>alter table table_name drop column column_name;
 </code></pre></div>
+
 <p>修改某列数据类型</p>
 <div class="highlight"><pre><span></span><code>alter table talbe_name modify column_name data_type;
 </code></pre></div>
+
 <h3 id="插入数据">插入数据</h3>
 <p>插入数据和其他sql数据库一样还是insert into这样的语句格式。</p>
 <div class="highlight"><pre><span></span><code><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">;</span>
 </code></pre></div>
+
 <p>从一个表格中读取数据然后插入数据：</p>
 <div class="highlight"><pre><span></span><code>insert into target_tb (column_name) select column_name from source_tb; 
 </code></pre></div>
+
 <h3 id="更新数据">更新数据</h3>
-<div class="highlight"><pre><span></span><code>update user set last_name ='amy' where id = 3 ; 
+<div class="highlight"><pre><span></span><code>update user set last_name =&#39;amy&#39; where id = 3 ; 
 </code></pre></div>
+
 <h3 id="删除数据">删除数据</h3>
 <p>根据条件删除数据</p>
 <div class="highlight"><pre><span></span><code>delete from table_name where a = 1 ;
 </code></pre></div>
+
 <p>删除表格中所有数据</p>
 <div class="highlight"><pre><span></span><code>delete from table_name ;
 </code></pre></div>
+
 <h3 id="删除table">删除table</h3>
 <div class="highlight"><pre><span></span><code><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">test</span><span class="p">;</span>
 </code></pre></div>
+
 <h3 id="删除database">删除database</h3>
 <div class="highlight"><pre><span></span><code><span class="k">drop</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">test</span><span class="p">;</span>
 </code></pre></div>
+
 <h3 id="别名">别名</h3>
 <p>前面说了select字句是不仅可以运算列，还可以重新构建一个列，这些列mysql会自动为其创建默认名字，你也可以明确指定该名字，用如下 <strong>as</strong> 关键词，如下所示:</p>
-<div class="highlight"><pre><span></span><code>select emp_id, 'ACTIVE' as status, emp_id * 3.1415926 as empid_x_pi, upper(lname) as last_name_upper from employee;
+<div class="highlight"><pre><span></span><code>select emp_id, &#39;ACTIVE&#39; as status, emp_id * 3.1415926 as empid_x_pi, upper(lname) as last_name_upper from employee;
 </code></pre></div>
+
 <p><strong>as</strong> 关键词可以省略，表达仍然有效，但还是推荐加上 <strong>as</strong> 关键词，这样SQL语句可读性更高。</p>
 <h3 id="去除重复的行">去除重复的行</h3>
 <p>如下所示加入 <strong>distinct</strong> 关键词来让select字句过滤掉重复的行。</p>
 <div class="highlight"><pre><span></span><code>select distinct cust_id from account;
 </code></pre></div>
+
 <h3 id="备份和还原">备份和还原</h3>
 <p>mysql的备份操作就是使用 <code>mysqldump</code> 命令，其将生成一个sql文件，然后还原实际上就是加载这个sql文件即可。</p>
 <h4 id="还原">还原</h4>
 <p>过程如下所示:</p>
 <div class="highlight"><pre><span></span><code>mysql -u root -p newdatabase &lt; dump.sql
 </code></pre></div>
+
 <h4 id="备份">备份</h4>
 <p>使用 <code>mysqldump</code> 命令：</p>
 <div class="highlight"><pre><span></span><code>mysqldump -u user -h 127.0.0.1 -P 8888 -p -v olddatabase &gt; dump.sql
 </code></pre></div>
+
 <ul>
 <li><strong><code>-u</code>:</strong> 设置登录用户名</li>
 <li><strong><code>-h</code>:</strong> 要连接的数据库服务器地址</li>
@@ -254,13 +261,15 @@ mariadb设置用户可以远程登录
 </ul>
 <p>其后必填参数是你想要dump的某个database名字。</p>
 <h4 id="备份还加上查询语句">备份还加上查询语句</h4>
-<div class="highlight"><pre><span></span><code>mysqldump --tables article --where="created_at &gt; '2017-11-19';"  --databases wxarticles  -u root  -p123456
+<div class="highlight"><pre><span></span><code>mysqldump --tables article --where=&quot;created_at &gt; &#39;2017-11-19&#39;;&quot;  --databases wxarticles  -u root  -p123456
 </code></pre></div>
+
 <h3 id="重命名数据库">重命名数据库</h3>
 <p>将备份和还原过程组合起来就是重命名数据库了。然后按照 <a href="https://stackoverflow.com/questions/67093/how-do-i-quickly-rename-a-mysql-database-change-schema-name">hendrasaputra</a>  介绍，如下做可以降低I/O。</p>
 <div class="highlight"><pre><span></span><code>mysqladmin -u username -p create newdatabase
 mysqldump -u username -v olddatabase -p | mysql -u username -p -D newdatabase
 </code></pre></div>
+
 <p>推荐扩展略读这篇文章，关于mysqlworkbench的相关备份还原和重命名操作：</p>
 <p><a href="https://mp.weixin.qq.com/s/13c5lipEzmLkIynttM3v2g">mysqlworkbench实现数据库的重命名</a></p>
 <h3 id="python连接">python连接</h3>
@@ -268,40 +277,45 @@ mysqldump -u username -v olddatabase -p | mysql -u username -p -D newdatabase
 <div class="highlight"><pre><span></span><code>import pymysql
 pymysql.install_as_MySQLdb()
 </code></pre></div>
+
 <p>参考了 <a href="https://stackoverflow.com/questions/34777755/how-to-config-django-using-pymysql-as-driver">这个网页</a> 。</p>
 <h2 id="附录">附录</h2>
 <h3 id="server-has-gone-away错误">server has gone away错误</h3>
 <p>这个错误可能原因很多，我遇到的情况是mysql的可允许包大小设定得太小了：</p>
 <div class="highlight"><pre><span></span><code>max_allowed_packet = 16M
 </code></pre></div>
+
 <h3 id="创建用户">创建用户</h3>
 <p>给user表格插入一条记录实际上就是新建一个新的mysql用户，如下所示:</p>
 <div class="highlight"><pre><span></span><code><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="k">user</span><span class="p">(</span><span class="k">host</span><span class="p">,</span><span class="k">user</span><span class="p">,</span><span class="k">password</span><span class="p">,</span><span class="n">select_priv</span><span class="p">,</span><span class="n">insert_priv</span><span class="p">)</span>
-<span class="k">values</span><span class="p">(</span><span class="s1">'localhost'</span><span class="p">,</span><span class="s1">'wanze'</span><span class="p">,</span><span class="k">password</span><span class="p">(</span><span class="s1">'123456'</span><span class="p">),</span><span class="s1">'Y'</span><span class="p">,</span><span class="s1">'Y'</span><span class="p">);</span>
+<span class="k">values</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span><span class="s1">&#39;wanze&#39;</span><span class="p">,</span><span class="k">password</span><span class="p">(</span><span class="s1">&#39;123456&#39;</span><span class="p">),</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">);</span>
 </code></pre></div>
+
 <h3 id="删除用户">删除用户</h3>
 <p>给user表格删除一条记录就是删除某个mysql用户，让我们把前面创建的这个用户删除了:</p>
-<div class="highlight"><pre><span></span><code><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'wanze'</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;wanze&#39;</span><span class="p">;</span>
 </code></pre></div>
+
 <p>好吧，继续再把那个用户加进去，然后我们注意到之前只给了那个用户select和insert的权限的，现在让我们再多给他几个权限。</p>
 <h3 id="更改用户权限">更改用户权限</h3>
 <div class="highlight"><pre><span></span><code><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">user</span>
-<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">update_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Y'</span><span class="p">,</span>
-<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">delete_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Y'</span><span class="p">,</span>
-<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">create_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Y'</span><span class="p">,</span>
-<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">drop_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Y'</span>
-<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'wanze'</span><span class="p">;</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">update_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Y&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">delete_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Y&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">create_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Y&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">drop_priv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Y&#39;</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;wanze&#39;</span><span class="p">;</span>
 </code></pre></div>
+
 <p>现在这个用户又新加上了update，delete，create和drop权限了。然后我们看到用户还有很多其他权限设置，</p>
 <h3 id="参考资料">参考资料</h3>
 <ol>
 <li>本网页主要参考了《SQL学习指南》一书，第二版，Alan Beaulieu著，张伟超，林青松译。</li>
 </ol>
 <div class="footnote">
-<hr/>
+<hr>
 <ol>
 <li id="fn:1">
-<p>参考了 <a href="http://www.w3schools.com/sql/sql_insert_into_select.asp">这个网页</a> <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
+<p>参考了 <a href="http://www.w3schools.com/sql/sql_insert_into_select.asp">这个网页</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -339,7 +353,6 @@ pymysql.install_as_MySQLdb()
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

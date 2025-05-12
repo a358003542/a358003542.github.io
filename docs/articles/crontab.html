@@ -5,16 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="crontab工具可以用来让系统执行一些周期性任务，其在ubuntu下服务名字叫cron；在centos下服务名字叫crond。
-你可以通过crontab这个命令查看或修改具体的配置：
-
-编辑一般就是进入的vi编辑器。用crontab -e修改的配置会直接生效，不需要重启crontab的后台服..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#一些常见的crobtab配置&#34;&gt;一些常见的crobtab配置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a hr..." />
 
 
 <meta name="keywords" content=", archived, " />
@@ -45,17 +43,6 @@
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -91,13 +78,6 @@
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#一些常见的crobtab配置">一些常见的crobtab配置</a></li>
-<li><a href="#定时备份crontab配置">定时备份crontab配置</a></li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-09-11T00:00:00+08:00">2019年 9月 11日 </time>
                 </div>
@@ -114,33 +94,44 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#一些常见的crobtab配置">一些常见的crobtab配置</a></li>
+<li><a href="#定时备份crontab配置">定时备份crontab配置</a></li>
+</ul>
+</div>
 <p>crontab工具可以用来让系统执行一些周期性任务，其在ubuntu下服务名字叫cron；在centos下服务名字叫crond。</p>
 <p>你可以通过crontab这个命令查看或修改具体的配置：</p>
 <div class="highlight"><pre><span></span><code>crontab -l  #列出配置文件内容
 
 crontab -e  #进入配置文件编辑
 </code></pre></div>
+
 <p>编辑一般就是进入的vi编辑器。用crontab -e修改的配置会直接生效，不需要重启crontab的后台服务。如果重启后台服务了，那么所有的任务都会重新开始计时。当你的配置写着每隔一个小时执行某个任务，那么要等到下一个小时的时候才会执行任务。</p>
 <p>一开始推荐写上这样一个每分钟的echo命令来看看crontab的具体运行情况。</p>
-<div class="highlight"><pre><span></span><code>* * * * * echo "test"
+<div class="highlight"><pre><span></span><code>* * * * * echo &quot;test&quot;
 </code></pre></div>
+
 <p>一般日志是默认在 <code>/var/log/cron</code> 那里（centos）。</p>
 <p>然后上面的配置含义是 ：</p>
 <div class="highlight"><pre><span></span><code>分 时 日 月 星期几 命令
 </code></pre></div>
+
 <p>其中小时是24时制，星期几0表示星期日，1表示星期一。后面的命令就是一行简单的shell命令，如果是多行命令的话建议写成bash脚本，然后给这个脚本可执行权限，然后写上该脚本的绝对路径名即可。</p>
 <p><strong>NOTICE</strong>： crontab里面执行的命令不是在shell环境下，比如pyenv环境就可能不会正常工作，推荐要使用什么命令什么文件都使用绝对路径。</p>
 <p>每五分钟：</p>
 <div class="highlight"><pre><span></span><code>*/5 * * * *
 </code></pre></div>
+
 <p>每三个小时：</p>
 <div class="highlight"><pre><span></span><code>0 */3 * * *
 </code></pre></div>
+
 <p>注意前面分钟一定要写上0，这是新手很容易犯的一个错误。</p>
 <p>每天早上七点钟：</p>
 <div class="highlight"><pre><span></span><code>0 7 * * *
 </code></pre></div>
+
 <h2 id="一些常见的crobtab配置">一些常见的crobtab配置</h2>
 <p>本小节参考了 <a href="https://blog.csdn.net/youngqj/article/details/6798065">这篇文章</a> 。</p>
 <ul>
@@ -189,7 +180,6 @@ crontab -e  #进入配置文件编辑
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

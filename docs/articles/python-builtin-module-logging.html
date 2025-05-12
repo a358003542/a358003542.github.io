@@ -5,15 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="logging模块
-在软件开发中，两个东西最易被初学者忽视，但实际上却是最有用的工具:
-一个是单元测试；一个是日志输出管理。python的官方内置模块logging可以帮助你更好地管理自己的日志汇报系统。一个好的日志汇报系统不仅能够帮助程序员调试debug，用户向专业人员汇报发生错误时候的信息..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#logging模块&#34;&gt;logging模块&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#什么..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -44,17 +43,6 @@
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -90,19 +78,6 @@
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#logging模块">logging模块</a><ul>
-<li><a href="#什么时候使用logging">什么时候使用logging</a></li>
-<li><a href="#将日志信息输出到文件">将日志信息输出到文件</a></li>
-<li><a href="#logging模块中级教程">logging模块中级教程</a></li>
-<li><a href="#字典统一配置">字典统一配置</a></li>
-<li><a href="#在logging中使用pprint">在logging中使用pprint</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
                 </div>
@@ -119,7 +94,18 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#logging模块">logging模块</a><ul>
+<li><a href="#什么时候使用logging">什么时候使用logging</a></li>
+<li><a href="#将日志信息输出到文件">将日志信息输出到文件</a></li>
+<li><a href="#logging模块中级教程">logging模块中级教程</a></li>
+<li><a href="#字典统一配置">字典统一配置</a></li>
+<li><a href="#在logging中使用pprint">在logging中使用pprint</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="logging模块">logging模块</h2>
 <p>在软件开发中，两个东西最易被初学者忽视，但实际上却是最有用的工具:
 一个是单元测试；一个是日志输出管理。python的官方内置模块logging可以帮助你更好地管理自己的日志汇报系统。一个好的日志汇报系统不仅能够帮助程序员调试debug，用户向专业人员汇报发生错误时候的信息，还可以帮助人们理解程序具体是如何运行的和运行到了那里，在干些什么，这些都是非常有用的。</p>
@@ -144,10 +130,11 @@
 
 logging.basicConfig(level=logging.DEBUG)
 
-logging.debug('debug')
-logging.info('info')
-logging.warning('warning')
+logging.debug(&#39;debug&#39;)
+logging.info(&#39;info&#39;)
+logging.warning(&#39;warning&#39;)
 </code></pre></div>
+
 <p>这里的basicConfig函数对整个日志系统进行一些配置。比如这里设置日志报告等级
 <code>level=logging.DEBUG</code> ，这样我们将会看到 <strong>DEBUG</strong> 以及 <strong>DEBUG</strong>
 以上等级的日志信息；然后如果设置为 <code>logging.INFO</code> ，则就只看到 <strong>INFO</strong>
@@ -157,12 +144,13 @@ logging.warning('warning')
 <strong>basicConfig</strong> 设置 <code>filename</code> 参数即可:</p>
 <div class="highlight"><pre><span></span><code>import logging
 
-logging.basicConfig(filename='test.log', level=logging.DEBUG)
+logging.basicConfig(filename=&#39;test.log&#39;, level=logging.DEBUG)
 
-logging.debug('debug')
-logging.info('info')
-logging.warning('warning')
+logging.debug(&#39;debug&#39;)
+logging.info(&#39;info&#39;)
+logging.warning(&#39;warning&#39;)
 </code></pre></div>
+
 <p>默认的 <strong>filemode</strong> 是 \"a\"
 ，也就是日志信息一直累积在那里。你可以多运行几次这个小py脚本，来看看具体的效果。
 <strong>filemode</strong> 也可以设置为 \"w\" ，则只保存最后那次运行的日志信息。</p>
@@ -174,6 +162,7 @@ and formatters。</p>
 之前我们运行logging.info，就是调用的默认的记录器，然后一般我们会针对每个python的模块文件创建一个记录器。</p>
 <div class="highlight"><pre><span></span><code>logger = logging.getLogger(__name__)
 </code></pre></div>
+
 <p>这个 <code>__name__</code>
 只是一种简便的命名方法，如果你勤快或者某种情况下有需要的话完全可以自己手工给记录器取个名字。</p>
 <p>然后这个 <code>getLogger</code>
@@ -243,56 +232,58 @@ and formatters。</p>
 <h4 id="formatters">formatters</h4>
 <p><strong>格式器</strong>，具体信息的格式定义。</p>
 <p>这里的format涉及到的一些参数设置如下所示:</p>
-<div class="highlight"><pre><span></span><code>-   %(levelname)s 类似'DEBUG'这样的logging level
+<div class="highlight"><pre><span></span><code>-   %(levelname)s 类似&#39;DEBUG&#39;这样的logging level
 -   %(message)s 具体输出的信息
--   %(asctime)s 具体时间，默认是'2003-07-08 16:49:45,896'，你可以通过 **datefmt** 选项来进一步设置格式，格式设置和strftime命令类似。
+-   %(asctime)s 具体时间，默认是&#39;2003-07-08 16:49:45,896&#39;，你可以通过 **datefmt** 选项来进一步设置格式，格式设置和strftime命令类似。
 -   %(filename)s 文件名，更简洁的表达是模块名。
 -   %(module)s 模块名
 -   %(funcName)s 函数名
 -   %(lineno)d 具体logging代码在第几行
 
--   %(name)s logger的名字，默认是'root'。
+-   %(name)s logger的名字，默认是&#39;root&#39;。
 -   %(process)d 进程号
 -   %(processName)s 进程名
 -   %(thread)d 线程号
 -   %(threadName)s 线程名
 </code></pre></div>
+
 <h3 id="字典统一配置">字典统一配置</h3>
 <p>django的setting.py就会有这样的配置，具体含义还是很明显的，就是定义处理器，格式器，记录器等。</p>
 <div class="highlight"><pre><span></span><code>LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': "%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s"
+    &#39;version&#39;: 1,
+    &#39;disable_existing_loggers&#39;: False,
+    &#39;formatters&#39;: {
+        &#39;simple&#39;: {
+            &#39;format&#39;: &quot;%(asctime)s %(name)s [%(levelname)s] %(thread)d %(module)s %(funcName)s %(lineno)s: %(message)s&quot;
         }
     },
-    'handlers': {
-        'log_file': {
-            'class': 'sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler',
-            'filename': config.get('web', 'log_path'),
-            'when': 'midnight',
-            'maxBytes': int(config.get('web', 'log_max_bytes')),
-            'interval': 1,
-            'backupDay': int(config.get('web', 'log_backup_days')),
-            'dedupetime': int(config.get('web', 'log_dedupe_time')),
-            'formatter': 'simple'
+    &#39;handlers&#39;: {
+        &#39;log_file&#39;: {
+            &#39;class&#39;: &#39;sdsom.common.log.DedupeRotatingAndTimedRotatingFileHandler&#39;,
+            &#39;filename&#39;: config.get(&#39;web&#39;, &#39;log_path&#39;),
+            &#39;when&#39;: &#39;midnight&#39;,
+            &#39;maxBytes&#39;: int(config.get(&#39;web&#39;, &#39;log_max_bytes&#39;)),
+            &#39;interval&#39;: 1,
+            &#39;backupDay&#39;: int(config.get(&#39;web&#39;, &#39;log_backup_days&#39;)),
+            &#39;dedupetime&#39;: int(config.get(&#39;web&#39;, &#39;log_dedupe_time&#39;)),
+            &#39;formatter&#39;: &#39;simple&#39;
         },
     },
-    'loggers': {
-        'django.request': {
-            'handlers': ['log_file'],
-            'level': config.get('web', 'log_level'),
-            'propagate': True,
+    &#39;loggers&#39;: {
+        &#39;django.request&#39;: {
+            &#39;handlers&#39;: [&#39;log_file&#39;],
+            &#39;level&#39;: config.get(&#39;web&#39;, &#39;log_level&#39;),
+            &#39;propagate&#39;: True,
         },
     }
 }
 </code></pre></div>
+
 <h3 id="在logging中使用pprint">在logging中使用pprint</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/11093236/use-logging-print-the-output-of-pprint">这个网页</a> 。</p>
 <p>有的时候logging的输出我们希望调用pprint从而输出打印更加美观些，可以调用pformat函数来达到这个效果：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'hello'</span><span class="p">:</span> <span class="s1">'there'</span><span class="p">}]</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;there&#39;</span><span class="p">}]</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pformat</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
 </code></pre></div>
             </div>
@@ -329,7 +320,6 @@ and formatters。</p>
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

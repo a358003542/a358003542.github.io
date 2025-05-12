@@ -5,20 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="argparse模块
-下面简要介绍了python3的官方文档argparse模块的用法，用于快速制作一个可以刷参数的python脚本。
-首先看下面这个简单的情况:
-
-这是简单的一个例子了，现在脚本还不可以接受任何参数，只可以用 -h 或
---help 来查看一些信息，如下所示。
-
-其首先是新建..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#argparse模块&#34;&gt;argparse模块&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -49,17 +43,6 @@
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -95,17 +78,6 @@
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#argparse模块">argparse模块</a><ul>
-<li><a href="#简单添加一个参数">简单添加一个参数</a></li>
-<li><a href="#添加参数的其他选项设置">添加参数的其他选项设置</a></li>
-<li><a href="#命令行选项关联其他动作">命令行选项关联其他动作</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
                 </div>
@@ -122,18 +94,28 @@
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#argparse模块">argparse模块</a><ul>
+<li><a href="#简单添加一个参数">简单添加一个参数</a></li>
+<li><a href="#添加参数的其他选项设置">添加参数的其他选项设置</a></li>
+<li><a href="#命令行选项关联其他动作">命令行选项关联其他动作</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="argparse模块">argparse模块</h2>
 <p>下面简要介绍了python3的官方文档argparse模块的用法，用于快速制作一个可以刷参数的python脚本。</p>
 <p>首先看下面这个简单的情况:</p>
 <div class="highlight"><pre><span></span><code>import argparse
-usage = '''
+usage = &#39;&#39;&#39;
 this is a example to show argparse usage
-'''
+&#39;&#39;&#39;
 parser = argparse.ArgumentParser(usage=usage)
 
 args = parser.parse_args()
 </code></pre></div>
+
 <p>这是简单的一个例子了，现在脚本还不可以接受任何参数，只可以用 <code>-h</code> 或
 <code>--help</code> 来查看一些信息，如下所示。</p>
 <div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
@@ -144,22 +126,24 @@ this is a example to show argparse usage
 optional arguments:
   -h, --help  show this help message and exit
 </code></pre></div>
+
 <p>其首先是新建一个parser，上面ArgumentParser的usage是可选参数，就是命令行的一些描述信息。然后需要调用parser的
 <code>parse_args</code> 方法，其就是具体将命令行接受的一些参数刷进去。</p>
 <h3 id="简单添加一个参数">简单添加一个参数</h3>
 <p>上面的例子太简单了，现在开始简单添加一个参数。</p>
 <div class="highlight"><pre><span></span><code>import argparse
-usage = '''
+usage = &#39;&#39;&#39;
 this is a example to show argparse usage
-'''
+&#39;&#39;&#39;
 parser = argparse.ArgumentParser(usage=usage)
 
-parser.add_argument('--config',help="the config file path")
+parser.add_argument(&#39;--config&#39;,help=&quot;the config file path&quot;)
 
 args = parser.parse_args()
 
 print(args)
 </code></pre></div>
+
 <p>这样命令行的帮助信息就变成如下所示了:</p>
 <div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
 usage: 
@@ -169,18 +153,20 @@ optional arguments:
   -h, --help       show this help message and exit
   --config CONFIG  the config file path
 </code></pre></div>
+
 <p>如果我们如下输入则有:</p>
-<div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
-Namespace(config='config.cfg')
+<div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config=&#39;config.cfg&#39;
+Namespace(config=&#39;config.cfg&#39;)
 </code></pre></div>
+
 <p>我们看到 <code>parse_args</code> 方法返回的是Namespace对象，推荐用 <code>vars</code>
 函数来将其处理成为字典值，这样会更好地方便后面的使用。</p>
 <div class="highlight"><pre><span></span><code>import argparse
-usage = '''
+usage = &#39;&#39;&#39;
 this is a example to show argparse usage
-'''
+&#39;&#39;&#39;
 parser = argparse.ArgumentParser(usage=usage)
-parser.add_argument('-c','--config',help="the config file path")
+parser.add_argument(&#39;-c&#39;,&#39;--config&#39;,help=&quot;the config file path&quot;)
 args = vars(parser.parse_args())
 
 print(args)
@@ -194,27 +180,30 @@ optional arguments:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
                         the config file path
-wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
-{'config': 'config.cfg'}
+wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config=&#39;config.cfg&#39;
+{&#39;config&#39;: &#39;config.cfg&#39;}
 </code></pre></div>
+
 <p>上面代码稍作修改，在长名字可选参数前面还可以加上短名字可选参数支持，然后我们看到
 <code>parse_args</code> 方法经过 <code>vars</code>处理之后返回的是字典值。该字典的key默认对应的是长名字可选参数。你还可以自己设置目标参数名:</p>
 <h3 id="添加参数的其他选项设置">添加参数的其他选项设置</h3>
 <p>下面演示了如何设置目标参数在脚本中具体对应的变量名:</p>
 <div class="highlight"><pre><span></span><code>import argparse
-usage = '''
+usage = &#39;&#39;&#39;
 this is a example to show argparse usage
-'''
+&#39;&#39;&#39;
 parser = argparse.ArgumentParser(usage=usage)
-parser.add_argument('-c','--config',dest="configpath",help="the config file path")
+parser.add_argument(&#39;-c&#39;,&#39;--config&#39;,dest=&quot;configpath&quot;,help=&quot;the config file path&quot;)
 args = vars(parser.parse_args())
 
 print(args)
 </code></pre></div>
+
 <p>然后我们看到字典输入如下:</p>
-<div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
-{'configpath': 'config.cfg'}
+<div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config=&#39;config.cfg&#39;
+{&#39;configpath&#39;: &#39;config.cfg&#39;}
 </code></pre></div>
+
 <p>当然一般就默认设置成为和长名字可选参数一致，没必要这么折腾。类似的你还可以继续用
 <code>add_argument</code> 方法来添加其他的可选参数，然后 <code>add_argument</code>
 还有如下一些选项配置:</p>
@@ -239,8 +228,9 @@ print(args)
 </dl>
 <p>必填参数的添加如下所示，除了这个\"target\"名字前面没有 <code>--</code>
 之外，和可选参数用法大致类似，其刷入args字典之后的key就是\"target\"这个名字。</p>
-<div class="highlight"><pre><span></span><code>parser.add_argument('target',help="必填参数")
+<div class="highlight"><pre><span></span><code>parser.add_argument(&#39;target&#39;,help=&quot;必填参数&quot;)
 </code></pre></div>
+
 <p>不过必填参数和可选参数在某些细节上还是有点差异的，后面会提及。</p>
 <h4 id="nargs选项设置">nargs选项设置</h4>
 <p>nargs设置之后该参数在脚本中具体对应的变量将是一个列表。其中nargs可以设置为一个数字，比如
@@ -261,30 +251,31 @@ print(args)
 </dd>
 </dl>
 <p>下面给出一个完整的例子:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
-<span class="n">usage</span> <span class="o">=</span> <span class="s1">'''</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">usage</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">resize the image</span>
-<span class="s1">'''</span>
+<span class="s1">&#39;&#39;&#39;</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-c'</span><span class="p">,</span><span class="s1">'--config'</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s2">"configpath"</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">"the config file path"</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'inputimg'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">"the input image"</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">'+'</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--width'</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">"the input image"</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;configpath&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;the config file path&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;inputimg&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;the input image&quot;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--width&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;the input image&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">())</span>
 
-    <span class="n">configpath</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">'configpath'</span><span class="p">]</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">'width'</span><span class="p">]</span>
-    <span class="n">inputimg</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">'inputimg'</span><span class="p">]</span>
+    <span class="n">configpath</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;configpath&#39;</span><span class="p">]</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
+    <span class="n">inputimg</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;inputimg&#39;</span><span class="p">]</span>
 
-    <span class="k">for</span> <span class="n">inputimg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="s1">'inputimg'</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'resize image'</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'the input image is </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inputimg</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'the target width is </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="p">))</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">inputimg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;inputimg&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;resize image&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;the input image is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inputimg</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;the target width is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </code></pre></div>
+
 <p>具体运行情况如下所示:</p>
 <div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu64:~/图片$ python3 resizeimg.py --help
 usage: 
@@ -311,6 +302,7 @@ the input image is 2015-05-03 18:20:45屏幕截图.png
 the target width is 300
 ....
 </code></pre></div>
+
 <h3 id="命令行选项关联其他动作">命令行选项关联其他动作</h3>
 <p>parser的 <code>add_argument</code> 方法的 <code>action</code>
 参数就是用来控制命令行选项关联的动作的，一般都不需要设置，就是默认的
@@ -319,50 +311,55 @@ the target width is 300
 <h4 id="store_const">store_const</h4>
 <p>如果是默认的store，则通常是需要指明具体值的，如果设置action为
 <code>store_const</code> 了:</p>
-<div class="highlight"><pre><span></span><code>parser.add_argument('--foo', action='store_const', const=42)
+<div class="highlight"><pre><span></span><code>parser.add_argument(&#39;--foo&#39;, action=&#39;store_const&#39;, const=42)
 </code></pre></div>
+
 <p>那么如下就会自动设置该值，这和default默认值的区别是这个选项的值要求是某个常量值。</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt; python3 test2.py --foo
 Namespace(foo=42)
 </code></pre></div>
+
 <h4 id="store_true-和-store_false">store_true 和 store_false</h4>
 <p>如果写为:</p>
-<div class="highlight"><pre><span></span><code>parser.add_argument('--foo', action='store_true')
+<div class="highlight"><pre><span></span><code>parser.add_argument(&#39;--foo&#39;, action=&#39;store_true&#39;)
 </code></pre></div>
+
 <p>则其存储的就是 <code>True</code> 值:</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt; python3 test2.py --foo 
 Namespace(foo=True)
 </code></pre></div>
+
 <p>这里主要是要讲定义自己的动作，就是类似 <code>--version</code>
 这样的用法，是一种影响程序整个工作流的选项，官方文档推荐通过子类化
 <code>argparse.Action</code> 的方法，还是有点麻烦的。然后发现 <em>click</em>
 模块非常好（一个解决创建命令行脚本工具问题推荐使用的第三方模块），处理这个问题也很容易:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">click</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">print_version</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_version</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">ctx</span><span class="o">.</span><span class="n">resilient_parsing</span><span class="p">:</span>
         <span class="k">return</span>
-    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">'Version 1.0'</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">&#39;Version 1.0&#39;</span><span class="p">)</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">quick</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="n">param</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">quick</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="n">param</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="n">param</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
 <span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--version'</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">print_version</span><span class="p">,</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--version&#39;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">print_version</span><span class="p">,</span>
               <span class="n">expose_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">'--quick'</span><span class="p">,</span><span class="n">callback</span><span class="o">=</span><span class="n">quick</span><span class="p">,</span><span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">():</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--quick&#39;</span><span class="p">,</span><span class="n">callback</span><span class="o">=</span><span class="n">quick</span><span class="p">,</span><span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">userinput</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'input:'</span><span class="p">)</span>
+        <span class="n">userinput</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;input:&#39;</span><span class="p">)</span>
         <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">userinput</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">userinput</span> <span class="o">==</span> <span class="s1">'exit'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">userinput</span> <span class="o">==</span> <span class="s1">&#39;exit&#39;</span><span class="p">:</span>
             <span class="k">break</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">hello</span><span class="p">()</span>
 </code></pre></div>
+
 <p>这里的ctx和param到click模块那边再细讲吧，我们看到整个过程比argparse美观多了。</p>
             </div>
         </div>
@@ -398,7 +395,6 @@ Namespace(foo=True)
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

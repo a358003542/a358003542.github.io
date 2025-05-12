@@ -5,18 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="dateutil模块
-安装是运行:
-
-本文简要介绍python的第三方日期时间处理支持模块dateutil,更多细节参考 官方文档 .
-relativedelta
-python自带的timedelta对某个datetime对象进行加减, 我记得以前似乎是不能很好应对跨月问题, 但最近测试显示是..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#dateutil模块&#34;&gt;dateutil模块&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -47,17 +43,6 @@ python自带的timedelta对某个datetime对象进行加减, 我记得以前似�
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -93,15 +78,6 @@ python自带的timedelta对某个datetime对象进行加减, 我记得以前似�
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#dateutil模块">dateutil模块</a></li>
-<li><a href="#relativedelta">relativedelta</a></li>
-<li><a href="#rrule">rrule</a></li>
-<li><a href="#parse">parse</a></li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-09-18T00:00:00+08:00">2019年 9月 18日 </time>
                 </div>
@@ -118,11 +94,19 @@ python自带的timedelta对某个datetime对象进行加减, 我记得以前似�
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#dateutil模块">dateutil模块</a></li>
+<li><a href="#relativedelta">relativedelta</a></li>
+<li><a href="#rrule">rrule</a></li>
+<li><a href="#parse">parse</a></li>
+</ul>
+</div>
 <h2 id="dateutil模块">dateutil模块</h2>
 <p>安装是运行:</p>
 <div class="highlight"><pre><span></span><code>pip install python-dateutil
 </code></pre></div>
+
 <p>本文简要介绍python的第三方日期时间处理支持模块dateutil,更多细节参考 <a href="https://dateutil.readthedocs.io/en/stable/">官方文档</a> .</p>
 <h2 id="relativedelta">relativedelta</h2>
 <p>python自带的timedelta对某个datetime对象进行加减, 我记得以前似乎是不能很好应对跨月问题, 但最近测试显示是可以的, 至于闰年问题是不是已经很好地解决了不太清楚, 不管怎么说, 还是推荐使用dateutil模块的 relativedelta函数.</p>
@@ -130,12 +114,13 @@ python自带的timedelta对某个datetime对象进行加减, 我记得以前似�
 now = datetime.utcnow()
 sdt = now - relativedelta(months=months)
 </code></pre></div>
+
 <h2 id="rrule">rrule</h2>
 <p>虽然没有lrule，但根据上面的relativedelta配置的起始时间，然后指定结束时间，通过rrule函数来生成一个时间区间，有时是很方便的。</p>
 <div class="highlight"><pre><span></span><code>from dateutil.rrule import rrule, MONTHLY
 
 def get_datetime_range(months, tz=timezone.utc):
-    """
+    &quot;&quot;&quot;
     返回一系列的datetime object 列表, 从当前时间往前数几个月.
 
     &gt;&gt;&gt; get_datetime_range(1) # doctest: +SKIP
@@ -145,10 +130,11 @@ def get_datetime_range(months, tz=timezone.utc):
     &gt;&gt;&gt; get_datetime_range(0) # doctest: +SKIP
     [datetime.datetime(2024, 11, 5, 14, 27, 53, tzinfo=datetime.timezone.utc)]
 
-    """
+    &quot;&quot;&quot;
     start_dt = dt_current(tz=tz) - relativedelta(months=months)
     return list(rrule(freq=MONTHLY, dtstart=start_dt, until=dt_current(tz=tz)))
 </code></pre></div>
+
 <h2 id="parse">parse</h2>
 <p>根据给定的日期时间字符串来获得datetime object, 某些简单的情况下用datetime的 <code>strptime</code> 够用了, 如果情况较复杂, 你可以看看dateutil提供的 parse函数, 也许能够很好地解决你的问题.</p>
             </div>
@@ -185,7 +171,6 @@ def get_datetime_range(months, tz=timezone.utc):
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

@@ -5,19 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="itertools模块
-repeat函数
-其定义函数如下：
-
-也就是返回一个可迭代对象，这么封装最大的一个用处是用于填充map函数或者zip函数的某个常数值。因为你填写repeat(5)之后将一个返回一个可迭代对象，不停的返回数字5而不需要你考虑长度问题。
-starmap函数
-starmap函..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#itertools模块&#34;&gt;itertools模块&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -48,17 +43,6 @@ starmap函..." />
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -94,18 +78,6 @@ starmap函..." />
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#itertools模块">itertools模块</a><ul>
-<li><a href="#repeat函数">repeat函数</a></li>
-<li><a href="#starmap函数">starmap函数</a></li>
-<li><a href="#可迭代对象flatten操作">可迭代对象flatten操作</a></li>
-<li><a href="#利用product函数来遍历组合">利用product函数来遍历组合</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
                 </div>
@@ -122,7 +94,17 @@ starmap函..." />
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#itertools模块">itertools模块</a><ul>
+<li><a href="#repeat函数">repeat函数</a></li>
+<li><a href="#starmap函数">starmap函数</a></li>
+<li><a href="#可迭代对象flatten操作">可迭代对象flatten操作</a></li>
+<li><a href="#利用product函数来遍历组合">利用product函数来遍历组合</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="itertools模块">itertools模块</h2>
 <h3 id="repeat函数">repeat函数</h3>
 <p>其定义函数如下：</p>
@@ -135,6 +117,7 @@ starmap函..." />
         for i in range(times):
             yield object
 </code></pre></div>
+
 <p>也就是返回一个可迭代对象，这么封装最大的一个用处是用于填充map函数或者zip函数的某个常数值。因为你填写repeat(5)之后将一个返回一个可迭代对象，不停的返回数字5而不需要你考虑长度问题。</p>
 <h3 id="starmap函数">starmap函数</h3>
 <p>starmap函数具体定义如下所示：</p>
@@ -143,6 +126,7 @@ starmap函..." />
     for args in iterable:
         yield function(*args)
 </code></pre></div>
+
 <p>其接受一个可迭代对象，然后逐个将可迭代对象中的元素解包之后送入函数当参数（最后当然函数也执行了）。</p>
 <h3 id="可迭代对象flatten操作">可迭代对象flatten操作</h3>
 <div class="highlight"><pre><span></span><code>a_list = [[1, 2], [3, 4], [5, 6]]
@@ -153,18 +137,21 @@ print(list(itertools.chain.from_iterable(a_list)))
 print(list(itertools.chain(*a_list)))
 # Output: [1, 2, 3, 4, 5, 6]
 </code></pre></div>
+
 <h3 id="利用product函数来遍历组合">利用product函数来遍历组合</h3>
 <p>product函数在 <code>itertools</code> 模块里面，按照官方文档的说明是product(A, B)返回值等价于((x,y) for x in A for y in B)，也就是各种可能的组合情况（类似于笛卡尔积的概念）:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(product(['a','b'],['c']))
-[('a', 'c'), ('b', 'c')]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(product([&#39;a&#39;,&#39;b&#39;],[&#39;c&#39;]))
+[(&#39;a&#39;, &#39;c&#39;), (&#39;b&#39;, &#39;c&#39;)]
 </code></pre></div>
+
 <p>此外单一迭代加上 <code>repeat</code> 参数也会生成一些很有意思的结果:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(product(['True','False'],repeat=len('abc')))
-[('True', 'True', 'True'), ('True', 'True', 'False'), ('True', 'False', 'True'), ('True', 'False', 'False'), ('False', 'True', 'True'), ('False', 'True', 'False'), ('False', 'False', 'True'), ('False', 'False', 'False')]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(product([&#39;True&#39;,&#39;False&#39;],repeat=len(&#39;abc&#39;)))
+[(&#39;True&#39;, &#39;True&#39;, &#39;True&#39;), (&#39;True&#39;, &#39;True&#39;, &#39;False&#39;), (&#39;True&#39;, &#39;False&#39;, &#39;True&#39;), (&#39;True&#39;, &#39;False&#39;, &#39;False&#39;), (&#39;False&#39;, &#39;True&#39;, &#39;True&#39;), (&#39;False&#39;, &#39;True&#39;, &#39;False&#39;), (&#39;False&#39;, &#39;False&#39;, &#39;True&#39;), (&#39;False&#39;, &#39;False&#39;, &#39;False&#39;)]
 </code></pre></div>
+
 <p>这可以看作:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(product(['True','False'],['True','False'],['True','False']))
-[('True', 'True', 'True'), ('True', 'True', 'False'), ('True', 'False', 'True'), ('True', 'False', 'False'), ('False', 'True', 'True'), ('False', 'True', 'False'), ('False', 'False', 'True'), ('False', 'False', 'False')]
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; list(product([&#39;True&#39;,&#39;False&#39;],[&#39;True&#39;,&#39;False&#39;],[&#39;True&#39;,&#39;False&#39;]))
+[(&#39;True&#39;, &#39;True&#39;, &#39;True&#39;), (&#39;True&#39;, &#39;True&#39;, &#39;False&#39;), (&#39;True&#39;, &#39;False&#39;, &#39;True&#39;), (&#39;True&#39;, &#39;False&#39;, &#39;False&#39;), (&#39;False&#39;, &#39;True&#39;, &#39;True&#39;), (&#39;False&#39;, &#39;True&#39;, &#39;False&#39;), (&#39;False&#39;, &#39;False&#39;, &#39;True&#39;), (&#39;False&#39;, &#39;False&#39;, &#39;False&#39;)]
 </code></pre></div>
             </div>
         </div>
@@ -200,7 +187,6 @@ print(list(itertools.chain(*a_list)))
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

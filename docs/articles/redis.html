@@ -5,15 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="redis基础
-redis简单来说就是一个基于内存的k-v存储数据库，当然具体内容还是很丰富的，这个后面再慢慢详细讨论之。
-就作为python接口和基本的 get set操作都是很直观简单的，这个就不多说了，至于具体数据类型，先知道字符串型即可，哦，对了，redis存储数字1也会变成字符串&#..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#redis基础&#34;&gt;redis基础&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#字典类型&..." />
 
 
 <meta name="keywords" content=", archived, " />
@@ -44,17 +43,6 @@ redis简单来说就是一个基于内存的k-v存储数据库，当然具体内
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -90,14 +78,6 @@ redis简单来说就是一个基于内存的k-v存储数据库，当然具体内
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#redis基础">redis基础</a></li>
-<li><a href="#字典类型">字典类型</a></li>
-<li><a href="#设置过期时间">设置过期时间</a></li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-03-09T00:00:00+08:00">2023年 3月 9日 </time>
                 </div>
@@ -114,34 +94,42 @@ redis简单来说就是一个基于内存的k-v存储数据库，当然具体内
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#redis基础">redis基础</a></li>
+<li><a href="#字典类型">字典类型</a></li>
+<li><a href="#设置过期时间">设置过期时间</a></li>
+</ul>
+</div>
 <h3 id="redis基础">redis基础</h3>
 <p>redis简单来说就是一个基于内存的k-v存储数据库，当然具体内容还是很丰富的，这个后面再慢慢详细讨论之。</p>
 <p>就作为python接口和基本的 get set操作都是很直观简单的，这个就不多说了，至于具体数据类型，先知道字符串型即可，哦，对了，redis存储数字1也会变成字符串"1"的。</p>
 <p>一个简单的获取redis的连接函数如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_redis_client</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">host</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">'redis'</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'host'</span><span class="p">,</span> <span class="s1">'localhost'</span><span class="p">)</span>
-    <span class="n">port</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">'redis'</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'port'</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_redis_client</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;redis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;host&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;redis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
 
     <span class="n">redis_client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">StrictRedis</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">redis_client</span>
 </code></pre></div>
+
 <p>注意看 <code>decode_responses=True</code> ，加上的目的就是让python那边接受字符串不是bytes型，也是字符串型，就大部分使用来说都会希望返回的是字符串型。</p>
 <h3 id="字典类型">字典类型</h3>
 <p>确切的描述是 hash 表，大体对应于python那边的字典类型。</p>
 <div class="highlight"><pre><span></span><code>127.0.0.1:6379&gt; hmset x a 1
 OK
 127.0.0.1:6379&gt; hgetall x
-1) "a"
-2) "1"
+1) &quot;a&quot;
+2) &quot;1&quot;
 127.0.0.1:6379&gt; hmset x b 2
 OK
 127.0.0.1:6379&gt; hgetall x
-1) "a"
-2) "1"
-3) "b"
-4) "2"
+1) &quot;a&quot;
+2) &quot;1&quot;
+3) &quot;b&quot;
+4) &quot;2&quot;
 </code></pre></div>
+
 <h3 id="设置过期时间">设置过期时间</h3>
 <p>设置某个key的过期时间，</p>
 <p>请参看 expire 和 pexpire 命令。</p>
@@ -179,7 +167,6 @@ OK
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

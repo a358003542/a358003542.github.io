@@ -5,20 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="安装和配置
-在ubuntu下可以这样简单安装之：
-
-centos下如下安装：
-
-centos下继续运行以下命令：
-
-这样安装之后，你需要牢记一点的是，新安装的PostgreSQL数据库还只有 postgres 这个用户有新建role（或说用户）和新建数据库的权限。你需要通过 postgres ..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#安装和配置&#34;&gt;安装和配置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#用户群组权限管理&..." />
 
 
 <meta name="keywords" content=", archived, " />
@@ -49,17 +43,6 @@ centos下继续运行以下命令：
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -95,7 +78,22 @@ centos下继续运行以下命令：
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-13T15:56:12.209696+08:00">2023年 10月 13日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
                 <div class="toc">
 <ul>
 <li><a href="#安装和配置">安装和配置</a></li>
@@ -133,33 +131,19 @@ centos下继续运行以下命令：
 <li><a href="#参考资料">参考资料</a></li>
 </ul>
 </div>
-
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-10-18T00:00:00+08:00">2020年 10月 18日 </time>
-                </div>
-
-                <div class="p-1">最近更新于：<time datetime="2023-10-13T15:56:12.209696+08:00">2023年 10月 13日 </time>
-                </div>
-
-
-                <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#archived-ref">archived</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-8 col-lg-8">
-            <div class="article-content">
-                
 <h2 id="安装和配置">安装和配置</h2>
 <p>在ubuntu下可以这样简单安装之：</p>
 <div class="highlight"><pre><span></span><code>sudo<span class="w">  </span>apt-get<span class="w"> </span>install<span class="w"> </span>postgresql
 </code></pre></div>
+
 <p>centos下如下安装：</p>
 <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>postgresql-server<span class="w"> </span>postgresql-contrib
 </code></pre></div>
+
 <p>centos下继续运行以下命令：</p>
 <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>postgresql-setup<span class="w"> </span>initdb
 </code></pre></div>
+
 <p>这样安装之后，你需要牢记一点的是，新安装的PostgreSQL数据库还只有 <strong>postgres</strong> 这个用户有新建role（或说用户）和新建数据库的权限。你需要通过 postgres 这个用户来执行 <code>createuser</code> 或 <code>createdb</code> 命令。这里我们先不急着学习SQL语句，因为postgresql里面关于用户群组权限的设置稍微有点复杂，而要使用postgresql，这一块是必须有个基本的了解的。</p>
 <h2 id="用户群组权限管理">用户群组权限管理</h2>
 <p>postgresql处理我们通常所谓的登录用户或者其他用户概念的术语是Rules，后面都称之为用户（rules），可以理解为为这个用户确立的一系列访问修改数据库的规则。然后rules是可以包含其他rules的，这个包含其他rules的rules我们通常称之为群组（group rules），然后群组也可以包含群组，但一般都推荐简单分为用户（rules）和群组用户（group rules）这两类。然后用户如果有登录权限的话则可以称之为登录用户（login rules），群组用户也可以赋予登录权限，但出于简单的考虑没谁这么做。所以现在rules简单的划分就分为这三类:</p>
@@ -177,14 +161,17 @@ postgres=# \password postgres
 Enter new password: 
 Enter it again:
 </code></pre></div>
+
 <p>这里需要强调一点的是这里通过psql来进行连接（postgres）然后输入 <code>\password</code> 修改postgres的密码是具体通过 TCP/IP 方式连接postgresql数据库的密码，不是系统passwd管理的那个密码。</p>
 <h3 id="postgres这个用户">postgres这个用户</h3>
 <p>postgres这个用户的一些信息如下所示:</p>
 <div class="highlight"><pre><span></span><code>postgres:x:121:131:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
 </code></pre></div>
+
 <p>然后还有新建的postgres这个群组:</p>
 <div class="highlight"><pre><span></span><code>postgres:x:131:
 </code></pre></div>
+
 <p>这里的121是uid，131是gid，然后后面 <code>/var/lib/postgresql</code> 这个文件夹就是postgres该用户的主文件夹，你的关于postgresql的一些配置和数据都放在这里面的。你可能会遇到保存 <code>.psql_history</code> 这个文件的权限问题，参看 <a href="http://dba.stackexchange.com/questions/68705/could-not-save-history-to-file-var-lib-postgresql-psql-history-no-such-file">这个网页</a> ，这个时候需要确认该文件夹的所有用户和所有群组都是postgres。</p>
 <h3 id="查看当前有多少用户">查看当前有多少用户</h3>
 <p>按照 <a href="http://stackoverflow.com/questions/32151288/how-is-there-a-pg-roles-table-in-postgres-before-a-database-is-created">这篇网页</a> 的介绍， <code>pg_roles</code> 是一个view视图，其只是一个对 <code>pg_authid</code> 的简单可读的视图封装，如下面所示，两者目前来说没有差异，然后我们看到postgres其是为superuser，也是login user。</p>
@@ -201,26 +188,33 @@ select rolname,rolsuper,rolcreaterole,rolcreatedb,rolcanlogin from pg_authid;
  postgres | t        | t             | t           | t
  wanze    | t        | t             | t           | t
 </code></pre></div>
+
 <h3 id="新建用户">新建用户</h3>
 <p>新建一个用户:</p>
 <div class="highlight"><pre><span></span><code>create role the_name;
 </code></pre></div>
+
 <p>但最起码要有登录login权限吧:</p>
 <div class="highlight"><pre><span></span><code>create role the_name login;
 </code></pre></div>
+
 <p>在使用postgresql时，如果某个用户不存在，那么PostgreSQL将会报错: </p>
-<div class="highlight"><pre><span></span><code>createdb: could not connect to database template1: FATAL:  role "wanze" does not exist
+<div class="highlight"><pre><span></span><code>createdb: could not connect to database template1: FATAL:  role &quot;wanze&quot; does not exist
 </code></pre></div>
+
 <h3 id="删除用户">删除用户</h3>
 <div class="highlight"><pre><span></span><code>drop role the_name;
 </code></pre></div>
+
 <p>或者该用户名不存在也不会报错的写法:</p>
 <div class="highlight"><pre><span></span><code>drop role if exists the_name;
 </code></pre></div>
+
 <h3 id="改变用户的权限">改变用户的权限</h3>
 <p>如下所示就改变一个用户的权限了。</p>
 <div class="highlight"><pre><span></span><code>alter role the_name createdb;
 </code></pre></div>
+
 <p>参照手册，后面的关键词有:</p>
 <div class="highlight"><pre><span></span><code>SUPERUSER | NOSUPERUSER
 CREATEDB | NOCREATEDB
@@ -230,20 +224,25 @@ INHERIT | NOINHERIT
 LOGIN | NOLOGIN
 REPLICATION | NOREPLICATION
 </code></pre></div>
+
 <h3 id="改变用户密码">改变用户密码</h3>
 <p>在新建用户的时候，我们可以如下:</p>
-<div class="highlight"><pre><span></span><code>create role the_name password "the_password";
+<div class="highlight"><pre><span></span><code>create role the_name password &quot;the_password&quot;;
 </code></pre></div>
+
 <p>后面也可以通过 <code>alter role</code> 来:</p>
-<div class="highlight"><pre><span></span><code>alter role the_name password "the_password";
+<div class="highlight"><pre><span></span><code>alter role the_name password &quot;the_password&quot;;
 </code></pre></div>
+
 <h3 id="新建一个群组">新建一个群组</h3>
 <div class="highlight"><pre><span></span><code>CREATE ROLE royalty INHERIT;
 </code></pre></div>
+
 <p>给群组用户增加登录用户</p>
 <div class="highlight"><pre><span></span><code>GRANT royalty TO leo;
 GRANT royalty TO regina;
 </code></pre></div>
+
 <h3 id="pg_hbaconf">pg_hba.conf</h3>
 <p>很多连接问题就是因为这个文件没有配置好，下面详细研究这个文件之。</p>
 <div class="highlight"><pre><span></span><code>#
@@ -252,6 +251,7 @@ GRANT royalty TO regina;
 # hostssl    DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
 # hostnossl  DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
 </code></pre></div>
+
 <ul>
 <li>
 <p>local 是指本地连接</p>
@@ -293,10 +293,12 @@ GRANT royalty TO regina;
 <h3 id="创建数据库">创建数据库</h3>
 <div class="highlight"><pre><span></span><code>CREATE DATABASE mydb;
 </code></pre></div>
+
 <p>有 CREATEDB 权限的用户可以新建数据库。</p>
 <p>然后创建一个数据库，并指定这个数据库的owner。</p>
 <div class="highlight"><pre><span></span><code>CREATE DATABASE mydb WITH owner = mydb_admin;
 </code></pre></div>
+
 <p>然后以mydb_admin登录开始进行数据库的其他操作。</p>
 <h3 id="备份和还原">备份和还原</h3>
 <p>两个backup方法  pg_dump 和 pg_dumpall
@@ -305,12 +307,13 @@ GRANT royalty TO regina;
 <p>首先你需要以postgres的身份连接postgres数据库，因为你要进行更改某个数据库的所有者，就必须是目前该数据库的所有者。</p>
 <div class="highlight"><pre><span></span><code>wanze@wanze-ubuntu:~$ sudo -u postgres psql postgres
 psql (9.3.8)
-Type "help" for help.
+Type &quot;help&quot; for help.
 
 postgres=# ALTER DATABASE mydb OWNER TO learner;
 ALTER DATABASE
 postgres=# \q
 </code></pre></div>
+
 <p>这里ALTER DATABASE语句里面 mydb 是具体你要更改的数据库名字，然后后面的learner是具体更改为的所有者名字。</p>
 <p>类似上面谈及的，还有 <strong>dropdb</strong> 用于删除数据库， <strong>dropuser</strong> 用于删除用户。</p>
 <p>CREATE TABLE语句我们都熟悉了，不过具体到数据类型上，还需要详细讨论一番。</p>
@@ -324,6 +327,7 @@ char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
 <p>参考了 <a href="https://stackoverflow.com/questions/469471/how-do-i-alter-a-postgresql-table-and-make-a-column-unique">这个网页</a> 。</p>
 <div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">the_table</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="k">constraint_name</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="p">(</span><span class="n">thecolumn</span><span class="p">);</span>
 </code></pre></div>
+
 <h3 id="删除基于某列重复值的重复行">删除基于某列重复值的重复行</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/6583916/delete-duplicate-records-in-postgresql">这个网页</a> 。</p>
 <div class="highlight"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dupes</span><span class="w"> </span><span class="n">T1</span>
@@ -331,18 +335,22 @@ char( N ) , varchar( N ) , date , time , timestamp , and interval ,</p>
 <span class="k">WHERE</span><span class="w">   </span><span class="n">T1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="n">id</span><span class="w">  </span><span class="c1">-- delete the older versions</span>
 <span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="k">key</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">T2</span><span class="p">.</span><span class="k">key</span><span class="p">;</span><span class="w">  </span><span class="c1">-- add more columns if needed</span>
 </code></pre></div>
+
 <p>USING语句有点古怪，具体要参看postgresql的delete一章，里面就介绍了如下语法：</p>
 <div class="highlight"><pre><span></span><code>DELETE FROM [ ONLY ] table_name [ * ] [ [ AS ] alias ]
     [ USING using_list ]
     [ WHERE condition | WHERE CURRENT OF cursor_name ]
     [ RETURNING * | output_expression [ [ AS ] output_name ] [, ...] ]
 </code></pre></div>
+
 <div class="highlight"><pre><span></span><code>using_list
 A list of table expressions, allowing columns from other tables to appear in the WHERE condition. This is similar to the list of tables that can be specified in the FROM Clause of a SELECT statement; for example, an alias for the table name can be specified. Do not repeat the target table in the using_list, unless you wish to set up a self-join.
 </code></pre></div>
+
 <div class="highlight"><pre><span></span><code>DELETE FROM films USING producers
-  WHERE producer_id = producers.id AND producers.name = 'foo';
+  WHERE producer_id = producers.id AND producers.name = &#39;foo&#39;;
 </code></pre></div>
+
 <p>这个using和select里面的using有点区别，这里的using更像是引用了某个表，让其可以在后面的where语句中使用。</p>
 <h3 id="理解postgresql的timestamptz字段类型">理解postgresql的timestamptz字段类型</h3>
 <p>首先数据库里面都应该是存放UTC时间，只是说以前使用timestamp的时候是属于程序上的强制性规范要求，这样避免各种纠结时区问题。而现在postgresql的timestamp字段对外说是支持时区的，但其实它内部存放的还是UTC时间，只是它帮你进行了一些自动转换。</p>
@@ -351,7 +359,7 @@ A list of table expressions, allowing columns from other tables to appear in the
 <h3 id="配置文件在那里">配置文件在那里</h3>
 <div class="highlight"><pre><span></span><code>sudo -u postgres psql postgres
 
-psql&gt; SELECT name,setting FROM pg_settings WHERE category = 'File Locations';
+psql&gt; SELECT name,setting FROM pg_settings WHERE category = &#39;File Locations&#39;;
        name        |                 setting                  
 -------------------+------------------------------------------
  config_file       | /etc/postgresql/9.3/main/postgresql.conf
@@ -361,13 +369,16 @@ psql&gt; SELECT name,setting FROM pg_settings WHERE category = 'File Locations';
  ident_file        | /etc/postgresql/9.3/main/pg_ident.conf
 (5 rows)
 </code></pre></div>
+
 <h3 id="重启postgresql服务">重启postgresql服务</h3>
 <p>在linux下可以运行如下命令行来达到目的:</p>
 <div class="highlight"><pre><span></span><code>sudo service postgresql restart
 </code></pre></div>
+
 <p>或者</p>
 <div class="highlight"><pre><span></span><code>sudo service postgresql reload
 </code></pre></div>
+
 <h2 id="参考资料">参考资料</h2>
 <ol>
 <li>PostgreSQL官方参考文档</li>
@@ -407,7 +418,6 @@ psql&gt; SELECT name,setting FROM pg_settings WHERE category = 'File Locations';
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

@@ -5,14 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="re模块
-re模块提供了python对于正则表达式的支持，对于字符串操作，如果之前在介绍字符串类型的一些方法（比如split，replace等等），能够用它们解决问题就用它们，因为更快更简单。实在需要动用正则表达式理念才考虑使用re模块，而且你要克制写很多或者很复杂的（除非某些特殊情况）正则表..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#re模块&#34;&gt;re模块&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#re模块中的元字符集&#..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -43,17 +43,6 @@ re模块提供了python对于正则表达式的支持，对于字符串操作，
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -89,18 +78,6 @@ re模块提供了python对于正则表达式的支持，对于字符串操作，
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#re模块">re模块</a><ul>
-<li><a href="#re模块中的元字符集">re模块中的元字符集</a></li>
-<li><a href="#re模块中的特殊字符类">re模块中的特殊字符类</a></li>
-<li><a href="#转义问题">转义问题</a></li>
-<li><a href="#re模块的使用">re模块的使用</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
                 </div>
@@ -117,7 +94,17 @@ re模块提供了python对于正则表达式的支持，对于字符串操作，
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#re模块">re模块</a><ul>
+<li><a href="#re模块中的元字符集">re模块中的元字符集</a></li>
+<li><a href="#re模块中的特殊字符类">re模块中的特殊字符类</a></li>
+<li><a href="#转义问题">转义问题</a></li>
+<li><a href="#re模块的使用">re模块的使用</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="re模块">re模块</h2>
 <p>re模块提供了python对于正则表达式的支持，对于字符串操作，如果之前在介绍字符串类型的一些方法（比如split，replace等等），能够用它们解决问题就用它们，因为更快更简单。实在需要动用正则表达式理念才考虑使用re模块，而且你要克制写很多或者很复杂的（除非某些特殊情况）正则表达式的冲动，因为正则表达式的引入将会使得整个程序都更加难懂和不可捉摸。</p>
 <p>更多内容请参见<a href="https://docs.python.org/3/library/re.html">官方文档</a>。</p>
@@ -179,6 +166,7 @@ re模块提供了python对于正则表达式的支持，对于字符串操作，
 匹配中文:[\u4e00-\u9fa5]
 \b  文档说严格的定义是\w 和\W 之间的边界，反之亦然。粗略的理解可以看作是英文单词头或者尾。
 </code></pre></div>
+
 <p>其中<code>^</code>在方括号[]里面，只有在最前面，才表示排除型字符组的意思。</p>
 <h3 id="转义问题">转义问题</h3>
 <p>正则表达式的转义问题有时会比较纠结。一个简单的原则是以上谈及的有特殊作用的字符有转义问题，如果python中的字符都写成<code>r''</code>这种形式，也就是所谓的raw string形式，这样<code>\n</code>在里面就可以直接写成<code>\n</code>，而<code>\section</code>可以简单写为<code>\\section</code>即可，也就是<code>\</code>字符需要转义一次。</p>
@@ -191,31 +179,34 @@ re模块提供了python对于正则表达式的支持，对于字符串操作，
 <div class="highlight"><pre><span></span><code>re.search(字符串模板, 待匹配字符串)
 re.match(pattern, string)
 </code></pre></div>
+
 <p>它们将会返回一个match object或者none，其中match
 object在逻辑上就是真值的意思。match对字符串的匹配是必须从一开始就精确匹配，这对于正则表达式多少0有点突兀。推荐使用search方法，如果一定要限定行首，或者字符串开始可以用前面讨论的正则表达式各个符号来表达。请看下面的例子。</p>
 <div class="highlight"><pre><span></span><code>import re
-string = '''this is test line.
+string = &#39;&#39;&#39;this is test line.
 this is the second line.
-today is sunday.'''
+today is sunday.&#39;&#39;&#39;
 
-match = re.search('(?m)^today',string)
+match = re.search(&#39;(?m)^today&#39;,string)
 
 if match:
-    print('所使用的正则表达式是：',match.re)
-    print('所输入的字符串是：',match.string)
-    print('匹配的结果是：',match.group(0))
-    print('匹配的字符串index',match.span())
+    print(&#39;所使用的正则表达式是：&#39;,match.re)
+    print(&#39;所输入的字符串是：&#39;,match.string)
+    print(&#39;匹配的结果是：&#39;,match.group(0))
+    print(&#39;匹配的字符串index&#39;,match.span())
 else:
-    print('return the none value')
+    print(&#39;return the none value&#39;)
 </code></pre></div>
+
 <p>前面说道圆括号的部分将会记忆起来，作为匹配的结果，默认整个正则表达式所匹配的全部是group中的第0个元素，然后从左到右，子group编号依次是1，2，3......。</p>
-<div class="highlight"><pre><span></span><code>所使用的正则表达式是： re.compile('(?m)^today', re.MULTILINE)
+<div class="highlight"><pre><span></span><code>所使用的正则表达式是： re.compile(&#39;(?m)^today&#39;, re.MULTILINE)
 所输入的字符串是： this is test line.
 this is the second line.
 today is sunday.
 匹配的结果是： today
 匹配的字符串index (44, 49)
 </code></pre></div>
+
 <p>具体这些信息是为了说明情况，实际最简单的情况可能就需要判断一下是不是真值，字符串模板是不是匹配到了即可。</p>
 <h4 id="分割操作">分割操作</h4>
 <p>re模块的split函数可以看作字符串的split方法的升级版本，对于所描述的任何正则表达式，匹配成功之后都将成为一个分隔符，从而将原输入字符串分割开来。</p>
@@ -224,33 +215,37 @@ today is sunday.
 
 def zwc(string):
     #中英文常用标点符号
-    lst = re.split('([\u4e00-\u9fa5\s，。；])',string)
+    lst = re.split(&#39;([\u4e00-\u9fa5\s，。；])&#39;,string)
     #去除 空白
     #去除\s 中英文常用标点符号
     lst = [i for i in lst if not  i in
-    [""," ","\n","\t","\r","\f","\v","；","，","。"]]
+    [&quot;&quot;,&quot; &quot;,&quot;\n&quot;,&quot;\t&quot;,&quot;\r&quot;,&quot;\f&quot;,&quot;\v&quot;,&quot;；&quot;,&quot;，&quot;,&quot;。&quot;]]
     print(lst)
 
-if __name__ == '__main__':
-    string='''道可道，非常道。名可名，非常名。無名天地之始，有名萬物之母。
+if __name__ == &#39;__main__&#39;:
+    string=&#39;&#39;&#39;道可道，非常道。名可名，非常名。無名天地之始，有名萬物之母。
     故常無欲，以觀其妙；常有欲，以觀其徼。此兩者同出而異名，
-    同謂之玄，玄之又玄，眾妙之門。 '''
+    同謂之玄，玄之又玄，眾妙之門。 &#39;&#39;&#39;
     zwc(string)
 </code></pre></div>
+
 <h4 id="替换操作">替换操作</h4>
 <p>基于正则表达式的替换操作非常的有用，其实前面的search方法，再加上具体匹配字符串的索引值，然后修改原字符串，然后再search这样循环操作下去，就是一个替换操作了。re模块有sub方法来专门解决这个问题。</p>
 <h4 id="非最长匹配">非最长匹配</h4>
 <p>本小节参考了 python cookbook 的 2.7 小节，比如说：</p>
-<div class="highlight"><pre><span></span><code>re.compile(r'"(.*)"')
+<div class="highlight"><pre><span></span><code>re.compile(r&#39;&quot;(.*)&quot;&#39;)
 </code></pre></div>
+
 <p>这将匹配两个双引号之间的内容，其默认是最长匹配，也就是多个双引号组成的句子都会匹配进去，你可以如下要要求最短匹配：</p>
-<div class="highlight"><pre><span></span><code>re.compile(r'"(.*?)"')
+<div class="highlight"><pre><span></span><code>re.compile(r&#39;&quot;(.*?)&quot;&#39;)
 </code></pre></div>
+
 <h4 id="非捕获组">非捕获组</h4>
 <p>看下面的正则表达式， <code>(?:...)</code> 这个括号的组是非捕获组，也就是不会进入
 .group 里面去。</p>
-<div class="highlight"><pre><span></span><code>re.search(r'((?:.|\n)*)',text2)
+<div class="highlight"><pre><span></span><code>re.search(r&#39;((?:.|\n)*)&#39;,text2)
 </code></pre></div>
+
 <p>然后默认 <code>.</code> 是不会匹配换行符号的，如果要引入换行符则要如上所示加上。</p>
 <script>
 window.MathJax = {
@@ -301,7 +296,6 @@ window.MathJax = {
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

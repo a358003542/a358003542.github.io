@@ -5,16 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="unittest模块
-编写python测试代码，学习pytest模块之前，必须先学习和了解python官方模块 unitest 。首先上例子：
-
-unittest模块的main函数具体实际执行各个测试单元类，这些测试单元类继承自unittest的TestCase类。在这些继承自TestCase..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#unittest模块&#34;&gt;unittest模块&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -45,17 +43,6 @@ unittest模块的main函数具体实际执行各个测试单元类，这些测�
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -91,23 +78,6 @@ unittest模块的main函数具体实际执行各个测试单元类，这些测�
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#unittest模块">unittest模块</a></li>
-<li><a href="#pytest模块">pytest模块</a></li>
-<li><a href="#确认抛出某个异常">确认抛出某个异常</a></li>
-<li><a href="#确认两个数字大约近似">确认两个数字大约近似</a></li>
-<li><a href="#fixture">fixture</a></li>
-<li><a href="#setup和teardown怎么实现">setup和teardown怎么实现</a></li>
-<li><a href="#测试过一次下次不测试了">测试过一次下次不测试了</a></li>
-<li><a href="#自己写的python模块和pytest集成">自己写的python模块和pytest集成</a></li>
-<li><a href="#自动发现测试文件">自动发现测试文件</a></li>
-<li><a href="#doctest集成">doctest集成</a></li>
-<li><a href="#mock">mock</a></li>
-<li><a href="#patch">patch</a></li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2020-09-09T00:00:00+08:00">2020年 9月 9日 </time>
                 </div>
@@ -124,48 +94,64 @@ unittest模块的main函数具体实际执行各个测试单元类，这些测�
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#unittest模块">unittest模块</a></li>
+<li><a href="#pytest模块">pytest模块</a></li>
+<li><a href="#确认抛出某个异常">确认抛出某个异常</a></li>
+<li><a href="#确认两个数字大约近似">确认两个数字大约近似</a></li>
+<li><a href="#fixture">fixture</a></li>
+<li><a href="#setup和teardown怎么实现">setup和teardown怎么实现</a></li>
+<li><a href="#测试过一次下次不测试了">测试过一次下次不测试了</a></li>
+<li><a href="#自己写的python模块和pytest集成">自己写的python模块和pytest集成</a></li>
+<li><a href="#自动发现测试文件">自动发现测试文件</a></li>
+<li><a href="#doctest集成">doctest集成</a></li>
+<li><a href="#mock">mock</a></li>
+<li><a href="#patch">patch</a></li>
+</ul>
+</div>
 <h2 id="unittest模块">unittest模块</h2>
 <p>编写python测试代码，学习pytest模块之前，必须先学习和了解python官方模块 <strong>unitest</strong> 。首先上例子：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">math</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">TooBigError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TooBigError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">pass</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">TooBigError</span><span class="p">(</span><span class="s1">'too big input error'</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TooBigError</span><span class="p">(</span><span class="s1">&#39;too big input error&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'hello'</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">FirstTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""setUp函数在每个测试单元执行前被执行，其通常用于预先配置</span>
-<span class="sd">        一些后面测试单元会用到的参数"""</span>
+<span class="k">class</span> <span class="nc">FirstTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setUp函数在每个测试单元执行前被执行，其通常用于预先配置</span>
+<span class="sd">        一些后面测试单元会用到的参数&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""tearDown函数在每个测试单元执行之后再执行。"""</span>
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;tearDown函数在每个测试单元执行之后再执行。&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">test_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""具体的测试单元，名字需要以test字符开始"""</span>
+    <span class="k">def</span> <span class="nf">test_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;具体的测试单元，名字需要以test字符开始&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">test_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">3.1416</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertNotAlmostEqual</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">3.1415</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">test_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">TooBigError</span><span class="p">,</span> <span class="n">hello</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </code></pre></div>
+
 <p>unittest模块的main函数具体实际执行各个测试单元类，这些测试单元类继承自unittest的TestCase类。在这些继承自TestCase的类中，<code>setUp</code> 函数和 <code>tearDown</code> 函数有特殊的用途，具体见上面代码的说明。然后里面定义的函数test字符串开头的都是所谓的测试单元，其将被逐个执行。</p>
 <p>TestCase有很多方法，比如 <code>assertTrue</code> ，<code>assertFalse</code> 用于断言某个bool值是真或假，然后 <code>assertEqual</code> 用来断言某两个值是相等的(==)，类似的还有 <code>assertNotEqual</code> 用来断言两个值不相等。这里值得一提的 <code>assertAlmostEqual</code> 方法是用来断言某两个float值在多少小数位上是大致相等的，比如上面的例子，
 <span class="math">$\pi$</span> 值具体到小数点4位是3.1416。上面这些方法后面还可以额外接受一个提示字符串参数（Msg参数），用来具体没有断言成功的时的补充信息。</p>
@@ -174,57 +160,61 @@ unittest模块的main函数具体实际执行各个测试单元类，这些测�
 <h2 id="pytest模块">pytest模块</h2>
 <p>pytest模块是站在unittest基础上的，你之前通过 unittest 写的测试案例，全部都不用更改照样有用，接下来你要写一个新的测试，不需要再新建一个 <code>unittest.TestCase</code> 类了（如果你希望多个测试在一个类里面，就新建一个类即可，这个类不需要继承自任何类了。）。</p>
 <p>具体使用如下简单的写测试函数即可，也不需要类似unittest那种很多assert方法，就是最简单的 <code>assert</code> 确认返回为 True 即可。</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_prime</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test_prime</span><span class="p">():</span>
     <span class="k">assert</span> <span class="n">prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
 </code></pre></div>
+
 <p>这样确实简单方便了不少。下面继续讨论编写单元测试代码中的知识。</p>
 <h2 id="确认抛出某个异常">确认抛出某个异常</h2>
 <p>把官方的例子copy过来了，看一下就懂了。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
     <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">test_mytest</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">test_mytest</span><span class="p">():</span>
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">):</span>
         <span class="n">f</span><span class="p">()</span>
 </code></pre></div>
+
 <h2 id="确认两个数字大约近似">确认两个数字大约近似</h2>
 <div class="highlight"><pre><span></span><code>assert i == pytest.approx(j, rel=0.1)
 assert i == pytest.approx(j, abs=10)
 </code></pre></div>
+
 <p>默认采用的是rel相对偏差小于 <span class="math">$1e^{-6}$</span> 。abs是绝对偏差。</p>
 <h2 id="fixture">fixture</h2>
 <p>pytest提出了一个fixture概念，这个fixture非常的有用。最简单的一个使用如下所示：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">sample_config</span><span class="p">():</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="k">def</span> <span class="nf">sample_config</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">test_config_read</span><span class="p">(</span><span class="n">sample_config</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">sample_config</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="k">def</span> <span class="nf">test_config_read</span><span class="p">(</span><span class="n">sample_config</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">sample_config</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
 </code></pre></div>
+
 <p>也就是你的测试函数里面可以带上那个经过fixture装饰的函数名字，其实一个参数，这个参数的值就是之前fixture装饰的那个函数的返回值，然后这个参数你在测试函数里面是可以直接使用的。</p>
 <p>你可以如上将fixture和测试函数写在一起，但更加推荐的做法是：在 <code>tests</code> 文件夹下面新建一个 <code>conftest.py</code> 文件，你在里面定义的pytest的fixture是全局可共用的。</p>
 <h2 id="setup和teardown怎么实现">setup和teardown怎么实现</h2>
 <p>结合上面的fixture你可以实现一种全局setup配置和teardown的配置。比如说我的测试用例需要生成一个临时的文件夹，在这个临时文件夹下面做一些操作，然后测试完之后希望删除这个临时文件夹。可以编写如下fixture：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">tempfolder</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">tempfolder</span><span class="p">():</span>
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 
-    <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">'tests/test_images'</span><span class="p">),</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s1">'test_images'</span><span class="p">))</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;tests/test_images&#39;</span><span class="p">),</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;test_images&#39;</span><span class="p">))</span>
 
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'pytest auto-create tempfolder </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;pytest auto-create tempfolder </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">t</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
@@ -233,30 +223,37 @@ assert i == pytest.approx(j, abs=10)
         <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>  <span class="c1"># noqa: B014</span>
             <span class="k">pass</span>
 </code></pre></div>
+
 <p>这里面的一个核心概念是fixture <code>yield</code> 后面的动作都属于teardown动作，如果是return的话则没有这个概念。其他测试函数可以直接调用哪个临时测试文件夹参数 <code>tempfolder</code> ，然后上面的一个额外动作是将一些文件复制到临时的测试文件夹，方便在临时的测试文件夹下做一些动作。最后teardown的动作就是删除临时文件夹。</p>
 <h2 id="测试过一次下次不测试了">测试过一次下次不测试了</h2>
 <p>如果你希望测试函数之前测试过一次了，然后后面就不用测试了，那么就在这个函数上面加上如下装饰器。</p>
-<div class="highlight"><pre><span></span><code>@pytest.mark.skip(reason="i have test it")
+<div class="highlight"><pre><span></span><code>@pytest.mark.skip(reason=&quot;i have test it&quot;)
 </code></pre></div>
+
 <h2 id="自己写的python模块和pytest集成">自己写的python模块和pytest集成</h2>
 <p>推荐安装的有：<code>pytest</code> 和 <code>pytest-runner</code> 。然后新建 <code>setup.cfg</code> 文件，里面的内容是：</p>
 <div class="highlight"><pre><span></span><code>[aliases]
 test=pytest
 </code></pre></div>
+
 <p>以后你要测试就输入：</p>
 <div class="highlight"><pre><span></span><code>python setup.py test
 </code></pre></div>
+
 <p>这样做的好处是，其是直接利用本地修改的源码，也就是一边修改源码一边实时测试。</p>
 <p>这样写的话记得要给pytest传递参数需要加上 <code>--addopts=</code> 选项，比如打印更多的信息：</p>
-<div class="highlight"><pre><span></span><code>python setup.py test --addopts="-v"
+<div class="highlight"><pre><span></span><code>python setup.py test --addopts=&quot;-v&quot;
 </code></pre></div>
+
 <p>可能每次写 <code>--addopts="-v"</code> 有点麻烦，在 <code>setup.cfg</code> 上加上这样一句吧：</p>
 <div class="highlight"><pre><span></span><code>[tool:pytest]
 addopts = --verbose
 </code></pre></div>
+
 <p>好了，就是：</p>
 <div class="highlight"><pre><span></span><code>python setup.py test
 </code></pre></div>
+
 <p>然后专心一边测试一边写代码吧。</p>
 <h2 id="自动发现测试文件">自动发现测试文件</h2>
 <p>pytest是支持自动发现测试文件的，所有的 <code>test_*.py</code> 和 <code>*_test.py</code> 文件都被认为是测试文件。</p>
@@ -264,28 +261,33 @@ addopts = --verbose
 <div class="highlight"><pre><span></span><code>[pytest]
 testpaths = tests
 </code></pre></div>
+
 <p>这样pytest就只处理这个tests文件夹下的测试文件了。</p>
 <h2 id="doctest集成">doctest集成</h2>
 <p>doctest在python源码那边能够立刻起到大概说明这个函数在做什么事情，还是很方便的。这里假设读者已经初步了解了doctest的基本用法了，如果没有请参看官方文档doctest相关部分，接下来的讨论是在这个基础之上，传统写法是不需要做什么改变的。</p>
 <p>使用pytest来集成doctest有以下好处，一是python模块文件后面不需要跟上：</p>
-<div class="highlight"><pre><span></span><code>if __name__ == "__main__":
+<div class="highlight"><pre><span></span><code>if __name__ == &quot;__main__&quot;:
     import doctest
     doctest.testmod()
 </code></pre></div>
+
 <p>二是pytest可以自动搜索目标python文件来实现批量doctest，最后就是pytest的原有传统unittest过程不受影响。</p>
 <p>你在自动发现测试文件的配置上需要进行做一些调整了：</p>
 <div class="highlight"><pre><span></span><code>[pytest]
 testpaths = tests my_python_module
 </code></pre></div>
+
 <p>也就是将你的原tests文件夹和你的python模块文件夹都加入搜索目录。</p>
 <p>然后你还需要加上这个选项：</p>
 <div class="highlight"><pre><span></span><code>addopts = --doctest-modules --doctest-continue-on-failure
 </code></pre></div>
+
 <p>其中 <code>--doctest-modules</code> 是开启pytest的doctest，然后 <code>--doctest-continue-on-failure</code> 是另外一个选项了，个人推荐加上。</p>
 <h2 id="mock">mock</h2>
 <p>在写单元测试时，涉及到网络，套接字等编程问题，必然有这个需求，那就是你希望伪造一些数据，拦截某些函数或类的返回值，从而将整个测试从大型软件框架中抽离出来，这个时候就必须要了解mock模块了。mock模块是unittest模块的子模块，即使是使用上pytest，这个mock子模块也是很有用的。</p>
 <div class="highlight"><pre><span></span><code>from unittest import mock
 </code></pre></div>
+
 <p>使用mock模块最关键性的问题是理解mock在做什么。mock模块里面最核心的概念是 <code>Mock</code> 类 ，我们看到官方文档的这个例子：</p>
 <div class="highlight"><pre><span></span><code>from unittest import mock
 class Test(): pass
@@ -297,21 +299,23 @@ t.method()
 t.method(1,2,3)
 3
 </code></pre></div>
+
 <p>简单来啊就是伪造一个python对象，然后通过定制某些特别的属性和方法来实现你的单元测试代码中你想要的那个python对象。在实践中推荐使用 <code>MagicMock</code> ，MagicMock继承自Mock，然后实现了很多python对象的magic method【也就是那一大堆<code>__what__</code> 的方法】。</p>
 <h2 id="patch">patch</h2>
 <p>实际编码中我们可能有这样的需求，那就是需要Mock的对象很复杂，最好是贴近某个真实对象，但是呢又需要做一些修改，这个时候我们就需要使用patch了：</p>
-<div class="highlight"><pre><span></span><code>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">'users.views.WXAPPAPI.jscode2session'</span><span class="p">,</span> \
-                <span class="n">return_value</span><span class="o">=</span><span class="p">{</span><span class="s2">"openid"</span><span class="p">:</span> <span class="s2">"o1ZL90Ble54545ylei7sBhjkjhtG7PLM"</span><span class="p">,</span> <span class="s2">"session_key"</span><span class="p">:</span> <span class="s2">"4XXDVTc0e4nuDjgjghhfCIcOg=="</span><span class="p">,</span><span class="s2">"expires_in"</span><span class="p">:</span> <span class="mi">7200</span><span class="p">})</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">test_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_jscode2session</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'js_code'</span><span class="p">:</span> <span class="s1">'003xXUd30hnknF15454ua5e30xXUdr'</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;users.views.WXAPPAPI.jscode2session&#39;</span><span class="p">,</span> \
+                <span class="n">return_value</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;openid&quot;</span><span class="p">:</span> <span class="s2">&quot;o1ZL90Ble54545ylei7sBhjkjhtG7PLM&quot;</span><span class="p">,</span> <span class="s2">&quot;session_key&quot;</span><span class="p">:</span> <span class="s2">&quot;4XXDVTc0e4nuDjgjghhfCIcOg==&quot;</span><span class="p">,</span><span class="s2">&quot;expires_in&quot;</span><span class="p">:</span> <span class="mi">7200</span><span class="p">})</span>
+    <span class="k">def</span> <span class="nf">test_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_jscode2session</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;js_code&#39;</span><span class="p">:</span> <span class="s1">&#39;003xXUd30hnknF15454ua5e30xXUdr&#39;</span><span class="p">}</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">'mini-login'</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;mini-login&#39;</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># for next testcase</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">our_session_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'our_session_key'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">our_session_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;our_session_key&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">)</span>
 </code></pre></div>
+
 <p>如何理解上面的代码？当这段测试代码运行的时候，它的变量名字空间被patch给污染了，比如上面的 <code>users.views.WXAPPAPI.jscode2session</code> 这个函数，被污染成为一个 Mock 对象了，这个Mock对象传递给了这个函数的第二个参数（额外的的这个参数哪怕你后面不用也必须写上） <code>mock_jscode2session</code> 。</p>
 <p>然后代码在运行的时候遇到<code>jscode2session</code> 总会返回上面给出的值，这样你就不用考虑数据库啊，网络情况之类的问题了。上面还有一些小技巧和django框架相关，比如 <code>self.client.get(reverse('mini-login'), data)</code> 是直接利用自己django，然后自己请求自己的url获得什么响应，这个和django相关，在这里就不多说了。</p>
 <script>
@@ -363,7 +367,6 @@ window.MathJax = {
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

@@ -5,16 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="有问题，问AI，按照28定律，本文大部分内容一般都是用不到的，python编程学完核心教程即可，本文历史原因放在这里。后面应该会慢慢删减成个人碎片笔记，不再整理成文了。
-bytes类型
-基本编码知识
-具体存储在计算机里面的都是二进制流，而如果要将其正确解析成为对应的字符，是需要建立一定的编码规..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#bytes类型&#34;&gt;bytes类型&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#基本编码知识..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -45,17 +43,6 @@ bytes类型
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -91,7 +78,22 @@ bytes类型
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
+
+                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
+                </div>
+
+                <div class="p-1">最近更新于：<time datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+                </div>
+
+
+                <div class="p-1">分类：
+                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="article-content">
                 <div class="toc">
 <ul>
 <li><a href="#bytes类型">bytes类型</a><ul>
@@ -165,23 +167,6 @@ bytes类型
 </li>
 </ul>
 </div>
-
-                <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
-                </div>
-
-                <div class="p-1">最近更新于：<time datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
-                </div>
-
-
-                <div class="p-1">分类：
-                <a class="category-link" href="https://a358003542.github.io/categories.html#posts-ref">posts</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-8 col-lg-8">
-            <div class="article-content">
-                
 <p>有问题，问AI，按照28定律，本文大部分内容一般都是用不到的，python编程学完核心教程即可，本文历史原因放在这里。后面应该会慢慢删减成个人碎片笔记，不再整理成文了。</p>
 <h2 id="bytes类型">bytes类型</h2>
 <h3 id="基本编码知识">基本编码知识</h3>
@@ -190,11 +175,11 @@ bytes类型
 <strong>unicode</strong> 类型。</p>
 <p>bytes简单的理解就是没有任何字符含义的二进制字节流。然后如这样 <code>b'test'</code>
 ，在前面加个字符b或者B，其将解析为bytes类型。</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x = b'test'
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x = b&#39;test&#39;
 &gt;&gt;&gt; x
-b'test'
+b&#39;test&#39;
 &gt;&gt;&gt; type(x)
-&lt;class 'bytes'&gt;
+&lt;class &#39;bytes&#39;&gt;
 &gt;&gt;&gt; x[0]
 116
 &gt;&gt;&gt; x[1]
@@ -203,41 +188,47 @@ b'test'
 [116, 101, 115, 116]
 &gt;&gt;&gt; 
 </code></pre></div>
+
 <p>python在打印时会尽可能打印可见字符，尽管上面的x打印显示出了具体的test这个字符，但我们应该认为x是一连串的数字序列而不具有任何字符串含义，如果我们调用bytes类型的<strong>decode</strong>方法，那么bytes类型解码之后将变成str类型。</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; y = x.decode('utf-8')
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; y = x.decode(&#39;utf-8&#39;)
 &gt;&gt;&gt; y
-'test'
+&#39;test&#39;
 &gt;&gt;&gt; type(y)
-&lt;class 'str'&gt;
+&lt;class &#39;str&#39;&gt;
 </code></pre></div>
+
 <p>当然具体编码方式是否正确，是否正确解析了原bytes字节流那又是另外一回事了。比如还可能是big5或者GB什么的编码。</p>
 <p>此外字符串str类型有个<strong>encode</strong>方法可以进行编码操作从而输出对应编码的bytes字节流。</p>
 <h3 id="使用方法">使用方法</h3>
 <p>我们可以如下看一下str类型和bytes类型具体有那些方法差异:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; set(dir('abc')) - set(dir(b'abc'))
-{'isdecimal', 'casefold', '__rmod__', 'format_map', 'format', 'encode', '__mod__', 'isnumeric', 'isprintable', 'isidentifier'}
-&gt;&gt;&gt; set(dir(b'abc')) - set(dir('abc'))
-{'decode', 'fromhex'}
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; set(dir(&#39;abc&#39;)) - set(dir(b&#39;abc&#39;))
+{&#39;isdecimal&#39;, &#39;casefold&#39;, &#39;__rmod__&#39;, &#39;format_map&#39;, &#39;format&#39;, &#39;encode&#39;, &#39;__mod__&#39;, &#39;isnumeric&#39;, &#39;isprintable&#39;, &#39;isidentifier&#39;}
+&gt;&gt;&gt; set(dir(b&#39;abc&#39;)) - set(dir(&#39;abc&#39;))
+{&#39;decode&#39;, &#39;fromhex&#39;}
 </code></pre></div>
+
 <p>我们看到bytes和str几乎拥有相同的功能，所以大部分之前学到的用于str字符串类型的那些方法同样可以用于bytes类型中。这多少有点方法泛滥了，因为bytes是字节流类型，内在是没有字符含义的，可能某些方法并不推荐使用。</p>
 <p>比如下面的upper方法和replace方法:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; b't'.upper()
-b'T'
-&gt;&gt;&gt; b'testst'.replace(b'st',b'oo')
-b'teoooo'
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; b&#39;t&#39;.upper()
+b&#39;T&#39;
+&gt;&gt;&gt; b&#39;testst&#39;.replace(b&#39;st&#39;,b&#39;oo&#39;)
+b&#39;teoooo&#39;
 </code></pre></div>
+
 <p>然后字节流的连接可以很方便的用加法或join方法来进行，如下所示:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; b't' + b'e'
-b'te'
-&gt;&gt;&gt; b''.join([b'a',b'c'])
-b'ac'
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; b&#39;t&#39; + b&#39;e&#39;
+b&#39;te&#39;
+&gt;&gt;&gt; b&#39;&#39;.join([b&#39;a&#39;,b&#39;c&#39;])
+b&#39;ac&#39;
 </code></pre></div>
+
 <p>但是要<em>注意</em>，python2里面不管是加法还是join方法都将丢掉那个b修饰符:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; b''.join([b'a',b'c'])
-'ac'
-&gt;&gt;&gt; b'a' + b'b'
-'ab'
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; b&#39;&#39;.join([b&#39;a&#39;,b&#39;c&#39;])
+&#39;ac&#39;
+&gt;&gt;&gt; b&#39;a&#39; + b&#39;b&#39;
+&#39;ab&#39;
 </code></pre></div>
+
 <p>不过这也无关紧要，因为python2里面我们可以理解str就对应的是python3的bytes类型，然后unicode对应的就是python3的str类型。</p>
 <h3 id="bytearray类型">bytearray类型</h3>
 <p>bytearray和bytes类型类似，而且其内部支持的方法和操作也和bytes类型类似，除了其更像是一个列表，可以原处修改而字符串和bytes是不可变的。python2现在也有bytearray类型了，只是内在的文本和二进制是不分的。</p>
@@ -245,19 +236,21 @@ b'ac'
 <p>文件对象是可迭代对象。</p>
 <h3 id="写文件">写文件</h3>
 <p>对文件的操作首先需要用<strong>open</strong>函数创建一个文件对象，简单的理解就是把相应的接口搭接好。文件对象的<strong>write</strong>方法进行对某个文件的写操作，最后需要调用<strong>close</strong>方法写的内容才真的写进去了。</p>
-<div class="highlight"><pre><span></span><code>file001 = open('test.txt','w')
-file001.write('hello world1\n')
-file001.write('hello world2\n')
+<div class="highlight"><pre><span></span><code>file001 = open(&#39;test.txt&#39;,&#39;w&#39;)
+file001.write(&#39;hello world1\n&#39;)
+file001.write(&#39;hello world2\n&#39;)
 file001.close()
 </code></pre></div>
+
 <p>如果你们了解C语言的文件操作，在这里会为python语言的简单便捷赞叹不已。就是这样三句话：创建一个文件对象，然后调用这个文件对象的wirte方法写入一些内容，然后用close方法关闭这个文件即可。</p>
 <h3 id="读文件">读文件</h3>
 <p>一般的用法就是用<strong>open</strong>函数创建一个文件对象，然后用<strong>read</strong>方法调用文件的内容。最后记得用<strong>close</strong>关闭文件。</p>
-<div class="highlight"><pre><span></span><code>file001 = open('test.txt')
+<div class="highlight"><pre><span></span><code>file001 = open(&#39;test.txt&#39;)
 filetext=file001.read()
 print(filetext)
 file001.close()
 </code></pre></div>
+
 <p>此外还有<strong>readline</strong>方法是一行一行的读取某文件的内容。</p>
 <h3 id="open函数的处理模式">open函数的处理模式</h3>
 <p>open函数的处理模式如下：</p>
@@ -285,41 +278,45 @@ file001.close()
 </dl>
 <h3 id="用with语句打开文件">用with语句打开文件</h3>
 <p>类似之前的例子我们可以用with语句来打开文件，这样就不用close方法来关闭文件了。然后with语句来提供了类似try语句的功能可以自动应对打开文件时的一些异常情况。</p>
-<div class="highlight"><pre><span></span><code>with open('test.txt','w') as file01:
-    file01.write('hello world1\n')
-    file01.write('hello world2\n')
+<div class="highlight"><pre><span></span><code>with open(&#39;test.txt&#39;,&#39;w&#39;) as file01:
+    file01.write(&#39;hello world1\n&#39;)
+    file01.write(&#39;hello world2\n&#39;)
 
-with open('test.txt','r') as file01:
+with open(&#39;test.txt&#39;,&#39;r&#39;) as file01:
     filetext=file01.read()
     print(filetext)
 </code></pre></div>
+
 <h3 id="文件操作推荐方式">文件操作推荐方式</h3>
 <p>除了read直接读取整个文件之外，还有readlines将文件读取为一个列表。不过更推荐的采用如下形式：</p>
-<div class="highlight"><pre><span></span><code>f = open('removeduplicate.py')
+<div class="highlight"><pre><span></span><code>f = open(&#39;removeduplicate.py&#39;)
 
 for line in f:
-    print(line,end='')
+    print(line,end=&#39;&#39;)
 </code></pre></div>
+
 <p>这种写法更python风格，代码运行也更高效。读取的line的结果等于readlines里面的一行，换行符 <code>\n</code> 附在最后，除了最后一行。</p>
 <p>上面的代码的一个小细节就是 <code>end=''</code> ，意思是取消<code>\n</code>，因为原来的行里面已经有<code>\n</code>了。</p>
 <p>然后代码稍作修改就可以在每一行之前加上<code>&gt;&gt;&gt;</code>这个符号了。</p>
-<div class="highlight"><pre><span></span><code>f = open('removeduplicate.py')
+<div class="highlight"><pre><span></span><code>f = open(&#39;removeduplicate.py&#39;)
 
 for line in f:
-    print('&gt;&gt;&gt;',line,end='')
+    print(&#39;&gt;&gt;&gt;&#39;,line,end=&#39;&#39;)
 </code></pre></div>
+
 <p>什么？这个输出只是在终端，没有到某个文件里面去，行，加上file参数。然后代码变成如下：</p>
 <div class="highlight"><pre><span></span><code>import sys
 
-f = open('removeduplicate.py')
-pyout=open(sys.argv[1] ,"w")
+f = open(&#39;removeduplicate.py&#39;)
+pyout=open(sys.argv[1] ,&quot;w&quot;)
 
 for line in f:
-    print('&gt;&gt;&gt;',line,end='',file=pyout)
+    print(&#39;&gt;&gt;&gt;&#39;,line,end=&#39;&#39;,file=pyout)
 
 pyout.close()
 f.close()
 </code></pre></div>
+
 <p>在上面描述的基础上，可以在新输出行之上再加入一些额外的操作来实现更多样的文件操作工具。</p>
 <h2 id="类的内置方法">类的内置方法</h2>
 <p>本章节围绕着下面这些内容逐步展开，从而逐步实现对python类的各个行为的深度定制。</p>
@@ -349,18 +346,19 @@ f.close()
 <h3 id="dict">`<strong>dict</strong>``</h3>
 <p>参考了 <a href="http://www.cnblogs.com/vamei/archive/2012/12/11/2772448.html">这个网页</a> 。</p>
 <p>首先读者记住class是个类似于def一样的语句，其也管理一个名字空间，然后区块里面的语句逐步执行。然后我们看下面这个例子：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">A</span><span class="p">():</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">fun2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">'fun'</span><span class="p">,</span> <span class="n">what</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fun2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fun&#39;</span><span class="p">,</span> <span class="n">what</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">1</span>
 </code></pre></div>
+
 <div class="highlight"><pre><span></span><code>class B(A):
 
     def __init__(self):
@@ -368,21 +366,22 @@ f.close()
     b = 2
 
     def fun3(self):
-        print('fun3')
+        print(&#39;fun3&#39;)
 
 b = B()
 
    b.__class__
-=&gt; &lt;class 'B'&gt;
+=&gt; &lt;class &#39;B&#39;&gt;
    B.__class__
-=&gt; &lt;class 'type'&gt;
+=&gt; &lt;class &#39;type&#39;&gt;
    b.__dict__
-=&gt; {'d': 5}
+=&gt; {&#39;d&#39;: 5}
    B.__dict__
-=&gt; mappingproxy({'__module__': 'builtins', '__init__': &lt;function B.__init__ at 0x7f13586057b8&gt;, 'b': 2, 'fun3': &lt;function B.fun3 at 0x7f1358605840&gt;, '__doc__': None})
+=&gt; mappingproxy({&#39;__module__&#39;: &#39;builtins&#39;, &#39;__init__&#39;: &lt;function B.__init__ at 0x7f13586057b8&gt;, &#39;b&#39;: 2, &#39;fun3&#39;: &lt;function B.fun3 at 0x7f1358605840&gt;, &#39;__doc__&#39;: None})
    A.__dict__
-=&gt; mappingproxy({'__module__': 'builtins', '__init__': &lt;function A.__init__ at 0x7f1358605620&gt;, 'fun2': &lt;function A.fun2 at 0x7f13586056a8&gt;, 'x': &lt;property object at 0x7f1358604188&gt;, '__dict__': &lt;attribute '__dict__' of 'A' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'A' objects&gt;, '__doc__': None})
+=&gt; mappingproxy({&#39;__module__&#39;: &#39;builtins&#39;, &#39;__init__&#39;: &lt;function A.__init__ at 0x7f1358605620&gt;, &#39;fun2&#39;: &lt;function A.fun2 at 0x7f13586056a8&gt;, &#39;x&#39;: &lt;property object at 0x7f1358604188&gt;, &#39;__dict__&#39;: &lt;attribute &#39;__dict__&#39; of &#39;A&#39; objects&gt;, &#39;__weakref__&#39;: &lt;attribute &#39;__weakref__&#39; of &#39;A&#39; objects&gt;, &#39;__doc__&#39;: None})
 </code></pre></div>
+
 <p>这个例子很有些东西，首先 <code>b.__class__</code> 是查看实例b的类型，大体输出接近于 <code>type(b)</code> ，然后我们看到类B的类型是type。后面在将metaclass会讲到这个，目前记住实例是根据类创建的，而类是根据元类也就是这个type创建的。</p>
 <p>然后我们看到不管是实例b还是类B或者类A都记忆了一些自己的属性，至于继承来的属性是不需要重复记忆了。</p>
 <p>然后类的 <code>__dict__</code>是 mappingproxy对象，其是只读的，也就是只有实例b的 <code>__dict__</code> 是 dict类型，是可以读写的（参考了<a href="http://pyzh.readthedocs.io/en/latest/python-questions-on-stackoverflow.html#dict">这篇文章</a>）。</p>
@@ -454,7 +453,7 @@ X , <code>__radd__(self,other)</code></p>
 <p>bool(X) <code>__bool__(self)</code></p>
 <h3 id="__eq__"><code>__eq__</code></h3>
 <p><code>__eq__</code>方法定义了两个对象之间A == B的行为。 比如下面：</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">==</span><span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
@@ -463,6 +462,7 @@ X , <code>__radd__(self,other)</code></p>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 </code></pre></div>
+
 <p>定义了这样的<code>__eq__</code>方法之后，我们运行==语句，如果两个对象之间内置字典键和值都是一样的，那么就返回True。</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; test=GClass()
 &gt;&gt;&gt; test.a=1
@@ -473,6 +473,7 @@ True
 &gt;&gt;&gt; test is test2
 False
 </code></pre></div>
+
 <p>如果我们不重定义<code>__eq__</code>方法，似乎test和test2会从原始的object类继承<code>__eq__</code>方法，然后它们比较返回的是False，我想可能是这两个实例内部某些值的差异吧，但应该不是基于id。</p>
 <h3 id="比较判断操作">比较判断操作</h3>
 <p>类似上面的==比较操作，还有如下比较判断操作和对应的内置方法可以重定义。</p>
@@ -500,21 +501,22 @@ False
 <p><a href="http://www.informit.com/articles/article.aspx?p=453682">参考网站</a>。</p>
 <p>这里先总结下is语句和==判断和isinstance和id还有type函数，然后再提及python类的内置方法<code>__eq__</code>。</p>
 <p>python是一个彻头彻尾的面向对象的语言，python内部一切数据都是对象，对象就有类型type的区别。比如内置的那样对象类型：</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; type('abc')
-&lt;class 'str'&gt;
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; type(&#39;abc&#39;)
+&lt;class &#39;str&#39;&gt;
 &gt;&gt;&gt; type(123)
-&lt;class 'int'&gt;
+&lt;class &#39;int&#39;&gt;
 &gt;&gt;&gt; type([1,2,3])
-&lt;class 'list'&gt;
+&lt;class &#39;list&#39;&gt;
 </code></pre></div>
+
 <p>对象除了有type类型之外，还有id属性，id就是这个对象具体在内存中的存储位置。</p>
 <p>当我们说lst=<div class="math">$$1,2,3$$</div>的时候，程序具体在内存中创建的对象是<div class="math">$$1,2,3$$</div>，而lst这个变量名不过是一个引用。然后我们看下面的例子：</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x=[1,2,3]
 &gt;&gt;&gt; y=[1,2,3]
 &gt;&gt;&gt; type(x)
-&lt;class 'list'&gt;
+&lt;class &#39;list&#39;&gt;
 &gt;&gt;&gt; type(y)
-&lt;class 'list'&gt;
+&lt;class &#39;list&#39;&gt;
 &gt;&gt;&gt; id(x)
 3069975884
 &gt;&gt;&gt; id(y)
@@ -524,6 +526,7 @@ True
 &gt;&gt;&gt; x is y
 False
 </code></pre></div>
+
 <p>type函数返回对象的类型，id函数返回对象具体在内存中的存储位置，而==判断只是确保值相等，is语句返回True则更加严格，需要对象在内存上（即id相等）完全是同一个东西。</p>
 <p>对象之间的类型比较可以用如下语句来进行比较：</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; x=10
@@ -532,6 +535,7 @@ True
 &gt;&gt;&gt; type(x) == type(0)
 True
 </code></pre></div>
+
 <p>不过不是特别好用，比如假设fun是你自己定义的一个函数，用type(fun) ==
 function就会出错，然后type比较还要小心NoneType和其他空列表类型不同，而且type比较并没有将类的继承考虑进去。</p>
 <p>一般推荐isinstance函数来进行类型比较，请参考<a href="http://stackoverflow.com/questions/1549801/differences-between-isinstance-and-type-in-python">这个网站</a>的说明。推荐使用types模块的特定名字来判断类型，具体如下：</p>
@@ -574,6 +578,7 @@ False
 &gt;&gt;&gt; isinstance(print,types.BuiltinFunctionType)
 True
 </code></pre></div>
+
 </dd>
 </dl>
 <p>更多内容请参见<a href="https://docs.python.org/3.4/library/types.html">types模块的官方文档</a>。</p>
@@ -588,6 +593,7 @@ __oct__(self)  八进制
 __hex__(self) 十六进制
 __index__(self) 切片操作
 </code></pre></div>
+
 <h3 id="lenwhat"><code>len(what)</code></h3>
 <p><code>len(what)</code> 由<code>__len__(self)</code>提供支持。</p>
 <h3 id="copy方法和deepcopy方法">copy方法和deepcopy方法</h3>
@@ -602,6 +608,7 @@ __index__(self) 切片操作
 with EXPR as VAR:
     BLOCK
 </code></pre></div>
+
 <p>实际上就是：</p>
 <div class="highlight"><pre><span></span><code>VAR = EXPR
 VAR.__enter__()
@@ -610,6 +617,7 @@ try:
 finally:
     VAR.__exit__()
 </code></pre></div>
+
 <p>比如我们执行 <code>with open(...) as f</code> 的这类语句，最终离开就应该调用了文件对象的 <code>__exit__</code> 方法：</p>
 <div class="highlight"><pre><span></span><code>with open(...) as f:
     BLOCK
@@ -621,21 +629,22 @@ try:
 finally:
     f.__exit__()
 </code></pre></div>
+
 <p>此外在<code>contextlib</code> 那里还提供了一个<strong>contextmanager</strong> 装饰器，写法有点差异，但要实现的效果大致是类似的。下面是一个演示例子：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Mylock</span><span class="p">():</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Mylock</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">acquire_lock</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
 <span class="k">with</span> <span class="n">Mylock</span><span class="p">()</span> <span class="k">as</span> <span class="n">lock</span><span class="p">:</span>
     <span class="c1"># do something</span>
 
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="nd">@contextmanager</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_lock</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_lock</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
     <span class="n">lock</span> <span class="o">=</span> <span class="n">acquire_lock</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">yield</span> <span class="n">lock</span>
@@ -645,17 +654,18 @@ finally:
 <span class="k">with</span> <span class="n">get_lock</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="k">as</span> <span class="n">lock</span><span class="p">:</span>
     <span class="c1"># do something</span>
 </code></pre></div>
+
 <h3 id="__call__"><code>__call__</code></h3>
 <p>请看下面的例子：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Position</span><span class="p">():</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Position</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">'('</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="s1">')'</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;)&#39;</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">p1</span><span class="o">=</span><span class="n">Position</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
@@ -665,19 +675,20 @@ finally:
 <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> 
 </code></pre></div>
+
 <p>有了<code>__call__(self,args)</code>方法，你的实例就好像函数一样可以被调用了。</p>
 <h3 id="__repr__-和-__str__-的区别"><code>__repr__</code> 和 <code>__str__</code> 的区别</h3>
 <p>简单来说就是 repr(what) 调用的是 <code>__repr__</code> 方法，str(what) 调用的是 <code>__str__</code> 方法。然后再简单实验了一下，和print函数和字符串format相关的使用的是 <code>__str__</code> 方法，如果你在python的REPL环境下，简单的输入该变量回显使用的是 <code>__repr__</code> 方法。如果你不实现<code>__str__</code> 方法，print函数或者字符串format相关的使用会调用 <code>__repr__</code> 方法，至于 <code>__repr__</code> 方法就算你不实现所有python对象都有默认的 <code>__repr__</code> 方法的。</p>
 <h3 id="__new__"><code>__new__</code></h3>
 <p>一个类创造出一个实例出来首先是调用 <code>__new__</code> 方法，然后才是调用<code>__init__</code>方法。其一个应用就是所谓的单例模式，也就是一个类只能创造一个实例，请参看 <a href="https://segmentfault.com/a/1190000008141049">这篇文章</a> 。【下面代码做了一些修改，python3之后除了<code>super()</code> 写法可以简化之外，object的<code>__new__</code> 方法是不带参数的。然后python的<code>__new__</code> 和 <code>__init__</code> 是协作关系，似乎要求参数存在某种一致性，暂时还不太清楚。TODO】</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>  
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>  
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="p">(</span><span class="n">Singleton</span><span class="p">):</span>  
+<span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Singleton</span><span class="p">):</span>  
     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">one</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">()</span>
@@ -689,47 +700,50 @@ finally:
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">id</span><span class="p">(</span><span class="n">one</span><span class="p">),</span> <span class="nb">id</span><span class="p">(</span><span class="n">two</span><span class="p">)</span>
 <span class="p">(</span><span class="mi">4303862608</span><span class="p">,</span> <span class="mi">4303862608</span><span class="p">)</span>
 </code></pre></div>
+
 <p>这里还有一个点，为什么 <code>_instance</code> 在两个类初始化过程中指向同一个对象。因为 <code>_instance</code> 是属于类的，而实例是基于类的 <code>__new__</code> 和 <code>__init__</code> 方法生成出来的，所以假设你是python程序，那个类（class其实和def一样的一种东西）为什么不在内存里编译好了就可以了，后面都引用这个类就行了。那么这个内存编译好了的类里面的 <code>_instance</code> 变量当然也封装好了。理解这个过程有助于我们进一步理解类变量的作用范围。</p>
 <h3 id="__del__"><code>__del__</code></h3>
 <p>当对象内存存储被回收时，python最后将执行一个内置方法<code>__del__</code>。有的时候你定义的需要管理一些额外的资源，定制这个函数可以确保python程序关闭时目标资源已经自动关闭回收。</p>
 <h3 id="__getattr__"><code>__getattr__</code></h3>
 <p>如果某个属性不在对象的 <code>__dict__</code> 里面，然后python会调用<code>__getattr__(self,name)</code> 方法（参考了<a href="http://www.cnblogs.com/vamei/archive/2012/12/11/2772448.html">这篇文章</a> ）。如果没定义这个方法那么将抛出 AttributeError 。</p>
 <p>因为python语言内部是行为是可能发生变化的，这里更确切的表述参考python官方文档是，如果python默认属性查找没有找到，那么将试着调用该对象的 <code>__getattr__</code> 方法来查找，还找不到则抛出 <code>AttributeError</code> 异常。官方文档还强调，如果按照python默认的属性查找动作，找到目标属性了，也就是之前我们讨论的那些和类继承相关的属性找到等等。那么 <code>__getattr__</code> 方法是不会被调用的。所以我们要实现 <code>__getattr__</code> 方法加上额外的查找动作代码如下：</p>
-<div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_element</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_element</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
                 <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_element</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'no such attribute in this object'</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;no such attribute in this object&#39;</span><span class="p">)</span>
 </code></pre></div>
+
 <p>然后还有 <code>__setattr__(self,name,value)</code> 和 <code>__delattr__(self,name)</code>，这两个方法不管原属性在不在都会对其进行操作，谨慎使用！相关的<code>__getattribute__</code> 方法一般不推荐使用，这会干扰python默认的属性查找行为，这是一种很不好的编程实践。</p>
 <h3 id="__missing__方法"><code>__missing__</code>方法</h3>
 <p>对于字典或者字典的子类，你可以通过定义 <code>__missing__</code> 方法来回避找不到键值而抛出的 <code>KeyError</code> ，参考了 <a href="http://stackoverflow.com/questions/635483/what-is-the-best-way-to-implement-nested-dictionaries-in-python">这个网页</a> 。如下所示:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">NestedDict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">UserDict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">'''</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">NestedDict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">UserDict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Implement this data structure:</span>
-<span class="sd">{"section":{},</span>
+<span class="sd">{&quot;section&quot;:{},</span>
 <span class="sd">}</span>
-<span class="sd">'''</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="sd">&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__missing__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__missing__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">value</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="bp">self</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">delete_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">delete_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">section</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="p">[</span><span class="n">section</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </code></pre></div>
+
 <p>如果找不到该key，则该类会自动赋值一个新的 dict()并作为该key的值。你可能希望使用 <code>type(self)()</code> ，但这种风格对json的兼容性不太好，推荐还是都用dict类。</p>
 <h2 id="类的装饰器">类的装饰器</h2>
 <p>装饰器的作用机制就是对接下来的函数进行进一步的封装，比如：</p>
@@ -740,26 +754,28 @@ finally:
     # 其就等价于在类声明语句里写上了这样一句。   
     what = staticmethod(what)
 </code></pre></div>
+
 <p>可见装饰器并不是一个什么神秘的难懂的概念，同样你可以定义自己的函数，这个函数处理某个函数对象，并对其进行某种封装。</p>
 <h3 id="自定义装饰器">自定义装饰器</h3>
 <div class="highlight"><pre><span></span><code>def print1(f):
-    print('1',f)
+    print(&#39;1&#39;,f)
     return f
 
 @print1
 def print3(c):
     print(c)
 
-print3('c')  # print1(print3)('c')
+print3(&#39;c&#39;)  # print1(print3)(&#39;c&#39;)
 </code></pre></div>
+
 <p>比如上面的print1函数就做成了一个装饰器函数，后面的print3函数可以理解为 <code>print3=print1(print3)</code> 。——在这里理解的关键在于理解python中函数名字是无关紧要的，关键是函数对象。比如这里右边的print3是<code>def print3</code> 时生成的那个函数对象，然后这个函数对象送给print1进行了处理并封装为一个新的函数对象，再把这个函数对象赋值给了变量print3。</p>
 <h3 id="多个装饰器">多个装饰器</h3>
 <div class="highlight"><pre><span></span><code>def print1(f):
-    print('1',f)
+    print(&#39;1&#39;,f)
     return f
 
 def print2(f):
-    print('2',f)
+    print(&#39;2&#39;,f)
     return f
 
 @print2
@@ -767,125 +783,134 @@ def print2(f):
 def print4(c):
     print(c)
 
-print4('c')
+print4(&#39;c&#39;)
 </code></pre></div>
+
 <p>多个装饰器的装饰顺序是从下往上的，上面的例子原print4函数对象先经过print1处理，然后再经过print2的处理，最后这个函数对象赋值给了变量print4。</p>
 <h3 id="装饰器带上参数">装饰器带上参数</h3>
 <p>在前面的例子中，我们就可以简单将装饰器函数理解为一个接受函数对象返回返回函数对象的函数，这很直观和简单。实际上装饰器也是可以带上自己的参数的，这需要通过函数的闭包结构【也就是函数里面定义函数的结构，这样内部函数是可以使用外部函数的那些参数和变量的】才能完成，如下面的例子所示:</p>
 <div class="highlight"><pre><span></span><code>def print1(f):
-    print('1',f)
+    print(&#39;1&#39;,f)
     return f
 
 def print2(b):
     def test(f):
-        print('2',f,b)
+        print(&#39;2&#39;,f,b)
         return f
     return test
 
-@print2('b')
+@print2(&#39;b&#39;)
 @print1
 def print4(c):
     print(c)
 
-print4('c')
+print4(&#39;c&#39;)
 </code></pre></div>
+
 <h3 id="一般装饰器写法">一般装饰器写法</h3>
 <p>本小节参考了 <a href="https://stackoverflow.com/questions/10294014/python-decorator-best-practice-using-a-class-vs-a-function">这个网页</a> 。一般书写一个装饰器函数有如下通用写法：</p>
 <h4 id="无参数装饰器版本">无参数装饰器版本</h4>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">wraper_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wraper_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># do something</span>
 
         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wraper_func</span>
 
 <span class="nd">@mydecorator</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this is test function</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
 
-<span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 </code></pre></div>
+
 <p>这里使用了 functools 模块的 wraps装饰器，其接受你要装饰的函数作为参数。如果不这样的话，你在原test函数中定义的说明文字将丢失，按照 <code>test=mydecorator(test)</code> ，实际上test变量接受的函数对象是 <code>wraper_func</code> ，不信你可以查看 <code>test.__name__</code> 其是等于 <code>wraper_func</code> 的。而如上使用wraps装饰器，你在原test函数中定义的名字和文档都将得到保留。</p>
 <h4 id="带参数装饰器版本">带参数装饰器版本</h4>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">mydecorator</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">mydecorator</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_mydecorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">wraper_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'i know you pass to decorator parameters:'</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wraper_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;i know you pass to decorator parameters:&#39;</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">)</span>
             <span class="c1"># do something</span>
 
             <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wraper_func</span>
     <span class="k">return</span> <span class="n">_mydecorator</span>
 
-<span class="nd">@mydecorator</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""</span>
+<span class="nd">@mydecorator</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this is test function</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
 
-<span class="n">test</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 </code></pre></div>
+
 <h3 id="静态方法装饰器">静态方法装饰器</h3>
 <div class="highlight"><pre><span></span><code>class Test:
 #    @staticmethod
     def hello():
-        print('aaa')
+        print(&#39;aaa&#39;)
 
 test=Test()
 test.hello()
 </code></pre></div>
+
 <p>在上面的例子中，我们希望创造一个函数，这个函数和self实例没有关系（这里指这个函数将不接受self这个默认参数了）。如上所示，hello函数只是希望简单打印一小段字符，如<em>上面这样的代码是错误</em>的，如果我们在这个函数上面加上 <code>@staticmethod</code> ，那么上面这段代码就不会报错了，</p>
 <div class="highlight"><pre><span></span><code>class Test:
     @staticmethod
     def hello():
-        print('aaa')
+        print(&#39;aaa&#39;)
 
 test=Test()
 test.hello()
 </code></pre></div>
+
 <p>这样在类里面定义出来的函数叫做这个类的静态方法，静态方法同样可以继承等等，而静态方法通常使用最大的特色就是不需要建立实例，即可以直接从类来调用，如下所示：</p>
 <div class="highlight"><pre><span></span><code>class Test:
     @staticmethod
     def hello():
-        print('aaa')
+        print(&#39;aaa&#39;)
 
 Test.hello()
 </code></pre></div>
+
 <p>静态方法的使用比如pyqt中的</p>
 <div class="highlight"><pre><span></span><code>QtGui.QFileDialog.getOpenFileName(......)
 </code></pre></div>
+
 <p>就是一个静态方法，可以通过直接调用这个方法来弹出询问打开文件的窗口，并不需要先实例化一个对象，然后通过self.what等类似的形式来调用。</p>
 <h3 id="类方法装饰器">类方法装饰器</h3>
 <p>还有一个装饰器有时也会用到， <code>@classmethod</code>，叫什么类方法装饰器。其和前面的静态方法一样也可以不新建实例，而直接通过类来调用。其和静态方法的区别就是静态方法在调用的时候没有任何默认的第一参数，而类方法在调用的时候默认第一参数就是调用的那个类。</p>
 <div class="highlight"><pre><span></span><code>class Test:
     @classmethod
     def hello(cls):
-        print('from class:', cls, 'saying hello')
+        print(&#39;from class:&#39;, cls, &#39;saying hello&#39;)
 
 Test.hello()
 
-from class: &lt;class '__main__.Test'&gt; saying hello
+from class: &lt;class &#39;__main__.Test&#39;&gt; saying hello
 </code></pre></div>
+
 <p>关于classmethod装饰器实际上东西就这么多，然后就是传进去的第一个参数cls看你有什么使用需要了，比如
 <code>cls(...)</code> 将根据这个类来生成一个实例。</p>
 <h3 id="类作为装饰器">类作为装饰器</h3>
 <p>类作为装饰器就是利用类的 <code>__call__</code>内置方法，我把这段代码粘贴在下面了，有时可能看别人的源码有用吧，但装饰器这部分就到此为止吧，没必要弄得这么复杂了。</p>
 <div class="highlight"><pre><span></span><code>class MyDecorator(object):
-    """Decorator example mixing class and function definitions."""
+    &quot;&quot;&quot;Decorator example mixing class and function definitions.&quot;&quot;&quot;
     def __init__(self, func, param1, param2):
         self.func = func
         self.param1, self.param2 = param1, param2
@@ -902,6 +927,7 @@ def my_dec_factory(param1, param2):
          return MyDecorator(func, param1, param2)
     return decorator
 </code></pre></div>
+
 <p>前面讲到class声明语句和def语句很类似，def语句是利用缩进区块内的代码（简单理解就是执行编译了一遍，当然应该还有其他处理）构建出一个函数对象，然后将这个函数对象和某个名字绑定起来。class语句也是利用缩进区块内的代码构建出一个类对象，然后将这个类对象和某个名字绑定起来。</p>
 <p>那么类装饰器，也就是类上面挂个装饰器，如下所示是什么意思呢：</p>
 <div class="highlight"><pre><span></span><code>def decorator(C):
@@ -911,14 +937,17 @@ def my_dec_factory(param1, param2):
 class C:
     ....
 </code></pre></div>
+
 <p>这样我们得到的C是：</p>
 <div class="highlight"><pre><span></span><code>C = decorator(C)
 </code></pre></div>
+
 <p>所以函数装饰器相当于函数对象创建过程的深度定制DIY，而类装饰器就相当于类对象创建过程的深度DIY。</p>
 <h2 id="元类metaclass">元类metaclass</h2>
 <p>所有类都是由元类（type类）创建的，其对应的语句如下：</p>
 <div class="highlight"><pre><span></span><code>class = type(classname, superclasses, attributedict)
 </code></pre></div>
+
 <p>type实际调用的是自身的 <code>__call__</code> 方法，这个方法将运行type的两个方法：
 <code>__new__</code> ， <code>__call__</code> 。</p>
 <p>这样就创造了一个类了，然后之前我们提到： 类还要调用自身的 <code>__new__</code> ，
@@ -930,10 +959,12 @@ class C:
         # do something
         return type.__new__(meta, classname, supers, classdict)
 </code></pre></div>
+
 <h3 id="使用一个元类">使用一个元类</h3>
 <div class="highlight"><pre><span></span><code>class Test(Super, metaclass=Meta):
     pass
 </code></pre></div>
+
 <p>元类这里暂时还不深究，就一般的python程序员来说理解元类即可，实在不需要使用元类的。</p>
 <h2 id="进程">进程</h2>
 <p>进程的定义是: 一个正在执行的程序实例。每个进程都有一个唯一的进程ID，也就是所谓的 <strong>PID</strong> 。使用<code>ps</code>
@@ -942,37 +973,39 @@ class C:
 <h3 id="进程fork">进程fork</h3>
 <p>进程fork进行了一些基本代码信息和其他配置以及其他相关信息的复制或注册。这就相当于在当前代码环境下，你有两个分别单独运行的程序实例了。</p>
 <p>下面是一个非常简单的小例子，你可以把 <code>os.fork()</code>语句移到 <code>print('before fork')</code>之前来看看变化。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'before fork '</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before fork &#39;</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'say hello from'</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;say hello from&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
 
 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'after fork'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after fork&#39;</span><span class="p">)</span>
 </code></pre></div>
+
 <p>对于这个程序简单的理解就是，本py文件编译成字节码进入内存经过某些成为一个程序实例了（其中还包含其他一些信息），然后程序具体运行的时候会通过os.fork来调用系统的fork函数，然后复制本程序实例（以本程序实例目前已经所处的状态），因为 <code>print('before
 fork')</code>已经执行了，所以子进程就不会执行这一行代码了，而是继续os.fork()下面的代码继续执行。此时就相当于有两个程序在运行了，至于后面的打印顺序那是说不准的。</p>
 <p>关于操作系统具体如何fork的我们可以暂时不考虑，这两个程序实例里面的变量和运行环境基本上是一模一样的，除了运行的状态有所不同之外。fork可以做出一种程序多任务处理方案吧，不过os模块的fork方法目前只支持unix环境。</p>
 <h3 id="子进程和父进程分开">子进程和父进程分开</h3>
 <p>请看下面的代码:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'before fork '</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before fork &#39;</span><span class="p">)</span>
 <span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'say hello from parent'</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;say hello from parent&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'say hello from child'</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;say hello from child&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
 
 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'after fork'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after fork&#39;</span><span class="p">)</span>
 </code></pre></div>
+
 <p>其运行结果大致如下:</p>
 <div class="highlight"><pre><span></span><code>before fork 
 13762
@@ -982,38 +1015,42 @@ say hello from child 13762
 after fork
 after fork
 </code></pre></div>
+
 <p>我们看到在父进程那一边，pid是本父进程的子进程PID，而在子进程那一边，os.fork()返回的是0。可以利用这点将父进程的操作和子进程的操作分开。具体上面的代码if
 pid 那一块是父进程的，else那一块是子进程的。</p>
 <h2 id="比较大小">比较大小</h2>
 <h3 id="字符串比较大小">字符串比较大小</h3>
 <p>读者可以实验一下python中字符串之间是可以比较大小的：</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 'abc' &gt; 'ab'
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; &#39;abc&#39; &gt; &#39;ab&#39;
 True
-&gt;&gt;&gt; 'fabc' &gt; 'abc'
+&gt;&gt;&gt; &#39;fabc&#39; &gt; &#39;abc&#39;
 True
-&gt;&gt;&gt; '3.04' &gt; '3'
+&gt;&gt;&gt; &#39;3.04&#39; &gt; &#39;3&#39;
 True
 </code></pre></div>
+
 <p>这个特性有的时候很有用的，具体是如何比较大小的呢？按照python官方文档的描述，采用的是词典编纂顺序。具体描述信息如下：</p>
 <blockquote>
 <p>序列之间比较大小是，首先两个序列各自的第一个元素开始比较，如果它们相同，则进行下一个比较，直到任何一个序列被穷尽。如果两个序列各自比较的类型都是相同的，那么整个过程将一直进行下去。如果两个序列是相等的则认为它们是相等的，如果某一个序列是另外一个序列的子序列，则那个短的序列认为比长的序列要小。具体到每一个元素的大小比较，是按照ASCII顺序对其进行比较的。</p>
 </blockquote>
 <h4 id="中文比较大小">中文比较大小？</h4>
 <p>读者这时会想到，既然python中字符串都默认是unicode编码（utf-8），那么中文应该也是能够比较大小的吧，事实确实如此：</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; '章' &gt; '张'
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; &#39;章&#39; &gt; &#39;张&#39;
 True
-&gt;&gt;&gt; '章' &lt; '张'
+&gt;&gt;&gt; &#39;章&#39; &lt; &#39;张&#39;
 False
-&gt;&gt;&gt; ord('章')
+&gt;&gt;&gt; ord(&#39;章&#39;)
 31456
-&gt;&gt;&gt; ord('张')
+&gt;&gt;&gt; ord(&#39;张&#39;)
 24352
 </code></pre></div>
+
 <p>感兴趣的读者可以打开字符映射表看一下，'张'对应的unicode编号是U+5F20，你输入0x5f20，返回的正是24352。如果你输入hex(24352)，返回的就是'0x5f20'。</p>
 <h3 id="元组和列表的比较大小">元组和列表的比较大小</h3>
 <p>元组和列表的相等判断还是很好理解的，而对于这样的东西:</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; (1,-1) &lt; (2,-2)
 </code></pre></div>
+
 <p>确实就有点古怪了。请读者参考<a href="http://stackoverflow.com/questions/5292303/python-tuple-comparison">这个网页</a>)，按照官方文档的说明：</p>
 <blockquote>
 <p>Tuples and lists are compared lexicographically using comparison of
@@ -1046,11 +1083,13 @@ False
 &gt;&gt;&gt; (1,-1,) &lt; (1,-1,0)
 True
 </code></pre></div>
+
 <h4 id="ord和chr函数">ord和chr函数</h4>
 <p>ord函数接受 一个字符，然后返回其unicode编码，十进制的。chr函数是ord函数的反向，比如你输入24352这个十进制uniocde，就返回了对应的字符。</p>
 <div class="highlight"><pre><span></span><code>&gt;&gt;&gt; chr(24352)
-'张'
+&#39;张&#39;
 </code></pre></div>
+
 <p>所以我们可以总结到，python3的字符串比较大小，是基于utf-8编码的。</p>
 <h2 id="其他">其他</h2>
 <h3 id="python-class类定义里面的语句会直接执行">python class类定义里面的语句会直接执行</h3>
@@ -1063,6 +1102,7 @@ True
 &gt;&gt;&gt; my_list
 [10, 4, 2]
 </code></pre></div>
+
 <h3 id="python36开始字典保留插入顺序">python3.6开始字典保留插入顺序</h3>
 <p>Python 3.6x dictionaries have become ordered collections by default.</p>
 <p>In the older versions of Python, i.e., before 3.6.7, the popitem() method removes a random item from a dictionary.</p>
@@ -1071,22 +1111,25 @@ True
 
 match http_status:
     case 200 | 201:
-         print('Success')
+         print(&#39;Success&#39;)
     case 400:
-        print('Not Found')
+        print(&#39;Not Found&#39;)
     case _:
-        print('Unknown')
+        print(&#39;Unknown&#39;)
 </code></pre></div>
+
 <h3 id="根据字符串获取模块对象">根据字符串获取模块对象</h3>
 <div class="highlight"><pre><span></span><code>import importlib
-importlib.import_module('what.what')
+importlib.import_module(&#39;what.what&#39;)
 </code></pre></div>
+
 <h3 id="检查某个变量是不是模块对象">检查某个变量是不是模块对象</h3>
 <p>参考了 <a href="https://stackoverflow.com/questions/865503/how-to-isinstancex-module">这个网页</a></p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">types</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">types</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">)</span>
 <span class="kc">True</span>
 </code></pre></div>
+
 <script>
 window.MathJax = {
   tex: {
@@ -1136,7 +1179,6 @@ window.MathJax = {
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

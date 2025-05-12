@@ -5,16 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="csv模块
-csv模块的使用主要是 reader 和 writer 两个函数，此外还提供了 DictReader 和 DictWriter 两个基于 reader和 writer的两个辅助类。reader和writer是接受的文件对象，具体使用参见官方的样例：
-
-reader和writer两个..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#csv模块&#34;&gt;csv模块&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#编写自己的csv方言..." />
 
 
 <meta name="keywords" content=", posts, " />
@@ -45,17 +43,6 @@ reader和writer两个..." />
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -91,16 +78,6 @@ reader和writer两个..." />
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#csv模块">csv模块</a><ul>
-<li><a href="#编写自己的csv方言">编写自己的csv方言</a></li>
-<li><a href="#dictreader和dictwriter类">DictReader和DictWriter类</a></li>
-</ul>
-</li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
                 </div>
@@ -117,32 +94,42 @@ reader和writer两个..." />
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#csv模块">csv模块</a><ul>
+<li><a href="#编写自己的csv方言">编写自己的csv方言</a></li>
+<li><a href="#dictreader和dictwriter类">DictReader和DictWriter类</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="csv模块">csv模块</h2>
 <p>csv模块的使用主要是 <code>reader</code> 和 <code>writer</code> 两个函数，此外还提供了 <code>DictReader</code> 和 <code>DictWriter</code> 两个基于 reader和 writer的两个辅助类。reader和writer是接受的文件对象，具体使用参见官方的样例：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'eggs.csv'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-    <span class="n">spamwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-                            <span class="n">quotechar</span><span class="o">=</span><span class="s1">'|'</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span><span class="p">)</span>
-    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">'Spam'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="s1">'Baked Beans'</span><span class="p">])</span>
-    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">'Spam'</span><span class="p">,</span> <span class="s1">'Lovely Spam'</span><span class="p">,</span> <span class="s1">'Wonderful Spam'</span><span class="p">])</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eggs.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">spamwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
+                            <span class="n">quotechar</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span><span class="p">)</span>
+    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Spam&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;Baked Beans&#39;</span><span class="p">])</span>
+    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Lovely Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Wonderful Spam&#39;</span><span class="p">])</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'eggs.csv'</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-    <span class="n">spamreader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span> <span class="n">quotechar</span><span class="o">=</span><span class="s1">'|'</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eggs.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">spamreader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">quotechar</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">spamreader</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
 </code></pre></div>
+
 <p>reader和writer两个函数后面接受的参数根据你的需要定制，具体就是所谓的csv方言格式。首先你可能不需要做任何修改，默认是采用的excel格式的csv方言：</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">excel</span><span class="p">(</span><span class="n">Dialect</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Describe the usual properties of Excel-generated CSV files."""</span>
-    <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">','</span>
-    <span class="n">quotechar</span> <span class="o">=</span> <span class="s1">'"'</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">excel</span><span class="p">(</span><span class="n">Dialect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describe the usual properties of Excel-generated CSV files.&quot;&quot;&quot;</span>
+    <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span>
+    <span class="n">quotechar</span> <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span>
     <span class="n">doublequote</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">skipinitialspace</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">lineterminator</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\r\n</span><span class="s1">'</span>
+    <span class="n">lineterminator</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span>
     <span class="n">quoting</span> <span class="o">=</span> <span class="n">QUOTE_MINIMAL</span>
 </code></pre></div>
+
 <p>下面就这些字段的含义作出说明：</p>
 <ul>
 <li><strong>delimiter</strong>  分隔符，这个意义很明显。</li>
@@ -165,59 +152,62 @@ reader和writer两个..." />
 <li><strong>doublequote</strong> 用来处理双引号在字符串中的情况，默认是True，字符串将会双引号之外再加上双引号，如果设置为False，会前面加上一个 <code>escapechar</code> 。</li>
 </ul>
 <p>如果你对csv的输出格式并没有太多要求或者和excel格式是一致的，那么简单的csv文件的读写如下所示，是不需要太多参数的：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'eggs.csv'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eggs.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
     <span class="n">spamwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">'Spam'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="s1">'Baked Beans'</span><span class="p">])</span>
-    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">'Spam'</span><span class="p">,</span> <span class="s1">'Lovely Spam'</span><span class="p">,</span> <span class="s1">'Wonderful Spam'</span><span class="p">])</span>
+    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Spam&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;Baked Beans&#39;</span><span class="p">])</span>
+    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Lovely Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Wonderful Spam&#39;</span><span class="p">])</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'eggs.csv'</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eggs.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
     <span class="n">spamreader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">spamreader</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
 </code></pre></div>
+
 <h3 id="编写自己的csv方言">编写自己的csv方言</h3>
 <p>如之前所示你可以指定一些csv方言的选项，或者如下所示定义一个你的csv方言类：</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">YourDialectCSV</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">Dialect</span><span class="p">):</span>
-    <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">','</span> <span class="c1"># 分隔符</span>
-    <span class="n">quotechar</span> <span class="o">=</span> <span class="s1">'"'</span> <span class="c1"># quote符号</span>
+<span class="k">class</span> <span class="nc">YourDialectCSV</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">Dialect</span><span class="p">):</span>
+    <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span> <span class="c1"># 分隔符</span>
+    <span class="n">quotechar</span> <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span> <span class="c1"># quote符号</span>
     <span class="n">doublequote</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># 双引号在字符中的情况</span>
     <span class="n">skipinitialspace</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># 分隔符后空白忽略</span>
-    <span class="n">lineterminator</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span> <span class="c1"># 换行符</span>
+    <span class="n">lineterminator</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="c1"># 换行符</span>
     <span class="n">quoting</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span> <span class="c1"># 最小quote</span>
 
-<span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span><span class="s2">"YourDialectCSV"</span><span class="p">,</span> <span class="n">YourDialectCSV</span><span class="p">)</span>
+<span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span><span class="s2">&quot;YourDialectCSV&quot;</span><span class="p">,</span> <span class="n">YourDialectCSV</span><span class="p">)</span>
 </code></pre></div>
+
 <p>这样后面你使用csv模块的reader和writer函数加上 <code>dialect='YourDialectCSV'</code>  即可。</p>
 <h3 id="dictreader和dictwriter类">DictReader和DictWriter类</h3>
 <p>对于开头一行是字段名的csv文件，推荐使用DictReader和DictWriter两个类，两个类初始实例化的时候同样可以接受dialect选项或其他参数，这些参数会原封不动传递给reader</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DictReader</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restkey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">dialect</span><span class="o">=</span><span class="s2">"excel"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DictReader</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restkey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dialect</span><span class="o">=</span><span class="s2">&quot;excel&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">DictWriter</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">,</span> <span class="n">restval</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">extrasaction</span><span class="o">=</span><span class="s2">"raise"</span><span class="p">,</span>
-                 <span class="n">dialect</span><span class="o">=</span><span class="s2">"excel"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">DictWriter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">,</span> <span class="n">restval</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extrasaction</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span>
+                 <span class="n">dialect</span><span class="o">=</span><span class="s2">&quot;excel&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
 </code></pre></div>
+
 <p>所以之前的讨论同样使用，具体使用很简单，如下看下官方样例即可：</p>
-<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'names.csv'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-    <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;names.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;first_name&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">]</span>
     <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
 
     <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">'first_name'</span><span class="p">:</span> <span class="s1">'Baked'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">:</span> <span class="s1">'Beans'</span><span class="p">})</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">'first_name'</span><span class="p">:</span> <span class="s1">'Lovely'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">:</span> <span class="s1">'Spam'</span><span class="p">})</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">'first_name'</span><span class="p">:</span> <span class="s1">'Wonderful'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">:</span> <span class="s1">'Spam'</span><span class="p">})</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Baked&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Beans&#39;</span><span class="p">})</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Lovely&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Spam&#39;</span><span class="p">})</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Wonderful&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Spam&#39;</span><span class="p">})</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'names.csv'</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;names.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
     <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'first_name'</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">'last_name'</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;first_name&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;last_name&#39;</span><span class="p">])</span>
 </code></pre></div>
             </div>
         </div>
@@ -253,7 +243,6 @@ reader和writer两个..." />
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 

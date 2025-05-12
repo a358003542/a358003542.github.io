@@ -5,16 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="msvalidate.01" content="55CB117A61A6F8286173763FB18D9625" />
-
     <meta name="author" content="wander" />
     <meta name="copyright" content="wander" />
 
     <meta name="description"
-        content="前言
-本文讨论的内容有如果要编写自己的python模块，并上传到pypi.org则需要了解的知识点。主要有setuptool模块的使用，pip命令行工具，如何在pypi上上传自己的模块和其他相关知识。
-setuptools
-本章知识是我们理解前人编写的各个有用的模块包的基础，也是编写自己的模块..." />
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#前言&#34;&gt;前言&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#setuptools&#34;..." />
 
 
 <meta name="keywords" content=", 计算机 - 编程, " />
@@ -45,17 +43,6 @@ setuptools
 
 
                 <div class="navbar-collapse collapse" id="navbarContent">
-                    <form action="https://a358003542.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"
-                        class="d-flex me-auto">
-
-                        <input type="search" name="q" id="tipue_search_input" class="form-control me-2"
-                            placeholder="Search..." aria-label="Search">
-
-                        <button class="btn btn-outline-primary text-nowrap" type="submit">搜索</button>
-                        
-                    </form>
-
-
                     <ul class="navbar-nav mb-lg-0">
 
                         <li class="nav-item ">
@@ -91,19 +78,6 @@ setuptools
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="p-3 bg-white small">
-                <div style="font-size:1.2rem;">目录</div>
-                <div class="toc">
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#setuptools">setuptools</a></li>
-<li><a href="#读取资源文件">读取资源文件</a></li>
-<li><a href="#pip的develop模式">pip的develop模式</a></li>
-<li><a href="#在pypi上传你的模块">在pypi上传你的模块</a></li>
-<li><a href="#pypi下载使用国内源">pypi下载使用国内源</a></li>
-<li><a href="#pypi只下载软件源文件">pypi只下载软件源文件</a></li>
-<li><a href="#其他注意事项">其他注意事项</a></li>
-</ul>
-</div>
 
                 <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
                 </div>
@@ -120,7 +94,18 @@ setuptools
 
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="article-content">
-                
+                <div class="toc">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#setuptools">setuptools</a></li>
+<li><a href="#读取资源文件">读取资源文件</a></li>
+<li><a href="#pip的develop模式">pip的develop模式</a></li>
+<li><a href="#在pypi上传你的模块">在pypi上传你的模块</a></li>
+<li><a href="#pypi下载使用国内源">pypi下载使用国内源</a></li>
+<li><a href="#pypi只下载软件源文件">pypi只下载软件源文件</a></li>
+<li><a href="#其他注意事项">其他注意事项</a></li>
+</ul>
+</div>
 <h3 id="前言">前言</h3>
 <p>本文讨论的内容有如果要编写自己的python模块，并上传到pypi.org则需要了解的知识点。主要有setuptool模块的使用，pip命令行工具，如何在pypi上上传自己的模块和其他相关知识。</p>
 <h3 id="setuptools">setuptools</h3>
@@ -130,9 +115,10 @@ setuptools
 <p>现在setuptools推荐使用<code>setup.cfg</code>来进行相关配置管理，而不是之前的 <code>setup.py</code> 里的 <code>setup</code> 函数。pypi生态圈和相关PEP规范在不断完善中，现在推荐使用 <code>build</code> 模块，运行 <code>python -m build</code> 来进行你项目的打包工作。</p>
 <p>你首先需要新建一个 <code>pyproject.toml</code> 文件，指定本项目的安装环境，setuptools相关如下：</p>
 <div class="highlight"><pre><span></span><code>[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = [&quot;setuptools&quot;, &quot;wheel&quot;]
+build-backend = &quot;setuptools.build_meta&quot;
 </code></pre></div>
+
 <h4 id="小型模块项目">小型模块项目</h4>
 <p>即使是非常小型的单python文件的模块，也推荐组织成为python的模块结构而不是通过<code>py_modules</code>来指定。</p>
 <p>现在假定这里我们讨论的python模块名字是pyskeleton，如果该python模块很小型，则推荐采用如下结构：</p>
@@ -143,6 +129,7 @@ build-backend = "setuptools.build_meta"
 setup.cfg
 pyproject.toml
 </code></pre></div>
+
 <p>对应的setup.cfg文件内容大体如下：</p>
 <div class="highlight"><pre><span></span><code>[metadata]
 name = pyskeleton
@@ -156,6 +143,7 @@ long_description_content_type=text/markdown
 include_package_data = True
 packages = pyskeleton
 </code></pre></div>
+
 <p>也就是直接将packages写上去即可。</p>
 <p><strong>NOTICE:</strong> packages这个关键词是setuptools模块继承自distutil模块的，<strong>其不会进一步递归扫描该模块可能有的子模块</strong>。也就是上面这个写法只能添加pyskeleton文件夹下的 <code>__init__.py</code> 文件和与其平行的一些python文件。如果你还希望在下面添加几个子模块，则参见下面的讨论。</p>
 <h4 id="中型模块项目">中型模块项目</h4>
@@ -170,20 +158,24 @@ packages = pyskeleton
 setup.cfg
 pyproject.toml
 </code></pre></div>
+
 <p>类似上面这样中型大小的python模块项目，如果子模块不是很多的话，那么你可以继续如下这样编写：</p>
 <div class="highlight"><pre><span></span><code>packages = 
   pyskeleton
   pyskeleton.submodule1
   pyskeleton.submodule2
 </code></pre></div>
+
 <p>显然这样子模块多于两个以上就显得很麻烦了，那么这时就推荐使用setuptools模块提供的find函数。</p>
 <div class="highlight"><pre><span></span><code>packages = find:
 </code></pre></div>
+
 <p>其会自动从根目录开始进行扫描，然后根据 <code>__init__.py</code> 是否存在来自动生成packages列表。这个时候就有一个注意事项：你的测试文件夹 tests 最好不要有 <code>__init__.py</code> 文件了，实际上利用pytest这样的测试辅助模块也是不需要 <code>__init__.py</code> 文件的。</p>
 <p>然后有的时候你可能希望某个子模块不要添加进去了，反正有的时候就有这个需求，那么你可以加上 exclude 参数：</p>
 <div class="highlight"><pre><span></span><code>[options.packages.find]
 exclude = my_python_module.backup
 </code></pre></div>
+
 <p>注意写法是你预期要添加进入packages列表的字段，然后排除掉。</p>
 <h4 id="多python模块项目">多python模块项目</h4>
 <p>绝大部分情况基本上就属于上面描述的哪两种了，但对于某些公司内部大型的复杂的python项目，可能会有多个python模块放在一个文件夹下，而且这里谈论的多个python模块的意思，就是多个python模块，比如requests和scapy这样完全不相干，不属于一个父模块名的独立的python模块，大体类似下面这样的文件夹结构：</p>
@@ -196,6 +188,7 @@ exclude = my_python_module.backup
 setup.cfg
 pyproject.toml
 </code></pre></div>
+
 <p>这种结构的 <code>setup.cfg</code> 大体内容如下所示：</p>
 <div class="highlight"><pre><span></span><code>[metadata]
 name = pyskeleton
@@ -219,9 +212,11 @@ include = pyskeleton
 console_scripts =
     pyskeleton = pyskeleton.__main__:main
 </code></pre></div>
+
 <p>首先来集中解释一下 <code>package_dir</code> 这个参数，这个参数实际上是从distuitl模块那边来的，上面这种写法对应的传统写法是：</p>
-<div class="highlight"><pre><span></span><code>package_dir = {'': 'src'}
+<div class="highlight"><pre><span></span><code>package_dir = {&#39;&#39;: &#39;src&#39;}
 </code></pre></div>
+
 <p>这个字典值key是模块名，value是对应的文件夹，空字符串意思是根模块。这个说起来有点难懂，我下面再将整个过程理一遍好让读者更容易懂一点。</p>
 <p>find函数的where是说要从哪里寻找python模块，所以现在find开始在src文件夹下面寻找了，include和exclude参数用来进一步控制find的查找行为，其中如果有include参数则只添加include参数指定的那些模块，比如上面只会添加pyskeleton模块，但这里还有一个点没讲。如果package_dir那个参数没配置的话，按照道理讲其对应的package name是 src.pyskeleton，因为包名是根据文件夹的结构来的，虽然我指定find从src文件夹开始查找，但是具体某个模块的文件夹结构是没变的，继而对应的packages那边的名字也是没变的，因为有了上面 package_dir 那个配置，现在模块的根位置对应的src文件夹，于是pyskeleton那个文件夹对应的模块名就是pyskeleton了。说得再具体一点pyskeleton现在将作为一个独立模块拷贝到 <code>site-packages</code> 哪里的根目录下面。</p>
 <p>为了加深理解我们可以将上面的include参数改成 <code>pyskeleton*</code> ，然后再随便新建一个pyskeleton2模块，经过测试就会发现又会多了一个pyskeleton2的模块。</p>
@@ -297,9 +292,10 @@ long_description</p>
 <dd></dd>
 </dl>
 <div class="highlight"><pre><span></span><code>entry_points = {
-'console_scripts' :[ 'zwc=zwc.zwc:main',],
+&#39;console_scripts&#39; :[ &#39;zwc=zwc.zwc:main&#39;,],
 }
 </code></pre></div>
+
 <p>其中zwc是你的shell调用的名字，然后zwc是你的模块，另外一个zwc是你的主模块的子模块，然后main是其中的main函数。这就是你的shell调用程序的接口了。类似的还有gui_script可以控制你调用GUI图形的命令入口。</p>
 <dl>
 <dt>include_package_data</dt>
@@ -320,18 +316,20 @@ long_description</p>
 <li>py_modules 不推荐使用，推荐使用packages来管理模块。</li>
 <li>data_files 前面的package_data是只能在你的模块文件夹里面的其他数据文件等，然后可能还有一些数据文件你需要包含的，用data_files来控制，具体后面跟着的参数格式如下面例子所示：</li>
 </ul>
-<div class="highlight"><pre><span></span><code>data_files = [('icos',['icos/wise.ico'])],
+<div class="highlight"><pre><span></span><code>data_files = [(&#39;icos&#39;,[&#39;icos/wise.ico&#39;])],
 #这是添加的icos文件夹下面的wise.ico文件
-data_files = [('',['skeleton.tar.gz'])],
+data_files = [(&#39;&#39;,[&#39;skeleton.tar.gz&#39;])],
 #这是添加的主目录下的skeleton.tar.gz文件
 </code></pre></div>
+
 <p>值得一提的是data_files不能接受glob语法。</p>
 <p>data_files已经不推荐使用了，推荐用<code>MANIFAST.in</code>来管理，可以方便用pkg_resources里面的方法来引用其中的资源文件。</p>
 <h3 id="读取资源文件">读取资源文件</h3>
 <p>如下所示：</p>
 <div class="highlight"><pre><span></span><code>from pkg_resources import resource_filename
-resource_stream('wise','icos/Folder-Documents.ico')
+resource_stream(&#39;wise&#39;,&#39;icos/Folder-Documents.ico&#39;)
 </code></pre></div>
+
 <p>第一个参数是模块名字，第二个参数是模块中的文件的相对路径表达。</p>
 <p>上面的例子是resource_filename，返回的是引用的文件名。此外还有命令：resource_string，参数和resource_filename一样，除了它返回的是字节流。这个字节流可以赋值给某个变量从而直接使用，或者存储在某个文件里面。</p>
 <h3 id="pip的develop模式">pip的develop模式</h3>
@@ -344,39 +342,47 @@ resource_stream('wise','icos/Folder-Documents.ico')
 <div class="highlight"><pre><span></span><code><span class="n">long_description</span> <span class="o">=</span> <span class="n">file</span><span class="p">:</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
 <span class="n">long_description_content_type</span><span class="o">=</span><span class="n">text</span><span class="o">/</span><span class="n">markdown</span>
 </code></pre></div>
+
 <p>注意上面配置的 <code>long_description_content_type</code> ，如果你喜欢 <code>reStructuredText</code> 格式，那么设置为 <code>text/x-rst</code> 即可。</p>
 <h4 id="打包模块">打包模块</h4>
 <p>首先推荐升级最新的setuptools，wheel和twine模块。</p>
 <p>然后直接用下面这句：</p>
 <div class="highlight"><pre><span></span><code>python setup.py sdist bdist_wheel
 </code></pre></div>
+
 <p>这样将直接dist文件夹下面生成源码tar包和wheel包。</p>
 <p>没有<code>setup.py</code> 的项目【<u>也就是采用setup.cfg新式管理方式的项目</u>】<strong>需要安装 <code>build</code> 模块</strong>，然后运行 <code>python -m build</code> 。</p>
 <p>然后推荐运行下：</p>
 <div class="highlight"><pre><span></span><code>twine check dist/*
 </code></pre></div>
+
 <p>来确保你的文档格式没问题。</p>
 <h4 id="使用twine上传">使用twine上传</h4>
 <p>使用twine上传到pypi很简单：</p>
 <div class="highlight"><pre><span></span><code>twine upload dist/*
 </code></pre></div>
+
 <p>你每次都需要输入用户名和密码，你可以安装 <code>keyring</code> 模块，然后运行：</p>
 <div class="highlight"><pre><span></span><code>keyring set https://upload.pypi.org/legacy/ your-username
 </code></pre></div>
+
 <p>来本地安全保存你的用户名和密码。</p>
 <h3 id="pypi下载使用国内源">pypi下载使用国内源</h3>
 <p>豆瓣的pypi源 <code>https://pypi.douban.com/simple</code>  或者 清华的pypi源 <code>https://pypi.tuna.tsinghua.edu.cn/simple</code> 都可以吧。</p>
 <p>临时使用用 <code>-i</code> 或者 <code>--index</code> 选项： </p>
 <div class="highlight"><pre><span></span><code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 </code></pre></div>
+
 <p>永久更改本地配置：</p>
 <div class="highlight"><pre><span></span><code>pip install pip -U
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 </code></pre></div>
+
 <h3 id="pypi只下载软件源文件">pypi只下载软件源文件</h3>
 <p>下载pypi上的目标软件源文件而不是安装。参考了 <a href="http://stackoverflow.com/questions/7300321/how-to-use-pythons-pip-to-download-and-keep-the-zipped-files-for-a-package">这个网页</a> 。</p>
-<div class="highlight"><pre><span></span><code>pip install --download="/pth/to/downloaded/files" package_name
+<div class="highlight"><pre><span></span><code>pip install --download=&quot;/pth/to/downloaded/files&quot; package_name
 </code></pre></div>
+
 <h3 id="其他注意事项">其他注意事项</h3>
 <p>注意那个什么egg-info这个缓存文件夹，如果你更改了你的项目的配置，最好将这个缓存文件夹删掉，有时会有干扰。</p>
             </div>
@@ -413,7 +419,6 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
     <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
     <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://a358003542.github.io/theme/js/base.js"></script>
 
 <script src="https://a358003542.github.io/theme/js/article.js"></script>
 
