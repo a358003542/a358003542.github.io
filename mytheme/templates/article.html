@@ -25,7 +25,6 @@
 {% block content %}
 <div class="container-xxl mt-3">
     <div class="row">
-        <div class="col-md-4 col-lg-3"></div>
         <header class="col-sm-12 col-md-8 col-lg-8 page-header">
             <h1><a href="{{ SITEURL }}/{{ article.url }}"> {{ article.title }} {%if article.subtitle %} <small> {{
                         article.subtitle }} </small> {% endif %} </a></h1>
@@ -33,39 +32,33 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 col-md-4 col-lg-3">
-            <div class="p-3 bg-white small">
-                {% if article.toc %}
-                <div style="font-size:1.2rem;">目录</div>
-                {{ article.toc }}
-                {% endif %}
-
-                {% if article.date %}
-                <div class="p-1">首发于：
-                {%- set day = article.date.strftime('%d')|int -%}
-                <time pubdate="pubdate" datetime="{{ article.date.isoformat() }}">
-                    {{- article.date.strftime('%Y') }}年 {{ article.date.strftime('%b') }} {{ day }}日 </time>
-                </div>
-                {% endif %}
-
-                {% if article.modified %}
-                <div class="p-1">最近更新于：{%- set day = article.modified.strftime('%d')|int -%}
-                <time datetime="{{ article.modified.isoformat() }}">
-                    {{- article.modified.strftime('%Y') }}年 {{ article.modified.strftime('%b') }} {{ day }}日 </time>
-                </div>
-                {% endif %}
-
-
-                {% if article.category|trim|count > 0 %}
-                <div class="p-1">分类：
-                <a class="category-link" href="{{ SITEURL }}/categories.html#{{ category.slug }}-ref">{{
-                    article.category }}</a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
         <div class="col-sm-12 col-md-8 col-lg-8">
+            {% if article.date %}
+            <div class="p-1">首发于：
+            {%- set day = article.date.strftime('%d')|int -%}
+            <time pubdate="pubdate" datetime="{{ article.date.isoformat() }}">
+                {{- article.date.strftime('%Y') }}年 {{ article.date.strftime('%b') }} {{ day }}日 </time>
+            </div>
+            {% endif %}
+
+            {% if article.modified %}
+            <div class="p-1">最近更新于：{%- set day = article.modified.strftime('%d')|int -%}
+            <time datetime="{{ article.modified.isoformat() }}">
+                {{- article.modified.strftime('%Y') }}年 {{ article.modified.strftime('%b') }} {{ day }}日 </time>
+            </div>
+            {% endif %}
+
+
+            {% if article.category|trim|count > 0 %}
+            <div class="p-1">分类：
+            <a class="category-link" href="{{ SITEURL }}/categories.html#{{ category.slug }}-ref">{{
+                article.category }}</a>
+            </div>
+            {% endif %}
+
+            <hr/>
+
+
             <div class="article-content">
                 {{ article.content }}
             </div>
