@@ -4,7 +4,7 @@ BookAuthor: [英]J.R.R.托尔金
 BookPublisher: 上海人民出版社
 BookLanguage: 中文
 BookCover: /images/Covers/魔戒三部曲 - [英]J.R.R.托尔金.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/181TPxaNLQ5sRYg2yi_LjiA?pwd=tsa5 
+bookepubdownload: https://pan.baidu.com/s/181TPxaNLQ5sRYg2yi_LjiA?pwd=tsa5 
 
 
 

@@ -4,7 +4,7 @@ BookAuthor: Eugene Rabinowitch & Govindjee
 BookPublisher: Independent Publisher
 BookLanguage: 英语
 BookCover: /images/Covers/Photosynthesis - Eugene Rabinowitch.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1s5LXACmeDIfzUcAsosKduQ?pwd=lvyx 
+bookpdfdownload: https://pan.baidu.com/s/1s5LXACmeDIfzUcAsosKduQ?pwd=lvyx 
 
 [TOC]
 

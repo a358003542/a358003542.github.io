@@ -4,7 +4,7 @@ BookAuthor: Thomas Engel & Philip Reid
 BookPublisher: Pearson
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 3e - Thomas Engel.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1yExJ9X__xD2K4MD8MtPAuQ?pwd=fiq4 
+bookpdfdownload: https://pan.baidu.com/s/1yExJ9X__xD2K4MD8MtPAuQ?pwd=fiq4 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Michael Zeece
 BookPublisher: Academic Press
 BookLanguage: 英语
 BookCover: /images/Covers/Introduction to the Chemistry of Food - Michael Zeece.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1oPRheP7oDVCgxNl882cZUA?pwd=jqrs 
+bookpdfdownload: https://pan.baidu.com/s/1oPRheP7oDVCgxNl882cZUA?pwd=jqrs 
 
 
 [TOC]

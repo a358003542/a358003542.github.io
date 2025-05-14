@@ -4,7 +4,7 @@ BookAuthor: [英]P. A. 考克斯 & 李亚栋
 BookPublisher: 科学出版社
 BookLanguage: 中文
 BookCover: /images/Covers/无机化学 - [英]P. A. 考克斯.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/17-6AkHAkZp91l0BqYOHLpg?pwd=ooft 
+bookpdfdownload: https://pan.baidu.com/s/17-6AkHAkZp91l0BqYOHLpg?pwd=ooft 
 
 
 [TOC]

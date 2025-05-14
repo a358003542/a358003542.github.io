@@ -4,7 +4,7 @@ BookAuthor: Carl J. Ballhausen & Harry B. Gray
 BookPublisher: Benjamin-Cummings Publishing Company
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Electroic Structures - Carl J. Ballhausen.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1OW_0sA-zwdgEcAODTUpiJg?pwd=xye1 
+bookpdfdownload: https://pan.baidu.com/s/1OW_0sA-zwdgEcAODTUpiJg?pwd=xye1 
 
 [TOC]
 

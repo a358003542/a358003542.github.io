@@ -4,7 +4,7 @@ BookAuthor: Taro Saito
 BookPublisher: CreateSpace Independent Publishing Platform
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry - Taro Saito.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/15FbzwtO94ulETxIHN1cfuQ?pwd=p4jv 
+bookpdfdownload: https://pan.baidu.com/s/15FbzwtO94ulETxIHN1cfuQ?pwd=p4jv 
 
 
 [TOC]

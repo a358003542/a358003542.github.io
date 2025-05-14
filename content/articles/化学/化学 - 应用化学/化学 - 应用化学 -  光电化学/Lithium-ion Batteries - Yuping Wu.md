@@ -4,7 +4,7 @@ BookAuthor: Yuping Wu
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Lithium-ion Batteries - Yuping Wu.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1VM9NicdP21ZbB0NHvCgbkw?pwd=kekp 
+bookpdfdownload: https://pan.baidu.com/s/1VM9NicdP21ZbB0NHvCgbkw?pwd=kekp 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Peter Atkins & Julio de Paula
 BookPublisher: W. H. Freeman & Company
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry for the Life Sciences 2e - Peter Atkins.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1xq3fuQIGDsW3QYeL9l6yOw?pwd=jamw 
+bookpdfdownload: https://pan.baidu.com/s/1xq3fuQIGDsW3QYeL9l6yOw?pwd=jamw 
 
 
 [TOC]

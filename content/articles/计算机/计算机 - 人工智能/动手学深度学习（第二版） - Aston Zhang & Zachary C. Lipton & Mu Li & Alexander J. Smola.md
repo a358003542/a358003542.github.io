@@ -5,7 +5,7 @@ BookScore: 5
 BookPublisher: Cambridge University Press
 BookLanguage: 中文
 BookCover: /images/Covers/动手学深度学习（第二版） - Aston Zhang & Zachary C. Lipton & Mu Li & Alexander J. Smola.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1br9fEGYiAfWdUyxeR8yDRA?pwd=uq3p
+bookpdfdownload: https://pan.baidu.com/s/1br9fEGYiAfWdUyxeR8yDRA?pwd=uq3p
 
 
 

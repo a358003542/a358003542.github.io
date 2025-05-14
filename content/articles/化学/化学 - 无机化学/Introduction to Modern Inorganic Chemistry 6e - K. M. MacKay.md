@@ -4,7 +4,7 @@ BookAuthor: K. M. MacKay & R. A. MacKay & W. Henderson
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Introduction to Modern Inorganic Chemistry 6e - K. M. MacKay.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/19ETmS8bDQ6O_FajhpDI3bw?pwd=2xj7 
+bookpdfdownload: https://pan.baidu.com/s/19ETmS8bDQ6O_FajhpDI3bw?pwd=2xj7 
 
 
 [TOC]

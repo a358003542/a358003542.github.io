@@ -4,7 +4,7 @@ BookAuthor: Carl J. Ballhausen & Harry B. Gray
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Orbital Theory - Carl J. Ballhausen.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1_Tp2Z77X7bH-8gA6uTgOQQ?pwd=apmb  
+bookpdfdownload: https://pan.baidu.com/s/1_Tp2Z77X7bH-8gA6uTgOQQ?pwd=apmb  
 
 [TOC]
 

@@ -4,7 +4,7 @@ BookAuthor: Brian W. Pfennig
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Principles of Inorganic Chemistry - Brian W. Pfennig.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1T3guA2BK_e9_dW3a_7aYhg?pwd=btwg 
+bookpdfdownload: https://pan.baidu.com/s/1T3guA2BK_e9_dW3a_7aYhg?pwd=btwg 
 
 
 [TOC]

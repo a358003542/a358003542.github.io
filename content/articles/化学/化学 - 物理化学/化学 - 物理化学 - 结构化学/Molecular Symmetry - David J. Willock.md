@@ -4,7 +4,7 @@ BookAuthor: David J. Willock
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Symmetry - David J. Willock.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1-SmherAMvzbFZNSBDk-u5g?pwd=cpxr 
+bookpdfdownload: https://pan.baidu.com/s/1-SmherAMvzbFZNSBDk-u5g?pwd=cpxr 
 
 
 [TOC]

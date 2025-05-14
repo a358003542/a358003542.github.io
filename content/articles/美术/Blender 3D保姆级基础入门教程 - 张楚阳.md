@@ -4,7 +4,7 @@ BookAuthor: 张楚阳
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/Blender 3D保姆级基础入门教程 - 张楚阳.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1NFxHxPrMXTpeNyRs8GRp4w?pwd=emiw
+bookpdfdownload: https://pan.baidu.com/s/1NFxHxPrMXTpeNyRs8GRp4w?pwd=emiw
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Masaki Yoshio & Ralph J. Brodd & Akiya Kozawa
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Lithium-Ion Batteries - Masaki Yoshio.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1vfSvZ5zx_fvty20I4zZ1GQ?pwd=wl8j 
+bookpdfdownload: https://pan.baidu.com/s/1vfSvZ5zx_fvty20I4zZ1GQ?pwd=wl8j 
 
 [TOC]
 

@@ -4,7 +4,7 @@ BookAuthor: Donald A. McQuarrie
 BookPublisher: University Science Books
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry 2e - Donald A. McQuarrie.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1dw4q8WOaydh0bP9SpLRpeg?pwd=5oik 
+bookpdfdownload: https://pan.baidu.com/s/1dw4q8WOaydh0bP9SpLRpeg?pwd=5oik 
 
 [TOC]
 

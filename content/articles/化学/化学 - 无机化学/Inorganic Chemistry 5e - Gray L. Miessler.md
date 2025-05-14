@@ -4,7 +4,7 @@ BookAuthor: Gray L. Miessler & Paul J. Fischer & Donald A. Tarr
 BookPublisher: Pearson
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry 5e - Gray L. Miessler.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1RCnH0qFNvjEJXIK6kOYHHw?pwd=7pni 
+bookpdfdownload: https://pan.baidu.com/s/1RCnH0qFNvjEJXIK6kOYHHw?pwd=7pni 
 
 
 [TOC]

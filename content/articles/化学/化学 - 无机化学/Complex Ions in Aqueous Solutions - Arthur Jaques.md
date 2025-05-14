@@ -4,7 +4,7 @@ BookAuthor: Arthur Jaques
 BookPublisher: Longman
 BookLanguage: 英语
 BookCover: /images/Covers/Complex Ions in Aqueous Solutions - Arthur Jaques.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1Ne-LWPyjm0lRSwaLOd6O5A?pwd=iy02 
+bookpdfdownload: https://pan.baidu.com/s/1Ne-LWPyjm0lRSwaLOd6O5A?pwd=iy02 
 
 
 [TOC]

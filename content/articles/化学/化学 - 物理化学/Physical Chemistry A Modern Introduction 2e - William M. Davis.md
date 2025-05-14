@@ -4,7 +4,7 @@ BookAuthor: William M. Davis & Clifford E. Dykstra
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry A Modern Introduction 2e - William M. Davis.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1umWUh2Y4Ao71cGemC_OdWA?pwd=sosc
+bookpdfdownload: https://pan.baidu.com/s/1umWUh2Y4Ao71cGemC_OdWA?pwd=sosc
 
 
 [TOC]

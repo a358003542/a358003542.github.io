@@ -4,7 +4,7 @@ BookAuthor: C. W. Bunn
 BookPublisher: Oxford at the The Clarendon Press
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Crystallography - C. W. Bunn.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1lSJ1kKAiL4q27x2BDA0ETg?pwd=b84y
+bookpdfdownload: https://pan.baidu.com/s/1lSJ1kKAiL4q27x2BDA0ETg?pwd=b84y
 
 [TOC]
 

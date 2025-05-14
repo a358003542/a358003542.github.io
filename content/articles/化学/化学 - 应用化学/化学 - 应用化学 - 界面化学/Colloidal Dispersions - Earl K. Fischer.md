@@ -4,7 +4,7 @@ BookAuthor: Earl K. Fischer
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Colloidal Dispersions - Earl K. Fischer.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1fb4652slrdodOuWLXEFYuQ?pwd=46ro 
+bookpdfdownload: https://pan.baidu.com/s/1fb4652slrdodOuWLXEFYuQ?pwd=46ro 
 
 [TOC]
 

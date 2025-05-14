@@ -4,7 +4,7 @@ BookAuthor: Lee Zhi Eng
 BookPublisher: Packt Publishing
 BookLanguage: 英语
 BookCover: /images/Covers/Building a Game with Unity and Blender - Lee Zhi Eng.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1uIbVjpYrrpuj9HFKMejhTQ?pwd=8yqk
+bookpdfdownload: https://pan.baidu.com/s/1uIbVjpYrrpuj9HFKMejhTQ?pwd=8yqk
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Herbert B. Enderton
 BookPublisher: Academic Press
 BookLanguage: 英语
 BookCover: /images/Covers/Elements of Set Theory (1977) - Herbert B. Enderton.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1UJJEt9BaL-XpN7P-Y5zP2g?pwd=hir4
+bookpdfdownload: https://pan.baidu.com/s/1UJJEt9BaL-XpN7P-Y5zP2g?pwd=hir4
 
 
 

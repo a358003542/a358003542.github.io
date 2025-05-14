@@ -4,7 +4,7 @@ BookAuthor: [美]R·霍夫曼 & 郭洪猷 & 李静
 BookPublisher: 化学工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/固体与表面 - [美]R·霍夫曼.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1xvDvJ8eMhvOlBkwqgxMytw?pwd=q7hk 
+bookpdfdownload: https://pan.baidu.com/s/1xvDvJ8eMhvOlBkwqgxMytw?pwd=q7hk 
 
 
 [TOC]

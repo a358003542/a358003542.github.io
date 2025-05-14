@@ -4,7 +4,7 @@ BookAuthor: James E. House
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry - James E. House.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1WacTMp37_lImEymBZ1gICg?pwd=3hu3 
+bookpdfdownload: https://pan.baidu.com/s/1WacTMp37_lImEymBZ1gICg?pwd=3hu3 
 
 
 [TOC]

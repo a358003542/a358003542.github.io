@@ -4,7 +4,7 @@ BookAuthor: Gernot Frenking & Sason Shaik
 BookPublisher: Wiley-VCH
 BookLanguage: 英语
 BookCover: /images/Covers/The Chemical Bond Chemical Bonding Across the Periodic Table - Gernot Frenking.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1cWmyAfwPIpGc6mcELKDq1A?pwd=rpic 
+bookpdfdownload: https://pan.baidu.com/s/1cWmyAfwPIpGc6mcELKDq1A?pwd=rpic 
 
 
 [TOC]

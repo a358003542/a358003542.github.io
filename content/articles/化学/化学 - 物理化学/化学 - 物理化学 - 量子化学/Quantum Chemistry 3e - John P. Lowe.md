@@ -4,7 +4,7 @@ BookAuthor: John P. Lowe & Kirk A. Peterson
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry 3e - John P. Lowe.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1iVi-zhM4VGjAVVK0pQbflw?pwd=x7ro 
+bookpdfdownload: https://pan.baidu.com/s/1iVi-zhM4VGjAVVK0pQbflw?pwd=x7ro 
 
 [TOC]
 

@@ -4,7 +4,7 @@ BookAuthor: Don Shillady
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Essentials of Physical Chemistry - Don Shillady.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1r5HdZBo-jPjm_Jy69Hhsaw?pwd=1hwb 
+bookpdfdownload: https://pan.baidu.com/s/1r5HdZBo-jPjm_Jy69Hhsaw?pwd=1hwb 
 
 
 [TOC]

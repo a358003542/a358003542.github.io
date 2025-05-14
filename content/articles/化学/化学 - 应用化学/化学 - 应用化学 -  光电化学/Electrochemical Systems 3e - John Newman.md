@@ -4,7 +4,7 @@ BookAuthor: John Newman & Karen E. Thomas-Alyea
 BookPublisher: Wiley-Interscience
 BookLanguage: 英语
 BookCover: /images/Covers/Electrochemical Systems 3e - John Newman.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1k528OWKuTMQX0QY2AWzNCg?pwd=u1oh 
+bookpdfdownload: https://pan.baidu.com/s/1k528OWKuTMQX0QY2AWzNCg?pwd=u1oh 
 
 [TOC]
 

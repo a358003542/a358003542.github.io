@@ -4,7 +4,7 @@ BookAuthor: Alexander Wynter Blyth
 BookPublisher: Charles Griffin and Company
 BookLanguage: 英语
 BookCover: /images/Covers/Poisons Their Effects and Detection - Alexander Wynter Blyth.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1ns6wCG4V-sRmWXB62K0tzw?pwd=7g3v 
+bookpdfdownload: https://pan.baidu.com/s/1ns6wCG4V-sRmWXB62K0tzw?pwd=7g3v 
 
 
 [TOC]

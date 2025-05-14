@@ -4,7 +4,7 @@ BookAuthor: Joseph B. Dence & Harry B. Gray & George S. Hammond
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Dynamics - Joseph B. Dence.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1KvYETJtwnWilpMkHWJD0BQ?pwd=hr9m 
+bookpdfdownload: https://pan.baidu.com/s/1KvYETJtwnWilpMkHWJD0BQ?pwd=hr9m 
 
 
 [TOC]

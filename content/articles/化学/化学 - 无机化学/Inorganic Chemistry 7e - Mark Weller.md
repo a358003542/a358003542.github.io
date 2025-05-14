@@ -4,7 +4,7 @@ BookAuthor: Mark Weller & Jonathan Rourke & Tina Overton & Fraser Armstrong
 BookPublisher: Oxford University Press
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry 7e - Mark Weller.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1r8Kza8jL7M6bgfdf9fw96g?pwd=y26n 
+bookpdfdownload: https://pan.baidu.com/s/1r8Kza8jL7M6bgfdf9fw96g?pwd=y26n 
 
 [TOC]
 

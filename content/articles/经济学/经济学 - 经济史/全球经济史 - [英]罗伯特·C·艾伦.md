@@ -4,7 +4,7 @@ BookAuthor: [英]罗伯特·C·艾伦
 BookPublisher: 译林出版社
 BookLanguage: 中文
 BookCover: /images/Covers/全球经济史 - [英]罗伯特·C·艾伦.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1oTuLXVE0K2t895-aepywWg?pwd=g4vm 
+bookepubdownload: https://pan.baidu.com/s/1oTuLXVE0K2t895-aepywWg?pwd=g4vm 
 
 
 

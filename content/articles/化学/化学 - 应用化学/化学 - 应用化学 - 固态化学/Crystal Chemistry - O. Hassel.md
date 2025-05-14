@@ -4,7 +4,7 @@ BookAuthor: O. Hassel
 BookPublisher: William Heinemann
 BookLanguage: 英语
 BookCover: /images/Covers/Crystal Chemistry - O. Hassel.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1F0ZE4bdtynYEdCJeizZqCw?pwd=0kn7
+bookpdfdownload: https://pan.baidu.com/s/1F0ZE4bdtynYEdCJeizZqCw?pwd=0kn7
 
 [TOC]
 

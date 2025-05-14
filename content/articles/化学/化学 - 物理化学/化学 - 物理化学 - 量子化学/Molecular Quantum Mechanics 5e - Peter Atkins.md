@@ -4,7 +4,7 @@ BookAuthor: Peter Atkins & Ronald Friedman
 BookPublisher: Oxford University Press
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Quantum Mechanics 5e - Peter Atkins.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1IKT5pHLfXfvdAma3hMe34w?pwd=lzui 
+bookpdfdownload: https://pan.baidu.com/s/1IKT5pHLfXfvdAma3hMe34w?pwd=lzui 
 
 [TOC]
 

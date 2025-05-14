@@ -3,8 +3,7 @@ BookName: Basics of NMR
 BookAuthor: Joseph P. Hornak
 BookLanguage: 英语
 BookCover: /images/Covers/Basics of NMR - Joseph P. Hornak.jpg
-OnedriveDownloadUrl: https://1drv.ms/u/s!AuCYFvwp2KHMgpZ9ghuRGiBEirwDWg?e=s6DEWU
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/18CBonf3y0IYpiF8cIqGOTQ?pwd=pd6y 
+bookbaidupandirectdownloadepuburl: https://pan.baidu.com/s/18CBonf3y0IYpiF8cIqGOTQ?pwd=pd6y 
 
 
 [TOC]

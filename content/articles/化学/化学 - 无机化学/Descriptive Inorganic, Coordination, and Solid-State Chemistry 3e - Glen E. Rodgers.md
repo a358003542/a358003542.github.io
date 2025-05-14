@@ -4,7 +4,7 @@ BookAuthor: Glen E. Rodgers
 BookPublisher: CENGAGE Learning
 BookLanguage: 英语
 BookCover: /images/Covers/Descriptive Inorganic, Coordination, and Solid-State Chemistry 3e - Glen E. Rodgers.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1-60rqQu5VBl6uCW3Wv9mwA?pwd=2sbo 
+bookpdfdownload: https://pan.baidu.com/s/1-60rqQu5VBl6uCW3Wv9mwA?pwd=2sbo 
 
 
 [TOC]

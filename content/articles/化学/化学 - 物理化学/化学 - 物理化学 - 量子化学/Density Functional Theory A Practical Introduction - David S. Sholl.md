@@ -4,7 +4,7 @@ BookAuthor: David S. Sholl & Janice A. Steckel
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Density Functional Theory A Practical Introduction - David S. Sholl.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/18xp7ksaOhHzJwwIqlHGE2Q?pwd=rsjn 
+bookpdfdownload: https://pan.baidu.com/s/18xp7ksaOhHzJwwIqlHGE2Q?pwd=rsjn 
 
 
 [TOC]

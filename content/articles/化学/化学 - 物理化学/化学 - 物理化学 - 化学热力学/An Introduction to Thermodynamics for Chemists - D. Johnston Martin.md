@@ -4,7 +4,7 @@ BookAuthor: D. Johnston Martin
 BookPublisher: Edward Arnold & Co.
 BookLanguage: 英语
 BookCover: /images/Covers/An Introduction to Thermodynamics for Chemists - D. Johnston Martin.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/13Who2WSS9m5e8m8fDrb36w?pwd=747k 
+bookpdfdownload: https://pan.baidu.com/s/13Who2WSS9m5e8m8fDrb36w?pwd=747k 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Howard DeVoe
 BookPublisher: Independent Publisher
 BookLanguage: 英语
 BookCover: /images/Covers/Thermodynamics and Chemistry 2e - Howard DeVoe.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1gNHqamsGXd8IMQE1gsjtfQ?pwd=z0yf
+bookpdfdownload: https://pan.baidu.com/s/1gNHqamsGXd8IMQE1gsjtfQ?pwd=z0yf
 
 
 [TOC]

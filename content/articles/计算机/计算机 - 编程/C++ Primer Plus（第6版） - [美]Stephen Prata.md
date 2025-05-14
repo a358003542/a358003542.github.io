@@ -4,7 +4,7 @@ BookAuthor: [美]Stephen Prata
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/C__ Primer Plus（第6版） - [美]Stephen Prata.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1NYmEj_c_NFVI2HTcpzF-wg?pwd=15c6 
+bookepubdownload: https://pan.baidu.com/s/1NYmEj_c_NFVI2HTcpzF-wg?pwd=15c6 
 
 
 

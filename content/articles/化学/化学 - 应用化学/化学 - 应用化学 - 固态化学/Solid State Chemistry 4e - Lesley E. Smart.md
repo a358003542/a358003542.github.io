@@ -4,7 +4,7 @@ BookAuthor: Lesley E. Smart & Elaine A. Moore
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Solid State Chemistry 4e - Lesley E. Smart.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1Ga8i7-aaxcDxx6HN5zP7fw?pwd=74gn
+bookpdfdownload: https://pan.baidu.com/s/1Ga8i7-aaxcDxx6HN5zP7fw?pwd=74gn
 
 [TOC]
 

@@ -4,7 +4,7 @@ BookAuthor: Harry B. Gray
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/Electrons and Chemical Bonding - Harry B. Gray.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1VHfYfTmDco2UTAOK9dAf6g?pwd=2bvu 
+bookpdfdownload: https://pan.baidu.com/s/1VHfYfTmDco2UTAOK9dAf6g?pwd=2bvu 
 
 
 [TOC]

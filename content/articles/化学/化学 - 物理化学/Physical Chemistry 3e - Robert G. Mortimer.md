@@ -4,7 +4,7 @@ BookAuthor: Robert G. Mortimer
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 3e - Robert G. Mortimer.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1d1MkiYFFgevrZyMSPzjdMw?pwd=z286 
+bookpdfdownload: https://pan.baidu.com/s/1d1MkiYFFgevrZyMSPzjdMw?pwd=z286 
 
 
 [TOC]

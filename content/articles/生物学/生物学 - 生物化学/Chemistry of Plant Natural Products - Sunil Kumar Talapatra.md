@@ -4,7 +4,7 @@ BookAuthor: Sunil Kumar Talapatra & Bani Talapatra
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Chemistry of Plant Natural Products - Sunil Kumar Talapatra.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1wPhTMCBp-bJCg6avFm8_MA?pwd=xwtp 
+bookpdfdownload: https://pan.baidu.com/s/1wPhTMCBp-bJCg6avFm8_MA?pwd=xwtp 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Peter Atkins & Tina Overton & Jonathan Rourke
 BookPublisher: W. H. Freeman & Company
 BookLanguage: 英语
 BookCover: /images/Covers/Shriver & Atkins' Inorganic Chemistry 5e - Peter Atkins.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1vrPIkprwS2GgAldqiA0w9w?pwd=opb6 
+bookpdfdownload: https://pan.baidu.com/s/1vrPIkprwS2GgAldqiA0w9w?pwd=opb6 
 
 
 [TOC]

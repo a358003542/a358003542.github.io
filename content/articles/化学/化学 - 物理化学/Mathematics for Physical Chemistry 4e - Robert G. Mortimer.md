@@ -4,7 +4,7 @@ BookAuthor: Robert G. Mortimer
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Mathematics for Physical Chemistry 4e - Robert G. Mortimer.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1mhYzUjLyUFFG5N5FsyBr0A?pwd=6apx 
+bookpdfdownload: https://pan.baidu.com/s/1mhYzUjLyUFFG5N5FsyBr0A?pwd=6apx 
 
 
 [TOC]

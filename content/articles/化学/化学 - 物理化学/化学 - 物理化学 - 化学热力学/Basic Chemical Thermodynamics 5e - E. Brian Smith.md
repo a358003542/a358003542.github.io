@@ -4,7 +4,7 @@ BookAuthor: E. Brian Smith
 BookPublisher: Imperial College Press
 BookLanguage: 英语
 BookCover: /images/Covers/Basic Chemical Thermodynamics 5e - E. Brian Smith.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1eF_S5Zk3Jj5aQiNRTIe0Sw?pwd=84mv 
+bookpdfdownload: https://pan.baidu.com/s/1eF_S5Zk3Jj5aQiNRTIe0Sw?pwd=84mv 
 
 
 [TOC]

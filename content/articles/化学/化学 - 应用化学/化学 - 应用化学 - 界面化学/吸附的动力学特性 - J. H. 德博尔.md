@@ -4,7 +4,7 @@ BookAuthor: J. H. 德博尔 & 柳正辉
 BookPublisher: 科学出版社
 BookLanguage: 中文
 BookCover: /images/Covers/吸附的动力学特性 - J. H. 德博尔.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1olduUyFMyQjVbQn647erHQ?pwd=tdec 
+bookpdfdownload: https://pan.baidu.com/s/1olduUyFMyQjVbQn647erHQ?pwd=tdec 
 
 
 [TOC]

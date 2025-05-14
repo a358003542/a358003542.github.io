@@ -4,7 +4,7 @@ BookAuthor: Anders Nilsson & Lars G.M. Pettersson & Jens K. Nørskov
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Bonding at Surfaces and Interfaces - Anders Nilsson.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1Vdc5l5DsyzLI68kJ-3ljvA?pwd=yr29 
+bookpdfdownload: https://pan.baidu.com/s/1Vdc5l5DsyzLI68kJ-3ljvA?pwd=yr29 
 
 
 [TOC]

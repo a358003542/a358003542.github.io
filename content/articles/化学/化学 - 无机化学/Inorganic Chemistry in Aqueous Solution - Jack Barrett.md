@@ -4,7 +4,7 @@ BookAuthor: Jack Barrett
 BookPublisher: The Royal Society of Chemistry
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry in Aqueous Solution - Jack Barrett.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1WEwBvX64me50Am_wM-m9Tw?pwd=uzo3 
+bookpdfdownload: https://pan.baidu.com/s/1WEwBvX64me50Am_wM-m9Tw?pwd=uzo3 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: 集体编写
 BookPublisher: Butterworths
 BookLanguage: 英语
 BookCover: /images/Covers/Crystal Growth - 集体编写.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1wkHQpSmcZ5q-1f2IAS75mQ?pwd=w4rq 
+bookpdfdownload: https://pan.baidu.com/s/1wkHQpSmcZ5q-1f2IAS75mQ?pwd=w4rq 
 
 [TOC]
 

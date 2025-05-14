@@ -4,7 +4,7 @@ BookAuthor: Abhik Ghosh & Steffen Berg
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Arrow Pushing in Inorganic Chemistry - Abhik Ghosh.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1RN6Ezouf0vQgu4weWU1svw?pwd=okg0 
+bookpdfdownload: https://pan.baidu.com/s/1RN6Ezouf0vQgu4weWU1svw?pwd=okg0 
 
 
 [TOC]

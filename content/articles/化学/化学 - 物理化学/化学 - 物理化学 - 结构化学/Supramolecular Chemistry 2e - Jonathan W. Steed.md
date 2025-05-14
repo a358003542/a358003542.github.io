@@ -4,7 +4,7 @@ BookAuthor: Jonathan W. Steed & Jerry L. Atwood
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Supramolecular Chemistry 2e - Jonathan W. Steed.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1qrelulq_GtMu3yC2-kG8Rw?pwd=8keg 
+bookpdfdownload: https://pan.baidu.com/s/1qrelulq_GtMu3yC2-kG8Rw?pwd=8keg 
 
 
 [TOC]

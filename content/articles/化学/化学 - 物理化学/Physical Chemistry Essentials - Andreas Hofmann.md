@@ -4,7 +4,7 @@ BookAuthor: Andreas Hofmann
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry Essentials - Andreas Hofmann.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1G2suLLgPMnLnxvAUA3Tseg?pwd=83qm 
+bookpdfdownload: https://pan.baidu.com/s/1G2suLLgPMnLnxvAUA3Tseg?pwd=83qm 
 
 
 [TOC]

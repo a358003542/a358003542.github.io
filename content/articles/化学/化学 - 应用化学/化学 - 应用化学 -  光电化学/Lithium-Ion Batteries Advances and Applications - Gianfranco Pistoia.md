@@ -4,7 +4,7 @@ BookAuthor: Gianfranco Pistoia
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Lithium-Ion Batteries Advances and Applications - Gianfranco Pistoia.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1BkY8NcrTmhw319i3_18oqA?pwd=swod 
+bookpdfdownload: https://pan.baidu.com/s/1BkY8NcrTmhw319i3_18oqA?pwd=swod 
 
 [TOC]
 

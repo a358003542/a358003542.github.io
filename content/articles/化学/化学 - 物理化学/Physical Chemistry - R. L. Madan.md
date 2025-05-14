@@ -4,7 +4,7 @@ BookAuthor: R. L. Madan
 BookPublisher: McGraw-Hill
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry - R. L. Madan.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1uloe-DQR_1eKA5LKV4h14A?pwd=tqqi 
+bookpdfdownload: https://pan.baidu.com/s/1uloe-DQR_1eKA5LKV4h14A?pwd=tqqi 
 
 
 [TOC]

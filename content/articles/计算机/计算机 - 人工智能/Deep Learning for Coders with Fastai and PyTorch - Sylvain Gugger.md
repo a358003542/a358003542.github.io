@@ -4,7 +4,7 @@ BookAuthor: Sylvain Gugger & Jeremy Howard
 BookPublisher: O'Reilly
 BookLanguage: 英语
 BookCover: /images/Covers/Deep Learning for Coders with Fastai and PyTorch - Sylvain Gugger & Jeremy Howard.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1OTyCKYoWsUaOmDZNXFRI0g?pwd=lyce
+bookpdfdownload: https://pan.baidu.com/s/1OTyCKYoWsUaOmDZNXFRI0g?pwd=lyce
 
 
 

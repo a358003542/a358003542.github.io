@@ -4,7 +4,7 @@ BookAuthor: James E. House
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Principles of Chemical Kinetics 2e - James E. House.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1cqzFd0CKNg9qxjmgYrhI4Q?pwd=no4y 
+bookpdfdownload: https://pan.baidu.com/s/1cqzFd0CKNg9qxjmgYrhI4Q?pwd=no4y 
 
 
 [TOC]

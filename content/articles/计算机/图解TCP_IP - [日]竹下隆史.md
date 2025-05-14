@@ -4,7 +4,7 @@ BookAuthor: [日]竹下隆史
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/图解TCP_IP - [日]竹下隆史.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1iyrgjKvN9W_Qqj3aOzfs8A?pwd=s0oz
+bookpdfdownload: https://pan.baidu.com/s/1iyrgjKvN9W_Qqj3aOzfs8A?pwd=s0oz
 
 
 

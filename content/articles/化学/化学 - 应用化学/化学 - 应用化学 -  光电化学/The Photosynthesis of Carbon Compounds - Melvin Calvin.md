@@ -4,7 +4,7 @@ BookAuthor: Melvin Calvin & J. A. Bassham
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/The Photosynthesis of Carbon Compounds - Melvin Calvin.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1VB5-pQJTvcrguuz2GnFi-A?pwd=new5 
+bookpdfdownload: https://pan.baidu.com/s/1VB5-pQJTvcrguuz2GnFi-A?pwd=new5 
 
 
 [TOC]

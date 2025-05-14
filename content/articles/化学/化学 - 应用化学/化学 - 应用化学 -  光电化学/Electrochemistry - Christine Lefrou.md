@@ -4,7 +4,7 @@ BookAuthor: Christine Lefrou & Pierre Fabry & Jean-Claude Poignet
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Electrochemistry - Christine Lefrou.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1yk-7zkJp6SL2PY1ZHz8SPQ?pwd=2o47 
+bookpdfdownload: https://pan.baidu.com/s/1yk-7zkJp6SL2PY1ZHz8SPQ?pwd=2o47 
 
 [TOC]
 

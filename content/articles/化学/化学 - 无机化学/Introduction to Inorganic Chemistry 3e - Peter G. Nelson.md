@@ -4,7 +4,7 @@ BookAuthor: Peter G. Nelson
 BookPublisher: Bookboon
 BookLanguage: 英语
 BookCover: /images/Covers/Introduction to Inorganic Chemistry - Peter G. Nelson.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1PFZnJXe9SIi55YCs7DlmMg?pwd=joi0 
+bookpdfdownload: https://pan.baidu.com/s/1PFZnJXe9SIi55YCs7DlmMg?pwd=joi0 
 
 
 [TOC]

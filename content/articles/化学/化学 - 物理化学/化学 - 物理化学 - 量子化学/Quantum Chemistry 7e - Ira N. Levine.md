@@ -4,7 +4,7 @@ BookAuthor: Ira N. Levine
 BookPublisher: Pearson
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry 7e - Ira N. Levine.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1Xb3xXSMBHt75qvrvRdEz6A?pwd=6f86 
+bookpdfdownload: https://pan.baidu.com/s/1Xb3xXSMBHt75qvrvRdEz6A?pwd=6f86 
 
 [TOC]
 

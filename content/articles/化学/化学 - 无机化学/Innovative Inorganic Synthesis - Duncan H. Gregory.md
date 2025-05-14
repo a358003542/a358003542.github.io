@@ -4,7 +4,7 @@ BookAuthor: Duncan H. Gregory
 BookPublisher: MDPI
 BookLanguage: 英语
 BookCover: /images/Covers/Innovative Inorganic Synthesis - Duncan H. Gregory.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/18CoQWhZTfAv6GKMhxdKjVg?pwd=a9kq 
+bookpdfdownload: https://pan.baidu.com/s/18CoQWhZTfAv6GKMhxdKjVg?pwd=a9kq 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Vladimir S. Bagotsky & Alexander M. Skundin & Yurij M. Volfkovich
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Electrochemical Power Sources - Vladimir S. Bagotsky.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1O8Yz-lwMPIrDj7ubyWBiyw?pwd=ci99 
+bookpdfdownload: https://pan.baidu.com/s/1O8Yz-lwMPIrDj7ubyWBiyw?pwd=ci99 
 
 [TOC]
 

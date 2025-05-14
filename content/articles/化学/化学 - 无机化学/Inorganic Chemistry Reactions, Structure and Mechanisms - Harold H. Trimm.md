@@ -4,7 +4,7 @@ BookAuthor: Harold H. Trimm
 BookPublisher: Apple Academic Press
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry Reactions, Structure and Mechanisms - Harold H. Trimm.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/18SRKdV6VctPzSHp0uQfEFQ?pwd=ipyv 
+bookpdfdownload: https://pan.baidu.com/s/18SRKdV6VctPzSHp0uQfEFQ?pwd=ipyv 
 
 
 [TOC]

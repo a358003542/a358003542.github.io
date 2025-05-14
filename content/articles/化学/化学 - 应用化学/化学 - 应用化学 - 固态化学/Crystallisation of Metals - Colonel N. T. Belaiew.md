@@ -4,7 +4,7 @@ BookAuthor: Colonel N. T. Belaiew
 BookPublisher: University of London Press
 BookLanguage: 英语
 BookCover: /images/Covers/Crystallisation of Metals - Colonel N. T. Belaiew.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1_gtkWe3Ng9VT9qS7GfpLyg?pwd=z00w 
+bookpdfdownload: https://pan.baidu.com/s/1_gtkWe3Ng9VT9qS7GfpLyg?pwd=z00w 
 
 [TOC]
 

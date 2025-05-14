@@ -4,7 +4,7 @@ BookAuthor: David R. Dalton
 BookPublisher: Oxford University Press
 BookLanguage: 英语
 BookCover: /images/Covers/The Chemistry of Wine - David R. Dalton.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1Fji4SmHELqj4z94_JxFUow?pwd=3mje 
+bookepubdownload: https://pan.baidu.com/s/1Fji4SmHELqj4z94_JxFUow?pwd=3mje 
 
 
 [TOC]

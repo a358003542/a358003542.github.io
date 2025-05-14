@@ -4,7 +4,7 @@ BookAuthor: Jürgen O. Besenhard
 BookPublisher: Wiley‐VCH
 BookLanguage: 英语
 BookCover: /images/Covers/Handbook of Battery Materials - Jürgen O. Besenhard.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1R65ycUcLNHOYX3k0CdGeXQ?pwd=hx27 
+bookpdfdownload: https://pan.baidu.com/s/1R65ycUcLNHOYX3k0CdGeXQ?pwd=hx27 
 
 [TOC]
 

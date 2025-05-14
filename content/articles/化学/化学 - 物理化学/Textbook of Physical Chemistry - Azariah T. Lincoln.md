@@ -4,7 +4,7 @@ BookAuthor: Azariah T. Lincoln
 BookPublisher: D. C. Heath & Co.
 BookLanguage: 英语
 BookCover: /images/Covers/Textbook of Physical Chemistry - Azariah T. Lincoln.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1yhI9-J-Kj1yEzBJtm7HrJA?pwd=dzsk 
+bookpdfdownload: https://pan.baidu.com/s/1yhI9-J-Kj1yEzBJtm7HrJA?pwd=dzsk 
 
 
 [TOC]

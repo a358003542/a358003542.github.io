@@ -4,7 +4,7 @@ BookAuthor: Wolfgang Schärtl
 BookPublisher: Bookboon
 BookLanguage: 英语
 BookCover: /images/Covers/Basic Physical Chemistry - Wolfgang Schärtl.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1GgLzzGMyOGCdhDrn1q5vnA?pwd=uuzy 
+bookpdfdownload: https://pan.baidu.com/s/1GgLzzGMyOGCdhDrn1q5vnA?pwd=uuzy 
 
 
 [TOC]

@@ -4,7 +4,7 @@ BookAuthor: Andrew W. Trask
 BookPublisher: Manning Publications Co.
 BookLanguage: 英语
 BookCover: /images/Covers/Grokking Deep Learning - Andrew W. Trask.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1NDmF6gktdfDfxHoLBN8-jw?pwd=f83r 
+bookpdfdownload: https://pan.baidu.com/s/1NDmF6gktdfDfxHoLBN8-jw?pwd=f83r 
 
 
 

@@ -4,7 +4,7 @@ BookAuthor: Ira N. Levine
 BookPublisher: McGraw-Hill
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 6e - Ira N. Levine.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1KoKy8lDZ1N_858kkq08rwg?pwd=86y1 
+bookpdfdownload: https://pan.baidu.com/s/1KoKy8lDZ1N_858kkq08rwg?pwd=86y1 
 
 
 [TOC]

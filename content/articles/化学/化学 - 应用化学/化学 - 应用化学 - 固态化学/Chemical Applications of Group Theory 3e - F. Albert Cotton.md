@@ -4,7 +4,7 @@ BookAuthor: F. Albert Cotton
 BookPublisher: Wiley-Interscience
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Applications of Group Theory 3e - F. Albert Cotton.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1_joA6eeNBYj3CxMNAQJLmA?pwd=xf27 
+bookpdfdownload: https://pan.baidu.com/s/1_joA6eeNBYj3CxMNAQJLmA?pwd=xf27 
 
 [TOC]
 

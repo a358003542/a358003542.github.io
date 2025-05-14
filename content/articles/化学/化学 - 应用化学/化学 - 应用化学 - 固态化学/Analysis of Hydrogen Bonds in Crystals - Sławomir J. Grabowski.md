@@ -4,7 +4,7 @@ BookAuthor: Sławomir J. Grabowski
 BookPublisher: MDPI
 BookLanguage: 英语
 BookCover: /images/Covers/Analysis of Hydrogen Bonds in Crystals - Sławomir J. Grabowski.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1ISKPOKIi-NQ_ChQFrRerbQ?pwd=k0o5 
+bookpdfdownload: https://pan.baidu.com/s/1ISKPOKIi-NQ_ChQFrRerbQ?pwd=k0o5 
 
 [TOC]
 

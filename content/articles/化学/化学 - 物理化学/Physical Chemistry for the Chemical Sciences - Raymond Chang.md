@@ -4,7 +4,7 @@ BookAuthor: Raymond Chang & John W. Thoman, Jr.
 BookPublisher: University Science Books
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry for the Chemical Sciences - Raymond Chang.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1AlwQmOt1wn9zrzewPVPjMw?pwd=5r3y 
+bookpdfdownload: https://pan.baidu.com/s/1AlwQmOt1wn9zrzewPVPjMw?pwd=5r3y 
 
 
 [TOC]

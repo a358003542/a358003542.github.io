@@ -4,7 +4,7 @@ BookAuthor: Arun Bahl & B. S. Bahl & G. D. Tuli
 BookPublisher: S. Chand
 BookLanguage: 英语
 BookCover: /images/Covers/Essentials of Physical Chemistry - Arun Bahl.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/13M3pRbYX0KRKxZOr2a455Q?pwd=yowe 
+bookpdfdownload: https://pan.baidu.com/s/13M3pRbYX0KRKxZOr2a455Q?pwd=yowe 
 
 
 [TOC]

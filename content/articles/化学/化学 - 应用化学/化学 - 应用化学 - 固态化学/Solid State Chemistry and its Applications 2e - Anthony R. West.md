@@ -4,7 +4,7 @@ BookAuthor: Anthony R. West
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Solid State Chemistry and its Applications 2e - Anthony R. West.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1HcLyfuIzKPP3xPMXAmc2xg?pwd=nl57
+bookpdfdownload: https://pan.baidu.com/s/1HcLyfuIzKPP3xPMXAmc2xg?pwd=nl57
 
 [TOC]
 

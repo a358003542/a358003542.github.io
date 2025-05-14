@@ -4,7 +4,7 @@ BookAuthor: Baron Justus Liebig
 BookPublisher: H. Bailliere
 BookLanguage: 英语
 BookCover: /images/Covers/Chemistry and Physics in relation to Physiology and Pathology 2e - Baron Justus Liebig.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/18r2u7zyiEawfIHv0aw2xhQ?pwd=pr9n 
+bookpdfdownload: https://pan.baidu.com/s/18r2u7zyiEawfIHv0aw2xhQ?pwd=pr9n 
 
 
 [TOC]

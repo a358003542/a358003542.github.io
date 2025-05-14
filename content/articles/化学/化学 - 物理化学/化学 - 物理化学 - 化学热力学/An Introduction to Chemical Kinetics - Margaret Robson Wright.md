@@ -4,7 +4,7 @@ BookAuthor: Margaret Robson Wright
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/An Introduction to Chemical Kinetics - Margaret Robson Wright.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1IBbuovpflTccTlZmZbEQOw?pwd=wl1n 
+bookpdfdownload: https://pan.baidu.com/s/1IBbuovpflTccTlZmZbEQOw?pwd=wl1n 
 
 
 [TOC]

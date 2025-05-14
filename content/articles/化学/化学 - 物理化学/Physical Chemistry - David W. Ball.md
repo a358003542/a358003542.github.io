@@ -4,7 +4,7 @@ BookAuthor: David W. Ball
 BookPublisher: Thomson Brooks/Cole
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry - David W. Ball.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1v2-e7Wu6cyooYj6-FPDM8g?pwd=nbhj 
+bookpdfdownload: https://pan.baidu.com/s/1v2-e7Wu6cyooYj6-FPDM8g?pwd=nbhj 
 
 
 [TOC]

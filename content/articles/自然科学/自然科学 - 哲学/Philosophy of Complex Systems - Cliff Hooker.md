@@ -4,7 +4,7 @@ BookAuthor: Cliff Hooker
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Philosophy of Complex Systems - Cliff Hooker.jpg
-BookBaidupanDirectDownloadUrl: https://pan.baidu.com/s/1U2kAGFwC5eqsZfLpzwWV_w?pwd=aiyx 
+bookpdfdownload: https://pan.baidu.com/s/1U2kAGFwC5eqsZfLpzwWV_w?pwd=aiyx 
 
 
 [TOC]
