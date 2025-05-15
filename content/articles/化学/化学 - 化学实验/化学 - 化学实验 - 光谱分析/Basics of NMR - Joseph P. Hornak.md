@@ -1,14 +1,15 @@
 Template: bookref
+Date: 20250515
 BookName: Basics of NMR
 BookAuthor: Joseph P. Hornak
 BookLanguage: 英语
 BookCover: /images/Covers/Basics of NMR - Joseph P. Hornak.jpg
-bookbaidupandirectdownloadepuburl: https://pan.baidu.com/s/18CBonf3y0IYpiF8cIqGOTQ?pwd=pd6y 
+bookepubdownload: https://pan.baidu.com/s/18CBonf3y0IYpiF8cIqGOTQ?pwd=pd6y 
 
 
 [TOC]
 
-本书是epub格式，是我根据 [这个网站](https://www.cis.rit.edu/htbooks/nmr/inside.htm) 的内容整理而制作的，考虑到后面可能还会进一步完善该epub，文件版本会变动几次，因此决定采用onedrive。在onedrive下上传相同的文件名的文件可以共享同一分享链接，用户下载总是采用最新的版本，这很是方便。
+本书是epub格式，是我根据 [这个网站](https://www.cis.rit.edu/htbooks/nmr/inside.htm) 的内容整理而制作的。
 
 
 ### INTRODUCTION

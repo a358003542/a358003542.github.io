@@ -1,11 +1,13 @@
 Template: bookref
+Date: 20250515
 BookName: unix编程艺术
 BookAuthor: [美]Eric S. Raymond
+BookScore: 3
 BookPublisher: 电子工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/unix编程艺术 - [美]Eric S. Raymond.jpg
-BookBaidupanDirectDownloadEpubUrl: https://pan.baidu.com/s/1Ity04KwkVTqa48Huj7uP2w?pwd=00mz 
-bookepubdownload: https://pan.baidu.com/s/1nvXD0791nCOOJkZkGIsfUw?pwd=bicz
+bookepubdownload: https://pan.baidu.com/s/1Ity04KwkVTqa48Huj7uP2w?pwd=00mz 
+bookpdfdownload: https://pan.baidu.com/s/1nvXD0791nCOOJkZkGIsfUw?pwd=bicz
 
 
 [TOC]
