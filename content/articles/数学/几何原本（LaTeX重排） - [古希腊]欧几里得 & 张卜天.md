@@ -1,18 +1,17 @@
 Template: bookref
 Date: 20250608
-BookName: 几何原本
+BookName: 几何原本（LaTeX重排）
 BookAuthor: [古希腊]欧几里得 & 张卜天
-BookScore: 4
-BookPublisher: 江西人民出版社
+BookScore: 5
 BookLanguage: 中文
-BookCover: /images/Covers/几何原本 - 欧几里得.jpg
-bookepubdownload: https://pan.baidu.com/s/131F6GccoME0fox6giumBiw?pwd=e0ob 
+BookCover: /images/Covers/几何原本（LaTeX重排） - [古希腊]欧几里得 & 张卜天.jpg
+bookpdfdownload: https://pan.baidu.com/s/10T3Ma_tgpBTsd2lCWN4bEA?pwd=wfhh
 
 
 
 [TOC]
 
-本书是epub格式 。
+本书是pdf格式 。
 
 
 ## 第一卷 

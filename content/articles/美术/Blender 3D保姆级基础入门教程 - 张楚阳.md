@@ -1,6 +1,8 @@
+Date: 20250514
 Template: bookref
 BookName: Blender 3D保姆级基础入门教程
 BookAuthor: 张楚阳
+BookScore: 2
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/Blender 3D保姆级基础入门教程 - 张楚阳.jpg

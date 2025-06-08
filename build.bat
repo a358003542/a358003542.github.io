@@ -1,2 +1,5 @@
-call .\venv\Scripts\activate.bat
+@echo off
+
 python run.py build
+
+
