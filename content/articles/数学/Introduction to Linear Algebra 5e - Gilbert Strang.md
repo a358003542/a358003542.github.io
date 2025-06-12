@@ -1,7 +1,8 @@
+Date: 20250612
 Template: bookref
 BookName: Introduction to Linear Algebra 5e
 BookAuthor: Gilbert Strang
-BookPublisher: Wellesley
+BookPublisher: Wellesley - Cambridge
 BookLanguage: 英语
 BookScore: 4
 BookCover: /images/Covers/Introduction to Linear Algebra 5e - Gilbert Strang.jpg
