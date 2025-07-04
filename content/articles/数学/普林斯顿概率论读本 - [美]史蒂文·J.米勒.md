@@ -1,9 +1,10 @@
+Date: 20250705
 Template: bookref
 BookName: 普林斯顿概率论读本
-BookAuthor: [美]史蒂文·J. 米勒
+BookAuthor: [美]史蒂文·J.米勒
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
-BookCover: /images/Covers/普林斯顿概率论读本 - [美]史蒂文·J. 米勒.jpg
+BookCover: /images/Covers/普林斯顿概率论读本 - [美]史蒂文·J.米勒.jpg
 bookpdfdownload: https://pan.baidu.com/s/16lVZ2_axuXRflK3hCua6bw?pwd=njqr
 
 
