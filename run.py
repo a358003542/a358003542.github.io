@@ -37,7 +37,7 @@ def devserve():
     click.echo("start devbuild your pelican project...")
     
     def devbuild():
-        cmd = "pelican -r {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE} --debug".format(
+        cmd = "pelican -r {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE}".format(
             INPUTDIR=INPUTDIR,
             OUTPUTDIR=OUTPUTDIR,
             CONFFILE=CONFFILE
