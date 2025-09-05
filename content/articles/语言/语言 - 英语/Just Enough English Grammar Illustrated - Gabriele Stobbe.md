@@ -2,6 +2,7 @@ Date: 20250725
 Template: bookref
 BookName: Just Enough English Grammar Illustrated
 BookAuthor: Gabriele Stobbe
+BookScore: 5
 BookPublisher: McGraw-Hill
 BookLanguage: 英语
 BookCover: /images/Covers/Just Enough English Grammar Illustrated - Gabriele Stobbe.jpg
