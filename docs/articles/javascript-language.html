@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="author" content="wander" />
+    <meta name="copyright" content="wander" />
+
+    <meta name="description"
+        content="&lt;div class=&#34;toc&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#数值&#34;&gt;数值&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#infinity&#34;&gt..." />
+
+
+<meta name="keywords" content=", 计算机 - Web应用, " />
+
+<title>javascript语言  -
+    wander的博客</title>
+
+    <link href="https://a358003542.github.io/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://a358003542.github.io/theme/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://a358003542.github.io/theme/css/base.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/pygments.css">
+<link rel="stylesheet" href="https://a358003542.github.io/theme/css/article.css">
+</head>
+
+<body>
+    <div class="flex-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://a358003542.github.io/">网站首页</a>
+
+                <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-collapse collapse" id="navbarContent">
+                    <ul class="navbar-nav mb-lg-0">
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/archives.html">所有博文</a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link "
+                                href="/categories.html">博文分类</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link  " href="https://a358003542.github.io/about.html">关于本网站</a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+
+        
+        <main>
+<div class="container-xxl mt-3">
+    <div class="row">
+        <header class="col-sm-12 col-md-8 col-lg-8 page-header">
+            <h1><a href="https://a358003542.github.io/articles/javascript-language.html"> javascript语言  </a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="p-1">首发于：<time pubdate="pubdate" datetime="2023-10-19T00:00:00+08:00">2023年 10月 19日 </time>
+            </div>
+
+            <div class="p-1">最近更新于：<time datetime="2023-10-21T00:00:00+08:00">2023年 10月 21日 </time>
+            </div>
+
+
+            <div class="p-1">分类：
+            <a class="category-link" href="https://a358003542.github.io/categories.html#ji-suan-ji-webying-yong-ref">计算机 - Web应用</a>
+            </div>
+
+            <hr/>
+
+
+            <div class="article-content">
+                <div class="toc">
+<ul>
+<li><a href="#数值">数值</a><ul>
+<li><a href="#infinity">Infinity</a></li>
+<li><a href="#生成一定范围内的随机数">生成一定范围内的随机数</a></li>
+</ul>
+</li>
+<li><a href="#字符串">字符串</a><ul>
+<li><a href="#字符串的match方法">字符串的match方法</a></li>
+</ul>
+</li>
+<li><a href="#函数">函数</a><ul>
+<li><a href="#命名函数表达式">命名函数表达式</a></li>
+<li><a href="#立即执行的匿名函数">立即执行的匿名函数</a></li>
+</ul>
+</li>
+<li><a href="#类">类</a><ul>
+<li><a href="#constructor方法">constructor方法</a></li>
+<li><a href="#tostring方法">toString方法</a></li>
+<li><a href="#this">this</a></li>
+<li><a href="#属性的get和set">属性的get和set</a></li>
+<li><a href="#类的继承">类的继承</a></li>
+<li><a href="#super">super</a></li>
+<li><a href="#instanceof">instanceof</a></li>
+<li><a href="#tojson方法">toJSON方法</a></li>
+</ul>
+</li>
+<li><a href="#属性名简写">属性名简写</a></li>
+<li><a href="#对象的原型">对象的原型</a></li>
+<li><a href="#date">Date</a></li>
+<li><a href="#json">JSON</a></li>
+<li><a href="#其他">其他</a><ul>
+<li><a href="#map和filter和reduce">map和filter和reduce</a></li>
+<li><a href="#表单提交按钮防止多次点击多次提交">表单提交按钮防止多次点击多次提交</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="数值">数值</h2>
+<h3 id="infinity">Infinity</h3>
+<p>表示数值的无穷大概念。</p>
+<div class="highlight"><pre><span></span><code>&gt; typeof Infinity
+&lt; &#39;number&#39;
+</code></pre></div>
+
+<p>正无穷大和负无穷大不相同：</p>
+<div class="highlight"><pre><span></span><code>&gt; Infinity === -Infinity
+&lt; false
+</code></pre></div>
+
+<h3 id="生成一定范围内的随机数">生成一定范围内的随机数</h3>
+<p>Math.random() 生成0-1内的随机浮点数，可能会生成0，但不会生成1。</p>
+<p>如果希望产生[0,b) 的随机整数，那么可以是:</p>
+<div class="highlight"><pre><span></span><code>Math.floor(Math.random()*b)
+</code></pre></div>
+
+<p>如果希望产生[a, b) 的随机整数：</p>
+<div class="highlight"><pre><span></span><code>a + Math.floor(Math.random()* (b-a))
+</code></pre></div>
+
+<p>因为randint一般选取随机数逻辑是[a,b]，也就是包含b，所以还需要稍作修改：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">randint</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">){</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nx">b</span><span class="o">-</span><span class="nx">a</span><span class="o">+</span><span class="mf">1</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="字符串">字符串</h2>
+<h3 id="字符串的match方法">字符串的match方法</h3>
+<p>字符串的match方法可以跟上 RegExp 对象来继续正则表达式匹配操作。</p>
+<h2 id="函数">函数</h2>
+<h3 id="命名函数表达式">命名函数表达式</h3>
+<p>类似下面这样的东西：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">sayHi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">func</span><span class="p">(</span><span class="nx">who</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">alert</span><span class="p">(</span><span class="sb">`Hello, </span><span class="si">${</span><span class="nx">who</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>其和</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">sayHi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">who</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">alert</span><span class="p">(</span><span class="sb">`Hello, </span><span class="si">${</span><span class="nx">who</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>的区别是这个函数多了一个局部的函数名字，可以被函数内部自身调用自身使用。之所以不直接使用外部赋值的那个变量，是防止该变量被污染然后导致函数运行出错。</p>
+<h3 id="立即执行的匿名函数">立即执行的匿名函数</h3>
+<p>某个js脚本一整段都被这样一种写法包围着：</p>
+<div class="highlight"><pre><span></span><code>(function($){…})(jQuery)
+</code></pre></div>
+
+<p>这是定义了一个匿名函数，其将立即执行，接受了一个jQuery参数，并传递给了匿名函数。</p>
+<p>之所以这种写法很常见是因为这样做可以将整个模块的代码都放在一个匿名函数里面，这样模块里面定义的全局变量就成了函数内的局部变量了，这样不会污染全局变量命名空间。这是一种过时的老代码写法。现代JavaScript应该采用类似下面这样的写法：</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">readyState</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;loading&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">your_function</span><span class="p">()</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMContentLoaded&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">your_function</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="类">类</h2>
+<p>现代javascript推荐使用class来定义类：</p>
+<div class="highlight"><pre><span></span><code><span class="c1">//定义类</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Point</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">y</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s1">&#39;(&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;, &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;)&#39;</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>以前老式的写法如下所示，可以了解下：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">Point</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">Point</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="s1">&#39;(&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;, &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;)&#39;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Point</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="constructor方法">constructor方法</h3>
+<p>面向对象编程里面常见的概念，即该对象的构造方法，在新建实例化该对象时被调用。</p>
+<h3 id="tostring方法">toString方法</h3>
+<p>一般自己定义的对象推荐加上一个 <code>toString</code> 方法：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">Jedi</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s1">&#39;no name&#39;</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">toString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="sb">`Jedi - </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">getName</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>&lt; jedi = new Jedi()
+&lt; jedi.name
+&gt; &#39;no name&#39;
+&lt; jedi.toString()
+&gt; &#39;Jedi - no name&#39;
+</code></pre></div>
+
+<p>上面的 <code>??</code> 是空值合并运算符，如果左侧为 <code>null</code> 或者 <code>undefined</code> 则返回右边的值，否则返回左边的值。现在javascript在处理默认值的问题上推荐使用空值合并运算符而不是逻辑或<code>||</code>。</p>
+<h3 id="this">this</h3>
+<p>在javascript里面，object里面定义的方法， <code>this</code> 指向的就是本对象的实例。因为函数也是一个对象，所以在函数里面也是可以使用this的，如果 <code>this</code> 在函数里面：</p>
+<div class="highlight"><pre><span></span><code>function (){
+    this.x = 1;
+}
+</code></pre></div>
+
+<p>那么其代表的是这个函数要运行的时候，具体 <strong>调用</strong> 这个函数的对象。</p>
+<p>比如说某个函数将这样被调用： <code>jquery对象.what</code> 那么这个函数里面的this就是指定的那个jquery实例，通常也就是网页里面的某个标签元素。</p>
+<h3 id="属性的get和set">属性的get和set</h3>
+<p>面向对象编程里面这个是自定义对象重要的一个设计点，javascript采用如下<code>get name()</code> 这样的写法： </p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">get</span><span class="w"> </span><span class="nx">name</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">_name</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">set</span><span class="w"> </span><span class="nx">name</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Name is too short.&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">value</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="s2">&quot;John&quot;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="类的继承">类的继承</h3>
+<p>关于面向对象的继承概念这里就不赘述了。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">Dog</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Animal</span><span class="p">{</span>
+<span class="w">   </span><span class="c1">//</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="super">super</h3>
+<p>类似python语言里面的super概念，引用父类。</p>
+<h3 id="instanceof">instanceof</h3>
+<p>类似于python语言中的isinstance函数。</p>
+<div class="highlight"><pre><span></span><code>obj instanceof Class
+</code></pre></div>
+
+<h3 id="tojson方法">toJSON方法</h3>
+<p>自定义的对象定义了这个方法，则该对象可以被 <code>JSON.stringify</code> 正确调用。</p>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">Test</span><span class="p">{</span>
+<span class="w">  </span><span class="nx">toJSON</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;b&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Test</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>&gt; JSON.stringify(t)
+&#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;
+</code></pre></div>
+
+<h2 id="属性名简写">属性名简写</h2>
+<p>如下所示：</p>
+<div class="highlight"><pre><span></span><code>&gt; let name = &quot;bob&quot;
+&gt; let age = 28
+&gt; let user = {name,age}
+&gt; user
+{name: &#39;bob&#39;, age: 28}
+</code></pre></div>
+
+<p>传统的写法是：</p>
+<div class="highlight"><pre><span></span><code>let user = {
+  name:name,
+  age:age
+}
+</code></pre></div>
+
+<h2 id="对象的原型">对象的原型</h2>
+<p>JavaScript的对象大多有一个原型对象，其从原型继承属性。可以通过 <code>Object.prototype</code> 来引用该对象的原型对象。</p>
+<p>要检测一个对象是否是另外一个对象的原型可以使用 <code>isPrototypeOf</code> 方法：</p>
+<div class="highlight"><pre><span></span><code>p.isPrototypeOf(o) // if true then the p is the o&#39;s prototype.
+</code></pre></div>
+
+<h2 id="date">Date</h2>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date">Date MDN 文档</a></p>
+<h2 id="json">JSON</h2>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON">JSON MDN 文档</a></p>
+<p>JSON支持的对象有：object，array，string，number，boolean 和 null 。</p>
+<p>如下所示，下面也演示了利用 <code>JSON.parse</code> 来将相应的JSON字符串转成JavaScript对象。</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="w"> </span><span class="nx">x</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="p">});</span>
+<span class="kc">undefined</span>
+<span class="o">&gt;</span><span class="w"> </span><span class="nx">x</span>
+<span class="s1">&#39;{&quot;x&quot;:5,&quot;y&quot;:6}&#39;</span>
+<span class="o">&gt;</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">x</span>
+<span class="s1">&#39;string&#39;</span>
+<span class="o">&gt;</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+<span class="kc">undefined</span>
+<span class="o">&gt;</span><span class="w"> </span><span class="nx">y</span>
+<span class="p">{</span><span class="w"> </span><span class="nx">x</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="p">}</span>
+<span class="o">&gt;</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">y</span>
+<span class="s1">&#39;object&#39;</span>
+</code></pre></div>
+
+<h2 id="其他">其他</h2>
+<h3 id="map和filter和reduce">map和filter和reduce</h3>
+<p>这三个函数是函数编程很重要的几个函数，在数组对象里面可以直接调用这些方法：</p>
+<div class="highlight"><pre><span></span><code>a.map(function)
+</code></pre></div>
+
+<h3 id="表单提交按钮防止多次点击多次提交">表单提交按钮防止多次点击多次提交</h3>
+<p>参考了 <a href="https://www.the-art-of-web.com/javascript/doublesubmit/">这个网页的第一小节</a> ，觉得这个解决方案很是简单，而且有效。对于单页面表单，也就是提交成功了通常切换到另外的网页那边去了的，还是很好地适用的。可能在某些情况下，本解决方案会令人不太满意，因为这个提交按钮只要提交之后就显示按钮一直处于禁用状态。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;...&quot;</span> <span class="na">onsubmit</span><span class="o">=</span><span class="s">&quot;myButton.disabled = true; return true;&quot;</span><span class="p">&gt;</span>
+...
+<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;myButton&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Submit&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+</code></pre></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </main>
+        
+        <footer class="footer">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">Created by Wander & Companion with</span></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://python.org/">Python</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="http://getpelican.com/">Pelican</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://github.com/Python-Markdown/markdown">Markdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.javascript.com/">Javascript</a></li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted px-2" href="https://www.mathjax.org/">Mathjax</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-muted px-2">etc...</span></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="https://a358003542.github.io/theme/lodash/js/lodash.min.js"></script>
+    <script src="https://a358003542.github.io/theme/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://a358003542.github.io/theme/js/article.js"></script>
+
+
+</body>
+
+</html>
