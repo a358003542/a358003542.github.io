@@ -52,10 +52,6 @@ class Tipue_Search_JSON_Generator(object):
             replace('”', '"').replace('’', "'").replace('^', '&#94;')
 
         soup_text = BeautifulSoup(page.content, 'html.parser')
-
-        # remove pre code
-        for s in soup_text.find_all('pre'):
-            s.extract()
         
         page_text = soup_text.get_text(' ', strip=True).replace('“', '"'). \
             replace('”', '"').replace('’', "'").replace('¶', ' ').replace('^', '&#94;')
