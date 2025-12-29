@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>搜索页面 - {{ SITENAME|striptags|e }}</title>
+{% endblock title %}
+
+{% block head_description %}
+{{ SITENAME|striptags|e }} 网站的搜索结果
+{% endblock head_description %}
+
+{% block head_links %}
+{{super()}}
+<link rel="stylesheet" href="{{ SITEURL }}/theme/css/tipuesearch.css">
+{% endblock head_links %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div id="tipue_search_content">
+                <div id="tipue_search_loading"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+{{ super() }}
+<script src="{{ SITEURL }}/theme/js/jquery.min.js"></script>
+<script src="{{ SITEURL }}/theme/js/tipuesearch_set.js"></script>
+<script src="{{ SITEURL }}/theme/js/tipuesearch.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tipue_search_input').tipuesearch({
+            'mode': 'json',
+            'show': 10,
+            'newWindow': false,
+            'wholeWords': false,
+            'minimumLength': 1,
+            'contentLocation': 'tipuesearch_content.json'
+        })
+    })
+</script>
+{% endblock script %}

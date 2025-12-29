@@ -143,7 +143,23 @@ for template_src in gen_all_file2(template_file_startpath, filetype="html$"):
 ################################### plugin #################
 PLUGIN_PATHS = ['myplugins']
 
-PLUGINS = ['bookref']
+PLUGINS = ['tipue_search', 'sitemap', 'bookref']
+
+
+SITEMAP = {
+    'format': 'xml',
+    'priorities': {
+        'articles': 0.8,
+        'indexes': 0.2,
+        'pages': 0.5
+    },
+    'changefreqs': {
+        'articles': 'weekly',
+        'indexes': 'weekly',
+        'pages': 'monthly'
+    },
+    'exclude': ['tags/', 'categorys/']
+}
 
 ##################################################################
 BOOKREFAUTHOR_SAVE_AS = 'bookref_author/{slug}.html'
