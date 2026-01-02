@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: 吸附的动力学特性
 BookAuthor: J. H. 德博尔 & 柳正辉
 BookPublisher: 科学出版社
 BookLanguage: 中文
 BookCover: /images/Covers/吸附的动力学特性 - J. H. 德博尔.jpg
-bookpdfdownload: https://pan.baidu.com/s/1olduUyFMyQjVbQn647erHQ?pwd=tdec 
+bookpdfbaidudownload: https://pan.baidu.com/s/1olduUyFMyQjVbQn647erHQ?pwd=tdec 
 
 
 [TOC]

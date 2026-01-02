@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Introductory Chemistry A Foundation 9e
 BookAuthor: Steven S. Zumdahl & Donald J. DeCoste

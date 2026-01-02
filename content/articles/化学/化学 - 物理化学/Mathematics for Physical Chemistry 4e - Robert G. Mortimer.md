@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Mathematics for Physical Chemistry 4e
 BookAuthor: Robert G. Mortimer
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Mathematics for Physical Chemistry 4e - Robert G. Mortimer.jpg
-bookpdfdownload: https://pan.baidu.com/s/1mhYzUjLyUFFG5N5FsyBr0A?pwd=6apx 
+bookpdfbaidudownload: https://pan.baidu.com/s/1mhYzUjLyUFFG5N5FsyBr0A?pwd=6apx 
 
 
 [TOC]

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Shriver & Atkins' Inorganic Chemistry 5e
 BookAuthor: Peter Atkins & Tina Overton & Jonathan Rourke
 BookPublisher: W. H. Freeman & Company
 BookLanguage: 英语
 BookCover: /images/Covers/Shriver & Atkins' Inorganic Chemistry 5e - Peter Atkins.jpg
-bookpdfdownload: https://pan.baidu.com/s/1vrPIkprwS2GgAldqiA0w9w?pwd=opb6 
+bookpdfbaidudownload: https://pan.baidu.com/s/1vrPIkprwS2GgAldqiA0w9w?pwd=opb6 
 
 
 [TOC]

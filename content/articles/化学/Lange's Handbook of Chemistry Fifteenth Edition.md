@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Lange's Handbook of Chemistry Fifteenth Edition
 BookAuthor: John A. Dean

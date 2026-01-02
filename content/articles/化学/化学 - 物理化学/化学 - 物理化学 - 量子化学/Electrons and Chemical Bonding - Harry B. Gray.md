@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Electrons and Chemical Bonding
 BookAuthor: Harry B. Gray
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/Electrons and Chemical Bonding - Harry B. Gray.jpg
-bookpdfdownload: https://pan.baidu.com/s/1VHfYfTmDco2UTAOK9dAf6g?pwd=2bvu 
+bookpdfbaidudownload: https://pan.baidu.com/s/1VHfYfTmDco2UTAOK9dAf6g?pwd=2bvu 
 
 
 [TOC]

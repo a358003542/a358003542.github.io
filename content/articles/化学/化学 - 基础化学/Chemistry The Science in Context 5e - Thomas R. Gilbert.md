@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry: The Science in Context 5e
 BookAuthor: Thomas R. Gilbert & Rein V. Kirss & Natalie Foster

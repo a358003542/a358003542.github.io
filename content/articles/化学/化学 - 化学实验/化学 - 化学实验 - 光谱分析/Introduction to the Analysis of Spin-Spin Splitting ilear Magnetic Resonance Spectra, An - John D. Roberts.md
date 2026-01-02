@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: An Introduction to the Analysis of Spin-Spin Splitting in High-Resolution Nuclear Magnetic Resonance Spectra
 BookAuthor: John D. Roberts

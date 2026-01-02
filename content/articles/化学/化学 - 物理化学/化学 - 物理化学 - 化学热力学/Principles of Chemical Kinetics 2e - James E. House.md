@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Principles of Chemical Kinetics 2e
 BookAuthor: James E. House
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Principles of Chemical Kinetics 2e - James E. House.jpg
-bookpdfdownload: https://pan.baidu.com/s/1cqzFd0CKNg9qxjmgYrhI4Q?pwd=no4y 
+bookpdfbaidudownload: https://pan.baidu.com/s/1cqzFd0CKNg9qxjmgYrhI4Q?pwd=no4y 
 
 
 [TOC]

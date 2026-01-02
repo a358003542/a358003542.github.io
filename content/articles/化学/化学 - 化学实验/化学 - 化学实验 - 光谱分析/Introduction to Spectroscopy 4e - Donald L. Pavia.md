@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to Spectroscopy 4e
 BookAuthor: Donald L. Pavia & Gary M. Lampman & George S. Kriz & James R. Vyvyan

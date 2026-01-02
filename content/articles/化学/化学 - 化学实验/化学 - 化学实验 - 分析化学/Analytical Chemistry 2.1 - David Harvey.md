@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Analytical Chemistry 2.1
 BookAuthor: David Harvey

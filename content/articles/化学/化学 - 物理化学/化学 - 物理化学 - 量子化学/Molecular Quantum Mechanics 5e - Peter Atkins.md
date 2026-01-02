@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Molecular Quantum Mechanics 5e
 BookAuthor: Peter Atkins & Ronald Friedman
 BookPublisher: Oxford University Press
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Quantum Mechanics 5e - Peter Atkins.jpg
-bookpdfdownload: https://pan.baidu.com/s/1IKT5pHLfXfvdAma3hMe34w?pwd=lzui 
+bookpdfbaidudownload: https://pan.baidu.com/s/1IKT5pHLfXfvdAma3hMe34w?pwd=lzui 
 
 [TOC]
 

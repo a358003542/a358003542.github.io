@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Analytical Electrochemistry 3e
 BookAuthor: Joseph Wang

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry Essentials
 BookAuthor: Andreas Hofmann
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry Essentials - Andreas Hofmann.jpg
-bookpdfdownload: https://pan.baidu.com/s/1G2suLLgPMnLnxvAUA3Tseg?pwd=83qm 
+bookpdfbaidudownload: https://pan.baidu.com/s/1G2suLLgPMnLnxvAUA3Tseg?pwd=83qm 
 
 
 [TOC]

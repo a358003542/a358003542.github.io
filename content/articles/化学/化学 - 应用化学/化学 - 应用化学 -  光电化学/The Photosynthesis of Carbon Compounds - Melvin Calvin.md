@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: The Photosynthesis of Carbon Compounds
 BookAuthor: Melvin Calvin & J. A. Bassham
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/The Photosynthesis of Carbon Compounds - Melvin Calvin.jpg
-bookpdfdownload: https://pan.baidu.com/s/1VB5-pQJTvcrguuz2GnFi-A?pwd=new5 
+bookpdfbaidudownload: https://pan.baidu.com/s/1VB5-pQJTvcrguuz2GnFi-A?pwd=new5 
 
 
 [TOC]

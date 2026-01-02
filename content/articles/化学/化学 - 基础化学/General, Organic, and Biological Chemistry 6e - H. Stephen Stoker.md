@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General, Organic, and Biological Chemistry 6e
 BookAuthor: H. Stephen Stoker

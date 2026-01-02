@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Applied Colloid and Surface Chemistry
 BookAuthor: Richard M. Pashley & Marilyn E. Karaman
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Applied Colloid and Surface Chemistry - Richard M. Pashley.jpg
-bookpdfdownload: https://pan.baidu.com/s/1dmLe0s4sdjoAZucgQIMN1w?pwd=m4ke 
+bookpdfbaidudownload: https://pan.baidu.com/s/1dmLe0s4sdjoAZucgQIMN1w?pwd=m4ke 
 
 [TOC]
 

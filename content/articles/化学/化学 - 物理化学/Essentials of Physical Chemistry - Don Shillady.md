@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Essentials of Physical Chemistry
 BookAuthor: Don Shillady
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Essentials of Physical Chemistry - Don Shillady.jpg
-bookpdfdownload: https://pan.baidu.com/s/1r5HdZBo-jPjm_Jy69Hhsaw?pwd=1hwb 
+bookpdfbaidudownload: https://pan.baidu.com/s/1r5HdZBo-jPjm_Jy69Hhsaw?pwd=1hwb 
 
 
 [TOC]

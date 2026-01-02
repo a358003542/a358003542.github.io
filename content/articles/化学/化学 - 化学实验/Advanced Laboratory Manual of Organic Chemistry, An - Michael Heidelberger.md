@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: An Advanced Laboratory Manual of Organic Chemistry
 BookAuthor: Michael Heidelberger

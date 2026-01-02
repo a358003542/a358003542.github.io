@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Descriptive Inorganic Chemistry 6e
 BookAuthor: Geoff Rayner-Canham & Tina Overton

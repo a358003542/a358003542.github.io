@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Electrochemical Systems 3e
 BookAuthor: John Newman & Karen E. Thomas-Alyea
 BookPublisher: Wiley-Interscience
 BookLanguage: 英语
 BookCover: /images/Covers/Electrochemical Systems 3e - John Newman.jpg
-bookpdfdownload: https://pan.baidu.com/s/1k528OWKuTMQX0QY2AWzNCg?pwd=u1oh 
+bookpdfbaidudownload: https://pan.baidu.com/s/1k528OWKuTMQX0QY2AWzNCg?pwd=u1oh 
 
 [TOC]
 

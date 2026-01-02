@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Modern Spectroscopy 4e
 BookAuthor: J. Michael Hollas

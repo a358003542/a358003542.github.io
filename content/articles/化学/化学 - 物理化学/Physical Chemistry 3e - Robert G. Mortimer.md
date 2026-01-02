@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry 3e
 BookAuthor: Robert G. Mortimer
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 3e - Robert G. Mortimer.jpg
-bookpdfdownload: https://pan.baidu.com/s/1d1MkiYFFgevrZyMSPzjdMw?pwd=z286 
+bookpdfbaidudownload: https://pan.baidu.com/s/1d1MkiYFFgevrZyMSPzjdMw?pwd=z286 
 
 
 [TOC]

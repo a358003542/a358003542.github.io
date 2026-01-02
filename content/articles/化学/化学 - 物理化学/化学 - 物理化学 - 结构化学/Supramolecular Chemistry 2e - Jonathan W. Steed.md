@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Supramolecular Chemistry 2e
 BookAuthor: Jonathan W. Steed & Jerry L. Atwood
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Supramolecular Chemistry 2e - Jonathan W. Steed.jpg
-bookpdfdownload: https://pan.baidu.com/s/1qrelulq_GtMu3yC2-kG8Rw?pwd=8keg 
+bookpdfbaidudownload: https://pan.baidu.com/s/1qrelulq_GtMu3yC2-kG8Rw?pwd=8keg 
 
 
 [TOC]

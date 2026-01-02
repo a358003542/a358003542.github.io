@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General Chemistry 3e
 BookAuthor: Linus Pauling

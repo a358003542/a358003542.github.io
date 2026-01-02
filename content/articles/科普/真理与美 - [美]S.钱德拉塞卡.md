@@ -5,7 +5,7 @@ BookAuthor: [美]S.钱德拉塞卡
 BookPublisher: 湖南科学技术出版社
 BookLanguage: 中文
 BookCover: /images/Covers/真理与美 - [美]S.钱德拉塞卡.jpg
-bookepubdownload: https://pan.baidu.com/s/1mrpEQa4xp18IjoJdzvAFeQ?pwd=ujbp
+bookepubbaidudownload: https://pan.baidu.com/s/1mrpEQa4xp18IjoJdzvAFeQ?pwd=ujbp
 
 
 [TOC]

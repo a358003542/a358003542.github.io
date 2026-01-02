@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry
 BookAuthor: David W. Ball
 BookPublisher: Thomson Brooks/Cole
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry - David W. Ball.jpg
-bookpdfdownload: https://pan.baidu.com/s/1v2-e7Wu6cyooYj6-FPDM8g?pwd=nbhj 
+bookpdfbaidudownload: https://pan.baidu.com/s/1v2-e7Wu6cyooYj6-FPDM8g?pwd=nbhj 
 
 
 [TOC]

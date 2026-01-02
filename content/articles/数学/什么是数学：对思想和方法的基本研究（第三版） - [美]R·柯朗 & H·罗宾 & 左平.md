@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: 什么是数学：对思想和方法的基本研究（第三版）
 BookAuthor: [美]R·柯朗 & H·罗宾 & 左平
 BookPublisher: 复旦大学出版社
 BookLanguage: 中文
 BookCover: /images/Covers/什么是数学：对思想和方法的基本研究（第三版） - [美]R·柯朗 & H·罗宾 & 左平.jpg
-bookpdfdownload: https://pan.baidu.com/s/1tZdgZmR7VFqYeMih9jTlRA?pwd=f96h
+bookpdfbaidudownload: https://pan.baidu.com/s/1tZdgZmR7VFqYeMih9jTlRA?pwd=f96h
 
 
 

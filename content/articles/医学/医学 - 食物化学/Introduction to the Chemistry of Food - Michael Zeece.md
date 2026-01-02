@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to the Chemistry of Food
 BookAuthor: Michael Zeece
 BookPublisher: Academic Press
 BookLanguage: 英语
 BookCover: /images/Covers/Introduction to the Chemistry of Food - Michael Zeece.jpg
-bookpdfdownload: https://pan.baidu.com/s/1oPRheP7oDVCgxNl882cZUA?pwd=jqrs 
+bookpdfbaidudownload: https://pan.baidu.com/s/1oPRheP7oDVCgxNl882cZUA?pwd=jqrs 
 
 
 [TOC]

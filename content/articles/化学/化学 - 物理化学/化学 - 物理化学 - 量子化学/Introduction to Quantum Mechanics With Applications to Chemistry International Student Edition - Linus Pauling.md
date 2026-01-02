@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to Quantum Mechanics: With Applications to Chemistry International Student Edition
 BookAuthor: Linus Pauling & E. Bright Wilson, Jr.
 BookPublisher: McGraw-Hill
 BookLanguage: 英语
 BookCover: /images/Covers/Introduction to Quantum Mechanics With Applications to Chemistry International Student Edition - Linus Pauling.jpg
-bookpdfdownload: https://pan.baidu.com/s/1YeO-GIY2kK5NyjYDcC5vOw?pwd=tqz0 
+bookpdfbaidudownload: https://pan.baidu.com/s/1YeO-GIY2kK5NyjYDcC5vOw?pwd=tqz0 
 
 [TOC]
 

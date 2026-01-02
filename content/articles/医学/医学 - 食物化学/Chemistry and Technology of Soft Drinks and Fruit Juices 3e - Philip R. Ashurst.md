@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry and Technology of Soft Drinks and Fruit Juices 3e
 BookAuthor: Philip R. Ashurst
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Chemistry and Technology of Soft Drinks and Fruit Juices 3e - Philip R. Ashurst.jpg
-bookpdfdownload: https://pan.baidu.com/s/1czs3i_NNte8YJ5pHFIwJ_Q?pwd=fjce 
+bookpdfbaidudownload: https://pan.baidu.com/s/1czs3i_NNte8YJ5pHFIwJ_Q?pwd=fjce 
 
 
 [TOC]

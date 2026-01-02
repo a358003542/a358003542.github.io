@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General Chemistry The Essential Concepts 6e
 BookAuthor: Raymond Chang & Jason Overby

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Handbook of Biodegradable Polymers Synthesis, Characterization and Applications
 BookAuthor: Andreas Lendlein & Adam Sisson

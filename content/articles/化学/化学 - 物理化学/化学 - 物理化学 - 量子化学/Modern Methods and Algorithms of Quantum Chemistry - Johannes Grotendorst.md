@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Modern Methods and Algorithms of Quantum Chemistry
 BookAuthor: Johannes Grotendorst
 BookPublisher: John von Neumann Institute for Computing
 BookLanguage: 英语
 BookCover: /images/Covers/Modern Methods and Algorithms of Quantum Chemistry - Johannes Grotendorst.jpg
-bookpdfdownload: https://pan.baidu.com/s/1LiYOmXKIWz7yDAH4bfgCdg?pwd=123g 
+bookpdfbaidudownload: https://pan.baidu.com/s/1LiYOmXKIWz7yDAH4bfgCdg?pwd=123g 
 
 [TOC]
 

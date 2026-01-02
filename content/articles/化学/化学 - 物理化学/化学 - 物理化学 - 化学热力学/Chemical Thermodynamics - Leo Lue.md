@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemical Thermodynamics
 BookAuthor: Leo Lue

@@ -5,7 +5,7 @@ BookAuthor: [古希腊]欧几里得 & 张卜天
 BookScore: 5
 BookLanguage: 中文
 BookCover: /images/Covers/几何原本（LaTeX重排） - [古希腊]欧几里得 & 张卜天.jpg
-bookpdfdownload: https://pan.baidu.com/s/10T3Ma_tgpBTsd2lCWN4bEA?pwd=wfhh
+bookpdfbaidudownload: https://pan.baidu.com/s/10T3Ma_tgpBTsd2lCWN4bEA?pwd=wfhh
 
 
 

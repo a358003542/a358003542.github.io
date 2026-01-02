@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Basic Concepts of Chemistry 8e
 BookAuthor: Leo J. Malone & Theodore O. Dolter

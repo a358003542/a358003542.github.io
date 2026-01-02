@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Solid State Chemistry: An Introduction 4e
 BookAuthor: Lesley E. Smart & Elaine A. Moore
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Solid State Chemistry 4e - Lesley E. Smart.jpg
-bookpdfdownload: https://pan.baidu.com/s/1Ga8i7-aaxcDxx6HN5zP7fw?pwd=74gn
+bookpdfbaidudownload: https://pan.baidu.com/s/1Ga8i7-aaxcDxx6HN5zP7fw?pwd=74gn
 
 [TOC]
 

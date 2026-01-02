@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Perfumery: Practice and Principles
 BookAuthor: Robert R. Calkin & J. Stephan Jellinek
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Perfumery Practice and Principles - Robert R. Calkin.jpg
-bookpdfdownload: https://pan.baidu.com/s/1Tpm0eupdmMqaTcU6lGJNgw?pwd=d2di 
+bookpdfbaidudownload: https://pan.baidu.com/s/1Tpm0eupdmMqaTcU6lGJNgw?pwd=d2di 
 
 
 [TOC]

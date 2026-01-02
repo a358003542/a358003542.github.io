@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Discovery of the Elements 6e
 BookAuthor: Mary Elvira Weeks

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Descriptive Inorganic, Coordination, and Solid-State Chemistry 3e
 BookAuthor: Glen E. Rodgers
 BookPublisher: CENGAGE Learning
 BookLanguage: 英语
 BookCover: /images/Covers/Descriptive Inorganic, Coordination, and Solid-State Chemistry 3e - Glen E. Rodgers.jpg
-bookpdfdownload: https://pan.baidu.com/s/1-60rqQu5VBl6uCW3Wv9mwA?pwd=2sbo 
+bookpdfbaidudownload: https://pan.baidu.com/s/1-60rqQu5VBl6uCW3Wv9mwA?pwd=2sbo 
 
 
 [TOC]

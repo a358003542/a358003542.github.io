@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Introductory Chemistry: Concepts and Critical Thinking 8e
 BookAuthor: Charles H. Corwin

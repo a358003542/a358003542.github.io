@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemical Dynamics
 BookAuthor: Joseph B. Dence & Harry B. Gray & George S. Hammond
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Dynamics - Joseph B. Dence.jpg
-bookpdfdownload: https://pan.baidu.com/s/1KvYETJtwnWilpMkHWJD0BQ?pwd=hr9m 
+bookpdfbaidudownload: https://pan.baidu.com/s/1KvYETJtwnWilpMkHWJD0BQ?pwd=hr9m 
 
 
 [TOC]

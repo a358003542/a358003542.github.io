@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to Polymer Chemistry 3e
 BookAuthor: Charles E. Carraher, Jr.

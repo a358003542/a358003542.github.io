@@ -6,7 +6,7 @@ BookScore: 3
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/Python深度学习 - [美]弗郎索瓦·肖莱.jpg
-bookpdfdownload: https://pan.baidu.com/s/1_hRFrNL-wNoW6nZ1WDZc4g?pwd=2uyr
+bookpdfbaidudownload: https://pan.baidu.com/s/1_hRFrNL-wNoW6nZ1WDZc4g?pwd=2uyr
 
 
 

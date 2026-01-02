@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: Building a Game with Unity and Blender
 BookAuthor: Lee Zhi Eng
 BookPublisher: Packt Publishing
 BookLanguage: 英语
 BookCover: /images/Covers/Building a Game with Unity and Blender - Lee Zhi Eng.jpg
-bookpdfdownload: https://pan.baidu.com/s/1uIbVjpYrrpuj9HFKMejhTQ?pwd=8yqk
+bookpdfbaidudownload: https://pan.baidu.com/s/1uIbVjpYrrpuj9HFKMejhTQ?pwd=8yqk
 
 
 [TOC]

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Basic Physical Chemistry: A Complete Introduction on Bachelor of Science Level
 BookAuthor: Wolfgang Schärtl
 BookPublisher: Bookboon
 BookLanguage: 英语
 BookCover: /images/Covers/Basic Physical Chemistry - Wolfgang Schärtl.jpg
-bookpdfdownload: https://pan.baidu.com/s/1GgLzzGMyOGCdhDrn1q5vnA?pwd=uuzy 
+bookpdfbaidudownload: https://pan.baidu.com/s/1GgLzzGMyOGCdhDrn1q5vnA?pwd=uuzy 
 
 
 [TOC]

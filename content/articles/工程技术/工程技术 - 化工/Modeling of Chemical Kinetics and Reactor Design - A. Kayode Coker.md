@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Modeling of Chemical Kinetics and Reactor Design
 BookAuthor: A. Kayode Coker

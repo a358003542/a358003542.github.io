@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Linden's Handbook of Batteries 4e
 BookAuthor: Thomas B. Reddy & David Linden

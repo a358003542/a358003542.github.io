@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Polymer Solutions: An Introduction to Physical Properties
 BookAuthor: Iwao Teraoka

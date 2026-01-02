@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: The Art and Principles of Chemistry
 BookAuthor: Henry E. Armstrong

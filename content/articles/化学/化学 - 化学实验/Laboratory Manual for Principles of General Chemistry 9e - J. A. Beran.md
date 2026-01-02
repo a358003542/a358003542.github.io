@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Laboratory Manual for Principles of General Chemistry 9e
 BookAuthor: J. A. Beran

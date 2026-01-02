@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General Chemistry Principles and Modern Applications 10e
 BookAuthor: Ralph H. Petrucci & F. Geoffrey Herring

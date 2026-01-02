@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Handbook of Industrial Chemistry Organic Chemicals
 BookAuthor: Mohammad Farhat Ali & Bassam M. El Ali & James G. Speight

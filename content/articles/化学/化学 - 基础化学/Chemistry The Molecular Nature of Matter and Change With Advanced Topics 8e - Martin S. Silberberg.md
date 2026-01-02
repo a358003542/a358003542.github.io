@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry: The Molecular Nature of Matter and Change: With Advanced Topics 8e
 BookAuthor: Martin S. Silberberg & Patricia G. Amateis

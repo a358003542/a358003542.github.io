@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry in Depth
 BookAuthor: Johannes Karl Fink
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry in Depth - Johannes Karl Fink.jpg
-bookpdfdownload: https://pan.baidu.com/s/1Cx7N0kseOluZlX42mEHqWg?pwd=rj4l 
+bookpdfbaidudownload: https://pan.baidu.com/s/1Cx7N0kseOluZlX42mEHqWg?pwd=rj4l 
 
 
 [TOC]

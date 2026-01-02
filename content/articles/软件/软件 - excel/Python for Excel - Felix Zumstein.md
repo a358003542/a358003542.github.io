@@ -5,7 +5,7 @@ BookAuthor: Felix Zumstein
 BookPublisher: O’Reilly
 BookLanguage: 英语
 BookCover: /images/Covers/Python for Excel - Felix Zumstein.jpg
-bookpdfdownload: https://pan.baidu.com/s/1I4mePSLbKtrmiY90Jq_Q-Q?pwd=jfkq
+bookpdfbaidudownload: https://pan.baidu.com/s/1I4mePSLbKtrmiY90Jq_Q-Q?pwd=jfkq
 
 
 

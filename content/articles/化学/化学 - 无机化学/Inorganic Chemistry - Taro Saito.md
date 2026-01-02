@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Inorganic Chemistry
 BookAuthor: Taro Saito
 BookPublisher: CreateSpace Independent Publishing Platform
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry - Taro Saito.jpg
-bookpdfdownload: https://pan.baidu.com/s/15FbzwtO94ulETxIHN1cfuQ?pwd=p4jv 
+bookpdfbaidudownload: https://pan.baidu.com/s/15FbzwtO94ulETxIHN1cfuQ?pwd=p4jv 
 
 
 [TOC]

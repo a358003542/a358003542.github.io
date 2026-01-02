@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Instructor's Solutions Manual to Accompany Atkins' Physical Chemistry 9e
 BookAuthor: C. A. Trapp & M. P. Cady & C. Giunta

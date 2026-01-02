@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry & Chemical Reactivity 8e
 BookAuthor: John C. Kotz & Paul M. Treichel & John R. Townsend

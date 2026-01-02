@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General, Organic and Biological Chemistry: Structures of Life
 BookAuthor: Karen Timberlake & MaryKay Orgill

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: 元素化学中
 BookAuthor: [英]N. N. 格林伍德 & A. 厄恩肖

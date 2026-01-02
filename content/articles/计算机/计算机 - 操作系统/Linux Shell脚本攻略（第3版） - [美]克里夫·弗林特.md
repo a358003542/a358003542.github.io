@@ -5,7 +5,7 @@ BookAuthor: [美]克里夫·弗林特
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/Linux Shell脚本攻略（第3版） - [美]克里夫·弗林特.jpg
-bookpdfdownload: https://pan.baidu.com/s/1qM_s2rfURaiudIhrJnmDPQ?pwd=fyfq
+bookpdfbaidudownload: https://pan.baidu.com/s/1qM_s2rfURaiudIhrJnmDPQ?pwd=fyfq
 
 
 

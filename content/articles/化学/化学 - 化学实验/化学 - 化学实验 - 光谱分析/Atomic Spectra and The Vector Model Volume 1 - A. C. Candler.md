@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Atomic Spectra and The Vector Model Volume 1
 BookAuthor: A. C. Candler

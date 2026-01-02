@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: 固体与表面: 一位化学家关于扩展结构中成键作用的见解
 BookAuthor: [美]R·霍夫曼 & 郭洪猷 & 李静
 BookPublisher: 化学工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/固体与表面 - [美]R·霍夫曼.jpg
-bookpdfdownload: https://pan.baidu.com/s/1xvDvJ8eMhvOlBkwqgxMytw?pwd=q7hk 
+bookpdfbaidudownload: https://pan.baidu.com/s/1xvDvJ8eMhvOlBkwqgxMytw?pwd=q7hk 
 
 
 [TOC]

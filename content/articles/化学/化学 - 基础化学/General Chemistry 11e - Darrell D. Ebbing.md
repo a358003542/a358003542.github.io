@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General Chemistry 11e
 BookAuthor: Darrell D. Ebbing & Steven D. Gammon

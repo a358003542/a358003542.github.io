@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry A Self-Teaching Guide 3e
 BookAuthor: Richard Post & Chad A. Snyder & Clifford C. Houk

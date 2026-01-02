@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Handbook of the Philosophy of Science Volume 10: Philosophy of Complex Systems
 BookAuthor: Cliff Hooker
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Philosophy of Complex Systems - Cliff Hooker.jpg
-bookpdfdownload: https://pan.baidu.com/s/1U2kAGFwC5eqsZfLpzwWV_w?pwd=aiyx 
+bookpdfbaidudownload: https://pan.baidu.com/s/1U2kAGFwC5eqsZfLpzwWV_w?pwd=aiyx 
 
 
 [TOC]

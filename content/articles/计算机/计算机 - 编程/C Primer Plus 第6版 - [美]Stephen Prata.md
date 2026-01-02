@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: C Primer Plus 第6版
 BookAuthor: [美]Stephen Prata
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/C Primer Plus 第6版 - [美]Stephen Prata.jpg
-bookpdfdownload: https://pan.baidu.com/s/1TjTsqgLO6NwQAFUGtphahg?pwd=den2
+bookpdfbaidudownload: https://pan.baidu.com/s/1TjTsqgLO6NwQAFUGtphahg?pwd=den2
 
 
 

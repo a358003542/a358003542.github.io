@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Lithium-ion Batteries: Fundamentals and Applications
 BookAuthor: Yuping Wu
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Lithium-ion Batteries - Yuping Wu.jpg
-bookpdfdownload: https://pan.baidu.com/s/1VM9NicdP21ZbB0NHvCgbkw?pwd=kekp 
+bookpdfbaidudownload: https://pan.baidu.com/s/1VM9NicdP21ZbB0NHvCgbkw?pwd=kekp 
 
 
 [TOC]

@@ -6,8 +6,8 @@ BookScore: 3
 BookPublisher: 电子工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/unix编程艺术 - [美]Eric S. Raymond.jpg
-bookepubdownload: https://pan.baidu.com/s/1Ity04KwkVTqa48Huj7uP2w?pwd=00mz 
-bookpdfdownload: https://pan.baidu.com/s/1nvXD0791nCOOJkZkGIsfUw?pwd=bicz
+bookepubbaidudownload: https://pan.baidu.com/s/1Ity04KwkVTqa48Huj7uP2w?pwd=00mz 
+bookpdfbaidudownload: https://pan.baidu.com/s/1nvXD0791nCOOJkZkGIsfUw?pwd=bicz
 
 
 [TOC]

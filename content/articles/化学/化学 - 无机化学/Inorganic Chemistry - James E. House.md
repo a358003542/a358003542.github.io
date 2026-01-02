@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Inorganic Chemistry
 BookAuthor: James E. House
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry - James E. House.jpg
-bookpdfdownload: https://pan.baidu.com/s/1WacTMp37_lImEymBZ1gICg?pwd=3hu3 
+bookpdfbaidudownload: https://pan.baidu.com/s/1WacTMp37_lImEymBZ1gICg?pwd=3hu3 
 
 
 [TOC]

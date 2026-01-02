@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry 6e
 BookAuthor: Ira N. Levine
 BookPublisher: McGraw-Hill
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 6e - Ira N. Levine.jpg
-bookpdfdownload: https://pan.baidu.com/s/1KoKy8lDZ1N_858kkq08rwg?pwd=86y1 
+bookpdfbaidudownload: https://pan.baidu.com/s/1KoKy8lDZ1N_858kkq08rwg?pwd=86y1 
 
 
 [TOC]

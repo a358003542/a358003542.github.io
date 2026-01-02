@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Molecular Orbital Theory: An Introductory Lecture Note and Reprint Volume
 BookAuthor: Carl J. Ballhausen & Harry B. Gray
 BookPublisher: W. A. Benjamin
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Orbital Theory - Carl J. Ballhausen.jpg
-bookpdfdownload: https://pan.baidu.com/s/1_Tp2Z77X7bH-8gA6uTgOQQ?pwd=apmb  
+bookpdfbaidudownload: https://pan.baidu.com/s/1_Tp2Z77X7bH-8gA6uTgOQQ?pwd=apmb  
 
 [TOC]
 

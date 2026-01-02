@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Handbook of Battery Materials
 BookAuthor: Jürgen O. Besenhard
 BookPublisher: Wiley‐VCH
 BookLanguage: 英语
 BookCover: /images/Covers/Handbook of Battery Materials - Jürgen O. Besenhard.jpg
-bookpdfdownload: https://pan.baidu.com/s/1R65ycUcLNHOYX3k0CdGeXQ?pwd=hx27 
+bookpdfbaidudownload: https://pan.baidu.com/s/1R65ycUcLNHOYX3k0CdGeXQ?pwd=hx27 
 
 [TOC]
 

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Principles of Instrumental Analysis 7e
 BookAuthor: Douglas A. Skoog & F. James Holler & Stanley R. Crouch

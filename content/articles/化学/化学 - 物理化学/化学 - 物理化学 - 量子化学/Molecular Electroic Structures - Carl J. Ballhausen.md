@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Molecular Electroic Structures: An Introduction
 BookAuthor: Carl J. Ballhausen & Harry B. Gray
 BookPublisher: Benjamin-Cummings Publishing Company
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Electroic Structures - Carl J. Ballhausen.jpg
-bookpdfdownload: https://pan.baidu.com/s/1OW_0sA-zwdgEcAODTUpiJg?pwd=xye1 
+bookpdfbaidudownload: https://pan.baidu.com/s/1OW_0sA-zwdgEcAODTUpiJg?pwd=xye1 
 
 [TOC]
 

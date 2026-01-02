@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry and Physics in relation to Physiology and Pathology 2e
 BookAuthor: Baron Justus Liebig
 BookPublisher: H. Bailliere
 BookLanguage: 英语
 BookCover: /images/Covers/Chemistry and Physics in relation to Physiology and Pathology 2e - Baron Justus Liebig.jpg
-bookpdfdownload: https://pan.baidu.com/s/18r2u7zyiEawfIHv0aw2xhQ?pwd=pr9n 
+bookpdfbaidudownload: https://pan.baidu.com/s/18r2u7zyiEawfIHv0aw2xhQ?pwd=pr9n 
 
 
 [TOC]

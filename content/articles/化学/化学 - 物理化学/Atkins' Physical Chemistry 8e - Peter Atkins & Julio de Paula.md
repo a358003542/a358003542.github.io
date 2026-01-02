@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Atkins' Physical Chemistry 8e
 BookAuthor: Peter Atkins & Julio de Paula

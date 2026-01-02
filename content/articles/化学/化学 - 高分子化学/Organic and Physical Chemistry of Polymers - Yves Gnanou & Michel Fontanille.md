@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Organic and Physical Chemistry of Polymers
 BookAuthor: Yves Gnanou & Michel Fontanille

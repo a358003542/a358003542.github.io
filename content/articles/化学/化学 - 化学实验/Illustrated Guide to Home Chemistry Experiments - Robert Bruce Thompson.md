@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Illustrated Guide to Home Chemistry Experiments: All Lab, No Lecture
 BookAuthor: Robert Bruce Thompson

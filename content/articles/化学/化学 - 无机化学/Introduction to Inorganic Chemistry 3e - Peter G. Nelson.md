@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to Inorganic Chemistry: Key Ideas and their Experimental Basis 3e
 BookAuthor: Peter G. Nelson
 BookPublisher: Bookboon
 BookLanguage: 英语
 BookCover: /images/Covers/Introduction to Inorganic Chemistry - Peter G. Nelson.jpg
-bookpdfdownload: https://pan.baidu.com/s/1PFZnJXe9SIi55YCs7DlmMg?pwd=joi0 
+bookpdfbaidudownload: https://pan.baidu.com/s/1PFZnJXe9SIi55YCs7DlmMg?pwd=joi0 
 
 
 [TOC]

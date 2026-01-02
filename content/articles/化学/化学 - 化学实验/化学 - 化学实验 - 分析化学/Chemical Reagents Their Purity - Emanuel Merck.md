@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemical Reagents Their Purity and Tests
 BookAuthor: Emanuel Merck

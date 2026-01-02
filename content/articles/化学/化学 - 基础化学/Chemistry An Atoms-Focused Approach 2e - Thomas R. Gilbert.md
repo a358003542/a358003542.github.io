@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry An Atoms-Focused Approach 2e
 BookAuthor: Thomas R. Gilbert & Rein V. Kirss & Natalie Foster & Stacey Lowery Bretz

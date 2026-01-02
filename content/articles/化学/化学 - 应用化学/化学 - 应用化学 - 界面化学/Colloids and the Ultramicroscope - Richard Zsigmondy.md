@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Colloids and the Ultramicroscope
 BookAuthor: Richard Zsigmondy
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Colloids and the Ultramicroscope - Richard Zsigmondy.jpg
-bookpdfdownload: https://pan.baidu.com/s/1tPIfhizUfY5J-l57iBo9rg?pwd=qbph 
+bookpdfbaidudownload: https://pan.baidu.com/s/1tPIfhizUfY5J-l57iBo9rg?pwd=qbph 
 
 [TOC]
 

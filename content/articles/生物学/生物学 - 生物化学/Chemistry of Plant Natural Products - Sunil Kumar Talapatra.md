@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry of Plant Natural Products: Stereochemistry, Conformation, Synthesis, Biology, and Medicine
 BookAuthor: Sunil Kumar Talapatra & Bani Talapatra
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Chemistry of Plant Natural Products - Sunil Kumar Talapatra.jpg
-bookpdfdownload: https://pan.baidu.com/s/1wPhTMCBp-bJCg6avFm8_MA?pwd=xwtp 
+bookpdfbaidudownload: https://pan.baidu.com/s/1wPhTMCBp-bJCg6avFm8_MA?pwd=xwtp 
 
 
 [TOC]

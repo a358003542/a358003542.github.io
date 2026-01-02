@@ -5,7 +5,7 @@ BookAuthor: [美]David Flanagan
 BookPublisher: 机械工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/JavaScript权威指南（原书第6版） - [美]David Flanagan.jpg
-bookepubdownload: https://pan.baidu.com/s/1w9mZBP_DecvDi9_qrZbTQQ?pwd=sfih
+bookepubbaidudownload: https://pan.baidu.com/s/1w9mZBP_DecvDi9_qrZbTQQ?pwd=sfih
 
 
 

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Photosynthesis
 BookAuthor: Eugene Rabinowitch & Govindjee
 BookPublisher: Independent Publisher
 BookLanguage: 英语
 BookCover: /images/Covers/Photosynthesis - Eugene Rabinowitch.jpg
-bookpdfdownload: https://pan.baidu.com/s/1s5LXACmeDIfzUcAsosKduQ?pwd=lvyx 
+bookpdfbaidudownload: https://pan.baidu.com/s/1s5LXACmeDIfzUcAsosKduQ?pwd=lvyx 
 
 [TOC]
 

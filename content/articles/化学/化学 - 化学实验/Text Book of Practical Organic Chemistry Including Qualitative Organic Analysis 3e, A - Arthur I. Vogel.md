@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: A Text Book of Practical Organic Chemistry Including Qualitative Organic Analysis 3e
 BookAuthor: Arthur I. Vogel

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Fundamentals of Analytical Chemistry 9e
 BookAuthor: F. James Holler & Stanley R. Crouch

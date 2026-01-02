@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: The Chemisty of Polymers 3e
 BookAuthor: John W. Nicholson

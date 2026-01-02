@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Laboratory Methods of Organic Chemistry
 BookAuthor: Ludwig Gattermann

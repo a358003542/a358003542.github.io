@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry: Human Activity, Chemical Reactivity 2e
 BookAuthor: Peter G. Mahaffy & Bob Bucat & Roy Tasker

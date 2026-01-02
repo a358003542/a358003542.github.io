@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry, and Engineering 2e
 BookAuthor: Steven H. Strogatz
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Nonlinear Dynamics and Chaos With Applications to Physics, Biology, Chemistry, and Engineering 2e - Steven H. Strogatz.jpg
-bookpdfdownload: https://pan.baidu.com/s/1rZCgMyO0xStJ40ySXrBohQ?pwd=e9lt 
+bookpdfbaidudownload: https://pan.baidu.com/s/1rZCgMyO0xStJ40ySXrBohQ?pwd=e9lt 
 
 
 [TOC]

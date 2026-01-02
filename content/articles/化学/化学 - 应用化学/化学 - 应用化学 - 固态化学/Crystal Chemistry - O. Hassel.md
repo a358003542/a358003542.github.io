@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Crystal Chemistry
 BookAuthor: O. Hassel
 BookPublisher: William Heinemann
 BookLanguage: 英语
 BookCover: /images/Covers/Crystal Chemistry - O. Hassel.jpg
-bookpdfdownload: https://pan.baidu.com/s/1F0ZE4bdtynYEdCJeizZqCw?pwd=0kn7
+bookpdfbaidudownload: https://pan.baidu.com/s/1F0ZE4bdtynYEdCJeizZqCw?pwd=0kn7
 
 [TOC]
 

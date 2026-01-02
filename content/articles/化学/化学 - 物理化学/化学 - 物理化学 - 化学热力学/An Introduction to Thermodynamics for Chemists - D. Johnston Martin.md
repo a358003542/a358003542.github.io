@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: An Introduction to Thermodynamics for Chemists
 BookAuthor: D. Johnston Martin
 BookPublisher: Edward Arnold & Co.
 BookLanguage: 英语
 BookCover: /images/Covers/An Introduction to Thermodynamics for Chemists - D. Johnston Martin.jpg
-bookpdfdownload: https://pan.baidu.com/s/13Who2WSS9m5e8m8fDrb36w?pwd=747k 
+bookpdfbaidudownload: https://pan.baidu.com/s/13Who2WSS9m5e8m8fDrb36w?pwd=747k 
 
 
 [TOC]

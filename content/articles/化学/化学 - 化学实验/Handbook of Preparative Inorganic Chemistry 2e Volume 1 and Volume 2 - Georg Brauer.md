@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Handbook of Preparative Inorganic Chemistry 2e Volume 1 and Volume 2
 BookAuthor: Georg Brauer

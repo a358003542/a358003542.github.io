@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Colloidal Dispersions
 BookAuthor: Earl K. Fischer
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Colloidal Dispersions - Earl K. Fischer.jpg
-bookpdfdownload: https://pan.baidu.com/s/1fb4652slrdodOuWLXEFYuQ?pwd=46ro 
+bookpdfbaidudownload: https://pan.baidu.com/s/1fb4652slrdodOuWLXEFYuQ?pwd=46ro 
 
 [TOC]
 

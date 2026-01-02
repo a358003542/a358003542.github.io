@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Organic Reactions Volume 3
 BookAuthor: Roger Adams

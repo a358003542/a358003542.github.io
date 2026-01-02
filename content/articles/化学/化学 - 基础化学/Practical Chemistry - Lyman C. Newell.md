@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Practical Chemistry
 BookAuthor: Lyman C. Newell

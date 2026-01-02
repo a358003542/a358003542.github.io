@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Crystallisation of Metals
 BookAuthor: Colonel N. T. Belaiew
 BookPublisher: University of London Press
 BookLanguage: 英语
 BookCover: /images/Covers/Crystallisation of Metals - Colonel N. T. Belaiew.jpg
-bookpdfdownload: https://pan.baidu.com/s/1_gtkWe3Ng9VT9qS7GfpLyg?pwd=z00w 
+bookpdfbaidudownload: https://pan.baidu.com/s/1_gtkWe3Ng9VT9qS7GfpLyg?pwd=z00w 
 
 [TOC]
 

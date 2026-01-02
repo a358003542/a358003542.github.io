@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Density Functional Theory: A Practical Introduction
 BookAuthor: David S. Sholl & Janice A. Steckel
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Density Functional Theory A Practical Introduction - David S. Sholl.jpg
-bookpdfdownload: https://pan.baidu.com/s/18xp7ksaOhHzJwwIqlHGE2Q?pwd=rsjn 
+bookpdfbaidudownload: https://pan.baidu.com/s/18xp7ksaOhHzJwwIqlHGE2Q?pwd=rsjn 
 
 
 [TOC]

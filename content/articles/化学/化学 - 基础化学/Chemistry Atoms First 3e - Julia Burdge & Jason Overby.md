@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry Atoms First 3e
 BookAuthor: Julia Burdge & Jason Overby

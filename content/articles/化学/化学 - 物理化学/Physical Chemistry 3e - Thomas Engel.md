@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry 3e
 BookAuthor: Thomas Engel & Philip Reid
 BookPublisher: Pearson
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 3e - Thomas Engel.jpg
-bookpdfdownload: https://pan.baidu.com/s/1yExJ9X__xD2K4MD8MtPAuQ?pwd=fiq4 
+bookpdfbaidudownload: https://pan.baidu.com/s/1yExJ9X__xD2K4MD8MtPAuQ?pwd=fiq4 
 
 
 [TOC]

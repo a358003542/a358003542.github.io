@@ -5,7 +5,7 @@ BookAuthor: [美]约翰·E.梅菲尔德
 BookPublisher: 湖南科学技术出版社
 BookLanguage: 中文
 BookCover: /images/Covers/复杂的引擎 - [美]约翰·E.梅菲尔德.jpg
-bookepubdownload: https://pan.baidu.com/s/1Xy6UBfC3CNMv913jJ_Uepg?pwd=w6n7
+bookepubbaidudownload: https://pan.baidu.com/s/1Xy6UBfC3CNMv913jJ_Uepg?pwd=w6n7
 
 
 

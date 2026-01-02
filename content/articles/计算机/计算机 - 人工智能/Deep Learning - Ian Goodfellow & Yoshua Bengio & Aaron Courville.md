@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: Deep Learning
 BookAuthor: Ian Goodfellow & Yoshua Bengio & Aaron Courville
 BookPublisher: www.deeplearningbook.org
 BookLanguage: 英语
 BookCover: /images/Covers/Deep Learning - Ian Goodfellow & Yoshua Bengio & Aaron Courville.jpg
-bookpdfdownload: https://pan.baidu.com/s/1sFO0DAw1KnsXh5IToQt3mQ?pwd=y0q2
+bookpdfbaidudownload: https://pan.baidu.com/s/1sFO0DAw1KnsXh5IToQt3mQ?pwd=y0q2
 
 
 

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Quantum Chemistry 2e
 BookAuthor: Donald A. McQuarrie
 BookPublisher: University Science Books
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry 2e - Donald A. McQuarrie.jpg
-bookpdfdownload: https://pan.baidu.com/s/1dw4q8WOaydh0bP9SpLRpeg?pwd=5oik 
+bookpdfbaidudownload: https://pan.baidu.com/s/1dw4q8WOaydh0bP9SpLRpeg?pwd=5oik 
 
 [TOC]
 

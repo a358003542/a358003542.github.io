@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Perfume and Flavor Chemicals Volume 1 and 2
 BookAuthor: Steffen Arctander

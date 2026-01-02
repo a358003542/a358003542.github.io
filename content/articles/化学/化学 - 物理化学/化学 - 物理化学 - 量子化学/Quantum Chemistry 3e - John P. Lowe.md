@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Quantum Chemistry 3e
 BookAuthor: John P. Lowe & Kirk A. Peterson
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry 3e - John P. Lowe.jpg
-bookpdfdownload: https://pan.baidu.com/s/1iVi-zhM4VGjAVVK0pQbflw?pwd=x7ro 
+bookpdfbaidudownload: https://pan.baidu.com/s/1iVi-zhM4VGjAVVK0pQbflw?pwd=x7ro 
 
 [TOC]
 

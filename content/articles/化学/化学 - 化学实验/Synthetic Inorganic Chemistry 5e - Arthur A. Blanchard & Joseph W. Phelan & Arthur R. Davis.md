@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Synthetic Inorganic Chemistry 5e
 BookAuthor: Arthur A. Blanchard & Joseph W. Phelan & Arthur R. Davis

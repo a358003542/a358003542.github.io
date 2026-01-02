@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry for the Chemical Sciences
 BookAuthor: Raymond Chang & John W. Thoman, Jr.
 BookPublisher: University Science Books
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry for the Chemical Sciences - Raymond Chang.jpg
-bookpdfdownload: https://pan.baidu.com/s/1AlwQmOt1wn9zrzewPVPjMw?pwd=5r3y 
+bookpdfbaidudownload: https://pan.baidu.com/s/1AlwQmOt1wn9zrzewPVPjMw?pwd=5r3y 
 
 
 [TOC]

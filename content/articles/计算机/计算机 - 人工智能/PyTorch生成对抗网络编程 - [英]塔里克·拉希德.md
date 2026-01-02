@@ -1,3 +1,4 @@
+Date: 20250515
 Template: bookref
 BookName: PyTorch生成对抗网络编程
 BookAuthor: [英]塔里克·拉希德
@@ -5,7 +6,7 @@ BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookScore: 4
 BookCover: /images/Covers/PyTorch生成对抗网络编程 - [英]塔里克·拉希德.jpg
-bookepubdownload: https://pan.baidu.com/s/1k2pyUVySfk3X-j0xHk8Ufw?pwd=v1iy
+bookepubbaidudownload: https://pan.baidu.com/s/1k2pyUVySfk3X-j0xHk8Ufw?pwd=v1iy
 
 
 [TOC]

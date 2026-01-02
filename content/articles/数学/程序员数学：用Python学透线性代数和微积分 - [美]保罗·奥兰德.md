@@ -1,10 +1,11 @@
+Date: 20251121
 Template: bookref
 BookName: 程序员数学：用Python学透线性代数和微积分
 BookAuthor: [美]保罗·奥兰德
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/程序员数学：用Python学透线性代数和微积分 - [美]保罗·奥兰德.jpg
-bookpdfdownload: https://pan.baidu.com/s/1o8yBdY-bjeSbh7_NuFMxRw?pwd=2bct
+bookpdfbaidudownload: https://pan.baidu.com/s/1o8yBdY-bjeSbh7_NuFMxRw?pwd=2bct
 
 
 

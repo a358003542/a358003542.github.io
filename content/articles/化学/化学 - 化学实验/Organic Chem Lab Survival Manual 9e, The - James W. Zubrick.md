@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: The Organic Chem Lab Survival Manual 9e
 BookAuthor: James W. Zubrick

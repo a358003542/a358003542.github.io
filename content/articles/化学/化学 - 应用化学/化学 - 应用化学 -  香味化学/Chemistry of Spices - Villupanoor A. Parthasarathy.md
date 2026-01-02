@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry of Spices
 BookAuthor: Villupanoor A. Parthasarathy & Bhageerathy Chempakam
 BookPublisher: CAB International
 BookLanguage: 英语
 BookCover: /images/Covers/Chemistry of Spices - Villupanoor A. Parthasarathy.jpg
-bookpdfdownload: https://pan.baidu.com/s/1rYlXCsER7m9G6GFQa9dMcA?pwd=emgg 
+bookpdfbaidudownload: https://pan.baidu.com/s/1rYlXCsER7m9G6GFQa9dMcA?pwd=emgg 
 
 
 [TOC]

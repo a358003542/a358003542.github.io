@@ -6,7 +6,7 @@ BookPublisher: Wellesley - Cambridge
 BookLanguage: 英语
 BookScore: 4
 BookCover: /images/Covers/Introduction to Linear Algebra 5e - Gilbert Strang.jpg
-bookpdfdownload: https://pan.baidu.com/s/1atsVq_494D3f8r5nDIKTJg?pwd=5q6m
+bookpdfbaidudownload: https://pan.baidu.com/s/1atsVq_494D3f8r5nDIKTJg?pwd=5q6m
 
 
 

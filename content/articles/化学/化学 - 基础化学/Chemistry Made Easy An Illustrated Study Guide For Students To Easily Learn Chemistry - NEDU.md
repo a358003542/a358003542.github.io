@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry Made Easy An Illustrated Study Guide For Students To Easily Learn Chemistry
 BookAuthor: NEDU

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry for Engineers and Manufacturers Volume 2
 BookAuthor: Bertram Blount & Arthur G. Bloxam

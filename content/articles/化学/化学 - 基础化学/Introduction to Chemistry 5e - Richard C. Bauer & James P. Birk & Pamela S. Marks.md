@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to Chemistry 5e
 BookAuthor: Richard C. Bauer & James P. Birk & Pamela S. Marks

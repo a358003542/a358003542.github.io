@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Analytical Chemistry: A Chemist and Laboratory Technician's Toolkit
 BookAuthor: Bryan M. Ham & Aihui Maham

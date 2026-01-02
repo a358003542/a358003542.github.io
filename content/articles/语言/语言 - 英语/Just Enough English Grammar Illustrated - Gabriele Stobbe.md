@@ -6,7 +6,7 @@ BookScore: 5
 BookPublisher: McGraw-Hill
 BookLanguage: 英语
 BookCover: /images/Covers/Just Enough English Grammar Illustrated - Gabriele Stobbe.jpg
-bookpdfdownload: https://pan.baidu.com/s/1h6BNkXtXvUT1sLqibtR43g?pwd=mf3g
+bookpdfbaidudownload: https://pan.baidu.com/s/1h6BNkXtXvUT1sLqibtR43g?pwd=mf3g
 
 
 

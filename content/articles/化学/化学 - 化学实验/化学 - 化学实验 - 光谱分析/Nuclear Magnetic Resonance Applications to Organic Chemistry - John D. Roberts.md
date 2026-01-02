@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Nuclear Magnetic Resonance Applications to Organic Chemistry
 BookAuthor: John D. Roberts

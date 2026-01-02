@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Quanta, Matter and Change: A molecular approach to physical chemistry
 BookAuthor: Peter Atkins & Julio de Paula & Ronald Friedman
 BookPublisher: W. H. Freeman & Company
 BookLanguage: 英语
 BookCover: /images/Covers/Quanta, Matter and Change A molecular approach to physical chemistry - Peter Atkins.jpg
-bookpdfdownload: https://pan.baidu.com/s/19SSXLIppB8HX7vvgBexhIg?pwd=xanf 
+bookpdfbaidudownload: https://pan.baidu.com/s/19SSXLIppB8HX7vvgBexhIg?pwd=xanf 
 
 [TOC]
 

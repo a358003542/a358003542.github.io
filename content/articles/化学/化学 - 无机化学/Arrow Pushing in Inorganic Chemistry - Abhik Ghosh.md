@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Arrow Pushing in Inorganic Chemistry: A Logical Approach to the Chemistry of the Main-Group Elements
 BookAuthor: Abhik Ghosh & Steffen Berg
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Arrow Pushing in Inorganic Chemistry - Abhik Ghosh.jpg
-bookpdfdownload: https://pan.baidu.com/s/1RN6Ezouf0vQgu4weWU1svw?pwd=okg0 
+bookpdfbaidudownload: https://pan.baidu.com/s/1RN6Ezouf0vQgu4weWU1svw?pwd=okg0 
 
 
 [TOC]

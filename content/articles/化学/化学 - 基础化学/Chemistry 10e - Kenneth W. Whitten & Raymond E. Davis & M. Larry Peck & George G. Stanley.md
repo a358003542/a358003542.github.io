@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry 10e
 BookAuthor: Kenneth W. Whitten & Raymond E. Davis & M. Larry Peck & George G. Stanley

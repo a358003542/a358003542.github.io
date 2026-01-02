@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Molecular Symmetry
 BookAuthor: David J. Willock
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Molecular Symmetry - David J. Willock.jpg
-bookpdfdownload: https://pan.baidu.com/s/1-SmherAMvzbFZNSBDk-u5g?pwd=cpxr 
+bookpdfbaidudownload: https://pan.baidu.com/s/1-SmherAMvzbFZNSBDk-u5g?pwd=cpxr 
 
 
 [TOC]

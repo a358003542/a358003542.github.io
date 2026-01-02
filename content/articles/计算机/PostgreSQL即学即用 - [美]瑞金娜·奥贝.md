@@ -5,7 +5,7 @@ BookAuthor: [美]瑞金娜·奥贝
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/PostgreSQL即学即用 - [美]瑞金娜·奥贝.jpg
-bookpdfdownload: https://pan.baidu.com/s/1aJ8Lmo-AV_tIZJcDFAt8lw?pwd=bk3t
+bookpdfbaidudownload: https://pan.baidu.com/s/1aJ8Lmo-AV_tIZJcDFAt8lw?pwd=bk3t
 
 
 

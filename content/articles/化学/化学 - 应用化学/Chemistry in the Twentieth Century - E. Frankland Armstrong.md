@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemistry in the Twentieth Century: An Account of the Achievement and the Present State of Knowledge in Chemical Science
 BookAuthor: E. Frankland Armstrong

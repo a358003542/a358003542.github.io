@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: 图解HTTP
 BookAuthor: [日]上野宣
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/图解HTTP - [日]上野宣.jpg
-bookpdfdownload: https://pan.baidu.com/s/1OetAUCDoATkSXbgcFIvsTQ?pwd=g4k6 
+bookpdfbaidudownload: https://pan.baidu.com/s/1OetAUCDoATkSXbgcFIvsTQ?pwd=g4k6 
 
 
 

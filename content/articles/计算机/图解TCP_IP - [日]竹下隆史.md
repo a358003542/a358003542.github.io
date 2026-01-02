@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: 图解TCP_IP
 BookAuthor: [日]竹下隆史
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/图解TCP_IP - [日]竹下隆史.jpg
-bookpdfdownload: https://pan.baidu.com/s/1iyrgjKvN9W_Qqj3aOzfs8A?pwd=s0oz
+bookpdfbaidudownload: https://pan.baidu.com/s/1iyrgjKvN9W_Qqj3aOzfs8A?pwd=s0oz
 
 
 

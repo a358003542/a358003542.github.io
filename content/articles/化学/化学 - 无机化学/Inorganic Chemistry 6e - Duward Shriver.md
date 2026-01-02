@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Inorganic Chemistry 6e
 BookAuthor: Duward Shriver & Mark Weller & Tina Overton

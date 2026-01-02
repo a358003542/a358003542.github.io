@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemical Applications of Group Theory 3e
 BookAuthor: F. Albert Cotton
 BookPublisher: Wiley-Interscience
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Applications of Group Theory 3e - F. Albert Cotton.jpg
-bookpdfdownload: https://pan.baidu.com/s/1_joA6eeNBYj3CxMNAQJLmA?pwd=xf27 
+bookpdfbaidudownload: https://pan.baidu.com/s/1_joA6eeNBYj3CxMNAQJLmA?pwd=xf27 
 
 [TOC]
 

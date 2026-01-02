@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Ideas of Quantum Chemistry 1e
 BookAuthor: Lucjan Piela

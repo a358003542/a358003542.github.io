@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Solid State Chemistry and its Applications 2e
 BookAuthor: Anthony R. West
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Solid State Chemistry and its Applications 2e - Anthony R. West.jpg
-bookpdfdownload: https://pan.baidu.com/s/1HcLyfuIzKPP3xPMXAmc2xg?pwd=nl57
+bookpdfbaidudownload: https://pan.baidu.com/s/1HcLyfuIzKPP3xPMXAmc2xg?pwd=nl57
 
 [TOC]
 

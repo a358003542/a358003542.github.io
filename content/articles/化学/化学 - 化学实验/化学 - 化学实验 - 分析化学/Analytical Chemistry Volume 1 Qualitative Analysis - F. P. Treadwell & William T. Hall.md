@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Analytical Chemistry Volume 1 Qualitative Analysis
 BookAuthor: F. P. Treadwell & William T. Hall

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Descriptive Inorganic Chemistry 3e
 BookAuthor: James E. House & Kathleen A. House

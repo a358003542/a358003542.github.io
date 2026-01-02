@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Electrochemistry for Chemists 2e
 BookAuthor: Donald T. Sawyer & Andrzej Sobkowiak & Julian L. Roberts
 BookPublisher: Wiley-Interscience
 BookLanguage: 英语
 BookCover: /images/Covers/Electrochemistry for Chemists 2e - Donald T. Sawyer.jpg
-bookpdfdownload: https://pan.baidu.com/s/1_1q4n_m04I_l56XdOflcVg?pwd=dldb 
+bookpdfbaidudownload: https://pan.baidu.com/s/1_1q4n_m04I_l56XdOflcVg?pwd=dldb 
 
 [TOC]
 

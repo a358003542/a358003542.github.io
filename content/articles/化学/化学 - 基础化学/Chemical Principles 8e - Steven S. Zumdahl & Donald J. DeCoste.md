@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Chemical Principles 8e
 BookAuthor: Steven S. Zumdahl & Donald J. DeCoste

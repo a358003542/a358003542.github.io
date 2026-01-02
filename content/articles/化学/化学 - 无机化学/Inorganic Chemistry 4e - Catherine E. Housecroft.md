@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Inorganic Chemistry 4e
 BookAuthor: Catherine E. Housecroft & Alan G. Sharpe

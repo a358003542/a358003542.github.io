@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General Chemistry Principles, Patterns, and Applications
 BookAuthor: Bruce Averill & Patricia Eldredge

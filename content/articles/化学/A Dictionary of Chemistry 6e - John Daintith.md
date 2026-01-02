@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: A Dictionary of Chemistry 6e
 BookAuthor: John Daintith

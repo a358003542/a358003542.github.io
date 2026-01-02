@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Handbook of Batteries 3e
 BookAuthor: David Linden & Thomas B. Reddy

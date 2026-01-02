@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Quantum Chemistry and Spectroscopy 4e
 BookAuthor: Thomas Engel & Warren Hehre & Alex Angerhofer
 BookPublisher: Pearson
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry and Spectroscopy 4e - Thomas Engel.jpg
-bookpdfdownload: https://pan.baidu.com/s/1PZleojq4GuSWQjAVoUePHA?pwd=077f 
+bookpdfbaidudownload: https://pan.baidu.com/s/1PZleojq4GuSWQjAVoUePHA?pwd=077f 
 
 [TOC]
 

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Vogel's Textbook of Quantitative Chemical Analysis 5e
 BookAuthor: G. H. Jeffery & J. Bassett

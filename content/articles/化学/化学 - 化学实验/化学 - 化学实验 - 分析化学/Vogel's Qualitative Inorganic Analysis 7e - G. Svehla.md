@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Vogel's Qualitative Inorganic Analysis 7e
 BookAuthor: G. Svehla

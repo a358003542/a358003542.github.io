@@ -1,10 +1,11 @@
+Date: 20250515
 Template: bookref
 BookName: 数理逻辑（第2版）
 BookAuthor: Herbert B. Enderton
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/数理逻辑（第2版） - Herbert B. Enderton.jpg
-bookpdfdownload: https://pan.baidu.com/s/1JSlICPKsJAnyQ3JXiFRu5w?pwd=28pe
+bookpdfbaidudownload: https://pan.baidu.com/s/1JSlICPKsJAnyQ3JXiFRu5w?pwd=28pe
 
 
 

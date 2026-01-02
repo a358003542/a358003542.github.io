@@ -1,9 +1,10 @@
+Date: 20250515
 Template: bookref
 BookName: The Matrix Cookbook (version 2012)
 BookAuthor: Kaare Brandt Petersen & Michael Syskind Pedersen
 BookLanguage: 英语
 BookCover: /images/Covers/Matrix Cookbook (version 2012), The - Kaare Brandt Petersen & Michael Syskind Pedersen.jpg
-bookpdfdownload: https://pan.baidu.com/s/1MU5zJ6-tQPlMpy1U3burqw?pwd=y7jw
+bookpdfbaidudownload: https://pan.baidu.com/s/1MU5zJ6-tQPlMpy1U3burqw?pwd=y7jw
 
 
 [TOC]

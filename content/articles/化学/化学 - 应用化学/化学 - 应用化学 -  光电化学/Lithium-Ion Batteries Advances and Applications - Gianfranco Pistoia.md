@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Lithium-Ion Batteries Advances and Applications
 BookAuthor: Gianfranco Pistoia
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Lithium-Ion Batteries Advances and Applications - Gianfranco Pistoia.jpg
-bookpdfdownload: https://pan.baidu.com/s/1BkY8NcrTmhw319i3_18oqA?pwd=swod 
+bookpdfbaidudownload: https://pan.baidu.com/s/1BkY8NcrTmhw319i3_18oqA?pwd=swod 
 
 [TOC]
 

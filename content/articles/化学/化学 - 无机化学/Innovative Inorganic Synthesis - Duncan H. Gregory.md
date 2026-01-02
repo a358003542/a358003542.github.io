@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Innovative Inorganic Synthesis
 BookAuthor: Duncan H. Gregory
 BookPublisher: MDPI
 BookLanguage: 英语
 BookCover: /images/Covers/Innovative Inorganic Synthesis - Duncan H. Gregory.jpg
-bookpdfdownload: https://pan.baidu.com/s/18CoQWhZTfAv6GKMhxdKjVg?pwd=a9kq 
+bookpdfbaidudownload: https://pan.baidu.com/s/18CoQWhZTfAv6GKMhxdKjVg?pwd=a9kq 
 
 
 [TOC]

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry 4e
 BookAuthor: Robert J. Silbey & Robert A. Alberty & Moungi G. Bawendi
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry 4e - Robert J. Silbey.jpg
-bookpdfdownload: https://pan.baidu.com/s/1x4Zd4BclodH2FnQNTcHz7w?pwd=7wj4 
+bookpdfbaidudownload: https://pan.baidu.com/s/1x4Zd4BclodH2FnQNTcHz7w?pwd=7wj4 
 
 
 [TOC]

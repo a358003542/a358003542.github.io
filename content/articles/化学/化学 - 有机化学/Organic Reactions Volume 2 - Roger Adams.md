@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Organic Reactions Volume 2
 BookAuthor: Roger Adams

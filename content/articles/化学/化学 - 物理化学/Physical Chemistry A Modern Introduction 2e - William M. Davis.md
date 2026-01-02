@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Physical Chemistry: A Modern Introduction 2e
 BookAuthor: William M. Davis & Clifford E. Dykstra
 BookPublisher: Taylor & Francis
 BookLanguage: 英语
 BookCover: /images/Covers/Physical Chemistry A Modern Introduction 2e - William M. Davis.jpg
-bookpdfdownload: https://pan.baidu.com/s/1umWUh2Y4Ao71cGemC_OdWA?pwd=sosc
+bookpdfbaidudownload: https://pan.baidu.com/s/1umWUh2Y4Ao71cGemC_OdWA?pwd=sosc
 
 
 [TOC]

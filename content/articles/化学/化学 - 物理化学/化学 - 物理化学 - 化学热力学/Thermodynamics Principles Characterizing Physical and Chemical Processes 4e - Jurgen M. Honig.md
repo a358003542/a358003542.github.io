@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Thermodynamics Principles Characterizing Physical and Chemical Processes 4e
 BookAuthor: Jurgen M. Honig
 BookPublisher: Elsevier
 BookLanguage: 英语
 BookCover: /images/Covers/Thermodynamics Principles Characterizing Physical and Chemical Processes 4e - Jurgen M. Honig.jpg
-bookpdfdownload: https://pan.baidu.com/s/1EA-0G1nxHI5uY71QDTVYbg?pwd=pi5g 
+bookpdfbaidudownload: https://pan.baidu.com/s/1EA-0G1nxHI5uY71QDTVYbg?pwd=pi5g 
 
 
 [TOC]

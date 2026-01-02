@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Crystal Growth
 BookAuthor: 集体编写
 BookPublisher: Butterworths
 BookLanguage: 英语
 BookCover: /images/Covers/Crystal Growth - 集体编写.jpg
-bookpdfdownload: https://pan.baidu.com/s/1wkHQpSmcZ5q-1f2IAS75mQ?pwd=w4rq 
+bookpdfbaidudownload: https://pan.baidu.com/s/1wkHQpSmcZ5q-1f2IAS75mQ?pwd=w4rq 
 
 [TOC]
 

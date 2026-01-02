@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Advanced Quantitative Analysis
 BookAuthor: Hobart H. Willard & Harvey Diehl

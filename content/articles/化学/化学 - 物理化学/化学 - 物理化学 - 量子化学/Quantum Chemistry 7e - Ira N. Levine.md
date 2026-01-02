@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Quantum Chemistry 7e
 BookAuthor: Ira N. Levine
 BookPublisher: Pearson
 BookLanguage: 英语
 BookCover: /images/Covers/Quantum Chemistry 7e - Ira N. Levine.jpg
-bookpdfdownload: https://pan.baidu.com/s/1Xb3xXSMBHt75qvrvRdEz6A?pwd=6f86 
+bookpdfbaidudownload: https://pan.baidu.com/s/1Xb3xXSMBHt75qvrvRdEz6A?pwd=6f86 
 
 [TOC]
 

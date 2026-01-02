@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Inorganic Chemistry in Aqueous Solution
 BookAuthor: Jack Barrett
 BookPublisher: The Royal Society of Chemistry
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry in Aqueous Solution - Jack Barrett.jpg
-bookpdfdownload: https://pan.baidu.com/s/1WEwBvX64me50Am_wM-m9Tw?pwd=uzo3 
+bookpdfbaidudownload: https://pan.baidu.com/s/1WEwBvX64me50Am_wM-m9Tw?pwd=uzo3 
 
 
 [TOC]

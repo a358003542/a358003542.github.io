@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General Chemistry
 BookAuthor: Hamilton P. Cady

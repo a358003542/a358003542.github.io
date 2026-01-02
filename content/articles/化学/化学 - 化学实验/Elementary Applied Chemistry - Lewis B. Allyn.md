@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Elementary Applied Chemistry
 BookAuthor: Lewis B. Allyn

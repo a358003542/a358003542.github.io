@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Principles of General, Organic, & Biological Chemistry
 BookAuthor: Janice G. Smith

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: An Introduction to Chemistry - Atoms First Anthology
 BookAuthor: Mark Bishop

@@ -1,10 +1,11 @@
+Date: 20251121
 Template: bookref
 BookName: 线性代数应该这样学（第3版）
 BookAuthor: [美]Sheldon Axler
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/线性代数应该这样学（第3版） - [美]Sheldon Axler.jpg
-bookpdfdownload: https://pan.baidu.com/s/18zOnfnnp7WjrtXOy_RsFBQ?pwd=hwhn
+bookpdfbaidudownload: https://pan.baidu.com/s/18zOnfnnp7WjrtXOy_RsFBQ?pwd=hwhn
 
 
 

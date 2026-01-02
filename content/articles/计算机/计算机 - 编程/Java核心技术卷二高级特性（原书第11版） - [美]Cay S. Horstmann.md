@@ -5,7 +5,7 @@ BookAuthor: [美]Cay S. Horstmann
 BookPublisher: 机械工业出版社
 BookLanguage: 中文
 BookCover: /images/Covers/Java核心技术卷二高级特性（原书第11版） - [美]Cay S. Horstmann.jpg
-bookpdfdownload: https://pan.baidu.com/s/1W3VWXTx514z2sAWyP29yMg?pwd=r29m
+bookpdfbaidudownload: https://pan.baidu.com/s/1W3VWXTx514z2sAWyP29yMg?pwd=r29m
 
 
 

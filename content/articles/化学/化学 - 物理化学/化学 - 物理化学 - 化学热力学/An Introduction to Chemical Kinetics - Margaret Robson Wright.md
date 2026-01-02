@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: An Introduction to Chemical Kinetics
 BookAuthor: Margaret Robson Wright
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/An Introduction to Chemical Kinetics - Margaret Robson Wright.jpg
-bookpdfdownload: https://pan.baidu.com/s/1IBbuovpflTccTlZmZbEQOw?pwd=wl1n 
+bookpdfbaidudownload: https://pan.baidu.com/s/1IBbuovpflTccTlZmZbEQOw?pwd=wl1n 
 
 
 [TOC]

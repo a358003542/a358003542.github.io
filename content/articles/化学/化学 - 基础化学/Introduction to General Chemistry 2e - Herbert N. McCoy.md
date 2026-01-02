@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Introduction to General Chemistry 2e
 BookAuthor: Herbert N. McCoy & Ethel M. Terry

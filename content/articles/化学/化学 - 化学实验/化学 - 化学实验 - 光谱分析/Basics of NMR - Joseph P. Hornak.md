@@ -1,10 +1,10 @@
-Template: bookref
 Date: 20250515
+Template: bookref
 BookName: Basics of NMR
 BookAuthor: Joseph P. Hornak
 BookLanguage: 英语
 BookCover: /images/Covers/Basics of NMR - Joseph P. Hornak.jpg
-bookepubdownload: https://pan.baidu.com/s/18CBonf3y0IYpiF8cIqGOTQ?pwd=pd6y 
+bookepubbaidudownload: https://pan.baidu.com/s/18CBonf3y0IYpiF8cIqGOTQ?pwd=pd6y 
 
 
 [TOC]

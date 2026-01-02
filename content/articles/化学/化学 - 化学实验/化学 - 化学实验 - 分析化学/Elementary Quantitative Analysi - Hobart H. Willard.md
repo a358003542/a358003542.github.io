@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Elementary Quantitative Analysis
 BookAuthor: Hobart H. Willard & N. Howell Furman

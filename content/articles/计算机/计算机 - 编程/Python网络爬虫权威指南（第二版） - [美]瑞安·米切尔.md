@@ -6,7 +6,7 @@ BookAuthor: [美]瑞安·米切尔
 BookPublisher: 人民邮电出版社
 BookLanguage: 中文
 BookCover: /images/Covers/Python网络爬虫权威指南（第二版） - [美]瑞安·米切尔.jpg
-bookpdfdownload: https://pan.baidu.com/s/1t3SCQXS6xtmmUwdRJqEa_w?pwd=j58t
+bookpdfbaidudownload: https://pan.baidu.com/s/1t3SCQXS6xtmmUwdRJqEa_w?pwd=j58t
 
 
 [TOC]

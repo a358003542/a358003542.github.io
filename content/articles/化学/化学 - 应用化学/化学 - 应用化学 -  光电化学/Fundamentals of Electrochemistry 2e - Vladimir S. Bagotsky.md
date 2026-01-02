@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Fundamentals of Electrochemistry 2e
 BookAuthor: Vladimir S. Bagotsky
 BookPublisher: Wiley-Interscience
 BookLanguage: 英语
 BookCover: /images/Covers/Fundamentals of Electrochemistry 2e - Vladimir S. Bagotsky.jpg
-bookpdfdownload: https://pan.baidu.com/s/1ygU8jZZsb3eLTlnXAprxpg?pwd=j1vd 
+bookpdfbaidudownload: https://pan.baidu.com/s/1ygU8jZZsb3eLTlnXAprxpg?pwd=j1vd 
 
 [TOC]
 

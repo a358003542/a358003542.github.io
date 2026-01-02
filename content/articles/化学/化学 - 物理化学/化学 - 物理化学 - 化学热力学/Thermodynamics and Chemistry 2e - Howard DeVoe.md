@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Thermodynamics and Chemistry 2e
 BookAuthor: Howard DeVoe
 BookPublisher: Independent Publisher
 BookLanguage: 英语
 BookCover: /images/Covers/Thermodynamics and Chemistry 2e - Howard DeVoe.jpg
-bookpdfdownload: https://pan.baidu.com/s/1gNHqamsGXd8IMQE1gsjtfQ?pwd=z0yf
+bookpdfbaidudownload: https://pan.baidu.com/s/1gNHqamsGXd8IMQE1gsjtfQ?pwd=z0yf
 
 
 [TOC]

@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Principles of Inorganic Chemistry
 BookAuthor: Brian W. Pfennig
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/Principles of Inorganic Chemistry - Brian W. Pfennig.jpg
-bookpdfdownload: https://pan.baidu.com/s/1T3guA2BK_e9_dW3a_7aYhg?pwd=btwg 
+bookpdfbaidudownload: https://pan.baidu.com/s/1T3guA2BK_e9_dW3a_7aYhg?pwd=btwg 
 
 
 [TOC]

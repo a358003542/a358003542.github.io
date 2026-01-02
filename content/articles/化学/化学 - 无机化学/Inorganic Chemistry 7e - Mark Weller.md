@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Inorganic Chemistry 7e
 BookAuthor: Mark Weller & Jonathan Rourke & Tina Overton & Fraser Armstrong
 BookPublisher: Oxford University Press
 BookLanguage: 英语
 BookCover: /images/Covers/Inorganic Chemistry 7e - Mark Weller.jpg
-bookpdfdownload: https://pan.baidu.com/s/1r8Kza8jL7M6bgfdf9fw96g?pwd=y26n 
+bookpdfbaidudownload: https://pan.baidu.com/s/1r8Kza8jL7M6bgfdf9fw96g?pwd=y26n 
 
 [TOC]
 

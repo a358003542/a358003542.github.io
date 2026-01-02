@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Notes on Molecular Orbital Calculations
 BookAuthor: John D. Roberts
 BookPublisher: Benjamin-Cummings Publishing Company
 BookLanguage: 英语
 BookCover: /images/Covers/Notes on Molecular Orbital Calculations - John D. Roberts.jpg
-bookpdfdownload: https://pan.baidu.com/s/1GI3BDPee9ixGlicpX9vHMA?pwd=0h05 
+bookpdfbaidudownload: https://pan.baidu.com/s/1GI3BDPee9ixGlicpX9vHMA?pwd=0h05 
 
 [TOC]
 

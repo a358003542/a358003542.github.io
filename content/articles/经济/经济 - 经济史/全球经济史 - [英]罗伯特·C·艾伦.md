@@ -6,7 +6,7 @@ BookScore: 4
 BookPublisher: 译林出版社
 BookLanguage: 中文
 BookCover: /images/Covers/全球经济史 - [英]罗伯特·C·艾伦.jpg
-bookepubdownload: https://pan.baidu.com/s/13lpqfaC6Vc9YmlDTcHt1DQ?pwd=tkft
+bookepubbaidudownload: https://pan.baidu.com/s/13lpqfaC6Vc9YmlDTcHt1DQ?pwd=tkft
 
 
 

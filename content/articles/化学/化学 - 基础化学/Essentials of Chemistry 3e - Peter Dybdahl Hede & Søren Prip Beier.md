@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Essentials of Chemistry 3e
 BookAuthor: Peter Dybdahl Hede & Søren Prip Beier

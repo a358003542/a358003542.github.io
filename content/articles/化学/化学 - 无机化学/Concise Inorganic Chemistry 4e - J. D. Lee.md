@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: Concise Inorganic Chemistry 4e
 BookAuthor: J. D. Lee

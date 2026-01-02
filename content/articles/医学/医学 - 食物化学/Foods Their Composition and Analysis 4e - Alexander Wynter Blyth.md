@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Foods: Their Composition and Analysis 4e
 BookAuthor: Alexander Wynter Blyth
 BookPublisher: Charles Griffin and Company
 BookLanguage: 英语
 BookCover: /images/Covers/Foods Their Composition and Analysis 4e - Alexander Wynter Blyth.jpg
-bookpdfdownload: https://pan.baidu.com/s/1w4X5LF4CxaME8XHlo0s26g?pwd=qhl9 
+bookpdfbaidudownload: https://pan.baidu.com/s/1w4X5LF4CxaME8XHlo0s26g?pwd=qhl9 
 
 
 [TOC]

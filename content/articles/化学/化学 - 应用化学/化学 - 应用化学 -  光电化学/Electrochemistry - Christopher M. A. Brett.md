@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Electrochemistry: Principles, Methods, And Applications
 BookAuthor: Christopher M. A. Brett & Ana Maria Oliveira Brett
 BookPublisher: Oxford University Press
 BookLanguage: 英语
 BookCover: /images/Covers/Electrochemistry - Christopher M. A. Brett.jpg
-bookpdfdownload: https://pan.baidu.com/s/1OicBwDS9ktmwr31U-IOBNw?pwd=4t16 
+bookpdfbaidudownload: https://pan.baidu.com/s/1OicBwDS9ktmwr31U-IOBNw?pwd=4t16 
 
 [TOC]
 

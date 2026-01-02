@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Chemical Crystallography: An Introduction to Optical and X-Ray Methods
 BookAuthor: C. W. Bunn
 BookPublisher: Oxford at the The Clarendon Press
 BookLanguage: 英语
 BookCover: /images/Covers/Chemical Crystallography - C. W. Bunn.jpg
-bookpdfdownload: https://pan.baidu.com/s/1lSJ1kKAiL4q27x2BDA0ETg?pwd=b84y
+bookpdfbaidudownload: https://pan.baidu.com/s/1lSJ1kKAiL4q27x2BDA0ETg?pwd=b84y
 
 [TOC]
 

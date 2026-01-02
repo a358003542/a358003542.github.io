@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: A Chemist's Guide to Density Functional Theory 2e
 BookAuthor: Wolfram Koch & Max C. Holthausen
 BookPublisher: John Wiley & Sons
 BookLanguage: 英语
 BookCover: /images/Covers/A Chemist's Guide to Density Functional Theory 2e - Wolfram Koch.jpg
-bookpdfdownload: https://pan.baidu.com/s/1sik2gOstadwXpeG8kfrfyg?pwd=jc27  
+bookpdfbaidudownload: https://pan.baidu.com/s/1sik2gOstadwXpeG8kfrfyg?pwd=jc27  
 
 [TOC]
 

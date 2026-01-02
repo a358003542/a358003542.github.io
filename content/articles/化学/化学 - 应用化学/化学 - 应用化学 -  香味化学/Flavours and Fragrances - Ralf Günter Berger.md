@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Flavours and Fragrances: Chemistry, Bioprocessing and Sustainability
 BookAuthor: Ralf Günter Berger
 BookPublisher: Springer
 BookLanguage: 英语
 BookCover: /images/Covers/Flavours and Fragrances - Ralf Günter Berger.jpg
-bookpdfdownload: https://pan.baidu.com/s/1jLWdAgueBtACFUG88TlapQ?pwd=h34j 
+bookpdfbaidudownload: https://pan.baidu.com/s/1jLWdAgueBtACFUG88TlapQ?pwd=h34j 
 
 
 [TOC]

@@ -1,3 +1,4 @@
+Date: 20250514
 Template: bookref
 BookName: General, Organic, and Biological Chemistry: An Integrated Approach 4e
 BookAuthor: Kenneth W. Raymond

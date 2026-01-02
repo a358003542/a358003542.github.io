@@ -1,10 +1,11 @@
+Date: 20250514
 Template: bookref
 BookName: Textbook of Physical Chemistry
 BookAuthor: Azariah T. Lincoln
 BookPublisher: D. C. Heath & Co.
 BookLanguage: 英语
 BookCover: /images/Covers/Textbook of Physical Chemistry - Azariah T. Lincoln.jpg
-bookpdfdownload: https://pan.baidu.com/s/1yhI9-J-Kj1yEzBJtm7HrJA?pwd=dzsk 
+bookpdfbaidudownload: https://pan.baidu.com/s/1yhI9-J-Kj1yEzBJtm7HrJA?pwd=dzsk 
 
 
 [TOC]
