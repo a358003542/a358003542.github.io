@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坚果云音频播放器（Cloudflare 中转）</title>
+    <style>
+        /* 样式和之前一致，无需修改 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #0078d7;
+            box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0063b1;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .player {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .audio-info {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+            min-height: 20px;
+        }
+        .audio-info.success {
+            color: #28a745;
+        }
+        .audio-info.error {
+            color: #dc3545;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .controls button {
+            width: 50%;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .controls button:nth-child(2) {
+            background: #6c757d;
+        }
+        .controls button:nth-child(2):hover {
+            background: #5a6268;
+        }
+        .progress-container {
+            margin: 15px 0;
+        }
+        #progressBar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        #progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #0078d7;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+        .tip {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>坚果云音频播放器（Cloudflare 中转）</h1>
+        
+        <!-- 输入坚果云文件路径（如 music/周杰伦-晴天.mp3） -->
+        <div class="input-group">
+            <label for="filePath">坚果云音频文件路径</label>
+            <input 
+                type="text" 
+                id="filePath" 
+                placeholder="示例：music/周杰伦-晴天.mp3（坚果云内的相对路径）"
+                autocomplete="off"
+            >
+        </div>
+        
+        <!-- 加载按钮 -->
+        <button id="loadBtn">加载音频</button>
+        
+        <!-- 播放器区域 -->
+        <div class="player">
+            <div class="audio-info" id="audioInfo">请输入文件路径并点击加载</div>
+            
+            <div class="controls">
+                <button id="playBtn" disabled>播放</button>
+                <button id="pauseBtn" disabled>暂停</button>
+            </div>
+            
+            <div class="progress-container">
+                <div id="progressBar">
+                    <div id="progress"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTime">00:00</span>
+                    <span id="totalTime">00:00</span>
+                </div>
+            </div>
+            
+            <div class="tip">
+                提示：1. 文件路径为坚果云内相对路径；2. 支持 MP3/FLAC/WAV 等格式；3. 无账号密码泄露风险
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 核心配置：替换为你的 Cloudflare Workers 域名
+        const WORKER_DOMAIN = 'odd-thunder-2731.wander-f6f.workers.dev'; // 改为你的 Worker 域名
+        
+        // 核心元素
+        const audio = new Audio();
+        const filePathInput = document.getElementById('filePath');
+        const loadBtn = document.getElementById('loadBtn');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const audioInfo = document.getElementById('audioInfo');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+
+        // 加载音频按钮点击事件
+        loadBtn.addEventListener('click', async () => {
+            const filePath = filePathInput.value.trim();
+            
+            // 验证文件路径
+            if (!filePath) {
+                setAudioInfo('请输入有效的坚果云文件路径（如 music/xxx.mp3）', 'error');
+                return;
+            }
+
+            try {
+                // 重置状态
+                setAudioInfo('正在请求 Cloudflare 中转服务...', '');
+                disableControls(true);
+                audio.pause();
+                audio.src = '';
+                progress.style.width = '0%';
+                currentTimeEl.textContent = '00:00';
+                totalTimeEl.textContent = '00:00';
+
+                // 构建 Cloudflare Workers 请求 URL
+                const proxyUrl = `https://${WORKER_DOMAIN}?filePath=${encodeURIComponent(filePath)}`;
+                
+                // 请求中转服务，下载音频为 Blob（避免 Chrome 弹窗）
+                setAudioInfo('正在下载音频文件...', '');
+                const response = await fetch(proxyUrl, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+
+                // 处理错误响应
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({ msg: '未知错误' }));
+                    throw new Error(errData.msg || `请求失败（HTTP ${response.status}）`);
+                }
+
+                // 转为 Blob 并生成本地 URL
+                const audioBlob = await response.blob();
+                if (audio.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(audio.src); // 释放旧 Blob URL
+                }
+                const blobUrl = URL.createObjectURL(audioBlob);
+                
+                // 加载音频
+                audio.src = blobUrl;
+                audio.preload = 'auto';
+                await audio.load();
+                
+                // 启用控制按钮
+                disableControls(false);
+                setAudioInfo('音频加载成功！可点击播放', 'success');
+
+            } catch (error) {
+                setAudioInfo(`加载失败：${error.message}`, 'error');
+                disableControls(true);
+                console.error('加载错误详情：', error);
+            }
+        });
+
+        // 播放/暂停按钮逻辑（和之前一致）
+        playBtn.addEventListener('click', async () => {
+            try {
+                await audio.play();
+                setAudioInfo('音频正在播放', 'success');
+            } catch (error) {
+                setAudioInfo(`播放失败：${error.message}`, 'error');
+            }
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            audio.pause();
+            setAudioInfo('音频已暂停', '');
+        });
+
+        // 进度条点击跳转（和之前一致）
+        progressBar.addEventListener('click', (e) => {
+            if (isNaN(audio.duration)) return;
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = percent * audio.duration;
+            updateProgress();
+        });
+
+        // 实时更新进度（和之前一致）
+        audio.addEventListener('timeupdate', updateProgress);
+        audio.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        // 音频播放结束（和之前一致）
+        audio.addEventListener('ended', () => {
+            setAudioInfo('音频播放完毕', '');
+            progress.style.width = '0%';
+            audio.currentTime = 0;
+        });
+
+        // 工具函数（和之前一致）
+        function updateProgress() {
+            if (isNaN(audio.duration)) return;
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${percent}%`;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '00:00';
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function setAudioInfo(text, type = '') {
+            audioInfo.textContent = text;
+            audioInfo.className = 'audio-info';
+            if (type) audioInfo.classList.add(type);
+        }
+
+        function disableControls(disabled) {
+            playBtn.disabled = disabled;
+            pauseBtn.disabled = disabled;
+        }
+
+        // 页面卸载时释放 Blob URL
+        window.addEventListener('unload', () => {
+            if (audio.src.startsWith('blob:')) {
+                URL.revokeObjectURL(audio.src);
+            }
+        });
+    </script>
+</body>
+</html>
