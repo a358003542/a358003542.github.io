@@ -1,14 +1,14 @@
 Slug: pelican
 Date: 20230309
-Modified: 20231017
+Modified: 20260105
 
 [TOC]
 
 ## pelican简介
 
-**本文的讨论基于pelican version 4.7.1** 。
+**本文的讨论基于pelican version 4.11.0** 。
 
-pelican是一个静态网站生成工具，其是用python编写实现的，所以对于pythoner来说显得格外的亲切。
+pelican是一个静态网站生成工具，其是用python编写实现的。
 
 首先按照官方的quickstart入门教程简单的刷一遍吧，好对pelican的使用和基本情况有个了解。那个 `Makefile`  说到底也只是一个对于 `pelican` 命令的调用和其他辅助功能，感兴趣的读者可以看到后面的 *定制自动生成python脚本* 一小节，就会对pelican模块的基本命令入口有个清晰的认识。而开发调试运行和实际build分别调用的是两个不同的python配置文件，一个是 `pelicanconf.py` ，一个是 `publishconf.py` 。
 

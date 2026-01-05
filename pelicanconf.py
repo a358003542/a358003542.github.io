@@ -24,8 +24,10 @@ DISPLAY_PAGES_ON_MENU = True
 SITENAME = "wander的博客"
 SITEURL = ''
 
+
+
 PATH = 'content'
-ARTICLE_PATHS = ['articles']
+ARTICLE_PATHS = ['articles', 'books', 'games', 'musics']
 ARTICLE_EXCLUDES = []
 
 TIMEZONE = 'Asia/Shanghai'
@@ -34,7 +36,7 @@ TIMEZONE = 'Asia/Shanghai'
 DEFAULT_DATE = 'fs'
 DEFAULT_LANG = 'zh_cn'
 
-DEFAULT_DATE_FORMAT = '%Y年 %b %-d日'
+DEFAULT_DATE_FORMAT = '%Y年%b%d日'
 
 #  disable feed generation
 FEED_ATOM = None
@@ -124,7 +126,7 @@ SITE_DESCRIPTION = '欢迎来到本网站，希望本网站的文章能够对您
 
 ########################## template ############################
 # need articles or dates or page_name jinja2 env variables
-DIRECT_TEMPLATES = ['index', 'categories', 'archives']
+DIRECT_TEMPLATES = ['index', 'archives', 'categories-articles', 'categories-books', 'categories-games', 'categories-musics']
 
 # disable parse html
 READERS = {'html': None}
@@ -143,7 +145,7 @@ for template_src in gen_all_file2(template_file_startpath, filetype="html$"):
 ################################### plugin #################
 PLUGIN_PATHS = ['myplugins']
 
-PLUGINS = ['tipue_search', 'sitemap', 'bookref']
+PLUGINS = ['tipue_search', 'sitemap', 'bookref', 'add_source_folder']
 
 
 SITEMAP = {

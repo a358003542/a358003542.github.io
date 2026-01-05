@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% from 'macros/category_macros.html' import render_category_panel %} 
+
+{% block title %}
+<title>书籍分类页面 -  {{ SITENAME|striptags|e }}</title>
+{% endblock title %}
+
+{% block head_description %}
+{{ SITENAME|striptags|e }} 这里展示本站所有书籍分类，方便快速查阅书籍相关内容。
+{% endblock head_description %}
+
+{% block head_links %}
+{{super()}}
+<link href="{{ SITEURL }}/theme/css/categories.css" rel="stylesheet">
+{% endblock head_links %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <header class="col-sm-12 col-md-11 page-header" style="border-bottom: 0pt;">
+            <h1><a href="{{ SITEURL }}/categories-books.html">书籍分类</a></h1>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-sm-12">
+            {# 仅需修改filter_type和accordion_id，其余逻辑复用 #}
+            {{ render_category_panel(
+                categories=categories, 
+                filter_type='books', 
+                page_label='书籍', 
+                accordion_id='accordionBooks'
+            ) }}
+        </div>
+    </div>
+</div>
+{% endblock content %}
