@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>坚果云音频播放器（Cloudflare 中转）</title>
+    <title>坚果云分享链接 - 音频播放器测试</title>
     <style>
-        /* 样式和之前一致，无需修改 */
         * {
             margin: 0;
             padding: 0;
@@ -143,15 +142,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>坚果云音频播放器（Cloudflare 中转）</h1>
+        <h1>坚果云分享链接音频播放器</h1>
         
-        <!-- 输入坚果云文件路径（如 music/周杰伦-晴天.mp3） -->
+        <!-- 分享链接输入 -->
         <div class="input-group">
-            <label for="filePath">坚果云音频文件路径</label>
+            <label for="shareUrl">坚果云音频分享链接</label>
             <input 
                 type="text" 
-                id="filePath" 
-                placeholder="示例：music/周杰伦-晴天.mp3（坚果云内的相对路径）"
+                id="shareUrl" 
+                placeholder="示例：https://www.jianguoyun.com/p/xxxx （私有/公开分享链接均可）"
                 autocomplete="off"
             >
         </div>
@@ -161,7 +160,7 @@
         
         <!-- 播放器区域 -->
         <div class="player">
-            <div class="audio-info" id="audioInfo">请输入文件路径并点击加载</div>
+            <div class="audio-info" id="audioInfo">请输入坚果云分享链接并点击加载</div>
             
             <div class="controls">
                 <button id="playBtn" disabled>播放</button>
@@ -179,18 +178,15 @@
             </div>
             
             <div class="tip">
-                提示：1. 文件路径为坚果云内相对路径；2. 支持 MP3/FLAC/WAV 等格式；3. 无账号密码泄露风险
+                提示：1. 分享链接需勾选「允许下载」；2. 支持 MP3/FLAC/WAV 等格式；3. 无账号密码泄露风险
             </div>
         </div>
     </div>
 
     <script>
-        // 核心配置：替换为你的 Cloudflare Workers 域名
-        const WORKER_DOMAIN = 'odd-thunder-2731.wander-f6f.workers.dev'; // 改为你的 Worker 域名
-        
         // 核心元素
         const audio = new Audio();
-        const filePathInput = document.getElementById('filePath');
+        const shareUrlInput = document.getElementById('shareUrl');
         const loadBtn = document.getElementById('loadBtn');
         const playBtn = document.getElementById('playBtn');
         const pauseBtn = document.getElementById('pauseBtn');
@@ -202,17 +198,17 @@
 
         // 加载音频按钮点击事件
         loadBtn.addEventListener('click', async () => {
-            const filePath = filePathInput.value.trim();
+            const shareUrl = shareUrlInput.value.trim();
             
-            // 验证文件路径
-            if (!filePath) {
-                setAudioInfo('请输入有效的坚果云文件路径（如 music/xxx.mp3）', 'error');
+            // 验证链接格式
+            if (!shareUrl || !shareUrl.includes('jianguoyun.com/p/')) {
+                setAudioInfo('请输入有效的坚果云分享链接（格式：https://www.jianguoyun.com/p/xxxx）', 'error');
                 return;
             }
 
             try {
                 // 重置状态
-                setAudioInfo('正在请求 Cloudflare 中转服务...', '');
+                setAudioInfo('正在解析分享链接并加载音频，请稍候...', '');
                 disableControls(true);
                 audio.pause();
                 audio.src = '';
@@ -220,33 +216,23 @@
                 currentTimeEl.textContent = '00:00';
                 totalTimeEl.textContent = '00:00';
 
-                // 构建 Cloudflare Workers 请求 URL
-                const proxyUrl = `https://${WORKER_DOMAIN}?filePath=${encodeURIComponent(filePath)}`;
-                
-                // 请求中转服务，下载音频为 Blob（避免 Chrome 弹窗）
+                // 解析分享链接为直链
+                setAudioInfo('正在解析分享链接...', '');
+                const directUrl = await getJianguoyunShareDirectUrl(shareUrl);
+
+                // 下载音频为Blob（避免Chrome弹窗）
                 setAudioInfo('正在下载音频文件...', '');
-                const response = await fetch(proxyUrl, {
-                    method: 'GET',
-                    mode: 'cors',
-                    credentials: 'omit'
-                });
+                const audioBlob = await downloadAudioAsBlob(directUrl);
 
-                // 处理错误响应
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({ msg: '未知错误' }));
-                    throw new Error(errData.msg || `请求失败（HTTP ${response.status}）`);
-                }
-
-                // 转为 Blob 并生成本地 URL
-                const audioBlob = await response.blob();
+                // 生成Blob URL并播放
                 if (audio.src.startsWith('blob:')) {
-                    URL.revokeObjectURL(audio.src); // 释放旧 Blob URL
+                    URL.revokeObjectURL(audio.src); // 释放旧Blob URL
                 }
                 const blobUrl = URL.createObjectURL(audioBlob);
-                
-                // 加载音频
                 audio.src = blobUrl;
                 audio.preload = 'auto';
+                
+                // 等待音频加载元数据
                 await audio.load();
                 
                 // 启用控制按钮
@@ -260,7 +246,7 @@
             }
         });
 
-        // 播放/暂停按钮逻辑（和之前一致）
+        // 播放/暂停按钮
         playBtn.addEventListener('click', async () => {
             try {
                 await audio.play();
@@ -275,7 +261,7 @@
             setAudioInfo('音频已暂停', '');
         });
 
-        // 进度条点击跳转（和之前一致）
+        // 进度条点击跳转
         progressBar.addEventListener('click', (e) => {
             if (isNaN(audio.duration)) return;
             const rect = progressBar.getBoundingClientRect();
@@ -284,20 +270,68 @@
             updateProgress();
         });
 
-        // 实时更新进度（和之前一致）
+        // 实时更新进度
         audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('loadedmetadata', () => {
             totalTimeEl.textContent = formatTime(audio.duration);
         });
 
-        // 音频播放结束（和之前一致）
+        // 音频播放结束
         audio.addEventListener('ended', () => {
             setAudioInfo('音频播放完毕', '');
             progress.style.width = '0%';
             audio.currentTime = 0;
         });
 
-        // 工具函数（和之前一致）
+        // 解析坚果云分享链接为直链
+        async function getJianguoyunShareDirectUrl(shareUrl) {
+            // 第一步：访问分享链接，获取页面内容
+            const response = await fetch(shareUrl, {
+                method: 'GET',
+                mode: 'cors',
+                redirect: 'follow',
+                credentials: 'omit'
+            });
+
+            if (!response.ok) {
+                throw new Error(`分享链接无法访问（HTTP ${response.status}）`);
+            }
+
+            // 第二步：解析页面HTML，提取下载直链
+            const html = await response.text();
+            
+            // 匹配坚果云分享页的下载链接（兼容不同版本页面）
+            const downloadLinkMatch = html.match(
+                /href="(https:\/\/dav\.jianguoyun\.com\/dav\/.*?)"(?:\s+class="jgy-file-download"|\s+download)/
+            );
+
+            if (!downloadLinkMatch) {
+                throw new Error('无法解析下载链接，请检查：1.分享链接是否有效；2.是否勾选「允许下载」');
+            }
+
+            // 解码URL并返回
+            return decodeURIComponent(downloadLinkMatch[1]);
+        }
+
+        // 下载音频为Blob
+        async function downloadAudioAsBlob(directUrl) {
+            const response = await fetch(directUrl, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit',
+                headers: {
+                    'Accept': 'audio/*'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`音频下载失败（HTTP ${response.status}）`);
+            }
+
+            return await response.blob();
+        }
+
+        // 更新进度条和时间
         function updateProgress() {
             if (isNaN(audio.duration)) return;
             const percent = (audio.currentTime / audio.duration) * 100;
@@ -305,6 +339,7 @@
             currentTimeEl.textContent = formatTime(audio.currentTime);
         }
 
+        // 时间格式化（秒 → 分:秒）
         function formatTime(seconds) {
             if (isNaN(seconds)) return '00:00';
             const minutes = Math.floor(seconds / 60);
@@ -312,18 +347,20 @@
             return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        // 设置音频信息提示
         function setAudioInfo(text, type = '') {
             audioInfo.textContent = text;
             audioInfo.className = 'audio-info';
             if (type) audioInfo.classList.add(type);
         }
 
+        // 禁用/启用控制按钮
         function disableControls(disabled) {
             playBtn.disabled = disabled;
             pauseBtn.disabled = disabled;
         }
 
-        // 页面卸载时释放 Blob URL
+        // 页面卸载时释放Blob URL，避免内存泄漏
         window.addEventListener('unload', () => {
             if (audio.src.startsWith('blob:')) {
                 URL.revokeObjectURL(audio.src);
