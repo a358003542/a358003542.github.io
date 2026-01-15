@@ -2,7 +2,7 @@ Date: 20250903
 Template: bookref
 BookName: 周易初讲
 BookAuthor: Wander
-BookPublisher: Wander
+BookPublisher: 自出版
 BookLanguage: 中文
 BookCover: /images/Covers/周易初讲 - Wander.jpg
 bookepubbaidudownload: https://pan.baidu.com/s/1n7wzNNnxNwIoBlkbQklYog?pwd=1vdv
