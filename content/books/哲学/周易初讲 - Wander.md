@@ -5,13 +5,18 @@ BookAuthor: Wander
 BookPublisher: 自出版
 BookLanguage: 中文
 BookCover: /images/Covers/周易初讲 - Wander.jpg
-bookepubbaidudownload: https://pan.baidu.com/s/1n7wzNNnxNwIoBlkbQklYog?pwd=1vdv
-bookpdfbaidudownload: https://pan.baidu.com/s/1A7YX89fv3tgQhU0i5SlgIQ?pwd=829n
+bookepubbaidudownload: https://pan.baidu.com/s/1SYMYa-DU1DwlQiYK5Zziow?pwd=k3uv
+bookpdfbaidudownload: https://pan.baidu.com/s/1TU4X76cI5yhx7GhJHReO2w?pwd=2hkm
 
 
 [TOC]
 
 本书对周易六十四卦进行了初步的讲解。
+
+[项目地址](https://github.com/a358003542/zhouyi)
+
+
+
 
 ## 目录
 ```
