@@ -109,7 +109,7 @@
             <div class="p-1">首发于：<time pubdate="pubdate" datetime="2019-10-18T00:00:00+08:00">2019年 10月 18日 </time>
             </div>
 
-            <div class="p-1">最近更新于：<time datetime="2025-03-20T14:26:38.906513+08:00">2025年 3月 20日 </time>
+            <div class="p-1">最近更新于：<time datetime="2026-01-21T00:00:00+08:00">2026年 1月 21日 </time>
             </div>
 
 
@@ -133,8 +133,9 @@
 <li><a href="#git命令的别名功能">git命令的别名功能</a></li>
 <li><a href="#切换版本">切换版本</a></li>
 <li><a href="#取消对文件的修改">取消对文件的修改</a></li>
-<li><a href="#最后一次commit的更改">最后一次commit的更改</a></li>
 <li><a href="#取消已经add了的文件">取消已经add了的文件</a></li>
+<li><a href="#删除远程仓库的某个文件">删除远程仓库的某个文件</a></li>
+<li><a href="#最后一次commit的更改">最后一次commit的更改</a></li>
 <li><a href="#commit几次之后的后悔行为">commit几次之后的后悔行为</a></li>
 <li><a href="#分支功能">分支功能</a><ul>
 <li><a href="#新建分支">新建分支</a></li>
@@ -265,17 +266,23 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 </code></pre></div>
 
 <p>如果你修改了某个文件，还没有add和commit，然后对现在修改不满意，想全部舍弃。那么可以如上使用restore某个文件或者文件夹来取消修改，从而文件回滚到最后一次commit时未修改的样子。</p>
+<h2 id="取消已经add了的文件">取消已经add了的文件</h2>
+<p>如果你不小心 <code>add .</code> 所有的文件，然后有些文件你不想add的，那么可以如下取消add操作。</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>restore<span class="w"> </span>--staged<span class="w"> </span>file_or_folder
+</code></pre></div>
+
+<h2 id="删除远程仓库的某个文件">删除远程仓库的某个文件</h2>
+<p>删除远程仓库的某个文件，这个文件本地已经取消跟踪了，一般推荐本地更改继续保留：</p>
+<div class="highlight"><pre><span></span><code>git rm --cached file_name
+</code></pre></div>
+
+<p>然后正常commit提交更改。注意不加上 <code>--cached</code> 本地文件也会被删除。</p>
 <h2 id="最后一次commit的更改">最后一次commit的更改</h2>
 <p>有的时候你提交一个commit了，然后又发现还有那个地方没有修改，或者commit的附加信息你不满意等等，你可以使用:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>--amend
 </code></pre></div>
 
 <p>来覆写上一次你的commit记录，amend的意思是改进修正的意思。这里你只能amend你最近的那次commit，然后运行命令之后，等于你上一次所有的commit都被取消掉了，然后你做了一些修改，再重新进行一个commit。</p>
-<h2 id="取消已经add了的文件">取消已经add了的文件</h2>
-<p>如果你不小心 <code>add .</code> 所有的文件，然后有些文件你不想add的，那么可以如下取消add操作。</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>restore<span class="w"> </span>--staged<span class="w"> </span>file_or_folder
-</code></pre></div>
-
 <h2 id="commit几次之后的后悔行为">commit几次之后的后悔行为</h2>
 <p>如果你commit几次了，然后对这几次commit都不太满意，想回滚到之前的某个commit下。可以如下：</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>commit_id

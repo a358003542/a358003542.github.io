@@ -1,5 +1,7 @@
 Slug: git
 Date: 20191018
+Modified: 20260121
+
 
 [TOC]
 
@@ -168,6 +170,22 @@ git  restore  file_or_folder
 ```
 如果你修改了某个文件，还没有add和commit，然后对现在修改不满意，想全部舍弃。那么可以如上使用restore某个文件或者文件夹来取消修改，从而文件回滚到最后一次commit时未修改的样子。
 
+## 取消已经add了的文件
+如果你不小心 `add .` 所有的文件，然后有些文件你不想add的，那么可以如下取消add操作。
+```bash
+git restore --staged file_or_folder
+```
+
+## 删除远程仓库的某个文件
+删除远程仓库的某个文件，这个文件本地已经取消跟踪了，一般推荐本地更改继续保留：
+
+```
+git rm --cached file_name
+```
+
+然后正常commit提交更改。注意不加上 `--cached` 本地文件也会被删除。
+
+
 ## 最后一次commit的更改
 
 有的时候你提交一个commit了，然后又发现还有那个地方没有修改，或者commit的附加信息你不满意等等，你可以使用:
@@ -179,11 +197,7 @@ git commit --amend
 来覆写上一次你的commit记录，amend的意思是改进修正的意思。这里你只能amend你最近的那次commit，然后运行命令之后，等于你上一次所有的commit都被取消掉了，然后你做了一些修改，再重新进行一个commit。
 
 
-## 取消已经add了的文件
-如果你不小心 `add .` 所有的文件，然后有些文件你不想add的，那么可以如下取消add操作。
-```bash
-git restore --staged file_or_folder
-```
+
 
 ## commit几次之后的后悔行为
 如果你commit几次了，然后对这几次commit都不太满意，想回滚到之前的某个commit下。可以如下：
