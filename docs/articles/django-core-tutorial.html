@@ -133,6 +133,7 @@
 <li><a href="#url定义name">url定义name</a></li>
 </ul>
 </li>
+<li><a href="#viewspy">views.py</a></li>
 <li><a href="#modelspy">models.py</a><ul>
 <li><a href="#数据库的配置">数据库的配置</a></li>
 <li><a href="#数据库迁移">数据库迁移</a></li>
@@ -152,7 +153,7 @@
 </div>
 <h2 id="初识django">初识Django</h2>
 <p>首先是搭建好项目的python依赖环境，最好是虚拟环境，虚拟环境里面安装好一些python模块，比如当然包含django模块依赖，这块讨论我就从简了。</p>
-<p>如果读者对django有了一定的了解，并且手头上已经积累了一个django启动项目骨架，比如说参考我创建的这个项目： <a href="https://github.com/a358003542/djangowander">djangowander</a> ，那么可以利用你手头上的项目模板来快速创建。而对于初学者，则运行如下命令来创建django项目骨架：</p>
+<p>运行如下命令来创建django项目骨架：</p>
 <div class="highlight"><pre><span></span><code>django-admin startproject project-name
 </code></pre></div>
 
@@ -193,7 +194,6 @@ python manage.py migrate
 <p>HTTP请求包到了你的服务器，比如nginx服务器，其会分析你的HTTP请求包里面的URL，具体是分析URL里面的path参数，然后根据path参数来决定不同的行为。比如说很多静态图片HTTP请求一般是不会到django那边去的，这些静态内容的URL请求会直接由nginx来返回HTTP响应包。</p>
 <p>还有一部分URL里面的path在Web服务器那边是定义为由某个WSGI服务接管，对于这些URL的HTTP请求，Web服务器只是起到代理性质，将该请求传递给WSGI服务即可，这里所说的WSGI服务就是django提供的。这部分URL又会分成很多不同的类型，在代码上的表现就是通过编写urls.py这个文件来实现URL的进一步分发，分发过来的HTTP请求包会继续往下面传递，这里HTTP请求包当然早就不是原生的文本格式了，而是方便程序员开发应用程序进行了很多友好的封装。分发过去的HTTP请求包会继续分发到视图层也就是views.py这个文件里面的某个视图函数上，具体HTTP响应包的内容就是由这个视图函数决定。</p>
 <p>具体该视图函数在处理过程中可能会请求SQL数据库里面的资源，这个时候就要使用models.py里面定义的模型层的代码了，具体叫做SQL数据库的ORM封装。</p>
-<p>当然上面的讨论是很简单很粗浅的。</p>
 <h2 id="settingspy">settings.py</h2>
 <p>settings.py在django项目早期搭建中，是一个会经常修改的文件，但是在项目后期等项目依赖环境基本稳定之后这个文件就很少变动了。</p>
 <p>这里的配置不仅有django自身的一些配置，也有项目django第三方依赖的一些配置，还可能有项目的其他环境变量。</p>
@@ -274,6 +274,9 @@ reverse(&#39;add&#39;,args=(1,2))
 </code></pre></div>
 
 <p>上面提到的reverse函数返回的url字符串还不是完整的url，而只是相对url。如果我们要获取全站的完整url则可以使用 <code>request.build_absolute_uri(location)</code> ，如果不指定location则默认是当前的url。</p>
+<h2 id="viewspy">views.py</h2>
+<p>TODO 待编写 简单介绍视图函数层返回 介绍返回基于模板文件的内容 介绍模板文件的查找 假定具有jinja2模板知识 然后简单介绍下django的模板的一些核心基础知识</p>
+<p>视图函数最简单的返回</p>
 <h2 id="modelspy">models.py</h2>
 <p>模型层的代码是放在models.py这个文件里面的，模型层本章内容会特别的多，初学者不可能一下就掌握的，慢慢摸索和学习。</p>
 <h3 id="数据库的配置">数据库的配置</h3>

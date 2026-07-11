@@ -9,7 +9,7 @@ Modified: 20231123
 ## 初识Django
 首先是搭建好项目的python依赖环境，最好是虚拟环境，虚拟环境里面安装好一些python模块，比如当然包含django模块依赖，这块讨论我就从简了。
 
-如果读者对django有了一定的了解，并且手头上已经积累了一个django启动项目骨架，比如说参考我创建的这个项目： [djangowander](https://github.com/a358003542/djangowander) ，那么可以利用你手头上的项目模板来快速创建。而对于初学者，则运行如下命令来创建django项目骨架：
+运行如下命令来创建django项目骨架：
 
 ```
 django-admin startproject project-name
@@ -71,8 +71,6 @@ HTTP请求包到了你的服务器，比如nginx服务器，其会分析你的HT
 还有一部分URL里面的path在Web服务器那边是定义为由某个WSGI服务接管，对于这些URL的HTTP请求，Web服务器只是起到代理性质，将该请求传递给WSGI服务即可，这里所说的WSGI服务就是django提供的。这部分URL又会分成很多不同的类型，在代码上的表现就是通过编写urls.py这个文件来实现URL的进一步分发，分发过来的HTTP请求包会继续往下面传递，这里HTTP请求包当然早就不是原生的文本格式了，而是方便程序员开发应用程序进行了很多友好的封装。分发过去的HTTP请求包会继续分发到视图层也就是views.py这个文件里面的某个视图函数上，具体HTTP响应包的内容就是由这个视图函数决定。
 
 具体该视图函数在处理过程中可能会请求SQL数据库里面的资源，这个时候就要使用models.py里面定义的模型层的代码了，具体叫做SQL数据库的ORM封装。
-
-当然上面的讨论是很简单很粗浅的。
 
 
 ## settings.py
@@ -186,6 +184,12 @@ reverse('add',args=(1,2))
 
 上面提到的reverse函数返回的url字符串还不是完整的url，而只是相对url。如果我们要获取全站的完整url则可以使用 `request.build_absolute_uri(location)` ，如果不指定location则默认是当前的url。
 
+
+## views.py
+TODO 待编写 简单介绍视图函数层返回 介绍返回基于模板文件的内容 介绍模板文件的查找 假定具有jinja2模板知识 然后简单介绍下django的模板的一些核心基础知识
+
+
+视图函数最简单的返回
 
 
 ## models.py
