@@ -137,7 +137,12 @@
 <li><a href="#环境变量的加载">环境变量的加载</a></li>
 </ul>
 </li>
-<li><a href="#静态文件管理">静态文件管理</a></li>
+<li><a href="#静态文件管理">静态文件管理</a><ul>
+<li><a href="#使用jinja2模板引擎">使用jinja2模板引擎</a></li>
+<li><a href="#静态文件加载">静态文件加载</a></li>
+<li><a href="#生产环境的静态文件">生产环境的静态文件</a></li>
+</ul>
+</li>
 <li><a href="#testspy">tests.py</a></li>
 <li><a href="#admin页面">admin页面</a></li>
 </ul>
@@ -223,6 +228,73 @@ if os.getenv(&#39;ALLOWED_HOSTS&#39;):
 <p>然后根据你的django项目在那里来具体修改 <code>.env</code> 环境变量。比如生产环境就加上 <code>DEBUG=true</code>，根据具体服务器所在地点情况的不同来针对性地加上 <code>ALLOWED_HOSTS</code> 字段。</p>
 <p>这样做第一个好处就是配置和代码抽离，代码尽可能少变动，配置变动不影响代码版本库。第二个好处就是很多隐私信息不进代码库，更加的安全。</p>
 <h2 id="静态文件管理">静态文件管理</h2>
+<p>首先写一个简单的基于静态文件的hello样例。</p>
+<p>视图函数类似这样的：</p>
+<div class="highlight"><pre><span></span><code>from django.shortcuts import render
+
+def index(request):
+    context = {}
+    return render(request, &#39;index.html&#39;, context)
+</code></pre></div>
+
+<p>随便新建一个 <code>index.html</code> 文件，上面简单写一句hello world。文件放在本应用的templates文件夹下。按照django的默认配置，应该是能正常工作的，否则的话建议先确认配置 <code>TEMPATES -&gt; APP_DIRS</code> 为 <code>True</code> 。 </p>
+<h3 id="使用jinja2模板引擎">使用jinja2模板引擎</h3>
+<p>笔者对jinja2模板引擎更熟悉，django是可以设置网页渲染引擎为jinja2的，这里就先讲了，后面涉及到模板文件的内容都默认是jinja2模板。</p>
+<p>你的项目环境需要确保安装了 <code>jinja2</code> 模块。</p>
+<p>然后对配置做如下更改：</p>
+<div class="highlight"><pre><span></span><code>TEMPLATES.extend([
+    {
+        &#39;BACKEND&#39;: &#39;django.template.backends.jinja2.Jinja2&#39;,
+        &#39;DIRS&#39;: [],
+        &#39;APP_DIRS&#39;: True,
+        &#39;OPTIONS&#39;: {
+            &#39;environment&#39;: &#39;myproject.jinja2.environment&#39;,
+        },
+    },
+])
+</code></pre></div>
+
+<p>在你的主应用文件夹下（settings.py旁边），新建一个jinja2.py文件，文件内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">django.templatetags.static</span> <span class="kn">import</span> <span class="n">static</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span>
+
+
+<span class="k">def</span> <span class="nf">environment</span><span class="p">(</span><span class="o">**</span><span class="n">options</span><span class="p">):</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="o">**</span><span class="n">options</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;static&quot;</span><span class="p">:</span> <span class="n">static</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">reverse</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">env</span>
+</code></pre></div>
+
+<p>这是将django的一些额外的功能static和reverse引入到jinja2模板环境中去，这样在jinja2模板中你就可以调用该函数了。</p>
+<p>然后在你的子应用下新建一个 <code>jinja2</code> 文件夹，下面放入你创建的jinja2模板，比如创建一个 <code>index.html</code> 文件，那么视图函数就不需要做任何更改了。</p>
+<p>如上操作的好处就是继续保留了django内置的admin页面支持，当然可能还有其他很多django第三方应用也是使用的django默认的模板引擎，那些也是不受影响的。</p>
+<h3 id="静态文件加载">静态文件加载</h3>
+<p>如下这样一行：</p>
+<div class="highlight"><pre><span></span><code>    &lt;link rel=&quot;stylesheet&quot; href=&quot;{{ static(&#39;vendor/bootstrap/css/bootstrap.min.css&#39;) }}&quot; &gt;
+</code></pre></div>
+
+<p>如上所述，现在static函数可以直接调用了，django默认模板引擎的那个<code>{% load static %}</code> 也不要用了。</p>
+<p>对应的静态文件放在你的子应用下，新建一个<code>static</code> 文件夹，然后是 <code>vendor</code> 文件夹等等，依次类推。</p>
+<h3 id="生产环境的静态文件">生产环境的静态文件</h3>
+<p>生产环境的静态文件主要是nginx那边的事，然后django提供了 <code>python manage.py collectstatic</code> 来收集项目涉及到的所有静态文件，收集的目标地建议新增配置：</p>
+<div class="highlight"><pre><span></span><code>STATIC_ROOT = &#39;/var/www/myproject/static&#39;
+</code></pre></div>
+
+<p>因为默认静态文件和你的代码放在一个目录下不是太好。</p>
+<p>下面的讨论假定你没有更改django原始配置，主要指的是 <code>STATIC_URL = 'static/'</code> 。</p>
+<p>nginx对应服务上新增配置：</p>
+<div class="highlight"><pre><span></span><code>location /static/ {
+    alias /var/www/myproject/static/;
+}
+</code></pre></div>
+
 <h2 id="testspy">tests.py</h2>
 <div class="highlight"><pre><span></span><code>python manage.py test
 </code></pre></div>

@@ -132,6 +132,97 @@ if os.getenv('ALLOWED_HOSTS'):
 
 
 ## 静态文件管理
+首先写一个简单的基于静态文件的hello样例。
+
+视图函数类似这样的：
+
+```
+from django.shortcuts import render
+
+def index(request):
+    context = {}
+    return render(request, 'index.html', context)
+```
+
+随便新建一个 `index.html` 文件，上面简单写一句hello world。文件放在本应用的templates文件夹下。按照django的默认配置，应该是能正常工作的，否则的话建议先确认配置 `TEMPATES -> APP_DIRS` 为 `True` 。 
+
+
+### 使用jinja2模板引擎
+笔者对jinja2模板引擎更熟悉，django是可以设置网页渲染引擎为jinja2的，这里就先讲了，后面涉及到模板文件的内容都默认是jinja2模板。
+
+你的项目环境需要确保安装了 `jinja2` 模块。
+
+然后对配置做如下更改：
+
+```
+TEMPLATES.extend([
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'myproject.jinja2.environment',
+        },
+    },
+])
+```
+
+在你的主应用文件夹下（settings.py旁边），新建一个jinja2.py文件，文件内容如下：
+
+```python
+from django.templatetags.static import static
+from django.urls import reverse
+
+from jinja2 import Environment
+
+
+def environment(**options):
+    env = Environment(**options)
+    env.globals.update(
+        {
+            "static": static,
+            "url": reverse,
+        }
+    )
+    return env
+```
+
+这是将django的一些额外的功能static和reverse引入到jinja2模板环境中去，这样在jinja2模板中你就可以调用该函数了。
+
+然后在你的子应用下新建一个 `jinja2` 文件夹，下面放入你创建的jinja2模板，比如创建一个 `index.html` 文件，那么视图函数就不需要做任何更改了。
+
+如上操作的好处就是继续保留了django内置的admin页面支持，当然可能还有其他很多django第三方应用也是使用的django默认的模板引擎，那些也是不受影响的。
+
+### 静态文件加载
+如下这样一行：
+```
+    <link rel="stylesheet" href="{{ static('vendor/bootstrap/css/bootstrap.min.css') }}" >
+```
+
+如上所述，现在static函数可以直接调用了，django默认模板引擎的那个`{% load static %}` 也不要用了。
+
+对应的静态文件放在你的子应用下，新建一个`static` 文件夹，然后是 `vendor` 文件夹等等，依次类推。
+
+### 生产环境的静态文件
+生产环境的静态文件主要是nginx那边的事，然后django提供了 `python manage.py collectstatic` 来收集项目涉及到的所有静态文件，收集的目标地建议新增配置：
+
+```
+STATIC_ROOT = '/var/www/myproject/static'
+```
+因为默认静态文件和你的代码放在一个目录下不是太好。
+
+下面的讨论假定你没有更改django原始配置，主要指的是 `STATIC_URL = 'static/'` 。
+
+nginx对应服务上新增配置：
+
+```
+location /static/ {
+    alias /var/www/myproject/static/;
+}
+```
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 Slug: nginx
 Date: 20190918
-
+Modified: 20260713
 
 [TOC]
 ## 前言
@@ -21,7 +21,7 @@ rpm系统安装:
 
 nginx的配置就是在 `/etc/nginx/sites-available` 那里新建一个配置文件，然后这样创建一个符号链接到 `sites-enabled` 那里。
 
-    sudo ln -s /etc/nginx/sites-available/cdwanze.work /etc/nginx/sites-enabled/cdwanze.work
+    sudo ln -s /etc/nginx/sites-available/myblog /etc/nginx/sites-enabled/myblog
 
 然后重启nginx即可。 
 
@@ -157,7 +157,7 @@ location / {
 
 ```
  location /static/ {
-      root /home/cdwanze/project/tinyblog;
+      root /home/ubuntu/project/tinyblog;
       autoindex off;
   }	
 ```
@@ -168,12 +168,12 @@ location / {
 
 ```
  location /static/ {
-      alias /home/cdwanze/project/tinyblog/static;
+      alias /home/ubuntu/project/tinyblog/static;
       autoindex off;
   }	
 ```
 
-`/static/` 将被替换为 `/home/cdwanze/project/tinyblog/static/???` 去找那个文件。
+`/static/` 将被替换为 `/home/ubuntu/project/tinyblog/static/???` 去找那个文件。
 
 本小节参考了 [这个网页](https://stackoverflow.com/questions/10631933/nginx-static-file-serving-confusion-with-root-alias) 。
 
