@@ -22,7 +22,7 @@ python的subprocess模块主要负责这方面的工作。
     
     hello world
     $HOME
-    /home/wanze
+    /home/ubuntu
 
 其中使用shell=True选项后用法较简单较直观，但网上提及安全性和兼容性可能有问题，他们推荐一般不适用shell=True这个选项。
 

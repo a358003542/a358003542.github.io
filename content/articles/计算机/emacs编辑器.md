@@ -221,7 +221,7 @@ set和setq的区别就在那个引号，setq不需要加上那个引号，第一
 
 ```lisp
 (ql:quickload :quickproject)
-(quickproject:make-project "wanze_clisp_project")
+(quickproject:make-project "ubuntu_clisp_project")
 ```
 
 这就是一个快速创建lisp项目的模板项目，参考一下即可。
@@ -238,7 +238,7 @@ quicklisp 大概有这些操作：
 新建的项目移动到 protacle 安装目录的 projects那个文件夹下，然后就可以调用：
 
 ```lisp
-(ql:quickload "wanze_clisp_project") 
+(ql:quickload "ubuntu_clisp_project") 
 ```
 
 但是这样加载之后还什么东西都没有，package.lisp 下如要加上如下内容：
@@ -246,15 +246,15 @@ quicklisp 大概有这些操作：
 ```lisp
 ;;;; package.lisp
 
-(defpackage #:wanze_clisp_project
+(defpackage #:ubuntu_clisp_project
   (:use #:cl)
   (:export #:hello
   ))
   
-(in-package wanze_clisp_project)
+(in-package ubuntu_clisp_project)
 ```
 
-然后把那个hello函数加到 `wanze_clisp_project.lisp` 文件里面去。
+然后把那个hello函数加到 `ubuntu_clisp_project.lisp` 文件里面去。
 
 ```lisp
 (defun hello () (print "hello"))
@@ -263,14 +263,14 @@ quicklisp 大概有这些操作：
 现在在slime repr 哪里你可以这样做了：
 
 ```text
-CL-USER> (ql:quickload :wanze_clisp_project)
-To load "wanze_clisp_project":
+CL-USER> (ql:quickload :ubuntu_clisp_project)
+To load "ubuntu_clisp_project":
   Load 1 ASDF system:
-    wanze_clisp_project
-; Loading "wanze_clisp_project"
+    ubuntu_clisp_project
+; Loading "ubuntu_clisp_project"
 
-(:WANZE_CLISP_PROJECT)
-CL-USER> (wanze_clisp_project:hello)
+(:ubuntu_CLISP_PROJECT)
+CL-USER> (ubuntu_clisp_project:hello)
 
 "hello" 
 "hello"
@@ -282,7 +282,7 @@ CL-USER>
 具体就是首先在slime repr哪里加载目标项目，然后运行：
 
 ```lisp
-(in-package wanze_clisp_project)
+(in-package ubuntu_clisp_project)
 ```
 
 现在你可以在slime repr哪里直接运行：

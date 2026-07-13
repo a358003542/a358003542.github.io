@@ -9,7 +9,7 @@ that can be used by jQuery plugin - Tipue Search.
 Copyright (c) Talha Mansoor
 
 
-updated by cdwanze 2019-03-08 for chinese
+updated by cdubuntu 2019-03-08 for chinese
 
 """
 

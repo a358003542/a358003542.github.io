@@ -52,7 +52,7 @@ passwd命令当然还可以修改其他用户的密码： `sudo passwd youname` 
 
 ## 最基本的命令
 
-当我们打开终端的时候，看到一个美元 `$` 符号，如果我们输入`su` 命令，然后进入root账户，看到开头有一个 `#` 符号，其中 `$` 表示普通用户，`#` 表示现在是超级用户。然后我们看到一个波浪号 `~` ，这个波浪号的意思就是当前用户的个人家目录，比如现在我这里`~` 的意思就表示目录 `/home/wanze` 。
+当我们打开终端的时候，看到一个美元 `$` 符号，如果我们输入`su` 命令，然后进入root账户，看到开头有一个 `#` 符号，其中 `$` 表示普通用户，`#` 表示现在是超级用户。然后我们看到一个波浪号 `~` ，这个波浪号的意思就是当前用户的个人家目录，比如现在我这里`~` 的意思就表示目录 `/home/ubuntu` 。
 
 进入Linux系统最常用的两个命令就是 `ls` 和 `cd` 。`ls` 命令会列出当前目录所包含的文件夹或者文件， 而 `cd folder_name` 就进入这个文件夹了。如果我们再输入 `cd` ，这个时候会回到个人的家目录那里。其实际等于执行了`cd ~` 。 关于cd命令我们还需要了解`cd .` ，那个点表示当前目录，而 `cd ..` 表示返回上一级目录。然后 `cd /etc` ，这样我们就直接跳到系统的 `/etc` 目录下了。
 
@@ -144,7 +144,7 @@ cat  *.txt  >  test.txt
 =>uname -s #内核名字
 Linux
 =>uname -n #主机名字
-wanze-ubuntu
+ubuntu-ubuntu
 =>uname -r #内核发行号
 3.13.0-36-generic
 =>uname -m #硬件架构
@@ -273,9 +273,9 @@ for i in $(ls *.txt | sort) ; do echo $i; done ;
 先看下面这个例子：
 
 ```
--rw-rw-r--  1 wanze wanze    41034  8月 27 15:19 wisesystem.xoj
-drwxrwxr-x  4 wanze wanze     4096  5月 28 18:50 yEd
-lrwxrwxrwx  1 wanze wanze       22  9月 11 18:37 到 git 的链接 -> /home/wanze/桌面/git
+-rw-rw-r--  1 ubuntu ubuntu    41034  8月 27 15:19 wisesystem.xoj
+drwxrwxr-x  4 ubuntu ubuntu     4096  5月 28 18:50 yEd
+lrwxrwxrwx  1 ubuntu ubuntu       22  9月 11 18:37 到 git 的链接 -> /home/ubuntu/桌面/git
 ```
 
 这里最重要的是先把第一栏看懂，文件所有者和文件所有群后面再讨论。
@@ -1088,7 +1088,7 @@ systemctl kill --singal=9 PID
 安装增强功能之后，在virtualbox那里设置好共享文件夹之后，记得进入客机系统，还需要如下加载文件夹：
 
 ```
-sudo mount -t vboxsf  share  /home/wanze/share
+sudo mount -t vboxsf  share  /home/ubuntu/share
 ```
 
 上面的 share 名字是你在virtualbox那边设置的名字，然后具体挂载的文件夹请在客机系统那里新建一个。

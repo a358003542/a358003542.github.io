@@ -436,15 +436,15 @@ def test_celery():
     LoadModule wsgi_module modules/mod_wsgi.so
 &lt;/IfModule&gt;
 
-WSGIPythonHome &quot;/home/wanze/venv&quot;
-WSGIPythonPath &quot;/home/wanze/venv/webapp&quot;
+WSGIPythonHome &quot;/home/ubuntu/venv&quot;
+WSGIPythonPath &quot;/home/ubuntu/venv/webapp&quot;
 
 &lt;VirtualHost *:80&gt;
-    ServerName api.cdwanze.work
+    ServerName api.cdubuntu.work
 
-    WSGIScriptAlias / /home/wanze/venv/webapp/webapp/wsgi.py
+    WSGIScriptAlias / /home/ubuntu/venv/webapp/webapp/wsgi.py
 
-    &lt;Directory /home/wanze/venv/webapp &gt;
+    &lt;Directory /home/ubuntu/venv/webapp &gt;
         &lt;IfVersion &gt;= 2.4&gt;
             Require all granted
         &lt;/IfVersion&gt;
@@ -454,9 +454,9 @@ WSGIPythonPath &quot;/home/wanze/venv/webapp&quot;
         &lt;/IfVersion&gt;
     &lt;/Directory&gt;
 
-    Alias &quot;/static&quot; &quot;/home/wanze/venv/webapp/static&quot;
+    Alias &quot;/static&quot; &quot;/home/ubuntu/venv/webapp/static&quot;
 
-    &lt;Directory  /home/wanze/venv/webapp/static &gt;
+    &lt;Directory  /home/ubuntu/venv/webapp/static &gt;
         &lt;IfVersion &gt;= 2.4&gt;
             Require all granted
         &lt;/IfVersion&gt;
@@ -491,10 +491,10 @@ WSGIPythonPath /path/to/mysite.com
 
 <p>而必须每个通过deamon模式来（参考了 <a href="https://stackoverflow.com/questions/14923083/multiple-sites-in-django">这个网页</a> ）：</p>
 <div class="highlight"><pre><span></span><code>&lt;VirtualHost *:80&gt;
-    ServerName api.cdwanze.work
-    WSGIDaemonProcess cdwanze_api  processes=1 python-path=/home/wanze/venv/myapi python-home=/home/wanze/venv/ threads=10  
-    WSGIProcessGroup cdwanze_api
-    WSGIScriptAlias / /home/wanze/venv/myapi/myapi/wsgi.py process-group=cdwanze_api
+    ServerName api.cdubuntu.work
+    WSGIDaemonProcess cdubuntu_api  processes=1 python-path=/home/ubuntu/venv/myapi python-home=/home/ubuntu/venv/ threads=10  
+    WSGIProcessGroup cdubuntu_api
+    WSGIScriptAlias / /home/ubuntu/venv/myapi/myapi/wsgi.py process-group=cdubuntu_api
     ...
 </code></pre></div>
 
@@ -913,7 +913,7 @@ messages.set_level(request, messages.DEBUG)
 </code></pre></div>
 
 <p>但后来我还是遇到csrf认证失败问题，最后参考 <a href="https://stackoverflow.com/questions/38841109/csrf-validation-does-not-work-on-django-using-https">这个问题的答案</a> 如下设置才可以。</p>
-<div class="highlight"><pre><span></span><code>CSRF_TRUSTED_ORIGINS = [&#39;www.cdwanze.work&#39;]
+<div class="highlight"><pre><span></span><code>CSRF_TRUSTED_ORIGINS = [&#39;www.cdubuntu.work&#39;]
 </code></pre></div>
 
 <h3 id="创建可复用的app">创建可复用的app</h3>

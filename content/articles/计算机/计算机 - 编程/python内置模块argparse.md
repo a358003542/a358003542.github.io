@@ -21,7 +21,7 @@ Date: 20231019
 这是简单的一个例子了，现在脚本还不可以接受任何参数，只可以用 `-h` 或
 `--help` 来查看一些信息，如下所示。
 
-    wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
+    ubuntu@ubuntu-ubuntu64:~/桌面$ python3 hello.py -h
     usage: 
     this is a example to show argparse usage
      [-h]
@@ -50,7 +50,7 @@ Date: 20231019
 
 这样命令行的帮助信息就变成如下所示了:
 
-    wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
+    ubuntu@ubuntu-ubuntu64:~/桌面$ python3 hello.py -h
     usage: 
     this is a example to show argparse usage
     
@@ -60,7 +60,7 @@ Date: 20231019
 
 如果我们如下输入则有:
 
-    wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
+    ubuntu@ubuntu-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
     Namespace(config='config.cfg')
 
 我们看到 `parse_args` 方法返回的是Namespace对象，推荐用 `vars`
@@ -76,7 +76,7 @@ Date: 20231019
     
     print(args)
     
-    wanze@wanze-ubuntu64:~/桌面$ python3 hello.py -h
+    ubuntu@ubuntu-ubuntu64:~/桌面$ python3 hello.py -h
     usage: 
     this is a example to show argparse usage
     python3 hello.py
@@ -85,7 +85,7 @@ Date: 20231019
       -h, --help            show this help message and exit
       -c CONFIG, --config CONFIG
                             the config file path
-    wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
+    ubuntu@ubuntu-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
     {'config': 'config.cfg'}
 
 上面代码稍作修改，在长名字可选参数前面还可以加上短名字可选参数支持，然后我们看到
@@ -107,7 +107,7 @@ Date: 20231019
 
 然后我们看到字典输入如下:
 
-    wanze@wanze-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
+    ubuntu@ubuntu-ubuntu64:~/桌面$ python3 hello.py --config='config.cfg'
     {'configpath': 'config.cfg'}
 
 当然一般就默认设置成为和长名字可选参数一致，没必要这么折腾。类似的你还可以继续用
@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
 具体运行情况如下所示:
 
-    wanze@wanze-ubuntu64:~/图片$ python3 resizeimg.py --help
+    ubuntu@ubuntu-ubuntu64:~/图片$ python3 resizeimg.py --help
     usage: 
     resize the image
     
@@ -200,7 +200,7 @@ if __name__ == '__main__':
                             the config file path
       --width WIDTH         the input image
     
-    wanze@wanze-ubuntu64:~/图片$ python3 resizeimg.py --width=300 *.png
+    ubuntu@ubuntu-ubuntu64:~/图片$ python3 resizeimg.py --width=300 *.png
     resize image
     the input image is 2015-01-27 13:16:46 的屏幕截图.png
     the target width is 300

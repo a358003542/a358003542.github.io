@@ -261,7 +261,7 @@ max_allowed_packet = 16M
 
 ```mysql
 insert into user(host,user,password,select_priv,insert_priv)
-values('localhost','wanze',password('123456'),'Y','Y');
+values('localhost','ubuntu',password('123456'),'Y','Y');
 ```
 
 
@@ -271,7 +271,7 @@ values('localhost','wanze',password('123456'),'Y','Y');
 给user表格删除一条记录就是删除某个mysql用户，让我们把前面创建的这个用户删除了:
 
 ```mysql
-delete from user where user = 'wanze';
+delete from user where user = 'ubuntu';
 ```
 
 好吧，继续再把那个用户加进去，然后我们注意到之前只给了那个用户select和insert的权限的，现在让我们再多给他几个权限。
@@ -286,7 +286,7 @@ mysql> update user
     -> delete_priv = 'Y',
     -> create_priv = 'Y',
     -> drop_priv = 'Y'
-    -> where user = 'wanze';
+    -> where user = 'ubuntu';
 ```
 
 现在这个用户又新加上了update，delete，create和drop权限了。然后我们看到用户还有很多其他权限设置，

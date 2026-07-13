@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
 具体脚本运行情况如下所示:
 ```
-    wanze@wanze-ubuntu:~/桌面$ python3 test2.py --help
+    ubuntu@ubuntu-ubuntu:~/桌面$ python3 test2.py --help
     Usage: test2.py [OPTIONS]
     
       Simple program that greets NAME for a total of COUNT times.
@@ -43,10 +43,10 @@ if __name__ == '__main__':
 
 更棒的是其 `prompt` 机制和具体命令行输入参数是兼容的:
 ```
-    wanze@wanze-ubuntu:~/桌面$ python3 test2.py --count=3 --name=wanze
-    Hello wanze!
-    Hello wanze!
-    Hello wanze!
+    ubuntu@ubuntu-ubuntu:~/桌面$ python3 test2.py --count=3 --name=ubuntu
+    Hello ubuntu!
+    Hello ubuntu!
+    Hello ubuntu!
 ```
 ## 必填参数，文件操作和如何测试
 

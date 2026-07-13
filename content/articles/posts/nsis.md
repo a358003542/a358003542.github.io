@@ -20,7 +20,7 @@ nsis安装程序是free的，通常制作一个简单的安装程序稍微熟悉
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "timer"
 !define PRODUCT_VERSION "1.3.1"
-!define PRODUCT_PUBLISHER "wanze"
+!define PRODUCT_PUBLISHER "ubuntu"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\timer.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -133,7 +133,7 @@ SectionEnd
 ```
 !define PRODUCT_NAME "yaogua"
 !define PRODUCT_VERSION "0.1.1"
-!define PRODUCT_PUBLISHER "wanze"
+!define PRODUCT_PUBLISHER "ubuntu"
 ```
 
 

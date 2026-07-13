@@ -22,7 +22,7 @@ sqlite3和postgresql不同，其没有客户端/服务器的概念，就是直�
 现在我们往这个数据库里面加入一点东西:
 
 ```
-wanze@wanze-ubuntu64:~/桌面$ sqlite3 mydb
+ubuntu@ubuntu-ubuntu64:~/桌面$ sqlite3 mydb
 SQLite version 3.8.2 2013-12-06 14:53:30
 Enter ".help" for instructions
 Enter SQL statements terminated with a ";"
@@ -35,7 +35,7 @@ mytable
 sqlite> .database
 seq  name             file                                                      
 ---  ---------------  ----------------------------------------------------------
-0    main             /home/wanze/桌面/mydb                                   
+0    main             /home/ubuntu/桌面/mydb                                   
 sqlite> .header on 
 sqlite> select * from mytable;
 id|name

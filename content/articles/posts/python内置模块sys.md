@@ -33,7 +33,7 @@ sys模块有一些功能很常用，其实在前面我们就看到过一些了�
     >>> import sys
     >>> sys.exit('出错了')
     出错了
-    wanze@wanze-ubuntu:~$ 
+    ubuntu@ubuntu-ubuntu:~$ 
 
 ### sys.platform
 

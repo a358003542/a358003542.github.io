@@ -67,14 +67,14 @@ postgres这个用户的一些信息如下所示:
      rolname  | rolsuper | rolcreaterole | rolcreatedb | rolcanlogin 
     ----------+----------+---------------+-------------+-------------
      postgres | t        | t             | t           | t
-     wanze    | t        | t             | t           | t
+     ubuntu    | t        | t             | t           | t
     
     select rolname,rolsuper,rolcreaterole,rolcreatedb,rolcanlogin from pg_authid;
     
      rolname  | rolsuper | rolcreaterole | rolcreatedb | rolcanlogin 
     ----------+----------+---------------+-------------+-------------
      postgres | t        | t             | t           | t
-     wanze    | t        | t             | t           | t
+     ubuntu    | t        | t             | t           | t
 
 ### 新建用户
 
@@ -88,7 +88,7 @@ postgres这个用户的一些信息如下所示:
 
 在使用postgresql时，如果某个用户不存在，那么PostgreSQL将会报错: 
 
-    createdb: could not connect to database template1: FATAL:  role "wanze" does not exist
+    createdb: could not connect to database template1: FATAL:  role "ubuntu" does not exist
 
 ### 删除用户
 
@@ -203,7 +203,7 @@ ident方法如果是本地连接的话就会使用peer方法，官方文档在�
 
 首先你需要以postgres的身份连接postgres数据库，因为你要进行更改某个数据库的所有者，就必须是目前该数据库的所有者。
 
-    wanze@wanze-ubuntu:~$ sudo -u postgres psql postgres
+    ubuntu@ubuntu-ubuntu:~$ sudo -u postgres psql postgres
     psql (9.3.8)
     Type "help" for help.
     

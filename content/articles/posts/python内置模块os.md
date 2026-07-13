@@ -18,11 +18,11 @@ Date: 20231019
 如果是终端调用python就是你终端的当前工作目录所在，你可以用pwd命令来查看。如下所示：
 
     =>pwd
-    /home/wanze
+    /home/ubuntu
     =>python3
     >>> import os
     >>> print(os.getcwd())
-    /home/wanze
+    /home/ubuntu
 
 ### mkdir函数
 
@@ -36,9 +36,9 @@ os模块里有一个chdir函数来更改当前工作目录所在地。
 
 可以使用*.*和*..*语法，也可以使用简单的\"test\"调转到test文件夹。
 
-    >>> os.chdir('/home/wanze/pymf')
+    >>> os.chdir('/home/ubuntu/pymf')
     >>> print(os.getcwd())
-    /home/wanze/pymf
+    /home/ubuntu/pymf
 
 ### 删除文件
 
@@ -139,7 +139,7 @@ os.environ，返回一个字典值，这个字典值里面存储着当前shell�
     import os
     print(os.environ['HOME'])
     
-    /home/wanze
+    /home/ubuntu
     >>> 
 
 ### getpid函数
@@ -159,7 +159,7 @@ os.getpid函数，返回当前运行的进程的pid。
     
     print([f for f in glob.glob('*.py') if os.stat(f).st_size > 400])
     
-    ['/home/wanze/桌面/test.py', '/home/wanze/桌面/flatten.py']
+    ['/home/ubuntu/桌面/test.py', '/home/ubuntu/桌面/flatten.py']
     ['flatten.py']
 
 下面这个例子进行了文件大小输出单位的优化:
@@ -225,10 +225,10 @@ os.path模块
     print(os.path.basename(__file__))
     print(os.path.basename(os.environ['HOME']))
     
-    /home/wanze/桌面/test.py
-    /home/wanze/桌面
+    /home/ubuntu/桌面/test.py
+    /home/ubuntu/桌面
     test.py
-    wanze
+    ubuntu
 
 其中`__file__`表示当前脚本文件所在的路径。
 
@@ -241,13 +241,13 @@ abspath函数接受一个path路径值然后返回一个正规的普适的路径
 
     >>> import os
     >>> os.path.abspath('')
-    '/home/wanze'
+    '/home/ubuntu'
     >>> os.path.abspath('test')
-    '/home/wanze/test'
+    '/home/ubuntu/test'
     >>> os.path.abspath('/test')
     '/test'
     >>> os.path.abspath('test/')
-    '/home/wanze/test'
+    '/home/ubuntu/test'
 
 我们看到如果abspath接收的是空字符串，其定位是当前脚本的工作目录，那么是引用的模块里面的`os.path.abspath('')`，具体对应的也是当前脚本的工作目录。然后os.path.abspath(\".\")返回的是当前脚本工作目录。
 
@@ -260,7 +260,7 @@ dirname函数接受一个路径值然后返回这个路径除开最后一个元�
 如上面例子所示，basename函数接受一个路径值然后返回路径的最后一个元素，如果路径指向文件，那么返回的是文件名；如果路径指向目录，那么返回的是最后那个目录的文件夹名。比如下面实现了从绝对路径提取出文件名的功能。
 
     >>> import os.path
-    >>> string = '/home/wanze/test.txt'
+    >>> string = '/home/ubuntu/test.txt'
     >>> fileName,fileExtension = os.path.splitext(os.path.basename(string))
     >>> fileName
     'test'
@@ -292,7 +292,7 @@ dirname函数接受一个路径值然后返回这个路径除开最后一个元�
 用于连接多个路径值合并成一个新的路径值，同样相对于简单的字符串拼接，用这个函数处理路径组合具有操作系统普适性和灵活性。
 
     >>> os.path.join(os.path.expanduser('~'),'test','lib')
-    '/home/wanze/test/lib'
+    '/home/ubuntu/test/lib'
 
 上面join函数多个参数生成的新path在windows下又是不同的输出的。
 
@@ -300,13 +300,13 @@ dirname函数接受一个路径值然后返回这个路径除开最后一个元�
 
     >>> import os
     >>> os.path.expanduser('~')
-    '/home/wanze'
+    '/home/ubuntu'
     >>> os.path.expanduser('~/pymf')
-    '/home/wanze/pymf'
+    '/home/ubuntu/pymf'
     >>> os.path.join(os.path.expanduser('~'),'pymf','mymodule')
-    '/home/wanze/pymf/mymodule'
+    '/home/ubuntu/pymf/mymodule'
 
-`~`这个符号可以在这里使用，从而展开为以/home/wanze为基础的绝对路径，兼容大部分系统（在windows下也可以使用。）
+`~`这个符号可以在这里使用，从而展开为以/home/ubuntu为基础的绝对路径，兼容大部分系统（在windows下也可以使用。）
 
 同时我们看到join函数可以接受很多不定量的参数，然后将他们组合成为一个新的路径，而且不用你费心是`/`还是`\`，你不需要写这些了，用join函数自然料理好一切。
 
