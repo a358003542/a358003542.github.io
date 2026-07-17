@@ -1,9 +1,9 @@
-Slug: linux-system
+Slug: learning-linux-system
 Date: 20191018
+Modified: 20260717
+
 
 [TOC]
-
-
 
 ## debian系或者rpm系
 
