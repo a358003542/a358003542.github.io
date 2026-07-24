@@ -14,5 +14,3 @@ DELETE_OUTPUT_DIRECTORY = False
 
 # Following items are often useful when publishing
 
-## add disqus comment
-DISQUS_SITENAME = 'wander1'
