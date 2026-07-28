@@ -1,4 +1,5 @@
 Date: 20250514
+Modified: 20260728
 Template: bookref
 BookName: Lange's Handbook of Chemistry Fifteenth Edition
 BookAuthor: John A. Dean
@@ -9,6 +10,12 @@ BookBaidupanDownloadUrl: https://pan.baidu.com/s/1afzCUQXudWVBrMRvpMEcAg
 BookBaidupanDownloadCode: 69ta
 
 [TOC]
+
+[微云相关资料分享](https://share.weiyun.com/vqpw1Age)
+
+
+相关项目推荐 我准备将该书制作成为markdown格式，并提供相应的工具，[项目地址在这里](https://github.com/a358003542/hua-xue-shou-ce) 。
+
 
 本书是文字版的。
 
