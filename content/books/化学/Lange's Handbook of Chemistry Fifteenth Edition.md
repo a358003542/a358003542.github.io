@@ -11,8 +11,6 @@ BookBaidupanDownloadCode: 69ta
 
 [TOC]
 
-[微云相关资料分享](https://share.weiyun.com/vqpw1Age)
-
 
 相关项目推荐 我准备将该书制作成为markdown格式，并提供相应的工具，[项目地址在这里](https://github.com/a358003542/hua-xue-shou-ce) 。
 
