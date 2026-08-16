@@ -1,6 +1,6 @@
 Slug: learning-linux-system
 Date: 20191018
-Modified: 20260717
+Modified: 20260816
 
 
 [TOC]
@@ -8,6 +8,18 @@ Modified: 20260717
 ## debian系或者rpm系
 
 目前Linux主流的包管理系统分为debian系和rpm系这两个。CentOS和Redhat属于rpm系；ubuntu和debian系统属于debian系。在ubuntu中第一个要学习的命令就是 apt 命令，通过它来进行系统软件的安装卸载更新等等工作；在centos第一个要学习的命令是 yum 命令，与apt命令类似进行了一系列的系统的软件包管理操作。
+
+### apt命令和dpkg命令
+
+系统安装好之后第一件要做的事是选一个好的源，然后安装更新。在系统设置→软件和更新那里，在“下载自”的哪里就是软件源的服务商，你最好还是自己搜索一个速度最快的源。然后在终端中执行以下命令来升级系统软件包： 
+
+-   apt update 更新源
+-   apt upgrade 升级源下已经安装了的软件（如果有很多软件需要升级的时候推荐使用命令： （`apt dist-upgrade` 这样不容易出错些。）
+-   apt install what 安装某个软件
+-   apt autoremove 清理软件残余
+-   apt autoclean 清理安装软件留下的缓存
+-   apt remove what 删除某个软件
+-   apt purge what 删除软件包括相应的软件配置
 
 ### yum命令和rpm命令
 
@@ -19,22 +31,6 @@ Modified: 20260717
 - yum clean 清除系统软件包管理相关的缓存
 - rpm -i what.rpm  本地安装某个rpm包，一般使用会加上 `-vh` 选项来显示更多的安装信息和安装进度。    
 - rpm -qa| grep what 搜索本地已经安装了的名字带有what的rpm包，
-
-
-
-### apt命令和dpkg命令
-
-系统安装好之后第一件要做的事是选一个好的源，然后安装更新。在系统设置→软件和更新那里，在“下载自”的哪里就是软件源的服务商，你最好还是自己搜索一个速度最快的源。然后在终端中执行以下命令来升级系统软件包： 
-
-
-
--   apt update 更新源
--   apt upgrade 升级源下已经安装了的软件（如果有很多软件需要升级的时候推荐使用命令： （`apt dist-upgrade` 这样不容易出错些。）
--   apt install what 安装某个软件
--   apt autoremove 清理软件残余
--   apt autoclean 清理安装软件留下的缓存
--   apt remove what 删除某个软件
--   apt purge what 删除软件包括相应的软件配置
 
 
 
@@ -52,7 +48,7 @@ passwd命令当然还可以修改其他用户的密码： `sudo passwd youname` 
 
 ## 最基本的命令
 
-当我们打开终端的时候，看到一个美元 `$` 符号，如果我们输入`su` 命令，然后进入root账户，看到开头有一个 `#` 符号，其中 `$` 表示普通用户，`#` 表示现在是超级用户。然后我们看到一个波浪号 `~` ，这个波浪号的意思就是当前用户的个人家目录，比如现在我这里`~` 的意思就表示目录 `/home/ubuntu` 。
+当我们打开终端的时候，看到一个美元 `$` 符号，如果我们输入`su` 命令，然后进入root账户，看到开头有一个 `#` 符号，其中 `$` 表示普通用户，`#` 表示现在是超级用户。然后我们看到一个波浪号 `~` ，这个波浪号的意思就是当前用户的个人家目录。
 
 进入Linux系统最常用的两个命令就是 `ls` 和 `cd` 。`ls` 命令会列出当前目录所包含的文件夹或者文件， 而 `cd folder_name` 就进入这个文件夹了。如果我们再输入 `cd` ，这个时候会回到个人的家目录那里。其实际等于执行了`cd ~` 。 关于cd命令我们还需要了解`cd .` ，那个点表示当前目录，而 `cd ..` 表示返回上一级目录。然后 `cd /etc` ，这样我们就直接跳到系统的 `/etc` 目录下了。
 
@@ -72,7 +68,7 @@ passwd命令当然还可以修改其他用户的密码： `sudo passwd youname` 
 
 ## 什么是shell
 
-shell就好像一个包装层，在shell的里面就是Linux操作系统的核心kernel，如果你要深入进去，将会遇到另外一个更加艰深的领域，比如计算机硬件啊，驱动程式啊还有Linux系统的设计核心等等之类的，这些知识都比较专业了，一般的人是不需要深究的。
+shell就好像一个包装层，在shell的里面就是Linux操作系统的核心kernel，如果你要深入进去，将会遇到另外一个更加艰深的领域，比如计算机硬件啊，驱动程式啊还有Linux系统的设计核心等等之类的，这些知识就比较专业了。
 
 Shell是提供操作系统核心（称为kernel）与用户之间交互的特殊程序，参见下图。这个kernel在启动时被装入内存,并管理系统直到关机为止。它负责建立和控制进程，管理内存、文件系统、通信等等。其他的实用程序，包括Shell在内都存储在硬盘上。kernel把程序从硬盘中装入内存，运行它们，并在程序运行结束后回收被程序占用的系统资源。Shell 是从你登录就开始运行的实用程序，它允许用户通过 Shell 脚本或者命令行的方式输入命令，并通过翻译这些命令完成用户与kernel的交互。
 
@@ -109,7 +105,7 @@ ps aux | grep firefox
 
 ## 重定向
 
-kernel处理的每一个进程都默认都0，1，2这样三个文件说明符。其中0表示标准输入，1表示标准输出，2表示标准错误输出。所谓的标准输出一般指输出到当前的终端，而所谓的标准错误输出也是输出到当前的终端。
+kernel处理的每一个进程都默认有0，1，2这样三个文件说明符。其中0表示标准输入，1表示标准输出，2表示标准错误输出。所谓的标准输出一般指输出到当前的终端，而所谓的标准错误输出也是输出到当前的终端。
 
 当文件说明符被分配给其他非终端，就叫做I/O重定向。`>` 是输出重定向，后面跟上输出目的地。 `>>` 是输出重定向的文件附加操作，也就是相当于文件操作的 `a` 操作。`<` 是输入重定向，后面跟上输入目的地。
 
@@ -178,14 +174,8 @@ pwd命令用来查看当前工作目录在文件系统中的路径。
 
 -   `/` Linux文件系统开始的地方。
 -   `~` 当前shell登录用户的家目录所在，对应于shell的 `$HOME` 变量的值。
-
 -   `.` 相对路径写法，当前目录的意思。
-
-
 - `..` 相对路径写法，上一级目录的意思。
-
-
-
 
 ### stat命令
 
@@ -259,13 +249,12 @@ ls的 `--sort` 选项用来排序，似乎很有用，可以了解一下，但�
 ls *.txt | sort
 ```
 
-
 ls这里抓取的文件字符流可以方便作为后面的操作，如下所示：
+
 ```bash
 for i in $(ls *.txt | sort) ; do echo $i; done ;
 ```
 ​    
-
 这段代码里面的 `$i` 就是对应的一个个文件字符流。
 
 #### -l选项详解
@@ -548,110 +537,32 @@ nohup thecommand
 
 
 
-## 设置后台服务
-
-下面将写一个后台服务脚本，让其成为Linux系统的一个后台服务。本小节参考了 [这个网页](http://unix.stackexchange.com/questions/236084/how-do-i-create-a-service-for-a-shell-script-so-i-can-start-and-stop-it-like-a-d) 。
-
-```bash
-#!/bin/sh
-
-### BEGIN INIT INFO
-# Provides:          shadowsocks
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Example initscript
-# Description:       The shadowsocks service
-### END INIT INFO
-
-PROG_BIN=ssserver
-PIDFILE=/var/run/shadowsocks.pid
-OPTIONS="--pid-file $PIDFILE -c /etc/shadowsocks/config.json"
-RETVAL=0
-
-start() {
-    echo -n $"Starting $0: "
-    $PROG_BIN $OPTIONS -d start 
-    RETVAL=$?
-    return $RETVAL
-}
-
-stop() {
-  echo -n $"Stopping $0: "
-  $PROG_BIN $OPTIONS -d stop
-  RETVAL=$?
-  return $RETVAL
-}
-
-status(){
-    if [ -e $PIDFILE ]; then
-        echo $0 is running, pid=`cat $PIDFILE`
-    else
-        echo $0 is stopped
-        RETVAL=1   
-        return $RETVAL
-    fi
-    RETVAL=0
-    return $RETVAL
-}
-
-# See how we were called.
-case "$1" in
-    start)
-        start
-        ;;
-    stop)
-        stop
-        ;;
-    status)
-        status
-        ;;
-    reload|restart)
-        stop
-        start
-        RETVAL=$?
-        ;;
-    *)
-        echo $"Usage: $0 {start|stop|restart|reload|status}"
-        RETVAL=2
-esac
-
-exit $RETVAL
-```
-
-然后上面的服务脚本要放入 `/etc/init.d` 里面去。
-
-这个时候就可以通过 `service what start+ 来调用服务脚本了。 要让服务脚本开机自启动，推荐用 `chkconfig+ 命令来做。
-
-
-- `chkconfig --add what` 添加服务让chkconfig可以管理它。
-
-- `chkconfig --del what` 删除服务
-
-- `chkconfig --level <级别> what on` 设置服务启动级别
-
-启动级别有：
-
-- 等级0表示：表示关机
-- 等级1表示：单用户模式
-- 等级2表示：无网络连接的多用户命令行模式
-- 等级3表示：有网络连接的多用户命令行模式
-- 等级4表示：不可用
-- 等级5表示：带图形界面的多用户模式
-- 等级6表示：重新启动
-  ​
-
-
-
-似乎较常用的级别设置是 35
-```
-chkconfig --level 35 what on
-```
-
-
-
 ## 网络配置
+
+### 最基本的原理
+
+Internet源起于美国的ARPAnet项目，其有个基本的知识点就是 **只有两个位于同一网域的计算机才可以直接进行文件交互** 。那么读者就会问了什么是网域，所谓网域说白了就是把一个大的互联网分割分割再分割的一个产物。而分割手段就是 **子网掩码** ，怎么判断两个计算机是同一网域呢？就是把这个计算机的IP地址和子网掩码相加，结果相同我们就说他们位于同一网域。
+
+比如 `192.168.0.1` 和 `192.168.0.101` 这两台计算机是可以直接进行交互，它们在子网掩码 `255.255.255.0` 之下是属于同一个子网的。同一个子网的机器通过路由器连接起来就可以直接进行通信了。 
+
+现在我们说一台计算机要对另外一台计算机发送一个信息包，首先这个计算机会分析自己的路由表，如果发现目标机器和自己在同一网域，那么就直接发送信息了。
+
+举一个实际的例子，比如说我输入`ipconfig` 可以查看当前我的电脑的无线网络网卡配置有：
+
+```
+Wireless LAN adapter WLAN:
+
+   Connection-specific DNS Suffix  . :
+   Link-local IPv6 Address . . . . . : fe80::296b:3e88:4a1c:e8bc%14
+   IPv4 Address. . . . . . . . . . . : 192.168.1.101
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1
+```
+
+我知道我自己的IP地址是 `192.168.1.101` ，我知道自己的子网掩码是 `255.255.255.0` 。然后我要和IP地址 `192.168.1.102` 的机器进行通信，经过计算（和子网掩码进行位逻辑AND操作得到**网域**，对两个网域进行位逻辑XOR操作，如果全0则是同一网域【参考了 [这个网页](https://intrinium.com/boolean-logic-and-subnet-masking/)】发现这两个IP位于同一**网域**，也就是同一子网内，则可以直接进行通信。
+
+如果不在同一网域，那么这个计算机就要根据路由表将这个信息包发送给默认的路由器（gateway），比如上面的例子就是 `192.168.1.1` 。路由器在网络世界里扮演着一个特殊的角色，那就是它们不具体处理数据，只负责数据分发。具体过程实际上就是上面描述的过程的不断迭代重复，也就是路由器也有一个自己的路由表，然后看看目标机器是不是和自己在同一网域等等，如果不则将信息包发送给另外一个默认的路由器或交换机之类的等等，直到最终目标机器和自己位于同一网域，然后将信息包发送给目标机器。
+
 
 ### IP地址
 
@@ -692,9 +603,7 @@ IP只有两种IP， 一种是 公网IP ，另一个是 私网IP 。
 
 
 ### 子网掩码
-
-子网掩码这个概念确实比较难理解，关键是不要太拘泥于某个特例细节，正如鸟哥最前面说的，子网掩码这个东西就是为了分割网域的，或者换言之一个实际存在的网域定义是由 
-
+一个实际存在的网域定义是由 
 
 - Network 该网域最小IP
 - Netmask 子网掩码 
@@ -979,74 +888,6 @@ curl httpbin.org/ip
 
 
 
-
-
-
-
-## 离线安装rpm包
-
-推荐安装 `yum-utils` 这个软件包：
-```
-yum install yum-utils
-```
-然后利用其提供的 yumdownloader 命令来下载对应的rpm包。
-
-### 下载相关依赖完全实现本地安装
-
-在安装某些rpm包的时候，可能还是需要某些依赖，要某从 [fedoraproject](http://dl.fedoraproject.org/pub/epel/7/x86_64/) 下载对应的epel安装包，或者干脆用yum 安装 `epel-realse` ，然后你还需要安装上面提及的 `yum-utils` ，然后运行：
-
-```
-yum install --downloadonly --downloaddir=. what.rpm ...
-```
-
-这样将自动下载并补齐这些rpm包还确实的依赖，然后你可以用上面的完全本地安装语句实现完全的面网络安装这些rpm包了。
-
-### 完全本地安装
-
-完全免网络从本地安装某些rpm包，自动解决其相互依赖问题。
-
-```
-yum localinstall -C --disablerepo=*  what.rpm ...
-```
-
-
-
-
-## centos6和centos7的区别
-
-本小节参考了 [这篇文章](http://www.cnblogs.com/HondaHsu/p/6118111.html) 和 [这篇文章](https://oracleblog.org/study-note/%E4%B8%80%E4%BA%9Bcentos-6%E5%92%8Ccentos-7%E7%9A%84%E5%8C%BA%E5%88%AB/) 。
-
--   默认文件系统从ext4到xfs。
--   之前的 /bin /sbin /lib /lib64 全部移到了 /usr 下。（区别较大）
--   防火墙由iptables变成firwalld。（区别较大）
--   默认数据库由mysql变成mariadb，这个如果只是单纯的使用的话并不用考虑太多。
--   python2.6升级到python2.7，这是极好的。
--   修改主机名推荐用 hostnamectl 。
--   语言字符集管理配置文件在 /etc/local.conf
--   修改时区推荐用 timedatectl 命令。
--   修改地区推荐使用 localectl 命令。
--   服务管理推荐用 systemctl 命令，不过之前的service命令也还是可以用的。然后之前的chkconfig也推荐用systemctl命令。
-
-```
-systemctl restart/start/stop service_name
-
-systemctl enable/disable  service_name
-
-```
-
--   强制终止进程，之前是 \verb+kill -9 PID+ ，现在推荐使用：
-
-```
-systemctl kill --singal=9 PID
-```
-
-
-
-- ifconfig命令需要单独安装了（net-tools），现在推荐使用ip命令。
-
-
-
-
 ## 通过U盘安装ubuntu
 
 -   在安装之前请先把硬盘中的资料做一些调整，空出一个大于20G的硬盘做将来要安装ubuntu根目录的地方。然后还需要一个大约为你内存两倍的硬盘分区等下要作为linux系统的swap交换分区。（更复杂的还可以开个分区给/home等等这里就不讨论了。）
@@ -1059,11 +900,7 @@ systemctl kill --singal=9 PID
 
 ## 在ubuntu下通过ISO文件硬盘安装win7系统
 
-
-
 -   用gparter分区
-
-
 -   先mount
 -   把文件复制到d盘
 -   执行 sudo update-grub
@@ -1071,34 +908,12 @@ systemctl kill --singal=9 PID
 
 
 
-## Virtualbox
-
-### 网络连接模式
-
-本小节参考了 [这个网页](http://www.jianshu.com/p/f59a0695b164) 。
-
--   NAT模式 网络地址转换，我的理解是Guest机发送的IP包通过主机（在这里类似做了路由器的功能）分发之后再出去的。
--   网桥模式 这个模式是最好理解的，虚拟机就类似于一台真实机器和Host同等地位的接入网络，如果你的内网不具有分发IP地址功能这种模式可能是不可行的。
--   Host-only模式 可以理解Guest在Host上模拟了一张网卡，然后所有的虚拟机都是连接在这张网卡上的。所有的虚拟机可以互相访问。虚拟机和主机之间，虚拟机和外网之间都可以通过设置来实现访问。 
-
-
-
-### 共享文件夹设置
-
-安装增强功能之后，在virtualbox那里设置好共享文件夹之后，记得进入客机系统，还需要如下加载文件夹：
-
-```
-sudo mount -t vboxsf  share  /home/ubuntu/share
-```
-
-上面的 share 名字是你在virtualbox那边设置的名字，然后具体挂载的文件夹请在客机系统那里新建一个。
-
-##  前言
+##  bash shell脚本简单入门
 
 下面简单讲一下 bash shell 脚本知识，点到为止。就基本的了解在日常linux作业中还是很有用的。但作为一个蹩脚的编程语言【抱歉这么说】并不推荐大量编写bash脚本代码，如果有这块大量的需求，应该使用其他工具。
 
 
-## 变量
+### 变量
 
 ```
 i=2
@@ -1132,15 +947,15 @@ export PS2=">"
 
 
 
-## echo命令
+### echo命令
 
 echo命令前面接触很多了，这里不赘述了。echo命令就是用于查看某个变量的值或者直接输出一行字符串。
 
-## unset命令
+### unset命令
 
 取消bash某个变量的赋值。
 
-## read命令
+### read命令
 
 请求用户输入某个变量的值
 
@@ -1149,12 +964,9 @@ read name ; echo '你输入的是：'${name}
 ```
 
 
-
-
-## bash里面的特殊符号
+### bash里面的特殊符号
 
 上面的分号bash和其他编程语言都大体类似，就是表示一行的结束。但bash还有很多其他的特殊符号，下面讲一下，这些特殊符号有的时候看到了搜索都不太好搜索。 更多信息请参阅 [这个网页](http://stackoverflow.com/questions/5163144/what-are-the-special-dollar-sign-shell-variable) 。
-
 
 
 -   `$0` 本命令名字，在shell脚本里面那么就成了本脚本的名字。
@@ -1168,7 +980,7 @@ read name ; echo '你输入的是：'${name}
 
 
 
-## if条件判断
+### if条件判断
 
 if条件语句格式是：
 ```bash
@@ -1196,7 +1008,7 @@ if [  !  -d  workspace  ];  then mkdir workspace   ; fi
 
 `-d` 表示检测某个文件夹是不是存在，`!` 符号在这里进行逻辑否操作。也就是这里如果workspace不存在，那么新建workspace文件夹。
 
-## for循环
+### for循环
 
 本小节参考了 [bash for loop](http://www.cyberciti.biz/faq/bash-for-loop/) 这篇文章，其关于bash编程的循环部分讲的很详细。
 
@@ -1263,13 +1075,13 @@ if [  !  -d  smallsize  ];  then mkdir smallsize   ; fi
 let i=1 && for f in $(ls *.jpg); do  mv -vi ${f} 0000${i}.jpg && let i=i+1; done
 ```
 
-## 调用子命令返回值
+### 调用子命令返回值
 
 在前面几个例子中，已经出现多次这个形式了： `$(cmd)` ，其将执行子shell命令，并将返回结果作为字符串值。
 
 
 
-## array
+### array
 
 shell编程最好不要过多涉及复杂的编程的内容，那将是很痛苦的，但是在某些情况下你可能需要了解array这个概念。下面来演示这样一个例子，其需求就是在一个自动备份程序之上再加上自动删除逻辑。
 
@@ -1372,7 +1184,7 @@ if __name__ == '__main__':
 
 
 
-## date命令
+### date命令
 
 之所以把date命令放在一章是因为date命令如果单独作为一个命令来使用，打印显示日期其实意义不是很大。但是在bash脚本中，在管道中，date命令却变得非常有用了。读者可以用 `--help` 查看一下帮助信息，这个命令比我们预想的还要复杂的多，而且这里的那些输出格式参数控制语法，就是到了其他编程语言中也是有用的（比如python的time模块中的strftime函数）。
 
@@ -1389,7 +1201,7 @@ date命令前面已谈到一点，更多信息请参看 [这篇文章](http://ww
 
 
 
-## xargs多行转一行
+### xargs多行转一行
 
 ```
 sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)
@@ -1397,43 +1209,13 @@ sudo rmdir --ignore-fail-on-non-empty  $(ls -U | head -n 10000 | xargs)
 
 这是一个批量删除空文件夹的命令，假设现在空文件夹数目很多。首先 `ls -U` 单纯列出来，然后管道导向 `head` 只打印最开始的几行，然后管道导向 `xargs` 命令，这样多行转成一行，就可以作为 rmdir 的参数了。
 
-## 找不到什么的错误
-
-本章节加上了一些内容，都是我遇到了说什么，No Such file等等之类的报错，一般是某些软件包依赖出了问题。下面的讨论有时是Ubuntu系统（debian系），有时是Centos（RPM系），具体看到那个包的名字，我想读者就能获得一些灵感的。
-
-### ffi.h
-
-参考了 [这个网页](http://stackoverflow.com/questions/12982486/glib-compile-error-ffi-h-but-libffi-is-installed) 。
-
-报错：
-    fatal error: ffi.h: No such file or directory
-
-
-解决方案：
-
-    sudo apt-get install libffi-dev
-
-
-### opensslv.h
-
-报错：
-
-    fatal error: openssl/opensslv.h: 没有那个文件或目录
-
-
-
-解决方案：
-
-    sudo apt install libssl-dev
-
 
 ## 参考资料
 
 1.  网络，有关别人博客知识的引用我是能在文章中列出来就列出来，只是Linux系统的很多知识很多网页内容都很接近，已经实在不知道原创者是谁了，所以这里一并用网络这个词来表示了。在此谢谢各位博客和其他的网页编写者们了，你们的劳动传播了知识，提升了IT从业者的技能和帮助他们解决了很多问题，从而促进了整个人类的IT技术进步。也许你们没有因此赚到一分钱，和获得半点的名利，但你们做出的贡献是不能为人们遗忘的，都是得到上帝嘉许的。
-
 2.  有名的鸟哥的linux私房菜基础篇和网络篇。请参看 [鸟哥的文章官网](http://linux.vbird.org) 。其中基础篇在 `/linux_basic` ，然后网络篇在 `/linux_server` 。
-
 3.  unix编程艺术 unix编程艺术 [美] Eric S·Raymond , 姜宏 (译者), 何源 (译者), 蔡晓骏 (译者)
 
     
+
 
