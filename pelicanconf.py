@@ -109,6 +109,17 @@ MARKDOWN = {
         'toc':{
             'toc_depth': '2-3',
             'slugify': slugify_unicode
+        },
+        'md4mathjax': {
+            'mathjax_settings': r"""
+                window.MathJax = {
+                    loader: {load: ['[tex]/mhchem']},
+                    tex: {
+                        inlineMath: {'[+]': [['$', '$']]},
+                        packages: {'[+]': ['mhchem']}
+                    }
+                };
+            """
         }
     },
     'output_format': 'html',
