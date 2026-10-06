@@ -1075,12 +1075,6 @@ fetch("http://localhost:8080").then(
 })
 ```
 
-## nodejs
-详细讨论请参阅 [这篇文章]({filename}./javascript和nodejs.md) 。
-
-
-## npm服务
-详细讨论请参阅 [这篇文章]({filename}./javascript和npm.md) 。
 
 ## 附录
 
@@ -1160,7 +1154,6 @@ function laterProcess(data){
 
 
 
-### javascript编码规范
 
 
 ### 参考资料
